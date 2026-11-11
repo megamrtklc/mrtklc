@@ -685,7 +685,35 @@
                     </div>
                 </div>
 
-                <section :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm">
+                
+                <section :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm overflow-hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500">KEŞİF ROTAN • <span x-text="currentProfile.name"></span></span>
+                            <h3 class="text-lg sm:text-xl font-black text-gray-900 dark:text-white mt-1">İlgi alanlarına göre keşfet</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzleme geçmişinde ve listende öne çıkan türlerden yeni yapımlar bul.</p>
+                        </div>
+                        <span class="text-[10px] text-gray-400 font-semibold" x-show="personalizedDiscoveryGenres.length" x-text="personalizedDiscoveryGenres.length + ' ilgi alanı bulundu'"></span>
+                    </div>
+                    <div x-show="personalizedDiscoveryGenres.length" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <template x-for="(genre, index) in personalizedDiscoveryGenres" :key="'taste-' + genre.name">
+                            <button type="button" @click="selectPersonalizedGenre(genre.label)" class="relative text-left rounded-xl border border-gray-200 dark:border-gray-700/80 bg-gray-50 dark:bg-white/[0.03] hover:border-rose-500 hover:bg-rose-500/5 p-3 sm:p-4 transition-all group overflow-hidden">
+                                <span class="absolute right-2 top-1 text-2xl font-black text-gray-200 dark:text-white/5" x-text="'0' + (index + 1)"></span>
+                                <span class="relative block text-sm font-black text-gray-900 dark:text-white group-hover:text-rose-500 transition-colors" x-text="genre.label"></span>
+                                <span class="relative block text-[10px] text-gray-500 dark:text-gray-400 mt-1" x-text="genre.count + ' yapım keşfet'"></span>
+                                <span class="relative block h-1 rounded-full bg-gray-200 dark:bg-gray-700 mt-3 overflow-hidden"><span class="block h-full rounded-full bg-rose-500" :style="'width:' + Math.max(12, genre.score / personalizedDiscoveryGenres[0].score * 100) + '%'"></span></span>
+                            </button>
+                        </template>
+                    </div>
+                    <div x-show="!personalizedDiscoveryGenres.length" class="rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-dashed border-gray-300 dark:border-gray-700 p-4 text-xs text-gray-500 dark:text-gray-400">
+                        Henüz yeterli izleme verisi yok. Birkaç yapım izlediğinde veya listene eklediğinde burada ilgi alanlarına özel keşif kısayolları oluşacak.
+                    </div>
+                    <div x-show="personalizedDiscoveryGenres.length" class="flex justify-end">
+                        <button type="button" @click="resetDiscoveryFilters()" class="text-[10px] font-bold text-rose-500 hover:text-rose-600 transition-colors">Tüm keşif filtrelerini göster <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    </div>
+                </section>
+
+<section :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm">
                     <div class="flex flex-col sm:flex-row gap-3">
                         <div class="relative flex-1">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
@@ -1802,6 +1830,69 @@
                         .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, 'tr'))
                         .slice(0, 8)
                         .map(entry => entry.item);
+                },
+
+
+                get personalizedDiscoveryGenres() {
+                    const read = key => {
+                        try {
+                            const value = JSON.parse(localStorage.getItem(key) || '{}');
+                            return value && typeof value === 'object' ? value : {};
+                        } catch (error) {
+                            console.warn('Keşif tercihleri okunamadı:', key, error);
+                            return {};
+                        }
+                    };
+                    const normalize = value => this.normalizeSearchText(value);
+                    const counts = new Map();
+                    const addItem = (item, weight) => {
+                        if (!item) return;
+                        const genres = [...new Set(String(item.category || item.genre || '').split(/[\\/;,]/).map(normalize).filter(Boolean))];
+                        genres.forEach(genre => {
+                            const existing = counts.get(genre) || { name: genre, score: 0 };
+                            existing.score += weight;
+                            counts.set(genre, existing);
+                        });
+                    };
+                    const progress = read('perde_player_progress_v3');
+                    Object.entries(progress).forEach(([id, saved]) => {
+                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        const seconds = Math.max(0, Number(saved?.time) || 0);
+                        if (item && seconds >= 300) addItem(item, 1 + Math.min(seconds / 3600, 2));
+                    });
+                    const episodeMap = read('cine_episode_tracking_v1');
+                    Object.entries(episodeMap).forEach(([key, tracking]) => {
+                        if (!key.startsWith(this.currentProfileId + ':')) return;
+                        const id = key.slice(this.currentProfileId.length + 1);
+                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        const count = Object.values(tracking?.watched || {}).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number)).size : 0), 0);
+                        if (item && count > 0) addItem(item, 1 + Math.min(count / 5, 3));
+                    });
+                    this.watchlist.forEach(saved => {
+                        const item = this.catalog.find(entry => String(entry.id) === String(saved.id));
+                        if (item) addItem(item, 1.5);
+                    });
+                    return [...counts.values()]
+                        .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, 'tr'))
+                        .slice(0, 4)
+                        .map(entry => ({
+                            ...entry,
+                            label: entry.name.charAt(0).toLocaleUpperCase('tr-TR') + entry.name.slice(1),
+                            count: this.catalog.filter(item => String(item.category || item.genre || '').split(/[\\/;,]/).some(value => normalize(value) === entry.name)).length
+                        }));
+                },
+
+                selectPersonalizedGenre(genre) {
+                    this.searchQuery = '';
+                    this.discoveryType = 'all';
+                    this.discoveryCountry = 'all';
+                    this.discoveryPlatform = 'all';
+                    this.discoveryRating = '0';
+                    this.discoveryYearFrom = '';
+                    this.discoveryYearTo = '';
+                    this.quickFilter = 'all';
+                    this.sortBy = 'default';
+                    this.discoveryGenre = genre;
                 },
 
                 get watchableCatalog() {
