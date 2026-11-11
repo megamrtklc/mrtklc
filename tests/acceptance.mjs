@@ -56,6 +56,17 @@ try {
       });
     });
     console.log('HERO POSTER PROBE:', posterStatus);
+    const backdropStatuses = await page.evaluate(async () => {
+      const app = window.Alpine.$data(document.documentElement);
+      return await Promise.all(app.catalog.slice(0, 10).map(item => new Promise(resolve => {
+        const image = new Image();
+        const timeout = setTimeout(() => resolve({ title: item.title, status: 'timeout', url: item.backdrop }), 10000);
+        image.onload = () => { clearTimeout(timeout); resolve({ title: item.title, status: 'loaded', width: image.naturalWidth, url: item.backdrop }); };
+        image.onerror = () => { clearTimeout(timeout); resolve({ title: item.title, status: 'error', url: item.backdrop }); };
+        image.src = item.backdrop || '';
+      })));
+    });
+    console.log('HERO BACKDROP PROBES:', JSON.stringify(backdropStatuses));
   } catch (error) {
     console.log('TMDB BACKDROP DIAGNOSTIC UNAVAILABLE:', error.message);
   }
