@@ -1,0 +1,39 @@
+name: Build Tailwind CSS Artifact
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/tailwind-build.yml'
+      - 'tailwind.config.js'
+      - 'src/tailwind.css'
+      - 'index.html'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-tailwind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Tailwind CLI
+        run: npm install --no-save tailwindcss@3.4.17
+      - name: Build production CSS
+        run: npx tailwindcss -c tailwind.config.js -i ./src/tailwind.css -o ./tailwind.css --minify
+      - name: Report CSS size
+        run: wc -c tailwind.css
+      - name: Upload compiled CSS
+        uses: actions/upload-artifact@v4
+        with:
+          name: tailwind-css-build
+          path: tailwind.css
+          if-no-files-found: error
+          retention-days: 7
