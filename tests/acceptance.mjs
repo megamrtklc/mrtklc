@@ -134,17 +134,25 @@ try {
       }, { timeout: 30000 });
       const mobileState = await mobilePage.evaluate(() => {
         const image = document.querySelector('#mobileHeroBanner img');
-        const lcp = performance.getEntriesByType('largest-contentful-paint').map(entry => ({
-          startTime: Math.round(entry.startTime),
-          size: entry.size,
-          tag: entry.element?.tagName || null,
-          id: entry.element?.id || null,
-          className: typeof entry.element?.className === 'string' ? entry.element.className.slice(0, 160) : '',
-          src: entry.element?.currentSrc || entry.element?.src || '',
-          text: entry.element?.textContent?.trim().slice(0, 80) || ''
-        }));
+        const lcp = await new Promise(resolve => {
+          const entries = [];
+          const observer = new PerformanceObserver(list => entries.push(...list.getEntries()));
+          observer.observe({ type: 'largest-contentful-paint', buffered: true });
+          setTimeout(() => {
+            observer.disconnect();
+            resolve(entries.map(entry => ({
+              startTime: Math.round(entry.startTime),
+              size: entry.size,
+              tag: entry.element?.tagName || null,
+              id: entry.element?.id || null,
+              className: typeof entry.element?.className === 'string' ? entry.element.className.slice(0, 160) : '',
+              src: entry.element?.currentSrc || entry.element?.src || '',
+              text: entry.element?.textContent?.trim().slice(0, 80) || ''
+            })));
+          }, 1800);
+        });
         const resources = performance.getEntriesByType('resource')
-          .filter(entry => /image\\.tmdb\\.org|filmvediziler\\.json|alpinejs|fonts\\.(googleapis|gstatic)|font-awesome/.test(entry.name))
+          .filter(entry => /image\.tmdb\.org|filmvediziler\.json|alpinejs|fonts\.(googleapis|gstatic)|font-awesome/.test(entry.name))
           .map(entry => ({ name: entry.name, start: Math.round(entry.startTime), duration: Math.round(entry.duration), bytes: entry.transferSize || 0, initiator: entry.initiatorType }));
         return {
           mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
