@@ -43,6 +43,12 @@ try {
     assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).count());
     const count = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.length);
     assert.equal(count, 140);
+    await page.waitForFunction(() => {
+      const links = [...document.querySelectorAll('link[rel="stylesheet"]')];
+      const iconCss = links.some(link => link.href.includes('font-awesome') && (link.media === 'all' || link.media === ''));
+      const fontCss = links.some(link => link.href.includes('fonts.googleapis.com') && (link.media === 'all' || link.media === ''));
+      return iconCss && fontCss;
+    }, { timeout: 15000 });
     const heroThumbnailCount = await page.locator('#heroThumbContainer img').count();
     assert.equal(heroThumbnailCount, 12, 'Ana sayfa hero küçük görselleri 12 ile sınırlandırılmalı');
     const responsiveSources = await page.locator('img[srcset]').evaluateAll(images => images.map(image => image.getAttribute('srcset') || '').filter(Boolean));
