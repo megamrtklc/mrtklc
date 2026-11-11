@@ -135,7 +135,7 @@
 
                 <!-- 3'LÜ TEMA SEÇİCİ DROPDOWN -->
                 <div class="relative" x-data="{ openThemeMenu: false }">
-                    <button @click="openThemeMenu = !openThemeMenu" :class="getButtonClass()" class="px-2 sm:px-3 h-9 rounded-lg border flex items-center space-x-2 text-xs font-bold transition-colors shadow-sm">
+                    <button @click="openThemeMenu = !openThemeMenu" :aria-label="'Tema seçimi: ' + getThemeName()" :class="getButtonClass()" class="px-2 sm:px-3 h-9 rounded-lg border flex items-center space-x-2 text-xs font-bold transition-colors shadow-sm">
                         <i :class="getThemeIcon()"></i>
                         <span class="hidden sm:inline" x-text="getThemeName()"></span>
                         <i class="fa-solid fa-chevron-down text-[10px] opacity-70"></i>
@@ -160,7 +160,7 @@
                 <!-- Profil Seçici -->
                 <div :class="getCardClass()" class="flex items-center space-x-1 sm:space-x-2 border rounded-lg px-1.5 sm:px-2.5 py-1">
                     <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="hidden sm:block w-6 h-6 rounded-full object-cover">
-                    <select x-model="currentProfileId" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] sm:max-w-none">
+                    <select x-model="currentProfileId" aria-label="Aktif profili seç" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] sm:max-w-none">
                         <template x-for="pro in profiles" :key="pro.id">
                             <option :value="pro.id" x-text="pro.name" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"></option>
                         </template>
@@ -256,10 +256,10 @@
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Featured Marvel & Action Collection</span>
                             <div class="flex space-x-1.5">
-                                <button @click="scrollHeroThumbs(-1)" class="w-7 h-7 rounded-full bg-black/60 border border-gray-700 hover:bg-rose-600 hover:border-rose-600 text-white flex items-center justify-center text-xs transition-colors">
+                                <button @click="scrollHeroThumbs(-1)" aria-label="Önceki öne çıkan yapım" class="w-7 h-7 rounded-full bg-black/60 border border-gray-700 hover:bg-rose-600 hover:border-rose-600 text-white flex items-center justify-center text-xs transition-colors">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </button>
-                                <button @click="scrollHeroThumbs(1)" class="w-7 h-7 rounded-full bg-black/60 border border-gray-700 hover:bg-rose-600 hover:border-rose-600 text-white flex items-center justify-center text-xs transition-colors">
+                                <button @click="scrollHeroThumbs(1)" aria-label="Sonraki öne çıkan yapım" class="w-7 h-7 rounded-full bg-black/60 border border-gray-700 hover:bg-rose-600 hover:border-rose-600 text-white flex items-center justify-center text-xs transition-colors">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </div>
@@ -273,7 +273,7 @@
                                     <div class="w-full aspect-[2/3] rounded-lg overflow-hidden bg-black mb-1.5">
                                         <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
                                     </div>
-                                    <h4 class="text-[11px] font-bold text-center text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="item.title"></h4>
+                                    <div class="text-[11px] font-bold text-center text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="item.title"></div>
                                 </div>
                             </template>
                         </div>
@@ -317,13 +317,13 @@
                         </div>
 
                         <div class="flex flex-wrap items-center gap-2">
-                            <select x-model="quickFilter" :class="getCardClass()" class="border rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 focus:outline-none focus:border-rose-600">
+                            <select x-model="quickFilter" aria-label="Yapım türü filtresi" :class="getCardClass()" class="border rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 focus:outline-none focus:border-rose-600">
                                 <option value="all">Tümü</option>
                                 <option value="imdb8">IMDb 8+</option>
                                 <option value="series">Diziler</option>
                                 <option value="movies">Filmler</option>
                             </select>
-                            <select x-model="sortBy" :class="getCardClass()" class="border rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 focus:outline-none focus:border-rose-600">
+                            <select x-model="sortBy" aria-label="Katalog sıralaması" :class="getCardClass()" class="border rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 focus:outline-none focus:border-rose-600">
                                 <option value="default">Sıralama: Önerilen</option>
                                 <option value="rating">En Yüksek Puan</option>
                                 <option value="year">En Yeni Yıl</option>
@@ -340,7 +340,7 @@
                                         <i class="fa-solid fa-star text-[9px]"></i>
                                         <span x-text="item.rating"></span>
                                     </div>
-                                    <button @click.stop="toggleWatchlist(item)" class="absolute top-2 left-2 w-7 h-7 rounded bg-black/70 backdrop-blur-md flex items-center justify-center text-gray-200 hover:text-rose-500 transition-colors">
+                                    <button @click.stop="toggleWatchlist(item)" :aria-label="isInWatchlist(item) ? 'İzleme listesinden çıkar' : 'İzleme listeme ekle'" class="absolute top-2 left-2 w-7 h-7 rounded bg-black/70 backdrop-blur-md flex items-center justify-center text-gray-200 hover:text-rose-500 transition-colors">
                                         <i :class="isInWatchlist(item) ? 'fa-solid fa-bookmark text-rose-500' : 'fa-regular fa-bookmark text-xs'"></i>
                                     </button>
                                 </div>
