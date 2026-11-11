@@ -383,10 +383,14 @@
                                 <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold" x-text="'Toplam ' + (selectedItem.episodes || 0) + ' Bölüm'"></span>
                             </div>
 
-                            <div x-show="getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
+                            <div x-show="tmdbDetailsLoading && getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
+                                <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-500 mb-2"></i>
+                                <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">TMDB bölüm bilgileri yükleniyor...</p>
+                            </div>
+                            <div x-show="!tmdbDetailsLoading && getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
                                 <i class="fa-solid fa-list-ul text-2xl text-gray-400 mb-2"></i>
-                                <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Bölüm ayrıntıları henüz katalog verisinde bulunmuyor.</p>
-                                <p class="mt-1 text-[11px] text-gray-500 dark:text-gray-400">Bu dizi için <span x-text="selectedItem.seasons || 0"></span> sezon ve toplam <span x-text="selectedItem.episodes || 0"></span> bölüm bilgisi mevcut. Bölüm adları ve ayrı video bağlantıları eklendiğinde burada listelenecek.</p>
+                                <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Bu sezon için TMDB bölüm bilgisi bulunamadı.</p>
+                                <p class="mt-1 text-[11px] text-gray-500 dark:text-gray-400">Sezon ve bölüm bilgileri TMDB kataloğunda mevcutsa burada listelenir. Bölüm kartları bilgi amaçlıdır; ayrıca bir izleme bağlantısı tanımlanmadıkça oynatmayı başlatmaz.</p>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" x-show="getEpisodesForSeason(selectedSeason).length > 0">
                                 <template x-for="ep in paginatedEpisodes" :key="ep.number">
@@ -728,6 +732,106 @@
                 catalog: [],
                 catalogLoading: true,
                 catalogError: null,
+                tmdbApiKey: '3108265ab3fdbf3af14175edf64a9c7f',
+                tmdbLanguage: 'tr-TR',
+                tmdbDetailsCache: {},
+                tmdbDetailsLoading: false,
+                tmdbDetailsError: '',
+
+                async fetchTmdb(path) {
+                    const separator = path.includes('?') ? '&' : '?';
+                    const response = await fetch('https://api.themoviedb.org/3/' + path + separator + 'api_key=' + this.tmdbApiKey + '&language=' + this.tmdbLanguage);
+                    if (!response.ok) throw new Error('TMDB isteği başarısız (HTTP ' + response.status + ')');
+                    return response.json();
+                },
+
+                async fetchTmdbDetails(item) {
+                    if (!item || !item.tmdbId) return;
+                    const cacheKey = item.type + ':' + item.tmdbId;
+                    if (this.tmdbDetailsCache[cacheKey]) {
+                        Object.assign(item, this.tmdbDetailsCache[cacheKey]);
+                        return;
+                    }
+
+                    this.tmdbDetailsLoading = true;
+                    this.tmdbDetailsError = '';
+                    try {
+                        const mediaType = item.type === 'tv' ? 'tv' : 'movie';
+                        const details = await this.fetchTmdb(mediaType + '/' + item.tmdbId + '?append_to_response=credits,videos');
+                        const credits = details.credits || {};
+                        const cast = (credits.cast || []).slice(0, 20).map((person, index) => ({
+                            id: person.id,
+                            name: person.name || '',
+                            character: person.character || '',
+                            profile: person.profile_path ? 'https://image.tmdb.org/t/p/w185' + person.profile_path : '',
+                            order: person.order ?? index
+                        }));
+                        const crew = credits.crew || [];
+                        const director = mediaType === 'movie'
+                            ? (crew.find(person => person.job === 'Director')?.name || item.director || '')
+                            : (crew.find(person => person.job === 'Executive Producer')?.name || item.director || '');
+                        const videos = details.videos?.results || [];
+                        const trailer = videos.find(video => video.site === 'YouTube' && video.type === 'Trailer');
+                        const poster = details.poster_path ? 'https://image.tmdb.org/t/p/w500' + details.poster_path : item.poster;
+                        const backdrop = details.backdrop_path ? 'https://image.tmdb.org/t/p/w1280' + details.backdrop_path : item.backdrop;
+                        const genres = (details.genres || []).map(genre => genre.name).join(' / ');
+                        const seasonData = {};
+
+                        if (mediaType === 'tv' && Array.isArray(details.seasons)) {
+                            const realSeasons = details.seasons.filter(season => season.season_number > 0);
+                            const seasonResults = await Promise.all(realSeasons.map(async season => {
+                                try {
+                                    const seasonDetails = await this.fetchTmdb('tv/' + item.tmdbId + '/season/' + season.season_number);
+                                    return [season.season_number, (seasonDetails.episodes || []).map(episode => ({
+                                        number: episode.episode_number,
+                                        title: episode.name || ('Bölüm ' + episode.episode_number),
+                                        desc: episode.overview || 'Bu bölüm için açıklama bulunmuyor.',
+                                        duration: episode.runtime ? episode.runtime + ' dk' : '',
+                                        still: episode.still_path ? 'https://image.tmdb.org/t/p/w500' + episode.still_path : poster
+                                    }))];
+                                } catch (error) {
+                                    console.warn('TMDB sezon verisi alınamadı:', season.season_number, error);
+                                    return [season.season_number, []];
+                                }
+                            }));
+                            seasonResults.forEach(([seasonNumber, episodes]) => { seasonData[seasonNumber] = episodes; });
+                        }
+
+                        const enriched = {
+                            poster,
+                            image: poster,
+                            backdrop,
+                            desc: details.overview || item.desc,
+                            tmdbOverview: details.overview || item.tmdbOverview,
+                            rating: String(details.vote_average ?? item.rating),
+                            tmdbRating: String(details.vote_average ?? item.tmdbRating),
+                            year: String((details.release_date || details.first_air_date || item.year || '')).slice(0, 4),
+                            duration: mediaType === 'movie'
+                                ? (details.runtime ? details.runtime + ' dk' : item.duration)
+                                : (details.episode_run_time?.[0] ? details.episode_run_time[0] + ' dk / bölüm' : item.duration),
+                            genre: genres || item.genre,
+                            category: genres || item.category,
+                            country: (details.production_countries || details.origin_country || []).map(country => typeof country === 'string' ? country : country.name).join(', ') || item.country,
+                            director,
+                            originalTitle: details.original_title || details.original_name || item.originalTitle,
+                            tmdbCast: cast.length ? cast : (item.tmdbCast || []),
+                            starring: cast.slice(0, 3).map(person => person.name).filter(Boolean).join(' / ') || item.starring,
+                            trailerUrl: trailer ? 'https://www.youtube.com/watch?v=' + trailer.key : item.trailerUrl,
+                            seasons: mediaType === 'tv' ? realSeasons.length : item.seasons,
+                            episodes: mediaType === 'tv' ? realSeasons.reduce((sum, season) => sum + Number(season.episode_count || 0), 0) : item.episodes,
+                            tmdbEpisodesBySeason: seasonData,
+                            tmdbDetailsLoaded: true
+                        };
+                        this.tmdbDetailsCache[cacheKey] = enriched;
+                        Object.assign(item, enriched);
+                        if (this.selectedItem?.id === item.id) Object.assign(this.selectedItem, enriched);
+                    } catch (error) {
+                        this.tmdbDetailsError = error.message || 'TMDB verileri alınamadı.';
+                        console.error('TMDB veri eşitleme hatası:', error);
+                    } finally {
+                        this.tmdbDetailsLoading = false;
+                    }
+                },
 
                 async init() {
                     try {
@@ -814,8 +918,7 @@
                 },
 
                 getEpisodesForSeason(seasonNum) {
-                    // Katalogda sezon/bölüm sayıları var; bölüm bazında metadata henüz bulunmuyor.
-                    return [];
+                    return this.selectedItem?.tmdbEpisodesBySeason?.[seasonNum] || [];
                 },
 
                 get paginatedEpisodes() {
@@ -1017,7 +1120,9 @@
                     this.isPlaying = false;
                     this.videoProgress = 0;
                     this.playbackError = false;
+                    this.tmdbDetailsError = '';
                     this.currentPage = 'watch';
+                    this.fetchTmdbDetails(item);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     
                     setTimeout(() => {
