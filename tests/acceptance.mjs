@@ -62,10 +62,16 @@ try {
     ]) {
       await page.setViewportSize(viewport);
       await page.waitForTimeout(120);
-      const dimensions = await page.evaluate(() => ({
-        viewport: document.documentElement.clientWidth,
-        page: document.documentElement.scrollWidth
-      }));
+      const dimensions = await page.evaluate(() => {
+        const width = document.documentElement.clientWidth;
+        const offenders = [...document.querySelectorAll('body *')]
+          .map(el => ({ tag: el.tagName, id: el.id, cls: typeof el.className === 'string' ? el.className.slice(0, 180) : '', left: Math.round(el.getBoundingClientRect().left), right: Math.round(el.getBoundingClientRect().right), width: Math.round(el.getBoundingClientRect().width), text: (el.innerText || '').trim().slice(0, 70) }))
+          .filter(el => el.right > width + 2 && el.width > 0)
+          .sort((a, b) => b.right - a.right)
+          .slice(0, 12);
+        return { viewport: width, page: document.documentElement.scrollWidth, offenders };
+      });
+      if (dimensions.page > dimensions.viewport + 1) console.log('OVERFLOW DETAILS:', JSON.stringify(dimensions.offenders));
       assert.ok(
         dimensions.page <= dimensions.viewport + 1,
         `Yatay taşma var: ${viewport.width}px ekranda sayfa ${dimensions.page}px genişliğinde`
