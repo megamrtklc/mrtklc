@@ -14,25 +14,33 @@ In GitHub, open **Settings → Secrets and variables → Actions → New reposit
 
 Do not paste any of these values into chat or commit them to the repository. After adding the three secrets, open **Actions → Deploy CineVerse Admin Worker → Run workflow**. The workflow deploys the Worker and writes the GitHub token into Cloudflare as an encrypted Worker secret.
 
-## 2. Protect the Worker with Cloudflare Access
+## 2. Configure password-based administrator login
 
-1. In Cloudflare Zero Trust, create a Self-hosted Access application for the exact Worker hostname shown after deployment (the `*.workers.dev` hostname).
-2. Add an Allow policy restricted to the administrator email address(es). Do not use an Everyone policy.
-3. Copy the application's Audience (AUD) tag.
-4. Set `CF_ACCESS_TEAM_DOMAIN` to the team domain without protocol, for example `example.cloudflareaccess.com`.
-5. Set `CF_ACCESS_AUD` to the copied AUD tag, then deploy again.
+Cloudflare Access is not required. The Worker serves a built-in login page and verifies a long administrator password on the server.
 
-The Worker independently validates the `Cf-Access-Jwt-Assertion` signature, issuer, audience, and expiry. If Access is not configured, the Worker fails closed and does not serve the panel.
+1. In GitHub, open **Settings → Secrets and variables → Actions**.
+2. Add a repository secret named `CINEVERSE_ADMIN_PASSWORD`.
+3. Use a unique password of at least 20 characters. Prefer a randomly generated password or a long passphrase; do not reuse a website password.
+4. Never paste the password into chat, source files, or `wrangler.jsonc`.
 
-## 3. Add the GitHub token as a Worker secret
+The deployment workflow stores this value as the encrypted Worker secret `ADMIN_PASSWORD`. It also generates a fresh 256-bit `SESSION_SECRET` at deployment time. Existing sessions are invalidated after each deployment.
 
-The GitHub fine-grained token is supplied to the deployment workflow as the `CINEVERSE_GITHUB_TOKEN` repository secret and stored in Cloudflare as an encrypted Worker secret. Do not paste the token into chat, source files, or `wrangler.jsonc`.
+The Worker issues a 12-hour, HMAC-signed session cookie with `HttpOnly`, `Secure`, and `SameSite=Strict` attributes. Login attempts are rate-limited to five per minute per client IP using a Worker rate-limiting binding. Catalog writes require a same-origin request and a current GitHub blob SHA.
 
-The deployment workflow runs the equivalent of `wrangler secret put GITHUB_TOKEN`; the secret value is not written to the repository.
+## 3. Deployment secrets
+
+The workflow requires these repository secrets:
+
+- `CLOUDFLARE_API_TOKEN` — deploy permission for this Worker.
+- `CLOUDFLARE_ACCOUNT_ID` — Cloudflare account ID.
+- `CINEVERSE_GITHUB_TOKEN` — fine-grained GitHub token scoped to this repository, Contents read/write.
+- `CINEVERSE_ADMIN_PASSWORD` — unique administrator password, at least 20 characters.
+
+The workflow stores `ADMIN_PASSWORD`, `SESSION_SECRET`, and `GITHUB_TOKEN` as encrypted Worker secrets. Do not commit `.dev.vars`, `.env`, or any token.
 
 ## 4. Open the panel
 
-Open the Worker hostname. Cloudflare Access will authenticate the administrator before the Worker serves the UI or API.
+Open the Worker hostname. The CineVerse login page appears. Enter the administrator password to access the panel.
 
 ## API
 
@@ -40,7 +48,7 @@ Open the Worker hostname. Cloudflare Access will authenticate the administrator 
 - `GET /api/catalog` — current catalog and GitHub blob SHA.
 - `PUT /api/catalog` — validated catalog update. Requires the latest SHA; stale writes return HTTP 409.
 
-All routes require a valid Cloudflare Access JWT. The API is same-origin and does not enable cross-origin requests. Catalog writes create a normal Git commit, preserving GitHub history for rollback.
+All catalog routes require a valid signed administrator session cookie. The API is same-origin and does not enable cross-origin requests. Catalog writes create a normal Git commit, preserving GitHub history for rollback.
 
 ## Notes
 
