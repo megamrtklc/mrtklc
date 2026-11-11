@@ -299,7 +299,7 @@
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
                             <div x-show="isDirectVideoUrl(selectedItem.watchUrl) && !hasPlaybackStarted" class="absolute inset-0 z-10 flex items-center justify-center bg-black cursor-pointer" @click.stop="startPlayback()">
-                                <img :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 w-full h-full object-cover">
+                                <img :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 w-full h-full object-contain">
                                 <div class="absolute inset-0 bg-black/25"></div>
                                 <button type="button" @click.stop="startPlayback()" class="relative z-10 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/50 bg-rose-600/90 text-white shadow-2xl backdrop-blur-sm transition-all hover:scale-110 hover:bg-rose-500" :aria-label="selectedItem.title + ' filmini oynat'">
                                     <i class="fa-solid fa-play text-2xl sm:text-3xl ml-1"></i>
