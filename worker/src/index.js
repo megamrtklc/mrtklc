@@ -44,7 +44,7 @@ async function getAccessKeys(teamDomain) {
 async function authorize(request, env) {
   const teamDomain = String(env.CF_ACCESS_TEAM_DOMAIN || "").trim().replace(/^https?:\/\//, "").replace(/\/$/, "");
   const audience = String(env.CF_ACCESS_AUD || "").trim();
-  if (!teamDomain || !audience) return { ok: false, status: 503, error: "Cloudflare Access yapılandırması tamamlanmamış." };
+  if (!teamDomain || teamDomain.startsWith("YOUR_") || !audience || audience.startsWith("SET_")) return { ok: false, status: 503, error: "Cloudflare Access yapılandırması tamamlanmamış." };
 
   const token = request.headers.get("cf-access-jwt-assertion");
   if (!token) return { ok: false, status: 401, error: "Yönetici oturumu gerekli." };
