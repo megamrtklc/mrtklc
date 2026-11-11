@@ -9,76 +9,77 @@ function json(data, status = 200) {
   });
 }
 
-function decodeBase64Url(value) {
-  const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
-  const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
-  const binary = atob(padded);
-  return Uint8Array.from(binary, char => char.charCodeAt(0));
-}
 
-function decodeJwtPart(value) {
-  return JSON.parse(new TextDecoder().decode(decodeBase64Url(value)));
-}
-
-function bytesToBase64(bytes) {
+function encodeBase64Url(bytes) {
   let binary = "";
-  for (let offset = 0; offset < bytes.length; offset += 0x8000) {
-    binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
-  }
-  return btoa(binary);
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 }
-
-async function getAccessKeys(teamDomain) {
-  const now = Date.now();
-  if (cachedJwks && now - cachedJwksAt < 10 * 60 * 1000) return cachedJwks;
-  const response = await fetch(`https://${teamDomain}/cdn-cgi/access/certs`, {
-    headers: { accept: "application/json" },
-    cf: { cacheTtl: 600, cacheEverything: true }
-  });
-  if (!response.ok) throw new Error("Cloudflare Access anahtarları alınamadı.");
-  cachedJwks = await response.json();
-  cachedJwksAt = now;
-  return cachedJwks;
+function decodeBase64Url(value) {
+  const normalized=value.replace(/-/g,"+").replace(/_/g,"/");
+  const padded=normalized+"=".repeat((4-normalized.length%4)%4);
+  const binary=atob(padded);
+  return Uint8Array.from(binary,char=>char.charCodeAt(0));
 }
-
-async function authorize(request, env) {
-  const teamDomain = String(env.CF_ACCESS_TEAM_DOMAIN || "").trim().replace(/^https?:\/\//, "").replace(/\/$/, "");
-  const audience = String(env.CF_ACCESS_AUD || "").trim();
-  if (!teamDomain || teamDomain.startsWith("YOUR_") || !audience || audience.startsWith("SET_")) return { ok: false, status: 503, error: "Cloudflare Access yapılandırması tamamlanmamış." };
-
-  const token = request.headers.get("cf-access-jwt-assertion");
-  if (!token) return { ok: false, status: 401, error: "Yönetici oturumu gerekli." };
-
+async function hmac(secret,value) {
+  const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(secret),{name:"HMAC",hash:"SHA-256"},false,["sign"]);
+  return new Uint8Array(await crypto.subtle.sign("HMAC",key,new TextEncoder().encode(value)));
+}
+function constantTimeEqual(a,b) {
+  if(a.length!==b.length)return false;
+  let diff=0;
+  for(let i=0;i<a.length;i++)diff|=a[i]^b[i];
+  return diff===0;
+}
+function getCookie(request,name) {
+  const cookie=request.headers.get("cookie")||"";
+  const match=cookie.split(";").map(x=>x.trim()).find(x=>x.startsWith(name+"="));
+  return match?match.slice(name.length+1):"";
+}
+function sameOrigin(request) {
+  const origin=request.headers.get("origin");
+  return !!origin&&origin===new URL(request.url).origin;
+}
+function loginPage(showError=false) {
+  const error=showError?'<p class="error">Şifre doğru değil. Lütfen tekrar dene.</p>':"";
+  const html='<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>CineVerse Yönetici Girişi</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 0,#30251b 0,#17191f 48%,#101116 100%);color:#f4f1eb;font:15px system-ui,sans-serif}.panel{width:min(100%,420px);padding:38px;border:1px solid #ffffff18;border-radius:22px;background:#202127ef;box-shadow:0 24px 80px #0008}.mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#d6b36b,#8e632c);display:grid;place-items:center;color:#17191f;font-weight:900;font-size:20px}.eyebrow{margin:25px 0 8px;color:#c9a967;font-size:11px;letter-spacing:2px;font-weight:700}h1{margin:0;font-size:27px}p{color:#a8a8ae;line-height:1.6}.field{display:block;margin:26px 0 14px;color:#d9d5ce;font-size:13px}.field input{display:block;width:100%;margin-top:9px;padding:14px 15px;border:1px solid #ffffff24;border-radius:11px;background:#15161b;color:#fff;font:inherit;outline:none}.field input:focus{border-color:#c9a967;box-shadow:0 0 0 3px #c9a96722}button{width:100%;padding:14px;border:0;border-radius:11px;background:linear-gradient(110deg,#d6b36b,#b78a43);color:#17191f;font:700 14px system-ui;cursor:pointer}.error{margin:0 0 14px;padding:11px 13px;border-radius:9px;background:#7f292933;color:#ffaaaa;font-size:13px}.foot{margin-top:22px;text-align:center;font-size:11px;color:#777982}</style></head><body><main class="panel"><div class="mark">C</div><div class="eyebrow">CINEVERSE / MANAGEMENT STUDIO</div><h1>Yönetici girişi</h1><p>Yönetim merkezine devam etmek için erişim şifreni gir.</p>'+error+'<form method="post" action="/api/login"><label class="field">Yönetici şifresi<input type="password" name="password" autocomplete="current-password" required minlength="20" autofocus></label><button type="submit">Güvenli giriş yap</button></form><div class="foot">Yalnızca yetkili yönetici erişebilir.</div></main></body></html>';
+  return new Response(html,{status:200,headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff","referrer-policy":"no-referrer"}});
+}
+async function authorize(request,env) {
+  if(!env.ADMIN_PASSWORD||!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32)return {ok:false,status:503,error:"Yönetici girişi henüz yapılandırılmamış."};
+  const token=getCookie(request,"cv_admin_session");
+  if(!token)return {ok:false,status:401,error:"Yönetici oturumu gerekli."};
   try {
-    const parts = token.split(".");
-    if (parts.length !== 3) throw new Error("JWT biçimi geçersiz.");
-    const header = decodeJwtPart(parts[0]);
-    const claims = decodeJwtPart(parts[1]);
-    if (header.alg !== "RS256" || !header.kid) throw new Error("JWT algoritması geçersiz.");
-    const issuer = `https://${teamDomain}`;
-    const now = Math.floor(Date.now() / 1000);
-    if (claims.iss !== issuer || !Array.isArray(claims.aud) || !claims.aud.includes(audience)) throw new Error("JWT hedefi doğrulanamadı.");
-    if (typeof claims.exp !== "number" || claims.exp <= now || (typeof claims.nbf === "number" && claims.nbf > now + 60)) throw new Error("JWT süresi geçersiz.");
-
-    const jwks = await getAccessKeys(teamDomain);
-    const jwk = (jwks.keys || []).find(key => key.kid === header.kid && key.kty === "RSA");
-    if (!jwk) {
-      cachedJwks = null;
-      const refreshed = await getAccessKeys(teamDomain);
-      const retryKey = (refreshed.keys || []).find(key => key.kid === header.kid && key.kty === "RSA");
-      if (!retryKey) throw new Error("JWT imza anahtarı bulunamadı.");
-      const cryptoKey = await crypto.subtle.importKey("jwk", retryKey, { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["verify"]);
-      const valid = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", cryptoKey, decodeBase64Url(parts[2]), new TextEncoder().encode(parts[0] + "." + parts[1]));
-      if (!valid) throw new Error("JWT imzası geçersiz.");
-    } else {
-      const cryptoKey = await crypto.subtle.importKey("jwk", jwk, { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["verify"]);
-      const valid = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", cryptoKey, decodeBase64Url(parts[2]), new TextEncoder().encode(parts[0] + "." + parts[1]));
-      if (!valid) throw new Error("JWT imzası geçersiz.");
-    }
-    return { ok: true, claims };
-  } catch (error) {
-    return { ok: false, status: 401, error: "Yönetici oturumu doğrulanamadı." };
+    const parts=token.split(".");
+    if(parts.length!==2)throw new Error("Invalid session");
+    const payload=JSON.parse(new TextDecoder().decode(decodeBase64Url(parts[0])));
+    const expected=await hmac(env.SESSION_SECRET,parts[0]);
+    const supplied=decodeBase64Url(parts[1]);
+    if(!constantTimeEqual(expected,supplied)||payload.sub!=="admin"||typeof payload.exp!=="number"||payload.exp<=Math.floor(Date.now()/1000))throw new Error("Invalid session");
+    return {ok:true,claims:{email:"Yönetici"}};
+  } catch { return {ok:false,status:401,error:"Yönetici oturumu doğrulanamadı."}; }
+}
+async function handleLogin(request,env) {
+  if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+  if(!env.ADMIN_PASSWORD||!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32)return json({error:"Yönetici girişi sunucuda yapılandırılmamış."},503);
+  if(env.LOGIN_LIMITER) {
+    const ip=request.headers.get("cf-connecting-ip")||"unknown";
+    const limit=await env.LOGIN_LIMITER.limit({key:ip});
+    if(!limit.success)return new Response("Çok fazla giriş denemesi. Bir dakika sonra tekrar dene.",{status:429,headers:{"content-type":"text/plain; charset=utf-8","retry-after":"60","cache-control":"no-store"}});
   }
+  const form=await request.formData();
+  const password=String(form.get("password")||"");
+  if(password.length<20||password.length>256)return loginPage(true);
+  const [candidate,expected]=await Promise.all([hmac(env.SESSION_SECRET,password),hmac(env.SESSION_SECRET,env.ADMIN_PASSWORD)]);
+  if(!constantTimeEqual(candidate,expected))return new Response(loginPage(true).body,{status:401,headers:loginPage(true).headers});
+  const now=Math.floor(Date.now()/1000);
+  const payload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:now,exp:now+43200})));
+  const signature=encodeBase64Url(await hmac(env.SESSION_SECRET,payload));
+  return new Response(null,{status:303,headers:{"location":"/","set-cookie":"cv_admin_session="+payload+"."+signature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=43200","cache-control":"no-store"}});
+}
+async function handleLogout(request) {
+  if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+  return new Response(null,{status:303,headers:{"location":"/","set-cookie":"cv_admin_session=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0","cache-control":"no-store"}});
 }
 
 function githubHeaders(env) {
@@ -157,42 +158,33 @@ async function writeCatalog(env, data, expectedSha) {
 }
 
 export default {
-  async fetch(request, env) {
-    const auth = await authorize(request, env);
-    if (!auth.ok) return json({ error: auth.error }, auth.status);
-
-    const url = new URL(request.url);
-    if (!url.pathname.startsWith("/api/")) {
-      return env.ASSETS.fetch(request);
+  async fetch(request,env) {
+    const url=new URL(request.url);
+    if(request.method==="POST"&&url.pathname==="/api/login")return handleLogin(request,env);
+    if(request.method==="POST"&&url.pathname==="/api/logout")return handleLogout(request);
+    const auth=await authorize(request,env);
+    if(!auth.ok) {
+      if(url.pathname.startsWith("/api/"))return json({error:auth.error},auth.status);
+      return loginPage();
     }
-
-    if (request.method === "GET" && url.pathname === "/api/session") {
-      return json({ authenticated: true, email: auth.claims.email || null });
+    if(!url.pathname.startsWith("/api/"))return env.ASSETS.fetch(request);
+    if(request.method==="GET"&&url.pathname==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
+    if(request.method==="GET"&&url.pathname==="/api/catalog") {
+      try { return json(await readCatalog(env)); }
+      catch(error) { return json({error:error.message||"Katalog okunamadı."},502); }
     }
-
-    if (request.method === "GET" && url.pathname === "/api/catalog") {
+    if(request.method==="PUT"&&url.pathname==="/api/catalog") {
+      if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
       try {
-        const result = await readCatalog(env);
-        return json(result);
-      } catch (error) {
-        return json({ error: error.message || "Katalog okunamadı." }, 502);
-      }
+        const length=Number(request.headers.get("content-length")||0);
+        if(length>2500000)return json({error:"İstek boyutu sınırı aşıldı."},413);
+        const body=await request.json();
+        if(!body||typeof body.sha!=="string"||!body.sha)return json({error:"Güncel katalog SHA bilgisi gerekli."},400);
+        const result=await writeCatalog(env,body.data,body.sha);
+        if(result.conflict)return json({error:"Katalog başka bir işlemde güncellenmiş. Veriyi yeniden yükleyip tekrar deneyin.",sha:result.sha},409);
+        return json({ok:true,sha:result.sha,commit:result.commit});
+      } catch(error) { return json({error:error.message||"Katalog kaydedilemedi."},400); }
     }
-
-    if (request.method === "PUT" && url.pathname === "/api/catalog") {
-      try {
-        const length = Number(request.headers.get("content-length") || 0);
-        if (length > 2_500_000) return json({ error: "İstek boyutu sınırı aşıldı." }, 413);
-        const body = await request.json();
-        if (!body || typeof body.sha !== "string" || !body.sha) return json({ error: "Güncel katalog SHA bilgisi gerekli." }, 400);
-        const result = await writeCatalog(env, body.data, body.sha);
-        if (result.conflict) return json({ error: "Katalog başka bir işlemde güncellenmiş. Veriyi yeniden yükleyip tekrar deneyin.", sha: result.sha }, 409);
-        return json({ ok: true, sha: result.sha, commit: result.commit });
-      } catch (error) {
-        return json({ error: error.message || "Katalog kaydedilemedi." }, 400);
-      }
-    }
-
-    return json({ error: "API endpoint bulunamadı." }, 404);
+    return json({error:"API endpoint bulunamadı."},404);
   }
 };
