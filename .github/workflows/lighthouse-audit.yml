@@ -57,6 +57,6 @@ jobs:
         run: node scripts/print-lighthouse-scores.mjs .lighthouseci
 
 
-# Manual verification trigger after responsive hero picture-source deployment (Nov 11, 2026).
+# Manual verification trigger after dual responsive hero image gating deployment (Nov 11, 2026).
 
 # Re-run production Lighthouse audit after the latest acceptance-test deployment (Nov 11, 2026).
