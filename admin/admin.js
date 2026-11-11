@@ -150,7 +150,7 @@
         const sessionResponse=await fetch('/api/session',{cache:'no-store',credentials:'same-origin'});
         if(!sessionResponse.ok)throw new Error('Yönetici oturumu doğrulanamadı.');
         const session=await sessionResponse.json();
-        $('.notice p').textContent='Cloudflare Access doğrulaması etkin. Yönetici: '+(session.email||'Yetkili hesap')+'. Katalog sunucu üzerinden güvenli biçimde okunuyor.';
+        $('.notice p').textContent='Yönetici oturumu etkin: '+(session.email||'Yetkili hesap')+'. Katalog sunucu üzerinden güvenli biçimde okunuyor.';
         $('.notice-tag').textContent='PROTECTED';
       }else if(apiResponse.status===404){
         response=await fetch('../filmvediziler.json',{cache:'no-store'});
@@ -187,6 +187,7 @@
   $$('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
   $$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
   $('#mobile-menu').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
+  $('#logout-button')?.addEventListener('click',async()=>{try{await fetch('/api/logout',{method:'POST',credentials:'same-origin'});}finally{window.location.reload();}});
   $('#catalog-search').addEventListener('input',()=>{state.page=1;renderCatalog()});
   $('#type-filter').addEventListener('change',()=>{state.page=1;renderCatalog()});
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog()});
