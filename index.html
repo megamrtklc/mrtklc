@@ -290,12 +290,23 @@
                                    @click="togglePlay(); showPlayerControls()"
                                    @loadedmetadata="updateVideoProgress"
                                    @timeupdate="updateVideoProgress"
-                                   @play="isPlaying = true; schedulePlayerControlsHide()"
+                                   @play="isPlaying = true; hasPlaybackStarted = true; schedulePlayerControlsHide()"
                                    @pause="isPlaying = false; showPlayerControls()"
                                    @ended="videoEnded = true"
                                    @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
+                            <div x-show="isDirectVideoUrl(selectedItem.watchUrl) && !hasPlaybackStarted" class="absolute inset-0 z-10 flex items-center justify-center bg-black cursor-pointer" @click.stop="startPlayback()">
+                                <img :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-black/25"></div>
+                                <button type="button" @click.stop="startPlayback()" class="relative z-10 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/50 bg-rose-600/90 text-white shadow-2xl backdrop-blur-sm transition-all hover:scale-110 hover:bg-rose-500" :aria-label="selectedItem.title + ' filmini oynat'">
+                                    <i class="fa-solid fa-play text-2xl sm:text-3xl ml-1"></i>
+                                </button>
+                                <div class="absolute bottom-5 left-5 right-5 z-10 text-center text-white drop-shadow-lg">
+                                    <div class="text-sm sm:text-base font-black" x-text="selectedItem.title"></div>
+                                    <div class="mt-1 text-[10px] sm:text-xs font-semibold tracking-wider text-white/80">OYNATMAK İÇİN TIKLA</div>
+                                </div>
+                            </div>
                             <div x-show="!isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-0 overflow-hidden bg-gray-950 text-white">
                                 <img :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="absolute inset-0 h-full w-full object-cover opacity-35 blur-[2px] scale-105">
                                 <div class="absolute inset-0 bg-gradient-to-r from-gray-950/95 via-gray-950/75 to-gray-950/55"></div>
@@ -318,7 +329,7 @@
                             </div>
 
                             <!-- Overlay Controls -->
-                            <div x-show="isDirectVideoUrl(selectedItem.watchUrl) && playerControlsVisible" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 translate-y-2" @click.stop class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
+                            <div x-show="isDirectVideoUrl(selectedItem.watchUrl) && hasPlaybackStarted && playerControlsVisible" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 translate-y-2" @click.stop class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
                                 <div class="flex items-center justify-between mb-1">
                                     <div class="flex items-center space-x-2">
                                         <span class="px-2.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase" x-text="selectedItem.title"></span>
@@ -1066,6 +1077,7 @@
                 durationFormatted: '00:00',
                 videoEnded: false,
                 playbackError: false,
+                hasPlaybackStarted: false,
                 playerControlsVisible: true,
                 playerControlsTimer: null,
 
@@ -1096,6 +1108,12 @@
                     return this.selectedItem && this.isDirectVideoUrl(this.selectedItem.watchUrl)
                         ? this.selectedItem.watchUrl
                         : '';
+                },
+
+                startPlayback() {
+                    this.hasPlaybackStarted = true;
+                    this.playerControlsVisible = true;
+                    this.togglePlay();
                 },
 
                 togglePlay() {
@@ -1278,6 +1296,8 @@
                     this.selectedEpisode = 1;
                     this.currentEpisodePage = 1;
                     this.isPlaying = false;
+                    this.hasPlaybackStarted = false;
+                    this.playerControlsVisible = true;
                     this.videoProgress = 0;
                     this.playbackError = false;
                     this.tmdbDetailsError = '';
