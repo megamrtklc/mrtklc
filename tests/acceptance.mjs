@@ -38,44 +38,13 @@ try {
   adaletId = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.find(item => item.title === 'Adalet 2')?.id);
   assert.ok(adaletId, 'Adalet 2 katalogda bulunamadı');
 
-  try {
-    const tmdbBackdrops = await page.evaluate(async () => {
-      const app = window.Alpine.$data(document.documentElement);
-      const images = await app.fetchTmdb('movie/1507696/images');
-      return (images.backdrops || []).slice(0, 12).map(image => image.file_path);
-    });
-    console.log('TMDB HERO BACKDROPS:', JSON.stringify(tmdbBackdrops));
-    const posterStatus = await page.evaluate(async () => {
-      const posterUrl = window.Alpine.$data(document.documentElement).currentHero.poster;
-      return await new Promise(resolve => {
-        const image = new Image();
-        const timeout = setTimeout(() => resolve('timeout'), 10000);
-        image.onload = () => { clearTimeout(timeout); resolve('loaded:' + image.naturalWidth); };
-        image.onerror = () => { clearTimeout(timeout); resolve('error'); };
-        image.src = posterUrl;
-      });
-    });
-    console.log('HERO POSTER PROBE:', posterStatus);
-    const backdropStatuses = await page.evaluate(async () => {
-      const app = window.Alpine.$data(document.documentElement);
-      return await Promise.all(app.catalog.slice(0, 10).map(item => new Promise(resolve => {
-        const image = new Image();
-        const timeout = setTimeout(() => resolve({ title: item.title, status: 'timeout', url: item.backdrop }), 10000);
-        image.onload = () => { clearTimeout(timeout); resolve({ title: item.title, status: 'loaded', width: image.naturalWidth, url: item.backdrop }); };
-        image.onerror = () => { clearTimeout(timeout); resolve({ title: item.title, status: 'error', url: item.backdrop }); };
-        image.src = item.backdrop || '';
-      })));
-    });
-    console.log('HERO BACKDROP PROBES:', JSON.stringify(backdropStatuses));
-  } catch (error) {
-    console.log('TMDB BACKDROP DIAGNOSTIC UNAVAILABLE:', error.message);
-  }
-
   await check('Ana sayfa açılıyor ve katalog yükleniyor', async () => {
     assert.match(await page.title(), /CineVerse/i);
     assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).count());
     const count = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.length);
     assert.equal(count, 140);
+    const heroThumbnailCount = await page.locator('#heroThumbContainer img').count();
+    assert.equal(heroThumbnailCount, 12, 'Ana sayfa hero küçük görselleri 12 ile sınırlandırılmalı');
     const responsiveSources = await page.locator('img[srcset]').evaluateAll(images => images.map(image => image.getAttribute('srcset') || '').filter(Boolean));
     console.log('RESPONSIVE IMAGE SOURCES:', JSON.stringify(responsiveSources.slice(0, 8)));
     assert.ok(responsiveSources.some(source => source.includes('w185')) && responsiveSources.some(source => source.includes('w780')), 'TMDB afiş veya hero görsellerinde duyarlı kaynaklar bulunamadı');
