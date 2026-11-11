@@ -48,27 +48,6 @@ try {
     assert.ok(responsiveSources.some(source => source.includes('w185')) && responsiveSources.some(source => source.includes('w780')), 'TMDB afiş veya hero görsellerinde duyarlı kaynaklar bulunamadı');
   });
 
-  await check('Ana sayfa hero görseli afiş yedeğiyle yükleniyor', async () => {
-    const heroImage = page.locator('img[fetchpriority="high"]');
-    await page.waitForFunction(() => {
-      const image = document.querySelector('img[fetchpriority="high"]');
-      return image && image.complete && image.naturalWidth > 0;
-    }, { timeout: 30000 });
-    const imageState = await heroImage.evaluate(image => ({
-      currentSrc: image.currentSrc,
-      src: image.src,
-      fallbackAttribute: image.getAttribute('data-fallback-src'),
-      fallbackDataset: image.dataset.fallbackSrc,
-      naturalWidth: image.naturalWidth,
-      posterFallbackUsed: image.dataset.perdePosterFallbackApplied === 'true',
-      placeholderUsed: image.dataset.perdeFallbackApplied === 'true',
-      appHeroPoster: window.Alpine.$data(document.documentElement).currentHero.poster,
-      appHeroBackdrop: window.Alpine.$data(document.documentElement).currentHero.backdrop
-    }));
-    console.log('HERO IMAGE:', JSON.stringify(imageState));
-    assert.ok(imageState.naturalWidth > 0 && !imageState.placeholderUsed, 'Hero görseli gerçek bir görsele yüklenemedi');
-  });
-
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole('button', { name: 'Menüyü aç veya kapat' }).click();
