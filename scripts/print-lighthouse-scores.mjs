@@ -50,7 +50,16 @@ for (const { file, report } of reports) {
       score: audit.score,
       displayValue: audit.displayValue || null,
       savingsMs: audit.details?.overallSavingsMs || 0,
-      savingsBytes: audit.details?.overallSavingsBytes || 0
+      savingsBytes: audit.details?.overallSavingsBytes || 0,
+      affected: (audit.details?.items || []).slice(0, 5).map(item => ({
+        url: item.url || null,
+        selector: item.node?.selector || null,
+        snippet: item.node?.snippet || null,
+        description: item.description || null,
+        source: item.source || null,
+        contrastRatio: item.contrastRatio || null,
+        wastedBytes: item.wastedBytes || 0
+      }))
     }));
   console.log(JSON.stringify({
     report: file,
