@@ -217,6 +217,34 @@
                     </div>
                 </section>
 
+                <!-- Kişiselleştirilmiş Öneriler -->
+                <section class="w-full px-6 sm:px-12 space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-500 mb-1">SANA ÖZEL • {{ currentProfile.name }}</p>
+                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">İzleme Zevkine Göre</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzleme geçmişin ve listene eklediğin yapımlardan yola çıkarak seçildi</p>
+                        </div>
+                        <span class="text-[10px] font-bold text-rose-500" x-text="personalizedRecommendations.length + ' öneri'"></span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 sm:gap-4">
+                        <template x-for="item in personalizedRecommendations" :key="'personal-' + item.id">
+                            <button @click="openWatchPage(item)" class="group min-w-0 text-left rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161922] hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
+                                <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <img :src="item.poster || item.image" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'series' ? 'Dizi' : 'Film'"></span>
+                                    <span class="absolute bottom-2 right-2 rounded bg-black/75 text-amber-400 text-[9px] font-black px-1.5 py-1"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || '—'"></span></span>
+                                </div>
+                                <div class="p-2.5 space-y-1">
+                                    <h3 class="text-[11px] font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
+                                    <p class="text-[9px] text-gray-500 dark:text-gray-400" x-text="(item.year || '') + (item.genre ? ' • ' + item.genre : '')"></p>
+                                </div>
+                            </button>
+                        </template>
+                    </div>
+                    <p x-show="!personalizedRecommendations.length" class="text-xs text-gray-500 dark:text-gray-400 py-5 text-center">Önerileri kişiselleştirmek için birkaç yapım izlemeye başlayabilir veya izleme listene ekleyebilirsin.</p>
+                </section>
+
                 <!-- Film & Dizi Katalog -->
                 <section class="w-full px-6 sm:px-12 space-y-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
@@ -1701,6 +1729,79 @@
                         if (sourceRating && rating && Math.abs(sourceRating - rating) <= 1) score += 1;
                         return { item: candidate, score };
                     }).sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, 'tr')).slice(0, 12).map(entry => entry.item);
+                },
+
+                get personalizedRecommendations() {
+                    const safeRead = key => {
+                        try {
+                            const value = JSON.parse(localStorage.getItem(key) || '{}');
+                            return value && typeof value === 'object' ? value : {};
+                        } catch (error) {
+                            console.warn('Kişiselleştirilmiş öneri verisi okunamadı:', key, error);
+                            return {};
+                        }
+                    };
+                    const tokens = value => String(value || '').split(/[\\/;,]/).map(part => this.normalizeSearchText(part)).filter(Boolean);
+                    const profileId = this.currentProfileId;
+                    const progress = safeRead('perde_player_progress_v3');
+                    const episodes = safeRead('cine_episode_tracking_v1');
+                    const history = new Map();
+
+                    Object.entries(progress).forEach(([id, saved]) => {
+                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        const time = Math.max(0, Number(saved?.time) || 0);
+                        if (item && time >= 300) history.set(String(item.id), { item, weight: 1 + Math.min(time / 3600, 2) });
+                    });
+
+                    Object.entries(episodes).forEach(([key, tracking]) => {
+                        if (!key.startsWith(profileId + ':')) return;
+                        const id = key.slice(profileId.length + 1);
+                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        if (!item) return;
+                        const watchedCount = Object.values(tracking?.watched || {}).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number)).size : 0), 0);
+                        if (watchedCount > 0) {
+                            const previous = history.get(String(item.id));
+                            history.set(String(item.id), { item, weight: Math.max(previous?.weight || 0, 1 + Math.min(watchedCount / 5, 3)) });
+                        }
+                    });
+
+                    const watchlistItems = this.watchlist.map(saved => this.catalog.find(item => String(item.id) === String(saved.id))).filter(Boolean);
+                    watchlistItems.forEach(item => {
+                        if (!history.has(String(item.id))) history.set(String(item.id), { item, weight: 1.5 });
+                    });
+
+                    if (!history.size) {
+                        return [...this.catalog]
+                            .filter(item => item && item.id != null)
+                            .sort((a, b) => (Number.parseFloat(b.rating) || 0) - (Number.parseFloat(a.rating) || 0))
+                            .slice(0, 8);
+                    }
+
+                    const preferences = { genres: new Map(), types: new Map(), countries: new Map(), directors: new Map() };
+                    history.forEach(({ item, weight }) => {
+                        tokens(item.category || item.genre).forEach(value => preferences.genres.set(value, (preferences.genres.get(value) || 0) + weight));
+                        if (item.type) preferences.types.set(item.type, (preferences.types.get(item.type) || 0) + weight);
+                        tokens(item.country).forEach(value => preferences.countries.set(value, (preferences.countries.get(value) || 0) + weight * 0.35));
+                        const director = this.normalizeSearchText(item.director);
+                        if (director) preferences.directors.set(director, (preferences.directors.get(director) || 0) + weight * 0.8);
+                    });
+
+                    const excluded = new Set([...history.keys(), ...this.watchlist.map(item => String(item.id))]);
+                    return this.catalog
+                        .filter(item => item && item.id != null && !excluded.has(String(item.id)))
+                        .map(item => {
+                            let score = 0;
+                            tokens(item.category || item.genre).forEach(value => score += (preferences.genres.get(value) || 0) * 3);
+                            score += (preferences.types.get(item.type) || 0) * 0.5;
+                            tokens(item.country).forEach(value => score += preferences.countries.get(value) || 0);
+                            const director = this.normalizeSearchText(item.director);
+                            if (director) score += preferences.directors.get(director) || 0;
+                            score += Math.max(0, Number.parseFloat(item.rating) || 0) * 0.12;
+                            return { item, score };
+                        })
+                        .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, 'tr'))
+                        .slice(0, 8)
+                        .map(entry => entry.item);
                 },
 
                 get watchableCatalog() {
