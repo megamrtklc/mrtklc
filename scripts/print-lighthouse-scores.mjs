@@ -61,11 +61,40 @@ for (const { file, report } of reports) {
         wastedBytes: item.wastedBytes || 0
       }))
     }));
+  const lcpAuditIds = [
+    'largest-contentful-paint-element',
+    'lcp-discovery-insight',
+    'lcp-breakdown-insight',
+    'lcp-request-discovery'
+  ];
+  const lcpDiagnostics = Object.fromEntries(lcpAuditIds.map(id => {
+    const audit = audits[id];
+    return [id, {
+      title: audit?.title || null,
+      displayValue: audit?.displayValue || null,
+      items: (audit?.details?.items || []).slice(0, 3).map(item => ({
+        url: item.url || item.request?.url || null,
+        snippet: item.node?.snippet || null,
+        value: item.value ?? null,
+        timing: item.timing ?? null,
+        phase: item.phase ?? null,
+        itemKeys: Object.keys(item).slice(0, 20),
+        subItems: (item.subItems?.items || []).slice(0, 3).map(sub => ({
+          url: sub.url || sub.request?.url || null,
+          value: sub.value ?? null,
+          timing: sub.timing ?? null,
+          phase: sub.phase ?? null,
+          keys: Object.keys(sub).slice(0, 12)
+        }))
+      }))
+    }];
+  }));
   console.log(JSON.stringify({
     report: file,
     url: report.requestedUrl || report.finalDisplayedUrl,
     scores,
     metrics,
-    findings
+    findings,
+    lcpDiagnostics
   }));
 }
