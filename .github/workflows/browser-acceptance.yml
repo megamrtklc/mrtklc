@@ -38,4 +38,4 @@ jobs:
           BASE_URL: https://megamrtklc.github.io/mrtklc/
         run: node tests/acceptance.mjs
 
-# Manual verification trigger after responsive hero preload deployment (Nov 11, 2026).
+# Manual verification trigger after responsive hero picture-source deployment (Nov 11, 2026).
