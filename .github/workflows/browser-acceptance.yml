@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/browser-acceptance.yml'
       - 'tests/acceptance.mjs'
+      - 'index.html'
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
