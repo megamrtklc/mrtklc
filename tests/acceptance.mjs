@@ -7,9 +7,13 @@ const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
 const failures = [];
+const failedResources = [];
 let adaletId = null;
 const results = [];
 page.on('pageerror', error => failures.push(error.message));
+page.on('response', response => {
+  if (response.status() >= 400) failedResources.push({ status: response.status(), url: response.url() });
+});
 
 async function check(name, fn) {
   try {
@@ -232,6 +236,7 @@ try {
 
   await check('Tarayıcıda yakalanan JavaScript çalışma zamanı hatası yok', async () => {
     assert.deepEqual(failures, []);
+    console.log('HTTP RESOURCE ERRORS:', JSON.stringify(failedResources.slice(0, 20)));
   });
 
   console.log(JSON.stringify({ baseURL: BASE_URL, results }, null, 2));
