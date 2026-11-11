@@ -619,7 +619,7 @@
                             </div>
 
                             <div id="similarContainer" class="flex items-center space-x-3.5 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
-                                <template x-for="sim in catalog.filter(s => s.id !== selectedItem.id)" :key="sim.id">
+                                <template x-for="sim in getSimilarItems(selectedItem)" :key="sim.id">
                                     <div @click="openWatchPage(sim)" :class="getCardClass()" class="w-28 flex-shrink-0 cursor-pointer p-2 rounded-xl border hover:border-gray-300 dark:hover:border-gray-700 transition-colors flex flex-col items-center text-center space-y-2 group">
                                         <div class="w-24 aspect-[2/3] rounded-lg overflow-hidden bg-black shadow-md">
                                             <img :src="sim.poster" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
@@ -1469,6 +1469,37 @@
                     this.discoveryYearTo = '';
                     this.quickFilter = 'all';
                     this.sortBy = 'default';
+                },
+
+                getSimilarItems(item) {
+                    if (!item) return [];
+                    const tokens = value => String(value || '').split(/[\\/;,]/).map(part => this.normalizeSearchText(part)).filter(Boolean);
+                    const sourceGenres = new Set([...tokens(item.category), ...tokens(item.genre)]);
+                    const sourceCast = new Set((item.tmdbCast || item.cast || []).slice(0, 12).map(person => this.normalizeSearchText(typeof person === 'string' ? person : person.name)).filter(Boolean));
+                    const sourceCountries = new Set(tokens(item.country));
+                    const sourceYear = Number.parseInt(item.year, 10) || 0;
+                    const sourceRating = Number.parseFloat(item.rating) || 0;
+
+                    return this.catalog.filter(candidate => candidate.id !== item.id).map(candidate => {
+                        const candidateGenres = new Set([...tokens(candidate.category), ...tokens(candidate.genre)]);
+                        const candidateCast = (candidate.tmdbCast || candidate.cast || []).slice(0, 12).map(person => this.normalizeSearchText(typeof person === 'string' ? person : person.name)).filter(Boolean);
+                        const candidateCountries = tokens(candidate.country);
+                        let score = 0;
+                        candidateGenres.forEach(genre => { if (sourceGenres.has(genre)) score += 5; });
+                        candidateCast.forEach(name => { if (sourceCast.has(name)) score += 2; });
+                        if (item.director && candidate.director && this.normalizeSearchText(item.director) === this.normalizeSearchText(candidate.director)) score += 4;
+                        candidateCountries.forEach(country => { if (sourceCountries.has(country)) score += 1; });
+                        if (item.type === candidate.type) score += 1;
+                        const year = Number.parseInt(candidate.year, 10) || 0;
+                        if (sourceYear && year) {
+                            const distance = Math.abs(sourceYear - year);
+                            if (distance <= 3) score += 2;
+                            else if (distance <= 7) score += 1;
+                        }
+                        const rating = Number.parseFloat(candidate.rating) || 0;
+                        if (sourceRating && rating && Math.abs(sourceRating - rating) <= 1) score += 1;
+                        return { item: candidate, score };
+                    }).sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, 'tr')).slice(0, 12).map(entry => entry.item);
                 },
 
                 get sortedFilteredCatalog() {
