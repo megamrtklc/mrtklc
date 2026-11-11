@@ -93,14 +93,18 @@ try {
       'Derlenmiş Tailwind CSS doğru yüklenmedi: ' + JSON.stringify(compiledStyleCheck)
     );
     await page.waitForFunction(() => {
-      const image = [...document.querySelectorAll('img[fetchpriority="high"]')]
-        .find(candidate => candidate.getClientRects().length > 0);
-      return image && image.complete && image.naturalWidth > 0;
+      const desktopHero = [...document.querySelectorAll('section img')]
+        .find(image => image.closest('section')?.classList.contains('md:flex') &&
+          image.getClientRects().length > 0);
+      return desktopHero && desktopHero.complete && desktopHero.naturalWidth > 0;
     }, { timeout: 20000 });
-    const heroImageOk = await page.locator('img[fetchpriority="high"]:visible').first().evaluate(image =>
-      image.naturalWidth > 0 && image.dataset.perdeFallbackApplied !== 'true'
-    );
-    assert.ok(heroImageOk, 'Ana sayfa hero görseli ilk açılışta yüklenemedi');
+    const heroImageOk = await page.evaluate(() => {
+      const image = [...document.querySelectorAll('section img')]
+        .find(candidate => candidate.closest('section')?.classList.contains('md:flex') &&
+          candidate.getClientRects().length > 0);
+      return !!image && image.naturalWidth > 0 && image.dataset.perdeFallbackApplied !== 'true';
+    });
+    assert.ok(heroImageOk, 'Masaüstü hero görseli yüklenemedi');
     const preloadChecks = await page.evaluate(() => ({
       catalog: !!document.querySelector('link[rel="preload"][as="fetch"][href="./filmvediziler.json"]'),
       alpine: [...document.querySelectorAll('link[rel="preload"][as="script"]')].some(link => link.href.includes('alpinejs')),
