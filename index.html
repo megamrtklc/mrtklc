@@ -1435,13 +1435,11 @@
                         this.durationFormatted = this.formatTime(video.duration);
 
                         if (this.selectedItem) {
-                            let progressMap = JSON.parse(localStorage.getItem('perde_player_progress_v3')) || {};
-                            progressMap[this.selectedItem.id] = {
+                            this.saveMovieProgress(this.selectedItem.id, {
                                 time: video.currentTime,
                                 duration: video.duration,
                                 savedAt: Date.now()
-                            };
-                            localStorage.setItem('perde_player_progress_v3', JSON.stringify(progressMap));
+                            });
                         }
                     }
                 },
@@ -1532,6 +1530,45 @@
 
                 get currentProfile() {
                     return this.profiles.find(p => p.id === this.currentProfileId) || this.profiles[0];
+                },
+
+                // Film ilerlemesi artık profil bazında tutulur. Eski ortak kayıtlar korunur,
+                // ancak hangi profile ait oldukları bilinmediği için önerilere dahil edilmez.
+                get profileMovieProgress() {
+                    try {
+                        const all = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}');
+                        const current = all[this.currentProfileId];
+                        return current && typeof current === 'object' ? current : {};
+                    } catch (error) {
+                        console.warn('Profil izleme geçmişi okunamadı:', error);
+                        return {};
+                    }
+                },
+
+                getMovieProgress(itemId) {
+                    const own = this.profileMovieProgress[String(itemId)];
+                    if (own) return own;
+                    // Eski sürümdeki ortak ilerlemeyi oynatmaya devam edebilmek için yalnızca
+                    // devam oynatımında geriye dönük yedek olarak kullan.
+                    try {
+                        const legacy = JSON.parse(localStorage.getItem('perde_player_progress_v3') || '{}');
+                        return legacy[String(itemId)] || null;
+                    } catch (error) {
+                        return null;
+                    }
+                },
+
+                saveMovieProgress(itemId, progress) {
+                    try {
+                        const all = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}');
+                        if (!all[this.currentProfileId] || typeof all[this.currentProfileId] !== 'object') {
+                            all[this.currentProfileId] = {};
+                        }
+                        all[this.currentProfileId][String(itemId)] = progress;
+                        localStorage.setItem('perde_profile_player_progress_v1', JSON.stringify(all));
+                    } catch (error) {
+                        console.warn('Profil izleme ilerlemesi kaydedilemedi:', error);
+                    }
                 },
 
                 switchProfile(id) {
@@ -1641,9 +1678,9 @@
                     
                     setTimeout(() => {
                         const video = document.getElementById('customVideoPlayer');
-                        let progressMap = JSON.parse(localStorage.getItem('perde_player_progress_v3')) || {};
-                        if (video && progressMap[item.id]) {
-                            video.currentTime = progressMap[item.id].time || 0;
+                        const savedProgress = this.getMovieProgress(item.id);
+                        if (video && savedProgress) {
+                            video.currentTime = savedProgress.time || 0;
                         }
                     }, 200);
                 },
@@ -1685,7 +1722,7 @@
                         try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; }
                         catch (error) { console.warn('İstatistik kaydı okunamadı:', key, error); return {}; }
                     };
-                    const progressMap = safeRead('perde_player_progress_v3');
+                    const progressMap = this.profileMovieProgress;
                     const progressItems = Object.entries(progressMap).map(([id, saved]) => {
                         const item = this.catalog.find(entry => String(entry.id) === String(id));
                         const time = Math.max(0, Number(saved?.time) || 0);
@@ -1771,7 +1808,7 @@
                     };
                     const tokens = value => String(value || '').split(/[\\/;,]/).map(part => this.normalizeSearchText(part)).filter(Boolean);
                     const profileId = this.currentProfileId;
-                    const progress = safeRead('perde_player_progress_v3');
+                    const progress = this.profileMovieProgress;
                     const episodes = safeRead('cine_episode_tracking_v1');
                     const history = new Map();
 
@@ -1854,7 +1891,7 @@
                             counts.set(genre, existing);
                         });
                     };
-                    const progress = read('perde_player_progress_v3');
+                    const progress = this.profileMovieProgress;
                     Object.entries(progress).forEach(([id, saved]) => {
                         const item = this.catalog.find(entry => String(entry.id) === String(id));
                         const seconds = Math.max(0, Number(saved?.time) || 0);
