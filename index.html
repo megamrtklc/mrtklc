@@ -313,7 +313,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
                         <div>
                             <h2 class="text-xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Tüm Yapımlar & Trendler</h2>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Tam ekran arşiv kataloğu</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Arşivden seçilen ilk 24 yapım • Tam liste Keşfet bölümünde</p>
                         </div>
 
                         <div class="flex flex-wrap items-center gap-2">
@@ -328,11 +328,12 @@
                                 <option value="rating">En Yüksek Puan</option>
                                 <option value="year">En Yeni Yıl</option>
                             </select>
+                            <button type="button" @click="navigateTo('explore')" class="px-3 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors">Tüm kataloğu keşfet <i class="fa-solid fa-arrow-right ml-1"></i></button>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-4">
-                        <template x-for="item in sortedFilteredCatalog" :key="item.id">
+                        <template x-for="item in homeCatalogPreview" :key="item.id">
                             <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 18vw, 14vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -2128,6 +2129,10 @@
                     else if (this.sortBy === 'oldest') result.sort((a, b) => (Number.parseInt(a.year, 10) || 9999) - (Number.parseInt(b.year, 10) || 9999));
                     else if (this.sortBy === 'title') result.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
                     return result;
+                },
+
+                get homeCatalogPreview() {
+                    return this.sortedFilteredCatalog.slice(0, 24);
                 }
             }
         }
