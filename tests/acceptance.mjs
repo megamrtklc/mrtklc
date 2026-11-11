@@ -93,10 +93,11 @@ try {
       'Derlenmiş Tailwind CSS doğru yüklenmedi: ' + JSON.stringify(compiledStyleCheck)
     );
     await page.waitForFunction(() => {
-      const image = document.querySelector('img[fetchpriority="high"]');
+      const image = [...document.querySelectorAll('img[fetchpriority="high"]')]
+        .find(candidate => candidate.getClientRects().length > 0);
       return image && image.complete && image.naturalWidth > 0;
     }, { timeout: 20000 });
-    const heroImageOk = await page.locator('img[fetchpriority="high"]').evaluate(image =>
+    const heroImageOk = await page.locator('img[fetchpriority="high"]:visible').first().evaluate(image =>
       image.naturalWidth > 0 && image.dataset.perdeFallbackApplied !== 'true'
     );
     assert.ok(heroImageOk, 'Ana sayfa hero görseli ilk açılışta yüklenemedi');
