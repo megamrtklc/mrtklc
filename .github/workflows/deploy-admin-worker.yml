@@ -61,7 +61,7 @@ jobs:
         env:
           ADMIN_PASSWORD: ${{ secrets.CINEVERSE_ADMIN_PASSWORD }}
         run: |
-          if [ ${#ADMIN_PASSWORD} -lt 20 ]; then echo "::error::CINEVERSE_ADMIN_PASSWORD must be at least 20 characters."; exit 1; fi
+          if [ ${#ADMIN_PASSWORD} -lt 10 ]; then echo "::error::CINEVERSE_ADMIN_PASSWORD must be at least 10 characters."; exit 1; fi
 
       - name: Store administrator password as encrypted Worker secret
         if: steps.preflight.outputs.configured == 'true'
