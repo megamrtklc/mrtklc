@@ -776,9 +776,10 @@
                         const backdrop = details.backdrop_path ? 'https://image.tmdb.org/t/p/w1280' + details.backdrop_path : item.backdrop;
                         const genres = (details.genres || []).map(genre => genre.name).join(' / ');
                         const seasonData = {};
+                        let realSeasons = [];
 
                         if (mediaType === 'tv' && Array.isArray(details.seasons)) {
-                            const realSeasons = details.seasons.filter(season => season.season_number > 0);
+                            realSeasons = details.seasons.filter(season => season.season_number > 0);
                             const seasonResults = await Promise.all(realSeasons.map(async season => {
                                 try {
                                     const seasonDetails = await this.fetchTmdb('tv/' + item.tmdbId + '/season/' + season.season_number);
