@@ -95,12 +95,39 @@ for (const { file, report } of reports) {
         statusCode: item.statusCode ?? null
       }))
   };
+  const networkItems = audits['network-requests']?.details?.items || [];
+  const diagnostics = {
+    mainThread: (audits['mainthread-work-breakdown']?.details?.items || []).slice(0, 10).map(item => ({
+      group: item.group || null,
+      duration: item.duration ?? null,
+      scripting: item.scripting ?? null,
+      scriptEvaluation: item.scriptEvaluation ?? null,
+      scriptParseCompile: item.scriptParseCompile ?? null,
+      styleLayout: item.styleLayout ?? null,
+      other: item.other ?? null,
+      url: item.url || null,
+      entity: item.entity?.name || item.entity || null
+    })),
+    lcpElement: (audits['largest-contentful-paint-element']?.details?.items || []).slice(0, 3).map(item => ({
+      selector: item.node?.selector || null,
+      snippet: item.node?.snippet || null,
+      url: item.url || null,
+      size: item.size ?? null,
+      timing: item.timing || null
+    })),
+    failedRequests: networkItems.filter(item => item.statusCode >= 400).map(item => ({
+      url: item.url || null,
+      statusCode: item.statusCode,
+      resourceType: item.resourceType || null
+    }))
+  };
   console.log(JSON.stringify({
     report: file,
     url: report.requestedUrl || report.finalDisplayedUrl,
     scores,
     metrics,
     findings,
-    lcpDiagnostics
+    lcpDiagnostics,
+    diagnostics
   }));
 }
