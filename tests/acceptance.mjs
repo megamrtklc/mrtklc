@@ -38,6 +38,17 @@ try {
   adaletId = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.find(item => item.title === 'Adalet 2')?.id);
   assert.ok(adaletId, 'Adalet 2 katalogda bulunamadı');
 
+  try {
+    const tmdbBackdrops = await page.evaluate(async () => {
+      const app = window.Alpine.$data(document.documentElement);
+      const images = await app.fetchTmdb('movie/1507696/images');
+      return (images.backdrops || []).slice(0, 12).map(image => image.file_path);
+    });
+    console.log('TMDB HERO BACKDROPS:', JSON.stringify(tmdbBackdrops));
+  } catch (error) {
+    console.log('TMDB BACKDROP DIAGNOSTIC UNAVAILABLE:', error.message);
+  }
+
   await check('Ana sayfa açılıyor ve katalog yükleniyor', async () => {
     assert.match(await page.title(), /CineVerse/i);
     assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).count());
