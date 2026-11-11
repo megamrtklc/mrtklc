@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cineverse-admin",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-11",
+  "assets": {
+    "directory": "../admin",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "vars": {
+    "GITHUB_OWNER": "megamrtklc",
+    "GITHUB_REPO": "mrtklc",
+    "GITHUB_BRANCH": "main",
+    "GITHUB_CATALOG_PATH": "filmvediziler.json",
+    "CF_ACCESS_TEAM_DOMAIN": "YOUR_TEAM.cloudflareaccess.com",
+    "CF_ACCESS_AUD": "SET_AFTER_CREATING_ACCESS_APPLICATION"
+  },
+  "secrets": {
+    "required": ["GITHUB_TOKEN"]
+  }
+}
