@@ -127,6 +127,7 @@ for (const { file, report } of reports) {
       previousRect: item.previousRect || null,
       currentRect: item.currentRect || null
     })),
+    layoutShiftDebugData: audits['cumulative-layout-shift']?.details?.items || [],
     layoutShiftAuditIds: Object.values(audits)
       .filter(audit => /layout-shift/i.test(audit.id || ''))
       .map(audit => ({
