@@ -15,8 +15,5 @@
     "GITHUB_CATALOG_PATH": "filmvediziler.json",
     "CF_ACCESS_TEAM_DOMAIN": "YOUR_TEAM.cloudflareaccess.com",
     "CF_ACCESS_AUD": "SET_AFTER_CREATING_ACCESS_APPLICATION"
-  },
-  "secrets": {
-    "required": ["GITHUB_TOKEN"]
   }
 }
