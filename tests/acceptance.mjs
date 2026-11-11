@@ -169,7 +169,7 @@ try {
       console.log('MOBILE HERO PERFORMANCE:', JSON.stringify(mobileState));
       assert.ok(mobileState.mobileVisible, 'Mobil manşet telefonda görünmüyor');
       assert.ok(!mobileState.desktopVisible, 'Masaüstü manşeti telefonda görünmemeli');
-      assert.ok(!mobileState.desktopHeroSource || mobileState.desktopHeroSource.startsWith('data:image/gif'), 'Mobil ekranda gizli masaüstü manşet görseli indirilmemeli');
+      assert.ok(!mobileState.desktopHeroSource || !mobileState.desktopHeroSource.startsWith('https://image.tmdb.org/'), 'Mobil ekranda gizli masaüstü manşet görseli indirilmemeli');
       assert.match(mobileState.source, /\/w(342|500|780)\//);
       assert.ok(mobileState.thumbnails > 0, 'Mobil manşet afiş şeridi yüklenmedi');
     } finally {
@@ -182,7 +182,7 @@ try {
     }));
     assert.ok(!desktopState.mobileVisible, 'Mobil manşet masaüstünde görünmemeli');
     assert.ok(desktopState.desktopVisible, 'Mevcut masaüstü manşeti görünmüyor');
-    assert.ok(!desktopState.mobileHeroSource || desktopState.mobileHeroSource.startsWith('data:image/gif'), 'Masaüstünde gizli mobil manşet görseli indirilmemeli');
+    assert.ok(!desktopState.mobileHeroSource || !desktopState.mobileHeroSource.startsWith('https://image.tmdb.org/'), 'Masaüstünde gizli mobil manşet görseli indirilmemeli');
   });
 
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
