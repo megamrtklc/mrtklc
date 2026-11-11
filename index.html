@@ -313,7 +313,7 @@
                                 </div>
                             </div>
                             <div x-show="!isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-0 overflow-hidden bg-gray-950 text-white">
-                                <img :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="absolute inset-0 h-full w-full object-cover opacity-35 blur-[2px] scale-105">
+                                <img :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="absolute inset-0 h-full w-full object-contain opacity-35 blur-[2px]">
                                 <div class="absolute inset-0 bg-gradient-to-r from-gray-950/95 via-gray-950/75 to-gray-950/55"></div>
                                 <div class="relative z-10 flex h-full flex-col sm:flex-row items-center justify-center gap-5 p-5 sm:p-8 text-center sm:text-left">
                                     <img :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="h-44 sm:h-56 max-w-[38%] rounded-lg object-contain shadow-2xl ring-1 ring-white/15">
