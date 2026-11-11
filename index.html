@@ -1390,7 +1390,7 @@
 
                 restoreRouteFromUrl() {
                     const hash = window.location.hash || '';
-                    const match = hash.match(/^#\\/watch\\/(.+)$/);
+                    const match = hash.match(/^#\/watch\/(.+)$/);
                     if (match) {
                         const itemId = decodeURIComponent(match[1]);
                         const item = this.catalog.find(entry => String(entry.id) === itemId);
@@ -1400,7 +1400,7 @@
                         }
                     }
 
-                    const pageMatch = hash.match(/^#\\/([^/?#]+)$/);
+                    const pageMatch = hash.match(/^#\/([^/?#]+)$/);
                     const page = pageMatch ? decodeURIComponent(pageMatch[1]) : 'home';
                     const allowedPages = ['home', 'explore', 'watchlist'];
                     this.currentPage = allowedPages.includes(page) ? page : 'home';
