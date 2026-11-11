@@ -37,8 +37,18 @@ function getCookie(request,name) {
   return match?match.slice(name.length+1):"";
 }
 function sameOrigin(request) {
-  const origin=request.headers.get("origin");
-  return !!origin&&origin===new URL(request.url).origin;
+  const trustedOrigin = "https://cineverse-admin.megamrtklc.workers.dev";
+  const requestOrigin = new URL(request.url).origin;
+  const origin = request.headers.get("origin");
+  if (origin) return origin === trustedOrigin || origin === requestOrigin;
+  const referer = request.headers.get("referer");
+  if (!referer) return false;
+  try {
+    const refererOrigin = new URL(referer).origin;
+    return refererOrigin === trustedOrigin || refererOrigin === requestOrigin;
+  } catch {
+    return false;
+  }
 }
 function loginPage(showError=false) {
   const error=showError?'<p class="error">Şifre doğru değil. Lütfen tekrar dene.</p>':"";
