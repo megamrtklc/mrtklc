@@ -1,20 +1,38 @@
 <!DOCTYPE html>
-<html lang="tr" class="dark">
+<html lang="tr" :class="theme === 'dark' ? 'dark' : ''" x-data="ultimateProApp()">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineVerse Ultimate Pro</title>
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
                     colors: {
-                        primary: '#E50914',
-                        darkBg: '#141414',
-                        cardBg: '#1F1F1F'
+                        brand: {
+                            red: '#E50914',
+                            accent: '#F43F5E',
+                            dark: '#0B0D11',
+                            card: '#161922'
+                        },
+                        ivory: {
+                            50: '#FAF8F5',
+                            100: '#F5F2EB',
+                            200: '#EBE7DD',
+                            card: '#FFFDF9'
+                        },
+                        slateLight: {
+                            50: '#F4F5F7',
+                            100: '#EAECEF',
+                            200: '#D8DBE2',
+                            card: '#FFFFFF'
+                        }
                     }
                 }
             }
@@ -22,378 +40,1103 @@
     </script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-[#141414] text-white font-sans antialiased selection:bg-red-600 selection:text-white transition-colors duration-300" id="bodyRoot">
+<body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
-    <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-b from-black/90 via-black/50 to-transparent backdrop-blur-md" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- Header / Top Navbar (Full Width) -->
+    <header :class="getHeaderClass()" class="sticky top-0 z-50 backdrop-blur-md border-b transition-colors duration-300">
+        <div class="w-full px-6 sm:px-12 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-8">
-                <a href="#" class="text-red-600 font-black text-2xl tracking-wider cursor-pointer" onclick="filterCategory('all')">CINEVERSE</a>
-                <div class="hidden md:flex space-x-6 text-sm font-medium">
-                    <a href="#" class="hover:text-gray-300 transition" onclick="filterCategory('all')">Ana Sayfa</a>
-                    <a href="#" class="hover:text-gray-300 transition" onclick="filterCategory('Dizi')">Diziler</a>
-                    <a href="#" class="hover:text-gray-300 transition" onclick="filterCategory('Film')">Filmler</a>
-                    <a href="#" class="hover:text-gray-300 transition" onclick="loadWatchlist()">Listem</a>
-                </div>
+                <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-film text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-black tracking-wider uppercase">CINE<span class="text-rose-600">VERSE</span></span>
+                </a>
+                
+                <nav class="hidden md:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                    <a href="#" @click.prevent="navigateTo('home')" :class="currentPage === 'home' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Ana Sayfa</a>
+                    <a href="#" @click.prevent="navigateTo('explore')" :class="currentPage === 'explore' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Keşfet</a>
+                    <a href="#" @click.prevent="navigateTo('watchlist')" :class="currentPage === 'watchlist' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center space-x-1.5">
+                        <span>İzleme Listem</span>
+                        <span class="px-1.5 py-0.2 bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-full text-[10px]" x-text="watchlist.length"></span>
+                    </a>
+                </nav>
             </div>
             
             <div class="flex items-center space-x-4">
-                <div class="relative">
-                    <input type="text" id="searchInput" placeholder="Film, dizi, oyuncu ara..." class="bg-black/50 border border-gray-700 rounded-full px-4 py-1.5 text-sm text-white focus:outline-none focus:border-red-600 w-40 sm:w-64 transition-all">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-400 text-sm"></i>
+                <div class="relative hidden sm:block">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                    <input type="text" x-model="searchQuery" placeholder="Film veya dizi ara..." :class="getSearchClass()" class="border rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-600 w-60 transition-all">
                 </div>
-                
-                <!-- Tema Seçici -->
-                <select id="themeSelector" class="bg-gray-800 text-xs text-white rounded px-2 py-1.5 border border-gray-700 focus:outline-none cursor-pointer">
-                    <option value="dark">Karanlık Mod</option>
-                    <option value="gray">Modern Gri</option>
-                    <option value="light">Fil Dişi</option>
-                </select>
 
-                <!-- Profil Alanı -->
-                <div id="activeProfileAvatar" class="w-8 h-8 rounded bg-red-600 flex items-center justify-center font-bold cursor-pointer text-sm shadow hover:opacity-90 transition" onclick="toggleProfileModal()" title="Profil Değiştir">M</div>
-            </div>
-        </div>
-    </nav>
+                <!-- 3'LÜ TEMA SEÇİCİ DROPDOWN -->
+                <div class="relative" x-data="{ openThemeMenu: false }">
+                    <button @click="openThemeMenu = !openThemeMenu" :class="getButtonClass()" class="px-3 h-9 rounded-lg border flex items-center space-x-2 text-xs font-bold transition-colors shadow-sm">
+                        <i :class="getThemeIcon()"></i>
+                        <span class="hidden sm:inline" x-text="getThemeName()"></span>
+                        <i class="fa-solid fa-chevron-down text-[10px] opacity-70"></i>
+                    </button>
 
-    <!-- Hero / Öne Çıkan Alan -->
-    <header id="heroSection" class="relative h-[75vh] w-full flex items-end pb-16 px-4 sm:px-8 lg:px-16 bg-cover bg-center transition-all duration-700">
-        <div class="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/30 to-black/70" id="heroGradient"></div>
-        <div class="relative z-10 max-w-2xl space-y-4">
-            <span id="heroBadge" class="bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">Öne Çıkan Yapım</span>
-            <h1 id="heroTitle" class="text-4xl sm:text-6xl font-extrabold tracking-tight">Yükleniyor...</h1>
-            <p id="heroDesc" class="text-gray-300 text-sm sm:text-base line-clamp-3">Lütfen bekleyin, içerikler sunucudan yükleniyor.</p>
-            <div class="flex space-x-4 pt-2">
-                <button id="heroPlayBtn" class="bg-white text-black font-bold px-6 py-2.5 rounded-md flex items-center space-x-2 hover:bg-gray-200 transition shadow-lg">
-                    <i class="fa-solid fa-play"></i>
-                    <span>Oynat</span>
-                </button>
-                <button id="heroDetailBtn" class="bg-gray-500/70 text-white font-bold px-6 py-2.5 rounded-md flex items-center space-x-2 hover:bg-gray-500/50 backdrop-blur transition shadow-lg">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <span>Daha Fazla Bilgi</span>
-                </button>
+                    <div x-show="openThemeMenu" @click.away="openThemeMenu = false" class="absolute right-0 mt-2 w-48 bg-white dark:bg-[#161922] border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl py-2 z-50 space-y-1">
+                        <button @click="setTheme('ivory'); openThemeMenu = false;" class="w-full text-left px-4 py-2 text-xs font-semibold flex items-center space-x-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <i class="fa-solid fa-sun text-amber-500"></i>
+                            <span>Fil Dişi (Sıcak Krem)</span>
+                        </button>
+                        <button @click="setTheme('slate'); openThemeMenu = false;" class="w-full text-left px-4 py-2 text-xs font-semibold flex items-center space-x-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <i class="fa-solid fa-circle-half-stroke text-sky-500"></i>
+                            <span>Modern Gri (Slate)</span>
+                        </button>
+                        <button @click="setTheme('dark'); openThemeMenu = false;" class="w-full text-left px-4 py-2 text-xs font-semibold flex items-center space-x-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200">
+                            <i class="fa-solid fa-moon text-indigo-400"></i>
+                            <span>Karanlık Mod</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Profil Seçici -->
+                <div :class="getCardClass()" class="flex items-center space-x-2 border rounded-lg px-2.5 py-1">
+                    <img :src="currentProfile.avatar" class="w-6 h-6 rounded-full object-cover">
+                    <select x-model="currentProfileId" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer">
+                        <template x-for="pro in profiles" :key="pro.id">
+                            <option :value="pro.id" x-text="pro.name" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"></option>
+                        </template>
+                    </select>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Ana İçerik / Katalog -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-        <section>
-            <div class="flex items-center justify-between mb-4">
-                <h2 id="sectionTitle" class="text-xl sm:text-2xl font-bold">Trend Yapımlar</h2>
-                <span class="text-xs text-red-500 cursor-pointer hover:underline" onclick="filterCategory('all')">Tümünü Gör</span>
+    <!-- Main Content Area -->
+    <main class="flex-grow w-full">
+        
+        <!-- ==================== HOME PAGE ==================== -->
+        <template x-if="currentPage === 'home'">
+            <div class="w-full space-y-10 pb-16">
+                
+                <!-- HERO BANNER (Tüm Modlar İçin Ortak ve Kusursuz Sinematik Manşet) -->
+                <section class="relative w-full bg-gray-950 min-h-[580px] sm:min-h-[640px] flex flex-col justify-between overflow-hidden select-none border-b border-gray-200 dark:border-gray-800/80">
+                    
+                    <!-- Main Hero Stage -->
+                    <div class="relative w-full flex-grow flex items-center px-6 sm:px-12 py-12">
+                        <!-- Backdrop Image -->
+                        <div class="absolute inset-0 z-0">
+                            <img :src="currentHero.backdrop" class="w-full h-full object-cover object-center filter brightness-[0.7]">
+                            <!-- Sabit Sinematik Koyu Gradyan Perdesi (Her Modda Görseli ve Yazıyı Mükemmel Gösterir) -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent"></div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/50 to-transparent"></div>
+                        </div>
+
+                        <!-- Left Info Container (Her modda sabit beyaz metinler ve net okunabilirlik) -->
+                        <div class="relative z-10 max-w-2xl space-y-4 text-white">
+                            <!-- Title -->
+                            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-rose-500 tracking-tight leading-none drop-shadow-md" x-text="currentHero.title"></h1>
+                            
+                            <!-- Star Rating & Year -->
+                            <div class="flex items-center space-x-3 text-xs sm:text-sm font-bold">
+                                <div class="flex items-center space-x-1 text-amber-400">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star-half-stroke"></i>
+                                </div>
+                                <span class="text-amber-400 font-extrabold" x-text="currentHero.rating"></span>
+                                <span class="text-gray-400">•</span>
+                                <span class="text-gray-200 font-semibold" x-text="currentHero.year"></span>
+                                <span class="text-gray-400">•</span>
+                                <span class="px-2 py-0.5 bg-rose-600/30 text-rose-300 border border-rose-500/40 rounded text-[10px] font-black uppercase" x-text="currentHero.genre"></span>
+                            </div>
+
+                            <!-- Starring -->
+                            <p class="text-gray-200 text-xs sm:text-sm">
+                                <strong class="text-white font-bold">Starring:</strong> 
+                                <span x-text="currentHero.starring"></span>
+                            </p>
+
+                            <!-- Introduction -->
+                            <p class="text-gray-200 text-xs sm:text-sm leading-relaxed line-clamp-3 max-w-xl">
+                                <strong class="text-white font-bold">Introduction:</strong> 
+                                <span x-text="currentHero.desc"></span>
+                            </p>
+
+                            <!-- Buttons -->
+                            <div class="flex items-center space-x-4 pt-3">
+                                <button @click="openWatchPage(currentHero)" class="px-8 py-3 bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-lg shadow-rose-600/40 transition-all transform hover:scale-105 flex items-center space-x-2.5">
+                                    <i class="fa-solid fa-play text-xs"></i>
+                                    <span>Play</span>
+                                </button>
+
+                                <button @click="toggleWatchlist(currentHero)" class="px-7 py-3 bg-black/40 hover:bg-rose-600/20 border border-rose-500/50 hover:border-rose-500 text-white font-bold text-xs uppercase tracking-wider rounded-full backdrop-blur-md transition-all flex items-center space-x-2">
+                                    <i :class="isInWatchlist(currentHero) ? 'fa-solid fa-bookmark text-rose-500' : 'fa-regular fa-bookmark'"></i>
+                                    <span x-text="isInWatchlist(currentHero) ? 'Collection (Added)' : 'Collection'"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Bottom Thumbnails Carousel -->
+                    <div class="relative z-10 w-full bg-gradient-to-t from-black/80 to-transparent pt-4 pb-6 px-6 sm:px-12">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Featured Marvel & Action Collection</span>
+                            <div class="flex space-x-1.5">
+                                <button @click="scrollHeroThumbs(-1)" class="w-7 h-7 rounded-full bg-black/60 border border-gray-700 hover:bg-rose-600 hover:border-rose-600 text-white flex items-center justify-center text-xs transition-colors">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                                <button @click="scrollHeroThumbs(1)" class="w-7 h-7 rounded-full bg-black/60 border border-gray-700 hover:bg-rose-600 hover:border-rose-600 text-white flex items-center justify-center text-xs transition-colors">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="heroThumbContainer" class="flex items-center space-x-4 overflow-x-auto no-scrollbar scroll-smooth py-1">
+                            <template x-for="(item, idx) in heroSlides" :key="item.id">
+                                <div @click="selectHeroSlide(idx)" 
+                                     :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 border-rose-500' : 'border-gray-800 opacity-75 hover:opacity-100'"
+                                     class="flex-shrink-0 w-32 sm:w-36 cursor-pointer group bg-gray-900 rounded-xl overflow-hidden border p-1.5 transition-all duration-300 shadow-sm">
+                                    <div class="w-full aspect-[2/3] rounded-lg overflow-hidden bg-black mb-1.5">
+                                        <img :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                                    </div>
+                                    <h4 class="text-[11px] font-bold text-center text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="item.title"></h4>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Film & Dizi Katalog -->
+                <section class="w-full px-6 sm:px-12 space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
+                        <div>
+                            <h2 class="text-xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Tüm Yapımlar & Trendler</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Tam ekran arşiv kataloğu</p>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select x-model="quickFilter" :class="getCardClass()" class="border rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 focus:outline-none focus:border-rose-600">
+                                <option value="all">Tümü</option>
+                                <option value="imdb8">IMDb 8+</option>
+                                <option value="series">Diziler</option>
+                                <option value="movies">Filmler</option>
+                            </select>
+                            <select x-model="sortBy" :class="getCardClass()" class="border rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 focus:outline-none focus:border-rose-600">
+                                <option value="default">Sıralama: Önerilen</option>
+                                <option value="rating">En Yüksek Puan</option>
+                                <option value="year">En Yeni Yıl</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-4">
+                        <template x-for="item in sortedFilteredCatalog" :key="item.id">
+                            <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
+                                <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <img :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <div class="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 flex items-center space-x-1">
+                                        <i class="fa-solid fa-star text-[9px]"></i>
+                                        <span x-text="item.rating"></span>
+                                    </div>
+                                    <button @click.stop="toggleWatchlist(item)" class="absolute top-2 left-2 w-7 h-7 rounded bg-black/70 backdrop-blur-md flex items-center justify-center text-gray-200 hover:text-rose-500 transition-colors">
+                                        <i :class="isInWatchlist(item) ? 'fa-solid fa-bookmark text-rose-500' : 'fa-regular fa-bookmark text-xs'"></i>
+                                    </button>
+                                </div>
+                                <div class="p-3 flex flex-col flex-grow justify-between space-y-1">
+                                    <div>
+                                        <span class="text-[9px] font-bold text-rose-500 uppercase" x-text="item.genre"></span>
+                                        <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
+                                    </div>
+                                    <div class="flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200 dark:border-gray-800/60">
+                                        <span x-text="item.year"></span>
+                                        <span x-text="item.duration"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </section>
             </div>
-            <div id="mediaGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-                <!-- Kartlar dinamik olarak yüklenecek -->
+        </template>
+
+        <!-- ==================== WATCH / DETAIL PAGE ==================== -->
+        <template x-if="currentPage === 'watch'">
+            <div class="w-full px-6 sm:px-12 pt-6 space-y-6 pb-16">
+                <button @click="navigateTo('home')" class="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400 hover:text-rose-500 transition-colors">
+                    <i class="fa-solid fa-arrow-left text-xs"></i>
+                    <span>Ana Sayfaya Dön</span>
+                </button>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    
+                    <!-- Left Section -->
+                    <div class="lg:col-span-8 space-y-6">
+                        
+                        <!-- Custom Video Player -->
+                        <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl border border-gray-200 dark:border-gray-800 group select-none">
+                            <video id="customVideoPlayer" 
+                                   class="w-full h-full object-cover" 
+                                   :poster="selectedItem.backdrop"
+                                   @timeupdate="updateVideoProgress"
+                                   @ended="videoEnded = true">
+                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                                Tarayıcınız video etiketini desteklemiyor.
+                            </video>
+
+                            <!-- Overlay Controls -->
+                            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
+                                <div class="flex items-center justify-between mb-1">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="px-2.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase" x-text="selectedItem.title"></span>
+                                        <span class="text-xs text-gray-300 font-semibold" x-show="selectedItem.type === 'tv'" x-text="'Sezon ' + selectedSeason + ' • Bölüm ' + selectedEpisode"></span>
+                                        <span class="text-xs text-gray-300 font-semibold" x-show="selectedItem.type === 'movie'">Sinema Modu</span>
+                                    </div>
+                                    <button @click="skipIntro()" class="px-3 py-1 rounded bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold border border-white/30 transition-all flex items-center space-x-1.5">
+                                        <i class="fa-solid fa-forward text-[10px]"></i>
+                                        <span>Jeneriği Geç</span>
+                                    </button>
+                                </div>
+
+                                <!-- Progress Bar -->
+                                <div class="w-full bg-white/30 h-2 rounded-full cursor-pointer relative overflow-hidden group/bar" @click="seekVideo($event)">
+                                    <div class="bg-rose-600 h-full rounded-full transition-all relative" :style="'width: ' + videoProgress + '%'">
+                                        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-white rounded-full shadow scale-0 group-hover/bar:scale-100 transition-transform"></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between text-xs text-gray-200 pt-1">
+                                    <div class="flex items-center space-x-3">
+                                        <button @click="togglePlay()" class="w-9 h-9 rounded-lg bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center shadow transition-all hover:scale-105">
+                                            <i :class="isPlaying ? 'fa-solid fa-pause text-sm' : 'fa-solid fa-play text-sm ml-0.5'"></i>
+                                        </button>
+                                        <button @click="skipTime(-10)" class="w-8 h-8 rounded bg-gray-800/80 hover:bg-gray-700 text-white flex items-center justify-center transition-all" title="10s Geri">
+                                            <i class="fa-solid fa-rotate-left text-xs"></i>
+                                        </button>
+                                        <button @click="skipTime(10)" class="w-8 h-8 rounded bg-gray-800/80 hover:bg-gray-700 text-white flex items-center justify-center transition-all" title="10s İleri">
+                                            <i class="fa-solid fa-rotate-right text-xs"></i>
+                                        </button>
+                                        <span class="font-mono text-xs font-bold text-gray-300" x-text="currentTimeFormatted + ' / ' + durationFormatted"></span>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2">
+                                        <button @click="toggleMute()" class="w-8 h-8 rounded bg-gray-800/80 hover:bg-gray-700 text-white flex items-center justify-center transition-all">
+                                            <i :class="isMuted ? 'fa-solid fa-volume-xmark text-xs text-rose-500' : 'fa-solid fa-volume-high text-xs'"></i>
+                                        </button>
+                                        <button @click="toggleFullscreen()" class="w-8 h-8 rounded bg-gray-800/80 hover:bg-gray-700 text-white flex items-center justify-center transition-all">
+                                            <i class="fa-solid fa-expand text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dizi Sezon Seçimi -->
+                        <div x-show="selectedItem.type === 'tv'" :class="getCardClass()" class="p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-9 h-9 rounded-lg bg-rose-600/20 text-rose-500 flex items-center justify-center font-black text-sm">
+                                    <i class="fa-solid fa-tv"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white">Sezon Seçimi</h3>
+                                    <p class="text-[11px] text-gray-500 dark:text-gray-400">İzlemek istediğiniz sezonu belirleyin</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 w-full sm:w-auto">
+                                <select x-model="selectedSeason" :class="getCardClass()" class="border rounded-lg px-4 py-2 text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:border-rose-600">
+                                    <template x-for="s in [1, 2, 3, 4, 5, 6]" :key="s">
+                                        <option :value="s" x-text="s + '. Sezon'"></option>
+                                    </template>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Sezon Bölümleri -->
+                        <div x-show="selectedItem.type === 'tv'" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-film text-rose-600 text-xs"></i>
+                                    <span x-text="selectedSeason + '. Sezon Bölümleri'"></span>
+                                </h3>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold" x-text="'Toplam ' + getEpisodesForSeason(selectedSeason).length + ' Bölüm'"></span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                                <template x-for="ep in paginatedEpisodes" :key="ep.number">
+                                    <div @click="selectEpisode(ep.number)" 
+                                         :class="selectedEpisode === ep.number ? 'border-rose-600 bg-rose-600/10' : 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700'"
+                                         class="p-2.5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all space-y-2 group">
+                                        <div class="relative w-full aspect-video rounded-lg overflow-hidden bg-black border border-gray-200 dark:border-gray-800">
+                                            <img :src="ep.still" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[9px] font-bold text-gray-300" x-text="ep.duration"></span>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center justify-between">
+                                                <h4 class="text-xs font-black text-gray-900 dark:text-white uppercase truncate" x-text="ep.number + '. ' + ep.title"></h4>
+                                                <span class="text-[9px] text-rose-500 dark:text-rose-400 font-bold" x-show="selectedEpisode === ep.number">Aktif</span>
+                                            </div>
+                                            <p class="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed" x-text="ep.desc"></p>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="flex items-center justify-center space-x-2 pt-3 border-t border-gray-200 dark:border-gray-800" x-show="getEpisodesForSeason(selectedSeason).length > 8">
+                                <template x-for="pageNum in totalEpisodePages" :key="pageNum">
+                                    <button @click="currentEpisodePage = pageNum" 
+                                            :class="currentEpisodePage === pageNum ? 'bg-rose-600 text-white' : 'bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'"
+                                            class="w-8 h-8 rounded-lg text-xs font-bold transition-all border border-gray-200 dark:border-gray-800" 
+                                            x-text="pageNum">
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Synopsis Card -->
+                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-3 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <h1 class="text-xl font-black text-gray-900 dark:text-white uppercase" x-text="selectedItem.title"></h1>
+                                <button @click="toggleWatchlist(selectedItem)" :class="getCardClass()" class="px-4 py-2 rounded-xl hover:opacity-85 text-gray-800 dark:text-white font-bold text-xs uppercase tracking-wider border flex items-center space-x-2 transition-colors">
+                                    <i :class="isInWatchlist(selectedItem) ? 'fa-solid fa-bookmark text-rose-500' : 'fa-regular fa-bookmark'"></i>
+                                    <span x-text="isInWatchlist(selectedItem) ? 'Listede' : 'Ekle'"></span>
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed" x-text="selectedItem.desc"></p>
+                        </div>
+
+                        <!-- Review Section -->
+                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white">Yorum Yap & Değerlendir</h3>
+                            
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xs text-gray-500 dark:text-gray-400">Puanınız:</span>
+                                <div class="flex space-x-1 text-amber-400 text-sm cursor-pointer">
+                                    <template x-for="star in [1,2,3,4,5,6,7,8,9,10]" :key="star">
+                                        <i @click="userRating = star" :class="userRating >= star ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i>
+                                    </template>
+                                </div>
+                                <span class="text-xs font-bold text-amber-400" x-text="userRating + '/10'"></span>
+                            </div>
+
+                            <div class="space-y-3">
+                                <textarea x-model="userCommentText" placeholder="Görüşlerinizi paylaşın..." :class="getCardClass()" class="w-full border rounded-xl p-3 text-xs text-gray-800 dark:text-slate-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-rose-600 resize-none h-20"></textarea>
+                                <button @click="submitReview()" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold transition-all">Yorumu Gönder</button>
+                            </div>
+
+                            <div class="space-y-2 pt-2" x-show="getReviews(selectedItem.id).length > 0">
+                                <h4 class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Topluluk Yorumları</h4>
+                                <template x-for="rev in getReviews(selectedItem.id)" :key="rev.date">
+                                    <div :class="getCardClass()" class="p-3 rounded-xl border text-xs space-y-1">
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-bold text-rose-500 dark:text-rose-400" x-text="rev.author"></span>
+                                            <div class="flex items-center space-x-1 text-amber-400 font-bold">
+                                                <i class="fa-solid fa-star text-[10px]"></i>
+                                                <span x-text="rev.rating + '/10'"></span>
+                                            </div>
+                                        </div>
+                                        <p class="text-gray-600 dark:text-gray-300" x-text="rev.comment"></p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Section -->
+                    <div class="lg:col-span-4 space-y-6">
+                        
+                        <!-- Yapım Künyesi -->
+                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-circle-info text-rose-600 text-xs"></i>
+                                    <span>Yapım Künyesi</span>
+                                </h3>
+
+                                <div :class="getCardClass()" class="px-2.5 py-1 rounded-lg border border-amber-400 text-amber-500 dark:text-amber-400 text-xs font-extrabold flex items-center space-x-1 shadow-sm">
+                                    <i class="fa-solid fa-star text-[10px]"></i>
+                                    <span x-text="selectedItem.rating"></span>
+                                    <span class="text-[10px] text-gray-400 font-normal">/10</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-xs">
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Orijinal İsim</span>
+                                    <span class="font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[160px]" x-text="selectedItem.originalTitle || selectedItem.title"></span>
+                                </div>
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Yönetmen</span>
+                                    <span class="font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[160px]" x-text="selectedItem.director"></span>
+                                </div>
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Kategori</span>
+                                    <span class="font-semibold text-rose-500 dark:text-rose-400 truncate max-w-[160px]" x-text="selectedItem.category"></span>
+                                </div>
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Yıl / Süre</span>
+                                    <span class="font-semibold text-gray-800 dark:text-gray-200" x-text="selectedItem.year + ' • ' + selectedItem.duration"></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Ülke</span>
+                                    <span class="font-semibold text-gray-800 dark:text-gray-200" x-text="(selectedItem.countryFlag || '') + ' ' + selectedItem.country"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Oyuncu Kadrosu -->
+                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm" x-show="selectedItem.tmdbCast && selectedItem.tmdbCast.length > 0">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-users text-rose-600 text-xs"></i>
+                                    <span>Oyuncu Kadrosu</span>
+                                </h3>
+                                <div class="flex space-x-1.5">
+                                    <button @click="scrollCast(-1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button @click="scrollCast(1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="castContainer" class="flex items-center space-x-3 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
+                                <template x-for="actor in selectedItem.tmdbCast.slice(0, 10)" :key="actor.name">
+                                    <div :class="getCardClass()" class="w-24 flex-shrink-0 p-2.5 rounded-xl border flex flex-col items-center text-center space-y-2 transition-transform duration-300 hover:scale-110 cursor-pointer group">
+                                        <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-md ring-2 ring-gray-300 dark:ring-gray-700 group-hover:ring-rose-500 transition-all">
+                                            <img :src="actor.profile || 'https://placehold.co/150x150/161922/ffffff?text=Photo'" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="w-full">
+                                            <h4 class="font-bold text-[11px] text-gray-900 dark:text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="actor.name"></h4>
+                                            <p class="text-[9px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="actor.character"></p>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Benzer Yapımlar -->
+                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-layer-group text-rose-600 text-xs"></i>
+                                    <span>Benzer Yapımlar</span>
+                                </h3>
+                                <div class="flex space-x-1.5">
+                                    <button @click="scrollSimilar(-1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button @click="scrollSimilar(1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="similarContainer" class="flex items-center space-x-3.5 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
+                                <template x-for="sim in catalog.filter(s => s.id !== selectedItem.id)" :key="sim.id">
+                                    <div @click="openWatchPage(sim)" :class="getCardClass()" class="w-28 flex-shrink-0 cursor-pointer p-2 rounded-xl border hover:border-gray-300 dark:hover:border-gray-700 transition-colors flex flex-col items-center text-center space-y-2 group">
+                                        <div class="w-24 aspect-[2/3] rounded-lg overflow-hidden bg-black shadow-md">
+                                            <img :src="sim.poster" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                        </div>
+                                        <h5 class="font-bold text-[11px] text-gray-800 dark:text-white line-clamp-1 w-full group-hover:text-rose-500 transition-colors" x-text="sim.title"></h5>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-        </section>
+        </template>
+
+        <!-- ==================== EXPLORE PAGE ==================== -->
+        <template x-if="currentPage === 'explore'">
+            <div class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
+                <div>
+                    <h2 class="text-2xl font-black uppercase tracking-wide text-gray-900 dark:text-white">Keşfet & Arşiv Kataloğu</h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sistemdeki tüm kayıtlı dizi ve film yapımları.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+                    <template x-for="item in catalog" :key="item.id">
+                        <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
+                            <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                <img :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400">
+                                    <i class="fa-solid fa-star text-[8px]"></i>
+                                    <span x-text="item.rating"></span>
+                                </div>
+                            </div>
+                            <div class="p-2.5 space-y-0.5">
+                                <span class="text-[9px] font-bold text-rose-500 uppercase" x-text="item.genre"></span>
+                                <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1" x-text="item.title"></h3>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+
+        <!-- ==================== WATCHLIST PAGE ==================== -->
+        <template x-if="currentPage === 'watchlist'">
+            <div class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
+                <div>
+                    <h2 class="text-2xl font-black uppercase tracking-wide text-gray-900 dark:text-white" x-text="currentProfile.name + ' - İzleme Listem'"></h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Seçili profile kaydettiğiniz özel favorileriniz.</p>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4" x-show="currentWatchlist.length > 0">
+                    <template x-for="item in currentWatchlist" :key="item.id">
+                        <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
+                            <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                <img :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <button @click.stop="toggleWatchlist(item)" class="absolute top-2 right-2 w-7 h-7 rounded bg-rose-600 text-white flex items-center justify-center shadow">
+                                    <i class="fa-solid fa-bookmark text-xs"></i>
+                                </button>
+                            </div>
+                            <div class="p-2.5 space-y-0.5">
+                                <span class="text-[9px] font-bold text-rose-500 uppercase" x-text="item.genre"></span>
+                                <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1" x-text="item.title"></h3>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <div x-show="currentWatchlist.length === 0" :class="getCardClass()" class="text-center py-16 rounded-2xl border max-w-md mx-auto space-y-4 shadow-sm">
+                    <i class="fa-regular fa-bookmark text-4xl text-rose-600"></i>
+                    <h3 class="font-bold text-base text-gray-900 dark:text-white">İzleme Listesi Boş</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Beğendiğiniz yapımları 'Collection / Listeye Ekle' butonuna basarak ekleyebilirsiniz.</p>
+                    <button @click="navigateTo('home')" class="px-6 py-2.5 bg-rose-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow hover:bg-rose-700 transition-colors">Ana Sayfaya Dön</button>
+                </div>
+            </div>
+        </template>
     </main>
 
-    <!-- Detay Modal -->
-    <div id="detailModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-[#181818] text-white w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl relative border border-gray-800 my-8">
-            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-red-600 transition">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-            <div id="modalContent" class="p-6 sm:p-8 space-y-6 max-h-[85vh] overflow-y-auto no-scrollbar">
-                <!-- Dinamik detay içeriği buraya gelecek -->
+    <!-- Footer (Full Width) -->
+    <footer :class="getHeaderClass()" class="border-t py-6 mt-auto w-full px-6 sm:px-12 transition-colors duration-300">
+        <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-400">
+            <div class="flex items-center space-x-2">
+                <span class="font-black uppercase tracking-widest text-gray-900 dark:text-white text-base">CINE<span class="text-rose-600">VERSE</span></span>
+                <span :class="getCardClass()" class="text-[10px] px-2 py-0.5 rounded text-gray-600 dark:text-gray-400 border">PRO</span>
             </div>
+            <div class="flex space-x-6 font-bold uppercase tracking-wider text-[11px]">
+                <a href="#" @click.prevent="navigateTo('home')" class="hover:text-black dark:hover:text-white transition-colors">Ana Sayfa</a>
+                <a href="#" @click.prevent="navigateTo('explore')" class="hover:text-black dark:hover:text-white transition-colors">Keşfet</a>
+                <a href="#" @click.prevent="navigateTo('watchlist')" class="hover:text-black dark:hover:text-white transition-colors">İzleme Listem</a>
+            </div>
+            <p class="text-[11px]">&copy; 2026 CineVerse Ultimate Pro. Tüm hakları saklıdır.</p>
         </div>
-    </div>
+    </footer>
 
-    <!-- Video Oynatıcı Modal -->
-    <div id="videoModal" class="fixed inset-0 z-50 hidden bg-black flex items-center justify-center">
-        <button onclick="closeVideo()" class="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-gray-800/80 text-white flex items-center justify-center hover:bg-red-600 transition">
-            <i class="fa-solid fa-xmark text-xl"></i>
-        </button>
-        <div class="w-full h-full flex flex-col items-center justify-center p-4 relative">
-            <div id="videoContainer" class="w-full max-w-5xl aspect-video rounded-lg shadow-2xl bg-black flex items-center justify-center overflow-hidden">
-                <iframe id="videoPlayerFrame" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
-            </div>
-            <!-- Dizi Bölüm Listesi Seçici (Eğer diziyse video modal içinde gösterilir) -->
-            <div id="episodeSelectorContainer" class="mt-4 w-full max-w-5xl hidden">
-                <div class="flex space-x-2 overflow-x-auto pb-2 no-scrollbar" id="episodeListRow"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Profil Seçim / Yönetim Modal -->
-    <div id="profileModal" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center p-4">
-        <div class="max-w-md w-full text-center space-y-6">
-            <h2 class="text-3xl font-bold">Kim İzliyor?</h2>
-            <div class="flex justify-center space-x-6" id="profileListContainer">
-                <div onclick="selectProfile('Murat', 'M')" class="cursor-pointer group">
-                    <div class="w-20 h-20 rounded-md bg-red-600 flex items-center justify-center text-3xl font-bold group-hover:ring-4 ring-white transition">M</div>
-                    <span class="mt-2 block text-sm text-gray-400 group-hover:text-white">Murat</span>
-                </div>
-                <div onclick="selectProfile('Misafir', 'G')" class="cursor-pointer group">
-                    <div class="w-20 h-20 rounded-md bg-blue-600 flex items-center justify-center text-3xl font-bold group-hover:ring-4 ring-white transition">G</div>
-                    <span class="mt-2 block text-sm text-gray-400 group-hover:text-white">Misafir</span>
-                </div>
-            </div>
-            <button onclick="toggleProfileModal()" class="text-xs text-gray-500 hover:underline">Kapat</button>
-        </div>
-    </div>
-
-    <!-- JavaScript Entegrasyon Mantığı -->
+    <!-- Script Application Logic -->
     <script>
-        let allMediaData = [];
-        let watchlist = JSON.parse(localStorage.getItem('cineverse_watchlist')) || [];
-        let currentActiveProfile = localStorage.getItem('cineverse_profile') || 'Murat';
+        function ultimateProApp() {
+            return {
+                currentPage: 'home',
+                searchQuery: '',
+                quickFilter: 'all',
+                sortBy: 'default',
+                selectedItem: null,
+                currentSlideIndex: 0,
+                userRating: 8,
+                userCommentText: '',
+                selectedSeason: 1,
+                selectedEpisode: 1,
+                currentEpisodePage: 1,
+                
+                theme: localStorage.getItem('cine_theme_v3') || 'ivory',
+                
+                get isDarkMode() {
+                    return this.theme === 'dark';
+                },
 
-        document.addEventListener("DOMContentLoaded", () => {
-            // Profil avatarını güncelle
-            document.getElementById('activeProfileAvatar').innerText = currentActiveProfile.charAt(0).toUpperCase();
+                setTheme(newTheme) {
+                    this.theme = newTheme;
+                    localStorage.setItem('cine_theme_v3', newTheme);
+                },
 
-            // Tema tercihini yükle
-            const savedTheme = localStorage.getItem('cineverse_theme') || 'dark';
-            document.getElementById('themeSelector').value = savedTheme;
-            applyTheme(savedTheme);
+                getBodyClass() {
+                    if (this.theme === 'ivory') return 'bg-ivory-50';
+                    if (this.theme === 'slate') return 'bg-slateLight-50';
+                    return 'bg-[#0b0d11]';
+                },
 
-            // JSON Verisini Çek
-            fetch('filmvediziler.json')
-                .then(response => {
-                    if (!response.ok) throw new Error("JSON dosyası yüklenemedi.");
-                    return response.json();
-                })
-                .then(data => {
-                    allMediaData = data;
-                    if (data.length > 0) {
-                        setupHero(data[0]);
-                        renderGrid(data);
+                getHeaderClass() {
+                    if (this.theme === 'ivory') return 'bg-ivory-100/95 border-ivory-200';
+                    if (this.theme === 'slate') return 'bg-slateLight-100/95 border-slateLight-200';
+                    return 'bg-[#0f1115]/95 border-gray-800/80';
+                },
+
+                getCardClass() {
+                    if (this.theme === 'ivory') return 'bg-ivory-card border-ivory-200';
+                    if (this.theme === 'slate') return 'bg-slateLight-card border-slateLight-200';
+                    return 'bg-[#161922] border-gray-800';
+                },
+
+                getSearchClass() {
+                    if (this.theme === 'ivory') return 'bg-ivory-200 border-ivory-200';
+                    if (this.theme === 'slate') return 'bg-slateLight-200 border-slateLight-200';
+                    return 'bg-gray-900 border-gray-800';
+                },
+
+                getButtonClass() {
+                    if (this.theme === 'ivory') return 'bg-ivory-200 border-ivory-200 text-gray-800';
+                    if (this.theme === 'slate') return 'bg-slateLight-200 border-slateLight-200 text-gray-800';
+                    return 'bg-gray-900 border-gray-800 text-amber-400';
+                },
+
+                getThemeIcon() {
+                    if (this.theme === 'ivory') return 'fa-solid fa-sun text-amber-500 text-xs';
+                    if (this.theme === 'slate') return 'fa-solid fa-circle-half-stroke text-sky-500 text-xs';
+                    return 'fa-solid fa-moon text-indigo-400 text-xs';
+                },
+
+                getThemeName() {
+                    if (this.theme === 'ivory') return 'Fil Dişi';
+                    if (this.theme === 'slate') return 'Modern Gri';
+                    return 'Karanlık';
+                },
+                
+                catalog: [
+                    {
+                        id: "civil-war-1",
+                        title: "Captain America: Civil War",
+                        type: "movie",
+                        category: "Aksiyon / Bilim Kurgu / Macera",
+                        genre: "Aksiyon",
+                        rating: "8.5",
+                        year: "2016",
+                        duration: "147 dk",
+                        country: "Amerika Birleşik Devletleri",
+                        countryFlag: "🇺🇸",
+                        poster: "https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=600&q=80",
+                        backdrop: "https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=1600&q=80",
+                        starring: "Chris Evans / Robert Downey Jr. / Scarlett Johansson",
+                        desc: "Captain Steve Rogers leads the newly formed Avengers Alliance and continues to maintain world peace, but political pressure mounts to install a system of accountability.",
+                        director: "Anthony Russo, Joe Russo",
+                        originalTitle: "Captain America: Civil War",
+                        tmdbCast: [
+                            { name: "Chris Evans", character: "Steve Rogers / Captain America", profile: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" },
+                            { name: "Robert Downey Jr.", character: "Tony Stark / Iron Man", profile: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80" },
+                            { name: "Scarlett Johansson", character: "Natasha Romanoff / Black Widow", profile: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" },
+                            { name: "Sebastian Stan", character: "Bucky Barnes / Winter Soldier", profile: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=200&q=80" },
+                            { name: "Anthony Mackie", character: "Sam Wilson / Falcon", profile: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80" },
+                            { name: "Chadwick Boseman", character: "T'Challa / Black Panther", profile: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&q=80" },
+                            { name: "Tom Holland", character: "Peter Parker / Spider-Man", profile: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80" }
+                        ]
+                    },
+                    {
+                        id: "archive-1",
+                        title: "Kıyamet Z: Yeni Dünya",
+                        type: "movie",
+                        category: "Aksiyon / Gerilim / Korku",
+                        genre: "Aksiyon",
+                        rating: "6.1",
+                        year: "2026",
+                        duration: "96 dk",
+                        country: "İspanya",
+                        countryFlag: "🇪🇸",
+                        poster: "https://image.tmdb.org/t/p/w500/mUcJtoyGnYbYNmeIuZASUJfyj3x.jpg",
+                        backdrop: "https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg",
+                        starring: "Carlos Alcaide / Julia Martínez / Berta Vázquez",
+                        desc: "TSJ virüsü salgınının ardından Kanarya Adaları Avrupa'nın son sığınağı hâline gelmiştir. Erzak bulmak için Madrid'e giden ekibe katılan Roberto hayatta kalmaya çalışır.",
+                        director: "Carles Torrens",
+                        originalTitle: "Apocalipsis Z: Nuevo mundo",
+                        tmdbCast: [
+                            { name: "Carlos Alcaide", character: "Roberto", profile: "https://image.tmdb.org/t/p/w185/rl8fxgvKu56zxf5kIMGVTX3ju7Q.jpg" },
+                            { name: "Julia Martínez", character: "Marina", profile: "https://image.tmdb.org/t/p/w185/kkw8za1vSW4uLXBdakwbFLO7TCU.jpg" },
+                            { name: "José María Yázpik", character: "Pritchenko", profile: "https://image.tmdb.org/t/p/w185/GEV4PnIhxAAPxIHvsyhdLUjnSv.jpg" },
+                            { name: "Berta Vázquez", character: "Lucía", profile: "https://image.tmdb.org/t/p/w185/rl8fxgvKu56zxf5kIMGVTX3ju7Q.jpg" },
+                            { name: "María Salgueiro", character: "Sor Mª Carmen", profile: "https://image.tmdb.org/t/p/w185/kkw8za1vSW4uLXBdakwbFLO7TCU.jpg" }
+                        ]
+                    },
+                    {
+                        id: "archive-2",
+                        title: "Snowden",
+                        type: "movie",
+                        category: "Dram / Tarih / Suç",
+                        genre: "Dram",
+                        rating: "7.1",
+                        year: "2016",
+                        duration: "134 dk",
+                        country: "Amerika Birleşik Devletleri",
+                        countryFlag: "🇺🇸",
+                        poster: "https://image.tmdb.org/t/p/w500/kMHJWkDpGVOkNG0QSser8KtsHAm.jpg",
+                        backdrop: "https://image.tmdb.org/t/p/w1280/mYZYVrQ2ghU3m79q7byeLzNXo1M.jpg",
+                        starring: "Joseph Gordon-Levitt / Shailene Woodley",
+                        desc: "Amerikan hükümetinin gizli dinleme faaliyetlerini dünyaya duyuran Edward Snowden'ın gerçek hikayesi.",
+                        director: "Oliver Stone",
+                        originalTitle: "Snowden",
+                        tmdbCast: [
+                            { name: "Joseph Gordon-Levitt", character: "Edward Snowden", profile: "https://image.tmdb.org/t/p/w185/z2FA8js799xqtfiFjBTicFYdfk.jpg" },
+                            { name: "Shailene Woodley", character: "Lindsay Mills", profile: "https://image.tmdb.org/t/p/w185/gL2NvHKW9wAH3qkZuJ76ULUiArB.jpg" },
+                            { name: "Melissa Leo", character: "Laura Poitras", profile: "https://image.tmdb.org/t/p/w185/GEV4PnIhxAAPxIHvsyhdLUjnSv.jpg" },
+                            { name: "Zachary Quinto", character: "Glenn Greenwald", profile: "https://image.tmdb.org/t/p/w185/rl8fxgvKu56zxf5kIMGVTX3ju7Q.jpg" },
+                            { name: "Nicolas Cage", character: "Hank Forrester", profile: "https://image.tmdb.org/t/p/w185/GEV4PnIhxAAPxIHvsyhdLUjnSv.jpg" }
+                        ]
+                    },
+                    {
+                        id: "archive-4",
+                        title: "Hz. Yusuf",
+                        type: "tv",
+                        category: "Dram / Tarih",
+                        genre: "Dram",
+                        rating: "7.6",
+                        year: "2009",
+                        duration: "45 dk",
+                        country: "İran",
+                        countryFlag: "🇮🇷",
+                        poster: "https://image.tmdb.org/t/p/w500/h7nsyR0I53gM6P1Inxl438UnqS7.jpg",
+                        backdrop: "https://image.tmdb.org/t/p/w1280/u4yhC4Q8bS1w7FWIPpKsmY4nv9E.jpg",
+                        starring: "Mostafa Zamani / Katayoun Riahi",
+                        desc: "Hazreti Yusuf'un Kur'an ve Ehl-i Beyt kaynaklarından ilham alınan hayat hikayesi.",
+                        director: "Farajollah Salahshoor",
+                        originalTitle: "یوسف پیامبر",
+                        tmdbCast: [
+                            { name: "Mostafa Zamani", character: "Hz. Yusuf", profile: "https://image.tmdb.org/t/p/w185/qryrZtOdZxxehJlweW3PF9nF4yp.jpg" },
+                            { name: "Katayoun Riahi", character: "Züleyha", profile: "https://image.tmdb.org/t/p/w185/x5TJ2wiBTAjdR2A0Ad7ZL7hFcVw.jpg" },
+                            { name: "Mahmoud Pak Niat", character: "Hz. Yakub", profile: "https://image.tmdb.org/t/p/w185/GEV4PnIhxAAPxIHvsyhdLUjnSv.jpg" },
+                            { name: "Jahanbakhsh Soltani", character: "Amenhotep", profile: "https://image.tmdb.org/t/p/w185/rl8fxgvKu56zxf5kIMGVTX3ju7Q.jpg" },
+                            { name: "Leila Boloukat", character: "Nefertiti", profile: "https://image.tmdb.org/t/p/w185/kkw8za1vSW4uLXBdakwbFLO7TCU.jpg" }
+                        ]
+                    },
+                    {
+                        id: "archive-5",
+                        title: "Zombi Ekspresi",
+                        type: "movie",
+                        category: "Aksiyon / Korku",
+                        genre: "Aksiyon",
+                        rating: "7.8",
+                        year: "2016",
+                        duration: "120 dk",
+                        country: "Güney Kore",
+                        countryFlag: "🇰🇷",
+                        poster: "https://image.tmdb.org/t/p/w500/uDSm2WqdaNPEMrkRM4tOacg4a9G.jpg",
+                        backdrop: "https://image.tmdb.org/t/p/w1280/brnfCYyz8EMbBrHgmh8sCwBi5i1.jpg",
+                        starring: "Gong Yoo / Don Lee / Jung Yu-mi",
+                        desc: "Seul'den Busan'a giden hızlı trende patlak veren ölümcül zombi salgını ve yolcuların hayatta kalma mücadelesi.",
+                        director: "Yeon Sang-ho",
+                        originalTitle: "부산행",
+                        tmdbCast: [
+                            { name: "Gong Yoo", character: "Seok-woo", profile: "https://image.tmdb.org/t/p/w185/ocGoFb6TrK3uWGXt4WnuibUG1vD.jpg" },
+                            { name: "Don Lee", character: "Sang-hwa", profile: "https://image.tmdb.org/t/p/w185/xqnARIEzfyr3BalhFBWHmCusLKH.jpg" },
+                            { name: "Jung Yu-mi", character: "Sung-kyung", profile: "https://image.tmdb.org/t/p/w185/GEV4PnIhxAAPxIHvsyhdLUjnSv.jpg" },
+                            { name: "Kim Su-an", character: "Su-an", profile: "https://image.tmdb.org/t/p/w185/rl8fxgvKu56zxf5kIMGVTX3ju7Q.jpg" },
+                            { name: "Kim Eui-sung", character: "Yon-suk", profile: "https://image.tmdb.org/t/p/w185/kkw8za1vSW4uLXBdakwbFLO7TCU.jpg" }
+                        ]
+                    },
+                    {
+                        id: "archive-6",
+                        title: "Lost",
+                        type: "tv",
+                        category: "Gizem / Macera / Dram",
+                        genre: "Gizem",
+                        rating: "8.3",
+                        year: "2004",
+                        duration: "6 Sezon",
+                        country: "Amerika Birleşik Devletleri",
+                        countryFlag: "🇺🇸",
+                        poster: "https://image.tmdb.org/t/p/w500/og6S0aTZU6YUJAbqxeKjCa3kY1E.jpg",
+                        backdrop: "https://image.tmdb.org/t/p/w1280/yUOFocKDW7MCC5isx4FK8A68QFp.jpg",
+                        starring: "Matthew Fox / Evangeline Lilly / Josh Holloway",
+                        desc: "Avustralya'dan Amerika'ya giderken uçağı pasifikte gizemli bir adaya düşen kazazedelerin sırlarla dolu yaşam mücadelesi.",
+                        director: "J.J. Abrams",
+                        originalTitle: "Lost",
+                        tmdbCast: [
+                            { name: "Matthew Fox", character: "Jack Shephard", profile: "https://image.tmdb.org/t/p/w185/6VIfueb4j3GCsIhxnstsXlY5C3Y.jpg" },
+                            { name: "Evangeline Lilly", character: "Kate Austen", profile: "https://image.tmdb.org/t/p/w185/pJHX2jd7ytre3NQbF9nlyWUqxH3.jpg" },
+                            { name: "Josh Holloway", character: "James Sawyer", profile: "https://image.tmdb.org/t/p/w185/GEV4PnIhxAAPxIHvsyhdLUjnSv.jpg" },
+                            { name: "Jorge Garcia", character: "Hugo Reyes", profile: "https://image.tmdb.org/t/p/w185/rl8fxgvKu56zxf5kIMGVTX3ju7Q.jpg" },
+                            { name: "Naveen Andrews", character: "Sayid Jarrah", profile: "https://image.tmdb.org/t/p/w185/kkw8za1vSW4uLXBdakwbFLO7TCU.jpg" }
+                        ]
+                    },
+                    {
+                        id: "archive-8",
+                        title: "Made in Korea",
+                        type: "tv",
+                        category: "Suç / Dram",
+                        genre: "Suç",
+                        rating: "8.2",
+                        year: "2025",
+                        duration: "2 Sezon",
+                        country: "Güney Kore",
+                        countryFlag: "🇰🇷",
+                        poster: "https://image.tmdb.org/t/p/w500/lhZCpYVMKZanGTMabOYHTZLD1WY.jpg",
+                        backdrop: "https://image.tmdb.org/t/p/w1280/fRR6jHutlHuYxMeZp4cZfjgafzd.jpg",
+                        starring: "Hyun Bin / Jung Woo-sung",
+                        desc: "1970'ler Kore'sinde hırs ve güç peşindeki Baek Gi Tae ile kararlı savcı Jang Gun Yeong'un çetin çatışması.",
+                        director: "Woo Min-ho",
+                        originalTitle: "메이드 인 코리아",
+                        tmdbCast: [
+                            { name: "Hyun Bin", character: "Baek Kitae", profile: "https://image.tmdb.org/t/p/w185/JQFzhO9j8HRiyr7leGPj6cqhvM.jpg" },
+                            { name: "Jung Woo-sung", character: "Jang Geonyoung", profile: "https://image.tmdb.org/t/p/w185/tI0ANQSwcOBfQUeHgfcwn7VmHRO.jpg" },
+                            { name: "Woo Min-ho", character: "Yönetmen", profile: "https://image.tmdb.org/t/p/w185/GEV4PnIhxAAPxIHvsyhdLUjnSv.jpg" }
+                        ]
                     }
-                })
-                .catch(error => {
-                    console.error("Hata:", error);
-                    document.getElementById('mediaGrid').innerHTML = `
-                        <div class="col-span-full text-center py-16 text-gray-400 space-y-2">
-                            <i class="fa-solid fa-triangle-exclamation text-3xl text-red-500"></i>
-                            <p>İçerikler yüklenemedi.</p>
-                            <p class="text-xs text-gray-500">Lütfen 'filmvediziler.json' dosyasının aynı dizinde olduğundan emin olun.</p>
-                        </div>`;
-                });
+                ],
 
-            // Dinleyiciler
-            document.getElementById('themeSelector').addEventListener('change', (e) => {
-                const theme = e.target.value;
-                localStorage.setItem('cineverse_theme', theme);
-                applyTheme(theme);
-            });
+                get heroSlides() {
+                    return this.catalog;
+                },
 
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                const filtered = allMediaData.filter(item => 
-                    item.title.toLowerCase().includes(query) || 
-                    (item.genre && item.genre.toLowerCase().includes(query)) ||
-                    (item.cast && item.cast.some(actor => actor.toLowerCase().includes(query)))
-                );
-                renderGrid(filtered);
-                document.getElementById('sectionTitle').innerText = query ? `"${query}" için arama sonuçları` : "Trend Yapımlar";
-            });
-        });
+                get currentHero() {
+                    return this.heroSlides[this.currentSlideIndex] || this.heroSlides[0];
+                },
 
-        function applyTheme(theme) {
-            const body = document.getElementById('bodyRoot');
-            if (theme === 'light') {
-                body.className = 'bg-gray-100 text-gray-900 font-sans antialiased transition-colors duration-300';
-            } else if (theme === 'gray') {
-                body.className = 'bg-gray-900 text-gray-100 font-sans antialiased transition-colors duration-300';
-            } else {
-                body.className = 'bg-[#141414] text-white font-sans antialiased transition-colors duration-300';
-            }
-        }
+                selectHeroSlide(idx) {
+                    this.currentSlideIndex = idx;
+                },
 
-        function setupHero(item) {
-            const hero = document.getElementById('heroSection');
-            hero.style.backgroundImage = `url('${item.poster || item.image}')`;
-            document.getElementById('heroTitle').innerText = item.title;
-            document.getElementById('heroDesc').innerText = item.description || item.summary || '';
-            document.getElementById('heroPlayBtn').onclick = () => playMedia(item);
-            document.getElementById('heroDetailBtn').onclick = () => openModal(item);
-        }
-
-        function renderGrid(data) {
-            const grid = document.getElementById('mediaGrid');
-            grid.innerHTML = '';
-
-            if (data.length === 0) {
-                grid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-12">Aradığınız kriterlere uygun içerik bulunamadı.</p>`;
-                return;
-            }
-
-            data.forEach(item => {
-                const isFavorited = watchlist.some(w => w.title === item.title);
-                const card = document.createElement('div');
-                card.className = 'group relative bg-cardBg rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 hover:z-20 border border-gray-800/50';
-                card.innerHTML = `
-                    <div class="aspect-[2/3] w-full bg-gray-800 overflow-hidden relative">
-                        <img src="${item.poster || item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:opacity-90 transition duration-300">
-                        <div class="absolute top-2 right-2 z-10">
-                            <button onclick="event.stopPropagation(); toggleWatchlist('${item.title}')" class="w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-red-600 transition">
-                                <i class="fa-solid ${isFavorited ? 'fa-check text-red-500' : 'fa-plus'} text-xs"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-3">
-                        <h3 class="font-bold text-sm truncate">${item.title}</h3>
-                        <div class="flex items-center justify-between text-xs text-gray-400 mt-1">
-                            <span>${item.year || '2023'}</span>
-                            <span class="bg-red-600/20 text-red-500 px-1.5 py-0.5 rounded font-medium">${item.type || 'Film'}</span>
-                        </div>
-                    </div>
-                `;
-                card.onclick = () => openModal(item);
-                grid.appendChild(card);
-            });
-        }
-
-        function filterCategory(type) {
-            document.getElementById('searchInput').value = '';
-            if (type === 'all') {
-                renderGrid(allMediaData);
-                document.getElementById('sectionTitle').innerText = "Trend Yapımlar";
-            } else {
-                const filtered = allMediaData.filter(item => item.type && item.type.toLowerCase() === type.toLowerCase());
-                renderGrid(filtered);
-                document.getElementById('sectionTitle').innerText = type === 'Dizi' ? "Popüler Diziler" : "Popüler Filmler";
-            }
-        }
-
-        function loadWatchlist() {
-            renderGrid(watchlist);
-            document.getElementById('sectionTitle').innerText = "Listem (İzleme Listesi)";
-        }
-
-        function toggleWatchlist(title) {
-            const item = allMediaData.find(i => i.title === title);
-            if (!item) return;
-            const index = watchlist.findIndex(w => w.title === title);
-            if (index > -1) {
-                watchlist.splice(index, 1);
-            } else {
-                watchlist.push(item);
-            }
-            localStorage.setItem('cineverse_watchlist', JSON.stringify(watchlist));
-            renderGrid(allMediaData);
-        }
-
-        function openModal(item) {
-            const modal = document.getElementById('detailModal');
-            const content = document.getElementById('modalContent');
-
-            let castHtml = item.cast ? `<p class="text-xs text-gray-400"><strong class="text-white">Oyuncular:</strong> ${item.cast.join(', ')}</p>` : '';
-            let seasonsHtml = '';
-
-            if (item.type && item.type.toLowerCase() === 'dizi' && item.seasons) {
-                seasonsHtml = `<div class="mt-4 space-y-2">
-                    <h4 class="font-bold text-sm">Sezonlar ve Bölümler</h4>
-                    <div class="flex space-x-2">`;
-                item.seasons.forEach((season, sIdx) => {
-                    seasonsHtml += `<button onclick="showEpisodes(${sIdx}, '${item.title}')" class="bg-gray-800 hover:bg-red-600 px-3 py-1.5 rounded text-xs transition">Sezon ${season.seasonNumber || sIdx+1}</button>`;
-                });
-                seasonsHtml += `</div></div>`;
-            }
-
-            content.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-6">
-                    <img src="${item.poster || item.image}" alt="${item.title}" class="w-full md:w-1/3 rounded-lg object-cover shadow-md aspect-[2/3]">
-                    <div class="space-y-4 flex-1">
-                        <h2 class="text-3xl font-bold">${item.title}</h2>
-                        <div class="flex items-center space-x-3 text-sm text-gray-400">
-                            <span>${item.year || ''}</span>
-                            <span class="border border-gray-600 px-1.5 py-0.5 text-xs rounded">${item.rating || '13+'}</span>
-                            <span class="text-red-500 font-semibold">${item.genre || ''}</span>
-                        </div>
-                        <p class="text-gray-300 text-sm leading-relaxed">${item.description || item.summary || 'Açıklama bulunmuyor.'}</p>
-                        ${castHtml}
-                        ${seasonsHtml}
-                        <div class="pt-4 flex space-x-3">
-                            <button onclick="playMedia('${item.title}')" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-md flex items-center space-x-2 transition shadow">
-                                <i class="fa-solid fa-play"></i><span>Hemen İzle</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            modal.classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('detailModal').classList.add('hidden');
-        }
-
-        function playMedia(input) {
-            let item = typeof input === 'string' ? allMediaData.find(i => i.title === input) : input;
-            if (!item) return;
-
-            closeModal();
-            const videoModal = document.getElementById('videoModal');
-            const iframe = document.getElementById('videoPlayerFrame');
-            const epContainer = document.getElementById('episodeSelectorContainer');
-            
-            let url = item.trailer || item.videoUrl || '';
-            if (url.includes('watch?v=')) {
-                url = url.replace('watch?v=', 'embed/');
-            }
-            iframe.src = url || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
-
-            // Eğer diziyse ve sezonları varsa alt kısma bölümleri dizelim
-            if (item.type && item.type.toLowerCase() === 'dizi' && item.seasons && item.seasons.length > 0) {
-                epContainer.classList.remove('hidden');
-                renderEpisodeList(item.seasons[0].episodes);
-            } else {
-                epContainer.classList.add('hidden');
-            }
-
-            videoModal.classList.remove('hidden');
-        }
-
-        function showEpisodes(seasonIndex, title) {
-            const item = allMediaData.find(i => i.title === title);
-            if (item && item.seasons && item.seasons[seasonIndex]) {
-                renderEpisodeList(item.seasons[seasonIndex].episodes);
-            }
-        }
-
-        function renderEpisodeList(episodes) {
-            const row = document.getElementById('episodeListRow');
-            row.innerHTML = '';
-            episodes.forEach((ep, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'bg-gray-800 hover:bg-red-600 px-4 py-2 rounded text-xs whitespace-nowrap transition flex flex-col items-start';
-                btn.innerHTML = `<span class="font-bold">${idx+1}. Bölüm</span><span class="text-[10px] text-gray-400 truncate max-w-[120px]">${ep.title || 'Bölüm'}</span>`;
-                btn.onclick = () => {
-                    if (ep.videoUrl) {
-                        let eUrl = ep.videoUrl;
-                        if (eUrl.includes('watch?v=')) eUrl = eUrl.replace('watch?v=', 'embed/');
-                        document.getElementById('videoPlayerFrame').src = eUrl;
+                scrollHeroThumbs(dir) {
+                    const container = document.getElementById('heroThumbContainer');
+                    if (container) {
+                        container.scrollBy({ left: dir * 220, behavior: 'smooth' });
                     }
-                };
-                row.appendChild(btn);
-            });
-        }
+                },
 
-        function closeVideo() {
-            const videoModal = document.getElementById('videoModal');
-            document.getElementById('videoPlayerFrame').src = '';
-            videoModal.classList.add('hidden');
-        }
+                getEpisodesForSeason(seasonNum) {
+                    if (!this.selectedItem) return [];
+                    return [
+                        { number: 1, title: "Başlangıç ve İlk Temas", duration: "52 dk", desc: "Karakterlerin tehlikeli serüvene ilk adımı attığı ve sırların yavaşça aralandığı açılış bölümü.", still: this.selectedItem.backdrop },
+                        { number: 2, title: "Kırılma Noktası", duration: "48 dk", desc: "Beklenmeyen bir ihanet ekibi zor durumda bırakırken, geçmişin karanlık gölgeleri yeniden ortaya çıkar.", still: this.selectedItem.poster },
+                        { number: 3, title: "Derin Sırlar", duration: "55 dk", desc: "Gerçeğe ulaşmak için hayati bir ipucu peşine düşen kahramanlar, ölümcül bir tuzağın içine çekilir.", still: this.selectedItem.backdrop },
+                        { number: 4, title: "Karanlık Sokaklar", duration: "50 dk", desc: "Şehirde artan gerilimle birlikte müttefikler ve düşmanlar birbirine karışır; her karar hayati önem taşır.", still: this.selectedItem.poster },
+                        { number: 5, title: "Son Direniş", duration: "53 dk", desc: "Tüm dengelerin altüst olduğu ve final karşılaşması öncesi fırtınalar koparan kritik eşik.", still: this.selectedItem.backdrop },
+                        { number: 6, title: "Yeni Düzen", duration: "58 dk", desc: "Sezonun nefes kesen finalinde tüm sırlar aydınlığa kavuşuyor ve yeni bir dönemin kapıları aralanıyor.", still: this.selectedItem.poster },
+                        { number: 7, title: "Küllerinden Doğmak", duration: "51 dk", desc: "Yeni sezonun gizemli olayları ardındaki gerçekler gün yüzüne çıkıyor.", still: this.selectedItem.backdrop },
+                        { number: 8, title: "Zoraki İttifak", duration: "49 dk", desc: "Düşmanlar hayatta kalmak için güçlerini birleştirmek zorunda kalıyor.", still: this.selectedItem.poster },
+                        { number: 9, title: "Yolun Sonu", duration: "54 dk", desc: "Büyük kapışma öncesi son hazırlıklar ve stratejik hamleler.", still: this.selectedItem.poster },
+                        { number: 10, title: "Büyük Final", duration: "60 dk", desc: "Soluk kesen sezon finali ve şoke edici gelişmeler.", still: this.selectedItem.poster }
+                    ];
+                },
 
-        function toggleProfileModal() {
-            const modal = document.getElementById('profileModal');
-            modal.classList.toggle('hidden');
-        }
+                get paginatedEpisodes() {
+                    const eps = this.getEpisodesForSeason(this.selectedSeason);
+                    const start = (this.currentEpisodePage - 1) * 8;
+                    return eps.slice(start, start + 8);
+                },
 
-        function selectProfile(name, initial) {
-            currentActiveProfile = name;
-            localStorage.setItem('cineverse_profile', name);
-            document.getElementById('activeProfileAvatar').innerText = initial;
-            toggleProfileModal();
+                get totalEpisodePages() {
+                    const eps = this.getEpisodesForSeason(this.selectedSeason);
+                    return Math.ceil(eps.length / 8);
+                },
+
+                selectEpisode(epNum) {
+                    this.selectedEpisode = epNum;
+                    const video = document.getElementById('customVideoPlayer');
+                    if (video) {
+                        video.currentTime = 0;
+                        video.play();
+                        this.isPlaying = true;
+                    }
+                },
+                
+                isPlaying: false,
+                isMuted: false,
+                videoProgress: 0,
+                currentTimeFormatted: '00:00',
+                durationFormatted: '00:00',
+                videoEnded: false,
+
+                togglePlay() {
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video) return;
+                    if (video.paused) {
+                        video.play();
+                        this.isPlaying = true;
+                    } else {
+                        video.pause();
+                        this.isPlaying = false;
+                    }
+                },
+
+                updateVideoProgress() {
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video) return;
+                    if (video.duration) {
+                        this.videoProgress = (video.currentTime / video.duration) * 100;
+                        this.currentTimeFormatted = this.formatTime(video.currentTime);
+                        this.durationFormatted = this.formatTime(video.duration);
+
+                        if (this.selectedItem) {
+                            let progressMap = JSON.parse(localStorage.getItem('perde_player_progress_v3')) || {};
+                            progressMap[this.selectedItem.id] = {
+                                time: video.currentTime,
+                                duration: video.duration,
+                                savedAt: Date.now()
+                            };
+                            localStorage.setItem('perde_player_progress_v3', JSON.stringify(progressMap));
+                        }
+                    }
+                },
+
+                seekVideo(event) {
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video || !video.duration) return;
+                    const rect = event.currentTarget.getBoundingClientRect();
+                    const pos = (event.clientX - rect.left) / rect.width;
+                    video.currentTime = pos * video.duration;
+                },
+
+                skipTime(seconds) {
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video) return;
+                    video.currentTime += seconds;
+                },
+
+                skipIntro() {
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video) return;
+                    video.currentTime += 85;
+                },
+
+                toggleMute() {
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video) return;
+                    video.muted = !video.muted;
+                    this.isMuted = video.muted;
+                },
+
+                toggleFullscreen() {
+                    const playerContainer = document.getElementById('customVideoPlayer')?.parentElement;
+                    if (!playerContainer) return;
+                    if (!document.fullscreenElement) {
+                        playerContainer.requestFullscreen();
+                    } else {
+                        document.exitFullscreen();
+                    }
+                },
+
+                formatTime(seconds) {
+                    const m = Math.floor(seconds / 60);
+                    const s = Math.floor(seconds % 60);
+                    return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+                },
+
+                scrollCast(direction) {
+                    const container = document.getElementById('castContainer');
+                    if (container) {
+                        container.scrollBy({ left: 180 * direction, behavior: 'smooth' });
+                    }
+                },
+
+                scrollSimilar(direction) {
+                    const container = document.getElementById('similarContainer');
+                    if (container) {
+                        container.scrollBy({ left: 180 * direction, behavior: 'smooth' });
+                    }
+                },
+
+                profiles: [
+                    { id: 'pro_1', name: 'Ana Profil', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop' },
+                    { id: 'pro_2', name: 'Çocuk Profili', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=200&auto=format&fit=crop' }
+                ],
+                currentProfileId: localStorage.getItem('cine_active_profile') || 'pro_1',
+
+                get currentProfile() {
+                    return this.profiles.find(p => p.id === this.currentProfileId) || this.profiles[0];
+                },
+
+                switchProfile(id) {
+                    this.currentProfileId = id;
+                    localStorage.setItem('cine_active_profile', id);
+                },
+
+                get watchlist() {
+                    let allLists = JSON.parse(localStorage.getItem('cine_profile_watchlists')) || {};
+                    return allLists[this.currentProfileId] || [];
+                },
+                get currentWatchlist() {
+                    return this.watchlist;
+                },
+
+                toggleWatchlist(item) {
+                    let allLists = JSON.parse(localStorage.getItem('cine_profile_watchlists')) || {};
+                    if (!allLists[this.currentProfileId]) allLists[this.currentProfileId] = [];
+                    let list = allLists[this.currentProfileId];
+                    const index = list.findIndex(m => m.id === item.id);
+                    if (index > -1) {
+                        list.splice(index, 1);
+                    } else {
+                        list.push(item);
+                    }
+                    localStorage.setItem('cine_profile_watchlists', JSON.stringify(allLists));
+                },
+
+                isInWatchlist(item) {
+                    return this.watchlist.some(m => m.id === item.id);
+                },
+
+                reviews: JSON.parse(localStorage.getItem('cine_reviews')) || {},
+
+                getReviews(itemId) {
+                    return this.reviews[itemId] || [];
+                },
+
+                submitReview() {
+                    if (!this.userCommentText.trim() || !this.selectedItem) return;
+                    if (!this.reviews[this.selectedItem.id]) {
+                        this.reviews[this.selectedItem.id] = [];
+                    }
+                    this.reviews[this.selectedItem.id].unshift({
+                        author: this.currentProfile.name,
+                        rating: this.userRating,
+                        comment: this.userCommentText,
+                        date: new Date().toLocaleDateString()
+                    });
+                    localStorage.setItem('cine_reviews', JSON.stringify(this.reviews));
+                    this.userCommentText = '';
+                },
+
+                navigateTo(page) {
+                    this.currentPage = page;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+
+                openWatchPage(item) {
+                    this.selectedItem = item;
+                    this.selectedSeason = 1;
+                    this.selectedEpisode = 1;
+                    this.currentEpisodePage = 1;
+                    this.isPlaying = false;
+                    this.videoProgress = 0;
+                    this.currentPage = 'watch';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    setTimeout(() => {
+                        const video = document.getElementById('customVideoPlayer');
+                        let progressMap = JSON.parse(localStorage.getItem('perde_player_progress_v3')) || {};
+                        if (video && progressMap[item.id]) {
+                            video.currentTime = progressMap[item.id].time || 0;
+                        }
+                    }, 200);
+                },
+
+                get sortedFilteredCatalog() {
+                    let result = this.catalog.filter(item => {
+                        const matchesSearch = item.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+                                              item.genre.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        let matchesQuick = true;
+                        if (this.quickFilter === 'imdb8') matchesQuick = parseFloat(item.rating) >= 8.0;
+                        if (this.quickFilter === 'series') matchesQuick = item.type === 'tv';
+                        if (this.quickFilter === 'movies') matchesQuick = item.type === 'movie';
+                        return matchesSearch && matchesQuick;
+                    });
+
+                    if (this.sortBy === 'rating') {
+                        result.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+                    } else if (this.sortBy === 'year') {
+                        result.sort((a, b) => parseInt(b.year) - parseInt(a.year));
+                    }
+                    return result;
+                }
+            }
         }
     </script>
 </body>
