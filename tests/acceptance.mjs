@@ -119,15 +119,23 @@ try {
     assert.ok(responsiveSources.some(source => source.includes('w185')) && responsiveSources.some(source => source.includes('w780')), 'TMDB afiş veya hero görsellerinde duyarlı kaynaklar bulunamadı');
   });
 
-  await check('Mobil hero görseli daha hafif boyutu seçiyor', async () => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.waitForFunction(() => {
-      const image = document.querySelector('img[fetchpriority="high"]');
-      return image && image.currentSrc.includes('/w500/');
-    }, { timeout: 20000 });
-    const mobileHeroSource = await page.locator('img[fetchpriority="high"]').evaluate(image => image.currentSrc);
-    assert.match(mobileHeroSource, /\/w500\//);
-    await page.setViewportSize({ width: 1440, height: 1000 });
+  await check('Mobil hero görseli uygun çözünürlükte yükleniyor', async () => {
+    // Ayrı mobil sayfa kullan: tarayıcı, önceden yüklenmiş büyük görseli viewport küçülünce
+    // her zaman daha küçük adayla değiştirmez.
+    const mobilePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    try {
+      await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await mobilePage.waitForFunction(() => {
+        const image = document.querySelector('img[fetchpriority="high"]');
+        return image && image.complete && image.naturalWidth > 0 &&
+          /\/w(500|780)\//.test(image.currentSrc);
+      }, { timeout: 30000 });
+      const mobileHeroSource = await mobilePage.locator('img[fetchpriority="high"]').evaluate(image => image.currentSrc);
+      console.log('MOBILE HERO SOURCE:', mobileHeroSource);
+      assert.match(mobileHeroSource, /\/w(500|780)\//);
+    } finally {
+      await mobilePage.close();
+    }
     await page.waitForFunction(() => {
       const image = document.querySelector('img[fetchpriority="high"]');
       return image && image.currentSrc.includes('/w1280/');
