@@ -1449,7 +1449,7 @@
                 },
 
                 get availableCountries() {
-                    const values = this.catalog.flatMap(item => String(item.country || '').split(/[,\\/;]/).map(value => value.trim()).filter(Boolean));
+                    const values = this.catalog.flatMap(item => String(item.country || '').split(/[,\/;]/).map(value => value.trim()).filter(Boolean));
                     return [...new Set(values)].sort((a, b) => a.localeCompare(b, 'tr'));
                 },
 
@@ -1515,7 +1515,7 @@
                         const matchesType = this.discoveryType === 'all' || item.type === this.discoveryType;
                         const genres = String(item.category || item.genre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value));
                         const matchesGenre = this.discoveryGenre === 'all' || genres.includes(this.normalizeSearchText(this.discoveryGenre)) || this.normalizeSearchText(item.genre) === this.normalizeSearchText(this.discoveryGenre);
-                        const countries = String(item.country || '').split(/[,\\/;]/).map(value => this.normalizeSearchText(value));
+                        const countries = String(item.country || '').split(/[,\/;]/).map(value => this.normalizeSearchText(value));
                         const matchesCountry = this.discoveryCountry === 'all' || countries.includes(this.normalizeSearchText(this.discoveryCountry));
                         const platforms = Array.isArray(item.platform) ? item.platform : (item.platform ? [item.platform] : []);
                         const matchesPlatform = this.discoveryPlatform === 'all' || platforms.some(value => this.normalizeSearchText(value) === this.normalizeSearchText(this.discoveryPlatform));
