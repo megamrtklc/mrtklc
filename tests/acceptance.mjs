@@ -160,6 +160,18 @@ try {
       } catch {}
     });
     try {
+      // Reproduce a constrained mobile device: 4x CPU slowdown and 1.6 Mbps / 150 ms network.
+      // This is diagnostic only; it does not change production application behavior.
+      const mobileCdp = await mobilePage.context().newCDPSession(mobilePage);
+      await mobileCdp.send('Network.enable');
+      await mobileCdp.send('Network.emulateNetworkConditions', {
+        offline: false,
+        latency: 150,
+        downloadThroughput: 1.6 * 1024 * 1024 / 8,
+        uploadThroughput: 750 * 1024 / 8,
+        connectionType: 'cellular3g'
+      });
+      await mobileCdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
       await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await mobilePage.waitForFunction(() => {
         const image = document.querySelector('#mobileHeroBanner img');
