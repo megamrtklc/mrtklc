@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-tailwind:
@@ -30,6 +30,17 @@ jobs:
         run: npx tailwindcss -c tailwind.config.js -i ./src/tailwind.css -o ./tailwind.css --minify
       - name: Report CSS size
         run: wc -c tailwind.css
+      - name: Commit compiled CSS
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tailwind.css
+          if git diff --cached --quiet; then
+            echo "Compiled CSS is unchanged."
+            exit 0
+          fi
+          git commit -m "Build production Tailwind CSS"
+          git push
       - name: Upload compiled CSS
         uses: actions/upload-artifact@v4
         with:
