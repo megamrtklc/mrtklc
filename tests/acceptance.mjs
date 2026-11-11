@@ -66,7 +66,6 @@ try {
       appHeroBackdrop: window.Alpine.$data(document.documentElement).currentHero.backdrop
     }));
     console.log('HERO IMAGE:', JSON.stringify(imageState));
-    console.log('HERO HANDLER:', await page.evaluate(() => window.Alpine.$data(document.documentElement).handleImageError.toString()));
     assert.ok(imageState.naturalWidth > 0 && !imageState.placeholderUsed, 'Hero görseli gerçek bir görsele yüklenemedi');
   });
 
