@@ -177,10 +177,12 @@ try {
     }
     const desktopState = await page.evaluate(() => ({
       mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
-      desktopVisible: getComputedStyle(document.querySelector('main section.hidden.md\\:flex')).display !== 'none'
+      desktopVisible: getComputedStyle(document.querySelector('main section.hidden.md\\:flex')).display !== 'none',
+      mobileHeroSource: document.querySelector('#mobileHeroBanner img')?.currentSrc || ''
     }));
     assert.ok(!desktopState.mobileVisible, 'Mobil manşet masaüstünde görünmemeli');
     assert.ok(desktopState.desktopVisible, 'Mevcut masaüstü manşeti görünmüyor');
+    assert.ok(!desktopState.mobileHeroSource || desktopState.mobileHeroSource.startsWith('data:image/gif'), 'Masaüstünde gizli mobil manşet görseli indirilmemeli');
   });
 
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
