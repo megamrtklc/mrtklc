@@ -61,7 +61,9 @@ try {
       fallbackDataset: image.dataset.fallbackSrc,
       naturalWidth: image.naturalWidth,
       posterFallbackUsed: image.dataset.perdePosterFallbackApplied === 'true',
-      placeholderUsed: image.dataset.perdeFallbackApplied === 'true'
+      placeholderUsed: image.dataset.perdeFallbackApplied === 'true',
+      appHeroPoster: window.Alpine.$data(document.documentElement).currentHero.poster,
+      appHeroBackdrop: window.Alpine.$data(document.documentElement).currentHero.backdrop
     }));
     console.log('HERO IMAGE:', JSON.stringify(imageState));
     assert.ok(imageState.naturalWidth > 0 && !imageState.placeholderUsed, 'Hero görseli gerçek bir görsele yüklenemedi');
