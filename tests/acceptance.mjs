@@ -132,7 +132,7 @@ try {
         const image = document.querySelector('#mobileHeroBanner img');
         return image && image.complete && image.naturalWidth > 0;
       }, { timeout: 30000 });
-      const mobileState = await mobilePage.evaluate(() => {
+      const mobileState = await mobilePage.evaluate(async () => {
         const image = document.querySelector('#mobileHeroBanner img');
         const lcp = await new Promise(resolve => {
           const entries = [];
