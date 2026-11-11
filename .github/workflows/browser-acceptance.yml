@@ -25,7 +25,7 @@ jobs:
       - name: Install Playwright
         run: npm install --no-save playwright
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
       - name: Run production browser acceptance tests
         env:
           BASE_URL: https://megamrtklc.github.io/mrtklc/
