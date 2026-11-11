@@ -58,3 +58,5 @@ jobs:
 
 
 # Manual verification trigger after responsive hero preload deployment (Nov 11, 2026).
+
+# Re-run production Lighthouse audit after the latest acceptance-test deployment (Nov 11, 2026).
