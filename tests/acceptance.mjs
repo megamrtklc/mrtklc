@@ -144,7 +144,10 @@ try {
       app.tmdbSeasonLoading = false;
       app.selectedSeason = 1;
       app.selectedItem.tmdbEpisodesBySeason = {
-        1: [\n          { number: 1, title: 'Kabul Testi Bölümü', duration: '42 dk', still: '' },\n          { number: 2, title: 'İkinci Kabul Bölümü', duration: '43 dk', still: '' }\n        ]
+        1: [
+          { number: 1, title: 'Kabul Testi Bölümü', duration: '42 dk', still: '' },
+          { number: 2, title: 'İkinci Kabul Bölümü', duration: '43 dk', still: '' }
+        ]
       };
     });
     const watchedButton = page.getByTitle('İzlendi olarak işaretle').first();
