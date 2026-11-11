@@ -38,4 +38,4 @@ jobs:
           BASE_URL: https://megamrtklc.github.io/mrtklc/
         run: node tests/acceptance.mjs
 
-# Manual production verification after responsive hero srcset deployment (Nov 11, 2026).
+# Manual production verification after mobile hero 500px cap deployment (Nov 11, 2026).
