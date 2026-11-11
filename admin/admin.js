@@ -36,7 +36,7 @@
     $('#result-count').textContent=`${state.filtered.length.toLocaleString('tr-TR')} kayıt`;
     $('#page-info').textContent=`Sayfa ${state.page} / ${pages}`;
     $('#prev-page').disabled=state.page<=1; $('#next-page').disabled=state.page>=pages;
-    $$('#catalog-rows [data-item]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id||'')===btn.dataset.item);if(item)toast(titleOf(item)+' · düzenleme bağlantısı henüz etkin değil');}));
+    $('#catalog-rows [data-item]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id||'')===btn.dataset.item);if(item)openEditor(item);}));
   }
   function renderCollections(){
     const raw=state.data?.collections;
@@ -53,6 +53,86 @@
     const maxYear=Math.max(1,...top.map(x=>x[1]));
     $('#year-chart').innerHTML=top.map(([y,n])=>`<div class="bar-row"><span>${escapeHtml(y)}</span><div class="bar-track"><div class="bar-fill" style="width:${n/maxYear*100}%"></div></div><b>${n}</b></div>`).join('')||'<small>Yıl verisi bulunamadı.</small>';
   }
+  function setField(id,value){const el=$('#'+id);if(el)el.value=value??'';}
+  function openEditor(item=null){
+    if(!state.apiEnabled||!state.sha){toast('Düzenleme için korumalı Worker adresini açmalısınız.');return;}
+    $('#content-form').reset();
+    $('#edit-id').value=item?String(item.id??''):'';
+    $('#editor-title').textContent=item?'İçeriği düzenle':'Yeni içerik';
+    setField('field-title',item?.title||'');
+    setField('field-type',item?.type==='tv'?'tv':'movie');
+    setField('field-year',item?.year||'');
+    setField('field-rating',item?.rating||'');
+    setField('field-genre',item?.genre||'');
+    setField('field-category',item?.category||'');
+    setField('field-duration',item?.duration||'');
+    setField('field-country',item?.country||'');
+    setField('field-director',item?.director||'');
+    setField('field-platform',item?.platform||'');
+    setField('field-image',item?.image||'');
+    setField('field-backdrop',item?.backdrop||'');
+    setField('field-trailer',item?.trailerUrl||'');
+    setField('field-seasons',item?.seasons||'');
+    setField('field-episodes',item?.episodes||'');
+    setField('field-desc',item?.desc||'');
+    $('#editor-status').textContent=item?'Mevcut katalog kaydı düzenleniyor.':'Yeni katalog kaydı oluşturuluyor.';
+    $('#content-dialog').showModal();
+  }
+  async function saveContent(event){
+    event.preventDefault();
+    if(!state.apiEnabled||!state.sha){toast('Güvenli katalog bağlantısı bulunamadı.');return;}
+    const save=$('#save-content');save.disabled=true;save.textContent='Kaydediliyor…';
+    $('#editor-status').textContent='GitHub kataloğuna güvenli bağlantı kuruluyor…';
+    try{
+      const existingId=$('#edit-id').value;
+      const existing=existingId?state.catalog.find(item=>String(item.id??'')===existingId):null;
+      const type=$('#field-type').value;
+      const record={
+        ...(existing||{}),
+        id:existing?.id??('cv-'+Date.now()),
+        title:$('#field-title').value.trim(),
+        type,
+        year:$('#field-year').value.trim(),
+        rating:$('#field-rating').value.trim(),
+        genre:$('#field-genre').value.trim(),
+        category:$('#field-category').value.trim(),
+        duration:$('#field-duration').value.trim(),
+        country:$('#field-country').value.trim(),
+        director:$('#field-director').value.trim(),
+        platform:$('#field-platform').value.trim(),
+        image:$('#field-image').value.trim(),
+        backdrop:$('#field-backdrop').value.trim(),
+        trailerUrl:$('#field-trailer').value.trim(),
+        desc:$('#field-desc').value.trim()
+      };
+      if(type==='tv'){
+        record.seasons=Number($('#field-seasons').value)||1;
+        record.episodes=Number($('#field-episodes').value)||0;
+      }else{
+        delete record.seasons;delete record.episodes;
+      }
+      const nextData={...state.data,catalog:[...state.catalog]};
+      const index=nextData.catalog.findIndex(item=>String(item.id??'')===String(record.id));
+      if(index>=0)nextData.catalog[index]=record;else nextData.catalog.push(record);
+      const response=await fetch('/api/catalog',{method:'PUT',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({data:nextData,sha:state.sha})});
+      const result=await response.json().catch(()=>({}));
+      if(response.status===409){throw new Error('Katalog başka bir yerde değişmiş. Sayfayı yenileyip tekrar deneyin.');}
+      if(!response.ok)throw new Error(result.error||'Kayıt yayınlanamadı.');
+      state.data=nextData;state.catalog=nextData.catalog;state.sha=result.sha;
+      $('#metric-total').textContent=state.catalog.length.toLocaleString('tr-TR');
+      $('#metric-movies').textContent=state.catalog.filter(x=>!isSeries(x)).length.toLocaleString('tr-TR');
+      $('#metric-series').textContent=state.catalog.filter(isSeries).length.toLocaleString('tr-TR');
+      $('#nav-count').textContent=state.catalog.length.toLocaleString('tr-TR');
+      renderRecent();renderCatalog();renderCollections();renderAnalytics();
+      $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig??{},null,2);
+      $('#content-dialog').close();toast('Katalog kaydı GitHub deposuna yayınlandı.');
+    }catch(error){
+      $('#editor-status').textContent=error.message;
+      toast(error.message);
+    }finally{
+      save.disabled=false;save.textContent='Kaydet ve yayınla';
+    }
+  }
   async function init(){
     $('#today-date').textContent=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
@@ -63,6 +143,10 @@
         const apiPayload=await apiResponse.json();
         data=apiPayload.data;
         state.sha=apiPayload.sha||null;
+        state.apiEnabled=!!state.sha;
+        $('#add-content').disabled=!state.apiEnabled;
+        $('#add-content').title=state.apiEnabled?'Yeni film veya dizi ekle':'Katalog bağlantısı gerekli';
+        $('.environment').innerHTML='<i></i> KORUMALI YÖNETİM';
         const sessionResponse=await fetch('/api/session',{cache:'no-store',credentials:'same-origin'});
         if(!sessionResponse.ok)throw new Error('Yönetici oturumu doğrulanamadı.');
         const session=await sessionResponse.json();
@@ -108,5 +192,9 @@
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog()});
   $('#prev-page').addEventListener('click',()=>{state.page=Math.max(1,state.page-1);renderCatalog()});
   $('#next-page').addEventListener('click',()=>{state.page++;renderCatalog()});
+  $('#add-content').addEventListener('click',()=>openEditor());
+  $('#content-form').addEventListener('submit',saveContent);
+  $('#close-editor').addEventListener('click',()=>$('#content-dialog').close());
+  $('#cancel-editor').addEventListener('click',()=>$('#content-dialog').close());
   init();
 })();
