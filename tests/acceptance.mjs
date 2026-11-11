@@ -1,4 +1,4 @@
-// Re-run after the latest production deployment.
+// Re-run after mobile layout stability update (Nov 11, 2026).
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 
