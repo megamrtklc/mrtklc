@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/lighthouse-audit.yml'
       - 'tests/acceptance.mjs'
+      - '.github/workflows/browser-acceptance.yml'
       - 'index.html'
   workflow_run:
     workflows: ["pages build and deployment"]
@@ -35,7 +36,7 @@ jobs:
         run: npm install --global @lhci/cli@0.14.0
 
       - name: Wait for Pages deployment
-        run: sleep 45
+        run: sleep 75
 
       - name: Audit mobile experience
         run: |
