@@ -57,9 +57,39 @@ try {
     await themeButton.click();
     await page.getByRole('button', { name: 'Fil Dişi (Sıcak Krem)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-ivory'));
+    const ivoryColors = await page.evaluate(() => {
+      const probe = document.createElement('div');
+      probe.className = 'bg-white text-gray-900 border border-gray-200';
+      document.body.appendChild(probe);
+      const style = getComputedStyle(probe);
+      const colors = { background: style.backgroundColor, text: style.color, border: style.borderTopColor };
+      probe.remove();
+      return colors;
+    });
+    assert.deepEqual(ivoryColors, {
+      background: 'rgb(255, 253, 249)',
+      text: 'rgb(41, 38, 31)',
+      border: 'rgb(226, 221, 210)'
+    }, 'Fil Dişi temasında kutu, metin veya kenarlık kontrastı uygulanmadı');
+
     await themeButton.click();
     await page.getByRole('button', { name: 'Modern Gri (Slate)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-slate'));
+    const slateColors = await page.evaluate(() => {
+      const probe = document.createElement('div');
+      probe.className = 'bg-white text-gray-900 border border-gray-200';
+      document.body.appendChild(probe);
+      const style = getComputedStyle(probe);
+      const colors = { background: style.backgroundColor, text: style.color, border: style.borderTopColor };
+      probe.remove();
+      return colors;
+    });
+    assert.deepEqual(slateColors, {
+      background: 'rgb(255, 255, 255)',
+      text: 'rgb(32, 36, 43)',
+      border: 'rgb(216, 219, 226)'
+    }, 'Modern Gri temasında kutu, metin veya kenarlık kontrastı uygulanmadı');
+
     await themeButton.click();
     await page.getByRole('button', { name: 'Karanlık Mod' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('dark'));
