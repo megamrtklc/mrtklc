@@ -263,7 +263,10 @@
                     <div class="relative w-full flex-grow flex items-center px-6 sm:px-12 py-12">
                         <!-- Backdrop Image -->
                         <div class="absolute inset-0 z-0">
-                            <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" sizes="100vw" :src="window.matchMedia('(min-width: 768px)').matches ? currentHero.backdrop : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='" :srcset="window.matchMedia('(min-width: 768px)').matches ? getTmdbImageSrcSet(currentHero.backdrop, [500, 780, 1280]) : ''" :alt="currentHero.title + ' arka plan görseli'" loading="lazy" decoding="async" @resize.window="if (window.matchMedia('(min-width: 768px)').matches) { $el.src = currentHero.backdrop; $el.srcset = getTmdbImageSrcSet(currentHero.backdrop, [500, 780, 1280]); } else { $el.removeAttribute('srcset'); $el.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='; }" @error="handleImageError($event)" class="w-full h-full object-cover object-center filter brightness-[0.7]">
+                            <picture class="w-full h-full">
+                                <source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop, [500, 780, 1280])">
+                                <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" :alt="currentHero.title + ' arka plan görseli'" loading="lazy" decoding="async" @error="handleImageError($event)" class="w-full h-full object-cover object-center filter brightness-[0.7]">
+                            </picture>
                             <!-- Sabit Sinematik Koyu Gradyan Perdesi (Her Modda Görseli ve Yazıyı Mükemmel Gösterir) -->
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent"></div>
                             <div class="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/50 to-transparent"></div>
