@@ -1,0 +1,42 @@
+name: Lighthouse Performance Audit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/lighthouse-audit.yml'
+      - 'index.html'
+      - 'filmvediziler.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    name: Lighthouse mobile and desktop audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Lighthouse CI
+        run: npm install --global @lhci/cli@0.14.0
+
+      - name: Audit mobile experience
+        run: |
+          lhci autorun \
+            --collect.url=https://megamrtklc.github.io/mrtklc/ \
+            --collect.numberOfRuns=3 \
+            --upload.target=temporary-public-storage
+
+      - name: Audit desktop experience
+        run: |
+          lhci autorun \
+            --collect.url=https://megamrtklc.github.io/mrtklc/ \
+            --collect.numberOfRuns=3 \
+            --collect.settings.preset=desktop \
+            --upload.target=temporary-public-storage
