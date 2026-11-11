@@ -2,16 +2,17 @@
 
 This Worker serves the admin UI and exposes a same-origin, authenticated catalog API. The GitHub token is only read from the Worker secret binding and is never sent to the browser.
 
-## 1. Create the Worker
+## 1. Configure automated deployment
 
-From this directory:
+The repository includes a GitHub Actions workflow that deploys this Worker whenever `admin/**` or `worker/**` changes.
 
-```bash
-cd worker
-npx wrangler@latest deploy
-```
+In GitHub, open **Settings → Secrets and variables → Actions → New repository secret** and add:
 
-İlk dağıtım için Wrangler, Cloudflare hesabında oturum açmanı isteyecektir. Worker ilk kurulumda Access değişkenleri eklenene kadar güvenlik gereği 503 döndürür.
+- `CLOUDFLARE_API_TOKEN` — a Cloudflare API token allowed to deploy Workers in this account. The first deployment must be allowed to create the Worker; after creation, the token can be narrowed to the existing Worker.
+- `CLOUDFLARE_ACCOUNT_ID` — the Cloudflare account ID.
+- `CINEVERSE_GITHUB_TOKEN` — a GitHub fine-grained token scoped only to `megamrtklc/mrtklc`, with **Contents: Read and write**.
+
+Do not paste any of these values into chat or commit them to the repository. After adding the three secrets, open **Actions → Deploy CineVerse Admin Worker → Run workflow**. The workflow deploys the Worker and writes the GitHub token into Cloudflare as an encrypted Worker secret.
 
 ## 2. Protect the Worker with Cloudflare Access
 
@@ -25,13 +26,9 @@ The Worker independently validates the `Cf-Access-Jwt-Assertion` signature, issu
 
 ## 3. Add the GitHub token as a Worker secret
 
-Create a GitHub fine-grained personal access token scoped only to repository `megamrtklc/mrtklc`, with **Contents: Read and write** permission. Do not paste the token into chat, source files, or `wrangler.jsonc`.
+The GitHub fine-grained token is supplied to the deployment workflow as the `CINEVERSE_GITHUB_TOKEN` repository secret and stored in Cloudflare as an encrypted Worker secret. Do not paste the token into chat, source files, or `wrangler.jsonc`.
 
-```bash
-npx wrangler secret put GITHUB_TOKEN
-```
-
-Paste the token into the terminal prompt. The token is stored as an encrypted Worker secret.
+The deployment workflow runs the equivalent of `wrangler secret put GITHUB_TOKEN`; the secret value is not written to the repository.
 
 ## 4. Open the panel
 
