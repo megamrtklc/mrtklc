@@ -8,6 +8,7 @@ on:
       - 'tailwind.config.js'
       - 'src/tailwind.css'
       - 'index.html'
+      - 'app.js'
   workflow_dispatch:
 
 permissions:
