@@ -404,9 +404,14 @@
                                     </div>
                                     <p class="text-[10px] text-gray-500 dark:text-gray-400" x-text="getWatchedEpisodeCount(selectedSeason) + ' / ' + getEpisodesForSeason(selectedSeason).length + ' bölüm izlendi'"></p>
                                 </div>
-                                <button x-show="getLastWatchedEpisode()" @click="continueLastWatchedEpisode()" class="shrink-0 rounded-lg border border-rose-500/30 px-3 py-2 text-[10px] font-bold text-rose-500 hover:bg-rose-500/10">
-                                    <i class="fa-solid fa-play mr-1"></i> Son izlediğimden devam et
-                                </button>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <button x-show="getLastWatchedEpisode()" @click="continueLastWatchedEpisode()" class="shrink-0 rounded-lg border border-rose-500/30 px-3 py-2 text-[10px] font-bold text-rose-500 hover:bg-rose-500/10">
+                                        <i class="fa-solid fa-play mr-1"></i> Son izlediğimden devam et
+                                    </button>
+                                    <button @click="goToNextEpisode()" :disabled="!getEpisodesForSeason(selectedSeason).length" class="shrink-0 rounded-lg bg-rose-600 px-3 py-2 text-[10px] font-bold text-white hover:bg-rose-700 disabled:opacity-40 disabled:cursor-not-allowed">
+                                        Sonraki bölüm <i class="fa-solid fa-chevron-right ml-1"></i>
+                                    </button>
+                                </div>
                             </div>
 
                             <div x-show="tmdbDetailsLoading && getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
