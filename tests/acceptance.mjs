@@ -128,6 +128,44 @@ try {
     await page.waitForFunction(() => JSON.parse(localStorage.getItem('cine_active_profile') || 'null') === 'pro_1');
   });
 
+  await check('Dizi bölüm takibi ve profil bazlı izleme ilerlemesi', async () => {
+    await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      const series = app.catalog.find(item => item.id === 'archive-6');
+      app.openWatchPage(series);
+    });
+    await page.waitForFunction(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      return app.currentPage === 'watch' && String(app.selectedItem?.id) === 'archive-6';
+    });
+    await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      app.tmdbDetailsLoading = false;
+      app.tmdbSeasonLoading = false;
+      app.selectedSeason = 1;
+      app.selectedItem.tmdbEpisodesBySeason = {
+        1: [{ number: 1, title: 'Kabul Testi Bölümü', duration: '42 dk', still: '' }]
+      };
+    });
+    const watchedButton = page.getByTitle('İzlendi olarak işaretle').first();
+    await watchedButton.waitFor({ state: 'visible' });
+    await watchedButton.click();
+    await page.waitForFunction(() => {
+      const all = JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}');
+      return (all['pro_1:archive-6']?.watched?.['1'] || []).includes(1);
+    });
+    await page.locator('header select').selectOption('pro_2');
+    const isolated = await page.evaluate(() => window.Alpine.$data(document.documentElement).isEpisodeWatched(1, 1));
+    assert.equal(isolated, false, 'Çocuk Profili Ana Profil bölüm takibini devraldı');
+    await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      app.saveMovieProgress('archive-6', { time: 75, duration: 2400, savedAt: Date.now() });
+    });
+    const progress = await page.evaluate(() => window.Alpine.$data(document.documentElement).getMovieProgress('archive-6'));
+    assert.equal(progress.time, 75, 'Profil bazlı oynatma ilerlemesi geri okunamadı');
+    await page.locator('header select').selectOption('pro_1');
+  });
+
   await check('İstatistikler sayfası açılıyor', async () => {
     await page.locator('header nav a').filter({ hasText: 'İstatistikler' }).first().click();
     await page.waitForURL(/#\/stats$/);
