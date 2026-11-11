@@ -45,6 +45,17 @@ try {
       return (images.backdrops || []).slice(0, 12).map(image => image.file_path);
     });
     console.log('TMDB HERO BACKDROPS:', JSON.stringify(tmdbBackdrops));
+    const posterStatus = await page.evaluate(async () => {
+      const posterUrl = window.Alpine.$data(document.documentElement).currentHero.poster;
+      return await new Promise(resolve => {
+        const image = new Image();
+        const timeout = setTimeout(() => resolve('timeout'), 10000);
+        image.onload = () => { clearTimeout(timeout); resolve('loaded:' + image.naturalWidth); };
+        image.onerror = () => { clearTimeout(timeout); resolve('error'); };
+        image.src = posterUrl;
+      });
+    });
+    console.log('HERO POSTER PROBE:', posterStatus);
   } catch (error) {
     console.log('TMDB BACKDROP DIAGNOSTIC UNAVAILABLE:', error.message);
   }
