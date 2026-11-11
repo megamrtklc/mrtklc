@@ -43,6 +43,12 @@ try {
     assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).count());
     const count = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.length);
     assert.equal(count, 140);
+    const preloadChecks = await page.evaluate(() => ({
+      catalog: !!document.querySelector('link[rel="preload"][as="fetch"][href="./filmvediziler.json"]'),
+      alpine: [...document.querySelectorAll('link[rel="preload"][as="script"]')].some(link => link.href.includes('alpinejs')),
+      hero: !!document.querySelector('link[rel="preload"][as="image"]')
+    }));
+    assert.ok(preloadChecks.catalog && preloadChecks.alpine && preloadChecks.hero, 'Kritik kaynak ön yüklemeleri eksik');
     await page.waitForFunction(() => {
       const links = [...document.querySelectorAll('link[rel="stylesheet"]')];
       const iconCss = links.some(link => link.href.includes('font-awesome') && (link.media === 'all' || link.media === ''));
