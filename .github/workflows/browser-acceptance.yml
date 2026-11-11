@@ -1,6 +1,11 @@
 name: Browser Acceptance Tests
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/browser-acceptance.yml'
+      - 'tests/acceptance.mjs'
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
@@ -26,6 +31,8 @@ jobs:
         run: npm install --no-save playwright
       - name: Install Chromium
         run: npx playwright install chromium
+      - name: Wait for Pages deployment
+        run: sleep 45
       - name: Run production browser acceptance tests
         env:
           BASE_URL: https://megamrtklc.github.io/mrtklc/
