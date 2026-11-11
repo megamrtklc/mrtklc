@@ -40,7 +40,11 @@ try {
       alpineLoaded: !!window.Alpine,
       alpineVersion: window.Alpine?.version || null,
       rootDataAttribute: document.documentElement.getAttribute('x-data'),
-      scriptSources: [...document.scripts].map(script => script.src).filter(Boolean),
+      appFunctionType: typeof window.ultimateProApp,
+      scripts: [...document.scripts].map((script, index) => ({
+        index, src: script.src || null, type: script.type || 'classic',
+        length: script.textContent.length, preview: script.textContent.slice(0, 90)
+      })),
       resourceFailures: performance.getEntriesByType('resource').filter(entry => entry.responseStatus >= 400).map(entry => entry.name)
     }));
     console.error('APP INITIALIZATION DIAGNOSTIC:', JSON.stringify(diagnostic));
