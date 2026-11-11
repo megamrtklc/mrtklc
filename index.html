@@ -1473,7 +1473,7 @@
 
                 getSimilarItems(item) {
                     if (!item) return [];
-                    const tokens = value => String(value || '').split(/[\\/;,]/).map(part => this.normalizeSearchText(part)).filter(Boolean);
+                    const tokens = value => String(value || '').split(/[\/;,]/).map(part => this.normalizeSearchText(part)).filter(Boolean);
                     const sourceGenres = new Set([...tokens(item.category), ...tokens(item.genre)]);
                     const sourceCast = new Set((item.tmdbCast || item.cast || []).slice(0, 12).map(person => this.normalizeSearchText(typeof person === 'string' ? person : person.name)).filter(Boolean));
                     const sourceCountries = new Set(tokens(item.country));
