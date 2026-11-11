@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -31,7 +34,11 @@ jobs:
           lhci autorun \
             --collect.url=https://megamrtklc.github.io/mrtklc/ \
             --collect.numberOfRuns=3 \
+            --collect.outputDir=.lighthouseci/mobile \
             --upload.target=temporary-public-storage
+
+      - name: Print mobile audit scores
+        run: node scripts/print-lighthouse-scores.mjs .lighthouseci/mobile
 
       - name: Audit desktop experience
         run: |
@@ -39,4 +46,16 @@ jobs:
             --collect.url=https://megamrtklc.github.io/mrtklc/ \
             --collect.numberOfRuns=3 \
             --collect.settings.preset=desktop \
+            --collect.outputDir=.lighthouseci/desktop \
             --upload.target=temporary-public-storage
+
+      - name: Print desktop audit scores
+        run: node scripts/print-lighthouse-scores.mjs .lighthouseci/desktop
+
+      - name: Save Lighthouse reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/
+          if-no-files-found: error
+          retention-days: 14
