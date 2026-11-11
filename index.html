@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr" :class="theme === 'dark' ? 'dark' : ''" x-data="ultimateProApp()">
+<html lang="tr" :class="theme === 'dark' ? 'dark' : (theme === 'ivory' ? 'theme-ivory' : 'theme-slate')" x-data="ultimateProApp()">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,6 +54,46 @@
     <style>
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Açık temalar: sabit Tailwind gri/beyaz yardımcı sınıflarını tema paletine uyarla. */
+        .theme-ivory {
+            --theme-surface: #FFFDF9;
+            --theme-surface-muted: #F5F2EB;
+            --theme-surface-soft: #EBE7DD;
+            --theme-border: #E2DDD2;
+            --theme-border-strong: #D4CDBF;
+            --theme-text-primary: #29261F;
+            --theme-text-secondary: #49443C;
+            --theme-text-muted: #696359;
+            --theme-text-subtle: #777166;
+        }
+        .theme-slate {
+            --theme-surface: #FFFFFF;
+            --theme-surface-muted: #F4F5F7;
+            --theme-surface-soft: #EAECEF;
+            --theme-border: #D8DBE2;
+            --theme-border-strong: #C6CBD4;
+            --theme-text-primary: #20242B;
+            --theme-text-secondary: #39414C;
+            --theme-text-muted: #596270;
+            --theme-text-subtle: #68717F;
+        }
+
+        .theme-ivory .bg-white, .theme-slate .bg-white { background-color: var(--theme-surface); }
+        .theme-ivory .bg-gray-50, .theme-slate .bg-gray-50 { background-color: var(--theme-surface-muted); }
+        .theme-ivory .bg-gray-100, .theme-slate .bg-gray-100 { background-color: var(--theme-surface-muted); }
+        .theme-ivory .bg-gray-200, .theme-slate .bg-gray-200 { background-color: var(--theme-surface-soft); }
+
+        .theme-ivory .text-gray-900, .theme-slate .text-gray-900 { color: var(--theme-text-primary); }
+        .theme-ivory .text-gray-800, .theme-slate .text-gray-800 { color: var(--theme-text-secondary); }
+        .theme-ivory .text-gray-700, .theme-slate .text-gray-700 { color: var(--theme-text-secondary); }
+        .theme-ivory .text-gray-600, .theme-slate .text-gray-600 { color: var(--theme-text-muted); }
+        .theme-ivory .text-gray-500, .theme-slate .text-gray-500 { color: var(--theme-text-muted); }
+        .theme-ivory .text-gray-400, .theme-slate .text-gray-400 { color: var(--theme-text-subtle); }
+
+        .theme-ivory .border-gray-100, .theme-slate .border-gray-100,
+        .theme-ivory .border-gray-200, .theme-slate .border-gray-200 { border-color: var(--theme-border); }
+        .theme-ivory .border-gray-300, .theme-slate .border-gray-300 { border-color: var(--theme-border-strong); }
     </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
