@@ -174,7 +174,7 @@
     <!-- Main Content Area -->
     <main class="flex-grow w-full">
         <!-- İlk çizim için statik hero: Alpine ve katalog hazırlanırken aynı ölçülerde görseli gösterir. -->
-        <section id="hero-initial-shell" aria-hidden="true" class="relative w-full bg-gray-950 min-h-[580px] sm:min-h-[640px] overflow-hidden select-none border-b border-gray-200 dark:border-gray-800/80">
+        <section id="hero-initial-shell" aria-hidden="true" class="relative w-full bg-gray-950 min-h-[540px] md:min-h-[640px] overflow-hidden select-none border-b border-gray-200 dark:border-gray-800/80">
             <img src="https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg"
                  srcset="https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w, https://image.tmdb.org/t/p/w780/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 780w, https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 1280w"
                  sizes="100vw" alt="" loading="eager" fetchpriority="high" decoding="async"
@@ -1464,8 +1464,8 @@
                     this.currentSlideIndex = idx;
                 },
 
-                scrollHeroThumbs(dir) {
-                    const container = document.getElementById('heroThumbContainer');
+                scrollHeroThumbs(dir, containerId = 'heroThumbContainer') {
+                    const container = document.getElementById(containerId);
                     if (container) {
                         container.scrollBy({ left: dir * 220, behavior: 'smooth' });
                     }
