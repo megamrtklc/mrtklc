@@ -128,17 +128,3 @@ try {
   await context.close();
   await browser.close();
 }
-));
-    await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(expectedId => window.Alpine && String(window.Alpine.$data(document.documentElement)?.selectedItem?.id) === String(expectedId), adaletId, { timeout: 30000 });
-  });
-
-  await check('Tarayıcıda yakalanan JavaScript çalışma zamanı hatası yok', async () => {
-    assert.deepEqual(failures, []);
-  });
-
-  console.log(JSON.stringify({ baseURL: BASE_URL, results }, null, 2));
-} finally {
-  await context.close();
-  await browser.close();
-}
