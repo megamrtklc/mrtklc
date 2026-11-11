@@ -60,6 +60,25 @@ try {
     assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).count());
     const count = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.length);
     assert.equal(count, 140);
+    const lcpEntries = await page.evaluate(() => new Promise(resolve => {
+      let settled = false;
+      const finish = value => { if (settled) return; settled = true; observer.disconnect(); resolve(value); };
+      const observer = new PerformanceObserver(list => finish(list.getEntries().map(entry => {
+        const element = entry.element;
+        return {
+          startTime: Math.round(entry.startTime),
+          size: entry.size,
+          tag: element?.tagName || null,
+          id: element?.id || null,
+          className: typeof element?.className === 'string' ? element.className.slice(0, 180) : '',
+          src: element?.currentSrc || element?.src || '',
+          text: element?.textContent?.trim().slice(0, 100) || ''
+        };
+      })));
+      observer.observe({ type: 'largest-contentful-paint', buffered: true });
+      setTimeout(() => finish([]), 1200);
+    }));
+    console.log('BROWSER LCP ELEMENTS:', JSON.stringify(lcpEntries));
     const compiledStyleCheck = await page.evaluate(() => ({
       localStylesheet: [...document.styleSheets].some(sheet => sheet.href && sheet.href.endsWith('/tailwind.css')),
       gridDisplay: getComputedStyle(document.querySelector('.grid')).display,
