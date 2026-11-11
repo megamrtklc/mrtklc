@@ -1087,11 +1087,12 @@
                 handleImageError(event, posterFallback = '') {
                     const image = event && event.target;
                     if (!image) return;
-                    if (posterFallback && !image.dataset.perdePosterFallbackApplied && image.src !== posterFallback) {
+                    const resolvedPosterFallback = posterFallback || image.dataset.fallbackSrc || this?.currentHero?.poster || '';
+                    if (resolvedPosterFallback && !image.dataset.perdePosterFallbackApplied && image.src !== resolvedPosterFallback) {
                         image.dataset.perdePosterFallbackApplied = 'true';
                         image.removeAttribute('srcset');
                         image.removeAttribute('sizes');
-                        image.src = posterFallback;
+                        image.src = resolvedPosterFallback;
                         return;
                     }
 
