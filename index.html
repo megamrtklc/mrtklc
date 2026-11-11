@@ -638,27 +638,101 @@
         <!-- ==================== EXPLORE PAGE ==================== -->
         <template x-if="currentPage === 'explore'">
             <div class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
-                <div>
-                    <h2 class="text-2xl font-black uppercase tracking-wide text-gray-900 dark:text-white">Keşfet & Arşiv Kataloğu</h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sistemdeki tüm kayıtlı dizi ve film yapımları.</p>
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                    <div>
+                        <h2 class="text-2xl font-black uppercase tracking-wide text-gray-900 dark:text-white">Keşfet & Arşiv Kataloğu</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Arşivdeki yapımları ayrıntılı kriterlerle keşfet.</p>
+                    </div>
+                    <div class="text-xs font-bold text-gray-500 dark:text-gray-400">
+                        <span class="text-rose-600 text-base" x-text="sortedFilteredCatalog.length"></span>
+                        <span x-text="' / ' + catalog.length + ' yapım'"></span>
+                    </div>
                 </div>
-                
-                <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-                    <template x-for="item in catalog" :key="item.id">
+
+                <section :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input x-model="searchQuery" @keydown.escape="searchQuery = ''" type="search" placeholder="İsim, orijinal ad, oyuncu, yönetmen, konu ara..." :class="getSearchClass()" class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-rose-600">
+                        </div>
+                        <button @click="resetDiscoveryFilters()" class="px-4 py-3 rounded-xl border text-xs font-bold uppercase tracking-wide text-gray-600 dark:text-gray-300 hover:border-rose-500 hover:text-rose-600 transition-colors">
+                            <i class="fa-solid fa-rotate-left mr-2"></i>Filtreleri Temizle
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Yapım türü</span>
+                            <select x-model="discoveryType" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="all">Film + Dizi</option><option value="movie">Filmler</option><option value="tv">Diziler</option>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Kategori / Tür</span>
+                            <select x-model="discoveryGenre" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="all">Tüm türler</option>
+                                <template x-for="genre in availableGenres" :key="genre"><option :value="genre" x-text="genre"></option></template>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Ülke</span>
+                            <select x-model="discoveryCountry" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="all">Tüm ülkeler</option>
+                                <template x-for="country in availableCountries" :key="country"><option :value="country" x-text="country"></option></template>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Platform</span>
+                            <select x-model="discoveryPlatform" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="all">Tüm platformlar</option>
+                                <template x-for="platform in availablePlatforms" :key="platform"><option :value="platform" x-text="platform"></option></template>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">En az puan</span>
+                            <select x-model="discoveryRating" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="0">Puan sınırı yok</option><option value="6">6.0 ve üzeri</option><option value="7">7.0 ve üzeri</option><option value="8">8.0 ve üzeri</option><option value="9">9.0 ve üzeri</option>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Sıralama</span>
+                            <select x-model="sortBy" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="default">Önerilen</option><option value="rating">Puan: yüksekten düşüğe</option><option value="year">Yıl: yeniden eskiye</option><option value="oldest">Yıl: eskiden yeniye</option><option value="title">İsim: A–Z</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 pt-1 border-t border-gray-200 dark:border-gray-700/70">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Yıl aralığı</span>
+                        <input type="number" min="1900" max="2100" x-model.number="discoveryYearFrom" placeholder="Başlangıç" :class="getSearchClass()" class="w-28 border rounded-lg px-3 py-2 text-xs text-gray-800 dark:text-gray-200">
+                        <span class="text-gray-400 text-xs">—</span>
+                        <input type="number" min="1900" max="2100" x-model.number="discoveryYearTo" placeholder="Bitiş" :class="getSearchClass()" class="w-28 border rounded-lg px-3 py-2 text-xs text-gray-800 dark:text-gray-200">
+                        <span class="text-[10px] text-gray-400">Aralıkta olmayan yapımlar gösterilmez.</span>
+                    </div>
+                </section>
+
+                <div x-show="sortedFilteredCatalog.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-4">
+                    <template x-for="item in sortedFilteredCatalog" :key="item.id">
                         <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                <img :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img :src="item.poster" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400">
-                                    <i class="fa-solid fa-star text-[8px]"></i>
-                                    <span x-text="item.rating"></span>
+                                    <i class="fa-solid fa-star text-[8px]"></i><span x-text="item.rating"></span>
                                 </div>
+                                <span class="absolute bottom-2 left-2 px-2 py-1 rounded bg-black/75 text-white text-[9px] font-bold" x-text="item.type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
                             </div>
-                            <div class="p-2.5 space-y-0.5">
+                            <div class="p-2.5 space-y-1 flex-1">
                                 <span class="text-[9px] font-bold text-rose-500 uppercase" x-text="item.genre"></span>
-                                <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1" x-text="item.title"></h3>
+                                <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
+                                <div class="flex justify-between gap-2 text-[10px] text-gray-500 dark:text-gray-400"><span x-text="item.year"></span><span x-text="item.duration"></span></div>
                             </div>
                         </div>
                     </template>
+                </div>
+                <div x-show="sortedFilteredCatalog.length === 0" :class="getCardClass()" class="rounded-2xl border text-center py-14 px-5 space-y-3">
+                    <i class="fa-solid fa-filter-circle-xmark text-3xl text-gray-400"></i>
+                    <h3 class="font-bold text-gray-900 dark:text-white">Bu kriterlere uygun yapım bulunamadı</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Arama kelimeni veya filtrelerini değiştirerek yeniden deneyebilirsin.</p>
+                    <button @click="resetDiscoveryFilters()" class="px-5 py-2.5 rounded-lg bg-rose-600 text-white text-xs font-bold">Tüm filtreleri temizle</button>
                 </div>
             </div>
         </template>
@@ -722,6 +796,13 @@
                 searchQuery: '',
                 quickFilter: 'all',
                 sortBy: 'default',
+                discoveryType: 'all',
+                discoveryGenre: 'all',
+                discoveryCountry: 'all',
+                discoveryPlatform: 'all',
+                discoveryRating: '0',
+                discoveryYearFrom: '',
+                discoveryYearTo: '',
                 selectedItem: null,
                 currentSlideIndex: 0,
                 userRating: 8,
@@ -1358,22 +1439,71 @@
                     }, 200);
                 },
 
+                normalizeSearchText(value) {
+                    return String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/ı/g, 'i').trim();
+                },
+
+                get availableGenres() {
+                    const values = this.catalog.flatMap(item => String(item.category || item.genre || '').split(/[\\/;,]/).map(value => value.trim()).filter(Boolean));
+                    return [...new Set(values)].sort((a, b) => a.localeCompare(b, 'tr'));
+                },
+
+                get availableCountries() {
+                    const values = this.catalog.flatMap(item => String(item.country || '').split(/[,/;]/).map(value => value.trim()).filter(Boolean));
+                    return [...new Set(values)].sort((a, b) => a.localeCompare(b, 'tr'));
+                },
+
+                get availablePlatforms() {
+                    const values = this.catalog.flatMap(item => Array.isArray(item.platform) ? item.platform : (item.platform ? [item.platform] : []));
+                    return [...new Set(values.map(value => String(value).trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'tr'));
+                },
+
+                resetDiscoveryFilters() {
+                    this.searchQuery = '';
+                    this.discoveryType = 'all';
+                    this.discoveryGenre = 'all';
+                    this.discoveryCountry = 'all';
+                    this.discoveryPlatform = 'all';
+                    this.discoveryRating = '0';
+                    this.discoveryYearFrom = '';
+                    this.discoveryYearTo = '';
+                    this.quickFilter = 'all';
+                    this.sortBy = 'default';
+                },
+
                 get sortedFilteredCatalog() {
+                    const query = this.normalizeSearchText(this.searchQuery);
                     let result = this.catalog.filter(item => {
-                        const matchesSearch = item.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
-                                              item.genre.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        const castNames = (item.tmdbCast || item.cast || []).map(person => typeof person === 'string' ? person : [person.name, person.character].filter(Boolean).join(' ')).join(' ');
+                        const searchable = [
+                            item.title, item.originalTitle, item.genre, item.category, item.desc,
+                            item.director, item.starring, item.country, castNames, item.awards,
+                            ...(Array.isArray(item.platform) ? item.platform : [item.platform || ''])
+                        ].join(' ');
+                        const matchesSearch = !query || this.normalizeSearchText(searchable).includes(query);
+                        const matchesType = this.discoveryType === 'all' || item.type === this.discoveryType;
+                        const genres = String(item.category || item.genre || '').split(/[\\/;,]/).map(value => this.normalizeSearchText(value));
+                        const matchesGenre = this.discoveryGenre === 'all' || genres.includes(this.normalizeSearchText(this.discoveryGenre)) || this.normalizeSearchText(item.genre) === this.normalizeSearchText(this.discoveryGenre);
+                        const countries = String(item.country || '').split(/[,/;]/).map(value => this.normalizeSearchText(value));
+                        const matchesCountry = this.discoveryCountry === 'all' || countries.includes(this.normalizeSearchText(this.discoveryCountry));
+                        const platforms = Array.isArray(item.platform) ? item.platform : (item.platform ? [item.platform] : []);
+                        const matchesPlatform = this.discoveryPlatform === 'all' || platforms.some(value => this.normalizeSearchText(value) === this.normalizeSearchText(this.discoveryPlatform));
+                        const rating = Number.parseFloat(item.rating) || 0;
+                        const matchesRating = rating >= (Number(this.discoveryRating) || 0);
+                        const year = Number.parseInt(item.year, 10) || 0;
+                        const matchesYearFrom = !this.discoveryYearFrom || (year > 0 && year >= Number(this.discoveryYearFrom));
+                        const matchesYearTo = !this.discoveryYearTo || (year > 0 && year <= Number(this.discoveryYearTo));
                         let matchesQuick = true;
-                        if (this.quickFilter === 'imdb8') matchesQuick = parseFloat(item.rating) >= 8.0;
+                        if (this.quickFilter === 'imdb8') matchesQuick = rating >= 8;
                         if (this.quickFilter === 'series') matchesQuick = item.type === 'tv';
                         if (this.quickFilter === 'movies') matchesQuick = item.type === 'movie';
-                        return matchesSearch && matchesQuick;
+                        return matchesSearch && matchesType && matchesGenre && matchesCountry && matchesPlatform && matchesRating && matchesYearFrom && matchesYearTo && matchesQuick;
                     });
 
-                    if (this.sortBy === 'rating') {
-                        result.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
-                    } else if (this.sortBy === 'year') {
-                        result.sort((a, b) => parseInt(b.year) - parseInt(a.year));
-                    }
+                    if (this.sortBy === 'rating') result.sort((a, b) => (Number.parseFloat(b.rating) || 0) - (Number.parseFloat(a.rating) || 0));
+                    else if (this.sortBy === 'year') result.sort((a, b) => (Number.parseInt(b.year, 10) || 0) - (Number.parseInt(a.year, 10) || 0));
+                    else if (this.sortBy === 'oldest') result.sort((a, b) => (Number.parseInt(a.year, 10) || 9999) - (Number.parseInt(b.year, 10) || 9999));
+                    else if (this.sortBy === 'title') result.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
                     return result;
                 }
             }
