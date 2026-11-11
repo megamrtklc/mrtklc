@@ -106,7 +106,7 @@
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-film text-white text-sm"></i>
                     </div>
-                    <span class="text-xl font-black tracking-wider uppercase">CINE<span class="text-rose-600">VERSE</span></span>
+                    <span class="text-xl font-black tracking-wider uppercase max-[360px]:hidden">CINE<span class="text-rose-600">VERSE</span></span>
                 </a>
                 
                 <nav class="hidden lg:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
@@ -124,7 +124,7 @@
                 </nav>
             </div>
             
-            <div class="flex items-center space-x-2 sm:space-x-4">
+            <div class="flex items-center space-x-1 sm:space-x-4">
                 <button @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen.toString()" aria-label="Menüyü aç veya kapat" class="lg:hidden w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-rose-500 transition-colors">
                     <i :class="mobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
                 </button>
@@ -135,7 +135,7 @@
 
                 <!-- 3'LÜ TEMA SEÇİCİ DROPDOWN -->
                 <div class="relative" x-data="{ openThemeMenu: false }">
-                    <button @click="openThemeMenu = !openThemeMenu" :class="getButtonClass()" class="px-3 h-9 rounded-lg border flex items-center space-x-2 text-xs font-bold transition-colors shadow-sm">
+                    <button @click="openThemeMenu = !openThemeMenu" :class="getButtonClass()" class="px-2 sm:px-3 h-9 rounded-lg border flex items-center space-x-2 text-xs font-bold transition-colors shadow-sm">
                         <i :class="getThemeIcon()"></i>
                         <span class="hidden sm:inline" x-text="getThemeName()"></span>
                         <i class="fa-solid fa-chevron-down text-[10px] opacity-70"></i>
@@ -158,8 +158,8 @@
                 </div>
 
                 <!-- Profil Seçici -->
-                <div :class="getCardClass()" class="flex items-center space-x-2 border rounded-lg px-2.5 py-1">
-                    <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="w-6 h-6 rounded-full object-cover">
+                <div :class="getCardClass()" class="flex items-center space-x-1 sm:space-x-2 border rounded-lg px-1.5 sm:px-2.5 py-1">
+                    <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="hidden sm:block w-6 h-6 rounded-full object-cover">
                     <select x-model="currentProfileId" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] sm:max-w-none">
                         <template x-for="pro in profiles" :key="pro.id">
                             <option :value="pro.id" x-text="pro.name" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"></option>
