@@ -7,11 +7,11 @@ This Worker serves the admin UI and exposes a same-origin, authenticated catalog
 From this directory:
 
 ```bash
-npm create cloudflare@latest -- --existing-script ./src/index.js
-npx wrangler deploy
+cd worker
+npx wrangler@latest deploy
 ```
 
-If the scaffold command is not needed in your environment, install Wrangler with `npm install --save-dev wrangler` and deploy with `npx wrangler deploy`.
+İlk dağıtım için Wrangler, Cloudflare hesabında oturum açmanı isteyecektir. Worker ilk kurulumda Access değişkenleri eklenene kadar güvenlik gereği 503 döndürür.
 
 ## 2. Protect the Worker with Cloudflare Access
 
