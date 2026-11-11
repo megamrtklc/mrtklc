@@ -451,7 +451,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center space-x-2 w-full sm:w-auto">
-                                <select x-model="selectedSeason" :class="getCardClass()" class="border rounded-lg px-4 py-2 text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:border-rose-600">
+                                <select x-model="selectedSeason" @change="selectedSeason = Number($event.target.value); loadSeasonEpisodes(selectedSeason)" :class="getCardClass()" class="border rounded-lg px-4 py-2 text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:border-rose-600">
                                     <template x-for="s in getSeasonOptions()" :key="s">
                                         <option :value="s" x-text="s + '. Sezon'"></option>
                                     </template>
@@ -490,11 +490,11 @@
                                 </div>
                             </div>
 
-                            <div x-show="tmdbDetailsLoading && getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
+                            <div x-show="(tmdbDetailsLoading || tmdbSeasonLoading) && getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
                                 <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-500 mb-2"></i>
-                                <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">TMDB bölüm bilgileri yükleniyor...</p>
+                                <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Seçilen sezonun bölüm bilgileri yükleniyor...</p>
                             </div>
-                            <div x-show="!tmdbDetailsLoading && getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
+                            <div x-show="!tmdbDetailsLoading && !tmdbSeasonLoading && getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
                                 <i class="fa-solid fa-list-ul text-2xl text-gray-400 mb-2"></i>
                                 <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Bu sezon için TMDB bölüm bilgisi bulunamadı.</p>
                                 <p class="mt-1 text-[11px] text-gray-500 dark:text-gray-400">Sezon ve bölüm bilgileri TMDB kataloğunda mevcutsa burada listelenir. Bölüm kartları bilgi amaçlıdır; ayrıca bir izleme bağlantısı tanımlanmadıkça oynatmayı başlatmaz.</p>
@@ -1123,6 +1123,8 @@
                 tmdbLanguage: 'tr-TR',
                 tmdbDetailsCache: {},
                 tmdbDetailsLoading: false,
+                tmdbSeasonLoading: false,
+                tmdbSeasonRequests: {},
                 tmdbDetailsError: '',
 
                 async fetchTmdb(path) {
@@ -1132,11 +1134,52 @@
                     return response.json();
                 },
 
+                async loadSeasonEpisodes(seasonNumber, targetItem = this.selectedItem) {
+                    const season = Number(seasonNumber);
+                    if (!targetItem || targetItem.type !== 'tv' || !targetItem.tmdbId || !Number.isInteger(season) || season < 1) return;
+                    if (!targetItem.tmdbEpisodesBySeason || typeof targetItem.tmdbEpisodesBySeason !== 'object') {
+                        targetItem.tmdbEpisodesBySeason = {};
+                    }
+                    if (Object.prototype.hasOwnProperty.call(targetItem.tmdbEpisodesBySeason, season)) return;
+
+                    const requestKey = String(targetItem.id) + ':' + season;
+                    if (this.tmdbSeasonRequests[requestKey]) return this.tmdbSeasonRequests[requestKey];
+
+                    this.tmdbSeasonLoading = true;
+                    const request = (async () => {
+                        try {
+                            const seasonDetails = await this.fetchTmdb('tv/' + targetItem.tmdbId + '/season/' + season);
+                            const episodes = (seasonDetails.episodes || []).map(episode => ({
+                                number: episode.episode_number,
+                                title: episode.name || ('Bölüm ' + episode.episode_number),
+                                desc: episode.overview || 'Bu bölüm için açıklama bulunmuyor.',
+                                duration: episode.runtime ? episode.runtime + ' dk' : '',
+                                still: episode.still_path
+                                    ? 'https://image.tmdb.org/t/p/w500' + episode.still_path
+                                    : (targetItem.poster || '')
+                            }));
+                            targetItem.tmdbEpisodesBySeason[season] = episodes;
+                            if (this.selectedItem?.id === targetItem.id) {
+                                this.selectedItem.tmdbEpisodesBySeason = targetItem.tmdbEpisodesBySeason;
+                            }
+                        } catch (error) {
+                            console.warn('TMDB sezon verisi alınamadı:', season, error);
+                            targetItem.tmdbEpisodesBySeason[season] = [];
+                        } finally {
+                            delete this.tmdbSeasonRequests[requestKey];
+                            this.tmdbSeasonLoading = Object.keys(this.tmdbSeasonRequests).length > 0;
+                        }
+                    })();
+                    this.tmdbSeasonRequests[requestKey] = request;
+                    return request;
+                },
+
                 async fetchTmdbDetails(item) {
                     if (!item || !item.tmdbId) return;
                     const cacheKey = item.type + ':' + item.tmdbId;
                     if (this.tmdbDetailsCache[cacheKey]) {
                         Object.assign(item, this.tmdbDetailsCache[cacheKey]);
+                        if (item.type === 'tv') await this.loadSeasonEpisodes(this.selectedSeason || 1, item);
                         return;
                     }
 
@@ -1162,29 +1205,6 @@
                         const poster = details.poster_path ? 'https://image.tmdb.org/t/p/w500' + details.poster_path : item.poster;
                         const backdrop = details.backdrop_path ? 'https://image.tmdb.org/t/p/w1280' + details.backdrop_path : item.backdrop;
                         const genres = (details.genres || []).map(genre => genre.name).join(' / ');
-                        const seasonData = {};
-                        let realSeasons = [];
-
-                        if (mediaType === 'tv' && Array.isArray(details.seasons)) {
-                            realSeasons = details.seasons.filter(season => season.season_number > 0);
-                            const seasonResults = await Promise.all(realSeasons.map(async season => {
-                                try {
-                                    const seasonDetails = await this.fetchTmdb('tv/' + item.tmdbId + '/season/' + season.season_number);
-                                    return [season.season_number, (seasonDetails.episodes || []).map(episode => ({
-                                        number: episode.episode_number,
-                                        title: episode.name || ('Bölüm ' + episode.episode_number),
-                                        desc: episode.overview || 'Bu bölüm için açıklama bulunmuyor.',
-                                        duration: episode.runtime ? episode.runtime + ' dk' : '',
-                                        still: episode.still_path ? 'https://image.tmdb.org/t/p/w500' + episode.still_path : poster
-                                    }))];
-                                } catch (error) {
-                                    console.warn('TMDB sezon verisi alınamadı:', season.season_number, error);
-                                    return [season.season_number, []];
-                                }
-                            }));
-                            seasonResults.forEach(([seasonNumber, episodes]) => { seasonData[seasonNumber] = episodes; });
-                        }
-
                         const enriched = {
                             poster,
                             image: poster,
@@ -1207,12 +1227,13 @@
                             trailerUrl: trailer ? 'https://www.youtube.com/watch?v=' + trailer.key : item.trailerUrl,
                             seasons: mediaType === 'tv' ? realSeasons.length : item.seasons,
                             episodes: mediaType === 'tv' ? realSeasons.reduce((sum, season) => sum + Number(season.episode_count || 0), 0) : item.episodes,
-                            tmdbEpisodesBySeason: seasonData,
+                            tmdbEpisodesBySeason: item.tmdbEpisodesBySeason || {},
                             tmdbDetailsLoaded: true
                         };
                         this.tmdbDetailsCache[cacheKey] = enriched;
                         Object.assign(item, enriched);
                         if (this.selectedItem?.id === item.id) Object.assign(this.selectedItem, enriched);
+                        if (mediaType === 'tv') await this.loadSeasonEpisodes(this.selectedSeason || 1, item);
                     } catch (error) {
                         this.tmdbDetailsError = error.message || 'TMDB verileri alınamadı.';
                         console.error('TMDB veri eşitleme hatası:', error);
