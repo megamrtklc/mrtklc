@@ -1,14 +1,6 @@
 name: Browser Acceptance Tests
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/browser-acceptance.yml'
-      - 'tests/acceptance.mjs'
-      - 'index.html'
-      - 'app.js'
-      - 'tailwind.css'
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
@@ -20,7 +12,7 @@ permissions:
 
 jobs:
   browser-acceptance:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
