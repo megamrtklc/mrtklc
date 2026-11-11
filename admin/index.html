@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#17191f">
+  <meta name="robots" content="noindex,nofollow">
+  <title>CineVerse Yönetim Merkezi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="./" aria-label="CineVerse yönetim merkezi">
+        <span class="brand-mark"><i></i><i></i><i></i></span>
+        <span><b>CINEVERSE</b><small>MANAGEMENT STUDIO</small></span>
+      </a>
+      <div class="workspace-label">ÇALIŞMA ALANI</div>
+      <nav class="nav-list" aria-label="Yönetim menüsü">
+        <button class="nav-link active" data-view="overview"><span class="nav-icon">▦</span> Genel Bakış</button>
+        <button class="nav-link" data-view="catalog"><span class="nav-icon">▤</span> Film &amp; Diziler <span class="nav-count" id="nav-count">—</span></button>
+        <button class="nav-link" data-view="collections"><span class="nav-icon">▧</span> Koleksiyonlar</button>
+        <button class="nav-link" data-view="homepage"><span class="nav-icon">⌂</span> Ana Sayfa</button>
+        <div class="nav-divider"></div>
+        <div class="workspace-label">YÖNETİM</div>
+        <button class="nav-link" data-view="analytics"><span class="nav-icon">◫</span> İstatistikler</button>
+        <button class="nav-link" data-view="users"><span class="nav-icon">♙</span> Kullanıcılar</button>
+        <button class="nav-link" data-view="system"><span class="nav-icon">⚙</span> Sistem &amp; Ayarlar</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="secure-note"><span class="lock">⌑</span><div><b>Güvenli yayınlama</b><small>Sunucu bağlantısı bekleniyor</small></div><span class="status-dot"></span></div>
+        <a class="back-link" href="../"><span>↗</span> Siteye dön</a>
+        <div class="sidebar-user"><div class="avatar">CV</div><div><b>Yönetici</b><small>Kurulum aşaması</small></div><span class="more">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobile-menu" aria-label="Menüyü aç">☰</button>
+        <div class="breadcrumbs"><span>Yönetim</span><b>/</b><strong id="crumb-current">Genel Bakış</strong></div>
+        <div class="top-actions"><span class="environment"><i></i> ÖNİZLEME MODU</span><a class="site-link" href="../" target="_blank" rel="noopener">Siteyi görüntüle ↗</a></div>
+      </header>
+      <div class="content-wrap">
+        <div class="notice"><span class="notice-icon">!</span><div><b>Kurulum aşaması — yayınlama kapalı</b><p>Bu panel şu anda canlı katalog verisini güvenli biçimde okur. Gerçek yönetici girişi ve sunucu üzerinden yayınlama bağlantısı tamamlanana kadar değişiklikler siteye gönderilmez.</p></div><span class="notice-tag">READ ONLY</span></div>
+        <section class="view active" id="view-overview">
+          <div class="page-heading"><div><div class="eyebrow">CINEVERSE / CONTROL CENTER</div><h1>Genel Bakış</h1><p>İçerik arşivinin ve platformun güncel durumu.</p></div><div class="heading-date" id="today-date"></div></div>
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-top"><span>Toplam yapım</span><span class="metric-icon red">▤</span></div><strong id="metric-total">—</strong><small><i class="tiny-dot green"></i> Katalogdan okundu</small></article>
+            <article class="metric-card"><div class="metric-top"><span>Filmler</span><span class="metric-icon gold">▣</span></div><strong id="metric-movies">—</strong><small>Film arşivi</small></article>
+            <article class="metric-card"><div class="metric-top"><span>Diziler</span><span class="metric-icon blue">▥</span></div><strong id="metric-series">—</strong><small>Dizi arşivi</small></article>
+            <article class="metric-card"><div class="metric-top"><span>Koleksiyonlar</span><span class="metric-icon violet">▧</span></div><strong id="metric-collections">—</strong><small>Tanımlı koleksiyon</small></article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="panel-card recent-panel"><div class="panel-heading"><div><h2>Son eklenen içerikler</h2><p>Katalogdaki en güncel kayıtlar</p></div><button class="text-button" data-go="catalog">Tümünü gör <span>→</span></button></div><div id="recent-list" class="recent-list"><div class="loading-line">Katalog yükleniyor…</div></div></article>
+            <article class="panel-card health-panel"><div class="panel-heading"><div><h2>Sistem durumu</h2><p>Bağlantı ve veri kontrolleri</p></div><span class="health-pulse"></span></div><div class="health-row"><span><i class="health-check">✓</i> Katalog dosyası</span><b id="health-catalog">Kontrol ediliyor</b></div><div class="health-row"><span><i class="health-check">✓</i> JSON veri yapısı</span><b id="health-json">Kontrol ediliyor</b></div><div class="health-row"><span><i class="health-wait">•</i> Yönetici doğrulaması</span><b class="muted">Kurulmadı</b></div><div class="health-row"><span><i class="health-wait">•</i> Güvenli yayınlama API</span><b class="muted">Kurulmadı</b></div><div class="health-foot">Son kontrol: <span id="last-check">—</span></div></article>
+          </div>
+          <article class="panel-card quick-panel"><div class="panel-heading"><div><h2>Yönetim kısayolları</h2><p>İçerik operasyonlarına hızlı erişim</p></div></div><div class="quick-actions"><button data-go="catalog"><span>＋</span><b>İçerik arşivi</b><small>Film ve dizileri incele</small></button><button data-go="collections"><span>▧</span><b>Koleksiyonlar</b><small>Özel listeleri yönet</small></button><button data-go="homepage"><span>⌂</span><b>Ana sayfa düzeni</b><small>Öne çıkan alanlar</small></button><button data-go="analytics"><span>◫</span><b>İstatistikler</b><small>Arşiv dağılımı</small></button></div></article>
+        </section>
+
+        <section class="view" id="view-catalog">
+          <div class="page-heading"><div><div class="eyebrow">İÇERİK MERKEZİ</div><h1>Film &amp; Diziler</h1><p>Katalog kayıtlarını ara, filtrele ve detaylarını incele.</p></div><button class="primary-button" id="add-content" disabled title="Güvenli yayınlama bağlantısı kurulunca açılacak">＋ Yeni içerik</button></div>
+          <div class="catalog-toolbar"><label class="search-box"><span>⌕</span><input id="catalog-search" type="search" placeholder="Başlık, yönetmen veya oyuncu ara…"></label><select id="type-filter"><option value="all">Tüm türler</option><option value="movie">Filmler</option><option value="tv">Diziler</option></select><select id="year-filter"><option value="all">Tüm yıllar</option></select><span class="result-count" id="result-count">Katalog okunuyor…</span></div>
+          <div class="catalog-table-wrap"><table class="catalog-table"><thead><tr><th>YAPIM</th><th>TÜR</th><th>YIL</th><th>PUAN</th><th>TMDB</th><th></th></tr></thead><tbody id="catalog-rows"><tr><td colspan="6" class="empty-cell">Katalog yükleniyor…</td></tr></tbody></table></div>
+          <div class="pagination"><span id="page-info">—</span><div><button id="prev-page" disabled>←</button><button id="next-page" disabled>→</button></div></div>
+        </section>
+
+        <section class="view" id="view-collections"><div class="page-heading"><div><div class="eyebrow">İÇERİK ORGANİZASYONU</div><h1>Koleksiyonlar</h1><p>Arşivde tanımlı özel koleksiyonlar.</p></div></div><div id="collection-grid" class="collection-grid"><div class="panel-card">Koleksiyonlar yükleniyor…</div></div></section>
+        <section class="view" id="view-homepage"><div class="page-heading"><div><div class="eyebrow">VİTRİN YÖNETİMİ</div><h1>Ana Sayfa</h1><p>Ana sayfa yapılandırmasını görüntüle.</p></div></div><div class="panel-card config-card"><h2>Mevcut yapılandırma</h2><pre id="homepage-config">Yükleniyor…</pre><p class="helper-text">Düzenleme ve yayınlama, güvenli API bağlantısı tamamlandıktan sonra etkinleştirilecek.</p></div></section>
+        <section class="view" id="view-analytics"><div class="page-heading"><div><div class="eyebrow">ARŞİV RAPORLARI</div><h1>İstatistikler</h1><p>Tür, yıl ve puan dağılımı.</p></div></div><div class="analytics-grid"><article class="panel-card"><h2>Yapım türleri</h2><div id="type-chart" class="bar-chart"></div></article><article class="panel-card"><h2>Yıllara göre dağılım</h2><div id="year-chart" class="bar-chart"></div></article></div></section>
+        <section class="view" id="view-users"><div class="page-heading"><div><div class="eyebrow">ERİŞİM KONTROLÜ</div><h1>Kullanıcılar</h1><p>Yönetici rolleri ve erişim kayıtları.</p></div></div><div class="panel-card empty-state"><span>♙</span><h2>Kullanıcı yönetimi henüz bağlı değil</h2><p>Kimlik doğrulama servisi kurulduğunda yönetici hesapları ve roller burada yönetilecek.</p></div></section>
+        <section class="view" id="view-system"><div class="page-heading"><div><div class="eyebrow">PLATFORM</div><h1>Sistem &amp; Ayarlar</h1><p>Bağlantılar, veri kaynağı ve güvenlik kurulumu.</p></div></div><div class="settings-grid"><article class="panel-card"><h2>Veri kaynağı</h2><div class="setting-row"><span>Katalog dosyası</span><b>filmvediziler.json</b></div><div class="setting-row"><span>Okuma yolu</span><b>../filmvediziler.json</b></div><div class="setting-row"><span>Yapı</span><b id="data-version">—</b></div></article><article class="panel-card"><h2>Güvenlik kurulumu</h2><div class="setting-row"><span>Giriş doğrulama</span><b class="state-pending">Bekliyor</b></div><div class="setting-row"><span>GitHub token</span><b class="state-pending">Worker secret gerekli</b></div><div class="setting-row"><span>Yayınlama</span><b class="state-pending">Kapalı</b></div><p class="helper-text">Gizli anahtarlar hiçbir zaman bu sayfanın JavaScript koduna eklenmeyecek.</p></article></div></section>
+        <footer class="footer-note">CineVerse Management Studio <span>•</span> İlk kurulum sürümü</footer>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./admin.js" defer></script>
+</body>
+</html>
