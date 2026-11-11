@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/browser-acceptance.yml'
       - 'tests/acceptance.mjs'
+      - 'index.html'
+      - 'filmvediziler.json'
   workflow_dispatch:
 
 permissions:
