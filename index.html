@@ -60,7 +60,7 @@
 
     <!-- Header / Top Navbar (Full Width) -->
     <header :class="getHeaderClass()" class="sticky top-0 z-50 backdrop-blur-md border-b transition-colors duration-300">
-        <div class="w-full px-6 sm:px-12 h-16 flex items-center justify-between">
+        <div class="w-full px-4 sm:px-12 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-8">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
@@ -69,7 +69,7 @@
                     <span class="text-xl font-black tracking-wider uppercase">CINE<span class="text-rose-600">VERSE</span></span>
                 </a>
                 
-                <nav class="hidden md:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                <nav class="hidden lg:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     <a href="#" @click.prevent="navigateTo('home')" :class="currentPage === 'home' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Ana Sayfa</a>
                     <a href="#" @click.prevent="navigateTo('explore')" :class="currentPage === 'explore' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Keşfet</a>
                     <a href="#" @click.prevent="navigateTo('video-links')" :class="currentPage === 'video-links' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center gap-1.5">
@@ -85,7 +85,7 @@
             </div>
             
             <div class="flex items-center space-x-4">
-                <div class="relative hidden sm:block">
+                <div class="relative hidden xl:block">
                     <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                     <input type="text" x-model="searchQuery" placeholder="Film veya dizi ara..." :class="getSearchClass()" class="border rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-600 w-60 transition-all">
                 </div>
