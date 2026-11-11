@@ -128,24 +128,35 @@ try {
     const mobilePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await mobilePage.addInitScript(() => {
       window.__layoutShiftEntries = [];
+      window.__lcpEntries = [];
+      window.__longTasks = [];
       try {
-        const observer = new PerformanceObserver(list => {
+        new PerformanceObserver(list => {
           for (const entry of list.getEntries()) {
-            if (entry.hadRecentInput) continue;
-            window.__layoutShiftEntries.push({
-              value: entry.value,
-              startTime: Math.round(entry.startTime),
+            if (!entry.hadRecentInput) window.__layoutShiftEntries.push({
+              value: entry.value, startTime: Math.round(entry.startTime),
               sources: (entry.sources || []).slice(0, 5).map(source => ({
-                node: source.node?.tagName || null,
-                id: source.node?.id || null,
+                node: source.node?.tagName || null, id: source.node?.id || null,
                 className: typeof source.node?.className === 'string' ? source.node.className.slice(0, 140) : '',
-                previousRect: source.previousRect || null,
-                currentRect: source.currentRect || null
+                previousRect: source.previousRect || null, currentRect: source.currentRect || null
               }))
             });
           }
-        });
-        observer.observe({ type: 'layout-shift', buffered: true });
+        }).observe({ type: 'layout-shift', buffered: true });
+        new PerformanceObserver(list => {
+          for (const entry of list.getEntries()) window.__lcpEntries.push({
+            startTime: Math.round(entry.startTime), size: entry.size,
+            tag: entry.element?.tagName || null, id: entry.element?.id || null,
+            className: typeof entry.element?.className === 'string' ? entry.element.className.slice(0, 160) : '',
+            src: entry.element?.currentSrc || entry.element?.src || '',
+            text: entry.element?.textContent?.trim().slice(0, 80) || ''
+          });
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+        new PerformanceObserver(list => {
+          for (const entry of list.getEntries()) window.__longTasks.push({
+            startTime: Math.round(entry.startTime), duration: Math.round(entry.duration)
+          });
+        }).observe({ type: 'longtask', buffered: true });
       } catch {}
     });
     try {
@@ -156,23 +167,8 @@ try {
       }, { timeout: 30000 });
       const mobileState = await mobilePage.evaluate(async () => {
         const image = document.querySelector('#mobileHeroBanner img');
-        const lcp = await new Promise(resolve => {
-          const entries = [];
-          const observer = new PerformanceObserver(list => entries.push(...list.getEntries()));
-          observer.observe({ type: 'largest-contentful-paint', buffered: true });
-          setTimeout(() => {
-            observer.disconnect();
-            resolve(entries.map(entry => ({
-              startTime: Math.round(entry.startTime),
-              size: entry.size,
-              tag: entry.element?.tagName || null,
-              id: entry.element?.id || null,
-              className: typeof entry.element?.className === 'string' ? entry.element.className.slice(0, 160) : '',
-              src: entry.element?.currentSrc || entry.element?.src || '',
-              text: entry.element?.textContent?.trim().slice(0, 80) || ''
-            })));
-          }, 1800);
-        });
+        await new Promise(resolve => setTimeout(resolve, 2200));
+        const lcp = window.__lcpEntries || [];
         const resources = performance.getEntriesByType('resource')
           .filter(entry => /image\.tmdb\.org|filmvediziler\.json|alpinejs|fonts\.(googleapis|gstatic)|font-awesome/.test(entry.name))
           .map(entry => ({ name: entry.name, start: Math.round(entry.startTime), duration: Math.round(entry.duration), bytes: entry.transferSize || 0, initiator: entry.initiatorType }));
@@ -186,6 +182,21 @@ try {
           thumbnails: document.querySelectorAll('#mobileHeroThumbs img').length,
           lcp,
           layoutShifts: window.__layoutShiftEntries || [],
+          longTasks: window.__longTasks || [],
+          navigation: (() => {
+            const entry = performance.getEntriesByType('navigation')[0];
+            return entry ? Object.fromEntries(['startTime','responseStart','domContentLoadedEventEnd','loadEventEnd','domInteractive','duration'].map(key => [key, Math.round(entry[key])])) : null;
+          })(),
+          appState: (() => {
+            const app = window.Alpine?.$data(document.documentElement);
+            return {
+              alpineReady: !!window.Alpine,
+              catalogCount: app?.catalog?.length ?? null,
+              catalogLoading: app?.catalogLoading ?? null,
+              initialShellPresent: !!document.getElementById('hero-initial-shell'),
+              heroTitle: document.querySelector('#mobileHeroBanner')?.innerText?.trim().slice(0, 100) || ''
+            };
+          })(),
           resources
         };
       });
