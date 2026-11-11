@@ -114,7 +114,21 @@ try {
     await page.locator('header nav a').filter({ hasText: 'Video Bağlantıları' }).first().click();
     await page.waitForURL(/#\/video-links$/);
     await page.locator('main button').filter({ hasText: 'Adalet 2' }).first().click();
-    await page.waitForURL(/#\/watch\/archive-125$/);
+    await page.waitForURL(new RegExp('#/watch/' + adaletId + '
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(expectedId => window.Alpine && String(window.Alpine.$data(document.documentElement)?.selectedItem?.id) === String(expectedId), adaletId, { timeout: 30000 });
+  });
+
+  await check('Tarayıcıda yakalanan JavaScript çalışma zamanı hatası yok', async () => {
+    assert.deepEqual(failures, []);
+  });
+
+  console.log(JSON.stringify({ baseURL: BASE_URL, results }, null, 2));
+} finally {
+  await context.close();
+  await browser.close();
+}
+));
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.waitForFunction(expectedId => window.Alpine && String(window.Alpine.$data(document.documentElement)?.selectedItem?.id) === String(expectedId), adaletId, { timeout: 30000 });
   });
