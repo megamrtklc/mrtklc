@@ -66,9 +66,9 @@ try {
 
   await check('Profil seçimi kalıcı kaydediliyor', async () => {
     await page.locator('header select').selectOption('pro_2');
-    await page.waitForFunction(() => localStorage.getItem('cine_active_profile') === 'pro_2');
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem('cine_active_profile') || 'null') === 'pro_2');
     await page.locator('header select').selectOption('pro_1');
-    await page.waitForFunction(() => localStorage.getItem('cine_active_profile') === 'pro_1');
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem('cine_active_profile') || 'null') === 'pro_1');
   });
 
   await check('İstatistikler sayfası açılıyor', async () => {
