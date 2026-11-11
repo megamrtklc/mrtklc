@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, view:'overview' };
+  const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, view:'overview', sha:null };
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const titleOf = item => item.title || item.tmdbTitle || item.originalTitle || item.tmdbOriginalTitle || 'Başlıksız yapım';
   const posterOf = item => item.image || item.poster || '';
@@ -57,9 +57,27 @@
     $('#today-date').textContent=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
     try{
-      const response=await fetch('../filmvediziler.json',{cache:'no-store'});
-      if(!response.ok)throw new Error('HTTP '+response.status);
-      const data=await response.json();
+      let data, response;
+      const apiResponse=await fetch('/api/catalog',{cache:'no-store',credentials:'same-origin'});
+      if(apiResponse.ok){
+        const apiPayload=await apiResponse.json();
+        data=apiPayload.data;
+        state.sha=apiPayload.sha||null;
+        const sessionResponse=await fetch('/api/session',{cache:'no-store',credentials:'same-origin'});
+        if(!sessionResponse.ok)throw new Error('Yönetici oturumu doğrulanamadı.');
+        const session=await sessionResponse.json();
+        $('.notice p').textContent='Cloudflare Access doğrulaması etkin. Yönetici: '+(session.email||'Yetkili hesap')+'. Katalog sunucu üzerinden güvenli biçimde okunuyor.';
+        $('.notice-tag').textContent='PROTECTED';
+      }else if(apiResponse.status===404){
+        response=await fetch('../filmvediziler.json',{cache:'no-store'});
+        if(!response.ok)throw new Error('HTTP '+response.status);
+        data=await response.json();
+        $('.notice p').textContent='Bu, GitHub Pages üzerinde salt okunur önizlemedir. Gerçek yönetim işlemleri için Cloudflare Access korumalı Worker adresini kullanın.';
+        $('.notice-tag').textContent='READ ONLY';
+      }else{
+        const apiError=await apiResponse.json().catch(()=>({}));
+        throw new Error(apiError.error||('Yönetim API hatası: '+apiResponse.status));
+      }
       const catalog=Array.isArray(data)?data:data?.catalog;
       if(!Array.isArray(catalog))throw new Error('Katalog listesi bulunamadı');
       state.data=data;state.catalog=catalog.filter(x=>x&&typeof x==='object');
