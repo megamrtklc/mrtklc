@@ -198,7 +198,7 @@
                             ? (Array.isArray(details.seasons) ? details.seasons.filter(season => Number(season.season_number) > 0) : [])
                             : [];
                         const credits = details.credits || {};
-                        const cast = (credits.cast || []).slice(0, 20).map((person, index) => ({
+                        const cast = (credits.cast || []).map((person, index) => ({
                             id: person.id,
                             name: person.name || '',
                             character: person.character || '',
