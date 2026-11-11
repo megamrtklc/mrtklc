@@ -119,27 +119,34 @@ try {
     assert.ok(responsiveSources.some(source => source.includes('w185')) && responsiveSources.some(source => source.includes('w780')), 'TMDB afiş veya hero görsellerinde duyarlı kaynaklar bulunamadı');
   });
 
-  await check('Mobil hero görseli uygun çözünürlükte yükleniyor', async () => {
-    // Ayrı mobil sayfa kullan: tarayıcı, önceden yüklenmiş büyük görseli viewport küçülünce
-    // her zaman daha küçük adayla değiştirmez.
+  await check('Mobil ve masaüstü için ayrı manşetler doğru gösteriliyor', async () => {
     const mobilePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
     try {
       await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await mobilePage.waitForFunction(() => {
-        const image = document.querySelector('img[fetchpriority="high"]');
-        return image && image.complete && image.naturalWidth > 0 &&
-          /\/w(500|780)\//.test(image.currentSrc);
+        const image = document.querySelector('#mobileHeroBanner img');
+        return image && image.complete && image.naturalWidth > 0;
       }, { timeout: 30000 });
-      const mobileHeroSource = await mobilePage.locator('img[fetchpriority="high"]').evaluate(image => image.currentSrc);
-      console.log('MOBILE HERO SOURCE:', mobileHeroSource);
-      assert.match(mobileHeroSource, /\/w(500|780)\//);
+      const mobileState = await mobilePage.evaluate(() => ({
+        mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
+        desktopVisible: getComputedStyle(document.querySelector('main section.hidden.md\\:flex')).display !== 'none',
+        source: document.querySelector('#mobileHeroBanner img').currentSrc,
+        thumbnails: document.querySelectorAll('#mobileHeroThumbs img').length
+      }));
+      console.log('MOBILE HERO STATE:', JSON.stringify(mobileState));
+      assert.ok(mobileState.mobileVisible, 'Mobil manşet telefonda görünmüyor');
+      assert.ok(!mobileState.desktopVisible, 'Masaüstü manşeti telefonda görünmemeli');
+      assert.match(mobileState.source, /\/w(342|500|780)\//);
+      assert.ok(mobileState.thumbnails > 0, 'Mobil manşet afiş şeridi yüklenmedi');
     } finally {
       await mobilePage.close();
     }
-    await page.waitForFunction(() => {
-      const image = document.querySelector('img[fetchpriority="high"]');
-      return image && image.currentSrc.includes('/w1280/');
-    }, { timeout: 20000 });
+    const desktopState = await page.evaluate(() => ({
+      mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
+      desktopVisible: getComputedStyle(document.querySelector('main section.hidden.md\\:flex')).display !== 'none'
+    }));
+    assert.ok(!desktopState.mobileVisible, 'Mobil manşet masaüstünde görünmemeli');
+    assert.ok(desktopState.desktopVisible, 'Mevcut masaüstü manşeti görünmüyor');
   });
 
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
