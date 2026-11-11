@@ -280,17 +280,34 @@
                         
                         <!-- Custom Video Player -->
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl border border-gray-200 dark:border-gray-800 group select-none">
-                            <video id="customVideoPlayer" 
-                                   class="w-full h-full object-cover" 
+                            <video id="customVideoPlayer"
+                                   x-show="isDirectVideoUrl(selectedItem.watchUrl)"
+                                   class="w-full h-full object-contain"
+                                   :src="getPlaybackUrl()"
                                    :poster="selectedItem.backdrop"
+                                   preload="metadata"
+                                   playsinline
+                                   @loadedmetadata="updateVideoProgress"
                                    @timeupdate="updateVideoProgress"
-                                   @ended="videoEnded = true">
-                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                                   @play="isPlaying = true"
+                                   @pause="isPlaying = false"
+                                   @ended="videoEnded = true"
+                                   @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
+                            <div x-show="!isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gray-950 p-6 text-center text-white">
+                                <i class="fa-solid fa-circle-play text-4xl text-rose-500"></i>
+                                <h3 class="text-base font-bold" x-text="selectedItem.watchUrl ? 'Bu kaynak yerleşik oynatıcıda açılamıyor' : 'Henüz izleme bağlantısı eklenmemiş'"></h3>
+                                <p class="max-w-md text-xs leading-relaxed text-gray-300" x-text="selectedItem.watchUrl ? 'Bu bağlantı farklı bir video platformuna ait. Kaynağı yeni sekmede açabilirsin.' : 'Bu yapım için yönetim verisine bir MP4 izleme bağlantısı eklenmesi gerekiyor.'"></p>
+                                <a x-show="selectedItem.watchUrl" :href="selectedItem.watchUrl" target="_blank" rel="noopener noreferrer" class="rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-white hover:bg-rose-700">Kaynağı Aç <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            </div>
+
+                            <div x-show="playbackError && isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-x-0 top-4 mx-auto w-fit rounded-lg bg-red-950/90 px-4 py-2 text-xs font-semibold text-white shadow-lg">
+                                Video kaynağı yüklenemedi. Bağlantıyı veya dosya erişimini kontrol et.
+                            </div>
 
                             <!-- Overlay Controls -->
-                            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
+                            <div x-show="isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
                                 <div class="flex items-center justify-between mb-1">
                                     <div class="flex items-center space-x-2">
                                         <span class="px-2.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase" x-text="selectedItem.title"></span>
@@ -349,7 +366,7 @@
                             </div>
                             <div class="flex items-center space-x-2 w-full sm:w-auto">
                                 <select x-model="selectedSeason" :class="getCardClass()" class="border rounded-lg px-4 py-2 text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:border-rose-600">
-                                    <template x-for="s in [1, 2, 3, 4, 5, 6]" :key="s">
+                                    <template x-for="s in getSeasonOptions()" :key="s">
                                         <option :value="s" x-text="s + '. Sezon'"></option>
                                     </template>
                                 </select>
@@ -363,10 +380,15 @@
                                     <i class="fa-solid fa-film text-rose-600 text-xs"></i>
                                     <span x-text="selectedSeason + '. Sezon Bölümleri'"></span>
                                 </h3>
-                                <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold" x-text="'Toplam ' + getEpisodesForSeason(selectedSeason).length + ' Bölüm'"></span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold" x-text="'Toplam ' + (selectedItem.episodes || 0) + ' Bölüm'"></span>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                            <div x-show="getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
+                                <i class="fa-solid fa-list-ul text-2xl text-gray-400 mb-2"></i>
+                                <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Bölüm ayrıntıları henüz katalog verisinde bulunmuyor.</p>
+                                <p class="mt-1 text-[11px] text-gray-500 dark:text-gray-400">Bu dizi için <span x-text="selectedItem.seasons || 0"></span> sezon ve toplam <span x-text="selectedItem.episodes || 0"></span> bölüm bilgisi mevcut. Bölüm adları ve ayrı video bağlantıları eklendiğinde burada listelenecek.</p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" x-show="getEpisodesForSeason(selectedSeason).length > 0">
                                 <template x-for="ep in paginatedEpisodes" :key="ep.number">
                                     <div @click="selectEpisode(ep.number)" 
                                          :class="selectedEpisode === ep.number ? 'border-rose-600 bg-rose-600/10' : 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700'"
@@ -786,20 +808,14 @@
                     }
                 },
 
+                getSeasonOptions() {
+                    const count = Number(this.selectedItem?.seasons || 0);
+                    return Array.from({ length: Math.max(0, count) }, (_, index) => index + 1);
+                },
+
                 getEpisodesForSeason(seasonNum) {
-                    if (!this.selectedItem) return [];
-                    return [
-                        { number: 1, title: "Başlangıç ve İlk Temas", duration: "52 dk", desc: "Karakterlerin tehlikeli serüvene ilk adımı attığı ve sırların yavaşça aralandığı açılış bölümü.", still: this.selectedItem.backdrop },
-                        { number: 2, title: "Kırılma Noktası", duration: "48 dk", desc: "Beklenmeyen bir ihanet ekibi zor durumda bırakırken, geçmişin karanlık gölgeleri yeniden ortaya çıkar.", still: this.selectedItem.poster },
-                        { number: 3, title: "Derin Sırlar", duration: "55 dk", desc: "Gerçeğe ulaşmak için hayati bir ipucu peşine düşen kahramanlar, ölümcül bir tuzağın içine çekilir.", still: this.selectedItem.backdrop },
-                        { number: 4, title: "Karanlık Sokaklar", duration: "50 dk", desc: "Şehirde artan gerilimle birlikte müttefikler ve düşmanlar birbirine karışır; her karar hayati önem taşır.", still: this.selectedItem.poster },
-                        { number: 5, title: "Son Direniş", duration: "53 dk", desc: "Tüm dengelerin altüst olduğu ve final karşılaşması öncesi fırtınalar koparan kritik eşik.", still: this.selectedItem.backdrop },
-                        { number: 6, title: "Yeni Düzen", duration: "58 dk", desc: "Sezonun nefes kesen finalinde tüm sırlar aydınlığa kavuşuyor ve yeni bir dönemin kapıları aralanıyor.", still: this.selectedItem.poster },
-                        { number: 7, title: "Küllerinden Doğmak", duration: "51 dk", desc: "Yeni sezonun gizemli olayları ardındaki gerçekler gün yüzüne çıkıyor.", still: this.selectedItem.backdrop },
-                        { number: 8, title: "Zoraki İttifak", duration: "49 dk", desc: "Düşmanlar hayatta kalmak için güçlerini birleştirmek zorunda kalıyor.", still: this.selectedItem.poster },
-                        { number: 9, title: "Yolun Sonu", duration: "54 dk", desc: "Büyük kapışma öncesi son hazırlıklar ve stratejik hamleler.", still: this.selectedItem.poster },
-                        { number: 10, title: "Büyük Final", duration: "60 dk", desc: "Soluk kesen sezon finali ve şoke edici gelişmeler.", still: this.selectedItem.poster }
-                    ];
+                    // Katalogda sezon/bölüm sayıları var; bölüm bazında metadata henüz bulunmuyor.
+                    return [];
                 },
 
                 get paginatedEpisodes() {
@@ -816,10 +832,9 @@
                 selectEpisode(epNum) {
                     this.selectedEpisode = epNum;
                     const video = document.getElementById('customVideoPlayer');
-                    if (video) {
+                    if (video && this.isDirectVideoUrl(this.selectedItem?.watchUrl)) {
                         video.currentTime = 0;
-                        video.play();
-                        this.isPlaying = true;
+                        video.play().catch(() => { this.playbackError = true; });
                     }
                 },
                 
@@ -829,16 +844,25 @@
                 currentTimeFormatted: '00:00',
                 durationFormatted: '00:00',
                 videoEnded: false,
+                playbackError: false,
+
+                isDirectVideoUrl(url) {
+                    return typeof url === 'string' && /\.mp4(?:$|[?#])/i.test(url);
+                },
+
+                getPlaybackUrl() {
+                    return this.selectedItem && this.isDirectVideoUrl(this.selectedItem.watchUrl)
+                        ? this.selectedItem.watchUrl
+                        : '';
+                },
 
                 togglePlay() {
                     const video = document.getElementById('customVideoPlayer');
-                    if (!video) return;
+                    if (!video || !this.isDirectVideoUrl(this.selectedItem?.watchUrl)) return;
                     if (video.paused) {
-                        video.play();
-                        this.isPlaying = true;
+                        video.play().catch(() => { this.playbackError = true; });
                     } else {
                         video.pause();
-                        this.isPlaying = false;
                     }
                 },
 
@@ -992,6 +1016,7 @@
                     this.currentEpisodePage = 1;
                     this.isPlaying = false;
                     this.videoProgress = 0;
+                    this.playbackError = false;
                     this.currentPage = 'watch';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     
