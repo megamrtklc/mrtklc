@@ -59,4 +59,4 @@ jobs:
 
 # Manual verification trigger after dual responsive hero image gating deployment (Nov 11, 2026).
 
-# Re-run production Lighthouse audit after the latest acceptance-test deployment (Nov 11, 2026).
+# Re-run production Lighthouse audit after responsive hero srcset deployment (Nov 11, 2026).
