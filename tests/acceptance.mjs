@@ -126,6 +126,28 @@ try {
 
   await check('Mobil ve masaüstü için ayrı manşetler doğru gösteriliyor', async () => {
     const mobilePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    await mobilePage.addInitScript(() => {
+      window.__layoutShiftEntries = [];
+      try {
+        const observer = new PerformanceObserver(list => {
+          for (const entry of list.getEntries()) {
+            if (entry.hadRecentInput) continue;
+            window.__layoutShiftEntries.push({
+              value: entry.value,
+              startTime: Math.round(entry.startTime),
+              sources: (entry.sources || []).slice(0, 5).map(source => ({
+                node: source.node?.tagName || null,
+                id: source.node?.id || null,
+                className: typeof source.node?.className === 'string' ? source.node.className.slice(0, 140) : '',
+                previousRect: source.previousRect || null,
+                currentRect: source.currentRect || null
+              }))
+            });
+          }
+        });
+        observer.observe({ type: 'layout-shift', buffered: true });
+      } catch {}
+    });
     try {
       await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await mobilePage.waitForFunction(() => {
@@ -163,6 +185,7 @@ try {
           imageNaturalWidth: image.naturalWidth,
           thumbnails: document.querySelectorAll('#mobileHeroThumbs img').length,
           lcp,
+          layoutShifts: window.__layoutShiftEntries || [],
           resources
         };
       });
