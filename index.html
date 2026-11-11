@@ -160,7 +160,7 @@
                 <!-- Profil Seçici -->
                 <div :class="getCardClass()" class="flex items-center space-x-1 sm:space-x-2 border rounded-lg px-1.5 sm:px-2.5 py-1">
                     <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="hidden sm:block w-6 h-6 rounded-full object-cover">
-                    <select x-model="currentProfileId" aria-label="Aktif profili seç" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] sm:max-w-none">
+                    <select x-model="currentProfileId" aria-label="Aktif profili seç" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] xl:max-w-none">
                         <template x-for="pro in profiles" :key="pro.id">
                             <option :value="pro.id" x-text="pro.name" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"></option>
                         </template>
