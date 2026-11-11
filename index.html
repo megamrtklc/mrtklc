@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
     <!-- Tailwind CSS: HTML ayrıştırmasını bloke etmeden yükle -->
-    <script defer src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -159,7 +159,7 @@
 
                 <!-- Profil Seçici -->
                 <div :class="getCardClass()" class="flex items-center space-x-2 border rounded-lg px-2.5 py-1">
-                    <img :alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="w-6 h-6 rounded-full object-cover">
+                    <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="w-6 h-6 rounded-full object-cover">
                     <select x-model="currentProfileId" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] sm:max-w-none">
                         <template x-for="pro in profiles" :key="pro.id">
                             <option :value="pro.id" x-text="pro.name" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"></option>
@@ -1377,7 +1377,17 @@
                 },
 
                 get currentHero() {
-                    return this.heroSlides[this.currentSlideIndex] || this.heroSlides[0];
+                    return this.heroSlides[this.currentSlideIndex] || this.heroSlides[0] || {
+                        id: 'loading',
+                        title: this.catalogLoading ? 'Yükleniyor...' : 'Yapım bulunamadı',
+                        backdrop: '',
+                        poster: '',
+                        rating: '—',
+                        year: '',
+                        genre: '',
+                        starring: '',
+                        desc: ''
+                    };
                 },
 
                 selectHeroSlide(idx) {
