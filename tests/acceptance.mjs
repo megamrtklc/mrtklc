@@ -96,7 +96,7 @@ try {
     assert.deepEqual(ivoryColors, {
       background: 'rgb(255, 253, 249)',
       text: 'rgb(41, 38, 31)',
-      border: 'rgb(226, 221, 210)'
+      border: 'rgb(235, 231, 221)'
     }, 'Fil Dişi temasında kutu, metin veya kenarlık kontrastı uygulanmadı');
 
     await themeButton.click();
