@@ -56,6 +56,14 @@ try {
       compiledStyleCheck.cdnRuntimeScripts === 0,
       'Derlenmiş Tailwind CSS doğru yüklenmedi: ' + JSON.stringify(compiledStyleCheck)
     );
+    await page.waitForFunction(() => {
+      const image = document.querySelector('img[fetchpriority="high"]');
+      return image && image.complete && image.naturalWidth > 0;
+    }, { timeout: 20000 });
+    const heroImageOk = await page.locator('img[fetchpriority="high"]').evaluate(image =>
+      image.naturalWidth > 0 && image.dataset.perdeFallbackApplied !== 'true'
+    );
+    assert.ok(heroImageOk, 'Ana sayfa hero görseli ilk açılışta yüklenemedi');
     const preloadChecks = await page.evaluate(() => ({
       catalog: !!document.querySelector('link[rel="preload"][as="fetch"][href="./filmvediziler.json"]'),
       alpine: [...document.querySelectorAll('link[rel="preload"][as="script"]')].some(link => link.href.includes('alpinejs')),
