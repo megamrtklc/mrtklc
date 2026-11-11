@@ -197,7 +197,7 @@
                     <div class="relative w-full flex-grow flex items-center px-6 sm:px-12 py-12">
                         <!-- Backdrop Image -->
                         <div class="absolute inset-0 z-0">
-                            <img :src="currentHero.backdrop" :alt="currentHero.title + ' arka plan görseli'" loading="eager" fetchpriority="high" decoding="async" @error="handleImageError($event)" class="w-full h-full object-cover object-center filter brightness-[0.7]">
+                            <img :src="currentHero.backdrop" :srcset="getTmdbImageSrcSet(currentHero.backdrop, [780, 1280])" sizes="100vw" :alt="currentHero.title + ' arka plan görseli'" loading="eager" fetchpriority="high" decoding="async" @error="handleImageError($event)" class="w-full h-full object-cover object-center filter brightness-[0.7]">
                             <!-- Sabit Sinematik Koyu Gradyan Perdesi (Her Modda Görseli ve Yazıyı Mükemmel Gösterir) -->
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent"></div>
                             <div class="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/50 to-transparent"></div>
@@ -271,7 +271,7 @@
                                      :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 border-rose-500' : 'border-gray-800 opacity-75 hover:opacity-100'"
                                      class="flex-shrink-0 w-32 sm:w-36 cursor-pointer group bg-gray-900 rounded-xl overflow-hidden border p-1.5 transition-all duration-300 shadow-sm">
                                     <div class="w-full aspect-[2/3] rounded-lg overflow-hidden bg-black mb-1.5">
-                                        <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                                        <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 18vw, 14vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
                                     </div>
                                     <div class="text-[11px] font-bold text-center text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="item.title"></div>
                                 </div>
@@ -294,7 +294,7 @@
                         <template x-for="item in personalizedRecommendations" :key="'personal-' + item.id">
                             <button @click="openWatchPage(item)" :class="getCardClass()" class="group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                    <img @error="handleImageError($event)" :src="item.poster || item.image" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image)" sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 18vw, 14vw" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'series' ? 'Dizi' : 'Film'"></span>
                                     <span class="absolute bottom-2 right-2 rounded bg-black/75 text-amber-400 text-[9px] font-black px-1.5 py-1"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || '—'"></span></span>
                                 </div>
@@ -841,7 +841,7 @@
                     <template x-for="item in sortedFilteredCatalog" :key="item.id">
                         <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                <img @error="handleImageError($event)" decoding="async" :src="item.poster" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img @error="handleImageError($event)" decoding="async" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 18vw, 14vw" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400">
                                     <i class="fa-solid fa-star text-[8px]"></i><span x-text="item.rating"></span>
                                 </div>
@@ -885,7 +885,7 @@
                     <template x-for="item in watchableCatalog" :key="item.id">
                         <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="group text-left rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 flex flex-col shadow-sm">
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900 w-full">
-                                <img @error="handleImageError($event)" decoding="async" :src="item.poster || item.backdrop" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img @error="handleImageError($event)" decoding="async" :src="item.poster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.backdrop)" sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 18vw, 14vw" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <span class="absolute top-2 left-2 px-2 py-1 rounded bg-rose-600 text-white text-[9px] font-black uppercase" x-text="item.type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
                                 <span class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400"><i class="fa-solid fa-star text-[8px]"></i> <span x-text="item.rating || '—'"></span></span>
                                 <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent px-3 pt-8 pb-3 text-white flex items-center gap-2">
@@ -923,7 +923,7 @@
                     <template x-for="item in currentWatchlist" :key="item.id">
                         <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 18vw, 14vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <button @click.stop="toggleWatchlist(item)" class="absolute top-2 right-2 w-7 h-7 rounded bg-rose-600 text-white flex items-center justify-center shadow">
                                     <i class="fa-solid fa-bookmark text-xs"></i>
                                 </button>
@@ -1076,6 +1076,13 @@
 
         function ultimateProApp() {
             return {
+                getTmdbImageSrcSet(url, widths = [185, 342, 500]) {
+                    if (typeof url !== 'string') return '';
+                    const match = url.match(/^(https:\/\/image\.tmdb\.org\/t\/p\/)(?:w\d+|original)(\/.*)$/);
+                    if (!match) return '';
+                    return widths.map(width => `${match[1]}w${width}${match[2]} ${width}w`).join(', ');
+                },
+
                 handleImageError(event) {
                     const image = event && event.target;
                     if (!image || image.dataset.perdeFallbackApplied) return;
