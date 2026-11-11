@@ -119,10 +119,19 @@ async function writeCatalog(env, data, expectedSha) {
   const ids = new Set();
   for (const item of data.catalog) {
     if (!item || typeof item !== "object" || Array.isArray(item)) throw new Error("Katalogda geçersiz kayıt bulundu.");
-    if (item.id !== undefined && item.id !== null) {
-      const id = String(item.id);
-      if (ids.has(id)) throw new Error("Katalogda yinelenen kayıt kimliği var: " + id);
-      ids.add(id);
+    if (item.id === undefined || item.id === null || !String(item.id).trim()) throw new Error("Her katalog kaydının benzersiz bir kimliği olmalı.");
+    if (typeof item.title !== "string" || !item.title.trim()) throw new Error("Her katalog kaydının yapım adı olmalı.");
+    const id = String(item.id);
+    if (ids.has(id)) throw new Error("Katalogda yinelenen kayıt kimliği var: " + id);
+    ids.add(id);
+    for (const field of ["image", "backdrop", "trailerUrl"]) {
+      if (!item[field]) continue;
+      try {
+        const parsed = new URL(String(item[field]));
+        if (parsed.protocol !== "https:" && parsed.protocol !== "http:") throw new Error("invalid protocol");
+      } catch {
+        throw new Error("Geçersiz görsel veya fragman adresi: " + field);
+      }
     }
   }
 
