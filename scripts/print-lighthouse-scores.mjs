@@ -1,0 +1,49 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+const root = process.argv[2];
+if (!root || !fs.existsSync(root)) {
+  throw new Error('Lighthouse çıktı klasörü bulunamadı: ' + root);
+}
+
+function collectJsonFiles(directory) {
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
+    const fullPath = path.join(directory, entry.name);
+    return entry.isDirectory()
+      ? collectJsonFiles(fullPath)
+      : entry.isFile() && entry.name.endsWith('.json') ? [fullPath] : [];
+  });
+}
+
+const reports = collectJsonFiles(root)
+  .map(file => {
+    try {
+      return { file, report: JSON.parse(fs.readFileSync(file, 'utf8')) };
+    } catch {
+      return null;
+    }
+  })
+  .filter(item => item?.report?.categories && item?.report?.audits);
+
+if (!reports.length) {
+  throw new Error('Lighthouse JSON raporu bulunamadı: ' + root);
+}
+
+for (const { file, report } of reports) {
+  const categories = report.categories;
+  const scores = Object.fromEntries(
+    ['performance', 'accessibility', 'best-practices', 'seo']
+      .map(key => [key, categories[key]?.score == null ? null : Math.round(categories[key].score * 100)])
+  );
+  const audits = report.audits || {};
+  const metrics = Object.fromEntries(
+    ['first-contentful-paint', 'largest-contentful-paint', 'speed-index', 'total-blocking-time', 'cumulative-layout-shift']
+      .map(key => [key, audits[key]?.displayValue || 'N/A'])
+  );
+  console.log(JSON.stringify({
+    report: file,
+    url: report.requestedUrl || report.finalDisplayedUrl,
+    scores,
+    metrics
+  }));
+}
