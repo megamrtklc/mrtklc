@@ -60,8 +60,8 @@ try {
       posterFallbackUsed: image.dataset.perdePosterFallbackApplied === 'true',
       placeholderUsed: image.dataset.perdeFallbackApplied === 'true'
     }));
-    assert.ok(imageState.naturalWidth > 0 && !imageState.placeholderUsed, 'Hero görseli gerçek bir görsele yüklenemedi');
     console.log('HERO IMAGE:', JSON.stringify(imageState));
+    assert.ok(imageState.naturalWidth > 0 && !imageState.placeholderUsed, 'Hero görseli gerçek bir görsele yüklenemedi');
   });
 
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
