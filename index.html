@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
-    <link rel="preload" as="fetch" href="./filmvediziler.json" crossorigin="anonymous" fetchpriority="low">
+    <link rel="preload" as="fetch" href="./filmvediziler.json" crossorigin="anonymous">
     <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js">
     <!-- İlk ekran manşetini yalnızca ilgili ekran boyutunda ön yükle. -->
     <link rel="preload" as="image" media="(max-width: 767px)"
@@ -35,8 +35,10 @@
     <link rel="preload" as="style" href="./tailwind.css">
     <link rel="stylesheet" href="./tailwind.css">
     <!-- İkonlar: ön yükle ama ilk çizimi bekletme. -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <!-- Inter fontları önceden istenir; CSS yerleşimden önce uygulanır. -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -1407,7 +1409,7 @@
 
                 async init() {
                     try {
-                        const response = await fetch('./filmvediziler.json', { cache: 'default', priority: 'low' });
+                        const response = await fetch('./filmvediziler.json', { cache: 'default' });
                         if (!response.ok) {
                             throw new Error('Katalog dosyası yüklenemedi (HTTP ' + response.status + ')');
                         }
