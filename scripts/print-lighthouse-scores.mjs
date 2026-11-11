@@ -40,10 +40,23 @@ for (const { file, report } of reports) {
     ['first-contentful-paint', 'largest-contentful-paint', 'speed-index', 'total-blocking-time', 'cumulative-layout-shift']
       .map(key => [key, audits[key]?.displayValue || 'N/A'])
   );
+  const findings = Object.values(audits)
+    .filter(audit => audit.score != null && audit.score < 1)
+    .sort((a, b) => (b.details?.overallSavingsMs || 0) - (a.details?.overallSavingsMs || 0))
+    .slice(0, 12)
+    .map(audit => ({
+      id: audit.id,
+      title: audit.title,
+      score: audit.score,
+      displayValue: audit.displayValue || null,
+      savingsMs: audit.details?.overallSavingsMs || 0,
+      savingsBytes: audit.details?.overallSavingsBytes || 0
+    }));
   console.log(JSON.stringify({
     report: file,
     url: report.requestedUrl || report.finalDisplayedUrl,
     scores,
-    metrics
+    metrics,
+    findings
   }));
 }
