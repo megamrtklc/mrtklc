@@ -67,28 +67,34 @@ for (const { file, report } of reports) {
     'lcp-breakdown-insight',
     'lcp-request-discovery'
   ];
-  const lcpDiagnostics = Object.fromEntries(lcpAuditIds.map(id => {
-    const audit = audits[id];
-    return [id, {
-      title: audit?.title || null,
-      displayValue: audit?.displayValue || null,
-      items: (audit?.details?.items || []).slice(0, 3).map(item => ({
-        url: item.url || item.request?.url || null,
-        snippet: item.node?.snippet || null,
-        value: item.value ?? null,
-        timing: item.timing ?? null,
-        phase: item.phase ?? null,
-        itemKeys: Object.keys(item).slice(0, 20),
-        subItems: (item.subItems?.items || []).slice(0, 3).map(sub => ({
-          url: sub.url || sub.request?.url || null,
-          value: sub.value ?? null,
-          timing: sub.timing ?? null,
-          phase: sub.phase ?? null,
-          keys: Object.keys(sub).slice(0, 12)
-        }))
+  const lcpDiagnostics = {
+    audits: Object.values(audits)
+      .filter(audit => /lcp|largest-contentful-paint/i.test(audit.id || ''))
+      .map(audit => ({
+        id: audit.id,
+        title: audit.title || null,
+        score: audit.score ?? null,
+        displayValue: audit.displayValue || null,
+        numericValue: audit.numericValue ?? null,
+        detailsType: audit.details?.type || null,
+        detailsKeys: Object.keys(audit.details || {}),
+        itemsCount: audit.details?.items?.length ?? null
+      })),
+    slowRequests: (audits['network-requests']?.details?.items || [])
+      .slice()
+      .sort((a, b) => (b.endTime || 0) - (a.endTime || 0))
+      .slice(0, 12)
+      .map(item => ({
+        url: item.url || null,
+        resourceType: item.resourceType || null,
+        startTime: item.startTime ?? null,
+        endTime: item.endTime ?? null,
+        duration: item.duration ?? null,
+        transferSize: item.transferSize ?? null,
+        priority: item.priority || null,
+        statusCode: item.statusCode ?? null
       }))
-    }];
-  }));
+  };
   console.log(JSON.stringify({
     report: file,
     url: report.requestedUrl || report.finalDisplayedUrl,
