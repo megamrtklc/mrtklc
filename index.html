@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,13 +27,13 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-[#141414] text-white font-sans antialiased selection:bg-red-600 selection:text-white">
+<body class="bg-[#141414] text-white font-sans antialiased selection:bg-red-600 selection:text-white transition-colors duration-300" id="bodyRoot">
 
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm" id="navbar">
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-b from-black/90 via-black/50 to-transparent backdrop-blur-md" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-8">
-                <a href="#" class="text-red-600 font-black text-2xl tracking-wider">CINEVERSE</a>
+                <a href="#" class="text-red-600 font-black text-2xl tracking-wider cursor-pointer" onclick="filterCategory('all')">CINEVERSE</a>
                 <div class="hidden md:flex space-x-6 text-sm font-medium">
                     <a href="#" class="hover:text-gray-300 transition" onclick="filterCategory('all')">Ana Sayfa</a>
                     <a href="#" class="hover:text-gray-300 transition" onclick="filterCategory('Dizi')">Diziler</a>
@@ -44,36 +44,36 @@
             
             <div class="flex items-center space-x-4">
                 <div class="relative">
-                    <input type="text" id="searchInput" placeholder="Film, dizi arayın..." class="bg-black/50 border border-gray-700 rounded-full px-4 py-1.5 text-sm text-white focus:outline-none focus:border-red-600 w-48 sm:w-64 transition-all">
+                    <input type="text" id="searchInput" placeholder="Film, dizi, oyuncu ara..." class="bg-black/50 border border-gray-700 rounded-full px-4 py-1.5 text-sm text-white focus:outline-none focus:border-red-600 w-40 sm:w-64 transition-all">
                     <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-400 text-sm"></i>
                 </div>
                 
-                <!-- Profil Menüsü / Tema Seçici -->
-                <div class="flex items-center space-x-3">
-                    <select id="themeSelector" class="bg-gray-800 text-xs text-white rounded px-2 py-1 border border-gray-700 focus:outline-none">
-                        <option value="dark">Karanlık Mod</option>
-                        <option value="gray">Modern Gri</option>
-                        <option value="light">Fil Dişi</option>
-                    </select>
-                    <div id="activeProfileAvatar" class="w-8 h-8 rounded bg-red-600 flex items-center justify-center font-bold cursor-pointer" onclick="toggleProfileModal()">M</div>
-                </div>
+                <!-- Tema Seçici -->
+                <select id="themeSelector" class="bg-gray-800 text-xs text-white rounded px-2 py-1.5 border border-gray-700 focus:outline-none cursor-pointer">
+                    <option value="dark">Karanlık Mod</option>
+                    <option value="gray">Modern Gri</option>
+                    <option value="light">Fil Dişi</option>
+                </select>
+
+                <!-- Profil Alanı -->
+                <div id="activeProfileAvatar" class="w-8 h-8 rounded bg-red-600 flex items-center justify-center font-bold cursor-pointer text-sm shadow hover:opacity-90 transition" onclick="toggleProfileModal()" title="Profil Değiştir">M</div>
             </div>
         </div>
     </nav>
 
     <!-- Hero / Öne Çıkan Alan -->
-    <header id="heroSection" class="relative h-[75vh] w-full flex items-end pb-16 px-4 sm:px-8 lg:px-16 bg-cover bg-center">
-        <div class="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/40 to-black/60"></div>
-        <div class="relative z-10 max-w-2xl">
-            <span id="heroBadge" class="bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider mb-3 inline-block">Öne Çıkan</span>
-            <h1 id="heroTitle" class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-4">Yükleniyor...</h1>
-            <p id="heroDesc" class="text-gray-300 text-sm sm:text-base line-clamp-3 mb-6">Lütfen bekleyin, içerikler yükleniyor.</p>
-            <div class="flex space-x-4">
-                <button id="heroPlayBtn" class="bg-white text-black font-bold px-6 py-2.5 rounded flex items-center space-x-2 hover:bg-gray-200 transition">
+    <header id="heroSection" class="relative h-[75vh] w-full flex items-end pb-16 px-4 sm:px-8 lg:px-16 bg-cover bg-center transition-all duration-700">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/30 to-black/70" id="heroGradient"></div>
+        <div class="relative z-10 max-w-2xl space-y-4">
+            <span id="heroBadge" class="bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">Öne Çıkan Yapım</span>
+            <h1 id="heroTitle" class="text-4xl sm:text-6xl font-extrabold tracking-tight">Yükleniyor...</h1>
+            <p id="heroDesc" class="text-gray-300 text-sm sm:text-base line-clamp-3">Lütfen bekleyin, içerikler sunucudan yükleniyor.</p>
+            <div class="flex space-x-4 pt-2">
+                <button id="heroPlayBtn" class="bg-white text-black font-bold px-6 py-2.5 rounded-md flex items-center space-x-2 hover:bg-gray-200 transition shadow-lg">
                     <i class="fa-solid fa-play"></i>
                     <span>Oynat</span>
                 </button>
-                <button id="heroDetailBtn" class="bg-gray-500/70 text-white font-bold px-6 py-2.5 rounded flex items-center space-x-2 hover:bg-gray-500/50 backdrop-blur transition">
+                <button id="heroDetailBtn" class="bg-gray-500/70 text-white font-bold px-6 py-2.5 rounded-md flex items-center space-x-2 hover:bg-gray-500/50 backdrop-blur transition shadow-lg">
                     <i class="fa-solid fa-circle-info"></i>
                     <span>Daha Fazla Bilgi</span>
                 </button>
@@ -81,27 +81,27 @@
         </div>
     </header>
 
-    <!-- İçerik Listeleri / Katalog -->
+    <!-- Ana İçerik / Katalog -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         <section>
-            <h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center justify-between">
-                <span>Trend Yapımlar</span>
+            <div class="flex items-center justify-between mb-4">
+                <h2 id="sectionTitle" class="text-xl sm:text-2xl font-bold">Trend Yapımlar</h2>
                 <span class="text-xs text-red-500 cursor-pointer hover:underline" onclick="filterCategory('all')">Tümünü Gör</span>
-            </h2>
-            <div id="mediaGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Dinamik Kartlar Buraya Yüklenecek -->
+            </div>
+            <div id="mediaGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                <!-- Kartlar dinamik olarak yüklenecek -->
             </div>
         </section>
     </main>
 
     <!-- Detay Modal -->
     <div id="detailModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-[#181818] w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl relative border border-gray-800">
+        <div class="bg-[#181818] text-white w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl relative border border-gray-800 my-8">
             <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-red-600 transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-            <div id="modalContent" class="p-6 sm:p-8 space-y-6">
-                <!-- Dinamik Detay İçeriği -->
+            <div id="modalContent" class="p-6 sm:p-8 space-y-6 max-h-[85vh] overflow-y-auto no-scrollbar">
+                <!-- Dinamik detay içeriği buraya gelecek -->
             </div>
         </div>
     </div>
@@ -111,58 +111,109 @@
         <button onclick="closeVideo()" class="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-gray-800/80 text-white flex items-center justify-center hover:bg-red-600 transition">
             <i class="fa-solid fa-xmark text-xl"></i>
         </button>
-        <div class="w-full h-full flex items-center justify-center p-4">
-            <iframe id="videoPlayerFrame" class="w-full max-w-5xl aspect-video rounded-lg shadow-2xl" src="" frameborder="0" allowfullscreen></iframe>
+        <div class="w-full h-full flex flex-col items-center justify-center p-4 relative">
+            <div id="videoContainer" class="w-full max-w-5xl aspect-video rounded-lg shadow-2xl bg-black flex items-center justify-center overflow-hidden">
+                <iframe id="videoPlayerFrame" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <!-- Dizi Bölüm Listesi Seçici (Eğer diziyse video modal içinde gösterilir) -->
+            <div id="episodeSelectorContainer" class="mt-4 w-full max-w-5xl hidden">
+                <div class="flex space-x-2 overflow-x-auto pb-2 no-scrollbar" id="episodeListRow"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profil Seçim / Yönetim Modal -->
+    <div id="profileModal" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center p-4">
+        <div class="max-w-md w-full text-center space-y-6">
+            <h2 class="text-3xl font-bold">Kim İzliyor?</h2>
+            <div class="flex justify-center space-x-6" id="profileListContainer">
+                <div onclick="selectProfile('Murat', 'M')" class="cursor-pointer group">
+                    <div class="w-20 h-20 rounded-md bg-red-600 flex items-center justify-center text-3xl font-bold group-hover:ring-4 ring-white transition">M</div>
+                    <span class="mt-2 block text-sm text-gray-400 group-hover:text-white">Murat</span>
+                </div>
+                <div onclick="selectProfile('Misafir', 'G')" class="cursor-pointer group">
+                    <div class="w-20 h-20 rounded-md bg-blue-600 flex items-center justify-center text-3xl font-bold group-hover:ring-4 ring-white transition">G</div>
+                    <span class="mt-2 block text-sm text-gray-400 group-hover:text-white">Misafir</span>
+                </div>
+            </div>
+            <button onclick="toggleProfileModal()" class="text-xs text-gray-500 hover:underline">Kapat</button>
         </div>
     </div>
 
     <!-- JavaScript Entegrasyon Mantığı -->
     <script>
         let allMediaData = [];
+        let watchlist = JSON.parse(localStorage.getItem('cineverse_watchlist')) || [];
+        let currentActiveProfile = localStorage.getItem('cineverse_profile') || 'Murat';
 
-        // Sayfa yüklendiğinde filmvediziler.json dosyasını çek
         document.addEventListener("DOMContentLoaded", () => {
+            // Profil avatarını güncelle
+            document.getElementById('activeProfileAvatar').innerText = currentActiveProfile.charAt(0).toUpperCase();
+
+            // Tema tercihini yükle
+            const savedTheme = localStorage.getItem('cineverse_theme') || 'dark';
+            document.getElementById('themeSelector').value = savedTheme;
+            applyTheme(savedTheme);
+
+            // JSON Verisini Çek
             fetch('filmvediziler.json')
                 .then(response => {
-                    if (!response.ok) throw new Error("JSON dosyası bulunamadı.");
+                    if (!response.ok) throw new Error("JSON dosyası yüklenemedi.");
                     return response.json();
                 })
                 .then(data => {
                     allMediaData = data;
-                    initApp(allMediaData);
+                    if (data.length > 0) {
+                        setupHero(data[0]);
+                        renderGrid(data);
+                    }
                 })
                 .catch(error => {
-                    console.error("Veri yükleme hatası:", error);
-                    // Hata durumunda örnek veri veya kullanıcı bilgilendirmesi
-                    document.getElementById('mediaGrid').innerHTML = `<p class="col-span-full text-center text-gray-500 py-12">İçerikler yüklenemedi. filmvediziler.json dosyasının dizinde olduğundan emin olun.</p>`;
+                    console.error("Hata:", error);
+                    document.getElementById('mediaGrid').innerHTML = `
+                        <div class="col-span-full text-center py-16 text-gray-400 space-y-2">
+                            <i class="fa-solid fa-triangle-exclamation text-3xl text-red-500"></i>
+                            <p>İçerikler yüklenemedi.</p>
+                            <p class="text-xs text-gray-500">Lütfen 'filmvediziler.json' dosyasının aynı dizinde olduğundan emin olun.</p>
+                        </div>`;
                 });
 
-            // Tema Değiştirici Dinleyicisi
+            // Dinleyiciler
             document.getElementById('themeSelector').addEventListener('change', (e) => {
-                changeTheme(e.target.value);
+                const theme = e.target.value;
+                localStorage.setItem('cineverse_theme', theme);
+                applyTheme(theme);
             });
 
-            // Arama Dinleyicisi
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 const query = e.target.value.toLowerCase();
-                const filtered = allMediaData.filter(item => item.title.toLowerCase().includes(query) || item.genre.toLowerCase().includes(query));
+                const filtered = allMediaData.filter(item => 
+                    item.title.toLowerCase().includes(query) || 
+                    (item.genre && item.genre.toLowerCase().includes(query)) ||
+                    (item.cast && item.cast.some(actor => actor.toLowerCase().includes(query)))
+                );
                 renderGrid(filtered);
+                document.getElementById('sectionTitle').innerText = query ? `"${query}" için arama sonuçları` : "Trend Yapımlar";
             });
         });
 
-        function initApp(data) {
-            if (data.length > 0) {
-                setupHero(data[0]);
-                renderGrid(data);
+        function applyTheme(theme) {
+            const body = document.getElementById('bodyRoot');
+            if (theme === 'light') {
+                body.className = 'bg-gray-100 text-gray-900 font-sans antialiased transition-colors duration-300';
+            } else if (theme === 'gray') {
+                body.className = 'bg-gray-900 text-gray-100 font-sans antialiased transition-colors duration-300';
+            } else {
+                body.className = 'bg-[#141414] text-white font-sans antialiased transition-colors duration-300';
             }
         }
 
         function setupHero(item) {
             const hero = document.getElementById('heroSection');
-            hero.style.backgroundImage = `url('${item.image || item.poster}')`;
+            hero.style.backgroundImage = `url('${item.poster || item.image}')`;
             document.getElementById('heroTitle').innerText = item.title;
             document.getElementById('heroDesc').innerText = item.description || item.summary || '';
-            document.getElementById('heroPlayBtn').onclick = () => playVideo(item.trailer || item.videoUrl);
+            document.getElementById('heroPlayBtn').onclick = () => playMedia(item);
             document.getElementById('heroDetailBtn').onclick = () => openModal(item);
         }
 
@@ -170,18 +221,29 @@
             const grid = document.getElementById('mediaGrid');
             grid.innerHTML = '';
 
+            if (data.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center text-gray-500 py-12">Aradığınız kriterlere uygun içerik bulunamadı.</p>`;
+                return;
+            }
+
             data.forEach(item => {
+                const isFavorited = watchlist.some(w => w.title === item.title);
                 const card = document.createElement('div');
-                card.className = 'group relative bg-[#1f1f1f] rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 hover:z-20';
+                card.className = 'group relative bg-cardBg rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 hover:z-20 border border-gray-800/50';
                 card.innerHTML = `
-                    <div class="aspect-[2/3] w-full bg-gray-800 overflow-hidden">
-                        <img src="${item.poster || item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:opacity-90 transition">
+                    <div class="aspect-[2/3] w-full bg-gray-800 overflow-hidden relative">
+                        <img src="${item.poster || item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:opacity-90 transition duration-300">
+                        <div class="absolute top-2 right-2 z-10">
+                            <button onclick="event.stopPropagation(); toggleWatchlist('${item.title}')" class="w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-red-600 transition">
+                                <i class="fa-solid ${isFavorited ? 'fa-check text-red-500' : 'fa-plus'} text-xs"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="p-3">
-                        <h3 class="font-bold text-sm truncate text-white">${item.title}</h3>
+                        <h3 class="font-bold text-sm truncate">${item.title}</h3>
                         <div class="flex items-center justify-between text-xs text-gray-400 mt-1">
                             <span>${item.year || '2023'}</span>
-                            <span class="bg-red-600/20 text-red-500 px-1.5 py-0.5 rounded">${item.type || 'Film'}</span>
+                            <span class="bg-red-600/20 text-red-500 px-1.5 py-0.5 rounded font-medium">${item.type || 'Film'}</span>
                         </div>
                     </div>
                 `;
@@ -191,21 +253,55 @@
         }
 
         function filterCategory(type) {
+            document.getElementById('searchInput').value = '';
             if (type === 'all') {
                 renderGrid(allMediaData);
+                document.getElementById('sectionTitle').innerText = "Trend Yapımlar";
             } else {
                 const filtered = allMediaData.filter(item => item.type && item.type.toLowerCase() === type.toLowerCase());
                 renderGrid(filtered);
+                document.getElementById('sectionTitle').innerText = type === 'Dizi' ? "Popüler Diziler" : "Popüler Filmler";
             }
+        }
+
+        function loadWatchlist() {
+            renderGrid(watchlist);
+            document.getElementById('sectionTitle').innerText = "Listem (İzleme Listesi)";
+        }
+
+        function toggleWatchlist(title) {
+            const item = allMediaData.find(i => i.title === title);
+            if (!item) return;
+            const index = watchlist.findIndex(w => w.title === title);
+            if (index > -1) {
+                watchlist.splice(index, 1);
+            } else {
+                watchlist.push(item);
+            }
+            localStorage.setItem('cineverse_watchlist', JSON.stringify(watchlist));
+            renderGrid(allMediaData);
         }
 
         function openModal(item) {
             const modal = document.getElementById('detailModal');
             const content = document.getElementById('modalContent');
 
+            let castHtml = item.cast ? `<p class="text-xs text-gray-400"><strong class="text-white">Oyuncular:</strong> ${item.cast.join(', ')}</p>` : '';
+            let seasonsHtml = '';
+
+            if (item.type && item.type.toLowerCase() === 'dizi' && item.seasons) {
+                seasonsHtml = `<div class="mt-4 space-y-2">
+                    <h4 class="font-bold text-sm">Sezonlar ve Bölümler</h4>
+                    <div class="flex space-x-2">`;
+                item.seasons.forEach((season, sIdx) => {
+                    seasonsHtml += `<button onclick="showEpisodes(${sIdx}, '${item.title}')" class="bg-gray-800 hover:bg-red-600 px-3 py-1.5 rounded text-xs transition">Sezon ${season.seasonNumber || sIdx+1}</button>`;
+                });
+                seasonsHtml += `</div></div>`;
+            }
+
             content.innerHTML = `
                 <div class="flex flex-col md:flex-row gap-6">
-                    <img src="${item.poster || item.image}" alt="${item.title}" class="w-full md:w-1/3 rounded-lg object-cover shadow-md">
+                    <img src="${item.poster || item.image}" alt="${item.title}" class="w-full md:w-1/3 rounded-lg object-cover shadow-md aspect-[2/3]">
                     <div class="space-y-4 flex-1">
                         <h2 class="text-3xl font-bold">${item.title}</h2>
                         <div class="flex items-center space-x-3 text-sm text-gray-400">
@@ -214,8 +310,10 @@
                             <span class="text-red-500 font-semibold">${item.genre || ''}</span>
                         </div>
                         <p class="text-gray-300 text-sm leading-relaxed">${item.description || item.summary || 'Açıklama bulunmuyor.'}</p>
+                        ${castHtml}
+                        ${seasonsHtml}
                         <div class="pt-4 flex space-x-3">
-                            <button onclick="playVideo('${item.trailer || item.videoUrl}')" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded flex items-center space-x-2 transition">
+                            <button onclick="playMedia('${item.title}')" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-md flex items-center space-x-2 transition shadow">
                                 <i class="fa-solid fa-play"></i><span>Hemen İzle</span>
                             </button>
                         </div>
@@ -229,34 +327,73 @@
             document.getElementById('detailModal').classList.add('hidden');
         }
 
-        function playVideo(url) {
+        function playMedia(input) {
+            let item = typeof input === 'string' ? allMediaData.find(i => i.title === input) : input;
+            if (!item) return;
+
+            closeModal();
             const videoModal = document.getElementById('videoModal');
             const iframe = document.getElementById('videoPlayerFrame');
-            // Embed dönüşümü (YouTube vb. linkler için)
-            let embedUrl = url;
-            if (url && url.includes('watch?v=')) {
-                embedUrl = url.replace('watch?v=', 'embed/');
+            const epContainer = document.getElementById('episodeSelectorContainer');
+            
+            let url = item.trailer || item.videoUrl || '';
+            if (url.includes('watch?v=')) {
+                url = url.replace('watch?v=', 'embed/');
             }
-            iframe.src = embedUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+            iframe.src = url || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+
+            // Eğer diziyse ve sezonları varsa alt kısma bölümleri dizelim
+            if (item.type && item.type.toLowerCase() === 'dizi' && item.seasons && item.seasons.length > 0) {
+                epContainer.classList.remove('hidden');
+                renderEpisodeList(item.seasons[0].episodes);
+            } else {
+                epContainer.classList.add('hidden');
+            }
+
             videoModal.classList.remove('hidden');
+        }
+
+        function showEpisodes(seasonIndex, title) {
+            const item = allMediaData.find(i => i.title === title);
+            if (item && item.seasons && item.seasons[seasonIndex]) {
+                renderEpisodeList(item.seasons[seasonIndex].episodes);
+            }
+        }
+
+        function renderEpisodeList(episodes) {
+            const row = document.getElementById('episodeListRow');
+            row.innerHTML = '';
+            episodes.forEach((ep, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-gray-800 hover:bg-red-600 px-4 py-2 rounded text-xs whitespace-nowrap transition flex flex-col items-start';
+                btn.innerHTML = `<span class="font-bold">${idx+1}. Bölüm</span><span class="text-[10px] text-gray-400 truncate max-w-[120px]">${ep.title || 'Bölüm'}</span>`;
+                btn.onclick = () => {
+                    if (ep.videoUrl) {
+                        let eUrl = ep.videoUrl;
+                        if (eUrl.includes('watch?v=')) eUrl = eUrl.replace('watch?v=', 'embed/');
+                        document.getElementById('videoPlayerFrame').src = eUrl;
+                    }
+                };
+                row.appendChild(btn);
+            });
         }
 
         function closeVideo() {
             const videoModal = document.getElementById('videoModal');
-            const iframe = document.getElementById('videoPlayerFrame');
-            iframe.src = '';
+            document.getElementById('videoPlayerFrame').src = '';
             videoModal.classList.add('hidden');
         }
 
-        function changeTheme(theme) {
-            const body = document.body;
-            if (theme === 'light') {
-                body.className = 'bg-gray-100 text-gray-900 font-sans antialiased';
-            } else if (theme === 'gray') {
-                body.className = 'bg-gray-900 text-gray-100 font-sans antialiased';
-            } else {
-                body.className = 'bg-[#141414] text-white font-sans antialiased';
-            }
+        function toggleProfileModal() {
+            const modal = document.getElementById('profileModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function selectProfile(name, initial) {
+            currentActiveProfile = name;
+            localStorage.setItem('cineverse_profile', name);
+            document.getElementById('activeProfileAvatar').innerText = initial;
+            toggleProfileModal();
         }
     </script>
 </body>
