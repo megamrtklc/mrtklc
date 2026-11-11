@@ -80,6 +80,25 @@ for (const { file, report } of reports) {
         detailsKeys: Object.keys(audit.details || {}),
         itemsCount: audit.details?.items?.length ?? null
       })),
+    auditDetails: Object.values(audits)
+      .filter(audit => /lcp|largest-contentful-paint/i.test(audit.id || ''))
+      .map(audit => ({
+        id: audit.id,
+        detailsType: audit.details?.type || null,
+        detailsKeys: Object.keys(audit.details || {}),
+        headings: audit.details?.headings || [],
+        items: (audit.details?.items || []).slice(0, 4).map(item => ({
+          keys: Object.keys(item || {}),
+          phase: item.phase || null,
+          duration: item.duration ?? null,
+          timing: item.timing || null,
+          url: item.url || null,
+          size: item.size ?? null,
+          selector: item.node?.selector || null,
+          snippet: item.node?.snippet || null,
+          subItems: item.subItems?.items?.slice(0, 4) || null
+        }))
+      })),
     slowRequests: (audits['network-requests']?.details?.items || [])
       .slice()
       .sort((a, b) => (b.endTime || 0) - (a.endTime || 0))
