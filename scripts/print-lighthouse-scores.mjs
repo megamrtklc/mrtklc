@@ -119,7 +119,24 @@ for (const { file, report } of reports) {
       url: item.url || null,
       statusCode: item.statusCode,
       resourceType: item.resourceType || null
-    }))
+    })),
+    layoutShiftElements: (audits['layout-shift-elements']?.details?.items || []).slice(0, 10).map(item => ({
+      selector: item.node?.selector || null,
+      snippet: item.node?.snippet || null,
+      score: item.score ?? null,
+      previousRect: item.previousRect || null,
+      currentRect: item.currentRect || null
+    })),
+    layoutShiftAuditIds: Object.values(audits)
+      .filter(audit => /layout-shift/i.test(audit.id || ''))
+      .map(audit => ({
+        id: audit.id,
+        score: audit.score ?? null,
+        displayValue: audit.displayValue || null,
+        detailsType: audit.details?.type || null,
+        detailsKeys: Object.keys(audit.details || {}),
+        itemsCount: audit.details?.items?.length ?? null
+      }))
   };
   console.log(JSON.stringify({
     report: file,
