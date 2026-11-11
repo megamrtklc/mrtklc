@@ -61,7 +61,7 @@
         </section>
 
         <section class="view" id="view-catalog">
-          <div class="page-heading"><div><div class="eyebrow">İÇERİK MERKEZİ</div><h1>Film &amp; Diziler</h1><p>Katalog kayıtlarını ara, filtrele ve detaylarını incele.</p></div><button class="primary-button" id="add-content" disabled title="Güvenli yayınlama bağlantısı kurulunca açılacak">＋ Yeni içerik</button></div>
+          <div class="page-heading"><div><div class="eyebrow">İÇERİK MERKEZİ</div><h1>Film &amp; Diziler</h1><p>Katalog kayıtlarını ara, filtrele ve detaylarını incele.</p></div><button class="primary-button" id="add-content" disabled title="Korumalı yönetim bağlantısı gerekli">＋ Yeni içerik</button></div>
           <div class="catalog-toolbar"><label class="search-box"><span>⌕</span><input id="catalog-search" type="search" placeholder="Başlık, yönetmen veya oyuncu ara…"></label><select id="type-filter"><option value="all">Tüm türler</option><option value="movie">Filmler</option><option value="tv">Diziler</option></select><select id="year-filter"><option value="all">Tüm yıllar</option></select><span class="result-count" id="result-count">Katalog okunuyor…</span></div>
           <div class="catalog-table-wrap"><table class="catalog-table"><thead><tr><th>YAPIM</th><th>TÜR</th><th>YIL</th><th>PUAN</th><th>TMDB</th><th></th></tr></thead><tbody id="catalog-rows"><tr><td colspan="6" class="empty-cell">Katalog yükleniyor…</td></tr></tbody></table></div>
           <div class="pagination"><span id="page-info">—</span><div><button id="prev-page" disabled>←</button><button id="next-page" disabled>→</button></div></div>
@@ -76,6 +76,31 @@
       </div>
     </main>
   </div>
+  <dialog class="editor-dialog" id="content-dialog" aria-labelledby="editor-title">
+    <form id="content-form" class="editor-form">
+      <div class="editor-head"><div><div class="eyebrow">KATALOG YÖNETİMİ</div><h2 id="editor-title">Yeni içerik</h2><p>Kaydettiğinde katalog GitHub deposuna yeni bir sürüm olarak gönderilir.</p></div><button type="button" class="dialog-close" id="close-editor" aria-label="Kapat">×</button></div>
+      <input type="hidden" id="edit-id">
+      <div class="editor-grid">
+        <label class="field wide"><span>Yapım adı *</span><input id="field-title" required maxlength="180" placeholder="Film veya dizi adı"></label>
+        <label class="field"><span>Tür</span><select id="field-type"><option value="movie">Film</option><option value="tv">Dizi</option></select></label>
+        <label class="field"><span>Yıl</span><input id="field-year" type="number" min="1880" max="2100" placeholder="2026"></label>
+        <label class="field"><span>IMDb / kullanıcı puanı</span><input id="field-rating" maxlength="12" placeholder="7.8"></label>
+        <label class="field"><span>Tür etiketi</span><input id="field-genre" maxlength="80" placeholder="Dram"></label>
+        <label class="field wide"><span>Kategori / türler</span><input id="field-category" maxlength="180" placeholder="Dram / Gerilim"></label>
+        <label class="field"><span>Süre</span><input id="field-duration" maxlength="40" placeholder="120 dk"></label>
+        <label class="field"><span>Ülke kodu</span><input id="field-country" maxlength="8" placeholder="US"></label>
+        <label class="field wide"><span>Yönetmen</span><input id="field-director" maxlength="240" placeholder="Yönetmen adı"></label>
+        <label class="field wide"><span>Yayın platformu</span><input id="field-platform" maxlength="100" placeholder="Netflix, Prime Video…"></label>
+        <label class="field wide"><span>Afiş görseli URL</span><input id="field-image" type="url" placeholder="https://…"></label>
+        <label class="field wide"><span>Arka plan görseli URL</span><input id="field-backdrop" type="url" placeholder="https://…"></label>
+        <label class="field wide"><span>Fragman URL</span><input id="field-trailer" type="url" placeholder="https://…"></label>
+        <label class="field"><span>Sezon sayısı</span><input id="field-seasons" type="number" min="1" max="100" placeholder="Dizi için"></label>
+        <label class="field"><span>Bölüm sayısı</span><input id="field-episodes" type="number" min="1" max="10000" placeholder="Dizi için"></label>
+        <label class="field wide"><span>Konu</span><textarea id="field-desc" rows="4" maxlength="5000" placeholder="Yapımın kısa konusu…"></textarea></label>
+      </div>
+      <div class="editor-footer"><span id="editor-status">Değişiklikler güvenli API üzerinden kaydedilir.</span><div><button type="button" class="secondary-button" id="cancel-editor">Vazgeç</button><button type="submit" class="primary-button" id="save-content">Kaydet ve yayınla</button></div></div>
+    </form>
+  </dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="./admin.js" defer></script>
 </body>
