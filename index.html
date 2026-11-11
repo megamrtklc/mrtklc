@@ -4,8 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineVerse Ultimate Pro</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Kritik harici kaynaklara erken bağlantı -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
+    <!-- Tailwind CSS: HTML ayrıştırmasını bloke etmeden yükle -->
+    <script defer src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -1200,7 +1207,7 @@
 
                 async init() {
                     try {
-                        const response = await fetch('./filmvediziler.json', { cache: 'no-cache' });
+                        const response = await fetch('./filmvediziler.json', { cache: 'default' });
                         if (!response.ok) {
                             throw new Error('Katalog dosyası yüklenemedi (HTTP ' + response.status + ')');
                         }
