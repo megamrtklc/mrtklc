@@ -69,6 +69,7 @@
                         <span>İzleme Listem</span>
                         <span class="px-1.5 py-0.2 bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-full text-[10px]" x-text="watchlist.length"></span>
                     </a>
+                    <a href="#" @click.prevent="navigateTo('stats')" :class="currentPage === 'stats' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">İstatistikler</a>
                 </nav>
             </div>
             
@@ -770,6 +771,103 @@
                 </div>
             </div>
         </template>
+
+        <!-- ==================== WATCHING STATISTICS PAGE ==================== -->
+        <template x-if="currentPage === 'stats'">
+            <div class="w-full px-6 sm:px-12 pt-8 space-y-7 pb-16">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-500 mb-2">CINEVERSE • KİŞİSEL RAPOR</p>
+                        <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-wide text-gray-900 dark:text-white">İzleme İstatistikleri</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2" x-text="currentProfile.name + ' için kaydedilen izleme ilerlemesi'"></p>
+                    </div>
+                    <div :class="getCardClass()" class="rounded-xl border px-4 py-2.5 flex items-center gap-2 text-xs font-bold text-gray-600 dark:text-gray-300">
+                        <i class="fa-solid fa-user-circle text-rose-500"></i>
+                        <span x-text="currentProfile.name"></span>
+                        <span class="text-gray-400">•</span>
+                        <span>Profil verileri</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
+                    <div :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 shadow-sm">
+                        <div class="flex items-center justify-between text-gray-500 dark:text-gray-400"><span class="text-[10px] font-black uppercase tracking-wider">Tamamlanan filmler</span><i class="fa-solid fa-circle-check text-rose-500"></i></div>
+                        <div class="mt-3 text-3xl font-black text-gray-900 dark:text-white" x-text="viewingStats.completedMovies"></div>
+                        <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400">İlerleme %90 ve üzeri</p>
+                    </div>
+                    <div :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 shadow-sm">
+                        <div class="flex items-center justify-between text-gray-500 dark:text-gray-400"><span class="text-[10px] font-black uppercase tracking-wider">Devam eden filmler</span><i class="fa-solid fa-play text-rose-500"></i></div>
+                        <div class="mt-3 text-3xl font-black text-gray-900 dark:text-white" x-text="viewingStats.inProgressMovies"></div>
+                        <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400">Kaydedilmiş ilerleme</p>
+                    </div>
+                    <div :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 shadow-sm">
+                        <div class="flex items-center justify-between text-gray-500 dark:text-gray-400"><span class="text-[10px] font-black uppercase tracking-wider">İzlenen bölümler</span><i class="fa-solid fa-tv text-rose-500"></i></div>
+                        <div class="mt-3 text-3xl font-black text-gray-900 dark:text-white" x-text="viewingStats.watchedEpisodes"></div>
+                        <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400">Sezon takip kayıtları</p>
+                    </div>
+                    <div :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 shadow-sm">
+                        <div class="flex items-center justify-between text-gray-500 dark:text-gray-400"><span class="text-[10px] font-black uppercase tracking-wider">Kaydedilen süre</span><i class="fa-solid fa-clock text-rose-500"></i></div>
+                        <div class="mt-3 text-3xl font-black text-gray-900 dark:text-white" x-text="viewingStats.savedTimeLabel"></div>
+                        <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400">Son kayıtlı oynatma konumları toplamı</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-5 gap-5">
+                    <section :class="getCardClass()" class="xl:col-span-3 rounded-2xl border p-5 sm:p-6 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                            <div>
+                                <h3 class="text-sm font-black text-gray-900 dark:text-white">İzleme ilerlemem</h3>
+                                <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">Oynatıcıda ilerlemesi kaydedilmiş filmler</p>
+                            </div>
+                            <span class="text-[10px] font-bold text-rose-500" x-text="viewingStats.progressItems.length + ' kayıt'"></span>
+                        </div>
+                        <div x-show="viewingStats.progressItems.length" class="space-y-3">
+                            <template x-for="entry in viewingStats.progressItems" :key="entry.item.id">
+                                <button @click="openWatchPage(entry.item)" class="w-full flex items-center gap-3 text-left group">
+                                    <img :src="entry.item.poster || entry.item.image" class="w-11 h-16 rounded-lg object-cover bg-gray-900 flex-shrink-0">
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center justify-between gap-2">
+                                            <span class="truncate text-xs font-bold text-gray-900 dark:text-white group-hover:text-rose-500" x-text="entry.item.title"></span>
+                                            <span class="text-[10px] font-black text-rose-500" x-text="Math.round(entry.percent) + '%'"></span>
+                                        </div>
+                                        <div class="mt-2 h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden"><div class="h-full rounded-full bg-rose-600" :style="'width:' + entry.percent + '%'"></div></div>
+                                        <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400" x-text="entry.status"></p>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                                </button>
+                            </template>
+                        </div>
+                        <div x-show="viewingStats.progressItems.length === 0" class="py-10 text-center">
+                            <i class="fa-solid fa-chart-line text-3xl text-gray-300 dark:text-gray-700"></i>
+                            <p class="mt-3 text-xs font-bold text-gray-700 dark:text-gray-200">Henüz izleme ilerlemesi yok</p>
+                            <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400">Doğrudan video oynatıp izlemeye başladığında ilerleme burada görünür.</p>
+                        </div>
+                    </section>
+
+                    <section :class="getCardClass()" class="xl:col-span-2 rounded-2xl border p-5 sm:p-6 shadow-sm space-y-4">
+                        <div class="border-b border-gray-200 dark:border-gray-800 pb-3">
+                            <h3 class="text-sm font-black text-gray-900 dark:text-white">En çok izlediğim türler</h3>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">Tamamlanan filmlerin tür dağılımı</p>
+                        </div>
+                        <div x-show="viewingStats.topGenres.length" class="space-y-4">
+                            <template x-for="genre in viewingStats.topGenres" :key="genre.name">
+                                <div>
+                                    <div class="flex items-center justify-between text-[11px] mb-1.5"><span class="font-bold text-gray-800 dark:text-gray-200" x-text="genre.name"></span><span class="text-gray-500" x-text="genre.count"></span></div>
+                                    <div class="h-2 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden"><div class="h-full rounded-full bg-rose-600" :style="'width:' + genre.percent + '%'"></div></div>
+                                </div>
+                            </template>
+                        </div>
+                        <div x-show="viewingStats.topGenres.length === 0" class="py-8 text-center text-[11px] text-gray-500 dark:text-gray-400">Tür dağılımı oluşturmak için tamamlanmış film kaydı gerekli.</div>
+                    </section>
+                </div>
+
+                <div :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <i class="fa-solid fa-circle-info text-rose-500 text-lg"></i>
+                    <p class="text-[10px] leading-relaxed text-gray-500 dark:text-gray-400">İstatistikler bu tarayıcıdaki yerel kayıtlarla hesaplanır. Bölüm takibi profile özeldir; film oynatma ilerlemesi mevcut kayıt yapısında profiller arasında ortak tutulur. Harici oynatıcı bağlantıları ve geçmişe dönük izleme kayıtları otomatik olarak ölçülemez.</p>
+                </div>
+            </div>
+        </template>
+
     </main>
 
     <!-- Footer (Full Width) -->
@@ -783,6 +881,7 @@
                 <a href="#" @click.prevent="navigateTo('home')" class="hover:text-black dark:hover:text-white transition-colors">Ana Sayfa</a>
                 <a href="#" @click.prevent="navigateTo('explore')" class="hover:text-black dark:hover:text-white transition-colors">Keşfet</a>
                 <a href="#" @click.prevent="navigateTo('watchlist')" class="hover:text-black dark:hover:text-white transition-colors">İzleme Listem</a>
+                <a href="#" @click.prevent="navigateTo('stats')" class="hover:text-black dark:hover:text-white transition-colors">İstatistikler</a>
             </div>
             <p class="text-[11px]">&copy; 2026 CineVerse Ultimate Pro. Tüm hakları saklıdır.</p>
         </div>
@@ -1402,7 +1501,7 @@
 
                     const pageMatch = hash.match(/^#\/([^/?#]+)$/);
                     const page = pageMatch ? decodeURIComponent(pageMatch[1]) : 'home';
-                    const allowedPages = ['home', 'explore', 'watchlist'];
+                    const allowedPages = ['home', 'explore', 'watchlist', 'stats'];
                     this.currentPage = allowedPages.includes(page) ? page : 'home';
                     this.syncRouteToUrl(this.currentPage, null);
                 },
@@ -1469,6 +1568,54 @@
                     this.discoveryYearTo = '';
                     this.quickFilter = 'all';
                     this.sortBy = 'default';
+                },
+
+                get viewingStats() {
+                    const safeRead = key => {
+                        try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; }
+                        catch (error) { console.warn('İstatistik kaydı okunamadı:', key, error); return {}; }
+                    };
+                    const progressMap = safeRead('perde_player_progress_v3');
+                    const progressItems = Object.entries(progressMap).map(([id, saved]) => {
+                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        const time = Math.max(0, Number(saved?.time) || 0);
+                        const duration = Math.max(0, Number(saved?.duration) || 0);
+                        if (!item || item.type !== 'movie' || !duration || !time) return null;
+                        const percent = Math.min(100, time / duration * 100);
+                        return { item, time, duration, percent, status: percent >= 90 ? 'Tamamlandı' : 'İzlemeye devam edebilirsin', savedAt: Number(saved.savedAt) || 0 };
+                    }).filter(Boolean).sort((a, b) => b.savedAt - a.savedAt);
+                    const episodeMap = safeRead('cine_episode_tracking_v1');
+                    let watchedEpisodes = 0;
+                    Object.entries(episodeMap).forEach(([key, value]) => {
+                        if (!key.startsWith(this.currentProfileId + ':')) return;
+                        Object.values(value?.watched || {}).forEach(list => {
+                            if (Array.isArray(list)) watchedEpisodes += new Set(list.map(Number)).size;
+                        });
+                    });
+                    const completed = progressItems.filter(entry => entry.percent >= 90);
+                    const inProgress = progressItems.filter(entry => entry.percent > 0 && entry.percent < 90);
+                    const totalSeconds = progressItems.reduce((sum, entry) => sum + entry.time, 0);
+                    const minutes = Math.floor(totalSeconds / 60);
+                    const savedTimeLabel = minutes >= 60
+                        ? Math.floor(minutes / 60) + ' sa ' + (minutes % 60) + ' dk'
+                        : minutes + ' dk';
+                    const genreCounts = {};
+                    completed.forEach(entry => {
+                        String(entry.item.category || entry.item.genre || 'Diğer').split(/[\/;,]/).map(value => value.trim()).filter(Boolean).forEach(genre => {
+                            genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+                        });
+                    });
+                    const topGenresRaw = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
+                    const maxGenre = Math.max(1, ...topGenresRaw.map(entry => entry[1]));
+                    const topGenres = topGenresRaw.map(([name, count]) => ({ name, count, percent: count / maxGenre * 100 }));
+                    return {
+                        completedMovies: completed.length,
+                        inProgressMovies: inProgress.length,
+                        watchedEpisodes,
+                        savedTimeLabel,
+                        progressItems: progressItems.slice(0, 8),
+                        topGenres
+                    };
                 },
 
                 getSimilarItems(item) {
