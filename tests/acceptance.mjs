@@ -51,6 +51,28 @@ try {
     assert.ok(await page.getByText('Keşfet & Arşiv Kataloğu', { exact: true }).isVisible());
   });
 
+  await check('Mobil, tablet ve masaüstünde yatay taşma kontrolü', async () => {
+    for (const viewport of [
+      { width: 320, height: 800 },
+      { width: 390, height: 844 },
+      { width: 768, height: 1024 },
+      { width: 1024, height: 900 },
+      { width: 1280, height: 900 },
+      { width: 1440, height: 1000 }
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.waitForTimeout(120);
+      const dimensions = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        page: document.documentElement.scrollWidth
+      }));
+      assert.ok(
+        dimensions.page <= dimensions.viewport + 1,
+        `Yatay taşma var: ${viewport.width}px ekranda sayfa ${dimensions.page}px genişliğinde`
+      );
+    }
+  });
+
   await check('Üç tema arasında geçiş yapılabiliyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     const themeButton = page.locator('header button').filter({ hasText: /Fil Dişi|Modern Gri|Karanlık Mod/ }).first();
