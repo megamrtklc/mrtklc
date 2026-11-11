@@ -8,6 +8,8 @@ on:
       - 'tests/acceptance.mjs'
       - '.github/workflows/browser-acceptance.yml'
       - 'index.html'
+      - 'app.js'
+      - 'tailwind.css'
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
