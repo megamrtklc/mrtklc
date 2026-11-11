@@ -95,7 +95,7 @@ try {
   });
 
   await check('İzleme listesine ekleme ve profil izolasyonu çalışıyor', async () => {
-    const saveButton = page.locator('button[@click="toggleWatchlist(selectedItem)"]');
+    const saveButton = page.locator('button').filter({ has: page.locator('span[x-text*="isInWatchlist"]') }).first();
     await saveButton.waitFor({ state: 'visible' });
     await saveButton.click();
     await page.waitForFunction(() => window.Alpine.$data(document.documentElement).isInWatchlist(window.Alpine.$data(document.documentElement).selectedItem));
