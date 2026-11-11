@@ -55,7 +55,10 @@ try {
       return image && image.complete && image.naturalWidth > 0;
     }, { timeout: 30000 });
     const imageState = await heroImage.evaluate(image => ({
-      src: image.currentSrc || image.src,
+      currentSrc: image.currentSrc,
+      src: image.src,
+      fallbackAttribute: image.getAttribute('data-fallback-src'),
+      fallbackDataset: image.dataset.fallbackSrc,
       naturalWidth: image.naturalWidth,
       posterFallbackUsed: image.dataset.perdePosterFallbackApplied === 'true',
       placeholderUsed: image.dataset.perdeFallbackApplied === 'true'
