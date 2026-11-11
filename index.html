@@ -787,7 +787,7 @@
                             </div>
 
                             <div id="castContainer" class="flex items-center space-x-3 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
-                                <template x-for="actor in selectedItem.tmdbCast.slice(0, 10)" :key="actor.name">
+                                <template x-for="actor in selectedItem.tmdbCast" :key="actor.name">
                                     <div :class="getCardClass()" class="w-24 flex-shrink-0 p-2.5 rounded-xl border flex flex-col items-center text-center space-y-2 transition-transform duration-300 hover:scale-110 cursor-pointer group">
                                         <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-md ring-2 ring-gray-300 dark:ring-gray-700 group-hover:ring-rose-500 transition-all">
                                             <img :alt="'Oyuncu fotoğrafı'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="actor.profile || 'https://placehold.co/150x150/161922/ffffff?text=Photo'" class="w-full h-full object-cover">
