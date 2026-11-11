@@ -145,11 +145,15 @@ try {
         }).observe({ type: 'layout-shift', buffered: true });
         new PerformanceObserver(list => {
           for (const entry of list.getEntries()) window.__lcpEntries.push({
-            startTime: Math.round(entry.startTime), size: entry.size,
+            startTime: Math.round(entry.startTime),
+            renderTime: Math.round(entry.renderTime || 0),
+            loadTime: Math.round(entry.loadTime || 0),
+            size: entry.size,
             tag: entry.element?.tagName || null, id: entry.element?.id || null,
             className: typeof entry.element?.className === 'string' ? entry.element.className.slice(0, 160) : '',
             src: entry.element?.currentSrc || entry.element?.src || '',
-            text: entry.element?.textContent?.trim().slice(0, 80) || ''
+            text: entry.element?.textContent?.trim().slice(0, 80) || '',
+            selector: entry.element ? [entry.element.tagName.toLowerCase(), entry.element.id ? '#' + entry.element.id : '', typeof entry.element.className === 'string' ? '.' + entry.element.className.trim().split(/\\s+/).slice(0, 3).join('.') : ''].join('') : ''
           });
         }).observe({ type: 'largest-contentful-paint', buffered: true });
         new PerformanceObserver(list => {
