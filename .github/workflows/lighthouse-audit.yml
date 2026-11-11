@@ -1,6 +1,10 @@
 name: Lighthouse Performance Audit
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/lighthouse-audit.yml'
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
@@ -12,7 +16,7 @@ permissions:
 
 jobs:
   lighthouse:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success'
     name: Lighthouse mobile and desktop audit
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -27,6 +31,9 @@ jobs:
 
       - name: Install Lighthouse CI
         run: npm install --global @lhci/cli@0.14.0
+
+      - name: Wait for Pages deployment
+        run: sleep 45
 
       - name: Audit mobile experience
         run: |
