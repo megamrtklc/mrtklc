@@ -35,11 +35,10 @@ jobs:
           lhci autorun \
             --collect.url=https://megamrtklc.github.io/mrtklc/ \
             --collect.numberOfRuns=3 \
-            --collect.outputDir=.lighthouseci/mobile \
             --upload.target=temporary-public-storage
 
       - name: Print mobile audit scores
-        run: node scripts/print-lighthouse-scores.mjs .lighthouseci/mobile
+        run: node scripts/print-lighthouse-scores.mjs .lighthouseci
 
       - name: Audit desktop experience
         run: |
@@ -47,11 +46,10 @@ jobs:
             --collect.url=https://megamrtklc.github.io/mrtklc/ \
             --collect.numberOfRuns=3 \
             --collect.settings.preset=desktop \
-            --collect.outputDir=.lighthouseci/desktop \
             --upload.target=temporary-public-storage
 
       - name: Print desktop audit scores
-        run: node scripts/print-lighthouse-scores.mjs .lighthouseci/desktop
+        run: node scripts/print-lighthouse-scores.mjs .lighthouseci
 
       - name: Save Lighthouse reports
         uses: actions/upload-artifact@v4
