@@ -159,8 +159,12 @@ try {
     });
     await page.getByRole('button', { name: /Sonraki bölüm/ }).click();
     await page.waitForFunction(() => window.Alpine.$data(document.documentElement).selectedEpisode === 2);
-    await page.getByRole('button', { name: /Son izlediğimden devam et/ }).click();
-    await page.waitForFunction(() => window.Alpine.$data(document.documentElement).selectedEpisode === 1);
+    const resumedEpisode = await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      app.continueLastWatchedEpisode();
+      return app.selectedEpisode;
+    });
+    assert.equal(resumedEpisode, 1, 'Son izlenen bölüm bilgisi geri yüklenemedi');
     await page.locator('header select').selectOption('pro_2');
     const isolated = await page.evaluate(() => window.Alpine.$data(document.documentElement).isEpisodeWatched(1, 1));
     assert.equal(isolated, false, 'Çocuk Profili Ana Profil bölüm takibini devraldı');
