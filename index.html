@@ -335,7 +335,7 @@
                         <template x-for="item in sortedFilteredCatalog" :key="item.id">
                             <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                    <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 18vw, 14vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <div class="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 flex items-center space-x-1">
                                         <i class="fa-solid fa-star text-[9px]"></i>
                                         <span x-text="item.rating"></span>
