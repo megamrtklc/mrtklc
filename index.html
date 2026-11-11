@@ -1,33 +1,263 @@
-<script>
-    // JSON verisini doğrudan buraya yapıştırıyoruz (CORS sorununu tamamen ortadan kaldırır)
-    const allMediaData = [
-        {
-            "title": "Örnek Film",
-            "type": "Film",
-            "year": "2023",
-            "genre": "Aksiyon",
-            "poster": "gorsel_linki.jpg",
-            "description": "Film açıklaması buraya gelecek..."
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineVerse Ultimate Pro</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#E50914',
+                        darkBg: '#141414',
+                        cardBg: '#1F1F1F'
+                    }
+                }
+            }
         }
-        // filmvediziler.json içeriğini buraya ekleyin
-    ];
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-[#141414] text-white font-sans antialiased selection:bg-red-600 selection:text-white">
 
-    // Sayfa açıldığında doğrudan çalışır
-    document.addEventListener("DOMContentLoaded", () => {
-        let watchlist = JSON.parse(localStorage.getItem('cineverse_watchlist')) || [];
-        let currentActiveProfile = localStorage.getItem('cineverse_profile') || 'Murat';
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-b from-black/80 to-transparent backdrop-blur-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-8">
+                <a href="#" class="text-red-600 font-black text-2xl tracking-wider">CINEVERSE</a>
+                <div class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#" class="hover:text-gray-300 transition" onclick="filterCategory('all')">Ana Sayfa</a>
+                    <a href="#" class="hover:text-gray-300 transition" onclick="filterCategory('Dizi')">Diziler</a>
+                    <a href="#" class="hover:text-gray-300 transition" onclick="filterCategory('Film')">Filmler</a>
+                    <a href="#" class="hover:text-gray-300 transition" onclick="loadWatchlist()">Listem</a>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="Film, dizi arayın..." class="bg-black/50 border border-gray-700 rounded-full px-4 py-1.5 text-sm text-white focus:outline-none focus:border-red-600 w-48 sm:w-64 transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-400 text-sm"></i>
+                </div>
+                
+                <!-- Profil Menüsü / Tema Seçici -->
+                <div class="flex items-center space-x-3">
+                    <select id="themeSelector" class="bg-gray-800 text-xs text-white rounded px-2 py-1 border border-gray-700 focus:outline-none">
+                        <option value="dark">Karanlık Mod</option>
+                        <option value="gray">Modern Gri</option>
+                        <option value="light">Fil Dişi</option>
+                    </select>
+                    <div id="activeProfileAvatar" class="w-8 h-8 rounded bg-red-600 flex items-center justify-center font-bold cursor-pointer" onclick="toggleProfileModal()">M</div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-        document.getElementById('activeProfileAvatar').innerText = currentActiveProfile.charAt(0).toUpperCase();
+    <!-- Hero / Öne Çıkan Alan -->
+    <header id="heroSection" class="relative h-[75vh] w-full flex items-end pb-16 px-4 sm:px-8 lg:px-16 bg-cover bg-center">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#141414] via-[#141414]/40 to-black/60"></div>
+        <div class="relative z-10 max-w-2xl">
+            <span id="heroBadge" class="bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider mb-3 inline-block">Öne Çıkan</span>
+            <h1 id="heroTitle" class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-4">Yükleniyor...</h1>
+            <p id="heroDesc" class="text-gray-300 text-sm sm:text-base line-clamp-3 mb-6">Lütfen bekleyin, içerikler yükleniyor.</p>
+            <div class="flex space-x-4">
+                <button id="heroPlayBtn" class="bg-white text-black font-bold px-6 py-2.5 rounded flex items-center space-x-2 hover:bg-gray-200 transition">
+                    <i class="fa-solid fa-play"></i>
+                    <span>Oynat</span>
+                </button>
+                <button id="heroDetailBtn" class="bg-gray-500/70 text-white font-bold px-6 py-2.5 rounded flex items-center space-x-2 hover:bg-gray-500/50 backdrop-blur transition">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Daha Fazla Bilgi</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
-        const savedTheme = localStorage.getItem('cineverse_theme') || 'dark';
-        document.getElementById('themeSelector').value = savedTheme;
-        applyTheme(savedTheme);
+    <!-- İçerik Listeleri / Katalog -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+        <section>
+            <h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center justify-between">
+                <span>Trend Yapımlar</span>
+                <span class="text-xs text-red-500 cursor-pointer hover:underline" onclick="filterCategory('all')">Tümünü Gör</span>
+            </h2>
+            <div id="mediaGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- Dinamik Kartlar Buraya Yüklenecek -->
+            </div>
+        </section>
+    </main>
 
-        if (allMediaData.length > 0) {
-            setupHero(allMediaData[0]);
-            renderGrid(allMediaData);
+    <!-- Detay Modal -->
+    <div id="detailModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-[#181818] w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl relative border border-gray-800">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-red-600 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="modalContent" class="p-6 sm:p-8 space-y-6">
+                <!-- Dinamik Detay İçeriği -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Oynatıcı Modal -->
+    <div id="videoModal" class="fixed inset-0 z-50 hidden bg-black flex items-center justify-center">
+        <button onclick="closeVideo()" class="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-gray-800/80 text-white flex items-center justify-center hover:bg-red-600 transition">
+            <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+        <div class="w-full h-full flex items-center justify-center p-4">
+            <iframe id="videoPlayerFrame" class="w-full max-w-5xl aspect-video rounded-lg shadow-2xl" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- JavaScript Entegrasyon Mantığı -->
+    <script>
+        let allMediaData = [];
+
+        // Sayfa yüklendiğinde filmvediziler.json dosyasını çek
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('filmvediziler.json')
+                .then(response => {
+                    if (!response.ok) throw new Error("JSON dosyası bulunamadı.");
+                    return response.json();
+                })
+                .then(data => {
+                    allMediaData = data;
+                    initApp(allMediaData);
+                })
+                .catch(error => {
+                    console.error("Veri yükleme hatası:", error);
+                    // Hata durumunda örnek veri veya kullanıcı bilgilendirmesi
+                    document.getElementById('mediaGrid').innerHTML = `<p class="col-span-full text-center text-gray-500 py-12">İçerikler yüklenemedi. filmvediziler.json dosyasının dizinde olduğundan emin olun.</p>`;
+                });
+
+            // Tema Değiştirici Dinleyicisi
+            document.getElementById('themeSelector').addEventListener('change', (e) => {
+                changeTheme(e.target.value);
+            });
+
+            // Arama Dinleyicisi
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = allMediaData.filter(item => item.title.toLowerCase().includes(query) || item.genre.toLowerCase().includes(query));
+                renderGrid(filtered);
+            });
+        });
+
+        function initApp(data) {
+            if (data.length > 0) {
+                setupHero(data[0]);
+                renderGrid(data);
+            }
         }
-        
-        // ... diğer dinleyiciler aynı kalır
-    });
-</script>
+
+        function setupHero(item) {
+            const hero = document.getElementById('heroSection');
+            hero.style.backgroundImage = `url('${item.image || item.poster}')`;
+            document.getElementById('heroTitle').innerText = item.title;
+            document.getElementById('heroDesc').innerText = item.description || item.summary || '';
+            document.getElementById('heroPlayBtn').onclick = () => playVideo(item.trailer || item.videoUrl);
+            document.getElementById('heroDetailBtn').onclick = () => openModal(item);
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('mediaGrid');
+            grid.innerHTML = '';
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'group relative bg-[#1f1f1f] rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 hover:z-20';
+                card.innerHTML = `
+                    <div class="aspect-[2/3] w-full bg-gray-800 overflow-hidden">
+                        <img src="${item.poster || item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:opacity-90 transition">
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-bold text-sm truncate text-white">${item.title}</h3>
+                        <div class="flex items-center justify-between text-xs text-gray-400 mt-1">
+                            <span>${item.year || '2023'}</span>
+                            <span class="bg-red-600/20 text-red-500 px-1.5 py-0.5 rounded">${item.type || 'Film'}</span>
+                        </div>
+                    </div>
+                `;
+                card.onclick = () => openModal(item);
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(type) {
+            if (type === 'all') {
+                renderGrid(allMediaData);
+            } else {
+                const filtered = allMediaData.filter(item => item.type && item.type.toLowerCase() === type.toLowerCase());
+                renderGrid(filtered);
+            }
+        }
+
+        function openModal(item) {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('modalContent');
+
+            content.innerHTML = `
+                <div class="flex flex-col md:flex-row gap-6">
+                    <img src="${item.poster || item.image}" alt="${item.title}" class="w-full md:w-1/3 rounded-lg object-cover shadow-md">
+                    <div class="space-y-4 flex-1">
+                        <h2 class="text-3xl font-bold">${item.title}</h2>
+                        <div class="flex items-center space-x-3 text-sm text-gray-400">
+                            <span>${item.year || ''}</span>
+                            <span class="border border-gray-600 px-1.5 py-0.5 text-xs rounded">${item.rating || '13+'}</span>
+                            <span class="text-red-500 font-semibold">${item.genre || ''}</span>
+                        </div>
+                        <p class="text-gray-300 text-sm leading-relaxed">${item.description || item.summary || 'Açıklama bulunmuyor.'}</p>
+                        <div class="pt-4 flex space-x-3">
+                            <button onclick="playVideo('${item.trailer || item.videoUrl}')" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-play"></i><span>Hemen İzle</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function playVideo(url) {
+            const videoModal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoPlayerFrame');
+            // Embed dönüşümü (YouTube vb. linkler için)
+            let embedUrl = url;
+            if (url && url.includes('watch?v=')) {
+                embedUrl = url.replace('watch?v=', 'embed/');
+            }
+            iframe.src = embedUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+            videoModal.classList.remove('hidden');
+        }
+
+        function closeVideo() {
+            const videoModal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoPlayerFrame');
+            iframe.src = '';
+            videoModal.classList.add('hidden');
+        }
+
+        function changeTheme(theme) {
+            const body = document.body;
+            if (theme === 'light') {
+                body.className = 'bg-gray-100 text-gray-900 font-sans antialiased';
+            } else if (theme === 'gray') {
+                body.className = 'bg-gray-900 text-gray-100 font-sans antialiased';
+            } else {
+                body.className = 'bg-[#141414] text-white font-sans antialiased';
+            }
+        }
+    </script>
+</body>
+</html>
