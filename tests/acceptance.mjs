@@ -104,7 +104,7 @@ try {
     await page.getByText('İzleme Listesi Boş', { exact: true }).waitFor({ state: 'visible' });
 
     await page.locator('header select').selectOption('pro_1');
-    await page.waitForFunction(() => window.Alpine.$data(document.documentElement).watchlist.some(item => String(item.id) === String(adaletId)));
+    await page.waitForFunction(expectedId => window.Alpine.$data(document.documentElement).watchlist.some(item => String(item.id) === String(expectedId)), adaletId);
     await page.locator('header nav a').filter({ hasText: 'İzleme Listem' }).first().click();
     await page.getByRole('heading', { name: 'Ana Profil - İzleme Listem' }).waitFor({ state: 'visible' });
     await page.getByText('Adalet 2', { exact: true }).waitFor({ state: 'visible' });
@@ -116,7 +116,7 @@ try {
     await page.locator('main button').filter({ hasText: 'Adalet 2' }).first().click();
     await page.waitForURL(/#\/watch\/archive-125$/);
     await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => window.Alpine && window.Alpine.$data(document.documentElement)?.selectedItem?.id === adaletId, { timeout: 30000 });
+    await page.waitForFunction(expectedId => window.Alpine && String(window.Alpine.$data(document.documentElement)?.selectedItem?.id) === String(expectedId), adaletId, { timeout: 30000 });
   });
 
   await check('Tarayıcıda yakalanan JavaScript çalışma zamanı hatası yok', async () => {
