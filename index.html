@@ -11,6 +11,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
+    <!-- İlk ekrandaki LCP görselini Alpine başlatılmadan önce indir. -->
+    <link rel="preload" as="image"
+          href="https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg"
+          imagesrcset="https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w, https://image.tmdb.org/t/p/w780/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 780w, https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 1280w"
+          imagesizes="100vw" fetchpriority="high">
     <!-- Tailwind CSS: HTML ayrıştırmasını bloke etmeden yükle -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
