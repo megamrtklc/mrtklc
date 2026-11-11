@@ -43,6 +43,19 @@ try {
     assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).count());
     const count = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.length);
     assert.equal(count, 140);
+    const compiledStyleCheck = await page.evaluate(() => ({
+      localStylesheet: [...document.styleSheets].some(sheet => sheet.href && sheet.href.endsWith('/tailwind.css')),
+      gridDisplay: getComputedStyle(document.querySelector('.grid')).display,
+      heroThumbDisplay: getComputedStyle(document.querySelector('#heroThumbContainer')).display,
+      cdnRuntimeScripts: document.querySelectorAll('script[src*="cdn.tailwindcss.com"]').length
+    }));
+    assert.ok(
+      compiledStyleCheck.localStylesheet &&
+      compiledStyleCheck.gridDisplay === 'grid' &&
+      compiledStyleCheck.heroThumbDisplay === 'flex' &&
+      compiledStyleCheck.cdnRuntimeScripts === 0,
+      'Derlenmiş Tailwind CSS doğru yüklenmedi: ' + JSON.stringify(compiledStyleCheck)
+    );
     const preloadChecks = await page.evaluate(() => ({
       catalog: !!document.querySelector('link[rel="preload"][as="fetch"][href="./filmvediziler.json"]'),
       alpine: [...document.querySelectorAll('link[rel="preload"][as="script"]')].some(link => link.href.includes('alpinejs')),
