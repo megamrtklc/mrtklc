@@ -39,7 +39,7 @@
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        .has-initial-route #hero-initial-shell { display: none !important; }
+        .has-initial-route #hero-initial-shell { display: none !important; }\n        .has-initial-route main { min-height: 0; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -172,9 +172,9 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-grow w-full">
+    <main class="relative flex-grow w-full min-h-[540px] md:min-h-[640px]">
         <!-- İlk çizim için statik hero: Alpine ve katalog hazırlanırken aynı ölçülerde görseli gösterir. -->
-        <section id="hero-initial-shell" aria-hidden="true" class="relative w-full bg-gray-950 min-h-[540px] md:min-h-[640px] overflow-hidden select-none border-b border-gray-200 dark:border-gray-800/80">
+        <section id="hero-initial-shell" aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 z-20 h-[540px] md:h-[640px] overflow-hidden select-none bg-gray-950 border-b border-gray-200 dark:border-gray-800/80">
             <img src="https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg"
                  srcset="https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w, https://image.tmdb.org/t/p/w780/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 780w, https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 1280w"
                  sizes="100vw" alt="" loading="eager" fetchpriority="high" decoding="async"
