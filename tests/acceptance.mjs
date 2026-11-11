@@ -86,14 +86,13 @@ try {
     await page.getByRole('button', { name: 'Fil Dişi (Sıcak Krem)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-ivory'));
     const ivoryColors = await page.evaluate(() => {
-      const probe = document.createElement('div');
-      probe.className = 'bg-white text-gray-900 border border-gray-200';
-      document.body.appendChild(probe);
-      const style = getComputedStyle(probe);
-      const colors = { background: style.backgroundColor, text: style.color, border: style.borderTopColor };
-      probe.remove();
-      return colors;
+      const select = document.querySelector('header select');
+      const surface = select?.closest('div.rounded-lg');
+      if (!select || !surface) return null;
+      const box = getComputedStyle(surface);
+      return { background: box.backgroundColor, text: getComputedStyle(select).color, border: box.borderTopColor };
     });
+    assert.ok(ivoryColors, 'Fil Dişi temasında gerçek profil kartı bulunamadı');
     assert.deepEqual(ivoryColors, {
       background: 'rgb(255, 253, 249)',
       text: 'rgb(41, 38, 31)',
@@ -104,14 +103,13 @@ try {
     await page.getByRole('button', { name: 'Modern Gri (Slate)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-slate'));
     const slateColors = await page.evaluate(() => {
-      const probe = document.createElement('div');
-      probe.className = 'bg-white text-gray-900 border border-gray-200';
-      document.body.appendChild(probe);
-      const style = getComputedStyle(probe);
-      const colors = { background: style.backgroundColor, text: style.color, border: style.borderTopColor };
-      probe.remove();
-      return colors;
+      const select = document.querySelector('header select');
+      const surface = select?.closest('div.rounded-lg');
+      if (!select || !surface) return null;
+      const box = getComputedStyle(surface);
+      return { background: box.backgroundColor, text: getComputedStyle(select).color, border: box.borderTopColor };
     });
+    assert.ok(slateColors, 'Modern Gri temasında gerçek profil kartı bulunamadı');
     assert.deepEqual(slateColors, {
       background: 'rgb(255, 255, 255)',
       text: 'rgb(32, 36, 43)',
