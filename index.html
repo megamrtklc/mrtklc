@@ -109,7 +109,7 @@
 
                 <!-- Profil Seçici -->
                 <div :class="getCardClass()" class="flex items-center space-x-2 border rounded-lg px-2.5 py-1">
-                    <img :src="currentProfile.avatar" class="w-6 h-6 rounded-full object-cover">
+                    <img :alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="w-6 h-6 rounded-full object-cover">
                     <select x-model="currentProfileId" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer">
                         <template x-for="pro in profiles" :key="pro.id">
                             <option :value="pro.id" x-text="pro.name" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"></option>
@@ -134,7 +134,7 @@
                     <div class="relative w-full flex-grow flex items-center px-6 sm:px-12 py-12">
                         <!-- Backdrop Image -->
                         <div class="absolute inset-0 z-0">
-                            <img :src="currentHero.backdrop" class="w-full h-full object-cover object-center filter brightness-[0.7]">
+                            <img :src="currentHero.backdrop" :alt="currentHero.title + ' arka plan görseli'" loading="eager" fetchpriority="high" decoding="async" @error="handleImageError($event)" class="w-full h-full object-cover object-center filter brightness-[0.7]">
                             <!-- Sabit Sinematik Koyu Gradyan Perdesi (Her Modda Görseli ve Yazıyı Mükemmel Gösterir) -->
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent"></div>
                             <div class="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/50 to-transparent"></div>
@@ -208,7 +208,7 @@
                                      :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 border-rose-500' : 'border-gray-800 opacity-75 hover:opacity-100'"
                                      class="flex-shrink-0 w-32 sm:w-36 cursor-pointer group bg-gray-900 rounded-xl overflow-hidden border p-1.5 transition-all duration-300 shadow-sm">
                                     <div class="w-full aspect-[2/3] rounded-lg overflow-hidden bg-black mb-1.5">
-                                        <img :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                                        <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
                                     </div>
                                     <h4 class="text-[11px] font-bold text-center text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="item.title"></h4>
                                 </div>
@@ -231,7 +231,7 @@
                         <template x-for="item in personalizedRecommendations" :key="'personal-' + item.id">
                             <button @click="openWatchPage(item)" class="group min-w-0 text-left rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161922] hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                    <img :src="item.poster || item.image" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <img @error="handleImageError($event)" :src="item.poster || item.image" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'series' ? 'Dizi' : 'Film'"></span>
                                     <span class="absolute bottom-2 right-2 rounded bg-black/75 text-amber-400 text-[9px] font-black px-1.5 py-1"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || '—'"></span></span>
                                 </div>
@@ -272,7 +272,7 @@
                         <template x-for="item in sortedFilteredCatalog" :key="item.id">
                             <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                    <img :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <div class="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 flex items-center space-x-1">
                                         <i class="fa-solid fa-star text-[9px]"></i>
                                         <span x-text="item.rating"></span>
@@ -331,13 +331,13 @@
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
                             <div x-show="isDirectVideoUrl(selectedItem.watchUrl) && !hasPlaybackStarted" class="absolute inset-0 z-10 flex items-center justify-center bg-black cursor-pointer" @click.stop="startPlayback()">
-                                <img :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 w-full h-full object-cover object-center">
+                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 w-full h-full object-cover object-center">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/20"></div>
                                 <button type="button" @click.stop="startPlayback()" class="relative z-10 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/50 bg-rose-600/90 text-white shadow-2xl backdrop-blur-sm transition-all hover:scale-110 hover:bg-rose-500" :aria-label="selectedItem.title + ' filmini oynat'">
                                     <i class="fa-solid fa-play text-2xl sm:text-3xl ml-1"></i>
                                 </button>
                                 <div class="absolute bottom-4 left-4 z-10 flex items-end gap-3 text-left text-white drop-shadow-lg sm:bottom-5 sm:left-5">
-                                    <img x-show="selectedItem.poster" :src="selectedItem.poster" :alt="selectedItem.title + ' afişi'" class="h-20 w-14 sm:h-24 sm:w-16 rounded-md object-cover shadow-xl ring-1 ring-white/40">
+                                    <img @error="handleImageError($event)" decoding="async" loading="eager" x-show="selectedItem.poster" :src="selectedItem.poster" :alt="selectedItem.title + ' afişi'" class="h-20 w-14 sm:h-24 sm:w-16 rounded-md object-cover shadow-xl ring-1 ring-white/40">
                                     <div class="pb-1">
                                         <div class="text-sm sm:text-base font-black" x-text="selectedItem.title"></div>
                                         <div class="mt-1 text-[10px] sm:text-xs font-semibold tracking-wider text-white/85">OYNATMAK İÇİN TIKLA</div>
@@ -345,10 +345,10 @@
                                 </div>
                             </div>
                             <div x-show="!isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-0 overflow-hidden bg-gray-950 text-white">
-                                <img :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="absolute inset-0 h-full w-full object-contain opacity-35 blur-[2px]">
+                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="absolute inset-0 h-full w-full object-contain opacity-35 blur-[2px]">
                                 <div class="absolute inset-0 bg-gradient-to-r from-gray-950/95 via-gray-950/75 to-gray-950/55"></div>
                                 <div class="relative z-10 flex h-full flex-col sm:flex-row items-center justify-center gap-5 p-5 sm:p-8 text-center sm:text-left">
-                                    <img :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="h-44 sm:h-56 max-w-[38%] rounded-lg object-contain shadow-2xl ring-1 ring-white/15">
+                                    <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="h-44 sm:h-56 max-w-[38%] rounded-lg object-contain shadow-2xl ring-1 ring-white/15">
                                     <div class="max-w-md space-y-3">
                                         <div class="flex items-center justify-center sm:justify-start gap-2 text-rose-400">
                                             <i class="fa-solid fa-film"></i>
@@ -482,7 +482,7 @@
                                          :class="selectedEpisode === ep.number ? 'border-rose-600 bg-rose-600/10' : 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700'"
                                          class="p-2.5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all space-y-2 group">
                                         <div class="relative w-full aspect-video rounded-lg overflow-hidden bg-black border border-gray-200 dark:border-gray-800">
-                                            <img :src="ep.still" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            <img :alt="'Bölüm görseli'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="ep.still" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                             <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[9px] font-bold text-gray-300" x-text="ep.duration"></span>
                                         </div>
                                         <div class="space-y-1">
@@ -626,7 +626,7 @@
                                 <template x-for="actor in selectedItem.tmdbCast.slice(0, 10)" :key="actor.name">
                                     <div :class="getCardClass()" class="w-24 flex-shrink-0 p-2.5 rounded-xl border flex flex-col items-center text-center space-y-2 transition-transform duration-300 hover:scale-110 cursor-pointer group">
                                         <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-md ring-2 ring-gray-300 dark:ring-gray-700 group-hover:ring-rose-500 transition-all">
-                                            <img :src="actor.profile || 'https://placehold.co/150x150/161922/ffffff?text=Photo'" class="w-full h-full object-cover">
+                                            <img :alt="'Oyuncu fotoğrafı'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="actor.profile || 'https://placehold.co/150x150/161922/ffffff?text=Photo'" class="w-full h-full object-cover">
                                         </div>
                                         <div class="w-full">
                                             <h4 class="font-bold text-[11px] text-gray-900 dark:text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="actor.name"></h4>
@@ -658,7 +658,7 @@
                                 <template x-for="sim in getSimilarItems(selectedItem)" :key="sim.id">
                                     <div @click="openWatchPage(sim)" :class="getCardClass()" class="w-28 flex-shrink-0 cursor-pointer p-2 rounded-xl border hover:border-gray-300 dark:hover:border-gray-700 transition-colors flex flex-col items-center text-center space-y-2 group">
                                         <div class="w-24 aspect-[2/3] rounded-lg overflow-hidden bg-black shadow-md">
-                                            <img :src="sim.poster" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                            <img :alt="sim.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="sim.poster" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                                         </div>
                                         <h5 class="font-bold text-[11px] text-gray-800 dark:text-white line-clamp-1 w-full group-hover:text-rose-500 transition-colors" x-text="sim.title"></h5>
                                     </div>
@@ -778,7 +778,7 @@
                     <template x-for="item in sortedFilteredCatalog" :key="item.id">
                         <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                <img :src="item.poster" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img @error="handleImageError($event)" decoding="async" :src="item.poster" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400">
                                     <i class="fa-solid fa-star text-[8px]"></i><span x-text="item.rating"></span>
                                 </div>
@@ -822,7 +822,7 @@
                     <template x-for="item in watchableCatalog" :key="item.id">
                         <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="group text-left rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 flex flex-col shadow-sm">
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900 w-full">
-                                <img :src="item.poster || item.backdrop" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img @error="handleImageError($event)" decoding="async" :src="item.poster || item.backdrop" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <span class="absolute top-2 left-2 px-2 py-1 rounded bg-rose-600 text-white text-[9px] font-black uppercase" x-text="item.type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
                                 <span class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400"><i class="fa-solid fa-star text-[8px]"></i> <span x-text="item.rating || '—'"></span></span>
                                 <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent px-3 pt-8 pb-3 text-white flex items-center gap-2">
@@ -860,7 +860,7 @@
                     <template x-for="item in currentWatchlist" :key="item.id">
                         <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                <img :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <button @click.stop="toggleWatchlist(item)" class="absolute top-2 right-2 w-7 h-7 rounded bg-rose-600 text-white flex items-center justify-center shadow">
                                     <i class="fa-solid fa-bookmark text-xs"></i>
                                 </button>
@@ -934,7 +934,7 @@
                         <div x-show="viewingStats.progressItems.length" class="space-y-3">
                             <template x-for="entry in viewingStats.progressItems" :key="entry.item.id">
                                 <button @click="openWatchPage(entry.item)" class="w-full flex items-center gap-3 text-left group">
-                                    <img :src="entry.item.poster || entry.item.image" class="w-11 h-16 rounded-lg object-cover bg-gray-900 flex-shrink-0">
+                                    <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image" class="w-11 h-16 rounded-lg object-cover bg-gray-900 flex-shrink-0">
                                     <div class="min-w-0 flex-1">
                                         <div class="flex items-center justify-between gap-2">
                                             <span class="truncate text-xs font-bold text-gray-900 dark:text-white group-hover:text-rose-500" x-text="entry.item.title"></span>
@@ -1013,6 +1013,14 @@
 
         function ultimateProApp() {
             return {
+                handleImageError(event) {
+                    const image = event && event.target;
+                    if (!image || image.dataset.perdeFallbackApplied) return;
+                    image.dataset.perdeFallbackApplied = 'true';
+                    const placeholder = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 480"><rect width="320" height="480" fill="#171923"/><g fill="none" stroke="#555b6b" stroke-width="8"><rect x="104" y="176" width="112" height="84" rx="10"/><path d="m116 244 34-35 24 22 18-18 20 24"/></g><text x="160" y="310" fill="#9ca3af" font-size="18" text-anchor="middle" font-family="Arial,sans-serif">Görsel yok</text></svg>';
+                    image.src = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(placeholder);
+                },
+
                 currentPage: 'home',
                 searchQuery: '',
                 quickFilter: 'all',
