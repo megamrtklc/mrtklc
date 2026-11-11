@@ -996,7 +996,7 @@
 
                 <div :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-3">
                     <i class="fa-solid fa-circle-info text-rose-500 text-lg"></i>
-                    <p class="text-[10px] leading-relaxed text-gray-500 dark:text-gray-400">İstatistikler bu tarayıcıdaki yerel kayıtlarla hesaplanır. Bölüm takibi profile özeldir; film oynatma ilerlemesi mevcut kayıt yapısında profiller arasında ortak tutulur. Harici oynatıcı bağlantıları ve geçmişe dönük izleme kayıtları otomatik olarak ölçülemez.</p>
+                    <p class="text-[10px] leading-relaxed text-gray-500 dark:text-gray-400">İstatistikler bu tarayıcıdaki yerel kayıtlarla ve aktif profile ait verilerle hesaplanır. Eski sürümden kalan ortak film ilerlemeleri yalnızca kaldığın yerden devam edebilmen için korunur; kişisel istatistiklere ve önerilere karıştırılmaz. Harici oynatıcı bağlantıları ve geçmişe dönük izleme kayıtları otomatik olarak ölçülemez.</p>
                 </div>
             </div>
         </template>
@@ -1188,6 +1188,9 @@
                     try {
                         const mediaType = item.type === 'tv' ? 'tv' : 'movie';
                         const details = await this.fetchTmdb(mediaType + '/' + item.tmdbId + '?append_to_response=credits,videos');
+                        const realSeasons = mediaType === 'tv'
+                            ? (Array.isArray(details.seasons) ? details.seasons.filter(season => Number(season.season_number) > 0) : [])
+                            : [];
                         const credits = details.credits || {};
                         const cast = (credits.cast || []).slice(0, 20).map((person, index) => ({
                             id: person.id,
