@@ -144,7 +144,7 @@ try {
       app.tmdbSeasonLoading = false;
       app.selectedSeason = 1;
       app.selectedItem.tmdbEpisodesBySeason = {
-        1: [{ number: 1, title: 'Kabul Testi Bölümü', duration: '42 dk', still: '' }]
+        1: [\n          { number: 1, title: 'Kabul Testi Bölümü', duration: '42 dk', still: '' },\n          { number: 2, title: 'İkinci Kabul Bölümü', duration: '43 dk', still: '' }\n        ]
       };
     });
     const watchedButton = page.getByTitle('İzlendi olarak işaretle').first();
@@ -154,6 +154,10 @@ try {
       const all = JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}');
       return (all['pro_1:archive-6']?.watched?.['1'] || []).includes(1);
     });
+    await page.getByRole('button', { name: /Sonraki bölüm/ }).click();
+    await page.waitForFunction(() => window.Alpine.$data(document.documentElement).selectedEpisode === 2);
+    await page.getByRole('button', { name: /Son izlediğimden devam et/ }).click();
+    await page.waitForFunction(() => window.Alpine.$data(document.documentElement).selectedEpisode === 1);
     await page.locator('header select').selectOption('pro_2');
     const isolated = await page.evaluate(() => window.Alpine.$data(document.documentElement).isEpisodeWatched(1, 1));
     assert.equal(isolated, false, 'Çocuk Profili Ana Profil bölüm takibini devraldı');
