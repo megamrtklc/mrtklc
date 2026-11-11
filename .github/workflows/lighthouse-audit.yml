@@ -56,3 +56,5 @@ jobs:
       - name: Print desktop audit scores
         run: node scripts/print-lighthouse-scores.mjs .lighthouseci
 
+
+# Manual verification trigger after responsive hero preload deployment.
