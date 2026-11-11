@@ -125,7 +125,7 @@ try {
   });
 
   await check('Mobil ve masaüstü için ayrı manşetler doğru gösteriliyor', async () => {
-    const mobilePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    const mobilePage = await browser.newPage({ viewport: { width: 412, height: 823 }, deviceScaleFactor: 1.75, isMobile: true, hasTouch: true });
     await mobilePage.addInitScript(() => {
       window.__layoutShiftEntries = [];
       window.__lcpEntries = [];
@@ -160,7 +160,7 @@ try {
       } catch {}
     });
     try {
-      // Reproduce a constrained mobile device: 4x CPU slowdown and 1.6 Mbps / 150 ms network.
+      // Match Lighthouse mobile emulation (412x823, DPR 1.75, touch) plus 4x CPU slowdown and 1.6 Mbps / 150 ms network.
       // This is diagnostic only; it does not change production application behavior.
       const mobileCdp = await mobilePage.context().newCDPSession(mobilePage);
       await mobileCdp.send('Network.enable');
