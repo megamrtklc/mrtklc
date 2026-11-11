@@ -119,6 +119,21 @@ try {
     assert.ok(responsiveSources.some(source => source.includes('w185')) && responsiveSources.some(source => source.includes('w780')), 'TMDB afiş veya hero görsellerinde duyarlı kaynaklar bulunamadı');
   });
 
+  await check('Mobil hero görseli daha hafif boyutu seçiyor', async () => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.waitForFunction(() => {
+      const image = document.querySelector('img[fetchpriority="high"]');
+      return image && image.currentSrc.includes('/w500/');
+    }, { timeout: 20000 });
+    const mobileHeroSource = await page.locator('img[fetchpriority="high"]').evaluate(image => image.currentSrc);
+    assert.match(mobileHeroSource, /\/w500\//);
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.waitForFunction(() => {
+      const image = document.querySelector('img[fetchpriority="high"]');
+      return image && image.currentSrc.includes('/w1280/');
+    }, { timeout: 20000 });
+  });
+
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole('button', { name: 'Menüyü aç veya kapat' }).click();
