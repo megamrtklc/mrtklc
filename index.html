@@ -999,6 +999,18 @@
 
     <!-- Script Application Logic -->
     <script>
+        function safeStorageRead(key, fallback = null) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (raw === null || raw === '') return fallback;
+                try { return JSON.parse(raw); } catch (_) { return raw; }
+            } catch (error) { console.warn('Yerel kayıt okunamadı:', key, error); return fallback; }
+        }
+        function safeStorageWrite(key, value) {
+            try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+            catch (error) { console.warn('Yerel kayıt kaydedilemedi:', key, error); return false; }
+        }
+
         function ultimateProApp() {
             return {
                 currentPage: 'home',
@@ -1020,7 +1032,7 @@
                 selectedEpisode: 1,
                 currentEpisodePage: 1,
                 
-                theme: localStorage.getItem('cine_theme_v3') || 'ivory',
+                theme: ['ivory','slate','dark'].includes(safeStorageRead('cine_theme_v3','ivory')) ? safeStorageRead('cine_theme_v3','ivory') : 'ivory',
                 
                 get isDarkMode() {
                     return this.theme === 'dark';
@@ -1028,7 +1040,7 @@
 
                 setTheme(newTheme) {
                     this.theme = newTheme;
-                    localStorage.setItem('cine_theme_v3', newTheme);
+                    safeStorageWrite('cine_theme_v3', newTheme);
                 },
 
                 getBodyClass() {
@@ -1186,19 +1198,22 @@
                         }
 
                         const data = await response.json();
-                        const sourceCatalog = Array.isArray(data) ? data : data.catalog;
+                        const sourceCatalog = Array.isArray(data) ? data : (data && typeof data === 'object' ? data.catalog : null);
 
                         if (!Array.isArray(sourceCatalog)) {
                             throw new Error('JSON dosyasında geçerli bir catalog listesi bulunamadı.');
                         }
 
-                        this.catalog = sourceCatalog.map((item) => {
+                        const validCatalog = sourceCatalog.filter(item => item && typeof item === 'object' && !Array.isArray(item) && (item.id != null || item.tmdbId != null || item.title || item.tmdbTitle || item.originalTitle));
+                        if (!validCatalog.length) throw new Error('Katalogda kullanılabilir bir film veya dizi kaydı bulunamadı.');
+                        if (validCatalog.length !== sourceCatalog.length) console.warn('Geçersiz katalog kayıtları atlandı:', sourceCatalog.length - validCatalog.length);
+                        this.catalog = validCatalog.map((item) => {
                             const cast = Array.isArray(item.tmdbCast) && item.tmdbCast.length
                                 ? item.tmdbCast
                                 : (Array.isArray(item.cast) ? item.cast.map((person, index) => ({
-                                    name: typeof person === 'string' ? person : (person.name || ''),
-                                    character: typeof person === 'string' ? '' : (person.character || ''),
-                                    profile: typeof person === 'string' ? '' : (person.profile || ''),
+                                    name: typeof person === 'string' ? person : (person && typeof person === 'object' ? (person.name || '') : ''),
+                                    character: typeof person === 'string' || !person || typeof person !== 'object' ? '' : (person.character || ''),
+                                    profile: typeof person === 'string' || !person || typeof person !== 'object' ? '' : (person.profile || ''),
                                     order: index
                                 })) : []);
 
@@ -1279,16 +1294,20 @@
                 },
 
                 getEpisodeTracking() {
-                    const all = JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}');
+                    const all = safeStorageRead('cine_episode_tracking_v1', {});
+                    if (!all || typeof all !== 'object' || Array.isArray(all)) return { watched: {}, last: null };
                     const key = this.currentProfileId + ':' + (this.selectedItem?.id || '');
-                    return all[key] || { watched: {}, last: null };
+                    const tracking = all[key];
+                    return tracking && typeof tracking === 'object' && !Array.isArray(tracking) ? { watched: tracking.watched && typeof tracking.watched === 'object' ? tracking.watched : {}, last: tracking.last ?? null } : { watched: {}, last: null };
                 },
 
                 saveEpisodeTracking(tracking) {
-                    const all = JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}');
+                    const stored = safeStorageRead('cine_episode_tracking_v1', {});
+                    const all = stored && typeof stored === 'object' && !Array.isArray(stored) ? stored : {};
                     const key = this.currentProfileId + ':' + (this.selectedItem?.id || '');
+                    if (!tracking || typeof tracking !== 'object' || Array.isArray(tracking)) return false;
                     all[key] = tracking;
-                    localStorage.setItem('cine_episode_tracking_v1', JSON.stringify(all));
+                    return safeStorageWrite('cine_episode_tracking_v1', all);
                 },
 
                 isEpisodeWatched(seasonNum, epNum) {
@@ -1526,7 +1545,7 @@
                     { id: 'pro_1', name: 'Ana Profil', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop' },
                     { id: 'pro_2', name: 'Çocuk Profili', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=200&auto=format&fit=crop' }
                 ],
-                currentProfileId: localStorage.getItem('cine_active_profile') || 'pro_1',
+                currentProfileId: ['pro_1','pro_2'].includes(safeStorageRead('cine_active_profile','pro_1')) ? safeStorageRead('cine_active_profile','pro_1') : 'pro_1',
 
                 get currentProfile() {
                     return this.profiles.find(p => p.id === this.currentProfileId) || this.profiles[0];
@@ -1536,7 +1555,8 @@
                 // ancak hangi profile ait oldukları bilinmediği için önerilere dahil edilmez.
                 get profileMovieProgress() {
                     try {
-                        const all = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}');
+                        const all = safeStorageRead('perde_profile_player_progress_v1', {});
+                        if (!all || typeof all !== 'object' || Array.isArray(all)) return {};
                         const current = all[this.currentProfileId];
                         return current && typeof current === 'object' ? current : {};
                     } catch (error) {
@@ -1551,8 +1571,8 @@
                     // Eski sürümdeki ortak ilerlemeyi oynatmaya devam edebilmek için yalnızca
                     // devam oynatımında geriye dönük yedek olarak kullan.
                     try {
-                        const legacy = JSON.parse(localStorage.getItem('perde_player_progress_v3') || '{}');
-                        return legacy[String(itemId)] || null;
+                        const legacy = safeStorageRead('perde_player_progress_v3', {});
+                        return legacy && typeof legacy === 'object' && !Array.isArray(legacy) ? (legacy[String(itemId)] || null) : null;
                     } catch (error) {
                         return null;
                     }
@@ -1560,48 +1580,53 @@
 
                 saveMovieProgress(itemId, progress) {
                     try {
-                        const all = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}');
-                        if (!all[this.currentProfileId] || typeof all[this.currentProfileId] !== 'object') {
+                        const stored = safeStorageRead('perde_profile_player_progress_v1', {});
+                        const all = stored && typeof stored === 'object' && !Array.isArray(stored) ? stored : {};
+                        if (!all[this.currentProfileId] || typeof all[this.currentProfileId] !== 'object' || Array.isArray(all[this.currentProfileId])) {
                             all[this.currentProfileId] = {};
                         }
                         all[this.currentProfileId][String(itemId)] = progress;
-                        localStorage.setItem('perde_profile_player_progress_v1', JSON.stringify(all));
+                        safeStorageWrite('perde_profile_player_progress_v1', all);
                     } catch (error) {
                         console.warn('Profil izleme ilerlemesi kaydedilemedi:', error);
                     }
                 },
 
                 switchProfile(id) {
+                    if (!this.profiles.some(profile => profile.id === id)) return;
                     this.currentProfileId = id;
-                    localStorage.setItem('cine_active_profile', id);
+                    safeStorageWrite('cine_active_profile', id);
                 },
 
                 get watchlist() {
-                    let allLists = JSON.parse(localStorage.getItem('cine_profile_watchlists')) || {};
-                    return allLists[this.currentProfileId] || [];
+                    const storedLists = safeStorageRead('cine_profile_watchlists', {});
+                    const allLists = storedLists && typeof storedLists === 'object' && !Array.isArray(storedLists) ? storedLists : {};
+                    const list = allLists[this.currentProfileId];
+                    return Array.isArray(list) ? list.filter(item => item && typeof item === 'object' && item.id != null) : [];
                 },
                 get currentWatchlist() {
                     return this.watchlist;
                 },
 
                 toggleWatchlist(item) {
-                    let allLists = JSON.parse(localStorage.getItem('cine_profile_watchlists')) || {};
-                    if (!allLists[this.currentProfileId]) allLists[this.currentProfileId] = [];
-                    let list = allLists[this.currentProfileId];
-                    const index = list.findIndex(m => m.id === item.id);
+                    const storedLists = safeStorageRead('cine_profile_watchlists', {});
+                    const allLists = storedLists && typeof storedLists === 'object' && !Array.isArray(storedLists) ? storedLists : {};
+                    if (!Array.isArray(allLists[this.currentProfileId])) allLists[this.currentProfileId] = [];
+                    const list = allLists[this.currentProfileId];
+                    const index = list.findIndex(m => m && String(m.id) === String(item.id));
                     if (index > -1) {
                         list.splice(index, 1);
                     } else {
                         list.push(item);
                     }
-                    localStorage.setItem('cine_profile_watchlists', JSON.stringify(allLists));
+                    safeStorageWrite('cine_profile_watchlists', allLists);
                 },
 
                 isInWatchlist(item) {
-                    return this.watchlist.some(m => m.id === item.id);
+                    return this.watchlist.some(m => m && String(m.id) === String(item.id));
                 },
 
-                reviews: JSON.parse(localStorage.getItem('cine_reviews')) || {},
+                reviews: (() => { const value = safeStorageRead('cine_reviews', {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; })(),
 
                 getReviews(itemId) {
                     return this.reviews[itemId] || [];
@@ -1609,16 +1634,14 @@
 
                 submitReview() {
                     if (!this.userCommentText.trim() || !this.selectedItem) return;
-                    if (!this.reviews[this.selectedItem.id]) {
-                        this.reviews[this.selectedItem.id] = [];
-                    }
+                    if (!Array.isArray(this.reviews[this.selectedItem.id])) this.reviews[this.selectedItem.id] = [];
                     this.reviews[this.selectedItem.id].unshift({
                         author: this.currentProfile.name,
                         rating: this.userRating,
                         comment: this.userCommentText,
                         date: new Date().toLocaleDateString()
                     });
-                    localStorage.setItem('cine_reviews', JSON.stringify(this.reviews));
+                    safeStorageWrite('cine_reviews', this.reviews);
                     this.userCommentText = '';
                 },
 
@@ -1719,7 +1742,7 @@
 
                 get viewingStats() {
                     const safeRead = key => {
-                        try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; }
+                        try { const value = safeStorageRead(key, {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; }
                         catch (error) { console.warn('İstatistik kaydı okunamadı:', key, error); return {}; }
                     };
                     const progressMap = this.profileMovieProgress;
@@ -1799,8 +1822,8 @@
                 get personalizedRecommendations() {
                     const safeRead = key => {
                         try {
-                            const value = JSON.parse(localStorage.getItem(key) || '{}');
-                            return value && typeof value === 'object' ? value : {};
+                            const value = safeStorageRead(key, {});
+                            return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
                         } catch (error) {
                             console.warn('Kişiselleştirilmiş öneri verisi okunamadı:', key, error);
                             return {};
@@ -1873,8 +1896,8 @@
                 get personalizedDiscoveryGenres() {
                     const read = key => {
                         try {
-                            const value = JSON.parse(localStorage.getItem(key) || '{}');
-                            return value && typeof value === 'object' ? value : {};
+                            const value = safeStorageRead(key, {});
+                            return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
                         } catch (error) {
                             console.warn('Keşif tercihleri okunamadı:', key, error);
                             return {};
