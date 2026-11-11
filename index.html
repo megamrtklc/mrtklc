@@ -280,17 +280,30 @@
                         
                         <!-- Custom Video Player -->
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-2xl border border-gray-200 dark:border-gray-800 group select-none">
-                            <video id="customVideoPlayer" 
-                                   class="w-full h-full object-cover" 
+                            <video id="customVideoPlayer"
+                                   x-show="isDirectVideoUrl(selectedItem.watchUrl)"
+                                   class="w-full h-full object-contain"
+                                   :src="getPlaybackUrl()"
                                    :poster="selectedItem.backdrop"
+                                   preload="metadata"
+                                   playsinline
+                                   @loadedmetadata="updateVideoProgress"
                                    @timeupdate="updateVideoProgress"
-                                   @ended="videoEnded = true">
-                                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                                   @play="isPlaying = true"
+                                   @pause="isPlaying = false"
+                                   @ended="videoEnded = true"
+                                   @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
+                            <div x-show="!isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gray-950 p-6 text-center text-white">
+                                <i class="fa-solid fa-circle-play text-4xl text-rose-500"></i>
+                                <h3 class="text-base font-bold" x-text="selectedItem.watchUrl ? 'Bu kaynak yerleşik oynatıcıda açılamıyor' : 'Henüz izleme bağlantısı eklenmemiş'"></h3>
+                                <p class="max-w-md text-xs leading-relaxed text-gray-300" x-text="selectedItem.watchUrl ? 'Bu bağlantı farklı bir video platformuna ait. Kaynağı yeni sekmede açabilirsin.' : 'Bu yapım için yönetim verisine bir MP4 izleme bağlantısı eklenmesi gerekiyor.'"></p>
+                                <a x-show="selectedItem.watchUrl" :href="selectedItem.watchUrl" target="_blank" rel="noopener noreferrer" class="rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-white hover:bg-rose-700">Kaynağı Aç <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
+                            </div>
 
                             <!-- Overlay Controls -->
-                            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
+                            <div x-show="isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
                                 <div class="flex items-center justify-between mb-1">
                                     <div class="flex items-center space-x-2">
                                         <span class="px-2.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase" x-text="selectedItem.title"></span>
@@ -816,10 +829,9 @@
                 selectEpisode(epNum) {
                     this.selectedEpisode = epNum;
                     const video = document.getElementById('customVideoPlayer');
-                    if (video) {
+                    if (video && this.isDirectVideoUrl(this.selectedItem?.watchUrl)) {
                         video.currentTime = 0;
-                        video.play();
-                        this.isPlaying = true;
+                        video.play().catch(() => { this.playbackError = true; });
                     }
                 },
                 
@@ -829,16 +841,25 @@
                 currentTimeFormatted: '00:00',
                 durationFormatted: '00:00',
                 videoEnded: false,
+                playbackError: false,
+
+                isDirectVideoUrl(url) {
+                    return typeof url === 'string' && /\\.mp4(?:$|[?#])/i.test(url);
+                },
+
+                getPlaybackUrl() {
+                    return this.selectedItem && this.isDirectVideoUrl(this.selectedItem.watchUrl)
+                        ? this.selectedItem.watchUrl
+                        : '';
+                },
 
                 togglePlay() {
                     const video = document.getElementById('customVideoPlayer');
-                    if (!video) return;
+                    if (!video || !this.isDirectVideoUrl(this.selectedItem?.watchUrl)) return;
                     if (video.paused) {
-                        video.play();
-                        this.isPlaying = true;
+                        video.play().catch(() => { this.playbackError = true; });
                     } else {
                         video.pause();
-                        this.isPlaying = false;
                     }
                 },
 
@@ -992,6 +1013,7 @@
                     this.currentEpisodePage = 1;
                     this.isPlaying = false;
                     this.videoProgress = 0;
+                    this.playbackError = false;
                     this.currentPage = 'watch';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     
