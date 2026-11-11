@@ -352,11 +352,15 @@
                                         <span class="font-mono text-xs font-bold text-gray-300" x-text="currentTimeFormatted + ' / ' + durationFormatted"></span>
                                     </div>
 
-                                    <div class="flex items-center space-x-2">
-                                        <button @click="toggleMute()" class="w-8 h-8 rounded bg-gray-800/80 hover:bg-gray-700 text-white flex items-center justify-center transition-all">
-                                            <i :class="isMuted ? 'fa-solid fa-volume-xmark text-xs text-rose-500' : 'fa-solid fa-volume-high text-xs'"></i>
-                                        </button>
-                                        <button @click="toggleFullscreen()" class="w-8 h-8 rounded bg-gray-800/80 hover:bg-gray-700 text-white flex items-center justify-center transition-all">
+                                    <div class="flex items-center gap-2 sm:gap-3">
+                                        <div class="flex items-center gap-2 rounded-lg bg-gray-900/70 px-2 py-1.5" @click.stop>
+                                            <button @click="toggleMute()" class="w-7 h-7 rounded hover:bg-white/10 text-white flex items-center justify-center transition-all" :title="isMuted ? 'Sesi Aç' : 'Sesi Kapat'">
+                                                <i :class="isMuted || volumeLevel === 0 ? 'fa-solid fa-volume-xmark text-xs text-rose-400' : volumeLevel < 0.5 ? 'fa-solid fa-volume-low text-xs' : 'fa-solid fa-volume-high text-xs'"></i>
+                                            </button>
+                                            <input type="range" min="0" max="1" step="0.01" :value="isMuted ? 0 : volumeLevel" @input="setVideoVolume($event.target.value)" aria-label="Ses seviyesi" title="Ses seviyesi" class="w-16 sm:w-24 h-1.5 accent-rose-500 cursor-pointer">
+                                            <span class="w-8 text-right font-mono text-[10px] text-gray-300" x-text="Math.round((isMuted ? 0 : volumeLevel) * 100) + '%'"></span>
+                                        </div>
+                                        <button @click="toggleFullscreen()" class="w-8 h-8 rounded bg-gray-800/80 hover:bg-gray-700 text-white flex items-center justify-center transition-all" title="Tam ekran">
                                             <i class="fa-solid fa-expand text-xs"></i>
                                         </button>
                                     </div>
@@ -1055,6 +1059,8 @@
                 
                 isPlaying: false,
                 isMuted: false,
+                volumeLevel: 1,
+                previousVolumeLevel: 1,
                 videoProgress: 0,
                 currentTimeFormatted: '00:00',
                 durationFormatted: '00:00',
@@ -1142,11 +1148,32 @@
                     video.currentTime += 85;
                 },
 
+                setVideoVolume(value) {
+                    const video = document.getElementById('customVideoPlayer');
+                    const nextVolume = Math.max(0, Math.min(1, Number(value)));
+                    this.volumeLevel = nextVolume;
+                    if (nextVolume > 0) this.previousVolumeLevel = nextVolume;
+                    if (video) {
+                        video.volume = nextVolume;
+                        video.muted = nextVolume === 0;
+                    }
+                    this.isMuted = nextVolume === 0;
+                },
+
                 toggleMute() {
                     const video = document.getElementById('customVideoPlayer');
                     if (!video) return;
-                    video.muted = !video.muted;
-                    this.isMuted = video.muted;
+                    if (video.muted || this.volumeLevel === 0) {
+                        const restoredVolume = this.previousVolumeLevel || 0.5;
+                        this.volumeLevel = restoredVolume;
+                        video.volume = restoredVolume;
+                        video.muted = false;
+                        this.isMuted = false;
+                    } else {
+                        this.previousVolumeLevel = this.volumeLevel;
+                        video.muted = true;
+                        this.isMuted = true;
+                    }
                 },
 
                 toggleFullscreen() {
