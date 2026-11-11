@@ -166,7 +166,7 @@
     <main class="flex-grow w-full">
         
         <!-- ==================== HOME PAGE ==================== -->
-        <div x-show="currentPage === 'home'">
+        <template x-if="currentPage === 'home'">
             <div class="w-full space-y-10 pb-16">
                 
                 <!-- HERO BANNER (Tüm Modlar İçin Ortak ve Kusursuz Sinematik Manşet) -->
@@ -712,7 +712,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </template>
 
         <!-- ==================== EXPLORE PAGE ==================== -->
         <template x-if="currentPage === 'explore'">
