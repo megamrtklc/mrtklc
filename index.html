@@ -1098,7 +1098,7 @@
                         return;
                     }
 
-                    this.handleImageError(event);
+                    if (app && typeof app.handleImageError === 'function') app.handleImageError(event);
                 },
 
                 handleImageError(event) {
