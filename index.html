@@ -302,6 +302,10 @@
                                 <a x-show="selectedItem.watchUrl" :href="selectedItem.watchUrl" target="_blank" rel="noopener noreferrer" class="rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-white hover:bg-rose-700">Kaynağı Aç <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i></a>
                             </div>
 
+                            <div x-show="playbackError && isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-x-0 top-4 mx-auto w-fit rounded-lg bg-red-950/90 px-4 py-2 text-xs font-semibold text-white shadow-lg">
+                                Video kaynağı yüklenemedi. Bağlantıyı veya dosya erişimini kontrol et.
+                            </div>
+
                             <!-- Overlay Controls -->
                             <div x-show="isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
                                 <div class="flex items-center justify-between mb-1">
@@ -844,7 +848,7 @@
                 playbackError: false,
 
                 isDirectVideoUrl(url) {
-                    return typeof url === 'string' && /\\.mp4(?:$|[?#])/i.test(url);
+                    return typeof url === 'string' && /\.mp4(?:$|[?#])/i.test(url);
                 },
 
                 getPlaybackUrl() {
