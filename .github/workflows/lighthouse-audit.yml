@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/lighthouse-audit.yml'
+      - 'tests/acceptance.mjs'
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
@@ -62,3 +63,4 @@ jobs:
 # Re-run production Lighthouse audit after mobile CLS stabilization (Nov 11, 2026).
 
 # Trigger detailed LCP diagnostics after the reporting enhancement (Nov 11, 2026).
+# Keep the production Lighthouse audit in sync with mobile acceptance-test changes.
