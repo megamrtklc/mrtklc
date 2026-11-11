@@ -1,0 +1,33 @@
+<script>
+    // JSON verisini doğrudan buraya yapıştırıyoruz (CORS sorununu tamamen ortadan kaldırır)
+    const allMediaData = [
+        {
+            "title": "Örnek Film",
+            "type": "Film",
+            "year": "2023",
+            "genre": "Aksiyon",
+            "poster": "gorsel_linki.jpg",
+            "description": "Film açıklaması buraya gelecek..."
+        }
+        // filmvediziler.json içeriğini buraya ekleyin
+    ];
+
+    // Sayfa açıldığında doğrudan çalışır
+    document.addEventListener("DOMContentLoaded", () => {
+        let watchlist = JSON.parse(localStorage.getItem('cineverse_watchlist')) || [];
+        let currentActiveProfile = localStorage.getItem('cineverse_profile') || 'Murat';
+
+        document.getElementById('activeProfileAvatar').innerText = currentActiveProfile.charAt(0).toUpperCase();
+
+        const savedTheme = localStorage.getItem('cineverse_theme') || 'dark';
+        document.getElementById('themeSelector').value = savedTheme;
+        applyTheme(savedTheme);
+
+        if (allMediaData.length > 0) {
+            setupHero(allMediaData[0]);
+            renderGrid(allMediaData);
+        }
+        
+        // ... diğer dinleyiciler aynı kalır
+    });
+</script>
