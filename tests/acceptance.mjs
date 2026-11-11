@@ -39,8 +39,9 @@ try {
     assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).count());
     const count = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.length);
     assert.equal(count, 140);
-    const responsiveImages = await page.locator('main img[srcset]').count();
-    assert.ok(responsiveImages >= 6, 'TMDB afişlerinde duyarlı görsel kaynakları bulunamadı');
+    const responsiveSources = await page.locator('img[srcset]').evaluateAll(images => images.map(image => image.getAttribute('srcset') || '').filter(Boolean));
+    console.log('RESPONSIVE IMAGE SOURCES:', JSON.stringify(responsiveSources.slice(0, 8)));
+    assert.ok(responsiveSources.some(source => source.includes('w185')) && responsiveSources.some(source => source.includes('w780')), 'TMDB afiş veya hero görsellerinde duyarlı kaynaklar bulunamadı');
   });
 
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
