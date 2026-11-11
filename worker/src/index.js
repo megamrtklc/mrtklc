@@ -38,17 +38,25 @@ function getCookie(request,name) {
 }
 function sameOrigin(request) {
   const trustedOrigin = "https://cineverse-admin.megamrtklc.workers.dev";
-  const requestOrigin = new URL(request.url).origin;
+  const requestUrl = new URL(request.url);
+  if (requestUrl.origin !== trustedOrigin) return false;
+
   const origin = request.headers.get("origin");
-  if (origin) return origin === trustedOrigin || origin === requestOrigin;
+  if (origin) return origin === trustedOrigin;
+
   const referer = request.headers.get("referer");
-  if (!referer) return false;
-  try {
-    const refererOrigin = new URL(referer).origin;
-    return refererOrigin === trustedOrigin || refererOrigin === requestOrigin;
-  } catch {
-    return false;
+  if (referer) {
+    try {
+      return new URL(referer).origin === trustedOrigin;
+    } catch {
+      return false;
+    }
   }
+
+  // Some browser form submissions omit Origin and Referer. In that case,
+  // require the browser's same-origin Fetch Metadata and the expected host.
+  return request.headers.get("sec-fetch-site") === "same-origin"
+    && request.headers.get("host") === requestUrl.host;
 }
 function loginPage(showError=false) {
   const error=showError?'<p class="error">Şifre doğru değil. Lütfen tekrar dene.</p>':"";
