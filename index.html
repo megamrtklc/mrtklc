@@ -252,7 +252,7 @@
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3 sm:gap-4">
                         <template x-for="item in personalizedRecommendations" :key="'personal-' + item.id">
-                            <button @click="openWatchPage(item)" class="group min-w-0 text-left rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#161922] hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
+                            <button @click="openWatchPage(item)" :class="getCardClass()" class="group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img @error="handleImageError($event)" :src="item.poster || item.image" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'series' ? 'Dizi' : 'Film'"></span>
@@ -716,19 +716,19 @@
                             <h3 class="text-lg sm:text-xl font-black text-gray-900 dark:text-white mt-1">İlgi alanlarına göre keşfet</h3>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzleme geçmişinde ve listende öne çıkan türlerden yeni yapımlar bul.</p>
                         </div>
-                        <span class="text-[10px] text-gray-400 font-semibold" x-show="personalizedDiscoveryGenres.length" x-text="personalizedDiscoveryGenres.length + ' ilgi alanı bulundu'"></span>
+                        <span :class="getMutedTextClass()" class="text-[10px] font-semibold" x-show="personalizedDiscoveryGenres.length" x-text="personalizedDiscoveryGenres.length + ' ilgi alanı bulundu'"></span>
                     </div>
                     <div x-show="personalizedDiscoveryGenres.length" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                         <template x-for="(genre, index) in personalizedDiscoveryGenres" :key="'taste-' + genre.name">
-                            <button type="button" @click="selectPersonalizedGenre(genre.label)" class="relative text-left rounded-xl border border-gray-200 dark:border-gray-700/80 bg-gray-50 dark:bg-white/[0.03] hover:border-rose-500 hover:bg-rose-500/5 p-3 sm:p-4 transition-all group overflow-hidden">
+                            <button type="button" @click="selectPersonalizedGenre(genre.label)" :class="getDiscoveryTileClass()" class="relative text-left rounded-xl border hover:border-rose-500 hover:bg-rose-500/5 p-3 sm:p-4 transition-all group overflow-hidden">
                                 <span class="absolute right-2 top-1 text-2xl font-black text-gray-200 dark:text-white/5" x-text="'0' + (index + 1)"></span>
                                 <span class="relative block text-sm font-black text-gray-900 dark:text-white group-hover:text-rose-500 transition-colors" x-text="genre.label"></span>
                                 <span class="relative block text-[10px] text-gray-500 dark:text-gray-400 mt-1" x-text="genre.count + ' yapım keşfet'"></span>
-                                <span class="relative block h-1 rounded-full bg-gray-200 dark:bg-gray-700 mt-3 overflow-hidden"><span class="block h-full rounded-full bg-rose-500" :style="'width:' + Math.max(12, genre.score / personalizedDiscoveryGenres[0].score * 100) + '%'"></span></span>
+                                <span :class="getDiscoveryTrackClass()" class="relative block h-1 rounded-full mt-3 overflow-hidden"><span class="block h-full rounded-full bg-rose-500" :style="'width:' + Math.max(12, genre.score / personalizedDiscoveryGenres[0].score * 100) + '%'"></span></span>
                             </button>
                         </template>
                     </div>
-                    <div x-show="!personalizedDiscoveryGenres.length" class="rounded-xl bg-gray-50 dark:bg-white/[0.03] border border-dashed border-gray-300 dark:border-gray-700 p-4 text-xs text-gray-500 dark:text-gray-400">
+                    <div x-show="!personalizedDiscoveryGenres.length" :class="getDiscoveryEmptyClass()" class="rounded-xl border border-dashed p-4 text-xs">
                         Henüz yeterli izleme verisi yok. Birkaç yapım izlediğinde veya listene eklediğinde burada ilgi alanlarına özel keşif kısayolları oluşacak.
                     </div>
                     <div x-show="personalizedDiscoveryGenres.length" class="flex justify-end">
@@ -791,9 +791,9 @@
                     <div class="flex flex-wrap items-center gap-3 pt-1 border-t border-gray-200 dark:border-gray-700/70">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Yıl aralığı</span>
                         <input type="number" min="1900" max="2100" x-model.number="discoveryYearFrom" placeholder="Başlangıç" :class="getSearchClass()" class="w-28 border rounded-lg px-3 py-2 text-xs text-gray-800 dark:text-gray-200">
-                        <span class="text-gray-400 text-xs">—</span>
+                        <span :class="getMutedTextClass()" class="text-xs">—</span>
                         <input type="number" min="1900" max="2100" x-model.number="discoveryYearTo" placeholder="Bitiş" :class="getSearchClass()" class="w-28 border rounded-lg px-3 py-2 text-xs text-gray-800 dark:text-gray-200">
-                        <span class="text-[10px] text-gray-400">Aralıkta olmayan yapımlar gösterilmez.</span>
+                        <span :class="getMutedTextClass()" class="text-[10px]">Aralıkta olmayan yapımlar gösterilmez.</span>
                     </div>
                 </section>
 
@@ -1090,6 +1090,29 @@
                     if (this.theme === 'ivory') return 'bg-ivory-card border-ivory-200';
                     if (this.theme === 'slate') return 'bg-slateLight-card border-slateLight-200';
                     return 'bg-[#161922] border-gray-800';
+                },
+
+                getDiscoveryTileClass() {
+                    if (this.theme === 'ivory') return 'bg-ivory-100 border-ivory-200';
+                    if (this.theme === 'slate') return 'bg-slateLight-100 border-slateLight-200';
+                    return 'bg-white/[0.03] border-gray-700/80';
+                },
+
+                getDiscoveryEmptyClass() {
+                    if (this.theme === 'ivory') return 'bg-ivory-100 border-ivory-200 text-gray-600';
+                    if (this.theme === 'slate') return 'bg-slateLight-100 border-slateLight-200 text-gray-600';
+                    return 'bg-white/[0.03] border-gray-700 text-gray-400';
+                },
+
+                getDiscoveryTrackClass() {
+                    if (this.theme === 'ivory') return 'bg-ivory-200';
+                    if (this.theme === 'slate') return 'bg-slateLight-200';
+                    return 'bg-gray-700';
+                },
+
+                getMutedTextClass() {
+                    if (this.theme === 'ivory' || this.theme === 'slate') return 'text-gray-600';
+                    return 'text-gray-400';
                 },
 
                 getSearchClass() {
