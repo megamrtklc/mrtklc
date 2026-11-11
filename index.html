@@ -59,9 +59,9 @@
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) -->
-    <header :class="getHeaderClass()" class="sticky top-0 z-50 backdrop-blur-md border-b transition-colors duration-300">
+    <header x-data="{ mobileMenuOpen: false }" :class="getHeaderClass()" class="sticky top-0 z-50 backdrop-blur-md border-b transition-colors duration-300">
         <div class="w-full px-4 sm:px-12 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-8">
+            <div class="flex items-center space-x-3 lg:space-x-8">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-film text-white text-sm"></i>
@@ -84,7 +84,10 @@
                 </nav>
             </div>
             
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen.toString()" aria-label="Menüyü aç veya kapat" class="lg:hidden w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-rose-500 transition-colors">
+                    <i :class="mobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
+                </button>
                 <div class="relative hidden xl:block">
                     <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                     <input type="text" x-model="searchQuery" placeholder="Film veya dizi ara..." :class="getSearchClass()" class="border rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-600 w-60 transition-all">
@@ -117,13 +120,26 @@
                 <!-- Profil Seçici -->
                 <div :class="getCardClass()" class="flex items-center space-x-2 border rounded-lg px-2.5 py-1">
                     <img :alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="w-6 h-6 rounded-full object-cover">
-                    <select x-model="currentProfileId" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer">
+                    <select x-model="currentProfileId" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] sm:max-w-none">
                         <template x-for="pro in profiles" :key="pro.id">
                             <option :value="pro.id" x-text="pro.name" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"></option>
                         </template>
                     </select>
                 </div>
             </div>
+        </div>
+        <div x-show="mobileMenuOpen" x-transition.origin.top.right @click.away="mobileMenuOpen = false" class="lg:hidden absolute top-full right-3 left-3 sm:left-auto sm:w-80 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl p-3 z-50">
+            <div class="relative mb-3">
+                <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                <input type="text" x-model="searchQuery" @keydown.enter="navigateTo('explore'); mobileMenuOpen = false" placeholder="Film veya dizi ara..." :class="getSearchClass()" class="w-full border rounded-lg pl-9 pr-3 py-2.5 text-sm text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-600">
+            </div>
+            <nav class="grid grid-cols-1 gap-1 text-sm font-bold text-gray-700 dark:text-gray-200">
+                <a href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Ana Sayfa</a>
+                <a href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Keşfet</a>
+                <a href="#" @click.prevent="navigateTo('video-links'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span>Video Bağlantıları</span><span class="text-xs text-rose-500" x-text="watchableCatalog.length"></span></a>
+                <a href="#" @click.prevent="navigateTo('watchlist'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span>İzleme Listem</span><span class="text-xs text-rose-500" x-text="watchlist.length"></span></a>
+                <a href="#" @click.prevent="navigateTo('stats'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">İstatistikler</a>
+            </nav>
         </div>
     </header>
 
