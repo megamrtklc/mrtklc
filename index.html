@@ -65,6 +65,10 @@
                 <nav class="hidden md:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     <a href="#" @click.prevent="navigateTo('home')" :class="currentPage === 'home' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Ana Sayfa</a>
                     <a href="#" @click.prevent="navigateTo('explore')" :class="currentPage === 'explore' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Keşfet</a>
+                    <a href="#" @click.prevent="navigateTo('video-links')" :class="currentPage === 'video-links' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center gap-1.5">
+                        <span>Video Bağlantıları</span>
+                        <span class="px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px]" x-text="watchableCatalog.length"></span>
+                    </a>
                     <a href="#" @click.prevent="navigateTo('watchlist')" :class="currentPage === 'watchlist' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center space-x-1.5">
                         <span>İzleme Listem</span>
                         <span class="px-1.5 py-0.2 bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-full text-[10px]" x-text="watchlist.length"></span>
@@ -737,6 +741,53 @@
                     <h3 class="font-bold text-gray-900 dark:text-white">Bu kriterlere uygun yapım bulunamadı</h3>
                     <p class="text-xs text-gray-500 dark:text-gray-400">Arama kelimeni veya filtrelerini değiştirerek yeniden deneyebilirsin.</p>
                     <button @click="resetDiscoveryFilters()" class="px-5 py-2.5 rounded-lg bg-rose-600 text-white text-xs font-bold">Tüm filtreleri temizle</button>
+                </div>
+            </div>
+        </template>
+
+        <!-- ==================== TEMPORARY VIDEO LINKS PAGE ==================== -->
+        <template x-if="currentPage === 'video-links'">
+            <div class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 text-[10px] font-black uppercase tracking-wider">Geçici test menüsü</span>
+                        </div>
+                        <h2 class="text-2xl font-black uppercase tracking-wide text-gray-900 dark:text-white">Video İzleme Bağlantıları</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzleme bağlantısı eklenmiş film ve diziler. Bir yapımı seçerek oynatma sayfasını açabilirsin.</p>
+                    </div>
+                    <div class="text-xs font-bold text-gray-500 dark:text-gray-400">
+                        <span class="text-rose-600 text-base" x-text="watchableCatalog.length"></span>
+                        <span> bağlantılı yapım</span>
+                    </div>
+                </div>
+
+                <div x-show="watchableCatalog.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-4">
+                    <template x-for="item in watchableCatalog" :key="item.id">
+                        <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="group text-left rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 flex flex-col shadow-sm">
+                            <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900 w-full">
+                                <img :src="item.poster || item.backdrop" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <span class="absolute top-2 left-2 px-2 py-1 rounded bg-rose-600 text-white text-[9px] font-black uppercase" x-text="item.type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
+                                <span class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400"><i class="fa-solid fa-star text-[8px]"></i> <span x-text="item.rating || '—'"></span></span>
+                                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent px-3 pt-8 pb-3 text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-play text-rose-400"></i>
+                                    <span class="text-[10px] font-bold uppercase tracking-wide">Oynatma sayfasını aç</span>
+                                </div>
+                            </div>
+                            <div class="p-3 space-y-1 w-full">
+                                <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500" x-text="item.title"></h3>
+                                <div class="flex items-center justify-between gap-2 text-[10px] text-gray-500 dark:text-gray-400">
+                                    <span x-text="item.year"></span>
+                                    <span x-text="isDirectVideoUrl(item.watchUrl) ? 'Doğrudan video' : 'Harici kaynak'"></span>
+                                </div>
+                            </div>
+                        </button>
+                    </template>
+                </div>
+                <div x-show="watchableCatalog.length === 0" :class="getCardClass()" class="rounded-2xl border text-center py-14 px-5 space-y-3">
+                    <i class="fa-solid fa-link-slash text-3xl text-gray-400"></i>
+                    <h3 class="font-bold text-gray-900 dark:text-white">Henüz izleme bağlantısı eklenmemiş</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Kataloğa bir video bağlantısı eklendiğinde burada görünecek.</p>
                 </div>
             </div>
         </template>
@@ -1504,7 +1555,7 @@
 
                     const pageMatch = hash.match(/^#\/([^/?#]+)$/);
                     const page = pageMatch ? decodeURIComponent(pageMatch[1]) : 'home';
-                    const allowedPages = ['home', 'explore', 'watchlist', 'stats'];
+                    const allowedPages = ['home', 'explore', 'video-links', 'watchlist', 'stats'];
                     this.currentPage = allowedPages.includes(page) ? page : 'home';
                     this.syncRouteToUrl(this.currentPage, null);
                 },
@@ -1650,6 +1701,10 @@
                         if (sourceRating && rating && Math.abs(sourceRating - rating) <= 1) score += 1;
                         return { item: candidate, score };
                     }).sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, 'tr')).slice(0, 12).map(entry => entry.item);
+                },
+
+                get watchableCatalog() {
+                    return this.catalog.filter(item => typeof item.watchUrl === 'string' && item.watchUrl.trim().length > 0);
                 },
 
                 get sortedFilteredCatalog() {
