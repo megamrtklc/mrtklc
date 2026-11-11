@@ -132,13 +132,32 @@ try {
         const image = document.querySelector('#mobileHeroBanner img');
         return image && image.complete && image.naturalWidth > 0;
       }, { timeout: 30000 });
-      const mobileState = await mobilePage.evaluate(() => ({
-        mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
-        desktopVisible: getComputedStyle(document.querySelector('main section.hidden.md\\:flex')).display !== 'none',
-        source: document.querySelector('#mobileHeroBanner img').currentSrc,
-        thumbnails: document.querySelectorAll('#mobileHeroThumbs img').length
-      }));
-      console.log('MOBILE HERO STATE:', JSON.stringify(mobileState));
+      const mobileState = await mobilePage.evaluate(() => {
+        const image = document.querySelector('#mobileHeroBanner img');
+        const lcp = performance.getEntriesByType('largest-contentful-paint').map(entry => ({
+          startTime: Math.round(entry.startTime),
+          size: entry.size,
+          tag: entry.element?.tagName || null,
+          id: entry.element?.id || null,
+          className: typeof entry.element?.className === 'string' ? entry.element.className.slice(0, 160) : '',
+          src: entry.element?.currentSrc || entry.element?.src || '',
+          text: entry.element?.textContent?.trim().slice(0, 80) || ''
+        }));
+        const resources = performance.getEntriesByType('resource')
+          .filter(entry => /image\\.tmdb\\.org|filmvediziler\\.json|alpinejs|fonts\\.(googleapis|gstatic)|font-awesome/.test(entry.name))
+          .map(entry => ({ name: entry.name, start: Math.round(entry.startTime), duration: Math.round(entry.duration), bytes: entry.transferSize || 0, initiator: entry.initiatorType }));
+        return {
+          mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
+          desktopVisible: getComputedStyle(document.querySelector('main section.hidden.md\\:flex')).display !== 'none',
+          source: image.currentSrc,
+          imageComplete: image.complete,
+          imageNaturalWidth: image.naturalWidth,
+          thumbnails: document.querySelectorAll('#mobileHeroThumbs img').length,
+          lcp,
+          resources
+        };
+      });
+      console.log('MOBILE HERO PERFORMANCE:', JSON.stringify(mobileState));
       assert.ok(mobileState.mobileVisible, 'Mobil manşet telefonda görünmüyor');
       assert.ok(!mobileState.desktopVisible, 'Masaüstü manşeti telefonda görünmemeli');
       assert.match(mobileState.source, /\/w(342|500|780)\//);
