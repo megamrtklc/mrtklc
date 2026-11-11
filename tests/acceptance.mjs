@@ -29,11 +29,24 @@ async function check(name, fn) {
 
 try {
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
-  await page.waitForFunction(() => {
-    if (!window.Alpine || typeof window.Alpine.$data !== 'function') return false;
-    const app = window.Alpine.$data(document.documentElement);
-    return app && Array.isArray(app.catalog) && app.catalog.length >= 130;
-  }, { timeout: 60000 });
+  try {
+    await page.waitForFunction(() => {
+      if (!window.Alpine || typeof window.Alpine.$data !== 'function') return false;
+      const app = window.Alpine.$data(document.documentElement);
+      return app && Array.isArray(app.catalog) && app.catalog.length >= 130;
+    }, { timeout: 60000 });
+  } catch (error) {
+    const diagnostic = await page.evaluate(() => ({
+      alpineLoaded: !!window.Alpine,
+      alpineVersion: window.Alpine?.version || null,
+      rootDataAttribute: document.documentElement.getAttribute('x-data'),
+      scriptSources: [...document.scripts].map(script => script.src).filter(Boolean),
+      resourceFailures: performance.getEntriesByType('resource').filter(entry => entry.responseStatus >= 400).map(entry => entry.name)
+    }));
+    console.error('APP INITIALIZATION DIAGNOSTIC:', JSON.stringify(diagnostic));
+    console.error('PAGE ERRORS:', JSON.stringify(failures));
+    throw error;
+  }
 
   adaletId = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.find(item => item.title === 'Adalet 2')?.id);
   assert.ok(adaletId, 'Adalet 2 katalogda bulunamadı');
