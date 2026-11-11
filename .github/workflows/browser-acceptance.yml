@@ -1,0 +1,32 @@
+name: Browser Acceptance Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/browser-acceptance.yml'
+      - 'tests/acceptance.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: npm install --no-save playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run production browser acceptance tests
+        env:
+          BASE_URL: https://megamrtklc.github.io/mrtklc/
+        run: node tests/acceptance.mjs
