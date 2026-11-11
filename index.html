@@ -197,7 +197,7 @@
                     <div class="relative w-full flex-grow flex items-center px-6 sm:px-12 py-12">
                         <!-- Backdrop Image -->
                         <div class="absolute inset-0 z-0">
-                            <img :src="currentHero.backdrop" :srcset="getTmdbImageSrcSet(currentHero.backdrop, [500, 780, 1280])" sizes="100vw" :alt="currentHero.title + ' arka plan görseli'" loading="eager" fetchpriority="high" decoding="async" @error="handleImageError($event)" class="w-full h-full object-cover object-center filter brightness-[0.7]">
+                            <img :data-fallback-src="currentHero.poster" :src="currentHero.backdrop" :srcset="getTmdbImageSrcSet(currentHero.backdrop, [500, 780, 1280])" sizes="100vw" :alt="currentHero.title + ' arka plan görseli'" loading="eager" fetchpriority="high" decoding="async" @error="handleImageError($event)" class="w-full h-full object-cover object-center filter brightness-[0.7]">
                             <!-- Sabit Sinematik Koyu Gradyan Perdesi (Her Modda Görseli ve Yazıyı Mükemmel Gösterir) -->
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent"></div>
                             <div class="absolute inset-0 bg-gradient-to-r from-gray-950/90 via-gray-950/50 to-transparent"></div>
@@ -1088,16 +1088,13 @@
                     const image = event && event.target;
                     if (!image) return;
 
-                    if (image.hasAttribute('fetchpriority') && !image.dataset.perdePosterFallbackApplied) {
-                        const app = window.Alpine?.$data(document.documentElement);
-                        const posterFallback = app?.currentHero?.poster || '';
-                        if (posterFallback && image.src !== posterFallback) {
-                            image.dataset.perdePosterFallbackApplied = 'true';
-                            image.removeAttribute('srcset');
-                            image.removeAttribute('sizes');
-                            image.src = posterFallback;
-                            return;
-                        }
+                    const posterFallback = image.dataset.fallbackSrc || '';
+                    if (posterFallback && !image.dataset.perdePosterFallbackApplied && image.src !== posterFallback) {
+                        image.dataset.perdePosterFallbackApplied = 'true';
+                        image.removeAttribute('srcset');
+                        image.removeAttribute('sizes');
+                        image.src = posterFallback;
+                        return;
                     }
 
                     if (image.dataset.perdeFallbackApplied) return;
