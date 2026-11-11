@@ -6,6 +6,7 @@ const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
 const failures = [];
+let adaletId = null;
 const results = [];
 page.on('pageerror', error => failures.push(error.message));
 
@@ -28,6 +29,9 @@ try {
     const app = window.Alpine.$data(document.documentElement);
     return app && Array.isArray(app.catalog) && app.catalog.length >= 130;
   }, { timeout: 60000 });
+
+  adaletId = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.find(item => item.title === 'Adalet 2')?.id);
+  assert.ok(adaletId, 'Adalet 2 katalogda bulunamadı');
 
   await check('Ana sayfa açılıyor ve katalog yükleniyor', async () => {
     assert.match(await page.title(), /CineVerse/i);
@@ -100,7 +104,7 @@ try {
     await page.getByText('İzleme Listesi Boş', { exact: true }).waitFor({ state: 'visible' });
 
     await page.locator('header select').selectOption('pro_1');
-    await page.waitForFunction(() => window.Alpine.$data(document.documentElement).watchlist.some(item => String(item.id) === 'archive-125'));
+    await page.waitForFunction(() => window.Alpine.$data(document.documentElement).watchlist.some(item => String(item.id) === String(adaletId)));
     await page.locator('header nav a').filter({ hasText: 'İzleme Listem' }).first().click();
     await page.getByRole('heading', { name: 'Ana Profil - İzleme Listem' }).waitFor({ state: 'visible' });
     await page.getByText('Adalet 2', { exact: true }).waitFor({ state: 'visible' });
@@ -112,7 +116,7 @@ try {
     await page.locator('main button').filter({ hasText: 'Adalet 2' }).first().click();
     await page.waitForURL(/#\/watch\/archive-125$/);
     await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => window.Alpine && window.Alpine.$data(document.documentElement)?.selectedItem?.id === 'archive-125', { timeout: 30000 });
+    await page.waitForFunction(() => window.Alpine && window.Alpine.$data(document.documentElement)?.selectedItem?.id === adaletId, { timeout: 30000 });
   });
 
   await check('Tarayıcıda yakalanan JavaScript çalışma zamanı hatası yok', async () => {
