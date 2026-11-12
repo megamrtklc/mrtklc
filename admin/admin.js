@@ -499,6 +499,8 @@
       $('.notice b').textContent='Yönetim bağlantısı aktif';
       $('.notice p').textContent=payload.readOnlyReason||('Yönetici oturumu etkin: '+(session.email||'Yetkili hesap')+'. Değişiklikler güvenli API üzerinden GitHub kataloğuna kaydedilir.');
       $('.notice-tag').textContent='CONNECTED';
+      const sideStatus=$('.sidebar-status small');if(sideStatus)sideStatus.textContent='Bağlantı aktif';
+      const sidePulse=$('.status-pulse');if(sidePulse)sidePulse.style.background='var(--green)';
       $('#health-catalog').textContent='Bağlandı';$('#health-json').textContent='Geçerli';
       $('#health-auth').textContent='Aktif';$('#health-api').textContent='Aktif';
       $('#data-version').textContent=String(state.data.version??'Belirtilmemiş');
