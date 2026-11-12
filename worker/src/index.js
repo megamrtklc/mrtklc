@@ -182,6 +182,7 @@ function catalogUrl(env) {
 }
 
 // Admin UI is served from this Worker asset bundle; keep catalog reads independent from write-token scope.
+// Redeploy the corrected admin asset bundle with the current UI selector fixes.
 async function readCatalog(env) {
   const headers = env.GITHUB_TOKEN ? githubHeaders(env) : { accept: "application/vnd.github+json", "x-github-api-version": API_VERSION, "user-agent": "CineVerse-Admin-Worker" };
   let response = await fetch(catalogUrl(env), { headers });
