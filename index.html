@@ -228,11 +228,11 @@
                 
                 <!-- MOBILE HERO: görsel üstte, içerik altta; masaüstü kompozisyonunun doğal mobil uyarlaması -->
                 <section id="mobileHeroBanner" @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="relative isolate md:hidden w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" :src="currentHero.poster || currentHero.backdrop" loading="eager" decoding="async" class="pointer-events-none absolute inset-0 z-0 h-full w-full scale-110 object-cover opacity-20 blur-2xl"><div class="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-gray-950/65 via-gray-950/80 to-gray-950/95"></div>
-                    <div class="relative aspect-[16/9] w-full overflow-hidden bg-gray-900">
+                    <div class="relative z-10 aspect-[16/9] w-full overflow-hidden bg-gray-900">
                         <img :src="currentHero.backdrop || currentHero.poster" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [342, 500, 780])" sizes="100vw" :alt="currentHero.title + ' görseli'" loading="eager" fetchpriority="high" decoding="async" @error="handleImageError($event)" class="h-full w-full object-cover object-center">
                         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-950/55 via-transparent to-transparent"></div>
                     </div>
-                    <div class="px-5 pb-6 pt-5 text-white sm:px-7">
+                    <div class="relative z-10 px-5 pb-6 pt-5 text-white sm:px-7">
                         <div class="space-y-3">
                             <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
                             <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.35rem,5.4vw,2.25rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
