@@ -411,25 +411,39 @@
     $('#hero-interval').value=settings.interval??6;
     $('#hero-autoplay').checked=settings.autoplay!==false;
     $('#hero-pause').checked=settings.pauseOnHover!==false;
-    const current=new Map(config.heroSlides.map(x=>[String(x.id),x]));
-    $('#hero-slide-list').innerHTML=state.catalog.map(item=>{
-      const entry=current.get(String(item.id)),active=entry?entry.active!==false:false;
-      return '<label class="hero-pick"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(active?'checked':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></span></label>';
-    }).join('');
-    const updateCount=()=>$('#hero-selected-count').textContent=$('#hero-slide-list input:checked').length+' yapım seçildi';
-    $$('#hero-slide-list input').forEach(input=>input.addEventListener('change',updateCount));
-    updateCount();
+    const desktopEntries=Array.isArray(config.desktopHeroSlides)?config.desktopHeroSlides:config.heroSlides;
+    const mobileEntries=Array.isArray(config.mobileHeroSlides)?config.mobileHeroSlides:config.heroSlides;
+    const renderList=(listId,countId,entries)=>{
+      const current=new Map(entries.map(x=>[String(x.id),x]));
+      $(listId).innerHTML=state.catalog.map(item=>{
+        const entry=current.get(String(item.id)),active=entry?entry.active!==false:false;
+        return '<label class="hero-pick"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(active?'checked':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\\'hidden\\'"><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></span></label>';
+      }).join('');
+      const updateCount=()=>$(countId).textContent=$(listId+' input:checked').length+' yapım seçildi';
+      $(listId+' input').forEach(input=>input.addEventListener('change',updateCount));
+      updateCount();
+    };
+    renderList('#hero-desktop-slide-list','#hero-desktop-selected-count',desktopEntries);
+    renderList('#hero-mobile-slide-list','#hero-mobile-selected-count',mobileEntries);
     $('#homepage-config').textContent=JSON.stringify(config,null,2);
   }
   async function saveHomepage(event){
     event.preventDefault();if(!canWrite())return;
-    const previous=homepageConfig(),byId=new Map(previous.heroSlides.map(x=>[String(x.id),x]));
-    const ids=$$('#hero-slide-list input:checked').map(x=>x.value);
-    const config={...previous,version:2,settings:{...previous.settings,
+    const previous=homepageConfig();
+    const legacyById=new Map(previous.heroSlides.map(x=>[String(x.id),x]));
+    const desktopById=new Map((previous.desktopHeroSlides||previous.heroSlides).map(x=>[String(x.id),x]));
+    const mobileById=new Map((previous.mobileHeroSlides||previous.heroSlides).map(x=>[String(x.id),x]));
+    const buildSlides=(listId,oldMap)=>$(listId+' input:checked').map(input=>{
+      const id=input.value,old=oldMap.get(String(id))||legacyById.get(String(id))||{};
+      return {...old,id,active:true,headline:old.headline||'',description:old.description||''};
+    });
+    const desktopHeroSlides=buildSlides('#hero-desktop-slide-list',desktopById);
+    const mobileHeroSlides=buildSlides('#hero-mobile-slide-list',mobileById);
+    const config={...previous,version:3,settings:{...previous.settings,
       desktopCount:Number($('#hero-desktop-count').value)||10,mobileCount:Number($('#hero-mobile-count').value)||6,
       interval:Number($('#hero-interval').value)||6,autoplay:$('#hero-autoplay').checked,pauseOnHover:$('#hero-pause').checked},
-      heroSlides:ids.map(id=>({...byId.get(String(id)),id,active:true,headline:byId.get(String(id))?.headline||'',description:byId.get(String(id))?.description||''}))};
-    const ok=await persist({...state.data,homepageConfig:config},'Vitrin ayarları kaydedildi.');
+      desktopHeroSlides,mobileHeroSlides,heroSlides:desktopHeroSlides};
+    const ok=await persist({...state.data,homepageConfig:config},'Masaüstü ve mobil manşet ayarları kaydedildi.');
     if(ok)renderHomepage();
   }
   async function init(){
