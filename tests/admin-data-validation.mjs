@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { validateCatalogData } from '../worker/src/index.js';
+const workerSource = readFileSync(new URL('../worker/src/index.js', import.meta.url), 'utf8');
+const validatorStart = workerSource.indexOf('export function validateCatalogData(data) {');
+const validatorEnd = workerSource.indexOf('\\n\\nasync function writeCatalog', validatorStart);
+assert.ok(validatorStart >= 0 && validatorEnd > validatorStart, 'Worker doğrulama fonksiyonu bulunamadı');
+const validatorSource = workerSource.slice(validatorStart, validatorEnd).replace('export function', 'function');
+const validateCatalogData = new Function(validatorSource + '\\nreturn validateCatalogData;')();
 
 const source = JSON.parse(readFileSync(new URL('../filmvediziler.json', import.meta.url), 'utf8'));
 const snapshot = JSON.stringify(source);
