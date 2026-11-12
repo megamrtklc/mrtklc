@@ -251,23 +251,6 @@
                     </div>
                 </section>
 
-                <!-- MOBILE FEATURED TITLES -->
-                <div class="md:hidden -mb-6 bg-gray-950 px-4 pt-2 pb-2">
-                    <div class="flex items-center justify-end mb-2">
-                        <div class="flex gap-2">
-                            <button @click="navigateHeroSlide(-1, 'mobileHeroThumbs')" aria-label="Önceki öne çıkan yapım" class="hero-nav-arrow"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                            <button @click="navigateHeroSlide(1, 'mobileHeroThumbs')" aria-label="Sonraki öne çıkan yapım" class="hero-nav-arrow"><i class="fa-solid fa-chevron-right text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div id="mobileHeroThumbs" class="flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth pb-0">
-                        <template x-for="(item, idx) in heroThumbSlides" :key="'mobile-' + item.id">
-                            <button @click="selectHeroSlide(idx)" :data-hero-index="idx" :aria-label="item.title" :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 opacity-100' : 'opacity-70'" class="flex-shrink-0 w-[66px] rounded-lg overflow-hidden bg-gray-900 transition-all">
-                                <img :src="item.poster" :alt="item.title" :srcset="getTmdbImageSrcSet(item.poster, [185, 342])" sizes="66px" loading="lazy" decoding="async" @error="handleImageError($event)" class="w-full aspect-[2/3] object-cover">
-                            </button>
-                        </template>
-                    </div>
-                </div>
-
                 <!-- DESKTOP HERO: sol metin + sağ sinematik görsel -->
                 <section @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="relative isolate hidden md:block w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80 select-none"><img aria-hidden="true" :src="currentHero.poster || currentHero.backdrop" loading="eager" decoding="async" class="pointer-events-none absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-35 blur-3xl"><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-gray-950/30 via-transparent to-gray-950/80"></div>
                     <div class="relative mx-auto grid min-h-[460px] max-w-[1440px] grid-cols-2 items-center gap-8 px-8 pt-10 pb-2 sm:px-10 lg:min-h-[500px] lg:gap-12 lg:px-14 xl:gap-16">
