@@ -238,8 +238,11 @@ async function writeCatalog(env, data, expectedSha) {
     ids.add(id);
     for (const field of ["image", "backdrop", "trailerUrl", "watchUrl"]) {
       if (!item[field]) continue;
+      const value = String(item[field]).trim();
+      // Legacy catalog entries may store an 11-character YouTube video ID instead of a URL.
+      if (field === "trailerUrl" && /^[A-Za-z0-9_-]{11}$/.test(value)) continue;
       try {
-        const parsed = new URL(String(item[field]));
+        const parsed = new URL(value);
         if (parsed.protocol !== "https:" && parsed.protocol !== "http:") throw new Error("invalid protocol");
       } catch {
         throw new Error("Geçersiz görsel veya fragman adresi: " + field);
