@@ -127,7 +127,7 @@
                     <span class="text-xl font-black tracking-wider uppercase max-[360px]:hidden">CINE<span class="text-rose-600">VERSE</span></span>
                 </a>
                 
-                <nav class="hidden lg:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                <nav class="hidden xl:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     <a href="#" @click.prevent="navigateTo('home')" :class="currentPage === 'home' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Ana Sayfa</a>
                     <a href="#" @click.prevent="navigateTo('explore')" :class="currentPage === 'explore' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Keşfet</a>
                     <a href="#" @click.prevent="navigateTo('video-links')" :class="currentPage === 'video-links' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center gap-1.5">
@@ -144,7 +144,7 @@
             </div>
             
             <div class="flex items-center space-x-1 sm:space-x-4">
-                <button @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen.toString()" aria-label="Menüyü aç veya kapat" class="lg:hidden w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-rose-500 transition-colors">
+                <button @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen.toString()" aria-label="Menüyü aç veya kapat" class="xl:hidden w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-rose-500 transition-colors">
                     <i :class="mobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
                 </button>
                 <div class="relative hidden xl:block">
@@ -187,7 +187,7 @@
                 </div>
             </div>
         </div>
-        <div x-show="mobileMenuOpen" x-transition.origin.top.right @click.away="mobileMenuOpen = false" class="lg:hidden absolute top-full right-3 left-3 sm:left-auto sm:w-80 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl p-3 z-50">
+        <div x-show="mobileMenuOpen" x-transition.origin.top.right @click.away="mobileMenuOpen = false" class="xl:hidden absolute top-full right-3 left-3 sm:left-auto sm:w-80 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl p-3 z-50">
             <div class="relative mb-3">
                 <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
                 <input type="text" x-model="searchQuery" @keydown.enter="navigateTo('explore'); mobileMenuOpen = false" placeholder="Film veya dizi ara..." :class="getSearchClass()" class="w-full border rounded-lg pl-9 pr-3 py-2.5 text-sm text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-600">
