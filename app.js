@@ -875,6 +875,42 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 },
 
+                async fetchActorAwards(wikidataId) {
+                    if (!wikidataId) return [];
+                    try {
+                        const response = await fetch('https://www.wikidata.org/wiki/Special:EntityData/' + encodeURIComponent(wikidataId) + '.json');
+                        if (!response.ok) throw new Error('Wikidata yanıt vermedi');
+                        const payload = await response.json();
+                        const entity = payload.entities?.[wikidataId];
+                        const claims = entity?.claims?.P166 || [];
+                        const awardClaims = claims.map(claim => {
+                            const id = claim.mainsnak?.datavalue?.value?.id;
+                            if (!id) return null;
+                            const rawDate = claim.qualifiers?.P585?.[0]?.datavalue?.value?.time || '';
+                            const yearMatch = rawDate.match(/[+-](\\d{4})-/);
+                            return { id, year: yearMatch ? yearMatch[1] : '' };
+                        }).filter(Boolean);
+                        const ids = [...new Set(awardClaims.map(item => item.id))];
+                        if (!ids.length) return [];
+                        const labelsResponse = await fetch('https://www.wikidata.org/w/api.php?action=wbgetentities&ids=' + encodeURIComponent(ids.join('|')) + '&props=labels&languages=tr|en&format=json&origin=*');
+                        if (!labelsResponse.ok) throw new Error('Ödül adları alınamadı');
+                        const labelsPayload = await labelsResponse.json();
+                        const awards = awardClaims.map(item => ({
+                            name: labelsPayload.entities?.[item.id]?.labels?.tr?.value || labelsPayload.entities?.[item.id]?.labels?.en?.value || '',
+                            year: item.year
+                        })).filter(item => item.name);
+                        const unique = new Map();
+                        awards.forEach(item => {
+                            const key = item.name + '|' + item.year;
+                            if (!unique.has(key)) unique.set(key, item);
+                        });
+                        return [...unique.values()].sort((a,b) => String(b.year).localeCompare(String(a.year)) || a.name.localeCompare(b.name, 'tr'));
+                    } catch (error) {
+                        console.warn('Oyuncu ödülleri alınamadı:', error);
+                        return [];
+                    }
+                },
+
                 async openActorProfile(actor, updateUrl = true) {
                     if (!actor || !actor.id) return;
                     this.selectedActor = { ...actor, id: Number(actor.id) };
@@ -891,6 +927,7 @@
                     try {
                         const personPath = 'person/' + encodeURIComponent(actor.id) + '?append_to_response=movie_credits,tv_credits,external_ids';
                         const person = await this.fetchTmdb(personPath);
+                        const awards = await this.fetchActorAwards(person.external_ids?.wikidata_id);
                         let biography = person.biography || '';
                         if (!biography.trim()) {
                             try {
@@ -923,6 +960,7 @@
                             id: person.id,
                             name: person.name || actor.name || 'Oyuncu',
                             biography,
+                            awards,
                             birthday: person.birthday || '',
                             deathday: person.deathday || '',
                             placeOfBirth: person.place_of_birth || '',
