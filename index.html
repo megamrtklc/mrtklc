@@ -905,7 +905,7 @@
                                 <template x-for="actor in selectedItem.tmdbCast" :key="actor.name">
                                     <div @click="actor.id && openActorProfile(actor)" @keydown.enter.prevent="actor.id && openActorProfile(actor)" tabindex="0" role="button" :aria-label="actor.name + ' oyuncu profilini aç'" :class="getCardClass()" class="w-24 flex-shrink-0 p-2.5 rounded-xl border flex flex-col items-center text-center space-y-2 transition-all duration-300 hover:scale-110 hover:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer group">
                                         <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-md ring-2 ring-gray-300 dark:ring-gray-700 group-hover:ring-rose-500 transition-all">
-                                            <img :alt="'Oyuncu fotoğrafı'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="actor.profile || 'https://placehold.co/150x150/161922/ffffff?text=Photo'" class="w-full h-full object-cover">
+                                            <img :alt="'Oyuncu fotoğrafı'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="actor.profile || 'https://placehold.co/150x150/161922/ffffff?text=Photo'" :srcset="getTmdbImageSrcSet(actor.profile, [45, 185])" sizes="48px" class="w-full h-full object-cover">
                                         </div>
                                         <div class="w-full">
                                             <h4 class="font-bold text-[11px] text-gray-900 dark:text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="actor.name"></h4>
