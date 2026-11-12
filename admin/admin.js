@@ -419,8 +419,8 @@
         const entry=current.get(String(item.id)),active=entry?entry.active!==false:false;
         return '<label class="hero-pick"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(active?'checked':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></span></label>';
       }).join('');
-      const updateCount=()=>$(countId).textContent=$$(listId+' input:checked').length+' yapım seçildi';
-      $$(listId+' input').forEach(input=>input.addEventListener('change',updateCount));
+      const updateCount=()=>$(countId).textContent=$$$(listId+' input:checked').length+' yapım seçildi';
+      $$$(listId+' input').forEach(input=>input.addEventListener('change',updateCount));
       updateCount();
     };
     renderList('#hero-desktop-slide-list','#hero-desktop-selected-count',desktopEntries);
@@ -433,7 +433,7 @@
     const legacyById=new Map(previous.heroSlides.map(x=>[String(x.id),x]));
     const desktopById=new Map((previous.desktopHeroSlides||previous.heroSlides).map(x=>[String(x.id),x]));
     const mobileById=new Map((previous.mobileHeroSlides||previous.heroSlides).map(x=>[String(x.id),x]));
-    const buildSlides=(listId,oldMap)=>$(listId+' input:checked').map(input=>{
+    const buildSlides=(listId,oldMap)=>$$(listId+' input:checked').map(input=>{
       const id=input.value,old=oldMap.get(String(id))||legacyById.get(String(id))||{};
       return {...old,id,active:true,headline:old.headline||'',description:old.description||''};
     });
