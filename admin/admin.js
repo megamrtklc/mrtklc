@@ -129,6 +129,7 @@
   async function deleteContent(id){
     if(!canWrite())return;
     const item=state.catalog.find(x=>String(x.id)===String(id));if(!item)return;
+    if(state.catalog.length<=1){toast('Katalogda en az bir yapım kalmalı.');return;}
     if(!confirm('“'+titleOf(item)+'” kaydını katalogdan silmek istiyor musun? Bu işlem yayına yansır.'))return;
     const nextData={...state.data,catalog:state.catalog.filter(x=>String(x.id)!==String(id))};
     if(Array.isArray(nextData.collections))nextData.collections=nextData.collections.map(c=>({...c,items:(c.items||[]).filter(x=>String(x)!==String(id))}));
@@ -187,6 +188,9 @@
       const entry=current.get(String(item.id)),active=entry?entry.active!==false:false;
       return '<label class="hero-pick"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(active?'checked':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></span></label>';
     }).join('');
+    const updateCount=()=>$('#hero-selected-count').textContent=$('#hero-slide-list input:checked').length+' yapım seçildi';
+    $('#hero-slide-list input').forEach(input=>input.addEventListener('change',updateCount));
+    updateCount();
     $('#homepage-config').textContent=JSON.stringify(config,null,2);
   }
   async function saveHomepage(event){
