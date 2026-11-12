@@ -36,17 +36,67 @@ if (location.hostname.endsWith('github.io')) {
       <div class="top-context"><div class="breadcrumbs"><span>Studio</span><b>/</b><strong id="crumb-current">Genel Bakış</strong></div><div class="heading-date" id="today-date"></div></div>
       <div class="notice"><span class="notice-icon">i</span><div><b>Bağlantı kontrol ediliyor</b><p>Yönetim oturumu ve katalog bağlantısı doğrulanıyor…</p></div><span class="notice-tag">CONNECTING</span></div>
       <section class="view active" id="view-overview">
-        <div class="welcome-block"><div><div class="eyebrow">YOUR CONTENT OVERVIEW</div><h1>Merhaba, <span>yönetici.</span></h1><p>İçerik evrenin burada şekilleniyor. Bugün neler oluyor?</p></div><button class="primary-button" id="add-content" disabled title="Korumalı yönetim bağlantısı gerekli">＋ Yeni yapım ekle</button></div>
-        <div class="overview-layout">
-          <article class="feature-panel"><div class="feature-top"><span class="feature-kicker">ARŞİVİN GENEL DURUMU</span><span class="live-indicator"><i></i> CANLI VERİ</span></div><div class="feature-total"><strong id="metric-total">—</strong><span>toplam yapım</span></div><div class="feature-breakdown"><div><span class="break-dot movie-dot"></span><small>Filmler</small><b id="metric-movies">—</b></div><div><span class="break-dot series-dot"></span><small>Diziler</small><b id="metric-series">—</b></div><div><span class="break-dot collection-dot"></span><small>Koleksiyonlar</small><b id="metric-collections">—</b></div></div><div class="feature-decoration">CV</div></article>
-          <div class="side-stack"><article class="mini-panel"><span class="mini-icon mint">↗</span><div><small>İÇERİK AKIŞI</small><b>Arşiv büyüyor</b><p>Son eklenen kayıtları incele</p></div><button data-go="catalog" aria-label="Kataloğa git">→</button></article><article class="mini-panel"><span class="mini-icon lilac">⌘</span><div><small>YÖNETİM MERKEZİ</small><b>Her şey kontrol altında</b><p>Platform ayarlarına göz at</p></div><button data-go="system" aria-label="Sisteme git">→</button></article></div>
-          <article class="panel-card recent-panel"><div class="panel-heading"><div><span class="section-index">01 / SON HAREKETLER</span><h2>Arşive yeni katılanlar</h2><p>Kataloğa en son eklenen yapımlar</p></div><button class="text-button" data-go="catalog">Tüm arşiv <span>↗</span></button></div><div id="recent-list" class="recent-list"><div class="loading-line">Katalog yükleniyor…</div></div></article>
-          <article class="panel-card health-panel"><div class="panel-heading"><div><span class="section-index">02 / TEKNİK DURUM</span><h2>Bağlantı kontrolü</h2><p>Servislerin mevcut durumu</p></div><span class="health-pulse"></span></div><div class="health-row"><span><i class="health-check">✓</i> Katalog dosyası</span><b id="health-catalog">Kontrol ediliyor</b></div><div class="health-row"><span><i class="health-check">✓</i> JSON veri yapısı</span><b id="health-json">Kontrol ediliyor</b></div><div class="health-row"><span><i class="health-wait">•</i> Yönetici doğrulaması</span><b id="health-auth" class="muted">Kontrol ediliyor</b></div><div class="health-row"><span><i class="health-wait">•</i> Güvenli yayınlama API</span><b id="health-api" class="muted">Kontrol ediliyor</b></div><div class="health-foot">Son kontrol <span id="last-check">—</span></div></article>
+        <div class="dashboard-welcome">
+          <div class="dashboard-welcome-copy">
+            <span class="dashboard-overline"><i></i> CINEVERSE CONTENT STUDIO</span>
+            <h1>İçerik dünyana<br><em>hoş geldin.</em></h1>
+            <p>Arşivini yönet, vitrinini şekillendir ve izleme deneyimini tek bir yerden kontrol et.</p>
+            <div class="dashboard-welcome-actions">
+              <button class="dashboard-primary" id="add-content" disabled title="Korumalı yönetim bağlantısı gerekli"><span>＋</span> Yeni yapım ekle</button>
+              <button class="dashboard-secondary" data-go="catalog">Arşivi keşfet <span>↗</span></button>
+            </div>
+            <div class="dashboard-welcome-foot"><span>BUGÜN</span><b id="today-date">—</b></div>
+          </div>
+          <div class="dashboard-art" aria-hidden="true">
+            <div class="dashboard-art-orbit orbit-one"></div><div class="dashboard-art-orbit orbit-two"></div>
+            <div class="dashboard-art-disc"><span>CV</span><i>✦</i></div>
+            <div class="dashboard-art-note note-top"><span>YOUR</span><b>STORY</b></div>
+            <div class="dashboard-art-note note-bottom"><span>CURATE · CREATE · INSPIRE</span><b>01 <small>/ STUDIO</small></b></div>
+            <div class="dashboard-art-spark spark-one">✳</div><div class="dashboard-art-spark spark-two">✦</div>
+          </div>
+          <div class="dashboard-welcome-index">01 <span>—</span> YOUR WORKSPACE</div>
         </div>
-        <div class="overview-extras">
-          <article class="panel-card overview-insight"><div class="panel-heading"><div><span class="section-index">04 / KATALOG ÖZETİ</span><h2>Arşivinin içeriği</h2><p>Yapım yılları ve puan ortalaması üzerinden hızlı görünüm.</p></div></div><div class="overview-stat-grid"><div><small>Ortalama puan</small><b id="overview-average">—</b></div><div><small>En eski yapım</small><b id="overview-oldest">—</b></div><div><small>En yeni yapım</small><b id="overview-newest">—</b></div><div><small>Fragmanı olan</small><b id="overview-trailers">—</b></div></div><div class="overview-yearline" id="overview-yearline"></div></article>
+
+        <div class="dashboard-section-head">
+          <div><span class="dashboard-eyebrow">GENEL DURUM</span><h2>Arşivinin kısa bir özeti</h2><p>İçeriklerinin güncel görünümü, tek bakışta.</p></div>
+          <span class="dashboard-live"><i></i> GÜNCEL VERİ</span>
         </div>
-        <div class="quick-strip"><div><span class="section-index">03 / HIZLI ERİŞİM</span><h2>Bir sonraki adımın ne?</h2></div><div class="quick-actions"><button data-go="collections"><span>▧</span><b>Koleksiyonlar</b><small>Listeleri düzenle ↗</small></button><button data-go="homepage"><span>⌂</span><b>Vitrin düzeni</b><small>Ana sayfayı incele ↗</small></button><button data-go="analytics"><span>⌁</span><b>İçgörüler</b><small>Verileri keşfet ↗</small></button></div></div>
+        <div class="dashboard-metrics">
+          <article class="dashboard-metric metric-total"><span class="dashboard-metric-icon">▤</span><small>TOPLAM YAPIM</small><strong id="metric-total">—</strong><span class="metric-caption">Arşivindeki tüm içerikler</span><i class="metric-watermark">01</i></article>
+          <article class="dashboard-metric metric-movies"><span class="dashboard-metric-icon">▣</span><small>FİLMLER</small><strong id="metric-movies">—</strong><span class="metric-caption">Uzun metraj yapımlar</span><i class="metric-watermark">02</i></article>
+          <article class="dashboard-metric metric-series"><span class="dashboard-metric-icon">▥</span><small>DİZİLER</small><strong id="metric-series">—</strong><span class="metric-caption">Seri ve sezon hikâyeleri</span><i class="metric-watermark">03</i></article>
+          <article class="dashboard-metric metric-collections"><span class="dashboard-metric-icon">▧</span><small>KOLEKSİYONLAR</small><strong id="metric-collections">—</strong><span class="metric-caption">Özenle hazırladığın seçkiler</span><i class="metric-watermark">04</i></article>
+        </div>
+
+        <div class="dashboard-main-grid">
+          <article class="dashboard-card dashboard-recent">
+            <div class="dashboard-card-heading"><div><span class="dashboard-eyebrow">ARŞİVDE YENİ</span><h2>Son eklenen yapımlar</h2><p>Arşivine en son kattığın içerikler.</p></div><button class="dashboard-link" data-go="catalog">Tüm arşiv <span>↗</span></button></div>
+            <div id="recent-list" class="recent-list"><div class="loading-line">Katalog yükleniyor…</div></div>
+          </article>
+          <article class="dashboard-card dashboard-shortcuts">
+            <div class="dashboard-card-heading"><div><span class="dashboard-eyebrow">STÜDYO KISAYOLLARI</span><h2>Nereden başlayalım?</h2><p>En çok kullanılan alanlara hızlıca geç.</p></div></div>
+            <button class="dashboard-shortcut" data-go="collections"><span class="shortcut-symbol shortcut-lilac">▧</span><span><b>Koleksiyonlar</b><small>Özel listelerini düzenle</small></span><i>↗</i></button>
+            <button class="dashboard-shortcut" data-go="homepage"><span class="shortcut-symbol shortcut-peach">⌂</span><span><b>Ana sayfa vitrini</b><small>Öne çıkanları belirle</small></span><i>↗</i></button>
+            <button class="dashboard-shortcut" data-go="watch-layout"><span class="shortcut-symbol shortcut-mint">▦</span><span><b>İzleme deneyimi</b><small>Sayfa düzenini şekillendir</small></span><i>↗</i></button>
+            <button class="dashboard-shortcut" data-go="analytics"><span class="shortcut-symbol shortcut-gold">⌁</span><span><b>İstatistikler</b><small>Arşivini daha yakından tanı</small></span><i>↗</i></button>
+          </article>
+        </div>
+
+        <div class="dashboard-bottom-grid">
+          <article class="dashboard-card dashboard-insights">
+            <div class="dashboard-card-heading"><div><span class="dashboard-eyebrow">KÜÇÜK BİR BAKIŞ</span><h2>Arşivinin karakteri</h2><p>Yıllar, puanlar ve fragmanlar üzerinden.</p></div><button class="dashboard-link" data-go="analytics">Detaylı analiz <span>↗</span></button></div>
+            <div class="dashboard-insight-stats"><div><small>ORTALAMA PUAN</small><b id="overview-average">—</b></div><div><small>EN ESKİ YAPIM</small><b id="overview-oldest">—</b></div><div><small>EN YENİ YAPIM</small><b id="overview-newest">—</b></div><div><small>FRAGMANLI</small><b id="overview-trailers">—</b></div></div>
+            <div class="dashboard-year-chart"><div class="year-chart-label"><span>Yapım yılları</span><small>Son 12 aktif yıl</small></div><div class="overview-yearline" id="overview-yearline"></div></div>
+          </article>
+          <article class="dashboard-card dashboard-health">
+            <div class="dashboard-card-heading"><div><span class="dashboard-eyebrow">ARKA PLANDA HER ŞEY YOLUNDA</span><h2>Sistem durumu</h2><p>Servis bağlantılarının kontrolü.</p></div><span class="dashboard-health-icon">✓</span></div>
+            <div class="dashboard-health-row"><span>Katalog dosyası</span><b id="health-catalog">Kontrol ediliyor</b></div>
+            <div class="dashboard-health-row"><span>Veri bütünlüğü</span><b id="health-json">Kontrol ediliyor</b></div>
+            <div class="dashboard-health-row"><span>Yönetici oturumu</span><b id="health-auth" class="muted">Kontrol ediliyor</b></div>
+            <div class="dashboard-health-row"><span>Yayınlama servisi</span><b id="health-api" class="muted">Kontrol ediliyor</b></div>
+            <div class="dashboard-health-foot">Son kontrol <span id="last-check">—</span></div>
+          </article>
+        </div>
       </section>
       <section class="view" id="view-catalog"><div class="page-heading"><div><div class="eyebrow">CONTENT LIBRARY / 01</div><h1>Film &amp; Diziler</h1><p>Kataloğunu keşfet, filtrele ve kayıtları yönet.</p></div><button class="primary-button" id="catalog-add" disabled>＋ Yeni yapım</button></div><div class="catalog-toolbar"><label class="search-box"><span>⌕</span><input id="catalog-search" type="search" placeholder="Başlık, yönetmen veya oyuncu ara…"></label><select id="type-filter"><option value="all">Tüm türler</option><option value="movie">Filmler</option><option value="tv">Diziler</option></select><select id="year-filter"><option value="all">Tüm yıllar</option></select><span class="result-count" id="result-count">Katalog okunuyor…</span></div><div class="catalog-table-wrap"><table class="catalog-table"><thead><tr><th>YAPIM</th><th>TÜR</th><th>YIL</th><th>PUAN</th><th>TMDB</th><th></th></tr></thead><tbody id="catalog-rows"><tr><td colspan="6" class="empty-cell">Katalog yükleniyor…</td></tr></tbody></table></div><div class="pagination"><span id="page-info">—</span><div><button id="prev-page" disabled>←</button><button id="next-page" disabled>→</button></div></div></section>
       <section class="view" id="view-collections"><div class="page-heading"><div><div class="eyebrow">CURATED / 02</div><h1>Koleksiyonlar</h1><p>Özel seçkiler oluştur, içerikleri seç ve yayına al.</p></div><button class="primary-button" id="collection-add">＋ Yeni koleksiyon</button></div><div id="collection-grid" class="collection-grid"><div class="panel-card">Koleksiyonlar yükleniyor…</div></div></section>
