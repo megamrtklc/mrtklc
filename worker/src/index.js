@@ -1,3 +1,4 @@
+/* Admin UI bundle deployment sync: admin assets are packaged by Wrangler. */
 const API_VERSION = "2022-11-28";
 let cachedJwks = null;
 let cachedJwksAt = 0;
