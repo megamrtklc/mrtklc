@@ -124,7 +124,7 @@
       if(response.status===409)throw new Error('Katalog başka bir işlemde güncellenmiş. Sayfayı yenileyip tekrar deneyin.');
       if(!response.ok)throw new Error(result.error||'Değişiklik kaydedilemedi.');
       state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];
-      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();
+      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.');
       return true;
