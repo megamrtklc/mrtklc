@@ -49,10 +49,10 @@
   function navigate(view){
     state.view=view;
     $$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
-    $$('.nav-link').forEach(el=>el.classList.toggle('active',el.dataset.view===view));
+    $('.nav-link').forEach(el=>{const active=el.dataset.view===view;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
     const active=$('.nav-link[data-view="'+view+'"]');
     $('#crumb-current').textContent=active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış';
-    $('#sidebar').classList.remove('open');
+    $('#sidebar').classList.remove('open');$('#mobile-menu')?.setAttribute('aria-expanded','false');
     if(view==='catalog')renderCatalog();
     if(view==='collections')renderCollections();
     if(view==='homepage')renderHomepage();
@@ -535,15 +535,27 @@
   $('#admin-theme-select').addEventListener('change',event=>applyAdminTheme(event.target.value));
   $$('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
   $$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
-  $('#mobile-menu').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
+  $('#mobile-menu').addEventListener('click',()=>{const open=$('#sidebar').classList.toggle('open');$('#mobile-menu').setAttribute('aria-expanded',String(open));$('#mobile-menu').setAttribute('aria-label',open?'Menüyü kapat':'Menüyü aç');});
   const shell=$('.app-shell');
-  if(window.innerWidth>760&&localStorage.getItem('cv-admin-sidebar-collapsed')==='1')shell.classList.add('sidebar-collapsed');
-  $('#sidebar-toggle').addEventListener('click',()=>{
-    shell.classList.toggle('sidebar-collapsed');
-    const collapsed=shell.classList.contains('sidebar-collapsed');
-    localStorage.setItem('cv-admin-sidebar-collapsed',collapsed?'1':'0');
-    $('#sidebar-toggle').title=collapsed?'Menüyü genişlet':'Menüyü daralt';
-    $('#sidebar-toggle').setAttribute('aria-label',collapsed?'Menüyü genişlet':'Menüyü daralt');
+  const sidebarToggle=$('#sidebar-toggle');
+  const setSidebarCollapsed=collapsed=>{
+    const desktop=window.innerWidth>760;
+    shell.classList.toggle('sidebar-collapsed',!!collapsed&&desktop);
+    if(sidebarToggle){
+      const label=collapsed?'Menüyü genişlet':'Menüyü daralt';
+      sidebarToggle.title=label;sidebarToggle.setAttribute('aria-label',label);
+      sidebarToggle.setAttribute('aria-expanded',String(!collapsed));
+    }
+    try{localStorage.setItem('cv-admin-sidebar-collapsed',collapsed&&desktop?'1':'0');}catch(error){}
+  };
+  setSidebarCollapsed(window.innerWidth>760&&localStorage.getItem('cv-admin-sidebar-collapsed')==='1');
+  sidebarToggle?.addEventListener('click',()=>{
+    const collapsed=!shell.classList.contains('sidebar-collapsed');
+    setSidebarCollapsed(collapsed);
+  });
+  window.addEventListener('resize',()=>{
+    if(window.innerWidth<=760){shell.classList.remove('sidebar-collapsed');}
+    else if(localStorage.getItem('cv-admin-sidebar-collapsed')==='1'){shell.classList.add('sidebar-collapsed');}
   });
   $('#profile-photo-button').addEventListener('click',()=>$('#profile-dialog').showModal());
   $('#profile-change-button').addEventListener('click',()=>$('#profile-dialog').showModal());
