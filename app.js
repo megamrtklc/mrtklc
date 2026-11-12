@@ -32,6 +32,7 @@
                 quickFilter: 'all',
                 sortBy: 'default',
                 discoveryType: 'all',
+                discoveryMood: 'all',
                 discoveryGenre: 'all',
                 discoveryCountry: 'all',
                 discoveryDirector: '',
@@ -1234,6 +1235,7 @@
                     if (!selected) return;
                     this.searchQuery = '';
                     this.discoveryType = 'all';
+                    this.discoveryMood = 'all';
                     this.discoveryGenre = 'all';
                     this.discoveryCountry = 'all';
                     this.discoveryDirector = '';
@@ -1269,6 +1271,7 @@
                 resetDiscoveryFilters() {
                     this.searchQuery = '';
                     this.discoveryType = 'all';
+                    this.discoveryMood = 'all';
                     this.discoveryGenre = 'all';
                     this.discoveryCountry = 'all';
                     this.discoveryDirector = '';
@@ -1510,6 +1513,20 @@
                         ].join(' ');
                         const matchesSearch = !query || this.normalizeSearchText(searchable).includes(query);
                         const matchesType = this.discoveryType === 'all' || item.type === this.discoveryType;
+                        const moodText = this.normalizeSearchText([
+                            item.category, item.genre, item.desc, item.title, item.originalTitle
+                        ].filter(Boolean).join(' '));
+                        const moodRules = {
+                            feelgood: ['komedi','aile','animasyon','romantik','macera','müzik'],
+                            thriller: ['gerilim','gizem','suç','korku','polisiye','aksiyon'],
+                            comedy: ['komedi','eğlence','mizah','stand up'],
+                            emotional: ['dram','romantik','aile','biyografi','tarih'],
+                            mind: ['bilim kurgu','gizem','gerilim','fantastik','psikolojik','distopya'],
+                            family: ['aile','animasyon','çocuk','macera']
+                        };
+                        const matchesMood = this.discoveryMood === 'all'
+                            || (this.discoveryMood === 'top' ? (Number.parseFloat(item.rating) || 0) >= 7.5
+                                : (moodRules[this.discoveryMood] || []).some(term => moodText.includes(this.normalizeSearchText(term))));
                         const genres = String(item.category || item.genre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value));
                         const selectedGenres = String(this.discoveryGenre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value)).filter(Boolean);
                         const matchesGenre = this.discoveryGenre === 'all' || selectedGenres.some(genre => genres.includes(genre) || this.normalizeSearchText(item.genre) === genre);
@@ -1528,7 +1545,7 @@
                         if (this.quickFilter === 'imdb8') matchesQuick = rating >= 8;
                         if (this.quickFilter === 'series') matchesQuick = item.type === 'tv';
                         if (this.quickFilter === 'movies') matchesQuick = item.type === 'movie';
-                        return matchesSearch && matchesType && matchesGenre && matchesCountry && matchesDirector && matchesPlatform && matchesRating && matchesYearFrom && matchesYearTo && matchesQuick;
+                        return matchesSearch && matchesType && matchesMood && matchesGenre && matchesCountry && matchesDirector && matchesPlatform && matchesRating && matchesYearFrom && matchesYearTo && matchesQuick;
                     });
 
                     if (this.sortBy === 'rating') result.sort((a, b) => (Number.parseFloat(b.rating) || 0) - (Number.parseFloat(a.rating) || 0));
