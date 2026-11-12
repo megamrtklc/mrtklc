@@ -181,6 +181,7 @@ function catalogUrl(env) {
   return `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
 }
 
+// Admin UI is served from this Worker asset bundle; keep catalog reads independent from write-token scope.
 async function readCatalog(env) {
   const headers = env.GITHUB_TOKEN ? githubHeaders(env) : { accept: "application/vnd.github+json", "x-github-api-version": API_VERSION, "user-agent": "CineVerse-Admin-Worker" };
   let response = await fetch(catalogUrl(env), { headers });
