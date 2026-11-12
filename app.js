@@ -173,6 +173,10 @@
                 tmdbApiKey: '3108265ab3fdbf3af14175edf64a9c7f',
                 tmdbLanguage: 'tr-TR',
                 tmdbDetailsCache: {},
+                selectedActor: null,
+                actorProfileLoading: false,
+                actorProfileError: '',
+                actorProfileCache: {},
                 tmdbDetailsLoading: false,
                 tmdbSeasonLoading: false,
                 tmdbSeasonRequests: {},
@@ -830,6 +834,7 @@
 
                 getRouteHash(page = this.currentPage, item = this.selectedItem) {
                     if (page === 'watch' && item?.id) return '#/watch/' + encodeURIComponent(item.id);
+                    if (page === 'actor' && this.selectedActor?.id) return '#/actor/' + encodeURIComponent(this.selectedActor.id);
                     return '#/' + encodeURIComponent(page || 'home');
                 },
 
@@ -842,6 +847,11 @@
 
                 restoreRouteFromUrl() {
                     const hash = window.location.hash || '';
+                    const actorMatch = hash.match(/^#\/actor\/(\d+)$/);
+                    if (actorMatch) {
+                        this.openActorProfile({ id: Number(actorMatch[1]), name: 'Oyuncu' }, false);
+                        return;
+                    }
                     const match = hash.match(/^#\/watch\/(.+)$/);
                     if (match) {
                         const itemId = decodeURIComponent(match[1]);
@@ -863,6 +873,72 @@
                     this.currentPage = page;
                     this.syncRouteToUrl(page, null);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+
+                async openActorProfile(actor, updateUrl = true) {
+                    if (!actor || !actor.id) return;
+                    this.selectedActor = { ...actor, id: Number(actor.id) };
+                    this.currentPage = 'actor';
+                    this.actorProfileError = '';
+                    if (updateUrl) this.syncRouteToUrl('actor', null);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    const cacheKey = String(actor.id);
+                    if (this.actorProfileCache[cacheKey]) {
+                        Object.assign(this.selectedActor, this.actorProfileCache[cacheKey]);
+                        return;
+                    }
+                    this.actorProfileLoading = true;
+                    try {
+                        const person = await this.fetchTmdb('person/' + encodeURIComponent(actor.id) + '?append_to_response=movie_credits,tv_credits,external_ids');
+                        const credits = [
+                            ...(person.movie_credits?.cast || []).map(item => ({ ...item, mediaType: 'movie' })),
+                            ...(person.tv_credits?.cast || []).map(item => ({ ...item, mediaType: 'tv' }))
+                        ];
+                        const seen = new Set();
+                        const filmography = credits
+                            .filter(item => item.id && !seen.has(item.mediaType + ':' + item.id) && seen.add(item.mediaType + ':' + item.id))
+                            .sort((a,b) => String(b.release_date || b.first_air_date || '').localeCompare(String(a.release_date || a.first_air_date || '')) || Number(b.popularity || 0) - Number(a.popularity || 0))
+                            .slice(0, 48)
+                            .map(item => ({
+                                id: item.id,
+                                type: item.mediaType,
+                                title: item.title || item.name || 'İsimsiz yapım',
+                                character: item.character || '',
+                                year: String(item.release_date || item.first_air_date || '').slice(0,4),
+                                poster: item.poster_path ? 'https://image.tmdb.org/t/p/w342' + item.poster_path : '',
+                                rating: Number(item.vote_average || 0),
+                                overview: item.overview || ''
+                            }));
+                        const profile = {
+                            id: person.id,
+                            name: person.name || actor.name || 'Oyuncu',
+                            biography: person.biography || '',
+                            birthday: person.birthday || '',
+                            deathday: person.deathday || '',
+                            placeOfBirth: person.place_of_birth || '',
+                            knownFor: person.known_for_department || 'Oyuncu',
+                            profile: person.profile_path ? 'https://image.tmdb.org/t/p/h632' + person.profile_path : (actor.profile || ''),
+                            alsoKnownAs: person.also_known_as || [],
+                            filmography
+                        };
+                        this.actorProfileCache[cacheKey] = profile;
+                        Object.assign(this.selectedActor, profile);
+                    } catch (error) {
+                        this.actorProfileError = error.message || 'Oyuncu bilgileri alınamadı.';
+                    } finally {
+                        this.actorProfileLoading = false;
+                    }
+                },
+
+                openActorCredit(item) {
+                    const match = this.catalog.find(entry => String(entry.tmdbId || '') === String(item.id) && entry.type === item.type);
+                    if (match) this.openWatchPage(match);
+                },
+
+                formatActorDate(value) {
+                    if (!value) return '';
+                    const parts = String(value).split('-');
+                    return parts.length === 3 ? parts[2] + '.' + parts[1] + '.' + parts[0] : value;
                 },
 
                 openWatchPage(item, updateUrl = true) {
