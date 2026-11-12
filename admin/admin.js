@@ -492,7 +492,7 @@
     if(ok){state.heroDraft=null;renderHomepage();}
   }
   async function init(){
-    const themeDefaultVersion='noir-studio-v1';
+    const themeDefaultVersion='control-room-v1';
     try{
       if(localStorage.getItem('cv-admin-theme-default-version')!==themeDefaultVersion){
         localStorage.setItem('cv-admin-theme','dark');
