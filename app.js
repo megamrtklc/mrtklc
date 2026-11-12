@@ -246,6 +246,7 @@
                     try {
                         const mediaType = item.type === 'tv' ? 'tv' : 'movie';
                         const details = await this.fetchTmdb(mediaType + '/' + item.tmdbId + '?append_to_response=credits,videos');
+                        const englishDetails = await this.fetchTmdb(mediaType + '/' + item.tmdbId, 'en-US').catch(() => null);
                         const realSeasons = mediaType === 'tv'
                             ? (Array.isArray(details.seasons) ? details.seasons.filter(season => Number(season.season_number) > 0) : [])
                             : [];
@@ -284,6 +285,7 @@
                             director,
                             directorPersonId,
                             originalTitle: details.original_title || details.original_name || item.originalTitle,
+                            englishTitle: englishDetails?.title || englishDetails?.name || item.englishTitle || '',
                             tmdbCast: cast.length ? cast : (item.tmdbCast || []),
                             starring: cast.slice(0, 3).map(person => person.name).filter(Boolean).join(' / ') || item.starring,
                             trailerUrl: trailer ? 'https://www.youtube.com/watch?v=' + trailer.key : item.trailerUrl,
