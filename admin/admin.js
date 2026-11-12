@@ -145,7 +145,9 @@
         state.sha=apiPayload.sha||null;
         state.apiEnabled=!!state.sha;
         $('#add-content').disabled=!state.apiEnabled;
+        $('#catalog-add').disabled=!state.apiEnabled;
         $('#add-content').title=state.apiEnabled?'Yeni film veya dizi ekle':'Katalog bağlantısı gerekli';
+        $('#catalog-add').title=state.apiEnabled?'Yeni film veya dizi ekle':'Katalog bağlantısı gerekli';
         $('.environment').innerHTML='<i></i> KORUMALI YÖNETİM';
         const sessionResponse=await fetch('/api/session',{cache:'no-store',credentials:'same-origin'});
         if(!sessionResponse.ok)throw new Error('Yönetici oturumu doğrulanamadı.');
