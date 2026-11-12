@@ -21,6 +21,30 @@
   const yearOf = item => Number(item.year || item.releaseYear || (item.tmdbReleaseDate || '').slice(0,4)) || '—';
   const collectionList = () => Array.isArray(state.data?.collections) ? state.data.collections : [];
   const toast = message => { const el=$('#toast'); if(!el)return; el.textContent=message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),3000); };
+  async function fetchWithTimeout(url,options={},timeoutMs=15000){
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),timeoutMs);
+    try{return await fetch(url,{...options,signal:controller.signal});}
+    catch(error){
+      if(error?.name==='AbortError')throw new Error('Bağlantı 15 saniye içinde yanıt vermedi: '+url);
+      throw error;
+    }finally{clearTimeout(timer);}
+  }
+  function showStartupError(message){
+    const notice=$('.notice');
+    if(notice){
+      const title=$('.notice b',notice),description=$('.notice p',notice),tag=$('.notice-tag',notice);
+      if(title)title.textContent='Bağlantı kurulamadı';
+      if(description)description.textContent=message;
+      if(tag)tag.textContent='ERROR';
+    }
+  }
+  window.addEventListener('error',event=>{
+    if(!state.data)showStartupError(event.message||'Yönetim paneli başlatılırken bir JavaScript hatası oluştu.');
+  });
+  window.addEventListener('unhandledrejection',event=>{
+    if(!state.data)showStartupError(event.reason?.message||String(event.reason||'Beklenmeyen bir bağlantı hatası oluştu.'));
+  });
   function canWrite(){ if(!state.apiEnabled||!state.sha){toast('Katalog şu anda salt okunur. GitHub erişim bağlantısı doğrulanınca düzenleme açılacak.');return false;} return true; }
   function navigate(view){
     state.view=view;
@@ -381,14 +405,14 @@
     const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
     try{
-      const apiResponse=await fetch('/api/catalog',{cache:'no-store',credentials:'same-origin'});
+      const apiResponse=await fetchWithTimeout('/api/catalog',{cache:'no-store',credentials:'same-origin'});
       if(!apiResponse.ok){const p=await apiResponse.json().catch(()=>({}));throw new Error(p.error||'Yönetim API hatası: '+apiResponse.status);}
       const payload=await apiResponse.json();state.data=payload.data;state.sha=payload.sha||null;state.apiEnabled=!!state.sha&&payload.writable!==false;
       if(!Array.isArray(state.data?.catalog))throw new Error('Katalog listesi bulunamadı.');
       state.catalog=state.data.catalog.filter(x=>x&&typeof x==='object');
       renderWelcomePosters();
       $('.environment').innerHTML='<i></i> KORUMALI YÖNETİM';
-      const sessionResponse=await fetch('/api/session',{cache:'no-store',credentials:'same-origin'});
+      const sessionResponse=await fetchWithTimeout('/api/session',{cache:'no-store',credentials:'same-origin'},10000);
       if(!sessionResponse.ok)throw new Error('Yönetici oturumu doğrulanamadı.');
       const session=await sessionResponse.json();
       $('.notice b').textContent='Yönetim bağlantısı aktif';
@@ -402,6 +426,7 @@
       $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
     }catch(error){
+      showStartupError(error.message||'Katalog yüklenemedi.');
       console.error('Admin yükleme hatası:',error);
       $('#health-catalog').textContent='Bağlantı yok';$('#health-json').textContent='Okunamadı';$('#metric-total').textContent='—';
       $('#recent-list').innerHTML='<div class="loading-line">'+escapeHtml(error.message||'Katalog yüklenemedi.')+'</div>';
