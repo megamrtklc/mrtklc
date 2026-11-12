@@ -572,12 +572,12 @@
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#hero-desktop-mode').addEventListener('change',()=>{const cfg=homepageConfig();state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=$('#hero-desktop-slide-list input:checked').map(x=>({id:x.value,active:true}));renderHomepage();});
-  $('#hero-desktop-category').addEventListener('change',()=>renderHomepage());
-  $('#hero-desktop-count').addEventListener('change',()=>renderHomepage());
+  $('#hero-desktop-category').addEventListener('change',event=>{homepageConfig().desktopCategory=event.target.value;renderHomepage();});
+  $('#hero-desktop-count').addEventListener('change',event=>{homepageConfig().settings.desktopCount=Number(event.target.value)||10;renderHomepage();});
   $('#hero-mobile-mode').addEventListener('change',()=>{const cfg=homepageConfig();state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=$('#hero-mobile-slide-list input:checked').map(x=>({id:x.value,active:true}));renderHomepage();});
-  $('#hero-mobile-category').addEventListener('change',()=>renderHomepage());
-  $('#hero-mobile-count').addEventListener('change',()=>renderHomepage());
-  $('#hero-description-length').addEventListener('input',()=>renderHomepage());
+  $('#hero-mobile-category').addEventListener('change',event=>{homepageConfig().mobileCategory=event.target.value;renderHomepage();});
+  $('#hero-mobile-count').addEventListener('change',event=>{homepageConfig().settings.mobileCount=Number(event.target.value)||6;renderHomepage();});
+  $('#hero-description-length').addEventListener('change',event=>{homepageConfig().settings.descriptionLength=Number(event.target.value)||220;renderHomepage();});
 
   $('#watch-layout-save').addEventListener('click',saveWatchLayout);
   $('#watch-available-list').addEventListener('click',event=>{
