@@ -222,7 +222,7 @@
             <div class="w-full space-y-10 pb-16">
                 
                 <!-- DESKTOP EDITORIAL HERO: mobil manşetten bağımsız yeni masaüstü kompozisyonu -->
-                <section id="desktopEditorialHero" x-data="{ trailerOpen: false }" @keydown.escape.window="trailerOpen = false" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
+                <section id="desktopEditorialHero" x-data="{ trailerOpen: false, trailerItem: null }" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0">
                         <img :src="currentHero.backdrop || currentHero.poster" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-cover object-center transition-transform duration-[1200ms] ease-out scale-[1.025]">
                         <div class="absolute inset-0 bg-gradient-to-r from-[#090a0d] via-[#090a0d]/95 via-[34%] to-[#090a0d]/5"></div>
@@ -248,7 +248,7 @@
                                 <div class="flex flex-wrap items-center gap-3 pt-1">
                                     <button type="button" @click="openWatchPage(currentHero)" class="inline-flex min-h-12 items-center gap-3 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 px-8 text-sm font-black uppercase tracking-wide text-[#17120a] shadow-lg shadow-amber-950/30 transition hover:-translate-y-0.5 hover:brightness-110"><i class="fa-solid fa-play"></i> Şimdi İzle</button>
                                     <button type="button" @click="toggleWatchlist(currentHero)" class="inline-flex min-h-12 items-center gap-3 rounded-full border border-white/35 bg-black/25 px-7 text-sm font-bold text-white backdrop-blur-sm transition hover:border-amber-300 hover:bg-white/10"><i :class="isInWatchlist(currentHero) ? 'fa-solid fa-bookmark text-amber-300' : 'fa-regular fa-bookmark'"></i><span x-text="isInWatchlist(currentHero) ? 'Listemde' : 'Listeme Ekle'"></span></button>
-                                    <button type="button" @click="trailerOpen = true" class="inline-flex min-h-12 items-center gap-2 rounded-full border border-amber-300/55 bg-black/25 px-6 text-sm font-bold text-amber-100 backdrop-blur-sm transition hover:border-amber-300 hover:bg-amber-300/10"><i class="fa-solid fa-circle-play text-amber-300"></i><span>Fragman</span></button>
+                                    <button type="button" @click="trailerItem = { title: currentHero.title || '', trailerUrl: currentHero.trailerUrl || '' }; trailerOpen = true" class="inline-flex min-h-12 items-center gap-2 rounded-full border border-amber-300/55 bg-black/25 px-6 text-sm font-bold text-amber-100 backdrop-blur-sm transition hover:border-amber-300 hover:bg-amber-300/10"><i class="fa-solid fa-circle-play text-amber-300"></i><span>Fragman</span></button>
                                 </div>
                             </div>
                         </div>
@@ -269,18 +269,18 @@
                         </div>
                     </div>
                     <template x-teleport="body">
-                    <div x-cloak x-show="trailerOpen" x-transition.opacity @click.self="trailerOpen = false" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Fragman oynatıcı">
+                    <div x-cloak x-show="trailerOpen" x-transition.opacity @click.self="trailerOpen = false; trailerItem = null" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Fragman oynatıcı">
                         <div x-show="trailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
                             <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
-                                <div class="min-w-0 pr-4"><p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p><p class="truncate text-sm font-bold text-white" x-text="currentHero.title"></p></div>
-                                <button type="button" @click="trailerOpen = false" aria-label="Fragmanı kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
+                                <div class="min-w-0 pr-4"><p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p><p class="truncate text-sm font-bold text-white" x-text="trailerItem ? trailerItem.title : ''"></p></div>
+                                <button type="button" @click="trailerOpen = false; trailerItem = null" aria-label="Fragmanı kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
                             </div>
-                            <template x-if="trailerOpen && currentHero.trailerUrl">
+                            <template x-if="trailerOpen && trailerItem && trailerItem.trailerUrl">
                                 <div class="aspect-video w-full bg-black">
-                                    <iframe :src="'https://www.youtube-nocookie.com/embed/' + (currentHero.trailerUrl.includes('youtu.be/') ? currentHero.trailerUrl.split('youtu.be/')[1].split(/[?&]/)[0] : currentHero.trailerUrl.includes('/embed/') ? currentHero.trailerUrl.split('/embed/')[1].split(/[?&]/)[0] : currentHero.trailerUrl.split('v=')[1].split('&')[0]) + '?autoplay=1&rel=0'" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                    <iframe :src="'https://www.youtube-nocookie.com/embed/' + (trailerItem.trailerUrl.includes('youtu.be/') ? trailerItem.trailerUrl.split('youtu.be/')[1].split(/[?&]/)[0] : trailerItem.trailerUrl.includes('/embed/') ? trailerItem.trailerUrl.split('/embed/')[1].split(/[?&]/)[0] : trailerItem.trailerUrl.split('v=')[1].split('&')[0]) + '?autoplay=1&rel=0'" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                 </div>
                             </template>
-                            <div x-show="!currentHero.trailerUrl" class="flex min-h-[220px] flex-col items-center justify-center gap-3 px-6 py-10 text-center">
+                            <div x-show="trailerItem && !trailerItem.trailerUrl" class="flex min-h-[220px] flex-col items-center justify-center gap-3 px-6 py-10 text-center">
                                 <span class="flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/25 bg-amber-300/10 text-amber-300"><i class="fa-solid fa-film text-xl"></i></span>
                                 <p class="text-base font-bold text-white">Fragman bulunamadı</p>
                                 <p class="max-w-md text-sm leading-6 text-gray-400">Bu yapım için şu anda izlenebilir bir fragman bağlantısı bulunmuyor. Daha sonra tekrar kontrol edebilirsin.</p>
