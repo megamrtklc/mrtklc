@@ -73,7 +73,9 @@ async function authorize(request,env) {
     const expected=await hmac(env.SESSION_SECRET,parts[0]);
     const supplied=decodeBase64Url(parts[1]);
     if(!constantTimeEqual(expected,supplied)||payload.sub!=="admin"||typeof payload.exp!=="number"||payload.exp<=Math.floor(Date.now()/1000))throw new Error("Invalid session");
-    return {ok:true,claims:{email:"Yönetici"}};
+    const refreshedPayload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:payload.iat||Math.floor(Date.now()/1000),exp:Math.floor(Date.now()/1000)+1800})));
+    const refreshedSignature=encodeBase64Url(await hmac(env.SESSION_SECRET,refreshedPayload));
+    return {ok:true,claims:{email:"Yönetici"},cookie:"cv_admin_session="+refreshedPayload+"."+refreshedSignature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=1800"};
   } catch { return {ok:false,status:401,error:"Yönetici oturumu doğrulanamadı."}; }
 }
 async function handleLogin(request,env) {
@@ -90,9 +92,9 @@ async function handleLogin(request,env) {
   const [candidate,expected]=await Promise.all([hmac(env.SESSION_SECRET,password),hmac(env.SESSION_SECRET,env.ADMIN_PASSWORD)]);
   if(!constantTimeEqual(candidate,expected))return new Response(loginPage(true).body,{status:401,headers:loginPage(true).headers});
   const now=Math.floor(Date.now()/1000);
-  const payload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:now,exp:now+43200})));
+  const payload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:now,exp:now+1800})));
   const signature=encodeBase64Url(await hmac(env.SESSION_SECRET,payload));
-  return new Response(null,{status:303,headers:{"location":"/","set-cookie":"cv_admin_session="+payload+"."+signature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=43200","cache-control":"no-store"}});
+  return new Response(null,{status:303,headers:{"location":"/","set-cookie":"cv_admin_session="+payload+"."+signature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=1800","cache-control":"no-store"}});
 }
 async function handleLogout(request) {
   if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
@@ -184,24 +186,30 @@ export default {
       if(url.pathname.startsWith("/api/"))return json({error:auth.error},auth.status);
       return loginPage();
     }
-    if(!url.pathname.startsWith("/api/"))return env.ASSETS.fetch(request);
-    if(request.method==="GET"&&url.pathname==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
-    if(request.method==="GET"&&url.pathname==="/api/catalog") {
-      try { return json(await readCatalog(env)); }
-      catch(error) { return json({error:error.message||"Katalog okunamadı."},502); }
-    }
-    if(request.method==="PUT"&&url.pathname==="/api/catalog") {
-      if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
-      try {
-        const length=Number(request.headers.get("content-length")||0);
-        if(length>2500000)return json({error:"İstek boyutu sınırı aşıldı."},413);
-        const body=await request.json();
-        if(!body||typeof body.sha!=="string"||!body.sha)return json({error:"Güncel katalog SHA bilgisi gerekli."},400);
-        const result=await writeCatalog(env,body.data,body.sha);
-        if(result.conflict)return json({error:"Katalog başka bir işlemde güncellenmiş. Veriyi yeniden yükleyip tekrar deneyin.",sha:result.sha},409);
-        return json({ok:true,sha:result.sha,commit:result.commit});
-      } catch(error) { return json({error:error.message||"Katalog kaydedilemedi."},400); }
-    }
-    return json({error:"API endpoint bulunamadı."},404);
+    const response=await (async()=>{
+      if(!url.pathname.startsWith("/api/"))return env.ASSETS.fetch(request);
+      if(request.method==="GET"&&url.pathname==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
+      if(request.method==="GET"&&url.pathname==="/api/catalog") {
+        try { return json(await readCatalog(env)); }
+        catch(error) { return json({error:error.message||"Katalog okunamadı."},502); }
+      }
+      if(request.method==="PUT"&&url.pathname==="/api/catalog") {
+        if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+        try {
+          const length=Number(request.headers.get("content-length")||0);
+          if(length>2500000)return json({error:"İstek boyutu sınırı aşıldı."},413);
+          const body=await request.json();
+          if(!body||typeof body.sha!=="string"||!body.sha)return json({error:"Güncel katalog SHA bilgisi gerekli."},400);
+          const result=await writeCatalog(env,body.data,body.sha);
+          if(result.conflict)return json({error:"Katalog başka bir işlemde güncellenmiş. Veriyi yeniden yükleyip tekrar deneyin.",sha:result.sha},409);
+          return json({ok:true,sha:result.sha,commit:result.commit});
+        } catch(error) { return json({error:error.message||"Katalog kaydedilemedi."},400); }
+      }
+      return json({error:"API endpoint bulunamadı."},404);
+    })();
+    const headers=new Headers(response.headers);
+    headers.set("set-cookie",auth.cookie);
+    headers.set("cache-control","no-store");
+    return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
   }
 };
