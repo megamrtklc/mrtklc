@@ -229,30 +229,7 @@ async function readCatalog(env) {
 }
 async function writeCatalog(env, data, expectedSha) {
   if (!env.GITHUB_TOKEN) throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
-  if (!data || typeof data !== "object" || !Array.isArray(data.catalog)) throw new Error("Gönderilen katalog yapısı geçersiz.");
-  if (data.catalog.length < 1 || data.catalog.length > 5000) throw new Error("Katalog kayıt sayısı sınır dışında.");
-  if (JSON.stringify(data).length > 2_000_000) throw new Error("Katalog boyutu 2 MB sınırını aşıyor.");
-  const ids = new Set();
-  for (const item of data.catalog) {
-    if (!item || typeof item !== "object" || Array.isArray(item)) throw new Error("Katalogda geçersiz kayıt bulundu.");
-    if (item.id === undefined || item.id === null || !String(item.id).trim()) throw new Error("Her katalog kaydının benzersiz bir kimliği olmalı.");
-    if (typeof item.title !== "string" || !item.title.trim()) throw new Error("Her katalog kaydının yapım adı olmalı.");
-    const id = String(item.id);
-    if (ids.has(id)) throw new Error("Katalogda yinelenen kayıt kimliği var: " + id);
-    ids.add(id);
-    for (const field of ["image", "backdrop", "trailerUrl", "watchUrl"]) {
-      if (!item[field]) continue;
-      const value = String(item[field]).trim();
-      // Legacy catalog entries may store an 11-character YouTube video ID instead of a URL.
-      if (field === "trailerUrl" && /^[A-Za-z0-9_-]{11}$/.test(value)) continue;
-      try {
-        const parsed = new URL(value);
-        if (parsed.protocol !== "https:" && parsed.protocol !== "http:") throw new Error("invalid protocol");
-      } catch {
-        throw new Error("Geçersiz görsel veya fragman adresi: " + field);
-      }
-    }
-  }
+  validateCatalogData(data);
 
   const current = await fetch(catalogUrl(env), { headers: githubHeaders(env) });
   const currentPayload = await current.json();
