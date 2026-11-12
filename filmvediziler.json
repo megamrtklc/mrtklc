@@ -17471,13 +17471,13 @@
       "player",
       "season",
       "episodes",
-      "cast",
+      "similar",
       "reviews"
     ],
     "right": [
       "synopsis",
       "credits",
-      "similar"
+      "cast"
     ]
   }
 }
