@@ -57,12 +57,12 @@
         .hero-nav-arrow i{font-size:12px;transition:transform .2s ease}
         .hero-nav-arrow:hover i{transform:scale(1.15)}
         @media(max-width:767px){.hero-nav-arrow{width:36px;height:36px}}
-        .home-card-rail{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:2px 2px 12px;scrollbar-width:none;-ms-overflow-style:none}
+        .home-card-rail{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:2px 2px 12px;scrollbar-width:none;-ms-overflow-style:none}
         .home-card-rail::-webkit-scrollbar{display:none}
         .home-rail-card{flex:0 0 42%;width:42%;scroll-snap-align:start}
         .home-rail-arrow{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(148,163,184,.35);border-radius:50%;background:rgba(127,127,127,.08);color:inherit;transition:all .2s}
         .home-rail-arrow:hover{background:#e11d48;border-color:#e11d48;color:#fff;transform:translateY(-1px)}
-        @media(min-width:640px){.home-rail-card{flex-basis:30%;width:30%}}
+        @media(max-width:380px){.home-rail-card{flex-basis:48%;width:48%}}\n        @media(min-width:640px){.home-rail-card{flex-basis:30%;width:30%}}
         @media(min-width:768px){.home-rail-card{flex-basis:22%;width:22%}}
         @media(min-width:1024px){.home-rail-card{flex-basis:18%;width:18%}}
         @media(min-width:1280px){.home-rail-card{flex-basis:15.5%;width:15.5%}}
@@ -323,7 +323,7 @@
                                 <source media="(min-width: 768px)"
                                         srcset="https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w, https://image.tmdb.org/t/p/w780/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 780w, https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 1280w"
                                         :srcset="getTmdbImageSrcSet(currentHero.backdrop, [500, 780, 1280])">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" :alt="currentHero.title + ' arka plan görseli'" loading="lazy" decoding="async" @error="handleImageError($event)" class="w-full h-full object-cover object-center filter brightness-[0.7]">
+                                <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" :alt="currentHero.title + ' arka plan görseli'" loading="eager" fetchpriority="high" decoding="async" @error="handleImageError($event)" class="w-full h-full object-cover object-center filter brightness-[0.7]">
                             </picture>
                             <!-- Sabit Sinematik Koyu Gradyan Perdesi (Her Modda Görseli ve Yazıyı Mükemmel Gösterir) -->
                             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/60 to-transparent"></div>
