@@ -144,7 +144,7 @@ async function writeCatalog(env, data, expectedSha) {
     const id = String(item.id);
     if (ids.has(id)) throw new Error("Katalogda yinelenen kayıt kimliği var: " + id);
     ids.add(id);
-    for (const field of ["image", "backdrop", "trailerUrl"]) {
+    for (const field of ["image", "backdrop", "trailerUrl", "watchUrl"]) {
       if (!item[field]) continue;
       try {
         const parsed = new URL(String(item[field]));
