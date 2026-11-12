@@ -351,51 +351,12 @@ try {
     assert.equal(badge.label, 'Dizi', 'Dizi önerisi Film olarak etiketlenmiş');
     await page.setViewportSize({ width: 360, height: 800 });
     await page.waitForFunction(() => window.innerWidth === 360);
-    const railCardLayout = await page.locator('#home-personalized-rail .home-rail-card').first().evaluate(card => ({
-      flexBasis: getComputedStyle(card).flexBasis,
-      flex: getComputedStyle(card).flex,
-      flexShrink: getComputedStyle(card).flexShrink,
-      inlineStyle: card.getAttribute('style'),
-      width: getComputedStyle(card).width,
-      viewport: window.innerWidth,
-      screenWidth: window.screen.width,
-      media380: matchMedia('(max-width: 380px)').matches,
-      media1280: matchMedia('(min-width: 1280px)').matches,
-      railWidth: card.parentElement.getBoundingClientRect().width,
-      railOffsetWidth: card.parentElement.offsetWidth,
-      railComputedWidth: getComputedStyle(card.parentElement).width,
-      railZoom: getComputedStyle(card.parentElement).zoom,
-      railTransform: getComputedStyle(card.parentElement).transform,
-      cardOffsetWidth: card.offsetWidth,
-      ancestorTransforms: (() => {
-        const values = [];
-        let node = card;
-        while (node && values.length < 8) {
-          const style = getComputedStyle(node);
-          values.push({ tag: node.tagName, id: node.id, className: typeof node.className === 'string' ? node.className.slice(0, 90) : '', width: style.width, zoom: style.zoom, transform: style.transform });
-          node = node.parentElement;
-        }
-        return values;
-      })(),
-      railClass: card.parentElement.className,
-      matchedRules: [...document.styleSheets].flatMap(sheet => {
-        try {
-          const found = [];
-          const walk = (rules, conditions = []) => [...rules].forEach(rule => {
-            if (rule.selectorText?.includes('home-rail-card')) found.push({
-              rule: rule.cssText,
-              conditions,
-              active: conditions.every(condition => matchMedia(condition).matches)
-            });
-            if (rule.cssRules) walk(rule.cssRules, rule.conditionText ? [...conditions, rule.conditionText] : conditions);
-          });
-          walk(sheet.cssRules);
-          return found;
-        } catch { return []; }
-      })
-    }));
-    console.log('NARROW RECOMMENDATION CARD LAYOUT:', JSON.stringify(railCardLayout));
-    assert.equal(railCardLayout.flexBasis, '48%', '380px altındaki ekranda kart genişliği %48 olmalı');
+    await page.waitForFunction(() => {
+      const card = document.querySelector('#home-personalized-rail .home-rail-card');
+      return !!card && getComputedStyle(card).flexBasis === '48%';
+    }, { timeout: 5000 });
+    const railCardBasis = await page.locator('#home-personalized-rail .home-rail-card').first().evaluate(card => getComputedStyle(card).flexBasis);
+    assert.equal(railCardBasis, '48%', '380px altındaki ekranda kart genişliği %48 olmalı');
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
