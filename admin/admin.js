@@ -292,10 +292,24 @@
   let watchDemoType='movie';
   function watchLayoutConfig(){
     const saved=state.data?.watchPageConfig||{};
-    const left=Array.isArray(saved.left)?saved.left.filter((id,index)=>watchCardIds.includes(id)&&saved.left.indexOf(id)===index):[];
-    const right=Array.isArray(saved.right)?saved.right.filter((id,index)=>watchCardIds.includes(id)&&saved.right.indexOf(id)===index):[];
-    const used=new Set([...left,...right]);
-    watchCardIds.forEach(id=>{if(!used.has(id)){(watchCardDefinitions[id].defaultSide==='left'?left:right).push(id);used.add(id);}});
+    const left=[],right=[],used=new Set();
+    const append=(source,target)=>{
+      if(!Array.isArray(source))return;
+      source.forEach(id=>{
+        if(watchCardIds.includes(id)&&!used.has(id)){
+          target.push(id);
+          used.add(id);
+        }
+      });
+    };
+    append(saved.left,left);
+    append(saved.right,right);
+    watchCardIds.forEach(id=>{
+      if(!used.has(id)){
+        (watchCardDefinitions[id].defaultSide==='left'?left:right).push(id);
+        used.add(id);
+      }
+    });
     return {left,right};
   }
   function watchDemoSample(){
