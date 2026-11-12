@@ -350,3 +350,23 @@ button,input,select,textarea{font-size:inherit}
 .avatar span{position:relative;z-index:1}
 .sidebar-collapsed .avatar img{border-radius:14px}
 @media(max-width:760px){.logout-button{padding:8px 10px;font-size:11px}.header-actions{gap:7px}}
+
+
+/* Watch-page card ordering editor */
+.watch-layout-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:18px}
+.watch-order-list{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+.watch-order-item{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fbfafc;min-width:0}
+.watch-order-grip{font-size:19px;color:#aaa5b7;cursor:grab}
+.watch-order-name{font-size:13px;font-weight:700;color:var(--ink);flex:1;min-width:0}
+.watch-order-number{font-size:11px;font-weight:800;color:#82799e;background:#eeeaf6;border-radius:8px;padding:5px 8px}
+.watch-order-move{width:31px;height:31px;border:1px solid var(--line);border-radius:9px;background:white;color:#71678f;font-weight:800}
+.watch-order-move:disabled{opacity:.25;cursor:not-allowed}
+.watch-layout-preview{margin-top:18px}
+.watch-layout-preview>p{font-size:12px;color:var(--muted);margin:6px 0 15px}
+.watch-preview-grid{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+.watch-preview-grid>div{display:flex;flex-direction:column;gap:7px}
+.watch-preview-grid span{padding:11px;border:1px dashed #cfc9dd;background:#f8f6fb;border-radius:9px;color:#71678f;font-size:11px;font-weight:700}
+@media(max-width:760px){.watch-layout-columns{grid-template-columns:1fr}.watch-order-item{padding:10px}.watch-preview-grid{grid-template-columns:1fr 1fr}}
+/* Flex ordering applies independently to the two watch-page columns. */
+#view-watch-layout .panel-heading{margin-bottom:4px}
+[data-watch-card]{flex-shrink:0}
