@@ -788,6 +788,64 @@
                     safeStorageWrite('cine_active_profile', id);
                 },
 
+                get libraryMovieEntries() {
+                    return Object.entries(this.profileMovieProgress).map(([id, saved]) => {
+                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        const time = Math.max(0, Number(saved?.time) || 0);
+                        const duration = Math.max(0, Number(saved?.duration) || 0);
+                        if (!item || item.type !== 'movie' || !duration || !time) return null;
+                        const percent = Math.min(100, Math.round(time / duration * 100));
+                        return { kind: 'movie', item, time, duration, percent, savedAt: Number(saved.savedAt) || 0, label: percent >= 90 ? 'Tamamlandı' : 'Film • İzlemeye devam et' };
+                    }).filter(Boolean).sort((a, b) => b.savedAt - a.savedAt);
+                },
+
+                get librarySeriesEntries() {
+                    const all = safeStorageRead('cine_episode_tracking_v1', {});
+                    if (!all || typeof all !== 'object' || Array.isArray(all)) return [];
+                    const prefix = this.currentProfileId + ':';
+                    return Object.entries(all).filter(([key]) => key.startsWith(prefix)).map(([key, tracking]) => {
+                        const itemId = key.slice(prefix.length);
+                        const item = this.catalog.find(entry => String(entry.id) === itemId);
+                        if (!item || item.type !== 'tv') return null;
+                        const watched = tracking?.watched && typeof tracking.watched === 'object' ? tracking.watched : {};
+                        const watchedCount = Object.values(watched).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number)).size : 0), 0);
+                        const last = tracking?.last || null;
+                        if (!watchedCount && !last) return null;
+                        const total = Math.max(0, Number(item.episodes) || 0);
+                        const percent = total ? Math.min(100, Math.round(watchedCount / total * 100)) : 0;
+                        return {
+                            kind: 'series', item, watchedCount, total, percent,
+                            season: Math.max(1, Number(last?.season) || 1),
+                            episode: Math.max(1, Number(last?.episode) || 1),
+                            savedAt: Number(last?.updatedAt) || 0,
+                            label: 'Sezon ' + (Number(last?.season) || 1) + ' • Bölüm ' + (Number(last?.episode) || 1)
+                        };
+                    }).filter(Boolean).sort((a, b) => b.savedAt - a.savedAt);
+                },
+
+                get continueWatchingItems() {
+                    return [
+                        ...this.libraryMovieEntries.filter(entry => entry.percent < 90),
+                        ...this.librarySeriesEntries.filter(entry => entry.percent < 100)
+                    ].sort((a, b) => b.savedAt - a.savedAt);
+                },
+
+                get libraryHistoryItems() {
+                    return [...this.libraryMovieEntries, ...this.librarySeriesEntries]
+                        .sort((a, b) => b.savedAt - a.savedAt)
+                        .slice(0, 24);
+                },
+
+                resumeLibraryItem(entry) {
+                    if (!entry?.item) return;
+                    this.openWatchPage(entry.item);
+                    if (entry.kind === 'series') {
+                        this.selectedSeason = entry.season;
+                        this.selectedEpisode = entry.episode;
+                        this.currentEpisodePage = Math.floor((entry.episode - 1) / 8) + 1;
+                    }
+                },
+
                 get watchlist() {
                     const storedLists = safeStorageRead('cine_profile_watchlists', {});
                     const allLists = storedLists && typeof storedLists === 'object' && !Array.isArray(storedLists) ? storedLists : {};
@@ -873,7 +931,7 @@
 
                     const pageMatch = hash.match(/^#\/([^/?#]+)$/);
                     const page = pageMatch ? decodeURIComponent(pageMatch[1]) : 'home';
-                    const allowedPages = ['home', 'explore', 'video-links', 'watchlist', 'stats'];
+                    const allowedPages = ['home', 'explore', 'video-links', 'library', 'watchlist', 'stats'];
                     this.currentPage = allowedPages.includes(page) ? page : 'home';
                     this.syncRouteToUrl(this.currentPage, null);
                 },
