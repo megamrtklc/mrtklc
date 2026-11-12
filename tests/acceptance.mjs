@@ -94,13 +94,13 @@ try {
     );
     await page.waitForFunction(() => {
       const desktopHero = [...document.querySelectorAll('section img')]
-        .find(image => image.closest('section')?.classList.contains('md:flex') &&
+        .find(image => image.closest('section')?.classList.contains('md:block') &&
           image.getClientRects().length > 0);
       return desktopHero && desktopHero.complete && desktopHero.naturalWidth > 0;
     }, { timeout: 20000 });
     const heroImageOk = await page.evaluate(() => {
       const image = [...document.querySelectorAll('section img')]
-        .find(candidate => candidate.closest('section')?.classList.contains('md:flex') &&
+        .find(candidate => candidate.closest('section')?.classList.contains('md:block') &&
           candidate.getClientRects().length > 0);
       return !!image && image.naturalWidth > 0 && image.dataset.perdeFallbackApplied !== 'true';
     });
