@@ -361,7 +361,7 @@
     if(ok)renderHomepage();
   }
   async function init(){
-    $('#today-date').textContent=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
+    const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;const dashboardDate=$('#dashboard-date');if(dashboardDate)dashboardDate.textContent=formattedDate;
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
     try{
       const apiResponse=await fetch('/api/catalog',{cache:'no-store',credentials:'same-origin'});
