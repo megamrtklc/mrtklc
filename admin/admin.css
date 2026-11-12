@@ -370,3 +370,46 @@ button,input,select,textarea{font-size:inherit}
 /* Flex ordering applies independently to the two watch-page columns. */
 #view-watch-layout .panel-heading{margin-bottom:4px}
 [data-watch-card]{flex-shrink:0}
+
+
+/* Improved catalog readability and larger artwork */
+.catalog-title img{width:52px;height:70px;border-radius:8px;box-shadow:0 5px 12px rgba(30,25,45,.12)}
+.catalog-title b{font-size:12px;line-height:1.4}
+.catalog-title small{font-size:10px}
+.catalog-table th{font-size:10px}
+.catalog-table td{font-size:12px;padding-top:12px;padding-bottom:12px}
+.type-chip,.row-action{font-size:10px}
+.poster-thumb{width:46px;height:62px;border-radius:8px}
+.recent-item{gap:13px;padding:10px 0}
+.recent-meta b{font-size:12px}
+.recent-meta small{font-size:10px}
+.rating-pill{font-size:10px}
+.panel-heading h2,.panel-card h2{font-size:16px}
+.panel-heading p{font-size:11px}
+.section-index,.eyebrow{font-size:9px}
+.notice b{font-size:12px}
+.notice p{font-size:11px}
+.nav-link{font-size:11px}
+.admin-header-name{font-size:12px;font-weight:700;color:#55535f;white-space:nowrap;max-width:145px;overflow:hidden;text-overflow:ellipsis}
+.header-actions{gap:12px}
+.avatar{width:40px;height:40px;flex:0 0 40px}
+.users-profile-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:18px;align-items:start}
+.users-profile-summary{display:flex;align-items:center;gap:17px;padding:16px;background:#f8f7fa;border-radius:15px}
+.users-profile-summary>div:last-child{display:flex;flex-direction:column;gap:5px}
+.users-profile-summary b{font:700 16px Manrope;color:#45434f}
+.users-profile-summary small{font-size:11px;color:var(--muted)}
+.admin-profile-form{display:flex;align-items:flex-end;gap:12px;margin-top:20px}
+.admin-profile-form .field{flex:1;margin:0}
+.admin-profile-form .field span{font-size:11px}
+.admin-profile-form .field input{font-size:13px;padding:13px 14px}
+.admin-profile-form .primary-button{padding:13px 18px;white-space:nowrap;font-size:12px}
+.users-profile-card,.access-card{min-height:100%}
+@media(max-width:980px){.users-profile-layout{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .catalog-title img{width:48px;height:65px}
+ .admin-header-name{max-width:95px;font-size:11px}
+ .header-actions{gap:8px}
+ .users-profile-layout{grid-template-columns:1fr}
+ .admin-profile-form{align-items:stretch;flex-direction:column}
+ .admin-profile-form .primary-button{align-self:flex-start}
+}
