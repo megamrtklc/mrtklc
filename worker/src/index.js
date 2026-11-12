@@ -74,9 +74,9 @@ async function authorize(request,env) {
     const expected=await hmac(env.SESSION_SECRET,parts[0]);
     const supplied=decodeBase64Url(parts[1]);
     if(!constantTimeEqual(expected,supplied)||payload.sub!=="admin"||typeof payload.exp!=="number"||payload.exp<=Math.floor(Date.now()/1000))throw new Error("Invalid session");
-    const refreshedPayload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:payload.iat||Math.floor(Date.now()/1000),exp:Math.floor(Date.now()/1000)+300})));
+    const refreshedPayload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:payload.iat||Math.floor(Date.now()/1000),exp:Math.floor(Date.now()/1000)+43200})));
     const refreshedSignature=encodeBase64Url(await hmac(env.SESSION_SECRET,refreshedPayload));
-    return {ok:true,claims:{email:"Yönetici"},cookie:"cv_admin_session="+refreshedPayload+"."+refreshedSignature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=300"};
+    return {ok:true,claims:{email:"Yönetici"},cookie:"cv_admin_session="+refreshedPayload+"."+refreshedSignature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=43200"};
   } catch { return {ok:false,status:401,error:"Yönetici oturumu doğrulanamadı."}; }
 }
 async function handleLogin(request,env) {
@@ -95,7 +95,7 @@ async function handleLogin(request,env) {
   const now=Math.floor(Date.now()/1000);
   const payload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:now,exp:now+300})));
   const signature=encodeBase64Url(await hmac(env.SESSION_SECRET,payload));
-  return new Response(null,{status:303,headers:{"location":"/","set-cookie":"cv_admin_session="+payload+"."+signature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=300","cache-control":"no-store"}});
+  return new Response(null,{status:303,headers:{"location":"/","set-cookie":"cv_admin_session="+payload+"."+signature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=43200","cache-control":"no-store"}});
 }
 async function handleLogout(request) {
   if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
