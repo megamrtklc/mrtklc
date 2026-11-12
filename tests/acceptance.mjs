@@ -265,7 +265,9 @@ try {
         savedId: String(saved.id)
       };
       app.switchProfile('pro_2');
-      const profileTwoIds = app.personalizedRecommendations.map(item => String(item.id));
+      const profileTwoRecommendations = app.personalizedRecommendations;
+      const profileTwoIds = profileTwoRecommendations.map(item => String(item.id));
+      const profileTwoReasons = profileTwoRecommendations.map(item => item.recommendationReason);
       app.switchProfile('pro_1');
       for (const [key, value] of Object.entries({
         perde_profile_player_progress_v1: original.progress,
@@ -276,7 +278,7 @@ try {
         if (value === null) localStorage.removeItem(key);
         else localStorage.setItem(key, value);
       }
-      return { profileOne, profileTwoIds };
+      return { profileOne, profileTwoIds, profileTwoReasons };
     });
     const ids = result.profileOne.ids;
     assert.ok(ids.length > 0 && ids.length <= 15, 'Öneri sayısı 1–15 aralığında olmalı');
@@ -285,7 +287,8 @@ try {
     assert.ok(!ids.includes(result.profileOne.seriesId), 'Bölüm takibi olan dizi önerilmemeli');
     assert.ok(!ids.includes(result.profileOne.savedId), 'İzleme listesindeki yapım tekrar önerilmemeli');
     assert.ok(result.profileOne.reasons.every(Boolean), 'Her önerinin kişisel gerekçesi olmalı');
-    assert.ok(result.profileTwoIds.includes(result.profileOne.movieId), 'Diğer profilin izleme geçmişi bu profili etkilememeli');
+    assert.ok(result.profileTwoIds.length > 0, 'İkinci profil için öneriler üretilmeli');
+    assert.ok(result.profileTwoReasons.every(reason => reason === 'Arşivden yüksek puanlı'), 'İlk profilin izleme geçmişi ikinci profilin önerilerini etkilememeli');
   });
 
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
