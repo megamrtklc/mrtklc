@@ -571,10 +571,10 @@
   $('#collection-search').addEventListener('input',filterCollectionItems);
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
-  $('#hero-desktop-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=$('#hero-desktop-slide-list input:checked').map(x=>({id:x.value,active:true}));homepageConfig().desktopMode=event.target.value;renderHomepage();});
+  $('#hero-desktop-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=Array.from(document.querySelectorAll('#hero-desktop-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().desktopMode=event.target.value;renderHomepage();});
   $('#hero-desktop-category').addEventListener('change',event=>{homepageConfig().desktopCategory=event.target.value;renderHomepage();});
   $('#hero-desktop-count').addEventListener('change',event=>{homepageConfig().settings.desktopCount=Number(event.target.value)||10;renderHomepage();});
-  $('#hero-mobile-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=$('#hero-mobile-slide-list input:checked').map(x=>({id:x.value,active:true}));homepageConfig().mobileMode=event.target.value;renderHomepage();});
+  $('#hero-mobile-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=Array.from(document.querySelectorAll('#hero-mobile-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().mobileMode=event.target.value;renderHomepage();});
   $('#hero-mobile-category').addEventListener('change',event=>{homepageConfig().mobileCategory=event.target.value;renderHomepage();});
   $('#hero-mobile-count').addEventListener('change',event=>{homepageConfig().settings.mobileCount=Number(event.target.value)||6;renderHomepage();});
   $('#hero-description-length').addEventListener('change',event=>{homepageConfig().settings.descriptionLength=Number(event.target.value)||220;renderHomepage();});
