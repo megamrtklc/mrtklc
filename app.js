@@ -887,7 +887,7 @@
                             const id = claim.mainsnak?.datavalue?.value?.id;
                             if (!id) return null;
                             const rawDate = claim.qualifiers?.P585?.[0]?.datavalue?.value?.time || '';
-                            const yearMatch = rawDate.match(/[+-](\\d{4})-/);
+                            const yearMatch = rawDate.match(/[+-](\d{4})-/);
                             return { id, year: yearMatch ? yearMatch[1] : '' };
                         }).filter(Boolean);
                         const ids = [...new Set(awardClaims.map(item => item.id))];
