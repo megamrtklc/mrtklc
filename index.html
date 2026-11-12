@@ -234,11 +234,6 @@
                         <button type="button" @click.stop="navigateHeroSlide(-1)" aria-label="Önceki öne çıkan yapım" class="absolute left-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/35 text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 active:scale-95"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         <button type="button" @click.stop="navigateHeroSlide(1)" aria-label="Sonraki öne çıkan yapım" class="absolute right-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/35 text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 active:scale-95"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
-                    <div class="flex items-center justify-center gap-1.5 bg-gray-950 px-5 pt-3" aria-label="Manşet yapım seçimi">
-                        <template x-for="(item, idx) in heroSlides" :key="'mobile-hero-dot-' + item.id">
-                            <button type="button" @click="selectHeroSlide(idx)" :aria-label="item.title + ' yapımını göster'" :aria-current="currentSlideIndex === idx ? 'true' : 'false'" class="h-1.5 rounded-full transition-all duration-300" :class="currentSlideIndex === idx ? 'w-5 bg-rose-500' : 'w-1.5 bg-white/35 hover:bg-white/65'"></button>
-                        </template>
-                    </div>
                     <div class="px-5 pb-6 pt-3 text-white sm:px-7">
                         <div class="space-y-3">
                             <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
