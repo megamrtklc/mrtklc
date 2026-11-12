@@ -401,7 +401,7 @@
     if(ok)renderHomepage();
   }
   async function init(){
-    applyAdminTheme(localStorage.getItem('cv-admin-theme')||'ivory',false);
+    applyAdminTheme(localStorage.getItem('cv-admin-theme')||'dark',false);
     const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
     try{
