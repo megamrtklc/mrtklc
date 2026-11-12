@@ -11,7 +11,7 @@
     const picker=$('#admin-theme-select');
     if(picker&&picker.value!==selected)picker.value=selected;
     const meta=document.querySelector('meta[name="theme-color"]');
-    if(meta)meta.content=selected==='dark'?'#101319':(selected==='slate'?'#edf0f4':'#f5f4f0');
+    if(meta)meta.content=selected==='dark'?'#0b0c10':(selected==='slate'?'#edf0f4':'#f5f4f0');
     if(persist){try{localStorage.setItem('cv-admin-theme',selected);}catch(error){console.warn('Tema tercihi kaydedilemedi:',error);}}
   }
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
