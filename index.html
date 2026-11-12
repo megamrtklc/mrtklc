@@ -419,6 +419,7 @@
                         </div>
                         <div class="flex items-center gap-2 shrink-0"><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15</span><button type="button" @click="scrollHomeCards('home-personalized-rail',-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-personalized-rail',1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div>
                     </div>
+                    <!-- Cards support profile-specific feedback; dismissals influence future recommendations. -->
                     <div id="home-personalized-rail" class="home-card-rail">
                         <template x-for="item in personalizedRecommendations.slice(0,15)" :key="'personal-' + item.id">
                             <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :class="getCardClass()" class="home-rail-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
