@@ -531,3 +531,9 @@ button,input,select,textarea{font-size:inherit}
 #view-watch-layout .watch-demo-column{transition:background .16s ease}
 #view-watch-layout .watch-demo-empty{padding:14px;border:1px dashed #bcb5ca;border-radius:9px;color:#827a91;font-size:12px;text-align:center}
 @media(max-width:760px){#view-watch-layout .watch-order-transfer{padding:0 8px}#view-watch-layout .watch-order-transfer span{font-size:10px}}
+
+#view-watch-layout .watch-order-move{display:inline-flex!important;align-items:center;justify-content:center;width:29px;height:29px;border:1px solid #dcd5eb;border-radius:8px;background:#f4f1fa;color:#766b9a;font-size:16px;font-weight:800;cursor:pointer}
+#view-watch-layout .watch-order-move:hover:not(:disabled){background:#eae4f7;border-color:#bdb1da}
+#view-watch-layout .watch-order-move:disabled{opacity:.28;cursor:not-allowed}
+#view-watch-layout .watch-order-item.drop-target{border-color:#9385bb;background:#f3f0fa;box-shadow:0 0 0 2px #9385bb22}
+@media(max-width:760px){#view-watch-layout .watch-order-move{width:27px;height:27px}}
