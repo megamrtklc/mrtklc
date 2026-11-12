@@ -223,7 +223,7 @@
             <div class="w-full space-y-10 pb-16">
                 
                 <!-- MOBILE HERO: telefon ekranları için ayrı, dikey kompozisyon -->
-                <section id="mobileHeroBanner" class="md:hidden relative w-full min-h-[540px] bg-gray-950 overflow-hidden select-none border-b border-gray-200 dark:border-gray-800/80">
+                <section id="mobileHeroBanner" @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="md:hidden relative w-full min-h-[540px] bg-gray-950 overflow-hidden select-none border-b border-gray-200 dark:border-gray-800/80">
                     <div class="absolute inset-0">
                         <picture class="absolute inset-0">
                             <source media="(max-width: 767px)"
@@ -286,7 +286,7 @@
                 </div>
 
                 <!-- DESKTOP HERO: mevcut masaüstü manşeti aynen korunur -->
-                <section class="hidden md:flex relative w-full bg-gray-950 min-h-[580px] sm:min-h-[640px] flex-col justify-between overflow-hidden select-none border-b border-gray-200 dark:border-gray-800/80">
+                <section @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="hidden md:flex relative w-full bg-gray-950 min-h-[580px] sm:min-h-[640px] flex-col justify-between overflow-hidden select-none border-b border-gray-200 dark:border-gray-800/80">
                     
                     <!-- Main Hero Stage -->
                     <div class="relative w-full flex-grow flex items-center px-6 sm:px-12 py-12">
