@@ -477,7 +477,7 @@
                     <div class="lg:col-span-8 space-y-6">
                         
                         <!-- Custom Video Player -->
-                        <div :class="cinemaMode ? 'fixed z-[100] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,1400px)] max-h-[88vh] rounded-xl border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.8)]' : 'relative w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl'" class="aspect-video overflow-hidden bg-black group select-none transition-all duration-300" @mouseenter="showPlayerControls()" @mousemove="showPlayerControls()" @mouseleave="hidePlayerControlsOnLeave()">
+                        <div data-watch-card="player" :style="'order: ' + getWatchCardOrder('player')" :class="cinemaMode ? 'fixed z-[100] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,1400px)] max-h-[88vh] rounded-xl border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.8)]' : 'relative w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl'" class="aspect-video overflow-hidden bg-black group select-none transition-all duration-300" @mouseenter="showPlayerControls()" @mousemove="showPlayerControls()" @mouseleave="hidePlayerControlsOnLeave()">
                             <video id="customVideoPlayer"
                                    x-show="isDirectVideoUrl(selectedItem.watchUrl)"
                                    class="w-full h-full object-contain"
@@ -581,7 +581,7 @@
                         </div>
 
                         <!-- Dizi Sezon Seçimi -->
-                        <div x-show="selectedItem.type === 'tv'" :class="getCardClass()" class="p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+                        <div data-watch-card="season" :style="'order: ' + getWatchCardOrder('season')" x-show="selectedItem.type === 'tv'" :class="getCardClass()" class="p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
                             <div class="flex items-center space-x-3">
                                 <div class="w-9 h-9 rounded-lg bg-rose-600/20 text-rose-500 flex items-center justify-center font-black text-sm">
                                     <i class="fa-solid fa-tv"></i>
@@ -601,7 +601,7 @@
                         </div>
 
                         <!-- Sezon Bölümleri -->
-                        <div x-show="selectedItem.type === 'tv'" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                        <div data-watch-card="episodes" :style="'order: ' + getWatchCardOrder('episodes')" x-show="selectedItem.type === 'tv'" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
                             <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
                                 <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
                                     <i class="fa-solid fa-film text-rose-600 text-xs"></i>
@@ -678,7 +678,7 @@
                         </div>
 
                         <!-- Synopsis Card -->
-                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-3 shadow-sm">
+                        <div data-watch-card="synopsis" :style="'order: ' + getWatchCardOrder('synopsis')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-3 shadow-sm">
                             <div class="flex items-center justify-between">
                                 <h1 class="text-xl font-black text-gray-900 dark:text-white uppercase" x-text="selectedItem.title"></h1>
                                 <button @click="toggleWatchlist(selectedItem)" :class="getCardClass()" class="px-4 py-2 rounded-xl hover:opacity-85 text-gray-800 dark:text-white font-bold text-xs uppercase tracking-wider border flex items-center space-x-2 transition-colors">
@@ -690,7 +690,7 @@
                         </div>
 
                         <!-- Review Section -->
-                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                        <div data-watch-card="reviews" :style="'order: ' + getWatchCardOrder('reviews')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
                             <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white">Yorum Yap & Değerlendir</h3>
                             
                             <div class="flex items-center space-x-3">
@@ -731,7 +731,7 @@
                     <div class="lg:col-span-4 space-y-6">
                         
                         <!-- Yapım Künyesi -->
-                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                        <div data-watch-card="credits" :style="'order: ' + getWatchCardOrder('credits')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
                             <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
                                 <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
                                     <i class="fa-solid fa-circle-info text-rose-600 text-xs"></i>
@@ -770,7 +770,7 @@
                         </div>
 
                         <!-- Oyuncu Kadrosu -->
-                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm" x-show="selectedItem.tmdbCast && selectedItem.tmdbCast.length > 0">
+                        <div data-watch-card="cast" :style="'order: ' + getWatchCardOrder('cast')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm" x-show="selectedItem.tmdbCast && selectedItem.tmdbCast.length > 0">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
                                     <i class="fa-solid fa-users text-rose-600 text-xs"></i>
@@ -802,7 +802,7 @@
                         </div>
 
                         <!-- Benzer Yapımlar -->
-                        <div :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                        <div data-watch-card="similar" :style="'order: ' + getWatchCardOrder('similar')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
                             <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
                                 <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
                                     <i class="fa-solid fa-layer-group text-rose-600 text-xs"></i>
