@@ -241,22 +241,24 @@ async function writeCatalog(env, data, expectedSha) {
 export default {
   async fetch(request,env) {
     const url=new URL(request.url);
-    if(request.method==="POST"&&url.pathname==="/api/login")return handleLogin(request,env);
-    if(request.method==="POST"&&url.pathname==="/api/logout")return handleLogout(request);
+    // Normalize optional trailing slashes so /api/catalog and /api/catalog/ resolve identically.
+    const path=url.pathname.replace(/\\/+$/,"")||"/";
+    if(request.method==="POST"&&path==="/api/login")return handleLogin(request,env);
+    if(request.method==="POST"&&path==="/api/logout")return handleLogout(request);
     const auth=await authorize(request,env);
     if(!auth.ok) {
-      if(url.pathname.startsWith("/api/"))return json({error:auth.error},auth.status);
+      if(path.startsWith("/api/"))return json({error:auth.error},auth.status);
       return loginPage();
     }
     const response=await (async()=>{
-      if(!url.pathname.startsWith("/api/"))return env.ASSETS.fetch(request);
-      if(request.method==="GET"&&url.pathname==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
-      if(request.method==="GET"&&url.pathname==="/api/profile-photo")return getProfilePhoto(env);
+      if(!path.startsWith("/api/"))return env.ASSETS.fetch(request);
+      if(request.method==="GET"&&path==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
+      if(request.method==="GET"&&path==="/api/profile-photo")return getProfilePhoto(env);
       if(request.method==="POST"&&url.pathname==="/api/profile-photo") {
         try{return await saveProfilePhoto(request,env);}
         catch(error){return json({error:error.message||"Profil fotoğrafı kaydedilemedi."},502);}
       }
-      if(request.method==="GET"&&url.pathname==="/api/catalog") {
+      if(request.method==="GET"&&path==="/api/catalog") {
         try { return json(await readCatalog(env)); }
         catch(error) { return json({error:error.message||"Katalog okunamadı."},502); }
       }
