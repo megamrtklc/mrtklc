@@ -1048,3 +1048,129 @@ body.admin-theme-slate .workspace-topbar{background:#edf0f4;border-color:#dce2e9
 .hero-preview-empty{padding:28px 16px;border:1px dashed var(--line);border-radius:12px;text-align:center;color:var(--muted);font-size:12px}
 @media(max-width:600px){.hero-controls{grid-template-columns:1fr}.hero-search-field{grid-column:auto}.hero-preview-copy{padding:14px}.hero-preview.mobile .hero-preview-art{min-height:190px}}
 body.admin-theme-dark .hero-controls input,body.admin-theme-dark .hero-controls select{background:#171c25;border-color:#303846;color:#edf0f5}
+
+
+/* =========================================================
+   CINEVERSE STUDIO · ADMIN EXPERIENCE REDESIGN
+   Clear hierarchy, deliberate spacing and stable navigation
+   ========================================================= */
+:root{--studio-ink:#e9edf5;--studio-muted:#98a2b4;--studio-line:rgba(151,164,187,.15);--studio-panel:#171d28;--studio-panel-2:#1c2431;--studio-accent:#b99b72}
+.app-shell{grid-template-columns:276px minmax(0,1fr);transition:grid-template-columns .26s cubic-bezier(.2,.75,.25,1)}
+.studio-header{background:linear-gradient(180deg,#171d28 0%,#131923 100%);border-right:1px solid #2b3442;border-bottom:0;padding:25px 18px 20px;gap:0;box-shadow:12px 0 36px rgba(0,0,0,.12);scrollbar-width:thin;scrollbar-color:#394454 transparent}
+.brand-row{padding:0 4px 25px;border-bottom:1px solid rgba(180,194,216,.12);margin-bottom:22px}
+.brand{gap:12px}
+.brand-symbol{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#c9a77a,#806747);color:#151923;box-shadow:0 7px 20px rgba(173,137,88,.2);transform:none}
+.brand-copy b{font:800 16px Manrope;letter-spacing:-.7px;color:#f4f2ed}
+.brand-copy small{color:#8994a7;font-size:8px;letter-spacing:2.4px}
+.sidebar-toggle{width:36px;height:36px;flex-basis:36px;border:1px solid #394454;border-radius:11px;background:#202938;color:#c4ccda;font-size:19px}
+.sidebar-toggle:hover{background:#2b3748;color:#fff;border-color:#627087}
+.header-center{display:block;border:0;padding:0 9px;margin:0 0 12px;min-width:0}
+.workspace-name{font:800 9px Manrope;letter-spacing:1.6px;text-transform:uppercase;color:#77859a}
+.workspace-name i{display:none}
+.nav-list{display:flex;flex-direction:column;align-items:stretch;gap:6px;flex:1;padding:0 0 20px;min-height:0}
+.nav-list:before{content:"ÇALIŞMA ALANI";display:block;padding:0 10px 8px;color:#657286;font:800 9px Manrope;letter-spacing:1.7px}
+.nav-link{position:relative;display:flex;align-items:center;gap:13px;width:100%;min-height:48px;padding:0 13px;border:1px solid transparent;border-radius:12px;background:transparent;color:#a4afbf;text-align:left;font:600 12px "DM Sans",sans-serif;white-space:nowrap;transition:background .18s ease,border-color .18s ease,color .18s ease}
+.nav-link:before{content:"";position:absolute;left:-18px;top:10px;bottom:10px;width:3px;border-radius:0 4px 4px 0;background:#c9a77a;opacity:0;transition:opacity .18s ease}
+.nav-link:hover{background:#202938;color:#f3f5f8;border-color:#2b3747}
+.nav-link.active{background:linear-gradient(100deg,rgba(190,157,111,.2),rgba(190,157,111,.07));border-color:rgba(190,157,111,.2);color:#f2dfc3;box-shadow:inset 0 1px rgba(255,255,255,.025)}
+.nav-link.active:before{opacity:1}
+.nav-link>span:first-child{display:grid;place-items:center;width:22px;height:22px;flex:0 0 22px;margin:0;color:#9daabd;font-size:18px;line-height:1}
+.nav-link.active>span:first-child{color:#d9b98d}
+.nav-label{display:block;min-width:0;overflow:hidden;opacity:1;visibility:visible;max-width:190px;transition:max-width .2s ease,opacity .15s ease,visibility .15s}
+.nav-link em{margin-left:auto;background:#303a49;color:#d4dbea;padding:4px 7px;font-size:10px;border-radius:7px}
+.header-actions{margin-top:auto;display:flex;flex-direction:column;align-items:stretch;gap:11px;padding:18px 0 0;border-top:1px solid rgba(180,194,216,.12);width:100%}
+.theme-picker{min-height:46px;background:#202938;border:1px solid #344052;border-radius:11px;color:#9eabbd}
+.theme-picker>span{color:#8290a4}
+.theme-picker select{color:#e7ebf2;background:transparent}
+.logout-button{min-height:43px;width:100%;border:1px solid #49333a;background:rgba(124,61,69,.12);color:#d9a7aa;border-radius:11px;font-size:11px}
+.logout-button:hover{background:rgba(156,69,78,.22);border-color:#76505a}
+.app-shell.sidebar-collapsed{grid-template-columns:82px minmax(0,1fr)}
+.sidebar-collapsed .studio-header{padding:22px 12px 18px}
+.sidebar-collapsed .brand-row{flex-direction:column;align-items:center;gap:18px;padding:0 0 20px;margin-bottom:17px}
+.sidebar-collapsed .brand{justify-content:center}
+.sidebar-collapsed .brand-copy,.sidebar-collapsed .header-center{display:none!important}
+.sidebar-collapsed .sidebar-toggle{transform:rotate(180deg)}
+.sidebar-collapsed .nav-list{align-items:stretch}
+.sidebar-collapsed .nav-list:before{content:"";padding:0;height:1px}
+.sidebar-collapsed .nav-link{justify-content:center;gap:0;width:54px;height:50px;min-height:50px;margin:0 auto;padding:0;font-size:0;color:transparent;overflow:hidden}
+.sidebar-collapsed .nav-link:before{left:-13px}
+.sidebar-collapsed .nav-link>span:first-child{width:24px;height:24px;flex:0 0 24px;margin:0;font-size:20px;color:#aab5c5}
+.sidebar-collapsed .nav-link.active>span:first-child{color:#e0bd8d}
+.sidebar-collapsed .nav-label{max-width:0!important;width:0!important;opacity:0!important;visibility:hidden!important;pointer-events:none}
+.sidebar-collapsed .nav-link em{display:none!important}
+.sidebar-collapsed .header-actions{align-items:center;padding-top:14px}
+.sidebar-collapsed .theme-picker{width:54px;min-height:46px;padding:5px;justify-content:center}
+.sidebar-collapsed .theme-picker>span{display:none}
+.sidebar-collapsed .theme-picker select{width:100%;font-size:0;color:transparent;appearance:none;background:transparent}
+.sidebar-collapsed .logout-button{width:54px;min-height:42px;font-size:0;padding:0;overflow:hidden}
+.sidebar-collapsed .logout-button:after{content:"↪";font-size:18px;color:#d9a7aa}
+.sidebar-collapsed .avatar{width:42px;height:42px}
+.main-area{background:var(--canvas)}
+.workspace-topbar{min-height:72px;padding:12px clamp(22px,3vw,48px);backdrop-filter:blur(16px)}
+.content-wrap{max-width:1660px;padding:28px clamp(22px,3vw,48px) 48px}
+.top-context{margin-bottom:24px}
+.breadcrumbs{font-size:11px}
+.notice{border-radius:13px;margin-bottom:28px;padding:14px 17px}
+.dashboard-welcome{border-radius:22px;box-shadow:0 18px 48px rgba(0,0,0,.13)}
+.dashboard-section-head{margin-top:34px}
+.dashboard-metric,.dashboard-card,.panel-card,.hero-device-panel{border-radius:17px;box-shadow:0 8px 28px rgba(0,0,0,.055)}
+.dashboard-metrics{gap:14px}
+.dashboard-metric{padding:20px}
+.dashboard-card{padding:21px}
+.page-heading{margin-bottom:25px}
+.page-heading h1{letter-spacing:-1.4px}
+.primary-button,.dashboard-primary,.dashboard-secondary{border-radius:10px}
+.catalog-toolbar{gap:12px;padding:15px;background:var(--surface);border:1px solid var(--line);border-radius:15px;margin-bottom:15px}
+.catalog-table-wrap{border-radius:16px;border:1px solid var(--line);overflow:hidden}
+.catalog-table th{letter-spacing:.08em}
+.catalog-table td,.catalog-table th{padding:15px 16px}
+.analytics-grid,.users-profile-layout,.watch-layout-editor-grid{gap:18px}
+.panel-card{padding:22px}
+.field input,.field select,.field textarea,.catalog-toolbar input,.catalog-toolbar select{border-radius:10px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #c9a77a;outline-offset:3px}
+@media(min-width:761px){
+ .studio-header{display:flex;flex-direction:column;align-items:stretch}
+ .brand-row{flex:none}
+ .nav-list{flex:none}
+ .header-actions{flex:1;justify-content:flex-end}
+ .sidebar-collapsed .nav-link{font-size:0}
+}
+@media(max-width:980px) and (min-width:761px){
+ .app-shell{grid-template-columns:238px minmax(0,1fr)}
+ .app-shell.sidebar-collapsed{grid-template-columns:78px minmax(0,1fr)}
+ .studio-header{padding-left:15px;padding-right:15px}
+ .nav-link{font-size:11px;padding-left:11px}
+}
+@media(max-width:760px){
+ .app-shell,.app-shell.sidebar-collapsed{display:block;height:auto;min-height:100vh;overflow:visible}
+ .studio-header{height:auto;min-height:70px;position:sticky;top:0;z-index:50;display:flex;flex-direction:row;align-items:center;gap:10px;padding:12px 16px;background:#171d28;border-right:0;border-bottom:1px solid #303a49;overflow:visible}
+ .brand-row{flex:1;display:flex;flex-direction:row!important;align-items:center;justify-content:flex-start;gap:0;padding:0;margin:0;border:0}
+ .brand-copy{display:block!important}
+ .brand-copy b{font-size:15px}
+ .sidebar-toggle{display:none}
+ .header-center{display:none!important}
+ .nav-list{display:none;position:absolute;top:calc(100% + 1px);left:0;right:0;z-index:60;max-height:calc(100vh - 80px);overflow-y:auto;padding:14px 16px 18px;background:#171d28;border:1px solid #303a49;border-top:0;border-radius:0 0 16px 16px;box-shadow:0 18px 34px rgba(0,0,0,.3);gap:5px}
+ .nav-list.open{display:flex}
+ .nav-list:before{padding:3px 10px 8px}
+ .nav-link{display:flex;width:100%;min-height:46px;padding:0 13px;font-size:13px;color:#b7c1d0}
+ .nav-link>span:first-child{width:24px;height:24px;flex:0 0 24px;margin:0;font-size:18px}
+ .nav-label{max-width:none!important;width:auto!important;opacity:1!important;visibility:visible!important}
+ .nav-link em{display:inline-block!important;margin-left:auto}
+ .header-actions{margin:0 0 0 auto;padding:0;border:0;width:auto;flex:0 0 auto;flex-direction:row;align-items:center;gap:7px}
+ .theme-picker{width:auto;min-width:0;min-height:36px;padding:4px 7px;background:#202938;border-color:#344052}
+ .theme-picker>span{display:none}
+ .theme-picker select{width:auto;max-width:90px!important;color:#e7ebf2;font-size:10px}
+ .logout-button{width:auto;min-height:35px;padding:7px 10px;font-size:10px}
+ .logout-button:after{display:none}
+ .mobile-menu{display:grid;place-items:center;width:38px;height:38px;border:1px solid #394454;border-radius:10px;background:#202938;color:#e5eaf2;font-size:17px}
+ .content-wrap{padding:20px 16px 34px}
+ .workspace-topbar{min-height:56px;padding:7px 13px}
+ .workspace-topbar .header-utility{gap:6px}
+}
+@media(max-width:460px){
+ .brand-symbol{width:37px;height:37px}
+ .brand-copy b{font-size:14px}
+ .theme-picker select{max-width:74px!important}
+ .header-actions{gap:5px}
+ .workspace-topbar .header-utility .site-link{font-size:8px}
+}
