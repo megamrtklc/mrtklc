@@ -6,6 +6,7 @@ on:
     paths:
       - "admin/**"
       - "worker/**"
+      - "tests/**"
       - ".github/workflows/deploy-admin-worker.yml"
   workflow_dispatch:
 
@@ -32,6 +33,7 @@ jobs:
         run: |
           node --check worker/src/index.js
           node --check admin/admin.js
+          node tests/admin-data-validation.mjs
           node -e "JSON.parse(require('node:fs').readFileSync('worker/wrangler.jsonc', 'utf8'))"
 
       - name: Check deployment secrets
