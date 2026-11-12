@@ -117,11 +117,38 @@
                 },
 
                 getWatchCardOrder(cardId) {
-                    const side = ['player','season','episodes','synopsis','reviews'].includes(cardId) ? 'left' : 'right';
-                    const defaults = side === 'left' ? ['player','season','episodes','synopsis','reviews'] : ['credits','cast','similar'];
-                    const order = this.watchPageConfig?.[side];
-                    const ids = Array.isArray(order) ? [...order.filter(id => defaults.includes(id)), ...defaults.filter(id => !order.includes(id))] : defaults;
-                    return ids.indexOf(cardId);
+                    const defaults = {
+                        left: ['player','season','episodes','synopsis','reviews'],
+                        right: ['credits','cast','similar']
+                    };
+                    const saved = this.watchPageConfig || {};
+                    const left = Array.isArray(saved.left) ? saved.left.filter(id => Object.values(defaults).flat().includes(id)) : [];
+                    const right = Array.isArray(saved.right) ? saved.right.filter(id => Object.values(defaults).flat().includes(id) && !left.includes(id)) : [];
+                    const all = [...left,...right];
+                    Object.values(defaults).flat().forEach(id => { if (!all.includes(id)) (defaults.left.includes(id) ? left : right).push(id); });
+                    const side = left.includes(cardId) ? left : right;
+                    return side.indexOf(cardId);
+                },
+
+                applyWatchPageLayout() {
+                    const config = this.watchPageConfig || {};
+                    const defaults = {
+                        left: ['player','season','episodes','synopsis','reviews'],
+                        right: ['credits','cast','similar']
+                    };
+                    const allIds = Object.values(defaults).flat();
+                    const left = Array.isArray(config.left) ? config.left.filter((id,index,arr) => allIds.includes(id) && arr.indexOf(id) === index) : [];
+                    const right = Array.isArray(config.right) ? config.right.filter((id,index,arr) => allIds.includes(id) && !left.includes(id) && arr.indexOf(id) === index) : [];
+                    const used = new Set([...left,...right]);
+                    allIds.forEach(id => { if (!used.has(id)) (defaults.left.includes(id) ? left : right).push(id); });
+                    this.$nextTick(() => {
+                        const leftColumn = document.getElementById('watch-left-column');
+                        const rightColumn = document.getElementById('watch-right-column');
+                        if (!leftColumn || !rightColumn) return;
+                        const cards = new Map(Array.from(document.querySelectorAll('[data-watch-card]')).map(node => [node.dataset.watchCard,node]));
+                        left.forEach((id,index) => { const node=cards.get(id); if(node){node.style.order=String(index);leftColumn.appendChild(node);} });
+                        right.forEach((id,index) => { const node=cards.get(id); if(node){node.style.order=String(index);rightColumn.appendChild(node);} });
+                    });
                 },
 
                 getThemeName() {
@@ -813,6 +840,7 @@
                     this.playbackError = false;
                     this.tmdbDetailsError = '';
                     this.currentPage = 'watch';
+                    this.applyWatchPageLayout();
                     if (updateUrl) this.syncRouteToUrl('watch', item);
                     this.fetchTmdbDetails(item);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
