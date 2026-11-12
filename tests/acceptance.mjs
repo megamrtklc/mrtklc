@@ -337,6 +337,10 @@ try {
   await check('Dizi önerileri doğru etiketleniyor ve dar ekran kart ölçüsü uygulanıyor', async () => {
     const tvCard = page.locator('#home-personalized-rail [data-recommendation-type="tv"]').first();
     await tvCard.waitFor({ state: 'attached', timeout: 10000 });
+    await page.waitForFunction(() => {
+      const card = document.querySelector('#home-personalized-rail [data-recommendation-type="tv"]');
+      return card?.querySelector('.relative > span')?.textContent.trim() === 'Dizi';
+    }, { timeout: 10000 });
     assert.equal((await tvCard.locator('.relative > span').first().innerText()).trim(), 'Dizi', 'Dizi önerisi Film olarak etiketlenmiş');
     await page.setViewportSize({ width: 360, height: 800 });
     const railCardBasis = await page.locator('#home-personalized-rail .home-rail-card').first().evaluate(card => getComputedStyle(card).flexBasis);
