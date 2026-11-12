@@ -16,6 +16,15 @@ function encodeBase64Url(bytes) {
   for (const byte of bytes) binary += String.fromCharCode(byte);
   return btoa(binary).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 }
+
+function bytesToBase64(bytes) {
+  let binary = "";
+  const chunkSize = 0x8000;
+  for (let offset = 0; offset < bytes.length; offset += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(offset, offset + chunkSize));
+  }
+  return btoa(binary);
+}
 function decodeBase64Url(value) {
   const normalized=value.replace(/-/g,"+").replace(/_/g,"/");
   const padded=normalized+"=".repeat((4-normalized.length%4)%4);
