@@ -431,6 +431,18 @@
                     this.currentSlideIndex = idx;
                 },
 
+                navigateHeroSlide(direction, containerId = 'heroThumbContainer') {
+                    if (this.heroSlides.length < 2) return;
+                    this.currentSlideIndex = (this.currentSlideIndex + direction + this.heroSlides.length) % this.heroSlides.length;
+                    const container = document.getElementById(containerId);
+                    if (container) {
+                        requestAnimationFrame(() => {
+                            const activeThumb = container.querySelector('[data-hero-index="' + this.currentSlideIndex + '"]');
+                            if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+                        });
+                    }
+                },
+
                 scrollHeroThumbs(dir, containerId = 'heroThumbContainer') {
                     const container = document.getElementById(containerId);
                     if (container) {
