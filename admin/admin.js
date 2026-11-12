@@ -290,22 +290,22 @@
     for(const side of ['left','right']){
       const root=$('#watch-'+side+'-list');
       root.innerHTML=config[side].map((id,index)=>{
-        const item=watchCardDefinitions[id];
-        return '<div class="watch-order-item" data-card="'+id+'" draggable="true" title="Sürükleyerek taşı veya sırala"><span class="watch-order-number">'+(index+1)+'</span><div class="watch-order-copy"><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+'</small></div><div class="watch-order-actions"><button type="button" class="watch-order-move" data-dir="-1" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" class="watch-order-move" data-dir="1" aria-label="Aşağı taşı" '+(index===config[side].length-1?'disabled':'')+'>↓</button><button type="button" class="watch-order-transfer" data-target-side="'+(side==='left'?'right':'left')+'" title="'+(side==='left'?'Sağ sütuna taşı':'Sol sütuna taşı')+'">⇄</button></div></div>';
+        const item=watchCardDefinitions[id],target=side==='left'?'right':'left';
+        const action=side==='left'?'Sağ alana taşı':'Sol alana taşı';
+        return '<div class="watch-order-item" data-card="'+id+'" draggable="true" title="Diğer alana sürükleyerek taşı"><span class="watch-order-number">'+(index+1)+'</span><div class="watch-order-copy"><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+'</small></div><div class="watch-order-actions"><button type="button" class="watch-order-transfer" data-target-side="'+target+'" aria-label="'+action+'" title="'+action+'">'+(side==='left'?'→':'←')+' <span>'+action+'</span></button></div></div>';
       }).join('')||'<div class="watch-demo-empty">Bu sütunda kart bulunmuyor.</div>';
+      root.classList.toggle('is-drop-target',false);
     }
-    renderWatchDemo(config);
+    renderWatchDemo(config);\n    $('#watch-demo-left').setAttribute('aria-live','polite');\n    $('#watch-demo-right').setAttribute('aria-live','polite');
   }
-  function moveWatchCard(side,id,direction,targetSide=null){
+  function moveWatchCard(side,id,targetSide){
+    if(!targetSide||side===targetSide)return;
     const config=watchLayoutConfig(),source=config[side],from=source.indexOf(id);
-    if(from<0)return;
-    if(targetSide){
-      source.splice(from,1);config[targetSide].push(id);
-    }else{
-      const to=from+direction;if(to<0||to>=source.length)return;
-      [source[from],source[to]]=[source[to],source[from]];
-    }
-    state.data.watchPageConfig=config;renderWatchLayout();
+    if(from<0||config[targetSide].includes(id))return;
+    source.splice(from,1);
+    config[targetSide].push(id);
+    state.data.watchPageConfig=config;
+    renderWatchLayout();
   }
   async function saveWatchLayout(){
     const config=watchLayoutConfig();
@@ -413,11 +413,41 @@
   let draggedWatchCard=null;
   ['left','right'].forEach(side=>{
     const list=$('#watch-'+side+'-list');
-    list.addEventListener('click',event=>{const item=event.target.closest('[data-card]');if(!item)return;const transfer=event.target.closest('[data-target-side]');if(transfer){moveWatchCard(side,item.dataset.card,0,transfer.dataset.targetSide);return;}const button=event.target.closest('[data-dir]');if(button)moveWatchCard(side,item.dataset.card,Number(button.dataset.dir));});
-    list.addEventListener('dragstart',event=>{const item=event.target.closest('[data-card]');if(!item)return;draggedWatchCard={side,id:item.dataset.card};item.classList.add('is-dragging');event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',item.dataset.card);});
-    list.addEventListener('dragend',()=>{draggedWatchCard=null;$('.watch-order-item').forEach(item=>item.classList.remove('is-dragging','drop-target'));});
-    list.addEventListener('dragover',event=>{if(!draggedWatchCard)return;event.preventDefault();const target=event.target.closest('[data-card]');$('.watch-order-item').forEach(item=>item.classList.toggle('drop-target',item===target));});
-    list.addEventListener('drop',event=>{if(!draggedWatchCard)return;event.preventDefault();const target=event.target.closest('[data-card]');const config=watchLayoutConfig();const from=draggedWatchCard;const source=config[from.side];const index=source.indexOf(from.id);if(index<0)return;source.splice(index,1);const destination=config[side];const targetIndex=target?destination.indexOf(target.dataset.card):-1;destination.splice(targetIndex<0?destination.length:targetIndex,0,from.id);state.data.watchPageConfig=config;draggedWatchCard=null;renderWatchLayout();});
+    list.addEventListener('click',event=>{
+      const item=event.target.closest('[data-card]');
+      const transfer=event.target.closest('[data-target-side]');
+      if(item&&transfer)moveWatchCard(side,item.dataset.card,transfer.dataset.targetSide);
+    });
+    list.addEventListener('dragstart',event=>{
+      const item=event.target.closest('[data-card]');
+      if(!item)return;
+      draggedWatchCard={side,id:item.dataset.card};
+      item.classList.add('is-dragging');
+      event.dataTransfer.effectAllowed='move';
+      event.dataTransfer.setData('text/plain',item.dataset.card);
+    });
+    list.addEventListener('dragend',()=>{
+      draggedWatchCard=null;
+      $('.watch-order-item').forEach(item=>item.classList.remove('is-dragging'));
+      $('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
+    });
+    list.addEventListener('dragover',event=>{
+      if(!draggedWatchCard||draggedWatchCard.side===side)return;
+      event.preventDefault();
+      event.dataTransfer.dropEffect='move';
+      list.classList.add('is-drop-target');
+    });
+    list.addEventListener('dragleave',event=>{
+      if(!list.contains(event.relatedTarget))list.classList.remove('is-drop-target');
+    });
+    list.addEventListener('drop',event=>{
+      if(!draggedWatchCard||draggedWatchCard.side===side)return;
+      event.preventDefault();
+      moveWatchCard(draggedWatchCard.side,draggedWatchCard.id,side);
+      draggedWatchCard=null;
+      $('.watch-order-item').forEach(item=>item.classList.remove('is-dragging'));
+      $('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
+    });
   });
   $('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{watchDemoType=button.dataset.demoType;renderWatchLayout();}));
   init();
