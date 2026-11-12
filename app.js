@@ -1119,7 +1119,7 @@
                             if (!result.trim()) throw new Error('Çeviri sonucu alınamadı. Lütfen tekrar dene.');
                             translated.push(result);
                         }
-                        person.biographyTranslated = translated.join(' ').replace(/\\s+([,.;!?])/g, '$1');
+                        person.biographyTranslated = translated.join(' ').replace(/\s+([,.;!?])/g, '$1');
                         person.biographyShowOriginal = false;
                     } catch (error) {
                         person.biographyTranslationError = error.message || 'Biyografi Türkçeye çevrilemedi.';
