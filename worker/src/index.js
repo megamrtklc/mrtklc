@@ -110,6 +110,68 @@ function githubHeaders(env) {
   };
 }
 
+function profilePhotoUrl(env) {
+  const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc");
+  const repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc");
+  const branch=encodeURIComponent(env.GITHUB_BRANCH||"main");
+  return `https://api.github.com/repos/${owner}/${repo}/contents/admin/assets/admin-profile`;
+}
+async function getProfilePhoto(env) {
+  if(!env.GITHUB_TOKEN)return json({error:"GitHub bağlantısı yapılandırılmamış."},503);
+  for(const ext of ["webp","png","jpg"]) {
+    const response=await fetch(profilePhotoUrl(env)+"."+ext+"?ref="+encodeURIComponent(env.GITHUB_BRANCH||"main"),{headers:githubHeaders(env)});
+    if(response.status===404)continue;
+    const data=await response.json();
+    if(!response.ok)return json({error:data.message||"Profil fotoğrafı okunamadı."},502);
+    return json({url:data.download_url||("https://raw.githubusercontent.com/"+(env.GITHUB_OWNER||"megamrtklc")+"/"+(env.GITHUB_REPO||"mrtklc")+"/"+(env.GITHUB_BRANCH||"main")+"/admin/assets/admin-profile."+ext)+"?v="+encodeURIComponent(data.sha||"")});
+  }
+  return json({url:null});
+}
+async function saveProfilePhoto(request,env) {
+  if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+  if(!env.GITHUB_TOKEN)return json({error:"GitHub bağlantısı yapılandırılmamış."},503);
+  const length=Number(request.headers.get("content-length")||0);
+  if(length>1050000)return json({error:"Fotoğraf boyutu 700 KB sınırını aşıyor."},413);
+  const body=await request.json();
+  const mime=String(body?.mime||"");
+  const allowed={"image/jpeg":"jpg","image/png":"png","image/webp":"webp"};
+  if(!allowed[mime]||typeof body?.base64!=="string"||body.base64.length>960000)return json({error:"Yalnızca JPG, PNG veya WebP fotoğraf yükleyebilirsin (en fazla 700 KB)."},400);
+  let bytes;
+  try{bytes=Uint8Array.from(atob(body.base64),c=>c.charCodeAt(0));}catch{return json({error:"Fotoğraf verisi okunamadı."},400);}
+  if(bytes.length<16||bytes.length>716800)return json({error:"Fotoğraf boyutu 700 KB sınırını aşmamalı."},413);
+  const signature=Array.from(bytes.slice(0,12));
+  const valid=mime==="image/jpeg"?signature[0]===255&&signature[1]===216&&signature[2]===255:
+    mime==="image/png"?signature.slice(0,8).join(",")==="137,80,78,71,13,10,26,10":
+    signature.slice(0,4).map(x=>String.fromCharCode(x)).join("")==="RIFF"&&signature.slice(8,12).map(x=>String.fromCharCode(x)).join("")==="WEBP";
+  if(!valid)return json({error:"Dosya içeriği seçilen görsel biçimiyle eşleşmiyor."},400);
+  const ext=allowed[mime],path="admin/assets/admin-profile."+ext;
+  const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc");
+  const branch=env.GITHUB_BRANCH||"main",base=`https://api.github.com/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
+  // Replace a previous photo regardless of its format.
+  for(const oldExt of ["jpg","png","webp"]) {
+    const oldPath="admin/assets/admin-profile."+oldExt;
+    const oldUrl=`https://api.github.com/repos/${owner}/${repo}/contents/${oldPath.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(branch)}`;
+    const oldRes=await fetch(oldUrl,{headers:githubHeaders(env)});
+    if(oldRes.ok) {
+      const old=await oldRes.json();
+      if(oldExt!==ext) {
+        const del=await fetch(oldUrl.split("?")[0],{method:"DELETE",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Remove previous CineVerse admin profile photo",sha:old.sha,branch})});
+        if(!del.ok)return json({error:"Önceki profil fotoğrafı değiştirilemedi."},502);
+      }
+    }
+  }
+  const existing=await fetch(base+"?ref="+encodeURIComponent(branch),{headers:githubHeaders(env)});
+  let sha;
+  if(existing.ok)sha=(await existing.json()).sha;
+  else if(existing.status!==404)return json({error:"Mevcut profil fotoğrafı kontrol edilemedi."},502);
+  const encoded=encodeBase64Url(bytes).replace(/-/g,"+").replace(/_/g,"/");
+  const content=encoded+"=".repeat((4-encoded.length%4)%4);
+  const response=await fetch(base,{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Update CineVerse admin profile photo",content,sha,branch})});
+  const result=await response.json();
+  if(!response.ok)return json({error:result.message||"Profil fotoğrafı kaydedilemedi."},502);
+  return json({ok:true,url:"https://raw.githubusercontent.com/"+(env.GITHUB_OWNER||"megamrtklc")+"/"+(env.GITHUB_REPO||"mrtklc")+"/"+branch+"/admin/assets/admin-profile."+ext+"?v="+encodeURIComponent(result.content?.sha||Date.now())});
+}
+
 function catalogUrl(env) {
   const owner = encodeURIComponent(env.GITHUB_OWNER || "megamrtklc");
   const repo = encodeURIComponent(env.GITHUB_REPO || "mrtklc");
@@ -189,6 +251,11 @@ export default {
     const response=await (async()=>{
       if(!url.pathname.startsWith("/api/"))return env.ASSETS.fetch(request);
       if(request.method==="GET"&&url.pathname==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
+      if(request.method==="GET"&&url.pathname==="/api/profile-photo")return getProfilePhoto(env);
+      if(request.method==="POST"&&url.pathname==="/api/profile-photo") {
+        try{return await saveProfilePhoto(request,env);}
+        catch(error){return json({error:error.message||"Profil fotoğrafı kaydedilemedi."},502);}
+      }
       if(request.method==="GET"&&url.pathname==="/api/catalog") {
         try { return json(await readCatalog(env)); }
         catch(error) { return json({error:error.message||"Katalog okunamadı."},502); }
