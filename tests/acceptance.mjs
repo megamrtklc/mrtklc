@@ -353,10 +353,27 @@ try {
     await page.waitForFunction(() => window.innerWidth === 360);
     const railCardLayout = await page.locator('#home-personalized-rail .home-rail-card').first().evaluate(card => ({
       flexBasis: getComputedStyle(card).flexBasis,
+      flex: getComputedStyle(card).flex,
+      flexShrink: getComputedStyle(card).flexShrink,
+      inlineStyle: card.getAttribute('style'),
       width: getComputedStyle(card).width,
       viewport: window.innerWidth,
+      screenWidth: window.screen.width,
       media380: matchMedia('(max-width: 380px)').matches,
-      railWidth: card.parentElement.getBoundingClientRect().width
+      media1280: matchMedia('(min-width: 1280px)').matches,
+      railWidth: card.parentElement.getBoundingClientRect().width,
+      railClass: card.parentElement.className,
+      matchedRules: [...document.styleSheets].flatMap(sheet => {
+        try {
+          const found = [];
+          const walk = rules => [...rules].forEach(rule => {
+            if (rule.selectorText?.includes('home-rail-card')) found.push(rule.cssText);
+            if (rule.cssRules) walk(rule.cssRules);
+          });
+          walk(sheet.cssRules);
+          return found;
+        } catch { return []; }
+      })
     }));
     console.log('NARROW RECOMMENDATION CARD LAYOUT:', JSON.stringify(railCardLayout));
     assert.equal(railCardLayout.flexBasis, '48%', '380px altındaki ekranda kart genişliği %48 olmalı');
