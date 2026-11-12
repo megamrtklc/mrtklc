@@ -967,7 +967,7 @@
                                     <span x-show="selectedActor.placeOfBirth" class="px-3 py-2 rounded-xl bg-gray-100 dark:bg-white/5 text-xs font-semibold text-gray-700 dark:text-gray-200"><i class="fa-solid fa-location-dot mr-2 text-rose-500"></i><span x-text="selectedActor.placeOfBirth"></span></span>
                                 </div>
                                 <div class="mt-6 grid grid-cols-1 gap-5 items-start text-left">
-                                    <div class="min-w-0" x-show="selectedActor.biography" :class="selectedActor.awards && selectedActor.awards.length ? 'lg:max-w-[calc(100%-284px)]' : ''">
+                                    <div class="min-w-0" x-show="selectedActor.biography" :class="selectedActor.awards && selectedActor.awards.length ? 'lg:max-w-[calc(100%-320px)]' : ''">
                                         <h2 class="text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white mb-2">Biyografi</h2>
                                         <p class="text-sm sm:text-[15px] leading-7 text-gray-600 dark:text-gray-300 whitespace-pre-line line-clamp-4" x-text="selectedActor.biography"></p>
                                         <button x-show="selectedActor.biography && selectedActor.biography.length > 220" type="button" @click="biographyOpen = true" class="mt-2 inline-flex items-center gap-2 text-xs font-black text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors">Tamamını oku <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></button>
