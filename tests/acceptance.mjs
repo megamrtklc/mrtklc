@@ -366,9 +366,13 @@ try {
       matchedRules: [...document.styleSheets].flatMap(sheet => {
         try {
           const found = [];
-          const walk = rules => [...rules].forEach(rule => {
-            if (rule.selectorText?.includes('home-rail-card')) found.push(rule.cssText);
-            if (rule.cssRules) walk(rule.cssRules);
+          const walk = (rules, conditions = []) => [...rules].forEach(rule => {
+            if (rule.selectorText?.includes('home-rail-card')) found.push({
+              rule: rule.cssText,
+              conditions,
+              active: conditions.every(condition => matchMedia(condition).matches)
+            });
+            if (rule.cssRules) walk(rule.cssRules, rule.conditionText ? [...conditions, rule.conditionText] : conditions);
           });
           walk(sheet.cssRules);
           return found;
