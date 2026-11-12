@@ -177,6 +177,7 @@
                 actorProfileLoading: false,
                 actorProfileError: '',
                 actorProfileCache: {},
+                directorProfileCache: {},
                 tmdbDetailsLoading: false,
                 tmdbSeasonLoading: false,
                 tmdbSeasonRequests: {},
@@ -255,9 +256,9 @@
                             order: person.order ?? index
                         }));
                         const crew = credits.crew || [];
-                        const director = mediaType === 'movie'
-                            ? (crew.find(person => person.job === 'Director')?.name || item.director || '')
-                            : (crew.find(person => person.job === 'Executive Producer')?.name || item.director || '');
+                        const directorPerson = crew.find(person => person.job === 'Director') || (mediaType === 'tv' ? crew.find(person => person.job === 'Executive Producer') : null);
+                        const director = directorPerson?.name || item.director || '';
+                        const directorPersonId = directorPerson?.id || item.directorPersonId || null;
                         const videos = details.videos?.results || [];
                         const trailer = videos.find(video => video.site === 'YouTube' && video.type === 'Trailer');
                         const poster = details.poster_path ? 'https://image.tmdb.org/t/p/w500' + details.poster_path : item.poster;
@@ -279,6 +280,7 @@
                             category: genres || item.category,
                             country: (details.production_countries || details.origin_country || []).map(country => typeof country === 'string' ? country : country.name).join(', ') || item.country,
                             director,
+                            directorPersonId,
                             originalTitle: details.original_title || details.original_name || item.originalTitle,
                             tmdbCast: cast.length ? cast : (item.tmdbCast || []),
                             starring: cast.slice(0, 3).map(person => person.name).filter(Boolean).join(' / ') || item.starring,
@@ -835,6 +837,7 @@
                 getRouteHash(page = this.currentPage, item = this.selectedItem) {
                     if (page === 'watch' && item?.id) return '#/watch/' + encodeURIComponent(item.id);
                     if (page === 'actor' && this.selectedActor?.id) return '#/actor/' + encodeURIComponent(this.selectedActor.id);
+                    if (page === 'director' && this.selectedActor?.id) return '#/director/' + encodeURIComponent(this.selectedActor.id);
                     return '#/' + encodeURIComponent(page || 'home');
                 },
 
@@ -850,6 +853,11 @@
                     const actorMatch = hash.match(/^#\/actor\/(\d+)$/);
                     if (actorMatch) {
                         this.openActorProfile({ id: Number(actorMatch[1]), name: 'Oyuncu' }, false);
+                        return;
+                    }
+                    const directorMatch = hash.match(/^#\/director\/(\d+)$/);
+                    if (directorMatch) {
+                        this.openDirectorProfile({ id: Number(directorMatch[1]), name: 'Yönetmen' }, false);
                         return;
                     }
                     const match = hash.match(/^#\/watch\/(.+)$/);
@@ -971,6 +979,74 @@
                             filmography
                         };
                         this.actorProfileCache[cacheKey] = profile;
+                        Object.assign(this.selectedActor, profile);
+                    } catch (error) {
+                        this.actorProfileError = error.message || 'Oyuncu bilgileri alınamadı.';
+                    } finally {
+                        this.actorProfileLoading = false;
+                    }
+                },
+
+                async openDirectorProfile(actor, updateUrl = true) {
+                    if (!actor || !actor.id) return;
+                    this.selectedActor = { ...actor, id: Number(actor.id) };
+                    this.currentPage = 'director';
+                    this.actorProfileError = '';
+                    if (updateUrl) this.syncRouteToUrl('director', null);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    const cacheKey = String(actor.id);
+                    if (this.directorProfileCache[cacheKey]) {
+                        Object.assign(this.selectedActor, this.directorProfileCache[cacheKey]);
+                        return;
+                    }
+                    this.actorProfileLoading = true;
+                    try {
+                        const personPath = 'person/' + encodeURIComponent(actor.id) + '?append_to_response=movie_credits,tv_credits,external_ids';
+                        const person = await this.fetchTmdb(personPath);
+                        const awards = await this.fetchActorAwards(person.external_ids?.wikidata_id);
+                        let biography = person.biography || '';
+                        if (!biography.trim()) {
+                            try {
+                                const englishPerson = await this.fetchTmdb('person/' + encodeURIComponent(actor.id), 'en-US');
+                                biography = englishPerson.biography || '';
+                            } catch (fallbackError) {
+                                console.warn('Oyuncu biyografisinin İngilizce kaynağı alınamadı:', fallbackError);
+                            }
+                        }
+                        const credits = [
+                            ...(person.movie_credits?.crew || []).filter(item => item.job === 'Director').map(item => ({ ...item, mediaType: 'movie' })),
+                            ...(person.tv_credits?.crew || []).filter(item => item.job === 'Director').map(item => ({ ...item, mediaType: 'tv' }))
+                        ];
+                        const seen = new Set();
+                        const filmography = credits
+                            .filter(item => item.id && !seen.has(item.mediaType + ':' + item.id) && seen.add(item.mediaType + ':' + item.id))
+                            .sort((a,b) => String(b.release_date || b.first_air_date || '').localeCompare(String(a.release_date || a.first_air_date || '')) || Number(b.popularity || 0) - Number(a.popularity || 0))
+                            .slice(0, 48)
+                            .map(item => ({
+                                id: item.id,
+                                type: item.mediaType,
+                                title: item.title || item.name || 'İsimsiz yapım',
+                                character: item.job || 'Yönetmen',
+                                year: String(item.release_date || item.first_air_date || '').slice(0,4),
+                                poster: item.poster_path ? 'https://image.tmdb.org/t/p/w342' + item.poster_path : '',
+                                rating: Number(item.vote_average || 0),
+                                genres: (item.genre_ids || []).map(id => ({28:'Aksiyon',12:'Macera',16:'Animasyon',35:'Komedi',80:'Suç',99:'Belgesel',18:'Dram',10751:'Aile',14:'Fantastik',36:'Tarih',27:'Korku',10402:'Müzik',9648:'Gizem',10749:'Romantik',878:'Bilim Kurgu',10770:'TV Filmi',53:'Gerilim',10752:'Savaş',37:'Vahşi Batı',10759:'Aksiyon & Macera',10762:'Çocuk',10763:'Haber',10764:'Reality',10765:'Bilim Kurgu & Fantastik',10766:'Pembe Dizi',10767:'Talk Show',10768:'Savaş & Politika'})[id]).filter(Boolean),
+                                overview: item.overview || ''
+                            }));
+                        const profile = {
+                            id: person.id,
+                            name: person.name || actor.name || 'Yönetmen',
+                            biography,
+                            awards,
+                            birthday: person.birthday || '',
+                            deathday: person.deathday || '',
+                            placeOfBirth: person.place_of_birth || '',
+                            knownFor: 'Yönetmen',
+                            profile: person.profile_path ? 'https://image.tmdb.org/t/p/h632' + person.profile_path : (actor.profile || ''),
+                            alsoKnownAs: person.also_known_as || [],
+                            filmography
+                        };
+                        this.directorProfileCache[cacheKey] = profile;
                         Object.assign(this.selectedActor, profile);
                     } catch (error) {
                         this.actorProfileError = error.message || 'Oyuncu bilgileri alınamadı.';
