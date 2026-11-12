@@ -268,8 +268,6 @@
                             </div>
                         </div>
                     </div>
-                </section>
-
                     <div x-cloak x-show="trailerOpen" x-transition.opacity @click.self="trailerOpen = false" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Fragman oynatıcı">
                         <div x-show="trailerOpen" x-transition.scale class="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
                             <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
@@ -281,6 +279,8 @@
                             </div>
                         </div>
                     </div>
+                </section>
+
                 <!-- MOBILE HERO: görsel üstte, içerik altta; masaüstü kompozisyonunun doğal mobil uyarlaması -->
                 <section id="mobileHeroBanner" @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" @touchstart.passive="startHeroTouch($event)" @touchend.passive="endHeroTouch($event)" class="relative isolate md:hidden w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" :src="currentHero.poster || currentHero.backdrop" loading="eager" decoding="async" class="pointer-events-none absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-3xl"><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-gray-950/65 via-gray-950/75 to-gray-950"></div>
                     <div class="relative aspect-[16/9] w-full overflow-hidden bg-gray-900" style="touch-action: pan-y;">
