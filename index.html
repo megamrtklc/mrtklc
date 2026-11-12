@@ -42,19 +42,29 @@
     <script defer src="./app.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        /* Filmografi: her satırın en solundaki afiş büyürken sol kenardan taşmasın. */
+        /* Filmografi: ilk sütun sola, son sütun sağa doğru büyür; afişler ekran kenarında kesilmez. */
+        .actor-filmography-grid > button { transform-origin: center center; }
         .actor-filmography-grid > button:nth-child(2n + 1) { transform-origin: left center; }
+        .actor-filmography-grid > button:nth-child(2n) { transform-origin: right center; }
         @media (min-width: 640px) {
+            .actor-filmography-grid > button { transform-origin: center center; }
             .actor-filmography-grid > button:nth-child(3n + 1) { transform-origin: left center; }
+            .actor-filmography-grid > button:nth-child(3n) { transform-origin: right center; }
         }
         @media (min-width: 768px) {
+            .actor-filmography-grid > button { transform-origin: center center; }
             .actor-filmography-grid > button:nth-child(4n + 1) { transform-origin: left center; }
+            .actor-filmography-grid > button:nth-child(4n) { transform-origin: right center; }
         }
         @media (min-width: 1024px) {
+            .actor-filmography-grid > button { transform-origin: center center; }
             .actor-filmography-grid > button:nth-child(6n + 1) { transform-origin: left center; }
+            .actor-filmography-grid > button:nth-child(6n) { transform-origin: right center; }
         }
         @media (min-width: 1280px) {
+            .actor-filmography-grid > button { transform-origin: center center; }
             .actor-filmography-grid > button:nth-child(8n + 1) { transform-origin: left center; }
+            .actor-filmography-grid > button:nth-child(8n) { transform-origin: right center; }
         }
         .has-initial-route #hero-initial-shell { display: none !important; }
         .has-initial-route main { min-height: 0; }
