@@ -1067,6 +1067,18 @@
                     return parts.length === 3 ? parts[2] + '.' + parts[1] + '.' + parts[0] : value;
                 },
 
+                formatActorDeathInfo(deathday, birthday) {
+                    if (!deathday) return '';
+                    const dateLabel = this.formatActorDate(deathday);
+                    if (!birthday) return dateLabel;
+                    const deathParts = String(deathday).split('-').map(Number);
+                    const birthParts = String(birthday).split('-').map(Number);
+                    if (deathParts.length !== 3 || birthParts.length !== 3 || [...deathParts, ...birthParts].some(part => !Number.isFinite(part) || part <= 0)) return dateLabel;
+                    let age = deathParts[0] - birthParts[0];
+                    if (deathParts[1] < birthParts[1] || (deathParts[1] === birthParts[1] && deathParts[2] < birthParts[2])) age--;
+                    return dateLabel + ' · ' + age + ' yaşında';
+                },
+
                 openWatchPage(item, updateUrl = true) {
                     this.selectedItem = item;
                     this.selectedSeason = 1;
