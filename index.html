@@ -421,7 +421,7 @@
                     </div>
                     <div id="home-personalized-rail" class="home-card-rail">
                         <template x-for="item in personalizedRecommendations.slice(0,15)" :key="'personal-' + item.id">
-                            <button @click="openWatchPage(item)" :data-recommendation-type="item.type" :class="getCardClass()" class="home-rail-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
+                            <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :class="getCardClass()" class="home-rail-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image)" sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 18vw, 14vw" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'tv' ? 'Dizi' : 'Film'"></span>
@@ -431,8 +431,9 @@
                                     <h3 class="text-[11px] font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
                                     <p class="text-[9px] text-gray-500 dark:text-gray-400" x-text="(item.year || '') + (item.genre ? ' • ' + item.genre : '')"></p>
                                     <p class="text-[9px] font-semibold text-rose-500/90 line-clamp-1" x-text="item.recommendationReason || &quot;Sana özel seçildi&quot;"></p>
+                                    <button type="button" @click.stop="dismissRecommendation(item)" :aria-label="item.title + ' önerisini gizle'" class="mt-1 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[9px] font-semibold text-gray-500 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"><i class="fa-regular fa-thumbs-down"></i> İlgimi çekmedi</button>
                                 </div>
-                            </button>
+                            </div>
                         </template>
                     </div>
                     <p x-show="!personalizedRecommendations.length" class="text-xs text-gray-500 dark:text-gray-400 py-5 text-center">Önerileri kişiselleştirmek için birkaç yapım izlemeye başlayabilir veya izleme listene ekleyebilirsin.</p>
