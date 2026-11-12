@@ -853,3 +853,111 @@ body.admin-theme-dark .dashboard-welcome{border:1px solid #49445a}
 @media(prefers-reduced-motion:reduce){
  #view-overview .dashboard-welcome:before,.dashboard-art-disc,.dashboard-art-orbit,.welcome-poster{animation:none!important}
 }
+
+/* ── Unified theme-aware controls, dropdowns and icon surfaces ── */
+body{
+  --control-bg:#fff;--control-hover:#f2eff8;--control-border:#e4e1eb;
+  --control-text:#45434f;--control-muted:#858092;--control-shadow:0 14px 34px rgba(35,31,52,.13);
+  --icon-surface:#efecf7;--icon-color:#766b9c;--icon-border:transparent;
+}
+body.admin-theme-slate{
+  --control-bg:#f9fafc;--control-hover:#edf1f7;--control-border:#d7dee8;
+  --control-text:#303947;--control-muted:#758295;--control-shadow:0 14px 34px rgba(40,52,70,.14);
+  --icon-surface:#e8edf5;--icon-color:#657b9b;--icon-border:#dce3ed;
+}
+body.admin-theme-dark{
+  --control-bg:#1c2430;--control-hover:#2b3544;--control-border:#3a4658;
+  --control-text:#e8edf5;--control-muted:#a3afc0;--control-shadow:0 18px 42px rgba(0,0,0,.42);
+  --icon-surface:#2b3444;--icon-color:#c5b8f0;--icon-border:#3b4659;
+}
+
+/* Every native select uses the same refined CineVerse dropdown treatment.
+   Native option lists inherit the active color scheme and these theme colors. */
+select{
+  appearance:none;-webkit-appearance:none;
+  min-height:42px;padding:0 42px 0 14px!important;
+  border:1px solid var(--control-border)!important;border-radius:12px!important;
+  color:var(--control-text)!important;
+  background-color:var(--control-bg)!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23766b9c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")!important;
+  background-repeat:no-repeat!important;background-position:right 14px center!important;
+  box-shadow:0 2px 8px rgba(30,28,45,.035);
+  transition:border-color .18s ease,box-shadow .18s ease,background-color .18s ease;
+  cursor:pointer;
+}
+select:hover{border-color:var(--icon-color)!important;background-color:var(--control-hover)!important}
+select:focus,select:focus-visible{
+  outline:0!important;border-color:var(--icon-color)!important;
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--icon-color) 19%,transparent),0 5px 14px rgba(20,20,35,.06)!important;
+}
+select option{background:var(--control-bg);color:var(--control-text);padding:10px}
+select option:checked{background:var(--control-hover);color:var(--control-text)}
+.theme-picker select{
+  min-height:32px;padding:0 30px 0 8px!important;border:0!important;border-radius:8px!important;
+  background-color:transparent!important;box-shadow:none!important;font-weight:700;
+  background-position:right 7px center!important;
+}
+.theme-picker select:hover{background-color:var(--control-hover)!important}
+.theme-picker select:focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--icon-color) 20%,transparent)!important}
+.field select{width:100%;min-height:46px}
+.catalog-toolbar select{min-width:132px}
+select:disabled{opacity:.55;cursor:not-allowed}
+
+/* Consistent icon contrast and depth across dashboard, navigation and actions. */
+.dashboard-metric-icon,.mini-icon,.shortcut-symbol,.notice-icon,
+.dashboard-health-icon,.empty-state>span,.access-card>.mini-icon{
+  background:var(--icon-surface);color:var(--icon-color);border:1px solid var(--icon-border);
+}
+.dashboard-metric-icon{box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.shortcut-symbol{border-radius:11px}
+body.admin-theme-dark .dashboard-metric-icon,
+body.admin-theme-dark .mini-icon,
+body.admin-theme-dark .shortcut-symbol,
+body.admin-theme-dark .notice-icon,
+body.admin-theme-dark .dashboard-health-icon{
+  background:var(--icon-surface);color:var(--icon-color);border-color:var(--icon-border);
+}
+body.admin-theme-dark .mini-icon.mint,
+body.admin-theme-dark .shortcut-mint{background:#233a34;color:#9ed5bd;border-color:#315247}
+body.admin-theme-dark .mini-icon.lilac,
+body.admin-theme-dark .shortcut-symbol:not(.shortcut-mint):not(.shortcut-gold){background:#302d43;color:#c8baf1;border-color:#494260}
+body.admin-theme-dark .shortcut-gold{background:#3a3325;color:#e1c58b;border-color:#57482c}
+body.admin-theme-dark .health-pulse{background:#82c49a;box-shadow:0 0 0 5px #263b32}
+body.admin-theme-dark .health-check{color:#91c9a5}
+body.admin-theme-dark .health-wait{color:#d5b77a}
+body.admin-theme-dark .dashboard-metric-icon{--metric-icon-bg:#2b3444;--metric-color:#c5b8f0}
+body.admin-theme-dark .dashboard-metric-icon,
+body.admin-theme-dark .dashboard-shortcut>span,
+body.admin-theme-dark .nav-link>span{filter:none}
+body.admin-theme-dark .nav-link.active{background:#343047;color:#e0d8fa}
+body.admin-theme-dark .nav-link.active>span{color:#c8baf1}
+body.admin-theme-dark .nav-link:hover>span{color:#e1d9fa}
+body.admin-theme-dark .row-action,
+body.admin-theme-dark .pagination button,
+body.admin-theme-dark .mini-panel>button,
+body.admin-theme-dark .dialog-close,
+body.admin-theme-dark .secondary-button,
+body.admin-theme-dark .mobile-menu,
+body.admin-theme-dark .sidebar-toggle{
+  background:#293241;border-color:#3b4658;color:#c8baf1;
+}
+body.admin-theme-dark .row-action:hover,
+body.admin-theme-dark .pagination button:hover:not(:disabled),
+body.admin-theme-dark .mini-panel>button:hover,
+body.admin-theme-dark .dialog-close:hover,
+body.admin-theme-dark .secondary-button:hover{
+  background:#354153;border-color:#59677c;color:#f0eaff;
+}
+body.admin-theme-dark .search-box>span,
+body.admin-theme-dark .catalog-toolbar .search-box>span{color:#a99bd0}
+body.admin-theme-dark .dashboard-link span,
+body.admin-theme-dark .text-button span{color:#c8baf1}
+body.admin-theme-dark .dashboard-welcome .dashboard-welcome-icon{color:#d5c9f4}
+body.admin-theme-dark button:focus-visible,
+body.admin-theme-dark a:focus-visible{
+  outline:2px solid #a99bd0;outline-offset:3px;
+}
+@media(prefers-reduced-motion:reduce){
+  select{transition:none}
+}
+
