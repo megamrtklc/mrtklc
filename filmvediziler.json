@@ -17370,83 +17370,18 @@
     }
   ],
   "homepageConfig": {
-    "version": 2,
+    "version": 4,
     "settings": {
-      "desktopCount": 10,
-      "mobileCount": 6,
+      "desktopCount": 8,
+      "mobileCount": 5,
       "interval": 6,
       "autoplay": true,
-      "pauseOnHover": true
+      "pauseOnHover": true,
+      "descriptionLength": 220
     },
     "heroSlides": [
       {
-        "id": "perde-mwawc4g1",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mwawheyh",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-34",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-105",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-26",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-124",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-98",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-6",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-4",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-2",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-23",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-103",
+        "id": "archive-112",
         "active": true,
         "headline": "",
         "description": ""
@@ -17458,7 +17393,123 @@
         "description": ""
       },
       {
+        "id": "archive-124",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-14",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-27",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-85",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-59",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-106",
+        "active": true,
+        "headline": "",
+        "description": ""
+      }
+    ],
+    "desktopMode": "auto",
+    "desktopCategory": "popular",
+    "mobileMode": "auto",
+    "mobileCategory": "top-rated",
+    "desktopHeroSlides": [
+      {
+        "id": "archive-112",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-125",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-124",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-14",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-27",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-85",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-59",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-106",
+        "active": true,
+        "headline": "",
+        "description": ""
+      }
+    ],
+    "mobileHeroSlides": [
+      {
+        "id": "archive-26",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-103",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
         "id": "archive-99",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-110",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-102",
         "active": true,
         "headline": "",
         "description": ""
