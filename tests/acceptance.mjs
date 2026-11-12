@@ -362,6 +362,21 @@ try {
       media380: matchMedia('(max-width: 380px)').matches,
       media1280: matchMedia('(min-width: 1280px)').matches,
       railWidth: card.parentElement.getBoundingClientRect().width,
+      railOffsetWidth: card.parentElement.offsetWidth,
+      railComputedWidth: getComputedStyle(card.parentElement).width,
+      railZoom: getComputedStyle(card.parentElement).zoom,
+      railTransform: getComputedStyle(card.parentElement).transform,
+      cardOffsetWidth: card.offsetWidth,
+      ancestorTransforms: (() => {
+        const values = [];
+        let node = card;
+        while (node && values.length < 8) {
+          const style = getComputedStyle(node);
+          values.push({ tag: node.tagName, id: node.id, className: typeof node.className === 'string' ? node.className.slice(0, 90) : '', width: style.width, zoom: style.zoom, transform: style.transform });
+          node = node.parentElement;
+        }
+        return values;
+      })(),
       railClass: card.parentElement.className,
       matchedRules: [...document.styleSheets].flatMap(sheet => {
         try {
