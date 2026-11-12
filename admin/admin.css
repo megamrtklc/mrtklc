@@ -961,3 +961,15 @@ body.admin-theme-dark a:focus-visible{
   select{transition:none}
 }
 
+
+/* Compact, elevated preview and administrator cluster at the far right */
+.header-utility{display:flex;align-items:center;gap:12px;margin-left:auto;padding:6px 8px 6px 12px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:0 5px 18px rgba(25,22,35,.045);flex:none}
+.header-utility .environment{padding:7px 10px}
+.header-utility .site-link{display:inline-flex;align-items:center;gap:5px;padding:8px 11px;border-radius:10px;background:var(--surface-soft);font-size:10px;font-weight:700;color:var(--ink);transition:background .2s,color .2s}
+.header-utility .site-link:hover{background:var(--accent-soft);color:var(--accent)}
+.header-profile{display:flex;align-items:center;gap:9px;padding-left:11px;border-left:1px solid var(--line);min-width:0}
+.header-profile .avatar{width:36px;height:36px;flex:0 0 36px;border-radius:12px;box-shadow:0 2px 7px rgba(25,22,35,.08)}
+.header-profile .admin-header-name{font-size:10px;font-weight:800;color:var(--ink);white-space:nowrap;max-width:112px;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:1180px){.header-utility{gap:7px;padding:5px 6px 5px 8px}.header-profile{gap:6px;padding-left:7px}.header-utility .site-link{padding:7px 8px}}
+@media(max-width:850px){.header-utility{gap:6px}.header-utility .environment{font-size:7px;padding:6px 7px}.header-utility .site-link{font-size:9px;padding:7px}.header-profile .admin-header-name{max-width:78px}}
+@media(max-width:560px){.header-utility{padding:4px;gap:5px;border-radius:12px}.header-utility .environment{display:none}.header-profile{padding-left:5px}.header-profile .admin-header-name{display:none}.header-profile .avatar{width:32px;height:32px;flex-basis:32px}.header-utility .site-link{font-size:8px;padding:7px}}
