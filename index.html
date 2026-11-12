@@ -504,12 +504,8 @@
 
         <!-- ==================== WATCH / DETAIL PAGE ==================== -->
         <template x-if="currentPage === 'watch'">
-            <div class="w-full px-6 sm:px-12 pt-6 space-y-6 pb-16" @keydown.escape.window="cinemaMode = false">
+            <div class="w-full px-6 sm:px-12 pt-2 space-y-6 pb-16" @keydown.escape.window="cinemaMode = false">
                 <div x-show="cinemaMode" x-transition.opacity @click="toggleCinemaMode()" class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-md"></div>
-                <button @click="navigateTo('home')" class="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400 hover:text-rose-500 transition-colors">
-                    <i class="fa-solid fa-arrow-left text-xs"></i>
-                    <span>Ana Sayfaya Dön</span>
-                </button>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                     
