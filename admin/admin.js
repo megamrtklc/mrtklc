@@ -22,6 +22,46 @@
     if(view==='collections')renderCollections();
     if(view==='homepage')renderHomepage();
   }
+  function applyProfilePhoto(url){
+    const targets=[$('#avatar-photo'),$('#profile-photo-preview'),$('#profile-dialog-preview')];
+    targets.forEach(img=>{if(!img)return;if(url){img.src=url;img.hidden=false;}else{img.removeAttribute('src');img.hidden=true;}});
+    const initials=[$('#avatar-initials'),$('#profile-photo-large span'),$('#profile-dialog-initials')];
+    initials.forEach(el=>{if(el)el.hidden=!!url;});
+  }
+  async function loadProfilePhoto(){
+    try{const response=await fetch('/api/profile-photo',{cache:'no-store',credentials:'same-origin'});if(!response.ok)return;const data=await response.json();if(data.url)applyProfilePhoto(data.url);}
+    catch(error){console.warn('Profil fotoğrafı alınamadı:',error);}
+  }
+  async function saveProfilePhoto(event){
+    event.preventDefault();
+    const file=$('#profile-file').files[0];if(!file){toast('Önce bir fotoğraf seç.');return;}
+    const allowed=['image/jpeg','image/png','image/webp'];
+    if(!allowed.includes(file.type)){toast('JPG, PNG veya WebP dosyası seçmelisin.');return;}
+    if(file.size>716800){toast('Fotoğraf en fazla 700 KB olabilir.');return;}
+    const button=$('#profile-save');button.disabled=true;button.textContent='Yükleniyor…';
+    $('#profile-upload-status').textContent='Fotoğraf güvenli biçimde yükleniyor…';
+    try{
+      const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=()=>reject(new Error('Fotoğraf okunamadı.'));reader.readAsDataURL(file);});
+      const base64=dataUrl.split(',')[1];
+      const response=await fetch('/api/profile-photo',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({mime:file.type,base64})});
+      const result=await response.json().catch(()=>({}));
+      if(!response.ok)throw new Error(result.error||'Fotoğraf kaydedilemedi.');
+      applyProfilePhoto(result.url);
+      $('#profile-dialog').close();$('#profile-form').reset();toast('Profil fotoğrafı güncellendi.');
+    }catch(error){$('#profile-upload-status').textContent=error.message;toast(error.message);}
+    finally{button.disabled=false;button.textContent='Fotoğrafı kaydet';}
+  }
+  function renderOverviewInsights(){
+    const years=state.catalog.map(yearOf).filter(x=>x!=='—').map(Number).filter(Number.isFinite);
+    const ratings=state.catalog.map(x=>Number(x.rating||x.tmdbRating)).filter(x=>Number.isFinite(x)&&x>0);
+    $('#overview-average').textContent=ratings.length?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)+'/10':'—';
+    $('#overview-oldest').textContent=years.length?Math.min(...years):'—';
+    $('#overview-newest').textContent=years.length?Math.max(...years):'—';
+    $('#overview-trailers').textContent=state.catalog.filter(x=>x.trailerUrl||x.tmdbTrailerUrl).length.toLocaleString('tr-TR');
+    const counts={};state.catalog.forEach(x=>{const y=yearOf(x);if(y!=='—')counts[y]=(counts[y]||0)+1;});
+    const top=Object.entries(counts).sort((a,b)=>Number(a[0])-Number(b[0])).slice(-12),max=Math.max(1,...top.map(x=>x[1]));
+    $('#overview-yearline').innerHTML=top.map(([year,count])=>'<span style="height:'+Math.max(8,count/max*100)+'%" title="'+escapeHtml(year)+': '+count+' yapım"><small>'+escapeHtml(String(year).slice(-2))+'</small></span>').join('');
+  }
   function updateMetrics(){
     const movies=state.catalog.filter(x=>!isSeries(x)).length;
     $('#metric-total').textContent=state.catalog.length.toLocaleString('tr-TR');
@@ -228,7 +268,7 @@
       $('#health-auth').textContent='Aktif';$('#health-api').textContent='Aktif';
       $('#data-version').textContent=String(state.data.version??'Belirtilmemiş');
       $('#add-content').disabled=!state.apiEnabled;$('#catalog-add').disabled=!state.apiEnabled;
-      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();
+      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();loadProfilePhoto();
       $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
     }catch(error){
@@ -242,6 +282,26 @@
   $$('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
   $$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
   $('#mobile-menu').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
+  const shell=$('.app-shell');
+  if(window.innerWidth>760&&localStorage.getItem('cv-admin-sidebar-collapsed')==='1')shell.classList.add('sidebar-collapsed');
+  $('#sidebar-toggle').addEventListener('click',()=>{
+    shell.classList.toggle('sidebar-collapsed');
+    const collapsed=shell.classList.contains('sidebar-collapsed');
+    localStorage.setItem('cv-admin-sidebar-collapsed',collapsed?'1':'0');
+    $('#sidebar-toggle').title=collapsed?'Menüyü genişlet':'Menüyü daralt';
+    $('#sidebar-toggle').setAttribute('aria-label',collapsed?'Menüyü genişlet':'Menüyü daralt');
+  });
+  $('#profile-photo-button').addEventListener('click',()=>$('#profile-dialog').showModal());
+  $('#profile-change-button').addEventListener('click',()=>$('#profile-dialog').showModal());
+  $('#profile-form').addEventListener('submit',saveProfilePhoto);
+  $('#profile-close').addEventListener('click',()=>$('#profile-dialog').close());
+  $('#profile-cancel').addEventListener('click',()=>$('#profile-dialog').close());
+  $('#profile-file').addEventListener('change',()=>{
+    const file=$('#profile-file').files[0];if(!file)return;
+    if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>716800){toast('JPG, PNG veya WebP seç; en fazla 700 KB.');$('#profile-file').value='';return;}
+    const reader=new FileReader();reader.onload=()=>{const url=String(reader.result);$('#profile-dialog-preview').src=url;$('#profile-dialog-preview').hidden=false;$('#profile-dialog-initials').hidden=true;};
+    reader.readAsDataURL(file);$('#profile-upload-status').textContent=file.name;
+  });
   $('#logout-button')?.addEventListener('click',async()=>{try{await fetch('/api/logout',{method:'POST',credentials:'same-origin'});}finally{window.location.reload();}});
   $('#catalog-search').addEventListener('input',()=>{state.page=1;renderCatalog();});
   $('#type-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
