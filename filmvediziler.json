@@ -300,8 +300,6 @@
       "trailerUrl": "https://www.youtube.com/watch?v=gCyWycOx3nI",
       "country": "Libyan Arab Jamahiriya / United Kingdom / Lebanon / Kuwait / Morocco",
       "tmdbId": 26842,
-      "seasons": null,
-      "episodes": null,
       "tmdbRating": "7.1",
       "tmdbVoteCount": 426,
       "tmdbTitle": "Çağrı",
@@ -404,7 +402,10 @@
       "tmdbImdbId": "tt0074896",
       "tmdbSyncedAt": "2026-11-07T06:45:41.949Z",
       "originalTitle": "The Message",
-      "imdbId": "tt0074896"
+      "imdbId": "tt0074896",
+      "platform": "",
+      "watchUrl": "https://s6.gelsistirire.top/d/zungbhsosk3rtzj5bpwrvt4kkunnjgv5sd65hgbnnwmfzgigze2qqsqzavpnctebdx7yoioc/The%20Equalizer%202%202018%20Bluray%201080p%20DUAL.mp4",
+      "personalNote": ""
     },
     {
       "id": "archive-4",
@@ -15217,7 +15218,7 @@
       "backdrop": "https://image.tmdb.org/t/p/w1280/3wf5wV222vqTmz10y1vbrPgrGDf.jpg",
       "trailerUrl": "https://www.youtube.com/watch?v=AZ5G2Tq0iAY",
       "imdbId": "tt1899353",
-      "watchUrl": "",
+      "watchUrl": "https://s6.gelsistirire.top/d/zungbhsosk3rtzj5bpwrvt4kkunnjgv5sd65hgbnnwmfzgigze2qqsqzavpnctebdx7yoioc/The%20Equalizer%202%202018%20Bluray%201080p%20DUAL.mp4",
       "platform": [
         "Netflix",
         "Apple TV+"
@@ -15343,9 +15344,8 @@
       "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/3wf5wV222vqTmz10y1vbrPgrGDf.jpg",
       "tmdbTrailerUrl": "https://www.youtube.com/watch?v=AZ5G2Tq0iAY",
       "tmdbImdbId": "tt1899353",
-      "watchUrl": "https://s6.gelsistirire.top/d/zungbhsosk3rtzj5bpwrvt4kkunnjgv5sd65hgbnnwmfzgigze2qqsqzavpnctebdx7yoioc/The%20Equalizer%202%202018%20Bluray%201080p%20DUAL.mp4",
       "tmdbSyncedAt": "2026-11-07T06:45:59.194Z"
-      },
+    },
     {
       "title": "Oyuncak Hikayesi",
       "originalTitle": "Toy Story",
