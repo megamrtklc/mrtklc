@@ -296,7 +296,9 @@
       }).join('')||'<div class="watch-demo-empty">Bu sütunda kart bulunmuyor.</div>';
       root.classList.toggle('is-drop-target',false);
     }
-    renderWatchDemo(config);\n    $('#watch-demo-left').setAttribute('aria-live','polite');\n    $('#watch-demo-right').setAttribute('aria-live','polite');
+    renderWatchDemo(config);
+    $('#watch-demo-left').setAttribute('aria-live','polite');
+    $('#watch-demo-right').setAttribute('aria-live','polite');
   }
   function moveWatchCard(side,id,targetSide){
     if(!targetSide||side===targetSide)return;
