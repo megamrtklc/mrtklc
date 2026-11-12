@@ -1000,3 +1000,20 @@ body.admin-theme-dark a:focus-visible{
 }
 body.admin-theme-dark .workspace-topbar{background:#101319;border-color:#2b3340}
 body.admin-theme-slate .workspace-topbar{background:#edf0f4;border-color:#dce2e9}
+
+/* Watch page card visibility and library controls */
+#view-watch-layout .watch-order-item.is-hidden{opacity:.58;border-style:dashed;background:#f5f3f7}
+#view-watch-layout .watch-order-item.is-hidden .watch-order-copy b:after{content:" · GİZLİ";font-size:10px;color:#9a7e4c}
+#view-watch-layout .watch-order-visibility,#view-watch-layout .watch-order-remove{width:29px;height:29px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font-size:17px;font-weight:800;cursor:pointer}
+#view-watch-layout .watch-order-visibility:hover{background:#eee9f8;border-color:#b9acd5}
+#view-watch-layout .watch-order-remove{color:#b45e5e}
+#view-watch-layout .watch-order-remove:hover{background:#fff0f0;border-color:#e5b7b7}
+#view-watch-layout .watch-available-panel{margin-top:2px}
+#view-watch-layout .watch-available-list{display:grid;gap:9px}
+#view-watch-layout .watch-available-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px dashed var(--line);border-radius:11px;background:var(--surface)}
+#view-watch-layout .watch-available-item>div:first-child{display:grid;gap:3px;min-width:0}
+#view-watch-layout .watch-available-item small{color:var(--muted)}
+#view-watch-layout .watch-available-actions{display:flex;gap:6px;flex:none}
+#view-watch-layout .watch-available-actions button{border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--surface);color:var(--text);font-size:12px;font-weight:700;cursor:pointer}
+#view-watch-layout .watch-available-actions button:hover{border-color:#b9acd5;background:#f2eef9}
+@media(max-width:760px){#view-watch-layout .watch-order-actions{gap:4px}#view-watch-layout .watch-order-visibility,#view-watch-layout .watch-order-remove{width:27px;height:27px}#view-watch-layout .watch-available-item{align-items:flex-start;flex-direction:column}}
