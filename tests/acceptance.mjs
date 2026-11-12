@@ -350,8 +350,16 @@ try {
     assert.equal(badge.type, 'tv', 'Test kartı dizi türünde olmalı');
     assert.equal(badge.label, 'Dizi', 'Dizi önerisi Film olarak etiketlenmiş');
     await page.setViewportSize({ width: 360, height: 800 });
-    const railCardBasis = await page.locator('#home-personalized-rail .home-rail-card').first().evaluate(card => getComputedStyle(card).flexBasis);
-    assert.equal(railCardBasis, '48%', '380px altındaki ekranda kart genişliği %48 olmalı');
+    await page.waitForFunction(() => window.innerWidth === 360);
+    const railCardLayout = await page.locator('#home-personalized-rail .home-rail-card').first().evaluate(card => ({
+      flexBasis: getComputedStyle(card).flexBasis,
+      width: getComputedStyle(card).width,
+      viewport: window.innerWidth,
+      media380: matchMedia('(max-width: 380px)').matches,
+      railWidth: card.parentElement.getBoundingClientRect().width
+    }));
+    console.log('NARROW RECOMMENDATION CARD LAYOUT:', JSON.stringify(railCardLayout));
+    assert.equal(railCardLayout.flexBasis, '48%', '380px altındaki ekranda kart genişliği %48 olmalı');
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
