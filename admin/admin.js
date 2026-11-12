@@ -42,7 +42,7 @@
     $('.nav-link').forEach(el=>{const active=el.dataset.view===view;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
     const active=$('.nav-link[data-view="'+view+'"]');
     $('#crumb-current').textContent=active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış';
-    $('#sidebar').classList.remove('open');$('#mobile-menu')?.setAttribute('aria-expanded','false');
+    $('#sidebar').classList.remove('open');$('#mobile-menu')?.setAttribute('aria-expanded','false');$('#mobile-menu')?.setAttribute('aria-label','Menüyü aç');
     if(view==='catalog')renderCatalog();
     if(view==='collections')renderCollections();
     if(view==='homepage')renderHomepage();
@@ -515,7 +515,7 @@
       toast(error.message||'Katalog yüklenemedi.');
     }
   }
-  $('#admin-theme-select').addEventListener('change',event=>applyAdminTheme(event.target.value));
+  // Tema seçici kaldırıldı: yeni yönetim arayüzü tek ve tutarlı bir tasarım sistemidir.
   $$('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
   $$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
   $('#mobile-menu').addEventListener('click',()=>{const open=$('#sidebar').classList.toggle('open');$('#mobile-menu').setAttribute('aria-expanded',String(open));$('#mobile-menu').setAttribute('aria-label',open?'Menüyü kapat':'Menüyü aç');});
