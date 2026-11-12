@@ -93,6 +93,8 @@
         }
 
         .theme-ivory .bg-white, .theme-slate .bg-white { background-color: var(--theme-surface); }
+        .awards-modal-panel { background-color: #ffffff !important; }
+        .dark .awards-modal-panel { background-color: #171923 !important; }
         .theme-ivory .bg-gray-50, .theme-slate .bg-gray-50 { background-color: var(--theme-surface-muted); }
         .theme-ivory .bg-gray-100, .theme-slate .bg-gray-100 { background-color: var(--theme-surface-muted); }
         .theme-ivory .bg-gray-200, .theme-slate .bg-gray-200 { background-color: var(--theme-surface-soft); }
@@ -934,7 +936,7 @@
                                         </ul>
                                         <button x-show="selectedActor.awards.length > 6" type="button" @click="awardsOpen = true" class="mt-3.5 inline-flex items-center gap-1.5 border-t border-[#d8c7a0]/35 dark:border-white/[.08] pt-3 text-[10px] font-semibold tracking-wide text-amber-700 dark:text-amber-300 hover:text-amber-600 transition-colors">Tüm ödülleri görüntüle <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
                                         <div x-show="awardsOpen" x-cloak @keydown.escape.window="awardsOpen = false" @click.self="awardsOpen = false" class="fixed inset-0 z-[125] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 sm:p-6" x-transition.opacity>
-                                            <div role="dialog" aria-modal="true" aria-label="Tüm kişi ödülleri" class="relative w-full max-w-xl max-h-[85vh] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white dark:bg-[#171923] shadow-2xl" x-transition>
+                                            <div role="dialog" aria-modal="true" aria-label="Tüm kişi ödülleri" class="awards-modal-panel relative w-full max-w-xl max-h-[85vh] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl" x-transition>
                                                 <div class="flex items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 px-5 sm:px-7 py-4"><div><span class="text-[9px] font-black uppercase tracking-[.2em] text-amber-600 dark:text-amber-400">CineVerse · Başarılar</span><h3 class="mt-1 text-lg sm:text-xl font-black text-gray-900 dark:text-white">Kazandığı ödüller</h3></div><button type="button" @click="awardsOpen = false" aria-label="Ödül penceresini kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-200 hover:bg-amber-500 hover:text-white transition-colors"><i class="fa-solid fa-xmark"></i></button></div>
                                                 <div class="overflow-y-auto max-h-[calc(85vh-76px)] px-5 sm:px-7 py-5"><ul class="space-y-3"><template x-for="(award, index) in selectedActor.awards" :key="'all-' + award.name + '-' + award.year + '-' + index"><li class="flex items-start gap-3 rounded-xl bg-gray-50 dark:bg-white/[.04] p-3 text-sm text-gray-700 dark:text-gray-200"><i class="fa-solid fa-trophy mt-0.5 text-amber-500"></i><span class="min-w-0 break-words"><strong x-text="award.name"></strong><span x-show="award.year" class="ml-2 text-xs text-gray-500 dark:text-gray-400" x-text="award.year"></span></span></li></template></ul></div>
                                             </div>
