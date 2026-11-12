@@ -810,3 +810,46 @@ body.admin-theme-dark .dashboard-welcome{border:1px solid #49445a}
  body.admin-theme-dark .nav-list{background:#171c25;border-color:#303846}
  body.admin-theme-slate .nav-list{background:#f5f7fa;border-color:#dce2e9}
 }
+
+
+/* Animated cinematic poster collage in the welcome card */
+#view-overview .dashboard-welcome{min-height:330px;background:
+ radial-gradient(ellipse at 77% 48%,rgba(132,111,181,.34),transparent 35%),
+ radial-gradient(ellipse at 95% 12%,rgba(221,166,135,.2),transparent 28%),
+ linear-gradient(118deg,#24232e 0%,#302d3b 52%,#40394c 100%)}
+#view-overview .dashboard-welcome:before{content:"";position:absolute;inset:-40%;z-index:-1;pointer-events:none;
+ background:conic-gradient(from 40deg at 72% 50%,transparent 0 20%,rgba(190,170,230,.09) 25%,transparent 34% 58%,rgba(225,190,160,.08) 65%,transparent 74%);
+ animation:welcome-aurora 18s linear infinite}
+@keyframes welcome-aurora{to{transform:rotate(360deg)}}
+.dashboard-art{perspective:900px}
+.dashboard-art-disc{animation:disc-breathe 6s ease-in-out infinite}
+@keyframes disc-breathe{0%,100%{transform:scale(.96) rotate(-5deg);filter:brightness(.92)}50%{transform:scale(1.05) rotate(5deg);filter:brightness(1.16)}}
+.dashboard-art-orbit{animation:orbit-drift 14s ease-in-out infinite alternate}
+.orbit-two{animation-delay:-7s}
+@keyframes orbit-drift{from{transform:rotate(-23deg) scale(.94)}to{transform:rotate(25deg) scale(1.07)}}
+.dashboard-poster-cloud{position:absolute;inset:0;z-index:3;pointer-events:none}
+.welcome-poster{position:absolute;width:104px;height:151px;overflow:hidden;border:2px solid #ffffffa8;border-radius:11px;background:#383444;box-shadow:0 18px 38px #100e1880;transform-style:preserve-3d;animation:poster-drift 7s ease-in-out infinite}
+.welcome-poster img{width:100%;height:100%;object-fit:cover;display:block}
+.welcome-poster:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,#17151de0)}
+.welcome-poster span{position:absolute;z-index:1;left:7px;right:7px;bottom:8px;color:#fff;font-size:8px;font-weight:800;text-shadow:0 2px 6px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.poster-float-1{left:5%;top:25%;transform:rotate(-13deg);animation-delay:-1s}
+.poster-float-2{left:29%;top:3%;transform:rotate(8deg) scale(.88);animation-delay:-3.5s}
+.poster-float-3{right:7%;top:19%;transform:rotate(13deg) scale(1.04);animation-delay:-2s}
+.poster-float-4{left:23%;bottom:1%;transform:rotate(-5deg) scale(.82);animation-delay:-5s}
+.poster-float-5{right:23%;bottom:0;transform:rotate(7deg) scale(.9);animation-delay:-4s}
+@keyframes poster-drift{0%,100%{translate:0 5px}50%{translate:0 -12px}}
+.dashboard-art-disc{opacity:.34}
+.dashboard-art-note{z-index:4}
+.dashboard-welcome-index{z-index:5}
+@media(max-width:1120px){.welcome-poster{width:88px;height:130px}}
+@media(max-width:820px){.welcome-poster{width:76px;height:112px}.dashboard-art{opacity:.95}}
+@media(max-width:560px){
+ #view-overview .dashboard-welcome{min-height:300px}
+ .dashboard-art{right:-48px;top:55px;width:190px;height:205px;opacity:.46}
+ .welcome-poster{width:62px;height:92px;border-radius:8px}
+ .poster-float-1{left:0;top:25%}.poster-float-2{left:27%;top:0}.poster-float-3{right:0;top:20%}
+ .poster-float-4{left:20%;bottom:0}.poster-float-5{right:18%;bottom:0}
+}
+@media(prefers-reduced-motion:reduce){
+ #view-overview .dashboard-welcome:before,.dashboard-art-disc,.dashboard-art-orbit,.welcome-poster{animation:none!important}
+}
