@@ -27,10 +27,6 @@
           href="https://image.tmdb.org/t/p/w500/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg"
           imagesrcset="https://image.tmdb.org/t/p/w342/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg 342w, https://image.tmdb.org/t/p/w500/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg 500w"
           imagesizes="100vw" fetchpriority="high">
-    <link rel="preload" as="image" media="(min-width: 768px)"
-          href="https://image.tmdb.org/t/p/w1280/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg"
-          imagesrcset="https://image.tmdb.org/t/p/w500/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg 500w, https://image.tmdb.org/t/p/w780/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg 780w, https://image.tmdb.org/t/p/w1280/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg 1280w"
-          imagesizes="100vw" fetchpriority="high">
     <!-- Derlenmiş Tailwind CSS: tarayıcıda JIT/derleme betiği çalıştırılmaz. -->
     <link rel="preload" as="style" href="./tailwind.css">
     <link rel="stylesheet" href="./tailwind.css">
@@ -53,15 +49,6 @@
         .has-initial-route main { min-height: 0; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .hero-nav-arrow{position:relative;isolation:isolate;display:inline-flex;width:40px;height:40px;align-items:center;justify-content:center;flex:0 0 auto;border:1px solid rgba(255,255,255,.28);border-radius:9999px;color:#fff;background:linear-gradient(145deg,rgba(30,30,38,.88),rgba(8,8,12,.72));box-shadow:0 5px 18px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.14);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .25s ease,border-color .25s ease,background .25s ease,box-shadow .25s ease}
-        .hero-nav-arrow::before{content:"";position:absolute;inset:-4px;z-index:-1;border-radius:inherit;background:radial-gradient(circle,rgba(225,29,72,.38),transparent 70%);opacity:.45;filter:blur(5px);transition:opacity .25s ease,transform .25s ease}
-        .hero-nav-arrow:hover{transform:translateY(-2px) scale(1.08);border-color:rgba(251,113,133,.9);background:linear-gradient(145deg,#e11d48,#9f1239);box-shadow:0 8px 24px rgba(225,29,72,.38),inset 0 1px 0 rgba(255,255,255,.3)}
-        .hero-nav-arrow:hover::before{opacity:1;transform:scale(1.25)}
-        .hero-nav-arrow:active{transform:scale(.94)}
-        .hero-nav-arrow:focus-visible{outline:2px solid #fb7185;outline-offset:4px}
-        .hero-nav-arrow i{font-size:12px;transition:transform .2s ease}
-        .hero-nav-arrow:hover i{transform:scale(1.15)}
-        @media(max-width:767px){.hero-nav-arrow{width:36px;height:36px}}
         .home-card-rail{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:2px 2px 12px;scrollbar-width:none;-ms-overflow-style:none}
         .home-card-rail::-webkit-scrollbar{display:none}
         .home-rail-card{flex:0 0 42%;width:42%;scroll-snap-align:start}
@@ -209,9 +196,9 @@
     </header>
 
     <!-- Main Content Area -->
-    <main class="relative flex-grow w-full min-h-[540px] md:min-h-[640px]">
+    <main class="relative flex-grow w-full min-h-[540px] md:min-h-0">
         <!-- İlk çizim için statik hero: Alpine ve katalog hazırlanırken aynı ölçülerde görseli gösterir. -->
-        <section id="hero-initial-shell" inert class="pointer-events-none absolute inset-x-0 top-0 z-20 overflow-hidden select-none border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" src="https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg" loading="eager" decoding="async" class="absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-3xl"><div class="absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div>
+        <section id="hero-initial-shell" inert class="pointer-events-none absolute md:hidden inset-x-0 top-0 z-20 overflow-hidden select-none border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" src="https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg" loading="eager" decoding="async" class="absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-3xl"><div class="absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div>
             <div class="mx-auto grid min-h-[560px] max-w-[1440px] grid-cols-1 items-center gap-6 px-5 py-7 md:grid-cols-2 md:gap-8 md:px-10 lg:px-14 lg:py-12">
                 <div class="order-2 space-y-4 text-white md:order-1 md:max-w-[590px]">
                     <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
@@ -258,51 +245,6 @@
                     </div>
                 </section>
 
-                <!-- DESKTOP HERO: sol metin + sağ sinematik görsel -->
-                <section @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="relative isolate hidden md:block w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80 select-none"><img aria-hidden="true" :src="currentHero.poster || currentHero.backdrop" loading="eager" decoding="async" class="pointer-events-none absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-35 blur-3xl"><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-gray-950/30 via-transparent to-gray-950/80"></div>
-                    <div class="relative mx-auto grid min-h-[460px] max-w-[1440px] grid-cols-2 items-center gap-8 px-8 pt-10 pb-2 sm:px-10 lg:min-h-[500px] lg:gap-12 lg:px-14 xl:gap-16">
-                        <div class="relative z-10 max-w-[590px] space-y-5 text-white">
-                            <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
-                            <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.45rem,3.2vw,3.65rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
-                            <div class="flex flex-wrap items-center gap-2.5 text-xs font-bold sm:text-sm">
-                                <span class="inline-flex items-center gap-2 rounded-md border border-amber-300/50 bg-[#f5c518] px-3 py-1.5 text-[11px] font-black text-black shadow-md"><span class="tracking-tight">IMDb</span><span class="text-base" x-text="currentHero.rating"></span></span>
-                                <span class="text-gray-600">•</span><span class="text-gray-300" x-text="currentHero.year"></span>
-                                <span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200" x-text="currentHero.type === 'tv' ? 'Dizi' : 'Film'"></span>
-                                <span class="text-gray-400" x-text="currentHero.genre"></span>
-                            </div>
-                            
-                            <p class="max-w-xl text-sm leading-6 text-gray-300 line-clamp-3" x-text="currentHero.desc"></p>
-                            <div class="flex flex-wrap items-center gap-3 pt-2">
-                                <button @click="openWatchPage(currentHero)" class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-rose-600 px-7 text-xs font-extrabold uppercase tracking-wide text-white shadow-lg shadow-rose-950/30 transition-all hover:-translate-y-0.5 hover:bg-rose-500"><i class="fa-solid fa-play text-[11px]"></i><span>Şimdi İzle</span></button>
-                                <button @click="toggleWatchlist(currentHero)" class="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 text-xs font-bold uppercase tracking-wide text-white transition-colors hover:border-white/40 hover:bg-white/10"><i :class="isInWatchlist(currentHero) ? 'fa-solid fa-bookmark text-rose-400' : 'fa-regular fa-bookmark'"></i><span x-text="isInWatchlist(currentHero) ? 'Listemde' : 'İzleme Listeme Ekle'"></span></button>
-                            </div>
-                        </div>
-                        <div class="relative z-10 min-w-0 -mx-8 lg:-mx-12 xl:-mx-16">
-                            <div class="absolute -inset-6 rounded-[2rem] bg-rose-600/10 blur-3xl"></div>
-                            <div class="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl shadow-black/40 ring-1 ring-white/10 lg:rounded-[1.75rem]">
-                                <img :src="currentHero.backdrop || currentHero.poster" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [500, 780, 1280])" sizes="(max-width: 1023px) 52vw, 54vw" :alt="currentHero.title + ' görseli'" :class="heroTransitionClass" loading="eager" decoding="async" @error="handleImageError($event)" style="mask-image: radial-gradient(ellipse 74% 80% at center, #000 42%, rgba(0,0,0,.96) 54%, rgba(0,0,0,.72) 70%, rgba(0,0,0,.28) 86%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse 74% 80% at center, #000 42%, rgba(0,0,0,.96) 54%, rgba(0,0,0,.72) 70%, rgba(0,0,0,.28) 86%, transparent 100%);" class="aspect-[16/10] h-full w-full scale-[1.07] object-cover object-center transition-transform duration-700 hover:scale-[1.09]">
-                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-gray-950/20 via-transparent to-transparent"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Hero Bottom Thumbnails Carousel -->
-                    <div class="relative z-10 -mb-6 w-full bg-gradient-to-t from-black/50 to-transparent px-8 pb-2 pt-1 sm:px-10 lg:px-14">
-                        <div class="mb-1 flex items-center justify-end">
-                            <div class="flex gap-2">
-                                <button @click="navigateHeroSlide(-1)" aria-label="Önceki öne çıkan yapım" class="hero-nav-arrow"><i class="fa-solid fa-chevron-left"></i></button>
-                                <button @click="navigateHeroSlide(1)" aria-label="Sonraki öne çıkan yapım" class="hero-nav-arrow"><i class="fa-solid fa-chevron-right"></i></button>
-                            </div>
-                        </div>
-                        <div id="heroThumbContainer" class="flex items-center gap-3 overflow-x-auto no-scrollbar scroll-smooth py-0.5">
-                            <template x-for="(item, idx) in heroThumbSlides" :key="item.id">
-                                <button type="button" @click="selectHeroSlide(idx)" :data-hero-index="idx" :aria-label="item.title" :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 border-rose-500' : 'border-gray-800 opacity-75 hover:opacity-100'" class="group flex w-28 flex-shrink-0 cursor-pointer flex-col overflow-hidden rounded-xl border bg-gray-900 p-1 shadow-sm transition-all duration-300 sm:w-32">
-                                    <span class="mb-1.5 block aspect-[2/3] w-full overflow-hidden rounded-lg bg-black"><img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster, [154, 185])" sizes="(max-width: 639px) 112px, 128px" class="h-full w-full object-cover transition-transform group-hover:scale-105"></span>
-                                    <span class="line-clamp-1 text-center text-[11px] font-bold text-white transition-colors group-hover:text-rose-500" x-text="item.title"></span>
-                                </button>
-                            </template>
-                        </div>
-                    </div>
-                </section>
 
                 <!-- Kişiselleştirilmiş Öneriler -->
                 <section class="w-full px-6 sm:px-12 space-y-5">
