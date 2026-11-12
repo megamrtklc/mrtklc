@@ -118,7 +118,7 @@ try {
       return iconCss && fontCss;
     }, { timeout: 15000 });
     const heroThumbnailCount = await page.locator('#heroThumbContainer img').count();
-    assert.equal(heroThumbnailCount, 12, 'Ana sayfa hero küçük görselleri 12 ile sınırlandırılmalı');
+    assert.equal(heroThumbnailCount, 10, 'Masaüstü hero küçük görselleri mevcut varsayılan ayar olan 10 ile sınırlandırılmalı');
     const responsiveSources = await page.locator('img[srcset], picture source[srcset]').evaluateAll(images => images.map(image => image.getAttribute('srcset') || '').filter(Boolean));
     console.log('RESPONSIVE IMAGE SOURCES:', JSON.stringify(responsiveSources.slice(0, 8)));
     assert.ok(responsiveSources.some(source => source.includes('w185')) && responsiveSources.some(source => source.includes('w780')), 'TMDB afiş veya hero görsellerinde duyarlı kaynaklar bulunamadı');
