@@ -414,7 +414,7 @@
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-500 mb-1">SANA ÖZEL • <span x-text="currentProfile.name"></span></p>
                             <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">İzleme Zevkine Göre</h2>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzleme geçmişin ve listene eklediğin yapımlardan yola çıkarak seçildi</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzlediğin türler, oyuncular, yönetmenler ve izleme listen birlikte değerlendirilir</p>
                         </div>
                         <div class="flex items-center gap-2 shrink-0"><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15</span><button type="button" @click="scrollHomeCards('home-personalized-rail',-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-personalized-rail',1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div>
                     </div>
@@ -429,6 +429,7 @@
                                 <div class="p-2.5 space-y-1">
                                     <h3 class="text-[11px] font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
                                     <p class="text-[9px] text-gray-500 dark:text-gray-400" x-text="(item.year || '') + (item.genre ? ' • ' + item.genre : '')"></p>
+                                    <p class="text-[9px] font-semibold text-rose-500/90 line-clamp-1" x-text="item.recommendationReason || &quot;Sana özel seçildi&quot;"></p>
                                 </div>
                             </button>
                         </template>
