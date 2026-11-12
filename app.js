@@ -1364,75 +1364,59 @@
 
                 get personalizedRecommendations() {
                     const safeRead = key => {
-                        try {
-                            const value = safeStorageRead(key, {});
-                            return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
-                        } catch (error) {
-                            console.warn('Kişiselleştirilmiş öneri verisi okunamadı:', key, error);
-                            return {};
-                        }
+                        try { const value = safeStorageRead(key, {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; }
+                        catch (error) { console.warn('Recommendation data read failed:', key, error); return {}; }
                     };
-                    const tokens = value => String(value || '').split(/[\\/;,]/).map(part => this.normalizeSearchText(part)).filter(Boolean);
+                    const normalize = value => this.normalizeSearchText(value);
+                    const tokens = value => [...new Set(String(value || '').split(/[\\/;,|]/).map(normalize).filter(Boolean))];
+                    const people = item => {
+                        const cast = Array.isArray(item?.tmdbCast) ? item.tmdbCast.map(person => person?.name) : [];
+                        const fallback = Array.isArray(item?.cast) ? item.cast : [];
+                        return [...new Set([...cast, ...fallback].map(normalize).filter(Boolean))];
+                    };
                     const profileId = this.currentProfileId;
                     const progress = this.profileMovieProgress;
                     const episodes = safeRead('cine_episode_tracking_v1');
                     const history = new Map();
-
                     Object.entries(progress).forEach(([id, saved]) => {
                         const item = this.catalog.find(entry => String(entry.id) === String(id));
                         const time = Math.max(0, Number(saved?.time) || 0);
                         if (item && time >= 300) history.set(String(item.id), { item, weight: 1 + Math.min(time / 3600, 2) });
                     });
-
                     Object.entries(episodes).forEach(([key, tracking]) => {
                         if (!key.startsWith(profileId + ':')) return;
                         const id = key.slice(profileId.length + 1);
                         const item = this.catalog.find(entry => String(entry.id) === String(id));
                         if (!item) return;
-                        const watchedCount = Object.values(tracking?.watched || {}).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number)).size : 0), 0);
-                        if (watchedCount > 0) {
-                            const previous = history.get(String(item.id));
-                            history.set(String(item.id), { item, weight: Math.max(previous?.weight || 0, 1 + Math.min(watchedCount / 5, 3)) });
-                        }
+                        const count = Object.values(tracking?.watched || {}).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number)).size : 0), 0);
+                        if (count > 0) { const previous = history.get(String(item.id)); history.set(String(item.id), { item, weight: Math.max(previous?.weight || 0, 1 + Math.min(count / 5, 3)) }); }
                     });
-
                     const watchlistItems = this.watchlist.map(saved => this.catalog.find(item => String(item.id) === String(saved.id))).filter(Boolean);
-                    watchlistItems.forEach(item => {
-                        if (!history.has(String(item.id))) history.set(String(item.id), { item, weight: 1.5 });
-                    });
-
-                    if (!history.size) {
-                        return [...this.catalog]
-                            .filter(item => item && item.id != null)
-                            .sort((a, b) => (Number.parseFloat(b.rating) || 0) - (Number.parseFloat(a.rating) || 0))
-                            .slice(0, 15);
-                    }
-
-                    const preferences = { genres: new Map(), types: new Map(), countries: new Map(), directors: new Map() };
-                    history.forEach(({ item, weight }) => {
-                        tokens(item.category || item.genre).forEach(value => preferences.genres.set(value, (preferences.genres.get(value) || 0) + weight));
-                        if (item.type) preferences.types.set(item.type, (preferences.types.get(item.type) || 0) + weight);
-                        tokens(item.country).forEach(value => preferences.countries.set(value, (preferences.countries.get(value) || 0) + weight * 0.35));
-                        const director = this.normalizeSearchText(item.director);
-                        if (director) preferences.directors.set(director, (preferences.directors.get(director) || 0) + weight * 0.8);
-                    });
-
+                    watchlistItems.forEach(item => { if (!history.has(String(item.id))) history.set(String(item.id), { item, weight: 1.35 }); });
                     const excluded = new Set([...history.keys(), ...this.watchlist.map(item => String(item.id))]);
-                    return this.catalog
-                        .filter(item => item && item.id != null && !excluded.has(String(item.id)))
-                        .map(item => {
-                            let score = 0;
-                            tokens(item.category || item.genre).forEach(value => score += (preferences.genres.get(value) || 0) * 3);
-                            score += (preferences.types.get(item.type) || 0) * 0.5;
-                            tokens(item.country).forEach(value => score += preferences.countries.get(value) || 0);
-                            const director = this.normalizeSearchText(item.director);
-                            if (director) score += preferences.directors.get(director) || 0;
-                            score += Math.max(0, Number.parseFloat(item.rating) || 0) * 0.12;
-                            return { item, score };
-                        })
-                        .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, 'tr'))
-                        .slice(0, 15)
-                        .map(entry => entry.item);
+                    if (!history.size) return [...this.catalog].filter(item => item && item.id != null && !excluded.has(String(item.id))).sort((a,b) => (Number.parseFloat(b.rating)||0) - (Number.parseFloat(a.rating)||0)).slice(0,15).map(item => ({ ...item, recommendationReason: 'Arşivde yüksek puanlı' }));
+                    const prefs = { genres:new Map(), types:new Map(), countries:new Map(), directors:new Map(), actors:new Map() };
+                    const add = (map,key,value) => { if (key) map.set(key,(map.get(key)||0)+value); };
+                    history.forEach(({item,weight}) => {
+                        tokens(item.category || item.genre).forEach(value => add(prefs.genres,value,weight));
+                        if (item.type) add(prefs.types,item.type,weight);
+                        tokens(item.country).forEach(value => add(prefs.countries,value,weight*0.3));
+                        add(prefs.directors,normalize(item.director),weight);
+                        people(item).forEach(actor => add(prefs.actors,actor,weight*0.85));
+                    });
+                    return this.catalog.filter(item => item && item.id != null && !excluded.has(String(item.id))).map(item => {
+                        const reasons = [];
+                        const push = (score,label) => { if (score > 0) reasons.push({score,label}); };
+                        tokens(item.category || item.genre).forEach(value => push((prefs.genres.get(value)||0)*3.2,'Sevdiğin tür: '+value));
+                        push((prefs.directors.get(normalize(item.director))||0)*3.1,'Sevdiğin yönetmen');
+                        people(item).forEach(actor => push((prefs.actors.get(actor)||0)*2.4,'Tanıdık oyuncu kadrosu'));
+                        tokens(item.country).forEach(value => push((prefs.countries.get(value)||0)*0.8,'Tercih ettiğin ülke sineması'));
+                        push((prefs.types.get(item.type)||0)*0.55,item.type === 'tv' ? 'Dizi tercihine uygun' : 'Film tercihine uygun');
+                        const rating = Math.max(0,Number.parseFloat(item.rating)||0);
+                        push(rating*0.14,rating >= 7.5 ? 'Yüksek puanlı yapım' : 'Arşiv puanı');
+                        reasons.sort((a,b) => b.score-a.score);
+                        return { item, score: reasons.reduce((sum,part) => sum+part.score,0), reason: reasons[0]?.label || 'İzleme profiline uygun' };
+                    }).sort((a,b) => b.score-a.score || (Number.parseFloat(b.item.rating)||0)-(Number.parseFloat(a.item.rating)||0) || a.item.title.localeCompare(b.item.title,'tr')).slice(0,15).map(entry => ({ ...entry.item, recommendationReason: entry.reason }));
                 },
 
 
