@@ -181,18 +181,45 @@ function catalogUrl(env) {
 }
 
 async function readCatalog(env) {
-  if (!env.GITHUB_TOKEN) throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
-  const response = await fetch(catalogUrl(env), { headers: githubHeaders(env) });
-  const payload = await response.json();
-  if (!response.ok) throw new Error(payload.message || "GitHub kataloğu okunamadı.");
-  if (!payload.content || !payload.sha) throw new Error("GitHub katalog içeriği veya SHA bilgisi eksik.");
-  const binary = atob(payload.content.replace(/\s/g, ""));
+  const headers = env.GITHUB_TOKEN ? githubHeaders(env) : { accept: "application/vnd.github+json", "x-github-api-version": API_VERSION, "user-agent": "CineVerse-Admin-Worker" };
+  let response = await fetch(catalogUrl(env), { headers });
+  let usedAuthenticatedRead = !!env.GITHUB_TOKEN && response.ok;
+  let payload = await response.json().catch(() => ({}));
+
+  // The repository is public. If a stored token is expired or mis-scoped,
+  // keep the admin readable through GitHub's public Contents API.
+  if (!response.ok || !payload.content || !payload.sha) {
+    response = await fetch(catalogUrl(env), {
+      headers: { accept: "application/vnd.github+json", "x-github-api-version": API_VERSION, "user-agent": "CineVerse-Admin-Worker" }
+    });
+    payload = await response.json().catch(() => ({}));
+    usedAuthenticatedRead = false;
+  }
+
+  if (!response.ok || !payload.content || !payload.sha) {
+    const rawUrl = "https://raw.githubusercontent.com/" +
+      (env.GITHUB_OWNER || "megamrtklc") + "/" +
+      (env.GITHUB_REPO || "mrtklc") + "/" +
+      (env.GITHUB_BRANCH || "main") + "/" +
+      (env.GITHUB_CATALOG_PATH || "filmvediziler.json");
+    const rawResponse = await fetch(rawUrl, { headers: { "cache-control": "no-cache" } });
+    if (!rawResponse.ok) throw new Error(payload.message || "GitHub kataloğu okunamadı (" + response.status + ").");
+    const data = await rawResponse.json();
+    if (!data || !Array.isArray(data.catalog)) throw new Error("Katalog JSON yapısı beklenen biçimde değil.");
+    return { data, sha: null, writable: false, readOnlyReason: "Katalog görüntüleniyor; güvenli yazma bağlantısı doğrulanamadı." };
+  }
+
+  const binary = atob(payload.content.replace(/\\s/g, ""));
   const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
   const data = JSON.parse(new TextDecoder().decode(bytes));
   if (!data || !Array.isArray(data.catalog)) throw new Error("Katalog JSON yapısı beklenen biçimde değil.");
-  return { data, sha: payload.sha };
+  return {
+    data,
+    sha: payload.sha,
+    writable: usedAuthenticatedRead && !!env.GITHUB_TOKEN,
+    readOnlyReason: usedAuthenticatedRead ? null : "Katalog açık GitHub kaynağından yüklendi; düzenleme için GitHub erişim anahtarını yenilemek gerekiyor."
+  };
 }
-
 async function writeCatalog(env, data, expectedSha) {
   if (!env.GITHUB_TOKEN) throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
   if (!data || typeof data !== "object" || !Array.isArray(data.catalog)) throw new Error("Gönderilen katalog yapısı geçersiz.");
