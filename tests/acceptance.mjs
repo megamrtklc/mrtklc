@@ -235,6 +235,59 @@ try {
     assert.ok(!desktopState.mobileHeroSource || !desktopState.mobileHeroSource.startsWith('https://image.tmdb.org/'), 'Masaüstünde gizli mobil manşet görseli indirilmemeli');
   });
 
+  await check('Akıllı öneriler aktif profil geçmişini kullanıyor ve önerileri çeşitlendiriyor', async () => {
+    const result = await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      const original = {
+        progress: localStorage.getItem('perde_profile_player_progress_v1'),
+        episodes: localStorage.getItem('cine_episode_tracking_v1'),
+        watchlists: localStorage.getItem('cine_profile_watchlists'),
+        activeProfile: localStorage.getItem('cine_active_profile')
+      };
+      const movie = app.catalog.find(item => item.type === 'movie');
+      const series = app.catalog.find(item => item.type === 'tv' && String(item.id) !== String(movie?.id));
+      const saved = app.catalog.find(item => item.id !== movie?.id && item.id !== series?.id);
+      localStorage.setItem('perde_profile_player_progress_v1', JSON.stringify({
+        pro_1: { [movie.id]: { time: 1200, duration: 1800, savedAt: Date.now() } }
+      }));
+      localStorage.setItem('cine_episode_tracking_v1', JSON.stringify({
+        ['pro_1:' + series.id]: { watched: { '1': [1, 2] }, last: { season: 1, episode: 2, updatedAt: Date.now() } }
+      }));
+      localStorage.setItem('cine_profile_watchlists', JSON.stringify({
+        pro_1: [{ id: saved.id, title: saved.title }]
+      }));
+      const recommendations = app.personalizedRecommendations;
+      const profileOne = {
+        ids: recommendations.map(item => String(item.id)),
+        reasons: recommendations.map(item => item.recommendationReason),
+        movieId: String(movie.id),
+        seriesId: String(series.id),
+        savedId: String(saved.id)
+      };
+      app.switchProfile('pro_2');
+      const profileTwoIds = app.personalizedRecommendations.map(item => String(item.id));
+      app.switchProfile('pro_1');
+      for (const [key, value] of Object.entries({
+        perde_profile_player_progress_v1: original.progress,
+        cine_episode_tracking_v1: original.episodes,
+        cine_profile_watchlists: original.watchlists,
+        cine_active_profile: original.activeProfile
+      })) {
+        if (value === null) localStorage.removeItem(key);
+        else localStorage.setItem(key, value);
+      }
+      return { profileOne, profileTwoIds };
+    });
+    const ids = result.profileOne.ids;
+    assert.ok(ids.length > 0 && ids.length <= 15, 'Öneri sayısı 1–15 aralığında olmalı');
+    assert.equal(new Set(ids).size, ids.length, 'Önerilerde yinelenen yapımlar var');
+    assert.ok(!ids.includes(result.profileOne.movieId), 'İzleme ilerlemesi olan film önerilmemeli');
+    assert.ok(!ids.includes(result.profileOne.seriesId), 'Bölüm takibi olan dizi önerilmemeli');
+    assert.ok(!ids.includes(result.profileOne.savedId), 'İzleme listesindeki yapım tekrar önerilmemeli');
+    assert.ok(result.profileOne.reasons.every(Boolean), 'Her önerinin kişisel gerekçesi olmalı');
+    assert.ok(result.profileTwoIds.includes(result.profileOne.movieId), 'Diğer profilin izleme geçmişi bu profili etkilememeli');
+  });
+
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole('button', { name: 'Menüyü aç veya kapat' }).click();
