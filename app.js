@@ -378,7 +378,8 @@
                 },
 
                 get heroSlides() {
-                    const configured = this.homepageConfig?.heroSlides;
+                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+                    const configured = this.homepageConfig?.[mobile ? 'mobileHeroSlides' : 'desktopHeroSlides'] || this.homepageConfig?.heroSlides;
                     if (!Array.isArray(configured) || !configured.length) return this.catalog;
                     const byId = new Map(this.catalog.map(item => [String(item.id), item]));
                     const selected = configured.filter(entry => entry && entry.active !== false)
