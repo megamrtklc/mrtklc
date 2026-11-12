@@ -148,19 +148,7 @@ async function saveProfilePhoto(request,env) {
   const ext=allowed[mime],path="admin/assets/admin-profile."+ext;
   const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc");
   const branch=env.GITHUB_BRANCH||"main",base=`https://api.github.com/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
-  // Replace a previous photo regardless of its format.
-  for(const oldExt of ["jpg","png","webp"]) {
-    const oldPath="admin/assets/admin-profile."+oldExt;
-    const oldUrl=`https://api.github.com/repos/${owner}/${repo}/contents/${oldPath.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(branch)}`;
-    const oldRes=await fetch(oldUrl,{headers:githubHeaders(env)});
-    if(oldRes.ok) {
-      const old=await oldRes.json();
-      if(oldExt!==ext) {
-        const del=await fetch(oldUrl.split("?")[0],{method:"DELETE",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Remove previous CineVerse admin profile photo",sha:old.sha,branch})});
-        if(!del.ok)return json({error:"Önceki profil fotoğrafı değiştirilemedi."},502);
-      }
-    }
-  }
+  // Upload the replacement first so a failed upload never removes the current photo.
   const existing=await fetch(base+"?ref="+encodeURIComponent(branch),{headers:githubHeaders(env)});
   let sha;
   if(existing.ok)sha=(await existing.json()).sha;
@@ -170,6 +158,22 @@ async function saveProfilePhoto(request,env) {
   const response=await fetch(base,{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Update CineVerse admin profile photo",content,sha,branch})});
   const result=await response.json();
   if(!response.ok)return json({error:result.message||"Profil fotoğrafı kaydedilemedi."},502);
+
+  // Only after the new image is stored, remove files from older formats.
+  for(const oldExt of ["jpg","png","webp"]) {
+    if(oldExt===ext)continue;
+    const oldPath="admin/assets/admin-profile."+oldExt;
+    const oldUrl=`https://api.github.com/repos/${owner}/${repo}/contents/${oldPath.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(branch)}`;
+    try {
+      const oldRes=await fetch(oldUrl,{headers:githubHeaders(env)});
+      if(!oldRes.ok)continue;
+      const old=await oldRes.json();
+      const del=await fetch(oldUrl.split("?")[0],{method:"DELETE",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Remove previous CineVerse admin profile photo",sha:old.sha,branch})});
+      if(!del.ok)console.warn("Previous admin profile photo cleanup failed:",oldExt,del.status);
+    } catch(error) {
+      console.warn("Previous admin profile photo cleanup failed:",oldExt,error);
+    }
+  }
   return json({ok:true,url:"https://raw.githubusercontent.com/"+(env.GITHUB_OWNER||"megamrtklc")+"/"+(env.GITHUB_REPO||"mrtklc")+"/"+branch+"/admin/assets/admin-profile."+ext+"?v="+encodeURIComponent(result.content?.sha||Date.now())});
 }
 
