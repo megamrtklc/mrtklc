@@ -242,7 +242,7 @@ export default {
   async fetch(request,env) {
     const url=new URL(request.url);
     // Normalize optional trailing slashes so /api/catalog and /api/catalog/ resolve identically.
-    const path=url.pathname.replace(/\\/+$/,"")||"/";
+    const path=url.pathname.replace(/\/+$/,"")||"/";
     if(request.method==="POST"&&path==="/api/login")return handleLogin(request,env);
     if(request.method==="POST"&&path==="/api/logout")return handleLogout(request);
     const auth=await authorize(request,env);
@@ -254,7 +254,7 @@ export default {
       if(!path.startsWith("/api/"))return env.ASSETS.fetch(request);
       if(request.method==="GET"&&path==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
       if(request.method==="GET"&&path==="/api/profile-photo")return getProfilePhoto(env);
-      if(request.method==="POST"&&url.pathname==="/api/profile-photo") {
+      if(request.method==="POST"&&path==="/api/profile-photo") {
         try{return await saveProfilePhoto(request,env);}
         catch(error){return json({error:error.message||"Profil fotoğrafı kaydedilemedi."},502);}
       }
@@ -262,7 +262,7 @@ export default {
         try { return json(await readCatalog(env)); }
         catch(error) { return json({error:error.message||"Katalog okunamadı."},502); }
       }
-      if(request.method==="PUT"&&url.pathname==="/api/catalog") {
+      if(request.method==="PUT"&&path==="/api/catalog") {
         if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
         try {
           const length=Number(request.headers.get("content-length")||0);
