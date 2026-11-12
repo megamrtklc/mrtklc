@@ -116,6 +116,14 @@
                     return 'fa-solid fa-moon text-indigo-400 text-xs';
                 },
 
+                getWatchCardOrder(cardId) {
+                    const side = ['player','season','episodes','synopsis','reviews'].includes(cardId) ? 'left' : 'right';
+                    const defaults = side === 'left' ? ['player','season','episodes','synopsis','reviews'] : ['credits','cast','similar'];
+                    const order = this.watchPageConfig?.[side];
+                    const ids = Array.isArray(order) ? [...order.filter(id => defaults.includes(id)), ...defaults.filter(id => !order.includes(id))] : defaults;
+                    return ids.indexOf(cardId);
+                },
+
                 getThemeName() {
                     if (this.theme === 'ivory') return 'Fil Dişi';
                     if (this.theme === 'slate') return 'Modern Gri';
@@ -124,6 +132,7 @@
                 
                 catalog: [],
                 homepageConfig: null,
+                watchPageConfig: null,
                 heroAutoplayTimer: null,
                 heroPaused: false,
                 catalogLoading: true,
@@ -263,6 +272,7 @@
 
                         const data = await response.json();
                         this.homepageConfig = data && typeof data === 'object' ? (data.homepageConfig || null) : null;
+                        this.watchPageConfig = data && typeof data === 'object' ? (data.watchPageConfig || null) : null;
                         const sourceCatalog = Array.isArray(data) ? data : (data && typeof data === 'object' ? data.catalog : null);
 
                         if (!Array.isArray(sourceCatalog)) {
