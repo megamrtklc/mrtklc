@@ -3,6 +3,17 @@
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
   const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false };
+  const adminThemes = ['ivory','slate','dark'];
+  function applyAdminTheme(theme, persist=true){
+    const selected=adminThemes.includes(theme)?theme:'ivory';
+    document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark');
+    document.body.classList.add('admin-theme-'+selected);
+    const picker=$('#admin-theme-select');
+    if(picker&&picker.value!==selected)picker.value=selected;
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.content=selected==='dark'?'#101319':(selected==='slate'?'#edf0f4':'#f5f4f0');
+    if(persist){try{localStorage.setItem('cv-admin-theme',selected);}catch(error){console.warn('Tema tercihi kaydedilemedi:',error);}}
+  }
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const titleOf = item => item.title || item.tmdbTitle || item.originalTitle || item.tmdbOriginalTitle || 'Başlıksız yapım';
   const posterOf = item => item.image || item.poster || item.tmdbPoster || '';
@@ -361,6 +372,7 @@
     if(ok)renderHomepage();
   }
   async function init(){
+    applyAdminTheme(localStorage.getItem('cv-admin-theme')||'ivory',false);
     const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;const dashboardDate=$('#dashboard-date');if(dashboardDate)dashboardDate.textContent=formattedDate;
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
     try{
@@ -391,7 +403,8 @@
       toast(error.message||'Katalog yüklenemedi.');
     }
   }
-  $$('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
+  $('#admin-theme-select').addEventListener('change',event=>applyAdminTheme(event.target.value));
+  $('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
   $$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
   $('#mobile-menu').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
   const shell=$('.app-shell');
