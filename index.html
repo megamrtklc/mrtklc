@@ -823,7 +823,7 @@
                                 </div>
                                 <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
                                     <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Yönetmen</span>
-                                    <button type="button" @click="openRelatedDiscoveries('director', selectedItem.director)" :disabled="!selectedItem.director" class="font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[160px] hover:text-rose-500 disabled:cursor-default transition-colors text-right underline decoration-dotted underline-offset-4 decoration-rose-500/50" x-text="selectedItem.director" title="Bu yönetmenin diğer yapımlarını keşfet"></button>
+                                    <button type="button" @click="openDirectorProfile({ id: selectedItem.directorPersonId, name: selectedItem.director })" :disabled="!selectedItem.directorPersonId" class="font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[160px] text-right underline decoration-dotted underline-offset-4 decoration-rose-500/50 hover:text-rose-500 dark:hover:text-rose-400 hover:font-bold hover:scale-105 transform-gpu origin-right disabled:cursor-default transition-all duration-200" x-text="selectedItem.director" title="Yönetmen biyografisini görüntüle"></button>
                                 </div>
                                 <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
                                     <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Kategori</span>
