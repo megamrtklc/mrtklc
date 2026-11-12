@@ -239,33 +239,77 @@
     return state.data.homepageConfig;
   }
   const watchCardDefinitions={
-    left:[['player','Video oynatıcı'],['season','Sezon seçimi'],['episodes','Sezon bölümleri'],['synopsis','Yapım özeti'],['reviews','Yorumlar ve değerlendirmeler']],
-    right:[['credits','Yapım künyesi'],['cast','Oyuncu kadrosu'],['similar','Benzer yapımlar']]
+    player:{label:'Video oynatıcı',defaultSide:'left',description:'Film veya bölüm oynatıcısı'},
+    season:{label:'Sezon seçimi',defaultSide:'left',description:'Diziler için sezon seçici'},
+    episodes:{label:'Sezon bölümleri',defaultSide:'left',description:'Bölüm listesi ve gezinme'},
+    synopsis:{label:'Yapım özeti',defaultSide:'left',description:'Başlık, puan ve hikâye'},
+    reviews:{label:'Yorumlar ve değerlendirmeler',defaultSide:'left',description:'İzleyici yorumları'},
+    credits:{label:'Yapım künyesi',defaultSide:'right',description:'Yönetmen, yıl, tür ve süre'},
+    cast:{label:'Oyuncu kadrosu',defaultSide:'right',description:'Oyuncular ve karakterleri'},
+    similar:{label:'Benzer yapımlar',defaultSide:'right',description:'Önerilen film ve diziler'}
   };
+  const watchCardIds=Object.keys(watchCardDefinitions);
+  let watchDemoType='movie';
   function watchLayoutConfig(){
-    const saved=state.data.watchPageConfig||{};
-    const normalize=(side)=>{const ids=watchCardDefinitions[side].map(x=>x[0]);const order=Array.isArray(saved[side])?saved[side].filter(id=>ids.includes(id)):[];return [...order,...ids.filter(id=>!order.includes(id))];};
-    return {left:normalize('left'),right:normalize('right')};
+    const saved=state.data?.watchPageConfig||{};
+    const left=Array.isArray(saved.left)?saved.left.filter((id,index)=>watchCardIds.includes(id)&&saved.left.indexOf(id)===index):[];
+    const right=Array.isArray(saved.right)?saved.right.filter((id,index)=>watchCardIds.includes(id)&&saved.right.indexOf(id)===index):[];
+    const used=new Set([...left,...right]);
+    watchCardIds.forEach(id=>{if(!used.has(id)){(watchCardDefinitions[id].defaultSide==='left'?left:right).push(id);used.add(id);}});
+    return {left,right};
+  }
+  function watchDemoSample(){
+    return state.catalog.find(item=>isSeries(item)===(watchDemoType==='tv'))||state.catalog[0]||null;
+  }
+  function renderWatchDemo(config){
+    const sample=watchDemoSample();
+    const title=sample?titleOf(sample):(watchDemoType==='tv'?'Örnek Dizi':'Örnek Film');
+    const poster=sample?posterOf(sample):'';
+    const year=sample?yearOf(sample):'2026';
+    const rating=sample?(sample.rating||sample.tmdbRating||'8.2'):'8.2';
+    const description=sample?(sample.desc||sample.tmdbOverview||'Sürükleyici bir hikâye, unutulmaz karakterler ve sinematik bir deneyim.'):'Sürükleyici bir hikâye, unutulmaz karakterler ve sinematik bir deneyim.';
+    const labels={
+      player:'<div class="demo-player-screen">'+(poster?'<img src="'+escapeHtml(poster)+'" alt="">':'')+'<div class="demo-player-overlay"><span class="demo-play-icon">▶</span><b>'+escapeHtml(title)+'</b><small>OYNATMAK İÇİN TIKLA</small></div><span class="demo-player-controls">▶　 ━━━━━━━━━━━━━　 ⚙ ⛶</span></div>',
+      season:'<div class="demo-card-head">SEZON SEÇİMİ <b>1. Sezon　⌄</b></div><p class="demo-muted">Sezonlar arasında geçiş yap</p>',
+      episodes:'<div class="demo-card-head">BÖLÜMLER <b>12 bölüm</b></div><div class="demo-episode-row"><span>01</span><b>Yeni bir başlangıç</b><small>48 dk</small></div><div class="demo-episode-row"><span>02</span><b>İlk karşılaşma</b><small>52 dk</small></div>',
+      synopsis:'<div class="demo-title-line"><b>'+escapeHtml(title)+'</b><span>★ '+escapeHtml(rating)+'</span></div><p class="demo-muted">'+escapeHtml(description.slice(0,170))+(description.length>170?'…':'')+'</p><small class="demo-meta">'+escapeHtml(year)+'　·　'+(watchDemoType==='tv'?'DİZİ':'FİLM')+'　·　 Dram / Gerilim</small>',
+      reviews:'<div class="demo-card-head">YORUMLAR <b>＋ Yorum yaz</b></div><p class="demo-muted">İzleyici değerlendirmeleri ve yorumlar burada görünür.</p>',
+      credits:'<div class="demo-card-head">YAPIM KÜNYESİ</div><div class="demo-detail-row"><span>Yönetmen</span><b>'+(sample?escapeHtml(sample.director||sample.tmdbDirector||'—'):'Örnek Yönetmen')+'</b></div><div class="demo-detail-row"><span>Yıl</span><b>'+escapeHtml(year)+'</b></div><div class="demo-detail-row"><span>Tür</span><b>Drama / Gerilim</b></div><div class="demo-detail-row"><span>Tür</span><b>'+(watchDemoType==='tv'?'Dizi':'Film')+'</b></div>',
+      cast:'<div class="demo-card-head">OYUNCU KADROSU</div><div class="demo-cast-row"><i>AK</i><span><b>Oyuncu adı</b><small>Karakter adı</small></span><i>MY</i><span><b>Oyuncu adı</b><small>Karakter adı</small></span></div>',
+      similar:'<div class="demo-card-head">BENZER YAPIMLAR</div><div class="demo-similar-row"><span>▣</span><span>Önerilen yapımlar　 ·　 Keşfet</span></div>'
+    };
+    const renderColumn=(side)=>config[side].filter(id=>watchDemoType==='tv'||(id!=='season'&&id!=='episodes')).map(id=>'<div class="watch-demo-card demo-'+id+'" data-demo-card="'+id+'"><div class="demo-card-label">'+escapeHtml(watchCardDefinitions[id].label)+'</div>'+labels[id]+'</div>').join('');
+    $('#watch-demo-left').innerHTML=renderColumn('left')||'<div class="watch-demo-empty">Bu sütunda kart yok. Soldaki listeden kart taşı.</div>';
+    $('#watch-demo-right').innerHTML=renderColumn('right')||'<div class="watch-demo-empty">Bu sütunda kart yok. Soldaki listeden kart taşı.</div>';
+    $('#watch-demo-left').classList.toggle('is-empty',!config.left.length);
+    $('#watch-demo-right').classList.toggle('is-empty',!config.right.length);
+    $$('[data-demo-type]').forEach(button=>button.classList.toggle('active',button.dataset.demoType===watchDemoType));
   }
   function renderWatchLayout(){
     const config=watchLayoutConfig();
     for(const side of ['left','right']){
       const root=$('#watch-'+side+'-list');
       root.innerHTML=config[side].map((id,index)=>{
-        const label=watchCardDefinitions[side].find(x=>x[0]===id)?.[1]||id;
-        return '<div class="watch-order-item" data-card="'+id+'"><span class="watch-order-grip">⠿</span><span class="watch-order-name">'+escapeHtml(label)+'</span><span class="watch-order-number">'+(index+1)+'</span><button type="button" class="watch-order-move" data-dir="-1" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" class="watch-order-move" data-dir="1" aria-label="Aşağı taşı" '+(index===config[side].length-1?'disabled':'')+'>↓</button></div>';
-      }).join('');
+        const item=watchCardDefinitions[id];
+        return '<div class="watch-order-item" data-card="'+id+'"><span class="watch-order-number">'+(index+1)+'</span><div class="watch-order-copy"><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+'</small></div><div class="watch-order-actions"><button type="button" class="watch-order-move" data-dir="-1" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" class="watch-order-move" data-dir="1" aria-label="Aşağı taşı" '+(index===config[side].length-1?'disabled':'')+'>↓</button><button type="button" class="watch-order-transfer" data-target-side="'+(side==='left'?'right':'left')+'" title="'+(side==='left'?'Sağ sütuna taşı':'Sol sütuna taşı')+'">⇄</button></div></div>';
+      }).join('')||'<div class="watch-demo-empty">Bu sütunda kart bulunmuyor.</div>';
     }
+    renderWatchDemo(config);
   }
-  function moveWatchCard(side,id,direction){
-    const config=watchLayoutConfig(),list=config[side],from=list.indexOf(id),to=from+direction;
-    if(from<0||to<0||to>=list.length)return;
-    [list[from],list[to]]=[list[to],list[from]];
+  function moveWatchCard(side,id,direction,targetSide=null){
+    const config=watchLayoutConfig(),source=config[side],from=source.indexOf(id);
+    if(from<0)return;
+    if(targetSide){
+      source.splice(from,1);config[targetSide].push(id);
+    }else{
+      const to=from+direction;if(to<0||to>=source.length)return;
+      [source[from],source[to]]=[source[to],source[from]];
+    }
     state.data.watchPageConfig=config;renderWatchLayout();
   }
   async function saveWatchLayout(){
     const config=watchLayoutConfig();
-    const ok=await persist({...state.data,watchPageConfig:config},'İzleme sayfası kart sıralaması kaydedildi.');
+    const ok=await persist({...state.data,watchPageConfig:config},'İzleme sayfası düzeni kaydedildi ve yayın kuyruğuna alındı.');
     if(ok)renderWatchLayout();
   }
   function renderHomepage(){
@@ -316,7 +360,7 @@
       $('#health-auth').textContent='Aktif';$('#health-api').textContent='Aktif';
       $('#data-version').textContent=String(state.data.version??'Belirtilmemiş');
       $('#add-content').disabled=!state.apiEnabled;$('#catalog-add').disabled=!state.apiEnabled;
-      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();renderAdminProfile();loadProfilePhoto();
+      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();renderAdminProfile();renderWatchLayout();loadProfilePhoto();
       $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
     }catch(error){
@@ -366,6 +410,7 @@
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#watch-layout-save').addEventListener('click',saveWatchLayout);
-  ['left','right'].forEach(side=>$('#watch-'+side+'-list').addEventListener('click',event=>{const button=event.target.closest('[data-dir]');if(!button)return;const item=button.closest('[data-card]');if(item)moveWatchCard(side,item.dataset.card,Number(button.dataset.dir));}));
+  ['left','right'].forEach(side=>$('#watch-'+side+'-list').addEventListener('click',event=>{const item=event.target.closest('[data-card]');if(!item)return;const transfer=event.target.closest('[data-target-side]');if(transfer){moveWatchCard(side,item.dataset.card,0,transfer.dataset.targetSide);return;}const button=event.target.closest('[data-dir]');if(button)moveWatchCard(side,item.dataset.card,Number(button.dataset.dir));}));
+  $('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{watchDemoType=button.dataset.demoType;renderWatchLayout();}));
   init();
 })();
