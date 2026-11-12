@@ -927,9 +927,26 @@
                                     <span x-show="selectedActor.birthday" class="px-3 py-2 rounded-xl bg-gray-100 dark:bg-white/5 text-xs font-semibold text-gray-700 dark:text-gray-200"><i class="fa-regular fa-calendar mr-2 text-rose-500"></i><span x-text="formatActorDate(selectedActor.birthday)"></span></span>
                                     <span x-show="selectedActor.placeOfBirth" class="px-3 py-2 rounded-xl bg-gray-100 dark:bg-white/5 text-xs font-semibold text-gray-700 dark:text-gray-200"><i class="fa-solid fa-location-dot mr-2 text-rose-500"></i><span x-text="selectedActor.placeOfBirth"></span></span>
                                 </div>
-                                <div class="mt-6 max-w-4xl" x-show="selectedActor.biography">
+                                <div x-data="{ biographyOpen: false }" class="mt-6 max-w-4xl text-left" x-show="selectedActor.biography">
                                     <h2 class="text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white mb-2">Biyografi</h2>
-                                    <p class="text-sm sm:text-[15px] leading-7 text-gray-600 dark:text-gray-300 whitespace-pre-line" x-text="selectedActor.biography"></p>
+                                    <p class="text-sm sm:text-[15px] leading-7 text-gray-600 dark:text-gray-300 whitespace-pre-line line-clamp-4" x-text="selectedActor.biography"></p>
+                                    <button x-show="selectedActor.biography && selectedActor.biography.length > 220" type="button" @click="biographyOpen = true" class="mt-2 inline-flex items-center gap-2 text-xs font-black text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors">
+                                        Tamamını oku <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                    </button>
+                                    <div x-show="biographyOpen" x-cloak @keydown.escape.window="biographyOpen = false" @click.self="biographyOpen = false" class="fixed inset-0 z-[120] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 sm:p-6" x-transition.opacity>
+                                        <div role="dialog" aria-modal="true" aria-label="Oyuncu biyografisi" class="relative w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white dark:bg-[#171923] shadow-2xl" x-transition>
+                                            <div class="flex items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 px-5 sm:px-7 py-4">
+                                                <div>
+                                                    <span class="text-[9px] font-black uppercase tracking-[.2em] text-rose-600 dark:text-rose-400">CineVerse · Oyuncu profili</span>
+                                                    <h3 class="mt-1 text-lg sm:text-xl font-black text-gray-900 dark:text-white">Biyografi</h3>
+                                                </div>
+                                                <button type="button" @click="biographyOpen = false" aria-label="Biyografiyi kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-200 hover:bg-rose-500 hover:text-white transition-colors"><i class="fa-solid fa-xmark"></i></button>
+                                            </div>
+                                            <div class="overflow-y-auto max-h-[calc(85vh-76px)] px-5 sm:px-7 py-5 sm:py-6">
+                                                <p class="text-sm sm:text-[15px] leading-7 text-gray-700 dark:text-gray-300 whitespace-pre-line" x-text="selectedActor.biography"></p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <p x-show="!actorProfileLoading && !selectedActor.biography" class="mt-5 text-sm text-gray-500 dark:text-gray-400">TMDB üzerinde bu oyuncu için biyografi bilgisi bulunmuyor.</p>
                             </div>
