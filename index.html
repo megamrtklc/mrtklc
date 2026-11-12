@@ -275,7 +275,7 @@
                                 <div class="min-w-0 pr-4"><p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p><p class="truncate text-sm font-bold text-white" x-text="currentHero.title"></p></div>
                                 <button type="button" @click="trailerOpen = false" aria-label="Fragmanı kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
                             </div>
-                            <template x-if="currentHero.trailerUrl">
+                            <template x-if="trailerOpen && currentHero.trailerUrl">
                                 <div class="aspect-video w-full bg-black">
                                     <iframe :src="'https://www.youtube-nocookie.com/embed/' + (currentHero.trailerUrl.includes('youtu.be/') ? currentHero.trailerUrl.split('youtu.be/')[1].split(/[?&]/)[0] : currentHero.trailerUrl.includes('/embed/') ? currentHero.trailerUrl.split('/embed/')[1].split(/[?&]/)[0] : currentHero.trailerUrl.split('v=')[1].split('&')[0]) + '?autoplay=1&rel=0'" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                 </div>
