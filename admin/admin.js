@@ -401,6 +401,13 @@
     if(ok)renderHomepage();
   }
   async function init(){
+    const themeDefaultVersion='dark-default-v2';
+    try{
+      if(localStorage.getItem('cv-admin-theme-default-version')!==themeDefaultVersion){
+        localStorage.setItem('cv-admin-theme','dark');
+        localStorage.setItem('cv-admin-theme-default-version',themeDefaultVersion);
+      }
+    }catch(error){console.warn('Varsayılan tema ayarı uygulanamadı:',error);}
     applyAdminTheme(localStorage.getItem('cv-admin-theme')||'dark',false);
     const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
