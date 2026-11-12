@@ -51,6 +51,72 @@ jobs:
             echo "configured=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Verify GitHub catalog write permission
+        if: steps.preflight.outputs.configured == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.CINEVERSE_GITHUB_TOKEN }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          node --input-type=module <<'NODE'
+          const token = process.env.GH_TOKEN;
+          if (!token) throw new Error("CINEVERSE_GITHUB_TOKEN tanımlanmamış.");
+          const owner = "megamrtklc";
+          const repo = "mrtklc";
+          const branch = `cineverse-write-check-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`;
+          const path = `.cineverse-admin-write-check/${branch}.txt`;
+          const base = `https://api.github.com/repos/${owner}/${repo}`;
+          const headers = {
+            authorization: `Bearer ${token}`,
+            accept: "application/vnd.github+json",
+            "x-github-api-version": "2022-11-28",
+            "user-agent": "CineVerse-Admin-Permission-Check",
+            "content-type": "application/json"
+          };
+          async function api(endpoint, method = "GET", body) {
+            const response = await fetch(base + endpoint, {
+              method,
+              headers,
+              ...(body ? { body: JSON.stringify(body) } : {})
+            });
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) {
+              throw new Error(`GitHub yazma yetkisi kontrolü başarısız (${response.status}): ${payload.message || response.statusText}`);
+            }
+            return payload;
+          }
+          let branchCreated = false;
+          try {
+            const main = await api("/git/ref/heads/main");
+            await api("/git/refs", "POST", {
+              ref: `refs/heads/${branch}`,
+              sha: main.object.sha
+            });
+            branchCreated = true;
+            const created = await api(`/contents/${path.split("/").map(encodeURIComponent).join("/")}`, "PUT", {
+              message: "Verify CineVerse admin GitHub write permission",
+              content: Buffer.from("temporary permission check").toString("base64"),
+              branch
+            });
+            await api(`/contents/${path.split("/").map(encodeURIComponent).join("/")}`, "DELETE", {
+              message: "Clean up CineVerse admin permission check",
+              sha: created.content.sha,
+              branch
+            });
+            console.log("PASS: CINEVERSE_GITHUB_TOKEN geçici dalda dosya oluşturup silebiliyor; Contents yazma yetkisi doğrulandı.");
+          } finally {
+            if (branchCreated) {
+              try {
+                await api(`/git/refs/heads/${encodeURIComponent(branch)}`, "DELETE");
+                console.log("PASS: Geçici kontrol dalı temizlendi.");
+              } catch (error) {
+                console.error("Geçici kontrol dalı temizlenemedi:", error.message);
+                process.exitCode = 1;
+              }
+            }
+          }
+          NODE
+
       - name: Deploy Worker
         if: steps.preflight.outputs.configured == 'true'
         env:
