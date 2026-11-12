@@ -71,13 +71,6 @@ jobs:
           ADMIN_PASSWORD: ${{ secrets.CINEVERSE_ADMIN_PASSWORD }}
         run: printf '%s' "$ADMIN_PASSWORD" | npx --yes wrangler@latest secret put ADMIN_PASSWORD --config worker/wrangler.jsonc
 
-      - name: Rotate session signing secret
-        if: steps.preflight.outputs.configured == 'true'
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: openssl rand -hex 32 | npx --yes wrangler@latest secret put SESSION_SECRET --config worker/wrangler.jsonc
-
       - name: Store GitHub token as encrypted Worker secret
         if: steps.preflight.outputs.configured == 'true'
         env:
