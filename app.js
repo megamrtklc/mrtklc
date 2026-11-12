@@ -34,6 +34,7 @@
                 discoveryType: 'all',
                 discoveryGenre: 'all',
                 discoveryCountry: 'all',
+                discoveryDirector: '',
                 discoveryPlatform: 'all',
                 discoveryRating: '0',
                 discoveryYearFrom: '',
@@ -1097,6 +1098,28 @@
                     return String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i').trim();
                 },
 
+                openRelatedDiscoveries(kind, value) {
+                    const selected = String(value || '').trim();
+                    if (!selected) return;
+                    this.searchQuery = '';
+                    this.discoveryType = 'all';
+                    this.discoveryGenre = 'all';
+                    this.discoveryCountry = 'all';
+                    this.discoveryDirector = '';
+                    this.discoveryPlatform = 'all';
+                    this.discoveryRating = '0';
+                    this.discoveryYearFrom = '';
+                    this.discoveryYearTo = '';
+                    this.quickFilter = 'all';
+                    this.sortBy = 'default';
+                    if (kind === 'genre') this.discoveryGenre = selected;
+                    if (kind === 'country') this.discoveryCountry = selected;
+                    if (kind === 'director') this.discoveryDirector = selected;
+                    this.currentPage = 'explore';
+                    this.syncRouteToUrl('explore', null);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+
                 get availableGenres() {
                     const values = this.catalog.flatMap(item => String(item.category || item.genre || '').split(/[\/;,]/).map(value => value.trim()).filter(Boolean));
                     return [...new Set(values)].sort((a, b) => a.localeCompare(b, 'tr'));
@@ -1117,6 +1140,7 @@
                     this.discoveryType = 'all';
                     this.discoveryGenre = 'all';
                     this.discoveryCountry = 'all';
+                    this.discoveryDirector = '';
                     this.discoveryPlatform = 'all';
                     this.discoveryRating = '0';
                     this.discoveryYearFrom = '';
@@ -1356,9 +1380,12 @@
                         const matchesSearch = !query || this.normalizeSearchText(searchable).includes(query);
                         const matchesType = this.discoveryType === 'all' || item.type === this.discoveryType;
                         const genres = String(item.category || item.genre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value));
-                        const matchesGenre = this.discoveryGenre === 'all' || genres.includes(this.normalizeSearchText(this.discoveryGenre)) || this.normalizeSearchText(item.genre) === this.normalizeSearchText(this.discoveryGenre);
+                        const selectedGenres = String(this.discoveryGenre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value)).filter(Boolean);
+                        const matchesGenre = this.discoveryGenre === 'all' || selectedGenres.some(genre => genres.includes(genre) || this.normalizeSearchText(item.genre) === genre);
                         const countries = String(item.country || '').split(/[,\/;]/).map(value => this.normalizeSearchText(value));
-                        const matchesCountry = this.discoveryCountry === 'all' || countries.includes(this.normalizeSearchText(this.discoveryCountry));
+                        const selectedCountries = String(this.discoveryCountry || '').split(/[,\/;]/).map(value => this.normalizeSearchText(value)).filter(Boolean);
+                        const matchesCountry = this.discoveryCountry === 'all' || selectedCountries.some(country => countries.includes(country));
+                        const matchesDirector = !this.discoveryDirector || this.normalizeSearchText(item.director || '').includes(this.normalizeSearchText(this.discoveryDirector));
                         const platforms = Array.isArray(item.platform) ? item.platform : (item.platform ? [item.platform] : []);
                         const matchesPlatform = this.discoveryPlatform === 'all' || platforms.some(value => this.normalizeSearchText(value) === this.normalizeSearchText(this.discoveryPlatform));
                         const rating = Number.parseFloat(item.rating) || 0;
@@ -1370,7 +1397,7 @@
                         if (this.quickFilter === 'imdb8') matchesQuick = rating >= 8;
                         if (this.quickFilter === 'series') matchesQuick = item.type === 'tv';
                         if (this.quickFilter === 'movies') matchesQuick = item.type === 'movie';
-                        return matchesSearch && matchesType && matchesGenre && matchesCountry && matchesPlatform && matchesRating && matchesYearFrom && matchesYearTo && matchesQuick;
+                        return matchesSearch && matchesType && matchesGenre && matchesCountry && matchesDirector && matchesPlatform && matchesRating && matchesYearFrom && matchesYearTo && matchesQuick;
                     });
 
                     if (this.sortBy === 'rating') result.sort((a, b) => (Number.parseFloat(b.rating) || 0) - (Number.parseFloat(a.rating) || 0));
