@@ -1034,7 +1034,7 @@
                         return [...this.catalog]
                             .filter(item => item && item.id != null)
                             .sort((a, b) => (Number.parseFloat(b.rating) || 0) - (Number.parseFloat(a.rating) || 0))
-                            .slice(0, 8);
+                            .slice(0, 15);
                     }
 
                     const preferences = { genres: new Map(), types: new Map(), countries: new Map(), directors: new Map() };
@@ -1060,7 +1060,7 @@
                             return { item, score };
                         })
                         .sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title, 'tr'))
-                        .slice(0, 8)
+                        .slice(0, 15)
                         .map(entry => entry.item);
                 },
 
@@ -1168,7 +1168,7 @@
                 },
 
                 get homeCatalogPreview() {
-                    return this.sortedFilteredCatalog.slice(0, 24);
+                    return this.sortedFilteredCatalog.slice(0, 15);
                 }
             }
         }
