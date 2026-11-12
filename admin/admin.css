@@ -518,3 +518,16 @@ button,input,select,textarea{font-size:inherit}
  #sidebar .nav-link{font-size:14px}
  #view-overview p,#view-catalog p,#view-collections p,#view-homepage p,#view-analytics p,#view-users p,#view-watch-layout p,#view-system p{font-size:13px}
 }
+
+
+/* Watch layout: cross-column transfer only; same-column sorting is intentionally disabled */
+#view-watch-layout .watch-order-item{cursor:grab}
+#view-watch-layout .watch-order-item:active{cursor:grabbing}
+#view-watch-layout .watch-order-move{display:none!important}
+#view-watch-layout .watch-order-transfer{width:auto;min-width:38px;padding:0 10px;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+#view-watch-layout .watch-order-transfer span{font-size:11px;font-weight:700}
+#view-watch-layout .watch-order-item.is-dragging{opacity:.4}
+#view-watch-layout .watch-order-list.is-drop-target{outline:2px dashed #8979b4;outline-offset:5px;background:#f5f2fb;border-radius:12px}
+#view-watch-layout .watch-demo-column{transition:background .16s ease}
+#view-watch-layout .watch-demo-empty{padding:14px;border:1px dashed #bcb5ca;border-radius:9px;color:#827a91;font-size:12px;text-align:center}
+@media(max-width:760px){#view-watch-layout .watch-order-transfer{padding:0 8px}#view-watch-layout .watch-order-transfer span{font-size:10px}}
