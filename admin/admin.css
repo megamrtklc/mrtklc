@@ -1452,7 +1452,7 @@ body.admin-theme-dark .dashboard-health-row b{color:#d9c9b5}
 body.admin-theme-dark .dashboard-health-foot{color:#827c83;border-color:#302d34}
 body.admin-theme-dark .page-heading h1{color:#f1e9df}
 body.admin-theme-dark .page-heading p{color:#99939a}
-body.admin-theme-dark .eyebrow,.body.admin-theme-dark .section-index{color:#c99b5d}
+body.admin-theme-dark .eyebrow,body.admin-theme-dark .section-index{color:#c99b5d}
 body.admin-theme-dark .primary-button{background:linear-gradient(135deg,#d7ad6c,#b77a4b);color:#211816;box-shadow:0 8px 20px rgba(0,0,0,.22)}
 body.admin-theme-dark .primary-button:hover:not(:disabled){background:#e4c083}
 body.admin-theme-dark .secondary-button{background:#27242a;border-color:#40363a;color:#e6d9cc}
