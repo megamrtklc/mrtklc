@@ -934,7 +934,7 @@
                                         </ul>
                                         <button x-show="selectedActor.awards.length > 6" type="button" @click="awardsOpen = true" class="mt-3.5 inline-flex items-center gap-1.5 border-t border-[#d8c7a0]/35 dark:border-white/[.08] pt-3 text-[10px] font-semibold tracking-wide text-amber-700 dark:text-amber-300 hover:text-amber-600 transition-colors">Tüm ödülleri görüntüle <i class="fa-solid fa-arrow-right text-[9px]"></i></button>
                                         <div x-show="awardsOpen" x-cloak @keydown.escape.window="awardsOpen = false" @click.self="awardsOpen = false" class="fixed inset-0 z-[125] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 sm:p-6" x-transition.opacity>
-                                            <div role="dialog" aria-modal="true" aria-label="Tüm oyuncu ödülleri" class="relative w-full max-w-xl max-h-[85vh] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white dark:bg-[#171923] shadow-2xl" x-transition>
+                                            <div role="dialog" aria-modal="true" aria-label="Tüm kişi ödülleri" class="relative w-full max-w-xl max-h-[85vh] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white dark:bg-[#171923] shadow-2xl" x-transition>
                                                 <div class="flex items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 px-5 sm:px-7 py-4"><div><span class="text-[9px] font-black uppercase tracking-[.2em] text-amber-600 dark:text-amber-400">CineVerse · Başarılar</span><h3 class="mt-1 text-lg sm:text-xl font-black text-gray-900 dark:text-white">Kazandığı ödüller</h3></div><button type="button" @click="awardsOpen = false" aria-label="Ödül penceresini kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-200 hover:bg-amber-500 hover:text-white transition-colors"><i class="fa-solid fa-xmark"></i></button></div>
                                                 <div class="overflow-y-auto max-h-[calc(85vh-76px)] px-5 sm:px-7 py-5"><ul class="space-y-3"><template x-for="(award, index) in selectedActor.awards" :key="'all-' + award.name + '-' + award.year + '-' + index"><li class="flex items-start gap-3 rounded-xl bg-gray-50 dark:bg-white/[.04] p-3 text-sm text-gray-700 dark:text-gray-200"><i class="fa-solid fa-trophy mt-0.5 text-amber-500"></i><span class="min-w-0 break-words"><strong x-text="award.name"></strong><span x-show="award.year" class="ml-2 text-xs text-gray-500 dark:text-gray-400" x-text="award.year"></span></span></li></template></ul></div>
                                             </div>
@@ -956,7 +956,7 @@
                                         <p class="text-sm sm:text-[15px] leading-7 text-gray-600 dark:text-gray-300 whitespace-pre-line line-clamp-4" x-text="selectedActor.biography"></p>
                                         <button x-show="selectedActor.biography && selectedActor.biography.length > 220" type="button" @click="biographyOpen = true" class="mt-2 inline-flex items-center gap-2 text-xs font-black text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors">Tamamını oku <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></button>
                                         <div x-show="biographyOpen" x-cloak @keydown.escape.window="biographyOpen = false" @click.self="biographyOpen = false" class="fixed inset-0 z-[120] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 sm:p-6" x-transition.opacity>
-                                            <div role="dialog" aria-modal="true" aria-label="Oyuncu biyografisi" class="relative w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white dark:bg-[#171923] shadow-2xl" x-transition>
+                                            <div role="dialog" aria-modal="true" aria-label="Kişi biyografisi" class="relative w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-white dark:bg-[#171923] shadow-2xl" x-transition>
                                                 <div class="flex items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 px-5 sm:px-7 py-4"><div><span class="text-[9px] font-black uppercase tracking-[.2em] text-rose-600 dark:text-rose-400">CineVerse · Oyuncu profili</span><h3 class="mt-1 text-lg sm:text-xl font-black text-gray-900 dark:text-white">Biyografi</h3></div><button type="button" @click="biographyOpen = false" aria-label="Biyografiyi kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-200 hover:bg-rose-500 hover:text-white transition-colors"><i class="fa-solid fa-xmark"></i></button></div>
                                                 <div class="overflow-y-auto max-h-[calc(85vh-76px)] px-5 sm:px-7 py-5 sm:py-6"><p class="text-sm sm:text-[15px] leading-7 text-gray-700 dark:text-gray-300 whitespace-pre-line" x-text="selectedActor.biography"></p></div>
                                             </div>
@@ -965,14 +965,14 @@
                                     </div>
                                     
                                 </div>
-                                <p x-show="!actorProfileLoading && !selectedActor.biography" class="mt-5 text-sm text-gray-500 dark:text-gray-400">TMDB üzerinde bu oyuncu için biyografi bilgisi bulunmuyor.</p>
+                                <p x-show="!actorProfileLoading && !selectedActor.biography" class="mt-5 text-sm text-gray-500 dark:text-gray-400">TMDB üzerinde bu kişi için biyografi bilgisi bulunmuyor.</p>
                             </div>
                         </div>
                     </section>
                 </template>
                 <div x-show="actorProfileLoading" class="py-16 text-center">
                     <i class="fa-solid fa-circle-notch fa-spin text-3xl text-rose-500"></i>
-                    <p class="mt-3 text-sm font-semibold text-gray-500 dark:text-gray-400">Oyuncu profili yükleniyor…</p>
+                    <p class="mt-3 text-sm font-semibold text-gray-500 dark:text-gray-400" x-text="currentPage === 'director' ? 'Yönetmen profili yükleniyor…' : 'Oyuncu profili yükleniyor…'"></p>
                 </div>
                 <div x-show="actorProfileError" class="rounded-2xl border border-rose-500/30 bg-rose-500/5 p-5 text-sm text-rose-600 dark:text-rose-300" x-text="actorProfileError"></div>
                 <section x-data="{ filmographyFilter: 'all', filmographyPage: 1 }" x-show="!actorProfileLoading && selectedActor && selectedActor.filmography && selectedActor.filmography.length" class="relative space-y-5">
@@ -980,7 +980,7 @@
                         <div>
                             <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[.22em] text-rose-600 dark:text-rose-400"><span class="w-6 h-px bg-rose-500"></span>Kariyer yolculuğu</span>
                             <h2 class="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-gray-900 dark:text-white">Filmografi</h2>
-                            <p class="mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400">Yer aldığı film ve dizilerden seçkiler</p>
+                            <p class="mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400" x-text="currentPage === 'director' ? 'Yönettiği film ve dizilerden seçkiler' : 'Yer aldığı film ve dizilerden seçkiler'"></p>
                         </div>
                         <div class="flex items-center justify-between sm:justify-end gap-3">
                             <span class="text-xs font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="(filmographyFilter === 'all' ? selectedActor.filmography.length : selectedActor.filmography.filter(work => work.type === filmographyFilter).length) + ' yapım'"></span>
@@ -1007,7 +1007,7 @@
                                     <span x-show="work.rating > 0" class="absolute top-1.5 right-1.5 inline-flex items-center gap-1 rounded-md border border-amber-300/30 bg-black/90 backdrop-blur-md px-1.5 py-1 text-[9px] font-black text-amber-300 shadow-lg"><i class="fa-solid fa-star text-[8px]"></i><span x-text="work.rating.toFixed(1)"></span></span>
                                     <div class="absolute inset-x-0 bottom-0 p-2 sm:p-2.5 bg-gradient-to-t from-black via-black/90 to-transparent">
                                         <h3 class="text-[10px] sm:text-[11px] font-black leading-tight text-white line-clamp-2 drop-shadow-lg" x-text="work.title"></h3>
-                                        <p x-show="work.character" class="mt-1 text-[9px] sm:text-[10px] font-semibold text-white/90 line-clamp-1 drop-shadow" x-text="'Rolü: ' + work.character"></p>
+                                        <p x-show="work.character" class="mt-1 text-[9px] sm:text-[10px] font-semibold text-white/90 line-clamp-1 drop-shadow" x-text="(currentPage === 'director' ? 'Görevi: ' : 'Rolü: ') + work.character"></p>
                                         <div x-show="work.genres && work.genres.length" class="mt-1 flex min-w-0 max-w-full items-center gap-1 overflow-hidden whitespace-nowrap text-[8px] sm:text-[9px] font-bold text-amber-200/95 drop-shadow" :title="work.genres.join(' · ')"><template x-for="genre in work.genres.slice(0, 2)" :key="genre"><span class="shrink-0 max-w-[48%] truncate rounded-sm bg-black/45 px-1 py-0.5" x-text="genre"></span></template><span x-show="work.genres.length > 2" class="shrink-0 text-white/75" x-text="'+' + (work.genres.length - 2)"></span></div>
                                         <p x-show="work.overview" class="mt-1.5 text-[9px] sm:text-[10px] leading-snug font-medium text-white/90 line-clamp-3 opacity-0 max-h-0 overflow-hidden transition-all duration-300 group-hover:opacity-100 group-hover:max-h-16 group-focus-visible:opacity-100 group-focus-visible:max-h-16" x-text="work.overview"></p>
                                         <div class="mt-1.5 flex items-center gap-1 text-[8px] sm:text-[9px] font-black uppercase tracking-wide drop-shadow" :class="catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type) ? 'text-rose-300' : 'text-white/80'">
