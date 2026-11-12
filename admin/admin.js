@@ -52,6 +52,22 @@
     }catch(error){$('#profile-upload-status').textContent=error.message;toast(error.message);}
     finally{button.disabled=false;button.textContent='Fotoğrafı kaydet';}
   }
+  function renderAdminProfile(){
+    const profile=state.data?.adminProfile||{};
+    const name=String(profile.name||'Yönetici').trim()||'Yönetici';
+    const input=$('#admin-name-input');if(input&&document.activeElement!==input)input.value=name;
+    const header=$('#admin-display-name');if(header)header.textContent=name;
+    const summary=$('#users-profile-name');if(summary)summary.textContent=name;
+  }
+  async function saveAdminProfile(event){
+    event.preventDefault();if(!canWrite())return;
+    const name=$('#admin-name-input').value.trim();
+    if(!name){toast('Yönetici adı boş bırakılamaz.');return;}
+    if(name.length>60){toast('Yönetici adı en fazla 60 karakter olabilir.');return;}
+    const nextData={...state.data,adminProfile:{...(state.data.adminProfile||{}),name}};
+    const ok=await persist(nextData,'Yönetici adı güncellendi.');
+    if(ok)renderAdminProfile();
+  }
   function renderOverviewInsights(){
     const years=state.catalog.map(yearOf).filter(x=>x!=='—').map(Number).filter(Number.isFinite);
     const ratings=state.catalog.map(x=>Number(x.rating||x.tmdbRating)).filter(x=>Number.isFinite(x)&&x>0);
@@ -127,7 +143,7 @@
       state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];
       state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
-      renderWatchLayout();
+      renderWatchLayout();renderAdminProfile();
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.');
       return true;
     }catch(error){toast(error.message);console.error(error);return false;}
@@ -300,7 +316,7 @@
       $('#health-auth').textContent='Aktif';$('#health-api').textContent='Aktif';
       $('#data-version').textContent=String(state.data.version??'Belirtilmemiş');
       $('#add-content').disabled=!state.apiEnabled;$('#catalog-add').disabled=!state.apiEnabled;
-      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();loadProfilePhoto();
+      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();renderAdminProfile();loadProfilePhoto();
       $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
     }catch(error){
@@ -325,6 +341,7 @@
   });
   $('#profile-photo-button').addEventListener('click',()=>$('#profile-dialog').showModal());
   $('#profile-change-button').addEventListener('click',()=>$('#profile-dialog').showModal());
+  $('#admin-profile-form').addEventListener('submit',saveAdminProfile);
   $('#profile-form').addEventListener('submit',saveProfilePhoto);
   $('#profile-close').addEventListener('click',()=>$('#profile-dialog').close());
   $('#profile-cancel').addEventListener('click',()=>$('#profile-dialog').close());
