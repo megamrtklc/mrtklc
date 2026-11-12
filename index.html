@@ -119,7 +119,7 @@
     <!-- Header / Top Navbar (Full Width) -->
     <header x-data="{ mobileMenuOpen: false }" :class="getHeaderClass()" class="sticky top-0 z-50 backdrop-blur-md border-b transition-colors duration-300">
         <div class="w-full px-4 sm:px-12 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3 lg:space-x-8">
+            <div class="flex items-center space-x-3 lg:space-x-6">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
                     <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-film text-white text-sm"></i>
@@ -127,7 +127,7 @@
                     <span class="text-xl font-black tracking-wider uppercase max-[360px]:hidden">CINE<span class="text-rose-600">VERSE</span></span>
                 </a>
                 
-                <nav class="hidden xl:flex items-center space-x-6 text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                <nav class="hidden xl:flex items-center space-x-4 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     <a href="#" @click.prevent="navigateTo('home')" :class="currentPage === 'home' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Ana Sayfa</a>
                     <a href="#" @click.prevent="navigateTo('explore')" :class="currentPage === 'explore' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Keşfet</a>
                     <a href="#" @click.prevent="navigateTo('video-links')" :class="currentPage === 'video-links' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center gap-1.5">
@@ -149,14 +149,14 @@
                 </button>
                 <div class="relative hidden xl:block">
                     <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                    <input type="text" x-model="searchQuery" placeholder="Film veya dizi ara..." :class="getSearchClass()" class="border rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-600 w-60 transition-all">
+                    <input type="text" x-model="searchQuery" placeholder="Film veya dizi ara..." :class="getSearchClass()" class="border rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-600 w-36 2xl:w-60 transition-all">
                 </div>
 
                 <!-- 3'LÜ TEMA SEÇİCİ DROPDOWN -->
                 <div class="relative" x-data="{ openThemeMenu: false }">
                     <button @click="openThemeMenu = !openThemeMenu" :aria-label="'Tema seçimi: ' + getThemeName()" :class="getButtonClass()" class="px-2 sm:px-3 h-9 rounded-lg border flex items-center space-x-2 text-xs font-bold transition-colors shadow-sm">
                         <i :class="getThemeIcon()"></i>
-                        <span class="hidden sm:inline" x-text="getThemeName()"></span>
+                        <span class="hidden 2xl:inline" x-text="getThemeName()"></span>
                         <i class="fa-solid fa-chevron-down text-[10px] opacity-70"></i>
                     </button>
 
@@ -179,7 +179,7 @@
                 <!-- Profil Seçici -->
                 <div :class="getCardClass()" class="flex items-center space-x-1 sm:space-x-2 border rounded-lg px-1.5 sm:px-2.5 py-1">
                     <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="hidden sm:block w-6 h-6 rounded-full object-cover">
-                    <select x-model="currentProfileId" aria-label="Aktif profili seç" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] xl:max-w-none">
+                    <select x-model="currentProfileId" aria-label="Aktif profili seç" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] 2xl:max-w-none">
                         <template x-for="pro in profiles" :key="pro.id">
                             <option :value="pro.id" x-text="pro.name" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"></option>
                         </template>
