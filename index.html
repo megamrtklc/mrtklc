@@ -42,6 +42,20 @@
     <script defer src="./app.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
+        /* Filmografi: her satırın en solundaki afiş büyürken sol kenardan taşmasın. */
+        .actor-filmography-grid > button:nth-child(2n + 1) { transform-origin: left center; }
+        @media (min-width: 640px) {
+            .actor-filmography-grid > button:nth-child(3n + 1) { transform-origin: left center; }
+        }
+        @media (min-width: 768px) {
+            .actor-filmography-grid > button:nth-child(4n + 1) { transform-origin: left center; }
+        }
+        @media (min-width: 1024px) {
+            .actor-filmography-grid > button:nth-child(6n + 1) { transform-origin: left center; }
+        }
+        @media (min-width: 1280px) {
+            .actor-filmography-grid > button:nth-child(8n + 1) { transform-origin: left center; }
+        }
         .has-initial-route #hero-initial-shell { display: none !important; }
         .has-initial-route main { min-height: 0; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -982,9 +996,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-3 gap-y-5 sm:gap-x-4 sm:gap-y-7 items-start">
+                    <div class="actor-filmography-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-3 gap-y-5 sm:gap-x-4 sm:gap-y-7 items-start">
                         <template x-for="work in selectedActor.filmography.filter(item => filmographyFilter === 'all' || item.type === filmographyFilter).sort((a, b) => Number(catalog.some(entry => String(entry.tmdbId || '') === String(b.id) && entry.type === b.type)) - Number(catalog.some(entry => String(entry.tmdbId || '') === String(a.id) && entry.type === a.type))).slice((filmographyPage - 1) * 16, filmographyPage * 16)" :key="work.type + '-' + work.id">
-                            <button type="button" @click="openActorCredit(work)" :disabled="!catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type)" :title="catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type) ? 'İzlemek için tıkla' : 'Bu yapım henüz CineVerse arşivinde yok'" class="group relative z-0 min-w-0 text-left rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent disabled:cursor-default transition-transform duration-300 ease-out hover:z-30 hover:scale-[2] hover:drop-shadow-2xl focus-visible:z-30 focus-visible:scale-[2]">
+                            <button type="button" @click="openActorCredit(work)" :disabled="!catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type)" :title="catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type) ? 'İzlemek için tıkla' : 'Bu yapım henüz CineVerse arşivinde yok'" class="group relative z-0 min-w-0 text-left rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent disabled:cursor-default transition-transform duration-300 ease-out hover:z-30 hover:scale-[1.5] hover:drop-shadow-2xl focus-visible:z-30 focus-visible:scale-[1.5]">
                                 <div class="relative aspect-[2/3] overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-800 shadow-md ring-1 ring-black/10 dark:ring-white/15 transition-all duration-300 group-hover:shadow-2xl group-hover:ring-rose-500/70">
                                     <img :src="work.poster || 'https://placehold.co/342x513/161922/ffffff?text=No+Poster'" :alt="work.title" @error="handleImageError($event)" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent opacity-95"></div>
