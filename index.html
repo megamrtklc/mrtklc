@@ -206,12 +206,12 @@
     <!-- Main Content Area -->
     <main class="relative flex-grow w-full min-h-[540px] md:min-h-[640px]">
         <!-- İlk çizim için statik hero: Alpine ve katalog hazırlanırken aynı ölçülerde görseli gösterir. -->
-        <section id="hero-initial-shell" inert class="pointer-events-none absolute inset-x-0 top-0 z-20 overflow-hidden select-none bg-gray-950 border-b border-gray-200 dark:border-gray-800/80">
+        <section id="hero-initial-shell" inert class="pointer-events-none absolute inset-x-0 top-0 z-20 overflow-hidden select-none border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" src="https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg" loading="eager" decoding="async" class="absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-3xl"><div class="absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div>
             <div class="mx-auto grid min-h-[560px] max-w-[1440px] grid-cols-1 items-center gap-6 px-5 py-7 md:grid-cols-2 md:gap-8 md:px-10 lg:px-14 lg:py-12">
                 <div class="order-2 space-y-4 text-white md:order-1 md:max-w-[590px]">
                     <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
-                    <h1 class="text-3xl font-black leading-[1.04] tracking-tight text-white sm:text-4xl lg:text-6xl">Kıyamet Z: Yeni Dünya</h1>
-                    <div class="flex flex-wrap items-center gap-2 text-xs font-bold"><span class="text-amber-400">★ 6.1</span><span class="text-gray-600">•</span><span class="text-gray-300">2026</span><span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200">Film</span><span class="text-gray-400">Aksiyon</span></div>
+                    <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.35rem,3vw,3.5rem)] font-black leading-tight tracking-tight text-white">Kıyamet Z: Yeni Dünya</h1>
+                    <div class="flex flex-wrap items-center gap-2 text-xs font-bold"><span class="inline-flex items-center gap-2 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-lg"><span class="tracking-tight">IMDb</span><span class="text-sm">6.1</span></span><span class="text-gray-600">•</span><span class="text-gray-300">2026</span><span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200">Film</span><span class="text-gray-400">Aksiyon</span></div>
                     <p class="max-w-xl text-sm leading-6 text-gray-300 line-clamp-3">TSJ virüsü salgınının ardından Kanarya Adaları Avrupa'nın son sığınağı hâline gelmiştir. Erzak bulmak için Madrid'e giden bir ekibe Roberto da şüpheli amaçlarla katılır.</p>
                     <div class="flex flex-wrap gap-3 pt-2"><span class="inline-flex min-h-11 items-center gap-2 rounded-full bg-rose-600 px-6 text-xs font-extrabold uppercase tracking-wide text-white"><span>▶</span> Şimdi İzle</span><span class="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 text-xs font-bold text-white"><span>▣</span> İzleme Listeme Ekle</span></div>
                 </div>
@@ -227,7 +227,7 @@
             <div class="w-full space-y-10 pb-16">
                 
                 <!-- MOBILE HERO: görsel üstte, içerik altta; masaüstü kompozisyonunun doğal mobil uyarlaması -->
-                <section id="mobileHeroBanner" @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="md:hidden w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80">
+                <section id="mobileHeroBanner" @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="relative isolate md:hidden w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" :src="currentHero.backdrop || currentHero.poster" loading="eager" decoding="async" class="pointer-events-none absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-3xl"><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-gray-950/65 via-gray-950/75 to-gray-950"></div>
                     <div class="relative aspect-[16/9] w-full overflow-hidden bg-gray-900">
                         <img :src="currentHero.backdrop || currentHero.poster" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [342, 500, 780])" sizes="100vw" :alt="currentHero.title + ' görseli'" loading="eager" fetchpriority="high" decoding="async" @error="handleImageError($event)" class="h-full w-full object-cover object-center">
                         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-950/55 via-transparent to-transparent"></div>
@@ -235,9 +235,9 @@
                     <div class="px-5 pb-6 pt-5 text-white sm:px-7">
                         <div class="space-y-3">
                             <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
-                            <h1 class="text-3xl font-black leading-[1.05] tracking-tight text-white sm:text-4xl" x-text="currentHero.title"></h1>
+                            <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.35rem,5.4vw,2.25rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
                             <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
-                                <span class="text-amber-400"><i class="fa-solid fa-star mr-1"></i><span x-text="currentHero.rating"></span></span>
+                                <span class="inline-flex items-center gap-2 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-md"><span class="tracking-tight">IMDb</span><span class="text-sm" x-text="currentHero.rating"></span></span>
                                 <span class="text-gray-600">•</span><span class="text-gray-300" x-text="currentHero.year"></span>
                                 <span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200" x-text="currentHero.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                 <span class="text-gray-400" x-text="currentHero.genre"></span>
@@ -270,19 +270,19 @@
                 </div>
 
                 <!-- DESKTOP HERO: sol metin + sağ sinematik görsel -->
-                <section @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="hidden md:block relative w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80 select-none">
+                <section @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="relative isolate hidden md:block w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80 select-none"><img aria-hidden="true" :src="currentHero.backdrop || currentHero.poster" loading="eager" decoding="async" class="pointer-events-none absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-35 blur-3xl"><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-gray-950/30 via-transparent to-gray-950/80"></div>
                     <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_78%_48%,rgba(225,29,72,0.13),transparent_42%)]"></div>
                     <div class="relative mx-auto grid min-h-[500px] max-w-[1440px] grid-cols-2 items-center gap-8 px-8 py-12 sm:px-10 lg:min-h-[540px] lg:gap-12 lg:px-14 xl:gap-16">
                         <div class="relative z-10 max-w-[590px] space-y-5 text-white">
                             <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
-                            <h1 class="text-4xl font-black leading-[1.04] tracking-tight text-white lg:text-5xl xl:text-6xl" x-text="currentHero.title"></h1>
+                            <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.45rem,3.2vw,3.65rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
                             <div class="flex flex-wrap items-center gap-2.5 text-xs font-bold sm:text-sm">
-                                <span class="inline-flex items-center gap-1.5 text-amber-400"><i class="fa-solid fa-star"></i><span x-text="currentHero.rating"></span></span>
+                                <span class="inline-flex items-center gap-2 rounded-md border border-amber-300/50 bg-[#f5c518] px-3 py-1.5 text-[11px] font-black text-black shadow-md"><span class="tracking-tight">IMDb</span><span class="text-base" x-text="currentHero.rating"></span></span>
                                 <span class="text-gray-600">•</span><span class="text-gray-300" x-text="currentHero.year"></span>
                                 <span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200" x-text="currentHero.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                 <span class="text-gray-400" x-text="currentHero.genre"></span>
                             </div>
-                            <p x-show="currentHero.starring" class="text-xs text-gray-300 sm:text-sm"><span class="font-bold text-white">Oyuncular:</span> <span x-text="currentHero.starring"></span></p>
+                            
                             <p class="max-w-xl text-sm leading-6 text-gray-300 line-clamp-3" x-text="currentHero.desc"></p>
                             <div class="flex flex-wrap items-center gap-3 pt-2">
                                 <button @click="openWatchPage(currentHero)" class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-rose-600 px-7 text-xs font-extrabold uppercase tracking-wide text-white shadow-lg shadow-rose-950/30 transition-all hover:-translate-y-0.5 hover:bg-rose-500"><i class="fa-solid fa-play text-[11px]"></i><span>Şimdi İzle</span></button>
