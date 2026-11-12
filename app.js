@@ -182,9 +182,9 @@
                 tmdbSeasonRequests: {},
                 tmdbDetailsError: '',
 
-                async fetchTmdb(path) {
+                async fetchTmdb(path, language = this.tmdbLanguage) {
                     const separator = path.includes('?') ? '&' : '?';
-                    const response = await fetch('https://api.themoviedb.org/3/' + path + separator + 'api_key=' + this.tmdbApiKey + '&language=' + this.tmdbLanguage);
+                    const response = await fetch('https://api.themoviedb.org/3/' + path + separator + 'api_key=' + this.tmdbApiKey + '&language=' + language);
                     if (!response.ok) throw new Error('TMDB isteği başarısız (HTTP ' + response.status + ')');
                     return response.json();
                 },
@@ -889,7 +889,17 @@
                     }
                     this.actorProfileLoading = true;
                     try {
-                        const person = await this.fetchTmdb('person/' + encodeURIComponent(actor.id) + '?append_to_response=movie_credits,tv_credits,external_ids');
+                        const personPath = 'person/' + encodeURIComponent(actor.id) + '?append_to_response=movie_credits,tv_credits,external_ids';
+                        const person = await this.fetchTmdb(personPath);
+                        let biography = person.biography || '';
+                        if (!biography.trim()) {
+                            try {
+                                const englishPerson = await this.fetchTmdb('person/' + encodeURIComponent(actor.id), 'en-US');
+                                biography = englishPerson.biography || '';
+                            } catch (fallbackError) {
+                                console.warn('Oyuncu biyografisinin İngilizce kaynağı alınamadı:', fallbackError);
+                            }
+                        }
                         const credits = [
                             ...(person.movie_credits?.cast || []).map(item => ({ ...item, mediaType: 'movie' })),
                             ...(person.tv_credits?.cast || []).map(item => ({ ...item, mediaType: 'tv' }))
@@ -912,7 +922,7 @@
                         const profile = {
                             id: person.id,
                             name: person.name || actor.name || 'Oyuncu',
-                            biography: person.biography || '',
+                            biography,
                             birthday: person.birthday || '',
                             deathday: person.deathday || '',
                             placeOfBirth: person.place_of_birth || '',
