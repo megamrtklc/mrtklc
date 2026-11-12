@@ -1525,9 +1525,14 @@
                         const coldStart = catalog.filter(item => item && item.id != null && !excluded.has(String(item.id))).map(item => {
                             const rating = Math.max(0, Number.parseFloat(item.rating) || 0);
                             const year = Number.parseInt(item.year, 10) || 0;
+                            const negativeGenre = tokens(item.category || item.genre).reduce((sum, value) => sum + (prefs.negativeGenres.get(value) || 0), 0);
+                            const negativeDirector = tokens(item.director).reduce((sum, value) => sum + (prefs.negativeDirectors.get(value) || 0), 0);
+                            const negativeActor = people(item).reduce((sum, value) => sum + (prefs.negativeActors.get(value) || 0), 0);
+                            const negativeTheme = plotTerms(item).reduce((sum, value) => sum + (prefs.negativeThemes.get(value) || 0), 0);
+                            const feedbackPenalty = negativeGenre * 0.85 + negativeDirector * 1.1 + Math.min(negativeActor, 3) * 0.3 + Math.min(negativeTheme, 4) * 0.12;
                             return {
                                 item,
-                                score: rating * 0.35 + (year >= currentYear - 4 ? 0.25 : 0),
+                                score: Math.max(0, rating * 0.35 + (year >= currentYear - 4 ? 0.25 : 0) - feedbackPenalty),
                                 primaryGenre: tokens(item.category || item.genre)[0] || 'diger',
                                 reason: 'Arşivden yüksek puanlı'
                             };
