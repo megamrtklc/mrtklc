@@ -875,6 +875,23 @@
                     return this.watchlist.some(m => m && String(m.id) === String(item.id));
                 },
 
+                get recommendationFeedback() {
+                    const all = safeStorageRead('cine_recommendation_feedback_v1', {});
+                    const own = all && typeof all === 'object' && !Array.isArray(all) ? all[this.currentProfileId] : [];
+                    return Array.isArray(own) ? [...new Set(own.map(String))] : [];
+                },
+
+                dismissRecommendation(item) {
+                    if (!item || item.id == null) return;
+                    const stored = safeStorageRead('cine_recommendation_feedback_v1', {});
+                    const all = stored && typeof stored === 'object' && !Array.isArray(stored) ? stored : {};
+                    const own = Array.isArray(all[this.currentProfileId]) ? all[this.currentProfileId].map(String) : [];
+                    const id = String(item.id);
+                    if (!own.includes(id)) own.push(id);
+                    all[this.currentProfileId] = own.slice(-200);
+                    safeStorageWrite('cine_recommendation_feedback_v1', all);
+                },
+
                 reviews: (() => { const value = safeStorageRead('cine_reviews', {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; })(),
 
                 getReviews(itemId) {
@@ -1430,10 +1447,13 @@
                         const id = String(item.id);
                         if (!history.has(id)) history.set(id, { item, weight: 0.85 });
                     });
-                    const excluded = new Set([...history.keys(), ...this.watchlist.map(item => String(item.id))]);
+                    const feedbackIds = this.recommendationFeedback;
+                    const feedbackItems = feedbackIds.map(id => catalogById.get(id)).filter(Boolean);
+                    const excluded = new Set([...history.keys(), ...this.watchlist.map(item => String(item.id)), ...feedbackIds]);
                     const prefs = {
                         genres: new Map(), types: new Map(), countries: new Map(),
-                        directors: new Map(), actors: new Map()
+                        directors: new Map(), actors: new Map(),
+                        negativeGenres: new Map(), negativeDirectors: new Map(), negativeActors: new Map()
                     };
                     const add = (map, key, value) => {
                         if (key) map.set(key, (map.get(key) || 0) + value);
@@ -1444,6 +1464,11 @@
                         tokens(item.country).forEach(value => add(prefs.countries, value, weight * 0.3));
                         tokens(item.director).forEach(value => add(prefs.directors, value, weight));
                         people(item).forEach(actor => add(prefs.actors, actor, weight * 0.8));
+                    });
+                    feedbackItems.forEach(item => {
+                        tokens(item.category || item.genre).forEach(value => add(prefs.negativeGenres, value, 1));
+                        tokens(item.director).forEach(value => add(prefs.negativeDirectors, value, 1));
+                        people(item).forEach(actor => add(prefs.negativeActors, actor, 1));
                     });
                     const currentYear = new Date().getFullYear();
                     const selectDiverse = ranked => {
@@ -1503,6 +1528,10 @@
                         const countryMatches = tokens(item.country).map(value => prefs.countries.get(value) || 0).sort((a, b) => b - a);
                         if (countryMatches[0]) push(countryMatches[0] * 0.9, 'Tercih ettiğin ülke sineması');
                         push((prefs.types.get(item.type) || 0) * 0.45, item.type === 'tv' ? 'Dizi tercihine uygun' : 'Film tercihine uygun');
+                        const negativeGenre = candidateGenres.reduce((sum, value) => sum + (prefs.negativeGenres.get(value) || 0), 0);
+                        const negativeDirector = tokens(item.director).reduce((sum, value) => sum + (prefs.negativeDirectors.get(value) || 0), 0);
+                        const negativeActor = people(item).reduce((sum, value) => sum + (prefs.negativeActors.get(value) || 0), 0);
+                        const feedbackPenalty = negativeGenre * 0.85 + negativeDirector * 1.1 + Math.min(negativeActor, 3) * 0.3;
                         const rating = Math.max(0, Number.parseFloat(item.rating) || 0);
                         if (rating > 6) push((rating - 6) * 0.42, 'Yüksek puanlı yapım');
                         const year = Number.parseInt(item.year, 10) || 0;
@@ -1510,7 +1539,7 @@
                         const reason = reasons.sort((a, b) => b.score - a.score)[0]?.label || 'İzleme profiline uygun';
                         return {
                             item,
-                            score: reasons.reduce((sum, entry) => sum + entry.score, 0) + freshness,
+                            score: Math.max(0, reasons.reduce((sum, entry) => sum + entry.score, 0) + freshness - feedbackPenalty),
                             primaryGenre: candidateGenres[0] || 'diger',
                             reason
                         };
