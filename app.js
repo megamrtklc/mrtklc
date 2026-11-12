@@ -158,6 +158,7 @@
                 },
                 
                 catalog: [],
+                collections: [],
                 homepageConfig: null,
                 watchPageConfig: null,
                 heroAutoplayTimer: null,
@@ -299,6 +300,7 @@
 
                         const data = await response.json();
                         this.homepageConfig = data && typeof data === 'object' ? (data.homepageConfig || null) : null;
+                        this.collections = Array.isArray(data?.collections) ? data.collections : [];
                         this.watchPageConfig = data && typeof data === 'object' ? (data.watchPageConfig || null) : null;
                         const sourceCatalog = Array.isArray(data) ? data : (data && typeof data === 'object' ? data.catalog : null);
 
@@ -367,6 +369,19 @@
                     const selected = configured.filter(entry => entry && entry.active !== false)
                         .map(entry => byId.get(String(entry.id))).filter(Boolean);
                     return selected.length ? selected : this.catalog;
+                },
+
+                get publishedCollections() {
+                    const byId = new Map(this.catalog.map(item => [String(item.id), item]));
+                    return (Array.isArray(this.collections) ? this.collections : [])
+                        .filter(collection => collection && collection.active !== false && String(collection.title || '').trim())
+                        .map(collection => ({
+                            ...collection,
+                            items: (Array.isArray(collection.items) ? collection.items : [])
+                                .map(id => byId.get(String(id)))
+                                .filter(item => item && (item.poster || item.image || item.backdrop))
+                        }))
+                        .filter(collection => collection.items.length > 0);
                 },
 
                 get heroThumbSlides() {
