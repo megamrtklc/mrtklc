@@ -291,6 +291,40 @@ try {
     assert.ok(result.profileTwoReasons.every(reason => reason === 'Arşivden yüksek puanlı'), 'İlk profilin izleme geçmişi ikinci profilin önerilerini etkilememeli');
   });
 
+  await check('Öneri geri bildirimi profile özel kaydediliyor ve benzer yapımları aşağı sıralıyor', async () => {
+    const result = await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      const key = 'cine_recommendation_feedback_v1';
+      const original = localStorage.getItem(key);
+      const originalProfile = app.currentProfileId;
+      try {
+        app.switchProfile('pro_1');
+        localStorage.removeItem(key);
+        const first = app.personalizedRecommendations;
+        const target = first[0];
+        if (!target) throw new Error('Geri bildirim testi için öneri bulunamadı');
+        app.dismissRecommendation(target);
+        const saved = JSON.parse(localStorage.getItem(key) || '{}');
+        const after = app.personalizedRecommendations;
+        app.switchProfile('pro_2');
+        const secondProfileFeedback = app.recommendationFeedback;
+        return {
+          targetId: String(target.id),
+          savedForProfileOne: (saved.pro_1 || []).includes(String(target.id)),
+          removedFromRecommendations: !after.some(item => String(item.id) === String(target.id)),
+          profileTwoUnaffected: secondProfileFeedback.length === 0
+        };
+      } finally {
+        if (original === null) localStorage.removeItem(key);
+        else localStorage.setItem(key, original);
+        app.switchProfile(originalProfile);
+      }
+    });
+    assert.ok(result.savedForProfileOne, 'Geri bildirim aktif profile kaydedilmedi');
+    assert.ok(result.removedFromRecommendations, 'İlgimi çekmedi denilen yapım önerilerde kaldı');
+    assert.ok(result.profileTwoUnaffected, 'Geri bildirim diğer profile sızdı');
+  });
+
   await check('Dizi önerileri doğru etiketleniyor ve dar ekran kart ölçüsü uygulanıyor', async () => {
     const tvCard = page.locator('#home-personalized-rail [data-recommendation-type="tv"]').first();
     await tvCard.waitFor({ state: 'attached', timeout: 10000 });
