@@ -48,8 +48,8 @@
   function canWrite(){ if(!state.apiEnabled||!state.sha){toast('Katalog şu anda salt okunur. GitHub erişim bağlantısı doğrulanınca düzenleme açılacak.');return false;} return true; }
   function navigate(view){
     state.view=view;
-    $$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
-    $$('.nav-link').forEach(el=>el.classList.toggle('active',el.dataset.view===view));
+    $$$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
+    $$$('.nav-link').forEach(el=>el.classList.toggle('active',el.dataset.view===view));
     const active=$('.nav-link[data-view="'+view+'"]');
     $('#crumb-current').textContent=active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış';
     $('#sidebar').classList.remove('open');
@@ -145,8 +145,8 @@
     $('#result-count').textContent=state.filtered.length.toLocaleString('tr-TR')+' kayıt';
     $('#page-info').textContent='Sayfa '+state.page+' / '+pages;
     $('#prev-page').disabled=state.page<=1;$('#next-page').disabled=state.page>=pages;
-    $$('#catalog-rows [data-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.edit);if(item)openEditor(item);}));
-    $$('#catalog-rows [data-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteContent(btn.dataset.delete)));
+    $$$('#catalog-rows [data-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.edit);if(item)openEditor(item);}));
+    $$$('#catalog-rows [data-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteContent(btn.dataset.delete)));
   }
   function renderCollections(){
     const list=collectionList();
@@ -154,8 +154,8 @@
       const count=Array.isArray(item.items)?item.items.length:0;
       return '<article class="collection-card"><div class="collection-card-top"><span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Pasif':'Yayında')+'</span><span class="collection-id">'+escapeHtml(item.id||'')+'</span></div><h3>'+escapeHtml(item.title||item.name||'İsimsiz koleksiyon')+'</h3><p>'+escapeHtml(item.description||'Açıklama eklenmemiş')+'</p><strong>'+count+'</strong><small>İçerik kaydı</small><div class="collection-actions"><button class="row-action" data-collection-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-collection-delete="'+escapeHtml(item.id)+'">Sil</button></div></article>';
     }).join(''):'<article class="panel-card empty-state"><span>▧</span><h2>Henüz koleksiyon bulunamadı</h2><p>Yeni koleksiyon oluşturarak seçkilerini yönetebilirsin.</p></article>';
-    $$('#collection-grid [data-collection-edit]').forEach(btn=>btn.addEventListener('click',()=>openCollectionEditor(btn.dataset.collectionEdit)));
-    $$('#collection-grid [data-collection-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteCollection(btn.dataset.collectionDelete)));
+    $$$('#collection-grid [data-collection-edit]').forEach(btn=>btn.addEventListener('click',()=>openCollectionEditor(btn.dataset.collectionEdit)));
+    $$$('#collection-grid [data-collection-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteCollection(btn.dataset.collectionDelete)));
     updateMetrics();
   }
   function renderAnalytics(){
@@ -252,7 +252,7 @@
   }
   function filterCollectionItems(){
     const q=$('#collection-search').value.trim().toLocaleLowerCase('tr');
-    $$('.collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
+    $$$('.collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
   }
   async function saveCollection(event){
     event.preventDefault();if(!canWrite())return;
@@ -323,7 +323,7 @@
     $('#watch-demo-right').innerHTML=renderColumn('right')||'<div class="watch-demo-empty">Bu sütunda kart yok. Soldaki listeden kart taşı.</div>';
     $('#watch-demo-left').classList.toggle('is-empty',!config.left.length);
     $('#watch-demo-right').classList.toggle('is-empty',!config.right.length);
-    $$('[data-demo-type]').forEach(button=>button.classList.toggle('active',button.dataset.demoType===watchDemoType));
+    $$$('[data-demo-type]').forEach(button=>button.classList.toggle('active',button.dataset.demoType===watchDemoType));
   }
   function renderWatchLayout(){
     const config=watchLayoutConfig();
@@ -385,7 +385,7 @@
       return '<label class="hero-pick"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(active?'checked':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></span></label>';
     }).join('');
     const updateCount=()=>$('#hero-selected-count').textContent=$('#hero-slide-list input:checked').length+' yapım seçildi';
-    $$('#hero-slide-list input').forEach(input=>input.addEventListener('change',updateCount));
+    $$$('#hero-slide-list input').forEach(input=>input.addEventListener('change',updateCount));
     updateCount();
     $('#homepage-config').textContent=JSON.stringify(config,null,2);
   }
@@ -442,8 +442,8 @@
     }
   }
   $('#admin-theme-select').addEventListener('change',event=>applyAdminTheme(event.target.value));
-  $('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
-  $$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
+  $$('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
+  $$$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
   $('#mobile-menu').addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
   const shell=$('.app-shell');
   if(window.innerWidth>760&&localStorage.getItem('cv-admin-sidebar-collapsed')==='1')shell.classList.add('sidebar-collapsed');
@@ -509,14 +509,14 @@
       event.preventDefault();
       event.dataTransfer.dropEffect='move';
       list.classList.add('is-drop-target');
-      $$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
+      $$$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
       const over=event.target.closest('[data-card]');
       if(over&&over.dataset.card!==draggedWatchCard.id)over.classList.add('drop-target');
     });
     list.addEventListener('dragleave',event=>{
       if(!list.contains(event.relatedTarget)){
         list.classList.remove('is-drop-target');
-        $$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
+        $$$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
       }
     });
     list.addEventListener('drop',event=>{
@@ -527,16 +527,16 @@
       const destination=over?config[side].indexOf(over.dataset.card):config[side].length;
       moveWatchCard(draggedWatchCard.side,draggedWatchCard.id,side,destination);
       draggedWatchCard=null;
-      $$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
-      $$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
+      $$$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
+      $$$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
     });
     list.addEventListener('dragend',()=>{
       draggedWatchCard=null;
-      $$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
-      $$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
+      $$$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
+      $$$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
     });
   });
-  $$('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{
+  $$$('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{
     watchDemoType=button.dataset.demoType;
     renderWatchLayout();
   }));
