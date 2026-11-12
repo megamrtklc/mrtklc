@@ -438,6 +438,12 @@
                     };
                 },
 
+                get heroDescription() {
+                    const text = String(this.currentHero?.desc || '');
+                    const max = Math.max(80, Math.min(500, Number(this.homepageConfig?.settings?.descriptionLength) || 220));
+                    return text.length > max ? text.slice(0, max).trimEnd() + '…' : text;
+                },
+
                 selectHeroSlide(idx) {
                     this.currentSlideIndex = idx;
                 },
