@@ -123,6 +123,9 @@
                 },
                 
                 catalog: [],
+                homepageConfig: null,
+                heroAutoplayTimer: null,
+                heroPaused: false,
                 catalogLoading: true,
                 catalogError: null,
                 tmdbApiKey: '3108265ab3fdbf3af14175edf64a9c7f',
@@ -259,6 +262,7 @@
                         }
 
                         const data = await response.json();
+                        this.homepageConfig = data && typeof data === 'object' ? (data.homepageConfig || null) : null;
                         const sourceCatalog = Array.isArray(data) ? data : (data && typeof data === 'object' ? data.catalog : null);
 
                         if (!Array.isArray(sourceCatalog)) {
@@ -306,6 +310,7 @@
                         });
 
                         this.currentSlideIndex = 0;
+                        this.startHeroAutoplay();
                         this.restoreRouteFromUrl();
                     } catch (error) {
                         this.catalogError = error.message || 'Bilinmeyen katalog hatası';
@@ -319,11 +324,35 @@
                 },
 
                 get heroSlides() {
-                    return this.catalog;
+                    const configured = this.homepageConfig?.heroSlides;
+                    if (!Array.isArray(configured) || !configured.length) return this.catalog;
+                    const byId = new Map(this.catalog.map(item => [String(item.id), item]));
+                    const selected = configured.filter(entry => entry && entry.active !== false)
+                        .map(entry => byId.get(String(entry.id))).filter(Boolean);
+                    return selected.length ? selected : this.catalog;
                 },
 
                 get heroThumbSlides() {
-                    return this.catalog.slice(0, 12);
+                    const settings = this.homepageConfig?.settings || {};
+                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+                    const configuredCount = Number(mobile ? settings.mobileCount : settings.desktopCount);
+                    const count = Math.max(1, Math.min(12, configuredCount || (mobile ? 6 : 10)));
+                    return this.heroSlides.slice(0, count);
+                },
+
+                startHeroAutoplay() {
+                    if (this.heroAutoplayTimer) window.clearInterval(this.heroAutoplayTimer);
+                    const settings = this.homepageConfig?.settings || {};
+                    if (settings.autoplay === false || this.heroSlides.length < 2) return;
+                    const seconds = Math.max(2, Math.min(60, Number(settings.interval) || 6));
+                    this.heroAutoplayTimer = window.setInterval(() => {
+                        if (this.heroPaused || document.hidden || this.heroSlides.length < 2) return;
+                        this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
+                    }, seconds * 1000);
+                },
+
+                setHeroPaused(value) {
+                    this.heroPaused = !!value;
                 },
 
                 get currentHero() {
