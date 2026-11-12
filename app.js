@@ -970,6 +970,11 @@
                             id: person.id,
                             name: person.name || actor.name || 'Oyuncu',
                             biography,
+                            biographyIsEnglish: this.isEnglishBiography(biography),
+                            biographyTranslated: '',
+                            biographyShowOriginal: false,
+                            biographyTranslationLoading: false,
+                            biographyTranslationError: '',
                             awards,
                             birthday: person.birthday || '',
                             deathday: person.deathday || '',
@@ -1038,6 +1043,11 @@
                             id: person.id,
                             name: person.name || actor.name || 'Yönetmen',
                             biography,
+                            biographyIsEnglish: this.isEnglishBiography(biography),
+                            biographyTranslated: '',
+                            biographyShowOriginal: false,
+                            biographyTranslationLoading: false,
+                            biographyTranslationError: '',
                             awards,
                             birthday: person.birthday || '',
                             deathday: person.deathday || '',
@@ -1065,6 +1075,57 @@
                     if (!value) return '';
                     const parts = String(value).split('-');
                     return parts.length === 3 ? parts[2] + '.' + parts[1] + '.' + parts[0] : value;
+                },
+
+                isEnglishBiography(text) {
+                    const words = String(text || '').toLowerCase().match(/[a-z']+/g) || [];
+                    if (words.length < 12) return false;
+                    const markers = new Set(['the','and','was','were','is','are','has','have','had','his','her','he','she','they','their','with','from','for','born','known','career','actor','actress','director','film','films','television','worked','appeared','studied','began','best','including','who','which','that','in','of','to','on','at','by','as']);
+                    const count = words.filter(word => markers.has(word)).length;
+                    return count >= 3 && count / words.length >= 0.035;
+                },
+
+                async translateSelectedBiography() {
+                    const person = this.selectedActor;
+                    if (!person?.biography || !person.biographyIsEnglish) return;
+                    if (person.biographyTranslated) {
+                        person.biographyShowOriginal = !person.biographyShowOriginal;
+                        return;
+                    }
+                    if (person.biographyTranslationLoading) return;
+                    person.biographyTranslationLoading = true;
+                    person.biographyTranslationError = '';
+                    try {
+                        const remainingText = String(person.biography).trim();
+                        const chunks = [];
+                        let remaining = remainingText;
+                        while (remaining.length > 0) {
+                            if (remaining.length <= 3200) {
+                                chunks.push(remaining);
+                                break;
+                            }
+                            let splitAt = remaining.lastIndexOf(' ', 3200);
+                            if (splitAt < 1200) splitAt = 3200;
+                            chunks.push(remaining.slice(0, splitAt));
+                            remaining = remaining.slice(splitAt).trimStart();
+                        }
+                        const translated = [];
+                        for (const chunk of chunks) {
+                            const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=tr&dt=t&q=' + encodeURIComponent(chunk);
+                            const response = await fetch(url);
+                            if (!response.ok) throw new Error('Çeviri servisi şu anda yanıt vermiyor. Lütfen tekrar dene.');
+                            const data = await response.json();
+                            const result = Array.isArray(data?.[0]) ? data[0].map(part => part?.[0] || '').join('') : '';
+                            if (!result.trim()) throw new Error('Çeviri sonucu alınamadı. Lütfen tekrar dene.');
+                            translated.push(result);
+                        }
+                        person.biographyTranslated = translated.join(' ').replace(/\\s+([,.;!?])/g, '$1');
+                        person.biographyShowOriginal = false;
+                    } catch (error) {
+                        person.biographyTranslationError = error.message || 'Biyografi Türkçeye çevrilemedi.';
+                    } finally {
+                        person.biographyTranslationLoading = false;
+                    }
                 },
 
                 formatActorDeathInfo(deathday, birthday) {
