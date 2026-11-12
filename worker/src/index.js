@@ -210,7 +210,7 @@ async function readCatalog(env) {
     return { data, sha: null, writable: false, readOnlyReason: "Katalog görüntüleniyor; güvenli yazma bağlantısı doğrulanamadı." };
   }
 
-  const binary = atob(payload.content.replace(/\\s/g, ""));
+  const binary = atob(payload.content.replace(/\s/g, ""));
   const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
   const data = JSON.parse(new TextDecoder().decode(bytes));
   if (!data || !Array.isArray(data.catalog)) throw new Error("Katalog JSON yapısı beklenen biçimde değil.");
