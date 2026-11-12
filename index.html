@@ -46,6 +46,15 @@
         .has-initial-route main { min-height: 0; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .hero-nav-arrow{position:relative;isolation:isolate;display:inline-flex;width:40px;height:40px;align-items:center;justify-content:center;flex:0 0 auto;border:1px solid rgba(255,255,255,.28);border-radius:9999px;color:#fff;background:linear-gradient(145deg,rgba(30,30,38,.88),rgba(8,8,12,.72));box-shadow:0 5px 18px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.14);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .25s ease,border-color .25s ease,background .25s ease,box-shadow .25s ease}
+        .hero-nav-arrow::before{content:"";position:absolute;inset:-4px;z-index:-1;border-radius:inherit;background:radial-gradient(circle,rgba(225,29,72,.38),transparent 70%);opacity:.45;filter:blur(5px);transition:opacity .25s ease,transform .25s ease}
+        .hero-nav-arrow:hover{transform:translateY(-2px) scale(1.08);border-color:rgba(251,113,133,.9);background:linear-gradient(145deg,#e11d48,#9f1239);box-shadow:0 8px 24px rgba(225,29,72,.38),inset 0 1px 0 rgba(255,255,255,.3)}
+        .hero-nav-arrow:hover::before{opacity:1;transform:scale(1.25)}
+        .hero-nav-arrow:active{transform:scale(.94)}
+        .hero-nav-arrow:focus-visible{outline:2px solid #fb7185;outline-offset:4px}
+        .hero-nav-arrow i{font-size:12px;transition:transform .2s ease}
+        .hero-nav-arrow:hover i{transform:scale(1.15)}
+        @media(max-width:767px){.hero-nav-arrow{width:36px;height:36px}}
         .home-card-rail{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:2px 2px 12px;scrollbar-width:none;-ms-overflow-style:none}
         .home-card-rail::-webkit-scrollbar{display:none}
         .home-rail-card{flex:0 0 42%;width:42%;scroll-snap-align:start}
@@ -282,13 +291,13 @@
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400">Featured collection</span>
                         <div class="flex gap-2">
-                            <button @click="scrollHeroThumbs(-1, 'mobileHeroThumbs')" aria-label="Önceki öne çıkan yapım" class="w-8 h-8 rounded-full bg-gray-900 border border-gray-700 text-white flex items-center justify-center"><i class="fa-solid fa-chevron-left text-xs"></i></button>
-                            <button @click="scrollHeroThumbs(1, 'mobileHeroThumbs')" aria-label="Sonraki öne çıkan yapım" class="w-8 h-8 rounded-full bg-gray-900 border border-gray-700 text-white flex items-center justify-center"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                            <button @click="navigateHeroSlide(-1, 'mobileHeroThumbs')" aria-label="Önceki öne çıkan yapım" class="hero-nav-arrow"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                            <button @click="navigateHeroSlide(1, 'mobileHeroThumbs')" aria-label="Sonraki öne çıkan yapım" class="hero-nav-arrow"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                         </div>
                     </div>
                     <div id="mobileHeroThumbs" class="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-1">
                         <template x-for="(item, idx) in heroThumbSlides" :key="'mobile-' + item.id">
-                            <button @click="selectHeroSlide(idx)" :aria-label="item.title" :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 opacity-100' : 'opacity-70'" class="flex-shrink-0 w-[76px] rounded-lg overflow-hidden bg-gray-900 transition-all">
+                            <button @click="selectHeroSlide(idx)" :data-hero-index="idx" :aria-label="item.title" :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 opacity-100' : 'opacity-70'" class="flex-shrink-0 w-[76px] rounded-lg overflow-hidden bg-gray-900 transition-all">
                                 <img :src="item.poster" :alt="item.title" :srcset="getTmdbImageSrcSet(item.poster, [185, 342])" sizes="76px" loading="lazy" decoding="async" @error="handleImageError($event)" class="w-full aspect-[2/3] object-cover">
                             </button>
                         </template>
@@ -366,10 +375,10 @@
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Featured Marvel & Action Collection</span>
                             <div class="flex space-x-1.5">
-                                <button @click="scrollHeroThumbs(-1)" aria-label="Önceki öne çıkan yapım" class="w-7 h-7 rounded-full bg-black/60 border border-gray-700 hover:bg-rose-600 hover:border-rose-600 text-white flex items-center justify-center text-xs transition-colors">
+                                <button @click="navigateHeroSlide(-1)" aria-label="Önceki öne çıkan yapım" class="hero-nav-arrow">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </button>
-                                <button @click="scrollHeroThumbs(1)" aria-label="Sonraki öne çıkan yapım" class="w-7 h-7 rounded-full bg-black/60 border border-gray-700 hover:bg-rose-600 hover:border-rose-600 text-white flex items-center justify-center text-xs transition-colors">
+                                <button @click="navigateHeroSlide(1)" aria-label="Sonraki öne çıkan yapım" class="hero-nav-arrow">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </div>
@@ -378,6 +387,7 @@
                         <div id="heroThumbContainer" class="flex items-center space-x-4 overflow-x-auto no-scrollbar scroll-smooth py-1">
                             <template x-for="(item, idx) in heroThumbSlides" :key="item.id">
                                 <div @click="selectHeroSlide(idx)" 
+                                     :data-hero-index="idx"
                                      :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 border-rose-500' : 'border-gray-800 opacity-75 hover:opacity-100'"
                                      class="flex-shrink-0 w-32 sm:w-36 cursor-pointer group bg-gray-900 rounded-xl overflow-hidden border p-1.5 transition-all duration-300 shadow-sm">
                                     <div class="w-full aspect-[2/3] rounded-lg overflow-hidden bg-black mb-1.5">
