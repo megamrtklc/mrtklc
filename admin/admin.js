@@ -415,12 +415,12 @@
     const mobileEntries=Array.isArray(config.mobileHeroSlides)?config.mobileHeroSlides:config.heroSlides;
     const renderList=(listId,countId,entries)=>{
       const current=new Map(entries.map(x=>[String(x.id),x]));
-      $(listId).innerHTML=state.catalog.map(item=>{
+      $$(listId).innerHTML=state.catalog.map(item=>{
         const entry=current.get(String(item.id)),active=entry?entry.active!==false:false;
         return '<label class="hero-pick"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(active?'checked':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></span></label>';
       }).join('');
-      const updateCount=()=>$(countId).textContent=$(listId+' input:checked').length+' yapım seçildi';
-      $(listId+' input').forEach(input=>input.addEventListener('change',updateCount));
+      const updateCount=()=>$(countId).textContent=$$(listId+' input:checked').length+' yapım seçildi';
+      $$(listId+' input').forEach(input=>input.addEventListener('change',updateCount));
       updateCount();
     };
     renderList('#hero-desktop-slide-list','#hero-desktop-selected-count',desktopEntries);
