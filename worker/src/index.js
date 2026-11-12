@@ -227,6 +227,75 @@ async function readCatalog(env) {
     readOnlyReason: usedAuthenticatedRead ? null : "Katalog açık GitHub kaynağından yüklendi; düzenleme için GitHub erişim anahtarını yenilemek gerekiyor."
   };
 }
+export function validateCatalogData(data) {
+  if (!data || typeof data !== "object" || Array.isArray(data) || !Array.isArray(data.catalog)) throw new Error("Gönderilen katalog yapısı geçersiz.");
+  if (data.catalog.length < 1 || data.catalog.length > 5000) throw new Error("Katalog kayıt sayısı sınır dışında.");
+  if (JSON.stringify(data).length > 2_000_000) throw new Error("Katalog boyutu 2 MB sınırını aşıyor.");
+  const ids = new Set();
+  for (const item of data.catalog) {
+    if (!item || typeof item !== "object" || Array.isArray(item)) throw new Error("Katalogda geçersiz kayıt bulundu.");
+    if (item.id === undefined || item.id === null || !String(item.id).trim()) throw new Error("Her katalog kaydının benzersiz bir kimliği olmalı.");
+    if (typeof item.title !== "string" || !item.title.trim()) throw new Error("Her katalog kaydının yapım adı olmalı.");
+    const id = String(item.id);
+    if (ids.has(id)) throw new Error("Katalogda yinelenen kayıt kimliği var: " + id);
+    ids.add(id);
+    for (const field of ["image", "backdrop", "trailerUrl", "watchUrl"]) {
+      if (!item[field]) continue;
+      const value = String(item[field]).trim();
+      if (field === "trailerUrl" && /^[A-Za-z0-9_-]{11}$/.test(value)) continue;
+      try {
+        const parsed = new URL(value);
+        if (parsed.protocol !== "https:" && parsed.protocol !== "http:") throw new Error("invalid protocol");
+      } catch {
+        throw new Error("Geçersiz görsel veya fragman adresi: " + field);
+      }
+    }
+  }
+  if (data.collections !== undefined) {
+    if (!Array.isArray(data.collections) || data.collections.length > 500) throw new Error("Koleksiyon listesi geçersiz.");
+    const collectionIds = new Set();
+    for (const collection of data.collections) {
+      if (!collection || typeof collection !== "object" || Array.isArray(collection)) throw new Error("Koleksiyonda geçersiz kayıt bulundu.");
+      const id = String(collection.id ?? "").trim();
+      if (!id || collectionIds.has(id)) throw new Error("Koleksiyon kimliği boş veya yinelenmiş.");
+      collectionIds.add(id);
+      if (typeof collection.title !== "string" || !collection.title.trim() || collection.title.length > 180) throw new Error("Koleksiyon adı geçersiz.");
+      if (collection.description !== undefined && (typeof collection.description !== "string" || collection.description.length > 5000)) throw new Error("Koleksiyon açıklaması geçersiz.");
+      if (collection.active !== undefined && typeof collection.active !== "boolean") throw new Error("Koleksiyon yayın durumu geçersiz.");
+      if (collection.items !== undefined && (!Array.isArray(collection.items) || collection.items.length > data.catalog.length)) throw new Error("Koleksiyon içerik listesi geçersiz.");
+      const itemIds = new Set();
+      for (const itemId of collection.items || []) {
+        const key = String(itemId);
+        if (!ids.has(key)) throw new Error("Koleksiyonda katalogda bulunmayan bir yapım seçilmiş.");
+        if (itemIds.has(key)) throw new Error("Koleksiyonda aynı yapım birden fazla kez seçilmiş.");
+        itemIds.add(key);
+      }
+    }
+  }
+  if (data.homepageConfig !== undefined) {
+    const config = data.homepageConfig;
+    if (!config || typeof config !== "object" || Array.isArray(config)) throw new Error("Ana sayfa vitrin ayarları geçersiz.");
+    const settings = config.settings || {};
+    if (!settings || typeof settings !== "object" || Array.isArray(settings)) throw new Error("Vitrin görüntü ayarları geçersiz.");
+    for (const [field,min,max] of [["desktopCount",1,20],["mobileCount",1,12],["interval",2,60]]) {
+      if (settings[field] !== undefined && (!Number.isInteger(Number(settings[field])) || Number(settings[field]) < min || Number(settings[field]) > max)) throw new Error("Vitrin ayarı sınır dışında: " + field);
+    }
+    for (const field of ["autoplay","pauseOnHover"]) {
+      if (settings[field] !== undefined && typeof settings[field] !== "boolean") throw new Error("Vitrin ayarı geçersiz: " + field);
+    }
+    if (config.heroSlides !== undefined && (!Array.isArray(config.heroSlides) || config.heroSlides.length > data.catalog.length)) throw new Error("Vitrin yapım listesi geçersiz.");
+    const slideIds = new Set();
+    for (const slide of config.heroSlides || []) {
+      if (!slide || typeof slide !== "object" || Array.isArray(slide)) throw new Error("Vitrinde geçersiz yapım kaydı bulundu.");
+      const id = String(slide.id ?? "");
+      if (!ids.has(id)) throw new Error("Vitrinde katalogda bulunmayan bir yapım seçilmiş.");
+      if (slideIds.has(id)) throw new Error("Vitrinde aynı yapım birden fazla kez seçilmiş.");
+      slideIds.add(id);
+    }
+  }
+  return true;
+}
+
 async function writeCatalog(env, data, expectedSha) {
   if (!env.GITHUB_TOKEN) throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
   validateCatalogData(data);
