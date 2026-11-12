@@ -489,3 +489,32 @@ button,input,select,textarea{font-size:inherit}
  .watch-order-copy b{font-size:11px}
  .watch-order-copy small{font-size:9px}
 }
+
+
+/* Readability and fixed admin navigation refinements */
+#sidebar .nav-link{font-size:14px;padding:13px 14px;line-height:1.35}
+#sidebar .nav-link span{font-size:17px}
+#sidebar .nav-link em{font-size:11px}
+.studio-header{position:sticky;top:0;align-self:start;z-index:40}
+@media(min-width:761px){
+ .app-shell{height:100vh;min-height:100vh;overflow:hidden}
+ .studio-header{height:100vh;position:sticky;top:0;overflow-y:auto;overscroll-behavior:contain}
+ .main-area{height:100vh;min-height:0;overflow-y:auto}
+}
+#view-overview p,#view-catalog p,#view-collections p,#view-homepage p,#view-analytics p,#view-users p,#view-watch-layout p,#view-system p,
+#view-overview small,#view-catalog small,#view-collections small,#view-homepage small,#view-analytics small,#view-users small,#view-watch-layout small,#view-system small,
+#view-overview label,#view-catalog label,#view-collections label,#view-homepage label,#view-analytics label,#view-users label,#view-watch-layout label,#view-system label{font-size:14px}
+#view-overview .section-index,#view-catalog .section-index,#view-collections .section-index,#view-homepage .section-index,#view-analytics .section-index,#view-users .section-index,#view-watch-layout .section-index,#view-system .section-index,
+#view-overview .eyebrow,#view-catalog .eyebrow,#view-collections .eyebrow,#view-homepage .eyebrow,#view-analytics .eyebrow,#view-users .eyebrow,#view-watch-layout .eyebrow,#view-system .eyebrow{font-size:10px}
+#view-overview .panel-heading p,#view-catalog .panel-heading p,#view-collections .panel-heading p,#view-homepage .panel-heading p,#view-analytics .panel-heading p,#view-users .panel-heading p,#view-watch-layout .panel-heading p,#view-system .panel-heading p{font-size:13px}
+#view-catalog .catalog-table td,#view-catalog .catalog-title small,#view-overview .recent-meta small{font-size:13px}
+#view-catalog .catalog-table th{font-size:11px}
+#view-watch-layout .watch-order-item{cursor:grab}
+#view-watch-layout .watch-order-item.is-dragging{opacity:.42}
+#view-watch-layout .watch-order-item.drop-target{border-color:#9385bb;background:#f3f0fa;box-shadow:0 0 0 2px #9385bb22}
+#view-watch-layout .watch-order-item[draggable=true]:active{cursor:grabbing}
+@media(max-width:760px){
+ .studio-header{position:sticky;top:0;z-index:50}
+ #sidebar .nav-link{font-size:14px}
+ #view-overview p,#view-catalog p,#view-collections p,#view-homepage p,#view-analytics p,#view-users p,#view-watch-layout p,#view-system p{font-size:13px}
+}
