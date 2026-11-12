@@ -291,6 +291,16 @@ try {
     assert.ok(result.profileTwoReasons.every(reason => reason === 'Arşivden yüksek puanlı'), 'İlk profilin izleme geçmişi ikinci profilin önerilerini etkilememeli');
   });
 
+  await check('Dizi önerileri doğru etiketleniyor ve dar ekran kart ölçüsü uygulanıyor', async () => {
+    const tvCard = page.locator('#home-personalized-rail [data-recommendation-type="tv"]').first();
+    await tvCard.waitFor({ state: 'attached', timeout: 10000 });
+    assert.equal((await tvCard.locator('.relative > span').first().innerText()).trim(), 'Dizi', 'Dizi önerisi Film olarak etiketlenmiş');
+    await page.setViewportSize({ width: 360, height: 800 });
+    const railCardBasis = await page.locator('#home-personalized-rail .home-rail-card').first().evaluate(card => getComputedStyle(card).flexBasis);
+    assert.equal(railCardBasis, '48%', '380px altındaki ekranda kart genişliği %48 olmalı');
+    await page.setViewportSize({ width: 1440, height: 1000 });
+  });
+
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole('button', { name: 'Menüyü aç veya kapat' }).click();
