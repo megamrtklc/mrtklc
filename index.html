@@ -42,8 +42,8 @@
     <script defer src="./app.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        @keyframes heroSlideNext{0%{opacity:.35;transform:translateX(3.5%) scale(1.045);filter:blur(5px)}100%{opacity:1;transform:translateX(0) scale(1);filter:blur(0)}}
-        @keyframes heroSlidePrev{0%{opacity:.35;transform:translateX(-3.5%) scale(1.045);filter:blur(5px)}100%{opacity:1;transform:translateX(0) scale(1);filter:blur(0)}}
+        @keyframes heroSlideNext{0%{opacity:.35;clip-path:inset(0 0 0 12%);filter:blur(5px)}100%{opacity:1;clip-path:inset(0);filter:blur(0)}}
+        @keyframes heroSlidePrev{0%{opacity:.35;clip-path:inset(0 12% 0 0);filter:blur(5px)}100%{opacity:1;clip-path:inset(0);filter:blur(0)}}
         .hero-slide-next{animation:heroSlideNext .52s cubic-bezier(.22,.75,.25,1) both}
         .hero-slide-prev{animation:heroSlidePrev .52s cubic-bezier(.22,.75,.25,1) both}
         @media(prefers-reduced-motion:reduce){.hero-slide-next,.hero-slide-prev{animation-duration:.01ms}}
