@@ -516,7 +516,7 @@
                                 </div>
                             </div>
                             <div x-show="!isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-0 overflow-hidden bg-gray-950 text-white">
-                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="absolute inset-0 h-full w-full object-contain opacity-35 blur-[2px]]">
+                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="absolute inset-0 h-full w-full object-contain opacity-35 blur-[2px]">
                                 <button x-show="!selectedItem.watchUrl" type="button" @click="trailerOpen = true" class="absolute left-3 top-3 sm:left-5 sm:top-5 z-30 inline-flex min-h-11 items-center gap-2.5 rounded-xl border border-amber-300/70 bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200 px-4 sm:px-5 text-xs sm:text-sm font-black tracking-wide text-gray-950 shadow-[0_8px_30px_rgba(251,191,36,0.35)] ring-1 ring-black/20 transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-[0_12px_36px_rgba(251,191,36,0.5)] focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
                                     <i class="fa-solid fa-film text-sm sm:text-base"></i>
                                     <span>FRAGMANI İZLE</span>
