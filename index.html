@@ -62,7 +62,8 @@
         .home-rail-card{flex:0 0 42%;width:42%;scroll-snap-align:start}
         .home-rail-arrow{width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(148,163,184,.35);border-radius:50%;background:rgba(127,127,127,.08);color:inherit;transition:all .2s}
         .home-rail-arrow:hover{background:#e11d48;border-color:#e11d48;color:#fff;transform:translateY(-1px)}
-        @media(max-width:380px){.home-rail-card{flex-basis:48%;width:48%}}\n        @media(min-width:640px){.home-rail-card{flex-basis:30%;width:30%}}
+        @media(max-width:380px){.home-rail-card{flex-basis:48%;width:48%}}
+        @media(min-width:640px){.home-rail-card{flex-basis:30%;width:30%}}
         @media(min-width:768px){.home-rail-card{flex-basis:22%;width:22%}}
         @media(min-width:1024px){.home-rail-card{flex-basis:18%;width:18%}}
         @media(min-width:1280px){.home-rail-card{flex-basis:15.5%;width:15.5%}}
@@ -423,7 +424,7 @@
                             <button @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image)" sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, (max-width: 1024px) 18vw, 14vw" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                    <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'series' ? 'Dizi' : 'Film'"></span>
+                                    <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                     <span class="absolute bottom-2 right-2 rounded bg-black/75 text-amber-400 text-[9px] font-black px-1.5 py-1"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || '—'"></span></span>
                                 </div>
                                 <div class="p-2.5 space-y-1">
