@@ -857,7 +857,7 @@
 
                             <div id="castContainer" class="flex items-center space-x-3 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
                                 <template x-for="actor in selectedItem.tmdbCast" :key="actor.name">
-                                    <div :class="getCardClass()" class="w-24 flex-shrink-0 p-2.5 rounded-xl border flex flex-col items-center text-center space-y-2 transition-transform duration-300 hover:scale-110 cursor-pointer group">
+                                    <div @click="actor.id && openActorProfile(actor)" @keydown.enter.prevent="actor.id && openActorProfile(actor)" tabindex="0" role="button" :aria-label="actor.name + ' oyuncu profilini aç'" :class="getCardClass()" class="w-24 flex-shrink-0 p-2.5 rounded-xl border flex flex-col items-center text-center space-y-2 transition-all duration-300 hover:scale-110 hover:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer group">
                                         <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-md ring-2 ring-gray-300 dark:ring-gray-700 group-hover:ring-rose-500 transition-all">
                                             <img :alt="'Oyuncu fotoğrafı'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="actor.profile || 'https://placehold.co/150x150/161922/ffffff?text=Photo'" class="w-full h-full object-cover">
                                         </div>
@@ -905,6 +905,65 @@
         </template>
 
         <!-- ==================== EXPLORE PAGE ==================== -->
+        <template x-if="currentPage === 'actor'">
+            <div class="w-full px-4 sm:px-8 lg:px-12 pt-5 sm:pt-8 pb-16 space-y-7">
+                <button @click="navigateTo('home')" class="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-rose-500 transition-colors">
+                    <i class="fa-solid fa-arrow-left"></i><span>Ana sayfaya dön</span>
+                </button>
+                <template x-if="selectedActor">
+                    <section class="relative overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#151922] shadow-xl">
+                        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background:radial-gradient(ellipse at 20% 15%,rgba(225,29,72,.55),transparent 48%),linear-gradient(120deg,transparent,rgba(148,163,184,.12))"></div>
+                        <div class="relative grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6 md:gap-9 p-5 sm:p-8 lg:p-10">
+                            <div class="mx-auto md:mx-0 w-44 sm:w-52 md:w-full max-w-[240px]">
+                                <div class="aspect-[3/4] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800 ring-1 ring-black/5 dark:ring-white/10 shadow-2xl">
+                                    <img :src="selectedActor.profile || 'https://placehold.co/500x700/161922/ffffff?text=Profile'" :alt="selectedActor.name" @error="handleImageError($event)" class="w-full h-full object-cover" decoding="async">
+                                </div>
+                            </div>
+                            <div class="min-w-0 flex flex-col justify-center text-center md:text-left">
+                                <span class="text-[10px] sm:text-xs font-black uppercase tracking-[.25em] text-rose-600 dark:text-rose-400">CineVerse · Oyuncu Profili</span>
+                                <h1 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-gray-900 dark:text-white" x-text="selectedActor.name"></h1>
+                                <p class="mt-2 text-sm font-semibold text-gray-500 dark:text-gray-400" x-text="selectedActor.knownFor || 'Oyuncu'"></p>
+                                <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-2" x-show="selectedActor.birthday || selectedActor.placeOfBirth">
+                                    <span x-show="selectedActor.birthday" class="px-3 py-2 rounded-xl bg-gray-100 dark:bg-white/5 text-xs font-semibold text-gray-700 dark:text-gray-200"><i class="fa-regular fa-calendar mr-2 text-rose-500"></i><span x-text="formatActorDate(selectedActor.birthday)"></span></span>
+                                    <span x-show="selectedActor.placeOfBirth" class="px-3 py-2 rounded-xl bg-gray-100 dark:bg-white/5 text-xs font-semibold text-gray-700 dark:text-gray-200"><i class="fa-solid fa-location-dot mr-2 text-rose-500"></i><span x-text="selectedActor.placeOfBirth"></span></span>
+                                </div>
+                                <div class="mt-6 max-w-4xl" x-show="selectedActor.biography">
+                                    <h2 class="text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white mb-2">Biyografi</h2>
+                                    <p class="text-sm sm:text-[15px] leading-7 text-gray-600 dark:text-gray-300 whitespace-pre-line" x-text="selectedActor.biography"></p>
+                                </div>
+                                <p x-show="!actorProfileLoading && !selectedActor.biography" class="mt-5 text-sm text-gray-500 dark:text-gray-400">Bu oyuncu için biyografi bilgisi bulunmuyor.</p>
+                            </div>
+                        </div>
+                    </section>
+                </template>
+                <div x-show="actorProfileLoading" class="py-16 text-center">
+                    <i class="fa-solid fa-circle-notch fa-spin text-3xl text-rose-500"></i>
+                    <p class="mt-3 text-sm font-semibold text-gray-500 dark:text-gray-400">Oyuncu profili yükleniyor…</p>
+                </div>
+                <div x-show="actorProfileError" class="rounded-2xl border border-rose-500/30 bg-rose-500/5 p-5 text-sm text-rose-600 dark:text-rose-300" x-text="actorProfileError"></div>
+                <section x-show="!actorProfileLoading && selectedActor && selectedActor.filmography && selectedActor.filmography.length" class="space-y-4">
+                    <div class="flex items-end justify-between gap-3">
+                        <div><span class="text-[10px] font-black uppercase tracking-[.2em] text-rose-600 dark:text-rose-400">Kariyer yolculuğu</span><h2 class="mt-1 text-xl sm:text-2xl font-black text-gray-900 dark:text-white">Filmografi</h2></div>
+                        <span class="text-xs font-bold text-gray-500 dark:text-gray-400" x-text="selectedActor.filmography.length + ' yapım'"></span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-5">
+                        <template x-for="work in (selectedActor.filmography || [])" :key="work.type + '-' + work.id">
+                            <button type="button" @click="openActorCredit(work)" :disabled="!catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type)" class="group min-w-0 text-left disabled:cursor-default">
+                                <div class="relative aspect-[2/3] overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-800 shadow-md ring-1 ring-black/5 dark:ring-white/10">
+                                    <img :src="work.poster || 'https://placehold.co/342x513/161922/ffffff?text=No+Poster'" :alt="work.title" @error="handleImageError($event)" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                    <span class="absolute top-2 left-2 rounded-md bg-black/75 px-2 py-1 text-[9px] font-black uppercase text-white" x-text="work.type === 'tv' ? 'Dizi' : 'Film'"></span>
+                                    <span x-show="work.rating > 0" class="absolute bottom-2 right-2 rounded-md bg-black/80 px-2 py-1 text-[10px] font-black text-amber-300" x-text="'★ ' + work.rating.toFixed(1)"></span>
+                                </div>
+                                <h3 class="mt-2 text-xs sm:text-sm font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="work.title"></h3>
+                                <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400 truncate"><span x-text="work.year || '—'"></span><span x-show="work.character"> · <span x-text="work.character"></span></span></p>
+                            </button>
+                        </template>
+                    </div>
+                </section>
+                <div x-show="!actorProfileLoading && selectedActor && selectedActor.filmography && !selectedActor.filmography.length" class="rounded-2xl border border-gray-200 dark:border-gray-800 p-8 text-center text-sm text-gray-500 dark:text-gray-400">Filmografi bilgisi bulunamadı.</div>
+            </div>
+        </template>
+
         <template x-if="currentPage === 'explore'">
             <div class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
