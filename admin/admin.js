@@ -293,24 +293,19 @@
   function watchLayoutConfig(){
     const saved=state.data?.watchPageConfig||{};
     const left=[],right=[],used=new Set();
+    const removed=Array.isArray(saved.removed)?saved.removed.filter(id=>watchCardIds.includes(id)):[];
+    const hidden=Array.isArray(saved.hidden)?saved.hidden.filter(id=>watchCardIds.includes(id)):[];
     const append=(source,target)=>{
       if(!Array.isArray(source))return;
       source.forEach(id=>{
-        if(watchCardIds.includes(id)&&!used.has(id)){
-          target.push(id);
-          used.add(id);
-        }
+        if(watchCardIds.includes(id)&&!removed.includes(id)&&!used.has(id)){target.push(id);used.add(id);}
       });
     };
-    append(saved.left,left);
-    append(saved.right,right);
+    append(saved.left,left);append(saved.right,right);
     watchCardIds.forEach(id=>{
-      if(!used.has(id)){
-        (watchCardDefinitions[id].defaultSide==='left'?left:right).push(id);
-        used.add(id);
-      }
+      if(!used.has(id)&&!removed.includes(id)){(watchCardDefinitions[id].defaultSide==='left'?left:right).push(id);used.add(id);}
     });
-    return {left,right};
+    return {left,right,hidden:hidden.filter(id=>used.has(id)),removed:[...new Set(removed)]};
   }
   function watchDemoSample(){
     return state.catalog.find(item=>isSeries(item)===(watchDemoType==='tv'))||state.catalog[0]||null;
@@ -332,7 +327,7 @@
       cast:'<div class="demo-card-head">OYUNCU KADROSU</div><div class="demo-cast-row"><i>AK</i><span><b>Oyuncu adı</b><small>Karakter adı</small></span><i>MY</i><span><b>Oyuncu adı</b><small>Karakter adı</small></span></div>',
       similar:'<div class="demo-card-head">BENZER YAPIMLAR</div><div class="demo-similar-row"><span>▣</span><span>Önerilen yapımlar　 ·　 Keşfet</span></div>'
     };
-    const renderColumn=(side)=>config[side].filter(id=>watchDemoType==='tv'||(id!=='season'&&id!=='episodes')).map(id=>'<div class="watch-demo-card demo-'+id+'" data-demo-card="'+id+'"><div class="demo-card-label">'+escapeHtml(watchCardDefinitions[id].label)+'</div>'+labels[id]+'</div>').join('');
+    const renderColumn=(side)=>config[side].filter(id=>!config.hidden.includes(id)&&(watchDemoType==='tv'||(id!=='season'&&id!=='episodes'))).map(id=>'<div class="watch-demo-card demo-'+id+'" data-demo-card="'+id+'"><div class="demo-card-label">'+escapeHtml(watchCardDefinitions[id].label)+'</div>'+labels[id]+'</div>').join('');
     $('#watch-demo-left').innerHTML=renderColumn('left')||'<div class="watch-demo-empty">Bu sütunda kart yok. Soldaki listeden kart taşı.</div>';
     $('#watch-demo-right').innerHTML=renderColumn('right')||'<div class="watch-demo-empty">Bu sütunda kart yok. Soldaki listeden kart taşı.</div>';
     $('#watch-demo-left').classList.toggle('is-empty',!config.left.length);
@@ -344,22 +339,45 @@
     for(const side of ['left','right']){
       const root=$('#watch-'+side+'-list');
       root.innerHTML=config[side].map((id,index)=>{
-        const item=watchCardDefinitions[id],target=side==='left'?'right':'left';
+        const item=watchCardDefinitions[id],target=side==='left'?'right':'left',isHidden=config.hidden.includes(id);
         const action=side==='left'?'Sağ alana taşı':'Sol alana taşı';
-        return '<div class="watch-order-item" data-card="'+id+'" draggable="true" title="Sürükleyerek sıralayabilir veya diğer sütuna taşıyabilirsin">'+
+        return '<div class="watch-order-item '+(isHidden?'is-hidden':'')+'" data-card="'+id+'" draggable="true" title="Sürükleyerek sıralayabilir veya diğer sütuna taşıyabilirsin">'+
           '<span class="watch-order-number">'+(index+1)+'</span>'+
-          '<div class="watch-order-copy"><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+'</small></div>'+
+          '<div class="watch-order-copy"><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+(isHidden?' · Gizli':'')+'</small></div>'+
           '<div class="watch-order-actions">'+
+          '<button type="button" class="watch-order-visibility" data-watch-toggle aria-label="'+(isHidden?'Kartı göster':'Kartı gizle')+'" title="'+(isHidden?'Kartı göster':'Kartı gizle')+'">'+(isHidden?'◉':'◌')+'</button>'+
           '<button type="button" class="watch-order-move" data-move-direction="-1" '+(index===0?'disabled':'')+' aria-label="Yukarı taşı" title="Yukarı taşı">↑</button>'+
           '<button type="button" class="watch-order-move" data-move-direction="1" '+(index===config[side].length-1?'disabled':'')+' aria-label="Aşağı taşı" title="Aşağı taşı">↓</button>'+
           '<button type="button" class="watch-order-transfer" data-target-side="'+target+'" aria-label="'+action+'" title="'+action+'">'+(side==='left'?'→':'←')+' <span>'+action+'</span></button>'+
+          '<button type="button" class="watch-order-remove" data-watch-remove aria-label="Düzeninden kaldır" title="Düzeninden kaldır">×</button>'+
           '</div></div>';
       }).join('')||'<div class="watch-demo-empty">Bu sütunda kart bulunmuyor.</div>';
       root.classList.remove('is-drop-target');
     }
+    $('#watch-available-list').innerHTML=config.removed.map(id=>{
+      const item=watchCardDefinitions[id];
+      return '<div class="watch-available-item"><div><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+'</small></div><div class="watch-available-actions"><button type="button" data-add-side="left" data-add-card="'+id+'">+ Sol</button><button type="button" data-add-side="right" data-add-card="'+id+'">+ Sağ</button></div></div>';
+    }).join('')||'<div class="watch-demo-empty">Tüm kartlar şu anda düzende. İstersen kartları buraya kaldırabilirsin.</div>';
     renderWatchDemo(config);
     $('#watch-demo-left').setAttribute('aria-live','polite');
     $('#watch-demo-right').setAttribute('aria-live','polite');
+  }
+  function toggleWatchCard(id){
+    const config=watchLayoutConfig();
+    config.hidden=config.hidden.includes(id)?config.hidden.filter(x=>x!==id):[...config.hidden,id];
+    state.data.watchPageConfig=config;renderWatchLayout();
+  }
+  function removeWatchCard(side,id){
+    const config=watchLayoutConfig();
+    config[side]=config[side].filter(x=>x!==id);config.hidden=config.hidden.filter(x=>x!==id);
+    config.removed=[...new Set([...config.removed,id])];
+    state.data.watchPageConfig=config;renderWatchLayout();
+  }
+  function addWatchCard(side,id){
+    if(!['left','right'].includes(side)||!watchCardIds.includes(id))return;
+    const config=watchLayoutConfig();if(!config.removed.includes(id))return;
+    config.removed=config.removed.filter(x=>x!==id);config[side].push(id);
+    state.data.watchPageConfig=config;renderWatchLayout();
   }
   function moveWatchCard(side,id,targetSide,index){
     if(!['left','right'].includes(side)||!['left','right'].includes(targetSide))return;
@@ -495,6 +513,10 @@
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#watch-layout-save').addEventListener('click',saveWatchLayout);
+  $('#watch-available-list').addEventListener('click',event=>{
+    const button=event.target.closest('[data-add-card]');
+    if(button)addWatchCard(button.dataset.addSide,button.dataset.addCard);
+  });
   let draggedWatchCard=null;
   ['left','right'].forEach(side=>{
     const list=$('#watch-'+side+'-list');
@@ -504,6 +526,8 @@
       const id=item.dataset.card;
       const transfer=event.target.closest('[data-target-side]');
       if(transfer){moveWatchCard(side,id,transfer.dataset.targetSide);return;}
+      if(event.target.closest('[data-watch-toggle]')){toggleWatchCard(id);return;}
+      if(event.target.closest('[data-watch-remove]')){removeWatchCard(side,id);return;}
       const move=event.target.closest('[data-move-direction]');
       if(move&&!move.disabled){
         const config=watchLayoutConfig(),index=config[side].indexOf(id);
