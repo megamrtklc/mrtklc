@@ -222,7 +222,7 @@
             <div class="w-full space-y-10 pb-16">
                 
                 <!-- DESKTOP EDITORIAL HERO: mobil manşetten bağımsız yeni masaüstü kompozisyonu -->
-                <section id="desktopEditorialHero" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
+                <section id="desktopEditorialHero" x-data="{ trailerOpen: false }" @keydown.escape.window="trailerOpen = false" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0">
                         <img :src="currentHero.backdrop || currentHero.poster" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-cover object-center transition-transform duration-[1200ms] ease-out scale-[1.025]">
                         <div class="absolute inset-0 bg-gradient-to-r from-[#090a0d] via-[#090a0d]/95 via-[34%] to-[#090a0d]/5"></div>
@@ -236,7 +236,7 @@
                                     <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span> Öne Çıkan Yapım
                                 </span>
                                 <div class="space-y-2">
-                                    <h1 class="max-w-full text-5xl font-black leading-[.98] tracking-[-0.045em] text-white drop-shadow-2xl lg:text-6xl xl:text-7xl" x-text="currentHero.title"></h1>
+                                    <h1 class="block w-full max-w-[520px] overflow-hidden text-ellipsis whitespace-nowrap text-5xl font-black leading-[1.05] tracking-[-0.045em] text-white drop-shadow-2xl lg:max-w-[570px] lg:text-6xl xl:text-7xl" x-text="currentHero.title" :title="currentHero.title"></h1>
                                     <p class="pl-1 text-sm font-black uppercase tracking-[0.62em] text-amber-400" x-text="currentHero.type === 'tv' ? 'DİZİ' : 'SİNEMA'"></p>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-200">
@@ -248,6 +248,7 @@
                                 <div class="flex flex-wrap items-center gap-3 pt-1">
                                     <button type="button" @click="openWatchPage(currentHero)" class="inline-flex min-h-12 items-center gap-3 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 px-8 text-sm font-black uppercase tracking-wide text-[#17120a] shadow-lg shadow-amber-950/30 transition hover:-translate-y-0.5 hover:brightness-110"><i class="fa-solid fa-play"></i> Şimdi İzle</button>
                                     <button type="button" @click="toggleWatchlist(currentHero)" class="inline-flex min-h-12 items-center gap-3 rounded-full border border-white/35 bg-black/25 px-7 text-sm font-bold text-white backdrop-blur-sm transition hover:border-amber-300 hover:bg-white/10"><i :class="isInWatchlist(currentHero) ? 'fa-solid fa-bookmark text-amber-300' : 'fa-regular fa-bookmark'"></i><span x-text="isInWatchlist(currentHero) ? 'Listemde' : 'Listeme Ekle'"></span></button>
+                                    <button type="button" x-show="currentHero.trailerUrl" @click="trailerOpen = true" class="inline-flex min-h-12 items-center gap-2 rounded-full border border-amber-300/55 bg-black/25 px-6 text-sm font-bold text-amber-100 backdrop-blur-sm transition hover:border-amber-300 hover:bg-amber-300/10"><i class="fa-solid fa-circle-play text-amber-300"></i><span>Fragman</span></button>
                                 </div>
                             </div>
                         </div>
@@ -269,6 +270,17 @@
                     </div>
                 </section>
 
+                    <div x-cloak x-show="trailerOpen" x-transition.opacity @click.self="trailerOpen = false" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Fragman oynatıcı">
+                        <div x-show="trailerOpen" x-transition.scale class="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
+                            <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
+                                <div class="min-w-0 pr-4"><p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">RESMİ FRAGMAN</p><p class="truncate text-sm font-bold text-white" x-text="currentHero.title"></p></div>
+                                <button type="button" @click="trailerOpen = false" aria-label="Fragmanı kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <div class="aspect-video w-full bg-black">
+                                <iframe x-show="trailerOpen" :src="trailerOpen && currentHero.trailerUrl ? 'https://www.youtube-nocookie.com/embed/' + (currentHero.trailerUrl.includes('youtu.be/') ? currentHero.trailerUrl.split('youtu.be/')[1].split(/[?&]/)[0] : currentHero.trailerUrl.split('v=')[1].split('&')[0]) + '?autoplay=1&rel=0' : ''" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
                 <!-- MOBILE HERO: görsel üstte, içerik altta; masaüstü kompozisyonunun doğal mobil uyarlaması -->
                 <section id="mobileHeroBanner" @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" @touchstart.passive="startHeroTouch($event)" @touchend.passive="endHeroTouch($event)" class="relative isolate md:hidden w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" :src="currentHero.poster || currentHero.backdrop" loading="eager" decoding="async" class="pointer-events-none absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-3xl"><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-gray-950/65 via-gray-950/75 to-gray-950"></div>
                     <div class="relative aspect-[16/9] w-full overflow-hidden bg-gray-900" style="touch-action: pan-y;">
