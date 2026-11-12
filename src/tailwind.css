@@ -1,4 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-\n\n/* Hareket hassasiyeti olan kullanıcılar için animasyonları azalt. */\n@media (prefers-reduced-motion: reduce) {\n  html:focus-within { scroll-behavior: auto !important; }\n  *, *::before, *::after {\n    animation-duration: 0.01ms !important;\n    animation-iteration-count: 1 !important;\n    transition-duration: 0.01ms !important;\n    scroll-behavior: auto !important;\n  }\n}\n
+
+/* Hareket hassasiyeti olan kullanıcılar için animasyonları azalt. */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
