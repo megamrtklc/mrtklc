@@ -823,7 +823,7 @@
                                 </div>
                                 <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
                                     <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Yönetmen</span>
-                                    <span class="font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[160px]" x-text="selectedItem.director"></span>
+                                    <button type="button" @click="selectedItem.directorPersonId && openDirectorProfile({ id: selectedItem.directorPersonId, name: selectedItem.director })" :disabled="!selectedItem.directorPersonId" class="font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[160px] hover:text-rose-500 disabled:cursor-default transition-colors text-right" :class="selectedItem.directorPersonId ? 'underline decoration-dotted underline-offset-4 decoration-rose-500/50 cursor-pointer' : ''" x-text="selectedItem.director"></button>
                                 </div>
                                 <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
                                     <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Kategori</span>
@@ -907,7 +907,7 @@
         </template>
 
         <!-- ==================== EXPLORE PAGE ==================== -->
-        <template x-if="currentPage === 'actor'">
+        <template x-if="currentPage === 'actor' || currentPage === 'director'">
             <div class="w-full px-4 sm:px-8 lg:px-12 pt-5 sm:pt-8 pb-16 space-y-7">
                 <button @click="navigateTo('home')" class="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-rose-500 transition-colors">
                     <i class="fa-solid fa-arrow-left"></i><span>Ana sayfaya dön</span>
@@ -922,7 +922,7 @@
                                 </div>
                             </div>
                             <div class="relative min-w-0 flex flex-col justify-start text-center md:text-left" x-data="{ biographyOpen: false, awardsOpen: false }">
-                                <span class="text-[10px] sm:text-xs font-black uppercase tracking-[.25em] text-rose-600 dark:text-rose-400">CineVerse · Oyuncu Profili</span>
+                                <span class="text-[10px] sm:text-xs font-black uppercase tracking-[.25em] text-rose-600 dark:text-rose-400" x-text="currentPage === 'director' ? 'CineVerse · Yönetmen Profili' : 'CineVerse · Oyuncu Profili'"></span>
                                 <h1 class="mt-3 lg:max-w-[calc(100%-284px)] text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-gray-900 dark:text-white" x-text="selectedActor.name"></h1>
                                 <p class="mt-2 lg:max-w-[calc(100%-284px)] text-sm font-semibold text-gray-500 dark:text-gray-400" x-text="selectedActor.knownFor || 'Oyuncu'"></p>
                                 <aside x-show="selectedActor.awards && selectedActor.awards.length" class="min-w-0 w-full lg:absolute lg:top-0 lg:right-0 lg:w-[260px] lg:z-10 rounded-xl border border-[#d8c7a0]/55 bg-[#fbf8f1]/80 dark:border-amber-200/10 dark:bg-white/[.025] px-4 py-4 shadow-[0_5px_20px_rgba(30,25,15,.035)]">
@@ -945,8 +945,14 @@
                                     <span x-show="selectedActor.placeOfBirth" class="px-3 py-2 rounded-xl bg-gray-100 dark:bg-white/5 text-xs font-semibold text-gray-700 dark:text-gray-200"><i class="fa-solid fa-location-dot mr-2 text-rose-500"></i><span x-text="selectedActor.placeOfBirth"></span></span>
                                 </div>
                                 <div class="mt-6 grid grid-cols-1 gap-5 items-start text-left">
-                                    <div class="min-w-0" x-show="selectedActor.biography" :class="selectedActor.awards && selectedActor.awards.length ? 'lg:max-w-[calc(100%-320px)]' : ''">
-                                        <h2 class="text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white mb-2">Biyografi</h2>
+                                    <div class="relative min-w-0 overflow-hidden rounded-2xl" x-show="selectedActor.biography" :class="[(selectedActor.awards && selectedActor.awards.length ? 'lg:max-w-[calc(100%-320px)]' : ''), currentPage === 'director' ? 'border border-amber-500/20 bg-gradient-to-br from-[#211a16] via-[#17191f] to-[#11151c] px-4 py-4 sm:px-5 sm:py-5 shadow-[0_12px_35px_rgba(0,0,0,.16)]' : '']">
+                                        <div x-show="currentPage === 'director'" class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+                                            <div class="absolute inset-0 bg-gradient-to-r from-black/5 via-black/20 to-black/55"></div>
+                                            <i class="fa-solid fa-chair absolute -right-2 -bottom-5 text-[150px] sm:text-[190px] text-amber-100/[.10] rotate-[-8deg]"></i>
+                                            <span class="absolute right-5 top-4 text-[9px] font-black tracking-[.3em] text-amber-100/25 uppercase">DIRECTOR CUT</span>
+                                        </div>
+                                        <div class="relative z-10">
+                                        <h2 class="text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white mb-2" x-text="currentPage === 'director' ? 'YÖNETMENİN HİKÂYESİ' : 'Biyografi'"></h2>
                                         <p class="text-sm sm:text-[15px] leading-7 text-gray-600 dark:text-gray-300 whitespace-pre-line line-clamp-4" x-text="selectedActor.biography"></p>
                                         <button x-show="selectedActor.biography && selectedActor.biography.length > 220" type="button" @click="biographyOpen = true" class="mt-2 inline-flex items-center gap-2 text-xs font-black text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors">Tamamını oku <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></button>
                                         <div x-show="biographyOpen" x-cloak @keydown.escape.window="biographyOpen = false" @click.self="biographyOpen = false" class="fixed inset-0 z-[120] flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 sm:p-6" x-transition.opacity>
@@ -954,6 +960,7 @@
                                                 <div class="flex items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 px-5 sm:px-7 py-4"><div><span class="text-[9px] font-black uppercase tracking-[.2em] text-rose-600 dark:text-rose-400">CineVerse · Oyuncu profili</span><h3 class="mt-1 text-lg sm:text-xl font-black text-gray-900 dark:text-white">Biyografi</h3></div><button type="button" @click="biographyOpen = false" aria-label="Biyografiyi kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-200 hover:bg-rose-500 hover:text-white transition-colors"><i class="fa-solid fa-xmark"></i></button></div>
                                                 <div class="overflow-y-auto max-h-[calc(85vh-76px)] px-5 sm:px-7 py-5 sm:py-6"><p class="text-sm sm:text-[15px] leading-7 text-gray-700 dark:text-gray-300 whitespace-pre-line" x-text="selectedActor.biography"></p></div>
                                             </div>
+                                        </div>
                                         </div>
                                     </div>
                                     
