@@ -372,12 +372,25 @@ try {
 
   await check('Mobil, tablet ve masaüstünde yatay taşma kontrolü', async () => {
     for (const viewport of [
-      { width: 320, height: 800 },
+      { width: 320, height: 800 },   // küçük telefon
+      { width: 360, height: 800 },
       { width: 390, height: 844 },
-      { width: 768, height: 1024 },
+      { width: 412, height: 823 },
+      { width: 430, height: 932 },
+      { width: 480, height: 900 },   // büyük telefon / dar tablet
+      { width: 540, height: 960 },
+      { width: 600, height: 960 },
+      { width: 768, height: 1024 },  // tablet dikey
+      { width: 820, height: 1180 },
+      { width: 900, height: 1100 },
+      { width: 1024, height: 768 },  // tablet yatay
       { width: 1024, height: 900 },
+      { width: 1180, height: 820 },
       { width: 1280, height: 900 },
-      { width: 1440, height: 1000 }
+      { width: 1366, height: 900 },
+      { width: 1440, height: 1000 },
+      { width: 1600, height: 900 },
+      { width: 1920, height: 1080 }  // TV / geniş ekran
     ]) {
       await page.setViewportSize(viewport);
       await page.waitForTimeout(120);
