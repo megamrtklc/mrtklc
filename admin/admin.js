@@ -3,17 +3,7 @@
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
   const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null };
-  const adminThemes = ['ivory','slate','dark'];
-  function applyAdminTheme(theme, persist=true){
-    const selected=adminThemes.includes(theme)?theme:'ivory';
-    document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark');
-    document.body.classList.add('admin-theme-'+selected);
-    const picker=$('#admin-theme-select');
-    if(picker&&picker.value!==selected)picker.value=selected;
-    const meta=document.querySelector('meta[name="theme-color"]');
-    if(meta)meta.content=selected==='dark'?'#0b0c10':(selected==='slate'?'#edf0f4':'#f5f4f0');
-    if(persist){try{localStorage.setItem('cv-admin-theme',selected);}catch(error){console.warn('Tema tercihi kaydedilemedi:',error);}}
-  }
+  function applyAdminTheme(){ document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark'); const meta=document.querySelector('meta[name="theme-color"]'); if(meta)meta.content='#f4f3ef'; }
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const titleOf = item => item.title || item.tmdbTitle || item.originalTitle || item.tmdbOriginalTitle || 'Başlıksız yapım';
   const posterOf = item => item.image || item.poster || item.tmdbPoster || '';
@@ -492,14 +482,7 @@
     if(ok){state.heroDraft=null;renderHomepage();}
   }
   async function init(){
-    const themeDefaultVersion='control-room-v1';
-    try{
-      if(localStorage.getItem('cv-admin-theme-default-version')!==themeDefaultVersion){
-        localStorage.setItem('cv-admin-theme','dark');
-        localStorage.setItem('cv-admin-theme-default-version',themeDefaultVersion);
-      }
-    }catch(error){console.warn('Varsayılan tema ayarı uygulanamadı:',error);}
-    applyAdminTheme(localStorage.getItem('cv-admin-theme')||'dark',false);
+    applyAdminTheme();
     const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
     try{
