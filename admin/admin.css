@@ -1026,3 +1026,25 @@ body.admin-theme-slate .workspace-topbar{background:#edf0f4;border-color:#dce2e9
 .hero-device-panel .homepage-slide-head .section-index{display:block;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.12em}
 .hero-device-panel .hero-slide-list{grid-template-columns:1fr;max-height:520px}
 @media(max-width:980px){.hero-device-grid{grid-template-columns:1fr}}
+
+/* Hero management controls, manual selection and device previews */
+.hero-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 8px}
+.hero-controls .field{display:grid;gap:6px;min-width:0}
+.hero-controls .field>span{font-size:11px;font-weight:750;color:var(--muted)}
+.hero-controls input,.hero-controls select{width:100%;min-width:0;box-sizing:border-box;border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:var(--surface);color:var(--text);font:inherit;font-size:12px}
+.hero-search-field{grid-column:1/-1}
+.hero-mode-hint{font-size:11px;line-height:1.55;color:var(--muted);margin:7px 0 12px}
+.hero-pick[hidden]{display:none!important}
+.hero-preview-wrap{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.hero-preview-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px;font-size:12px}
+.hero-preview-heading span{font-size:10px;color:var(--muted)}
+.hero-preview-art{min-height:180px;display:flex;align-items:flex-end;background-size:cover;background-position:center;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.1);color:#fff}
+.hero-preview.mobile .hero-preview-art{min-height:210px}
+.hero-preview-copy{width:min(88%,560px);padding:18px}
+.hero-preview-kicker{font-size:9px;font-weight:800;letter-spacing:.14em;color:#f5c65b}
+.hero-preview-copy h3{font-size:clamp(17px,2vw,25px);font-weight:900;line-height:1.1;margin:8px 0}
+.hero-preview-meta{font-size:10px;font-weight:700;color:#f6d98a}
+.hero-preview-copy p{font-size:11px;line-height:1.55;color:#e5e7eb;margin:8px 0 0;max-width:490px}
+.hero-preview-empty{padding:28px 16px;border:1px dashed var(--line);border-radius:12px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:600px){.hero-controls{grid-template-columns:1fr}.hero-search-field{grid-column:auto}.hero-preview-copy{padding:14px}.hero-preview.mobile .hero-preview-art{min-height:190px}}
+body.admin-theme-dark .hero-controls input,body.admin-theme-dark .hero-controls select{background:#171c25;border-color:#303846;color:#edf0f5}
