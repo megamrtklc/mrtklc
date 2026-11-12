@@ -1268,6 +1268,12 @@
                     return [...new Set(values.map(value => String(value).trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'tr'));
                 },
 
+                setDiscoveryMood(mood) {
+                    const allowed = ['all','feelgood','thriller','comedy','emotional','mind','family','top'];
+                    if (!allowed.includes(mood)) return;
+                    this.discoveryMood = mood;
+                },
+
                 resetDiscoveryFilters() {
                     this.searchQuery = '';
                     this.discoveryType = 'all';
@@ -1512,15 +1518,16 @@
                             item.category, item.genre, item.desc, item.title, item.originalTitle
                         ].filter(Boolean).join(' '));
                         const moodRules = {
-                            feelgood: ['komedi','aile','animasyon','romantik','macera','müzik'],
-                            thriller: ['gerilim','gizem','suç','korku','polisiye','aksiyon'],
-                            comedy: ['komedi','eğlence','mizah','stand up'],
-                            emotional: ['dram','romantik','aile','biyografi','tarih'],
-                            mind: ['bilim kurgu','gizem','gerilim','fantastik','psikolojik','distopya'],
-                            family: ['aile','animasyon','çocuk','macera']
+                            feelgood: ['komedi','eğlence','aile','animasyon','romantik','macera','müzik','müzikal','feel good','feelgood'],
+                            thriller: ['gerilim','gizem','suç','korku','polisiye','aksiyon','dedektif','psikolojik gerilim','suspense'],
+                            comedy: ['komedi','eğlence','mizah','stand up','sitcom','absürt'],
+                            emotional: ['dram','romantik','aile','biyografi','tarih','melodram','duygusal'],
+                            mind: ['bilim kurgu','gizem','gerilim','fantastik','psikolojik','distopya','zihin','zeka','ters köşe'],
+                            family: ['aile','animasyon','çocuk','macera','fantastik','çocuk filmi']
                         };
                         const matchesMood = this.discoveryMood === 'all'
-                            || (this.discoveryMood === 'top' ? (Number.parseFloat(item.rating) || 0) >= 7.5
+                            || (this.discoveryMood === 'top'
+                                ? (Number.parseFloat(item.rating) || 0) >= 7.5
                                 : (moodRules[this.discoveryMood] || []).some(term => moodText.includes(this.normalizeSearchText(term))));
                         const genres = String(item.category || item.genre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value));
                         const selectedGenres = String(this.discoveryGenre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value)).filter(Boolean);
