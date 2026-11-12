@@ -1380,60 +1380,142 @@
                 },
 
                 get personalizedRecommendations() {
-                    const safeRead = key => {
-                        try { const value = safeStorageRead(key, {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; }
-                        catch (error) { console.warn('Recommendation data read failed:', key, error); return {}; }
-                    };
+                    const catalog = Array.isArray(this.catalog) ? this.catalog : [];
+                    if (!catalog.length) return [];
+                    const catalogById = new Map(catalog.filter(item => item && item.id != null).map(item => [String(item.id), item]));
                     const normalize = value => this.normalizeSearchText(value);
                     const tokens = value => [...new Set(String(value || '').split(/[\\/;,|]/).map(normalize).filter(Boolean))];
                     const people = item => {
-                        const cast = Array.isArray(item?.tmdbCast) ? item.tmdbCast.map(person => person?.name) : [];
-                        const fallback = Array.isArray(item?.cast) ? item.cast : [];
-                        return [...new Set([...cast, ...fallback].map(normalize).filter(Boolean))];
+                        const tmdb = Array.isArray(item?.tmdbCast) ? item.tmdbCast.map(person => person?.name) : [];
+                        const fallback = Array.isArray(item?.cast) ? item.cast.map(person => typeof person === 'string' ? person : person?.name) : [];
+                        return [...new Set([...tmdb, ...fallback].map(normalize).filter(Boolean))];
                     };
-                    const profileId = this.currentProfileId;
+                    const safeRead = key => {
+                        const value = safeStorageRead(key, {});
+                        return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+                    };
+                    const profileId = String(this.currentProfileId || '');
                     const progress = this.profileMovieProgress;
                     const episodes = safeRead('cine_episode_tracking_v1');
                     const history = new Map();
+                    const recentBoost = timestamp => {
+                        const savedAt = Number(timestamp) || 0;
+                        if (!savedAt) return 0;
+                        const ageDays = Math.max(0, (Date.now() - savedAt) / 86400000);
+                        return ageDays <= 30 ? 0.45 : ageDays <= 120 ? 0.2 : 0;
+                    };
                     Object.entries(progress).forEach(([id, saved]) => {
-                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        const item = catalogById.get(String(id));
                         const time = Math.max(0, Number(saved?.time) || 0);
-                        if (item && time >= 300) history.set(String(item.id), { item, weight: 1 + Math.min(time / 3600, 2) });
+                        if (!item || time < 300) return;
+                        const duration = Math.max(0, Number(saved?.duration) || 0);
+                        const completion = duration ? Math.min(1, time / duration) : 0;
+                        const weight = 1 + Math.min(time / 3600, 1.8) + (completion >= 0.9 ? 0.65 : 0) + recentBoost(saved?.savedAt);
+                        history.set(String(item.id), { item, weight });
                     });
                     Object.entries(episodes).forEach(([key, tracking]) => {
                         if (!key.startsWith(profileId + ':')) return;
-                        const id = key.slice(profileId.length + 1);
-                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        const item = catalogById.get(key.slice(profileId.length + 1));
                         if (!item) return;
-                        const count = Object.values(tracking?.watched || {}).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number)).size : 0), 0);
-                        if (count > 0) { const previous = history.get(String(item.id)); history.set(String(item.id), { item, weight: Math.max(previous?.weight || 0, 1 + Math.min(count / 5, 3)) }); }
+                        const watched = tracking?.watched && typeof tracking.watched === 'object' ? tracking.watched : {};
+                        const count = Object.values(watched).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number).filter(number => number > 0)).size : 0), 0);
+                        const last = tracking?.last || null;
+                        if (!count && !last) return;
+                        const weight = 1.15 + Math.min(count / 7, 2.4) + recentBoost(last?.updatedAt);
+                        const previous = history.get(String(item.id));
+                        history.set(String(item.id), { item, weight: Math.max(previous?.weight || 0, weight) });
                     });
-                    const watchlistItems = this.watchlist.map(saved => this.catalog.find(item => String(item.id) === String(saved.id))).filter(Boolean);
-                    watchlistItems.forEach(item => { if (!history.has(String(item.id))) history.set(String(item.id), { item, weight: 1.35 }); });
+                    const watchlistItems = this.watchlist.map(saved => catalogById.get(String(saved.id))).filter(Boolean);
+                    watchlistItems.forEach(item => {
+                        const id = String(item.id);
+                        if (!history.has(id)) history.set(id, { item, weight: 0.85 });
+                    });
                     const excluded = new Set([...history.keys(), ...this.watchlist.map(item => String(item.id))]);
-                    if (!history.size) return [...this.catalog].filter(item => item && item.id != null && !excluded.has(String(item.id))).sort((a,b) => (Number.parseFloat(b.rating)||0) - (Number.parseFloat(a.rating)||0)).slice(0,15).map(item => ({ ...item, recommendationReason: 'Arşivde yüksek puanlı' }));
-                    const prefs = { genres:new Map(), types:new Map(), countries:new Map(), directors:new Map(), actors:new Map() };
-                    const add = (map,key,value) => { if (key) map.set(key,(map.get(key)||0)+value); };
-                    history.forEach(({item,weight}) => {
-                        tokens(item.category || item.genre).forEach(value => add(prefs.genres,value,weight));
-                        if (item.type) add(prefs.types,item.type,weight);
-                        tokens(item.country).forEach(value => add(prefs.countries,value,weight*0.3));
-                        add(prefs.directors,normalize(item.director),weight);
-                        people(item).forEach(actor => add(prefs.actors,actor,weight*0.85));
+                    const prefs = {
+                        genres: new Map(), types: new Map(), countries: new Map(),
+                        directors: new Map(), actors: new Map()
+                    };
+                    const add = (map, key, value) => {
+                        if (key) map.set(key, (map.get(key) || 0) + value);
+                    };
+                    history.forEach(({ item, weight }) => {
+                        tokens(item.category || item.genre).forEach(value => add(prefs.genres, value, weight));
+                        if (item.type) add(prefs.types, item.type, weight);
+                        tokens(item.country).forEach(value => add(prefs.countries, value, weight * 0.3));
+                        tokens(item.director).forEach(value => add(prefs.directors, value, weight));
+                        people(item).forEach(actor => add(prefs.actors, actor, weight * 0.8));
                     });
-                    return this.catalog.filter(item => item && item.id != null && !excluded.has(String(item.id))).map(item => {
+                    const currentYear = new Date().getFullYear();
+                    const selectDiverse = ranked => {
+                        const remaining = [...ranked];
+                        const selected = [];
+                        const genreCounts = new Map();
+                        const typeCounts = new Map();
+                        while (remaining.length && selected.length < 15) {
+                            let bestIndex = 0;
+                            let bestAdjusted = -Infinity;
+                            remaining.forEach((entry, index) => {
+                                const genre = entry.primaryGenre || 'diger';
+                                const type = entry.item.type || 'unknown';
+                                const genreCount = genreCounts.get(genre) || 0;
+                                const typeCount = typeCounts.get(type) || 0;
+                                const diversityPenalty = Math.max(0, genreCount - 1) * 1.7 + (typeCount >= 9 ? 1.25 : 0);
+                                const adjusted = entry.score - diversityPenalty;
+                                if (adjusted > bestAdjusted) {
+                                    bestAdjusted = adjusted;
+                                    bestIndex = index;
+                                }
+                            });
+                            const [chosen] = remaining.splice(bestIndex, 1);
+                            selected.push(chosen);
+                            const genre = chosen.primaryGenre || 'diger';
+                            const type = chosen.item.type || 'unknown';
+                            genreCounts.set(genre, (genreCounts.get(genre) || 0) + 1);
+                            typeCounts.set(type, (typeCounts.get(type) || 0) + 1);
+                        }
+                        return selected;
+                    };
+                    if (!history.size) {
+                        const coldStart = catalog.filter(item => item && item.id != null && !excluded.has(String(item.id))).map(item => {
+                            const rating = Math.max(0, Number.parseFloat(item.rating) || 0);
+                            const year = Number.parseInt(item.year, 10) || 0;
+                            return {
+                                item,
+                                score: rating * 0.35 + (year >= currentYear - 4 ? 0.25 : 0),
+                                primaryGenre: tokens(item.category || item.genre)[0] || 'diger',
+                                reason: 'Arşivden yüksek puanlı'
+                            };
+                        }).sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0) || a.item.title.localeCompare(b.item.title, 'tr'));
+                        return selectDiverse(coldStart).map(entry => ({ ...entry.item, recommendationReason: entry.reason }));
+                    }
+                    const ranked = catalog.filter(item => item && item.id != null && !excluded.has(String(item.id))).map(item => {
                         const reasons = [];
-                        const push = (score,label) => { if (score > 0) reasons.push({score,label}); };
-                        tokens(item.category || item.genre).forEach(value => push((prefs.genres.get(value)||0)*3.2,'Sevdiğin tür: '+value));
-                        push((prefs.directors.get(normalize(item.director))||0)*3.1,'Sevdiğin yönetmen');
-                        people(item).forEach(actor => push((prefs.actors.get(actor)||0)*2.4,'Tanıdık oyuncu kadrosu'));
-                        tokens(item.country).forEach(value => push((prefs.countries.get(value)||0)*0.8,'Tercih ettiğin ülke sineması'));
-                        push((prefs.types.get(item.type)||0)*0.55,item.type === 'tv' ? 'Dizi tercihine uygun' : 'Film tercihine uygun');
-                        const rating = Math.max(0,Number.parseFloat(item.rating)||0);
-                        push(rating*0.14,rating >= 7.5 ? 'Yüksek puanlı yapım' : 'Arşiv puanı');
-                        reasons.sort((a,b) => b.score-a.score);
-                        return { item, score: reasons.reduce((sum,part) => sum+part.score,0), reason: reasons[0]?.label || 'İzleme profiline uygun' };
-                    }).sort((a,b) => b.score-a.score || (Number.parseFloat(b.item.rating)||0)-(Number.parseFloat(a.item.rating)||0) || a.item.title.localeCompare(b.item.title,'tr')).slice(0,15).map(entry => ({ ...entry.item, recommendationReason: entry.reason }));
+                        const push = (score, label) => {
+                            if (score > 0.15) reasons.push({ score, label });
+                        };
+                        const candidateGenres = tokens(item.category || item.genre);
+                        const genreMatches = candidateGenres.map(value => ({ value, weight: prefs.genres.get(value) || 0 })).filter(entry => entry.weight > 0).sort((a, b) => b.weight - a.weight);
+                        if (genreMatches.length) push(genreMatches.reduce((sum, entry) => sum + entry.weight, 0) * 3.1, 'Sevdiğin tür: ' + genreMatches[0].value);
+                        const directorMatches = tokens(item.director).map(value => prefs.directors.get(value) || 0).sort((a, b) => b - a);
+                        if (directorMatches[0]) push(directorMatches[0] * 2.8, 'Sevdiğin yönetmen');
+                        const actorMatches = people(item).map(actor => prefs.actors.get(actor) || 0).filter(Boolean).sort((a, b) => b - a);
+                        if (actorMatches.length) push(actorMatches[0] * 2.1 + (actorMatches[1] || 0) * 0.45, 'Tanıdık oyuncu kadrosu');
+                        const countryMatches = tokens(item.country).map(value => prefs.countries.get(value) || 0).sort((a, b) => b - a);
+                        if (countryMatches[0]) push(countryMatches[0] * 0.9, 'Tercih ettiğin ülke sineması');
+                        push((prefs.types.get(item.type) || 0) * 0.45, item.type === 'tv' ? 'Dizi tercihine uygun' : 'Film tercihine uygun');
+                        const rating = Math.max(0, Number.parseFloat(item.rating) || 0);
+                        if (rating > 6) push((rating - 6) * 0.42, 'Yüksek puanlı yapım');
+                        const year = Number.parseInt(item.year, 10) || 0;
+                        const freshness = year >= currentYear - 3 ? 0.25 : year >= currentYear - 8 ? 0.1 : 0;
+                        const reason = reasons.sort((a, b) => b.score - a.score)[0]?.label || 'İzleme profiline uygun';
+                        return {
+                            item,
+                            score: reasons.reduce((sum, entry) => sum + entry.score, 0) + freshness,
+                            primaryGenre: candidateGenres[0] || 'diger',
+                            reason
+                        };
+                    }).sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0) || a.item.title.localeCompare(b.item.title, 'tr'));
+                    return selectDiverse(ranked).map(entry => ({ ...entry.item, recommendationReason: entry.reason }));
                 },
 
 
