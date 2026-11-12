@@ -222,7 +222,7 @@
             <div class="w-full space-y-10 pb-16">
                 
                 <!-- DESKTOP EDITORIAL HERO: mobil manşetten bağımsız yeni masaüstü kompozisyonu -->
-                <section id="desktopEditorialHero" x-data="{ trailerOpen: false, trailerItem: null }" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
+                <section id="desktopEditorialHero" x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0">
                         <img :src="currentHero.backdrop || currentHero.poster" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-cover object-center transition-transform duration-[1200ms] ease-out scale-[1.025]">
                         <div class="absolute inset-0 bg-gradient-to-r from-[#090a0d] via-[#090a0d]/95 via-[34%] to-[#090a0d]/5"></div>
@@ -303,15 +303,16 @@
                             <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
                             <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.35rem,5.4vw,2.25rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
                             <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
-                                <span class="inline-flex items-center gap-2 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-md"><span class="tracking-tight">IMDb</span><span class="text-sm" x-text="currentHero.rating"></span></span>
+                                <span class="inline-flex items-center gap-1.5 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-md"><i class="fa-solid fa-star text-[10px]"></i><span class="text-sm" x-text="currentHero.rating || '—'"></span></span>
                                 <span class="text-gray-600">•</span><span class="text-gray-300" x-text="currentHero.year"></span>
                                 <span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200" x-text="currentHero.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                 <span class="text-gray-400" x-text="currentHero.genre"></span>
                             </div>
                             <p class="max-w-2xl text-sm leading-6 text-gray-300 line-clamp-3" x-text="currentHero.desc"></p>
-                            <div class="grid grid-cols-2 gap-2 pt-1">
-                                <button @click="openWatchPage(currentHero)" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-rose-600 px-3 text-xs font-extrabold uppercase tracking-wide text-white shadow-lg shadow-rose-950/30 transition-colors hover:bg-rose-500"><i class="fa-solid fa-play"></i><span>Şimdi İzle</span></button>
-                                <button @click="toggleWatchlist(currentHero)" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-3 text-xs font-bold text-white transition-colors hover:bg-white/10"><i :class="isInWatchlist(currentHero) ? 'fa-solid fa-bookmark text-rose-400' : 'fa-regular fa-bookmark'"></i><span x-text="isInWatchlist(currentHero) ? 'Listemde' : 'Listeme Ekle'"></span></button>
+                            <div class="grid min-w-0 grid-cols-2 gap-2 pt-1">
+                                <button type="button" @click="openWatchPage(currentHero)" class="inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-xl bg-rose-600 px-2 sm:px-3 text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-white shadow-lg shadow-rose-950/30 transition-colors hover:bg-rose-500"><i class="fa-solid fa-play shrink-0"></i><span class="truncate">Şimdi İzle</span></button>
+                                <button type="button" @click="toggleWatchlist(currentHero)" class="inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-2 sm:px-3 text-[11px] sm:text-xs font-bold text-white transition-colors hover:bg-white/10"><i :class="isInWatchlist(currentHero) ? 'fa-solid fa-bookmark text-rose-400' : 'fa-regular fa-bookmark'" class="shrink-0"></i><span class="truncate" x-text="isInWatchlist(currentHero) ? 'Listemde' : 'Listeme Ekle'"></span></button>
+                                <button type="button" @click="$dispatch('open-mobile-hero-trailer', { title: currentHero.title || '', trailerUrl: currentHero.trailerUrl || '' })" class="col-span-2 inline-flex min-h-10 min-w-0 items-center justify-center gap-2 rounded-xl border border-amber-300/45 bg-amber-300/10 px-3 text-xs font-bold text-amber-100 transition-colors hover:border-amber-300 hover:bg-amber-300/15"><i class="fa-solid fa-circle-play shrink-0 text-amber-300"></i><span>Fragmanı İzle</span></button>
                             </div>
                         </div>
                     </div>
