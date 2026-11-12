@@ -941,23 +941,48 @@
                     <p class="mt-3 text-sm font-semibold text-gray-500 dark:text-gray-400">Oyuncu profili yükleniyor…</p>
                 </div>
                 <div x-show="actorProfileError" class="rounded-2xl border border-rose-500/30 bg-rose-500/5 p-5 text-sm text-rose-600 dark:text-rose-300" x-text="actorProfileError"></div>
-                <section x-show="!actorProfileLoading && selectedActor && selectedActor.filmography && selectedActor.filmography.length" class="space-y-4">
-                    <div class="flex items-end justify-between gap-3">
-                        <div><span class="text-[10px] font-black uppercase tracking-[.2em] text-rose-600 dark:text-rose-400">Kariyer yolculuğu</span><h2 class="mt-1 text-xl sm:text-2xl font-black text-gray-900 dark:text-white">Filmografi</h2></div>
-                        <span class="text-xs font-bold text-gray-500 dark:text-gray-400" x-text="selectedActor.filmography.length + ' yapım'"></span>
+                <section x-data="{ filmographyFilter: 'all' }" x-show="!actorProfileLoading && selectedActor && selectedActor.filmography && selectedActor.filmography.length" class="relative space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                        <div>
+                            <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[.22em] text-rose-600 dark:text-rose-400"><span class="w-6 h-px bg-rose-500"></span>Kariyer yolculuğu</span>
+                            <h2 class="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-gray-900 dark:text-white">Filmografi</h2>
+                            <p class="mt-1 text-xs sm:text-sm text-gray-500 dark:text-gray-400">Yer aldığı film ve dizilerden seçkiler</p>
+                        </div>
+                        <div class="flex items-center justify-between sm:justify-end gap-3">
+                            <span class="text-xs font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="(filmographyFilter === 'all' ? selectedActor.filmography.length : selectedActor.filmography.filter(work => work.type === filmographyFilter).length) + ' yapım'"></span>
+                            <div class="inline-flex items-center gap-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-100/80 dark:bg-white/[.04] p-1">
+                                <button type="button" @click="filmographyFilter = 'all'" :aria-pressed="filmographyFilter === 'all'" :class="filmographyFilter === 'all' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'" class="px-3 py-2 rounded-lg text-[11px] font-extrabold transition-all">Tümü</button>
+                                <button type="button" @click="filmographyFilter = 'movie'" :aria-pressed="filmographyFilter === 'movie'" :class="filmographyFilter === 'movie' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'" class="px-3 py-2 rounded-lg text-[11px] font-extrabold transition-all">Filmler</button>
+                                <button type="button" @click="filmographyFilter = 'tv'" :aria-pressed="filmographyFilter === 'tv'" :class="filmographyFilter === 'tv' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'" class="px-3 py-2 rounded-lg text-[11px] font-extrabold transition-all">Diziler</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-5">
-                        <template x-for="work in (selectedActor.filmography || [])" :key="work.type + '-' + work.id">
-                            <button type="button" @click="openActorCredit(work)" :disabled="!catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type)" class="group min-w-0 text-left disabled:cursor-default">
-                                <div class="relative aspect-[2/3] overflow-hidden rounded-xl bg-gray-200 dark:bg-gray-800 shadow-md ring-1 ring-black/5 dark:ring-white/10">
-                                    <img :src="work.poster || 'https://placehold.co/342x513/161922/ffffff?text=No+Poster'" :alt="work.title" @error="handleImageError($event)" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                                    <span class="absolute top-2 left-2 rounded-md bg-black/75 px-2 py-1 text-[9px] font-black uppercase text-white" x-text="work.type === 'tv' ? 'Dizi' : 'Film'"></span>
-                                    <span x-show="work.rating > 0" class="absolute bottom-2 right-2 rounded-md bg-black/80 px-2 py-1 text-[10px] font-black text-amber-300" x-text="'★ ' + work.rating.toFixed(1)"></span>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-3 gap-y-6 sm:gap-x-5 sm:gap-y-8">
+                        <template x-for="work in selectedActor.filmography.filter(item => filmographyFilter === 'all' || item.type === filmographyFilter)" :key="work.type + '-' + work.id">
+                            <button type="button" @click="openActorCredit(work)" :disabled="!catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type)" :title="catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type) ? 'CineVerse arşivinde görüntüle' : 'Bu yapım henüz CineVerse arşivinde yok'" class="group min-w-0 text-left rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-4 focus-visible:ring-offset-transparent disabled:cursor-default">
+                                <div class="relative aspect-[2/3] overflow-hidden rounded-2xl bg-gray-200 dark:bg-gray-800 shadow-lg ring-1 ring-black/5 dark:ring-white/10 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:shadow-rose-950/15 group-hover:ring-rose-500/50">
+                                    <img :src="work.poster || 'https://placehold.co/342x513/161922/ffffff?text=No+Poster'" :alt="work.title" @error="handleImageError($event)" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-transparent opacity-90"></div>
+                                    <div class="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                                        <span class="rounded-md border border-white/15 bg-black/65 backdrop-blur-md px-2 py-1 text-[9px] font-black uppercase tracking-wider text-white" x-text="work.type === 'tv' ? 'Dizi' : 'Film'"></span>
+                                        <span x-show="work.year" class="rounded-md bg-black/55 backdrop-blur-md px-2 py-1 text-[9px] font-bold text-white/90" x-text="work.year"></span>
+                                    </div>
+                                    <span x-show="work.rating > 0" class="absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-md bg-black/75 backdrop-blur-md px-2 py-1 text-[10px] font-black text-amber-300"><i class="fa-solid fa-star text-[8px]"></i><span x-text="work.rating.toFixed(1)"></span></span>
+                                    <div class="absolute inset-x-0 bottom-0 p-3 sm:p-3.5">
+                                        <h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="work.title"></h3>
+                                        <p x-show="work.character" class="mt-1.5 text-[10px] sm:text-[11px] font-medium text-white/70 line-clamp-1" x-text="'Rolü: ' + work.character"></p>
+                                        <div class="mt-2.5 flex items-center gap-1.5 text-[9px] font-extrabold uppercase tracking-wider" :class="catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type) ? 'text-rose-300' : 'text-white/50'">
+                                            <i :class="catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type) ? 'fa-solid fa-circle-play' : 'fa-solid fa-film'"></i>
+                                            <span x-text="catalog.some(entry => String(entry.tmdbId || '') === String(work.id) && entry.type === work.type) ? 'Arşivde görüntüle' : 'Arşivde yok'"></span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <h3 class="mt-2 text-xs sm:text-sm font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="work.title"></h3>
-                                <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400 truncate"><span x-text="work.year || '—'"></span><span x-show="work.character"> · <span x-text="work.character"></span></span></p>
                             </button>
                         </template>
+                    </div>
+                    <div x-show="!selectedActor.filmography.some(work => filmographyFilter === 'all' || work.type === filmographyFilter)" class="rounded-2xl border border-dashed border-gray-300 dark:border-gray-700 p-8 text-center">
+                        <i class="fa-solid fa-clapperboard text-2xl text-gray-400"></i>
+                        <p class="mt-3 text-sm font-semibold text-gray-500 dark:text-gray-400">Bu kategoride yapım bulunamadı.</p>
                     </div>
                 </section>
                 <div x-show="!actorProfileLoading && selectedActor && selectedActor.filmography && !selectedActor.filmography.length" class="rounded-2xl border border-gray-200 dark:border-gray-800 p-8 text-center text-sm text-gray-500 dark:text-gray-400">Filmografi bilgisi bulunamadı.</div>
