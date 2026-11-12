@@ -17453,5 +17453,19 @@
       }
     ]
   },
-  "exportedAt": "2026-11-10T22:20:23.455Z"
+  "exportedAt": "2026-11-10T22:20:23.455Z",
+  "watchPageConfig": {
+    "left": [
+      "player",
+      "season",
+      "episodes",
+      "cast",
+      "reviews"
+    ],
+    "right": [
+      "synopsis",
+      "credits",
+      "similar"
+    ]
+  }
 }
