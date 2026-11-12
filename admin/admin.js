@@ -10,7 +10,7 @@
   const yearOf = item => Number(item.year || item.releaseYear || (item.tmdbReleaseDate || '').slice(0,4)) || '—';
   const collectionList = () => Array.isArray(state.data?.collections) ? state.data.collections : [];
   const toast = message => { const el=$('#toast'); if(!el)return; el.textContent=message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),3000); };
-  function canWrite(){ if(!state.apiEnabled||!state.sha){toast('Düzenleme için korumalı yönetim adresini kullanın.');return false;} return true; }
+  function canWrite(){ if(!state.apiEnabled||!state.sha){toast('Katalog şu anda salt okunur. GitHub erişim bağlantısı doğrulanınca düzenleme açılacak.');return false;} return true; }
   function navigate(view){
     state.view=view;
     $$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
@@ -291,7 +291,7 @@
       const root=$('#watch-'+side+'-list');
       root.innerHTML=config[side].map((id,index)=>{
         const item=watchCardDefinitions[id];
-        return '<div class="watch-order-item" data-card="'+id+'"><span class="watch-order-number">'+(index+1)+'</span><div class="watch-order-copy"><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+'</small></div><div class="watch-order-actions"><button type="button" class="watch-order-move" data-dir="-1" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" class="watch-order-move" data-dir="1" aria-label="Aşağı taşı" '+(index===config[side].length-1?'disabled':'')+'>↓</button><button type="button" class="watch-order-transfer" data-target-side="'+(side==='left'?'right':'left')+'" title="'+(side==='left'?'Sağ sütuna taşı':'Sol sütuna taşı')+'">⇄</button></div></div>';
+        return '<div class="watch-order-item" data-card="'+id+'" draggable="true" title="Sürükleyerek taşı veya sırala"><span class="watch-order-number">'+(index+1)+'</span><div class="watch-order-copy"><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+'</small></div><div class="watch-order-actions"><button type="button" class="watch-order-move" data-dir="-1" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" class="watch-order-move" data-dir="1" aria-label="Aşağı taşı" '+(index===config[side].length-1?'disabled':'')+'>↓</button><button type="button" class="watch-order-transfer" data-target-side="'+(side==='left'?'right':'left')+'" title="'+(side==='left'?'Sağ sütuna taşı':'Sol sütuna taşı')+'">⇄</button></div></div>';
       }).join('')||'<div class="watch-demo-empty">Bu sütunda kart bulunmuyor.</div>';
     }
     renderWatchDemo(config);
@@ -346,7 +346,7 @@
     try{
       const apiResponse=await fetch('/api/catalog',{cache:'no-store',credentials:'same-origin'});
       if(!apiResponse.ok){const p=await apiResponse.json().catch(()=>({}));throw new Error(p.error||'Yönetim API hatası: '+apiResponse.status);}
-      const payload=await apiResponse.json();state.data=payload.data;state.sha=payload.sha||null;state.apiEnabled=!!state.sha;
+      const payload=await apiResponse.json();state.data=payload.data;state.sha=payload.sha||null;state.apiEnabled=!!state.sha&&payload.writable!==false;
       if(!Array.isArray(state.data?.catalog))throw new Error('Katalog listesi bulunamadı.');
       state.catalog=state.data.catalog.filter(x=>x&&typeof x==='object');
       $('.environment').innerHTML='<i></i> KORUMALI YÖNETİM';
@@ -354,12 +354,12 @@
       if(!sessionResponse.ok)throw new Error('Yönetici oturumu doğrulanamadı.');
       const session=await sessionResponse.json();
       $('.notice b').textContent='Yönetim bağlantısı aktif';
-      $('.notice p').textContent='Yönetici oturumu etkin: '+(session.email||'Yetkili hesap')+'. Değişiklikler güvenli API üzerinden GitHub kataloğuna kaydedilir.';
+      $('.notice p').textContent=payload.readOnlyReason||('Yönetici oturumu etkin: '+(session.email||'Yetkili hesap')+'. Değişiklikler güvenli API üzerinden GitHub kataloğuna kaydedilir.');
       $('.notice-tag').textContent='CONNECTED';
       $('#health-catalog').textContent='Bağlandı';$('#health-json').textContent='Geçerli';
       $('#health-auth').textContent='Aktif';$('#health-api').textContent='Aktif';
       $('#data-version').textContent=String(state.data.version??'Belirtilmemiş');
-      $('#add-content').disabled=!state.apiEnabled;$('#catalog-add').disabled=!state.apiEnabled;
+      $('#add-content').disabled=!state.apiEnabled;$('#catalog-add').disabled=!state.apiEnabled;$('#collection-add').disabled=!state.apiEnabled;
       updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();renderAdminProfile();renderWatchLayout();loadProfilePhoto();
       $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
@@ -410,7 +410,15 @@
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#watch-layout-save').addEventListener('click',saveWatchLayout);
-  ['left','right'].forEach(side=>$('#watch-'+side+'-list').addEventListener('click',event=>{const item=event.target.closest('[data-card]');if(!item)return;const transfer=event.target.closest('[data-target-side]');if(transfer){moveWatchCard(side,item.dataset.card,0,transfer.dataset.targetSide);return;}const button=event.target.closest('[data-dir]');if(button)moveWatchCard(side,item.dataset.card,Number(button.dataset.dir));}));
+  let draggedWatchCard=null;
+  ['left','right'].forEach(side=>{
+    const list=$('#watch-'+side+'-list');
+    list.addEventListener('click',event=>{const item=event.target.closest('[data-card]');if(!item)return;const transfer=event.target.closest('[data-target-side]');if(transfer){moveWatchCard(side,item.dataset.card,0,transfer.dataset.targetSide);return;}const button=event.target.closest('[data-dir]');if(button)moveWatchCard(side,item.dataset.card,Number(button.dataset.dir));});
+    list.addEventListener('dragstart',event=>{const item=event.target.closest('[data-card]');if(!item)return;draggedWatchCard={side,id:item.dataset.card};item.classList.add('is-dragging');event.dataTransfer.effectAllowed='move';event.dataTransfer.setData('text/plain',item.dataset.card);});
+    list.addEventListener('dragend',()=>{draggedWatchCard=null;$('.watch-order-item').forEach(item=>item.classList.remove('is-dragging','drop-target'));});
+    list.addEventListener('dragover',event=>{if(!draggedWatchCard)return;event.preventDefault();const target=event.target.closest('[data-card]');$('.watch-order-item').forEach(item=>item.classList.toggle('drop-target',item===target));});
+    list.addEventListener('drop',event=>{if(!draggedWatchCard)return;event.preventDefault();const target=event.target.closest('[data-card]');const config=watchLayoutConfig();const from=draggedWatchCard;const source=config[from.side];const index=source.indexOf(from.id);if(index<0)return;source.splice(index,1);const destination=config[side];const targetIndex=target?destination.indexOf(target.dataset.card):-1;destination.splice(targetIndex<0?destination.length:targetIndex,0,from.id);state.data.watchPageConfig=config;draggedWatchCard=null;renderWatchLayout();});
+  });
   $('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{watchDemoType=button.dataset.demoType;renderWatchLayout();}));
   init();
 })();
