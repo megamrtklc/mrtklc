@@ -232,3 +232,57 @@ button,input,select,textarea{font-size:inherit}
   .header-actions{gap:8px}
   .site-link{font-size:12px}
 }
+
+
+/* ── Functional content management controls ── */
+.row-actions{white-space:nowrap}
+.row-actions .row-action{margin-right:6px}
+.danger-action{color:#b34f58!important;background:#fff1f1!important;border-color:#f5dddd!important}
+.collection-card{position:relative;min-width:0}
+.collection-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.collection-status{font-size:11px;font-weight:700;color:#477b61;background:#e8f4ed;padding:6px 9px;border-radius:999px}
+.collection-status.inactive{color:#8a6d46;background:#f6efe3}
+.collection-id{font-size:10px;color:#aaa6b2;overflow:hidden;text-overflow:ellipsis}
+.collection-actions{display:flex;gap:8px;margin-top:20px;padding-top:15px;border-top:1px solid var(--line)}
+.collection-dialog{width:min(760px,calc(100vw - 28px));max-height:90vh;overflow:auto}
+.collection-picker-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:22px 0 12px}
+.collection-picker-head h3{margin:0;font-size:16px}
+.collection-picker-head input{width:min(280px,55%);padding:11px 13px;border:1px solid var(--line);border-radius:11px;background:#fbfafc;font:inherit}
+.collection-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:360px;overflow:auto;padding:2px}
+.collection-pick{display:flex;align-items:center;gap:10px;min-width:0;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff;cursor:pointer}
+.collection-pick[hidden]{display:none}
+.collection-pick input{width:17px;height:17px;flex:0 0 auto;accent-color:#786aa7}
+.collection-pick span{display:flex;flex-direction:column;min-width:0;gap:3px}
+.collection-pick b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.collection-pick small{font-size:10px;color:var(--muted)}
+.homepage-editor{display:block}
+.homepage-settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 18px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.homepage-settings .field{margin:0}
+.toggle-field{display:flex;align-items:center;gap:10px;color:var(--ink);font-size:13px;font-weight:600}
+.toggle-field input{width:18px;height:18px;accent-color:#786aa7}
+.homepage-slide-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:25px 0 14px}
+.homepage-slide-head h2{margin:0 0 5px;font-size:19px}
+.homepage-slide-head p{margin:0;color:var(--muted);font-size:13px}
+.homepage-slide-head>span{padding:7px 10px;border-radius:999px;background:#f0ecfa;color:#655b8d;font-size:12px;font-weight:700;white-space:nowrap}
+.hero-slide-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;max-height:560px;overflow:auto;padding:2px}
+.hero-pick{display:flex;align-items:center;gap:11px;min-width:0;padding:9px;border:1px solid var(--line);border-radius:13px;background:#fff;cursor:pointer}
+.hero-pick:has(input:checked){border-color:#b6a9dc;background:#f7f4ff}
+.hero-pick input{width:17px;height:17px;flex:0 0 auto;accent-color:#786aa7}
+.hero-pick img{width:38px;height:54px;flex:0 0 auto;object-fit:cover;border-radius:6px;background:#eee}
+.hero-pick span{display:flex;flex-direction:column;min-width:0;gap:4px}
+.hero-pick b{font-size:12px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero-pick small{font-size:10px;color:var(--muted)}
+.homepage-save{display:flex;justify-content:flex-end;margin-top:20px}
+.config-details{margin-top:20px;border-top:1px solid var(--line);padding-top:15px}
+.config-details summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--muted)}
+.access-card{max-width:780px}
+.access-card h2{margin:16px 0 8px;font-size:21px}
+.access-card>p{font-size:14px;line-height:1.65;color:var(--muted)}
+.state-ready{color:#477b61!important;background:#e8f4ed;padding:5px 9px;border-radius:999px}
+@media(max-width:760px){
+ .collection-items,.hero-slide-list{grid-template-columns:1fr}
+ .homepage-settings{grid-template-columns:1fr 1fr}
+ .collection-picker-head{align-items:stretch;flex-direction:column}
+ .collection-picker-head input{width:100%}
+}
+@media(max-width:460px){.homepage-settings{grid-template-columns:1fr}.row-actions .row-action{padding:7px 8px;font-size:10px}}
