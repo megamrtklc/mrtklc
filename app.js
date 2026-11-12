@@ -122,10 +122,12 @@
                         right: ['credits','cast','similar']
                     };
                     const saved = this.watchPageConfig || {};
-                    const left = Array.isArray(saved.left) ? saved.left.filter(id => Object.values(defaults).flat().includes(id)) : [];
-                    const right = Array.isArray(saved.right) ? saved.right.filter(id => Object.values(defaults).flat().includes(id) && !left.includes(id)) : [];
+                    const allIds = Object.values(defaults).flat();
+                    const removed = Array.isArray(saved.removed) ? saved.removed : [];
+                    const left = Array.isArray(saved.left) ? saved.left.filter(id => allIds.includes(id) && !removed.includes(id)) : [];
+                    const right = Array.isArray(saved.right) ? saved.right.filter(id => allIds.includes(id) && !removed.includes(id) && !left.includes(id)) : [];
                     const all = [...left,...right];
-                    Object.values(defaults).flat().forEach(id => { if (!all.includes(id)) (defaults.left.includes(id) ? left : right).push(id); });
+                    allIds.forEach(id => { if (!all.includes(id) && !removed.includes(id)) (defaults.left.includes(id) ? left : right).push(id); });
                     const side = left.includes(cardId) ? left : right;
                     return side.indexOf(cardId);
                 },
@@ -137,17 +139,20 @@
                         right: ['credits','cast','similar']
                     };
                     const allIds = Object.values(defaults).flat();
-                    const left = Array.isArray(config.left) ? config.left.filter((id,index,arr) => allIds.includes(id) && arr.indexOf(id) === index) : [];
-                    const right = Array.isArray(config.right) ? config.right.filter((id,index,arr) => allIds.includes(id) && !left.includes(id) && arr.indexOf(id) === index) : [];
+                    const removed = Array.isArray(config.removed) ? config.removed : [];
+                    const hidden = Array.isArray(config.hidden) ? config.hidden : [];
+                    const left = Array.isArray(config.left) ? config.left.filter((id,index,arr) => allIds.includes(id) && !removed.includes(id) && arr.indexOf(id) === index) : [];
+                    const right = Array.isArray(config.right) ? config.right.filter((id,index,arr) => allIds.includes(id) && !removed.includes(id) && !left.includes(id) && arr.indexOf(id) === index) : [];
                     const used = new Set([...left,...right]);
-                    allIds.forEach(id => { if (!used.has(id)) (defaults.left.includes(id) ? left : right).push(id); });
+                    allIds.forEach(id => { if (!used.has(id) && !removed.includes(id)) (defaults.left.includes(id) ? left : right).push(id); });
                     this.$nextTick(() => {
                         const leftColumn = document.getElementById('watch-left-column');
                         const rightColumn = document.getElementById('watch-right-column');
                         if (!leftColumn || !rightColumn) return;
                         const cards = new Map(Array.from(document.querySelectorAll('[data-watch-card]')).map(node => [node.dataset.watchCard,node]));
-                        left.forEach((id,index) => { const node=cards.get(id); if(node){node.style.order=String(index);leftColumn.appendChild(node);} });
-                        right.forEach((id,index) => { const node=cards.get(id); if(node){node.style.order=String(index);rightColumn.appendChild(node);} });
+                        allIds.forEach(id => { const node=cards.get(id); if(node) node.hidden=removed.includes(id)||hidden.includes(id); });
+                        left.forEach((id,index) => { const node=cards.get(id); if(node){node.hidden=hidden.includes(id);node.style.order=String(index);leftColumn.appendChild(node);} });
+                        right.forEach((id,index) => { const node=cards.get(id); if(node){node.hidden=hidden.includes(id);node.style.order=String(index);rightColumn.appendChild(node);} });
                     });
                 },
 
