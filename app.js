@@ -437,6 +437,12 @@
                         container.scrollBy({ left: dir * 220, behavior: 'smooth' });
                     }
                 },
+                scrollHomeCards(containerId, direction) {
+                    const container = document.getElementById(containerId);
+                    if (!container) return;
+                    const distance = Math.max(container.clientWidth * 0.88, 240);
+                    container.scrollBy({ left: direction * distance, behavior: 'smooth' });
+                },
 
                 getSeasonOptions() {
                     const count = Number(this.selectedItem?.seasons || 0);
