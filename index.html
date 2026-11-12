@@ -252,7 +252,7 @@
                 </section>
 
                 <!-- MOBILE FEATURED TITLES -->
-                <div class="md:hidden bg-gray-950 px-4 pt-4 pb-5">
+                <div class="md:hidden -mb-6 bg-gray-950 px-4 pt-2 pb-2">
                     <div class="flex items-center justify-between mb-3">
                         <span class="text-[10px] font-black uppercase tracking-[0.18em] text-gray-200">Featured collection</span>
                         <div class="flex gap-2">
@@ -260,7 +260,7 @@
                             <button @click="navigateHeroSlide(1, 'mobileHeroThumbs')" aria-label="Sonraki öne çıkan yapım" class="hero-nav-arrow"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                         </div>
                     </div>
-                    <div id="mobileHeroThumbs" class="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-1">
+                    <div id="mobileHeroThumbs" class="flex gap-2.5 overflow-x-auto no-scrollbar scroll-smooth pb-0">
                         <template x-for="(item, idx) in heroThumbSlides" :key="'mobile-' + item.id">
                             <button @click="selectHeroSlide(idx)" :data-hero-index="idx" :aria-label="item.title" :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 opacity-100' : 'opacity-70'" class="flex-shrink-0 w-[76px] rounded-lg overflow-hidden bg-gray-900 transition-all">
                                 <img :src="item.poster" :alt="item.title" :srcset="getTmdbImageSrcSet(item.poster, [185, 342])" sizes="76px" loading="lazy" decoding="async" @error="handleImageError($event)" class="w-full aspect-[2/3] object-cover">
@@ -272,7 +272,7 @@
                 <!-- DESKTOP HERO: sol metin + sağ sinematik görsel -->
                 <section @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="relative isolate hidden md:block w-full overflow-hidden border-b border-gray-200 bg-gray-950 dark:border-gray-800/80 select-none"><img aria-hidden="true" :src="currentHero.backdrop || currentHero.poster" loading="eager" decoding="async" class="pointer-events-none absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-35 blur-3xl"><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div><div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-gray-950/30 via-transparent to-gray-950/80"></div>
                     <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_78%_48%,rgba(225,29,72,0.13),transparent_42%)]"></div>
-                    <div class="relative mx-auto grid min-h-[500px] max-w-[1440px] grid-cols-2 items-center gap-8 px-8 py-12 sm:px-10 lg:min-h-[540px] lg:gap-12 lg:px-14 xl:gap-16">
+                    <div class="relative mx-auto grid min-h-[500px] max-w-[1440px] grid-cols-2 items-center gap-8 px-8 pt-12 pb-3 sm:px-10 lg:min-h-[540px] lg:gap-12 lg:px-14 xl:gap-16">
                         <div class="relative z-10 max-w-[590px] space-y-5 text-white">
                             <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
                             <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.45rem,3.2vw,3.65rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
@@ -298,18 +298,18 @@
                         </div>
                     </div>
                     <!-- Hero Bottom Thumbnails Carousel -->
-                    <div class="relative z-10 w-full bg-gradient-to-t from-black/50 to-transparent px-8 pb-6 pt-2 sm:px-10 lg:px-14">
-                        <div class="mb-3 flex items-center justify-between">
+                    <div class="relative z-10 -mb-6 w-full bg-gradient-to-t from-black/50 to-transparent px-8 pb-2 pt-1 sm:px-10 lg:px-14">
+                        <div class="mb-2 flex items-center justify-between">
                             <span class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Öne çıkan yapımlar</span>
                             <div class="flex gap-2">
                                 <button @click="navigateHeroSlide(-1)" aria-label="Önceki öne çıkan yapım" class="hero-nav-arrow"><i class="fa-solid fa-chevron-left"></i></button>
                                 <button @click="navigateHeroSlide(1)" aria-label="Sonraki öne çıkan yapım" class="hero-nav-arrow"><i class="fa-solid fa-chevron-right"></i></button>
                             </div>
                         </div>
-                        <div id="heroThumbContainer" class="flex items-center gap-4 overflow-x-auto no-scrollbar scroll-smooth py-1">
+                        <div id="heroThumbContainer" class="flex items-center gap-3 overflow-x-auto no-scrollbar scroll-smooth py-0.5">
                             <template x-for="(item, idx) in heroThumbSlides" :key="item.id">
-                                <button type="button" @click="selectHeroSlide(idx)" :data-hero-index="idx" :aria-label="item.title" :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 border-rose-500' : 'border-gray-800 opacity-75 hover:opacity-100'" class="group flex w-32 flex-shrink-0 cursor-pointer flex-col overflow-hidden rounded-xl border bg-gray-900 p-1.5 shadow-sm transition-all duration-300 sm:w-36">
-                                    <span class="mb-1.5 block aspect-[2/3] w-full overflow-hidden rounded-lg bg-black"><img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster, [154, 185])" sizes="(max-width: 639px) 128px, 144px" class="h-full w-full object-cover transition-transform group-hover:scale-105"></span>
+                                <button type="button" @click="selectHeroSlide(idx)" :data-hero-index="idx" :aria-label="item.title" :class="currentSlideIndex === idx ? 'ring-2 ring-rose-500 border-rose-500' : 'border-gray-800 opacity-75 hover:opacity-100'" class="group flex w-36 flex-shrink-0 cursor-pointer flex-col overflow-hidden rounded-xl border bg-gray-900 p-1 shadow-sm transition-all duration-300 sm:w-40">
+                                    <span class="mb-1.5 block aspect-[2/3] w-full overflow-hidden rounded-lg bg-black"><img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster, [154, 185])" sizes="(max-width: 639px) 144px, 160px" class="h-full w-full object-cover transition-transform group-hover:scale-105"></span>
                                     <span class="line-clamp-1 text-center text-[11px] font-bold text-white transition-colors group-hover:text-rose-500" x-text="item.title"></span>
                                 </button>
                             </template>
