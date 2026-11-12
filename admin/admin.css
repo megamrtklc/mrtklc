@@ -1341,3 +1341,5 @@ body.admin-theme-dark .header-utility{background:var(--surface);border-color:var
  .theme-picker select{max-width:68px!important}
  .logout-button{font-size:8px;padding:6px}
 }
+
+body.admin-theme-ivory{--canvas:#f3f2ed;--surface:#fffefa;--surface-soft:#f8f7f2;--ink:#202d2b;--text:#34413e;--muted:#78817c;--line:#e4e5dc;--accent:#d97757;--accent-soft:#f9e9e1;--studio-green:#203b36;--studio-green-2:#294b44}
