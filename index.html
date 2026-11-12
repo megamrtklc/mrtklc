@@ -474,7 +474,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                     
                     <!-- Left Section -->
-                    <div class="lg:col-span-8 flex flex-col space-y-6">
+                    <div id="watch-left-column" class="lg:col-span-8 flex flex-col space-y-6">
                         
                         <!-- Custom Video Player -->
                         <div data-watch-card="player" :style="'order: ' + getWatchCardOrder('player')" :class="cinemaMode ? 'fixed z-[100] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,1400px)] max-h-[88vh] rounded-xl border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.8)]' : 'relative w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl'" class="aspect-video overflow-hidden bg-black group select-none transition-all duration-300" @mouseenter="showPlayerControls()" @mousemove="showPlayerControls()" @mouseleave="hidePlayerControlsOnLeave()">
@@ -728,7 +728,7 @@
                     </div>
 
                     <!-- Right Section -->
-                    <div class="lg:col-span-4 flex flex-col space-y-6">
+                    <div id="watch-right-column" class="lg:col-span-4 flex flex-col space-y-6">
                         
                         <!-- Yapım Künyesi -->
                         <div data-watch-card="credits" :style="'order: ' + getWatchCardOrder('credits')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
