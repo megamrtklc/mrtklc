@@ -244,7 +244,7 @@
                                     <span class="text-white/35">|</span><span x-text="currentHero.year"></span>
                                     <span class="text-white/35">|</span><span x-text="currentHero.genre"></span>
                                 </div>
-                                <p class="max-w-[480px] text-[15px] leading-7 text-gray-200/90 line-clamp-3" x-text="currentHero.desc"></p>
+                                <p class="max-w-[480px] text-[15px] leading-7 text-gray-200/90 line-clamp-3" x-text="heroDescription"></p>
                                 <div class="flex flex-wrap items-center gap-3 pt-1">
                                     <button type="button" @click="openWatchPage(currentHero)" class="inline-flex min-h-12 items-center gap-3 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 px-8 text-sm font-black uppercase tracking-wide text-[#17120a] shadow-lg shadow-amber-950/30 transition hover:-translate-y-0.5 hover:brightness-110"><i class="fa-solid fa-play"></i> Şimdi İzle</button>
                                     <button type="button" @click="toggleWatchlist(currentHero)" class="inline-flex min-h-12 items-center gap-3 rounded-full border border-white/35 bg-black/25 px-7 text-sm font-bold text-white backdrop-blur-sm transition hover:border-amber-300 hover:bg-white/10"><i :class="isInWatchlist(currentHero) ? 'fa-solid fa-bookmark text-amber-300' : 'fa-regular fa-bookmark'"></i><span x-text="isInWatchlist(currentHero) ? 'Listemde' : 'Listeme Ekle'"></span></button>
@@ -308,7 +308,7 @@
                                 <span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200" x-text="currentHero.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                 <span class="text-gray-400" x-text="currentHero.genre"></span>
                             </div>
-                            <p class="max-w-2xl text-sm leading-6 text-gray-300 line-clamp-3" x-text="currentHero.desc"></p>
+                            <p class="max-w-2xl text-sm leading-6 text-gray-300 line-clamp-3" x-text="heroDescription"></p>
                             <div class="grid min-w-0 grid-cols-2 gap-2 pt-1">
                                 <button type="button" @click="openWatchPage(currentHero)" class="inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-xl bg-rose-600 px-2 sm:px-3 text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-white shadow-lg shadow-rose-950/30 transition-colors hover:bg-rose-500"><i class="fa-solid fa-play shrink-0"></i><span class="truncate">Şimdi İzle</span></button>
                                 <button type="button" @click="toggleWatchlist(currentHero)" class="inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-2 sm:px-3 text-[11px] sm:text-xs font-bold text-white transition-colors hover:bg-white/10"><i :class="isInWatchlist(currentHero) ? 'fa-solid fa-bookmark text-rose-400' : 'fa-regular fa-bookmark'" class="shrink-0"></i><span class="truncate" x-text="isInWatchlist(currentHero) ? 'Listemde' : 'Listeme Ekle'"></span></button>
