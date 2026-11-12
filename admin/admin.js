@@ -101,6 +101,8 @@
     setField('field-genre',item?.genre||'');setField('field-category',item?.category||item?.tmdbGenres||'');
     setField('field-duration',item?.duration||item?.tmdbRuntime||'');setField('field-country',item?.country||item?.tmdbCountries||'');
     setField('field-director',item?.director||item?.tmdbDirector||'');setField('field-platform',item?.platform||'');
+    setField('field-watch',item?.watchUrl||'');setField('field-note',item?.personalNote||'');
+    setField('field-tmdb',item?.tmdbId||'');setField('field-imdb',item?.imdbId||item?.tmdbImdbId||'');
     setField('field-image',item?.image||item?.poster||item?.tmdbPoster||'');setField('field-backdrop',item?.backdrop||item?.tmdbBackdrop||'');
     setField('field-trailer',item?.trailerUrl||item?.tmdbTrailerUrl||'');setField('field-seasons',item?.seasons||'');
     setField('field-episodes',item?.episodes||'');setField('field-desc',item?.desc||item?.tmdbOverview||'');
@@ -114,7 +116,9 @@
     const record={...(existing||{}),id:existing?.id??('cv-'+Date.now()),title:$('#field-title').value.trim(),type,
       year:$('#field-year').value.trim(),rating:$('#field-rating').value.trim(),genre:$('#field-genre').value.trim(),
       category:$('#field-category').value.trim(),duration:$('#field-duration').value.trim(),country:$('#field-country').value.trim(),
-      director:$('#field-director').value.trim(),platform:$('#field-platform').value.trim(),image:$('#field-image').value.trim(),
+      director:$('#field-director').value.trim(),platform:$('#field-platform').value.trim(),watchUrl:$('#field-watch').value.trim(),
+      personalNote:$('#field-note').value.trim(),tmdbId:$('#field-tmdb').value.trim()?Number($('#field-tmdb').value):null,
+      imdbId:$('#field-imdb').value.trim(),image:$('#field-image').value.trim(),
       backdrop:$('#field-backdrop').value.trim(),trailerUrl:$('#field-trailer').value.trim(),desc:$('#field-desc').value.trim()};
     if(!record.title){toast('Yapım adı zorunludur.');return;}
     if(type==='tv'){record.seasons=Number($('#field-seasons').value)||1;record.episodes=Number($('#field-episodes').value)||0;}else{delete record.seasons;delete record.episodes;}
