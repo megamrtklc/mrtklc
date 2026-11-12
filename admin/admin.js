@@ -442,7 +442,7 @@
       const pool=mode==='auto'?autoHeroItems(category,limit):state.catalog;
       list.innerHTML=pool.map(item=>{
         const checked=selected.has(String(item.id));
-        return '<label class="hero-pick" data-search="'+escapeHtml((titleOf(item)+' '+yearOf(item)).toLocaleLowerCase('tr-TR'))+'"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(checked?'checked ':'')+(mode==='auto'?'disabled ':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\\'hidden\\'"><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+' · ★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'</small></span></label>';
+        return '<label class="hero-pick" data-search="'+escapeHtml((titleOf(item)+' '+yearOf(item)).toLocaleLowerCase('tr-TR'))+'"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(checked?'checked ':'')+(mode==='auto'?'disabled ':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt=""><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+' · ★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'</small></span></label>';
       }).join('');
       const count=()=>$('#hero-'+device+'-selected-count').textContent=$$('#hero-'+device+'-slide-list input:checked').length+' yapım seçildi';
       const preview=()=>{
