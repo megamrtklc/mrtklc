@@ -292,20 +292,38 @@
       root.innerHTML=config[side].map((id,index)=>{
         const item=watchCardDefinitions[id],target=side==='left'?'right':'left';
         const action=side==='left'?'Sağ alana taşı':'Sol alana taşı';
-        return '<div class="watch-order-item" data-card="'+id+'" draggable="true" title="Diğer alana sürükleyerek taşı"><span class="watch-order-number">'+(index+1)+'</span><div class="watch-order-copy"><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+'</small></div><div class="watch-order-actions"><button type="button" class="watch-order-transfer" data-target-side="'+target+'" aria-label="'+action+'" title="'+action+'">'+(side==='left'?'→':'←')+' <span>'+action+'</span></button></div></div>';
+        return '<div class="watch-order-item" data-card="'+id+'" draggable="true" title="Sürükleyerek sıralayabilir veya diğer sütuna taşıyabilirsin">'+
+          '<span class="watch-order-number">'+(index+1)+'</span>'+
+          '<div class="watch-order-copy"><b>'+escapeHtml(item.label)+'</b><small>'+escapeHtml(item.description)+'</small></div>'+
+          '<div class="watch-order-actions">'+
+          '<button type="button" class="watch-order-move" data-move-direction="-1" '+(index===0?'disabled':'')+' aria-label="Yukarı taşı" title="Yukarı taşı">↑</button>'+
+          '<button type="button" class="watch-order-move" data-move-direction="1" '+(index===config[side].length-1?'disabled':'')+' aria-label="Aşağı taşı" title="Aşağı taşı">↓</button>'+
+          '<button type="button" class="watch-order-transfer" data-target-side="'+target+'" aria-label="'+action+'" title="'+action+'">'+(side==='left'?'→':'←')+' <span>'+action+'</span></button>'+
+          '</div></div>';
       }).join('')||'<div class="watch-demo-empty">Bu sütunda kart bulunmuyor.</div>';
-      root.classList.toggle('is-drop-target',false);
+      root.classList.remove('is-drop-target');
     }
     renderWatchDemo(config);
     $('#watch-demo-left').setAttribute('aria-live','polite');
     $('#watch-demo-right').setAttribute('aria-live','polite');
   }
-  function moveWatchCard(side,id,targetSide){
-    if(!targetSide||side===targetSide)return;
+  function moveWatchCard(side,id,targetSide,index){
+    if(!['left','right'].includes(side)||!['left','right'].includes(targetSide))return;
     const config=watchLayoutConfig(),source=config[side],from=source.indexOf(id);
-    if(from<0||config[targetSide].includes(id))return;
-    source.splice(from,1);
-    config[targetSide].push(id);
+    if(from<0)return;
+    if(side===targetSide){
+      source.splice(from,1);
+      let destination=Number.isInteger(index)?index:source.length;
+      if(from<destination)destination--;
+      destination=Math.max(0,Math.min(destination,source.length));
+      source.splice(destination,0,id);
+    }else{
+      if(config[targetSide].includes(id))return;
+      source.splice(from,1);
+      let destination=Number.isInteger(index)?index:config[targetSide].length;
+      destination=Math.max(0,Math.min(destination,config[targetSide].length));
+      config[targetSide].splice(destination,0,id);
+    }
     state.data.watchPageConfig=config;
     renderWatchLayout();
   }
@@ -417,8 +435,15 @@
     const list=$('#watch-'+side+'-list');
     list.addEventListener('click',event=>{
       const item=event.target.closest('[data-card]');
+      if(!item)return;
+      const id=item.dataset.card;
       const transfer=event.target.closest('[data-target-side]');
-      if(item&&transfer)moveWatchCard(side,item.dataset.card,transfer.dataset.targetSide);
+      if(transfer){moveWatchCard(side,id,transfer.dataset.targetSide);return;}
+      const move=event.target.closest('[data-move-direction]');
+      if(move&&!move.disabled){
+        const config=watchLayoutConfig(),index=config[side].indexOf(id);
+        moveWatchCard(side,id,side,index+Number(move.dataset.moveDirection));
+      }
     });
     list.addEventListener('dragstart',event=>{
       const item=event.target.closest('[data-card]');
@@ -428,29 +453,41 @@
       event.dataTransfer.effectAllowed='move';
       event.dataTransfer.setData('text/plain',item.dataset.card);
     });
-    list.addEventListener('dragend',()=>{
-      draggedWatchCard=null;
-      $('.watch-order-item').forEach(item=>item.classList.remove('is-dragging'));
-      $('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
-    });
     list.addEventListener('dragover',event=>{
-      if(!draggedWatchCard||draggedWatchCard.side===side)return;
+      if(!draggedWatchCard)return;
       event.preventDefault();
       event.dataTransfer.dropEffect='move';
       list.classList.add('is-drop-target');
+      $$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
+      const over=event.target.closest('[data-card]');
+      if(over&&over.dataset.card!==draggedWatchCard.id)over.classList.add('drop-target');
     });
     list.addEventListener('dragleave',event=>{
-      if(!list.contains(event.relatedTarget))list.classList.remove('is-drop-target');
+      if(!list.contains(event.relatedTarget)){
+        list.classList.remove('is-drop-target');
+        $$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
+      }
     });
     list.addEventListener('drop',event=>{
-      if(!draggedWatchCard||draggedWatchCard.side===side)return;
+      if(!draggedWatchCard)return;
       event.preventDefault();
-      moveWatchCard(draggedWatchCard.side,draggedWatchCard.id,side);
+      const over=event.target.closest('[data-card]');
+      const config=watchLayoutConfig();
+      const destination=over?config[side].indexOf(over.dataset.card):config[side].length;
+      moveWatchCard(draggedWatchCard.side,draggedWatchCard.id,side,destination);
       draggedWatchCard=null;
-      $('.watch-order-item').forEach(item=>item.classList.remove('is-dragging'));
-      $('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
+      $$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
+      $$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
+    });
+    list.addEventListener('dragend',()=>{
+      draggedWatchCard=null;
+      $$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
+      $$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
     });
   });
-  $('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{watchDemoType=button.dataset.demoType;renderWatchLayout();}));
+  $$('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{
+    watchDemoType=button.dataset.demoType;
+    renderWatchLayout();
+  }));
   init();
 })();
