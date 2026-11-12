@@ -194,6 +194,7 @@
   $('#prev-page').addEventListener('click',()=>{state.page=Math.max(1,state.page-1);renderCatalog()});
   $('#next-page').addEventListener('click',()=>{state.page++;renderCatalog()});
   $('#add-content').addEventListener('click',()=>openEditor());
+  $('#catalog-add')?.addEventListener('click',()=>openEditor());
   $('#content-form').addEventListener('submit',saveContent);
   $('#close-editor').addEventListener('click',()=>$('#content-dialog').close());
   $('#cancel-editor').addEventListener('click',()=>$('#content-dialog').close());
