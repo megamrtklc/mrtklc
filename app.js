@@ -13,7 +13,7 @@
 
         function ultimateProApp() {
             return {
-                getTmdbImageSrcSet(url, widths = [185, 342, 500]) {
+                getTmdbImageSrcSet(url, widths = [185, 240, 280, 342, 500]) {
                     if (typeof url !== 'string') return '';
                     const match = url.match(/^(https:\/\/image\.tmdb\.org\/t\/p\/)(?:w\d+|original)(\/.*)$/);
                     if (!match) return '';
