@@ -133,6 +133,7 @@
                         <span>Video Bağlantıları</span>
                         <span class="px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px]" x-text="watchableCatalog.length"></span>
                     </a>
+                    <a href="#" @click.prevent="navigateTo('library')" :class="currentPage === 'library' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center gap-1.5"><i class="fa-solid fa-book-open text-rose-500"></i><span>Kütüphanem</span><span class="px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px]" x-text="continueWatchingItems.length"></span></a>
                     <a href="#" @click.prevent="navigateTo('watchlist')" :class="currentPage === 'watchlist' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center space-x-1.5">
                         <span>İzleme Listem</span>
                         <span class="px-1.5 py-0.2 bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-full text-[10px]" x-text="watchlist.length"></span>
@@ -194,6 +195,7 @@
                 <a href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Ana Sayfa</a>
                 <a href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Keşfet</a>
                 <a href="#" @click.prevent="navigateTo('video-links'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span>Video Bağlantıları</span><span class="text-xs text-rose-500" x-text="watchableCatalog.length"></span></a>
+                <a href="#" @click.prevent="navigateTo('library'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span>Kütüphanem</span><span class="text-xs text-rose-500" x-text="continueWatchingItems.length"></span></a>
                 <a href="#" @click.prevent="navigateTo('watchlist'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span>İzleme Listem</span><span class="text-xs text-rose-500" x-text="watchlist.length"></span></a>
                 <a href="#" @click.prevent="navigateTo('stats'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">İstatistikler</a>
             </nav>
@@ -432,6 +434,40 @@
                         </template>
                     </div>
                     <p x-show="!personalizedRecommendations.length" class="text-xs text-gray-500 dark:text-gray-400 py-5 text-center">Önerileri kişiselleştirmek için birkaç yapım izlemeye başlayabilir veya izleme listene ekleyebilirsin.</p>
+                </section>
+
+                <!-- İzlemeye Devam Et: aktif profilin kaldığı yapımlar -->
+                <section x-show="continueWatchingItems.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-500 mb-1">KALDIĞIN YERDEN</p>
+                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">İzlemeye Devam Et</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><span x-text="currentProfile.name"></span> profiline ait izleme ilerlemesi</p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="continueWatchingItems.length + ' yapım'"></span>
+                            <button type="button" @click="scrollHomeCards('home-continue-rail',-1)" aria-label="Önceki izleme kayıtları" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button type="button" @click="scrollHomeCards('home-continue-rail',1)" aria-label="Sonraki izleme kayıtları" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
+                            <button type="button" @click="navigateTo('library')" class="text-[10px] font-black text-rose-500 hover:text-rose-400 ml-1">Tümünü Gör <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                    <div id="home-continue-rail" class="home-card-rail">
+                        <template x-for="entry in continueWatchingItems.slice(0,15)" :key="'continue-' + entry.kind + '-' + entry.item.id">
+                            <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="home-rail-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-500/60 transition-all duration-300 shadow-sm">
+                                <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image || entry.item.tmdbPoster" :srcset="getTmdbImageSrcSet(entry.item.poster || entry.item.image || entry.item.tmdbPoster)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+                                    <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="entry.kind === 'series' ? 'DİZİ' : 'FİLM'"></span>
+                                    <span class="absolute bottom-3 left-3 right-3 text-white text-[10px] font-bold line-clamp-1" x-text="entry.kind === 'series' ? entry.label : entry.label"></span>
+                                </div>
+                                <div class="p-2.5 space-y-2">
+                                    <h3 class="text-[11px] font-bold text-gray-900 dark:text-white line-clamp-1" x-text="entry.item.title"></h3>
+                                    <div class="h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden"><div class="h-full rounded-full bg-rose-600" :style="'width:' + entry.percent + '%'"></div></div>
+                                    <div class="flex items-center justify-between text-[9px] text-gray-500 dark:text-gray-400"><span x-text="entry.kind === 'series' ? entry.watchedCount + (entry.total ? ' / ' + entry.total + ' bölüm' : ' bölüm izlendi') : Math.floor(entry.time / 60) + ' dk izlendi'"></span><span class="font-black text-rose-500" x-text="entry.percent + '%'"></span></div>
+                                </div>
+                            </button>
+                        </template>
+                    </div>
                 </section>
 
                 <!-- Yönetim panelinden yayınlanan koleksiyonlar -->
@@ -1265,6 +1301,68 @@
             </div>
         </template>
 
+        <!-- ==================== PERSONAL WATCH CENTER ==================== -->
+        <template x-if="currentPage === 'library'">
+            <div class="w-full px-6 sm:px-12 pt-8 space-y-8 pb-16">
+                <section class="relative overflow-hidden rounded-3xl border border-rose-500/20 bg-gradient-to-br from-gray-950 via-[#191923] to-[#2a1420] p-6 sm:p-9 text-white shadow-xl">
+                    <div class="absolute -right-10 -top-16 h-64 w-64 rounded-full bg-rose-600/15 blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.25em] text-rose-400 mb-2">CINEVERSE • KİŞİSEL ALAN</p>
+                            <h2 class="text-2xl sm:text-4xl font-black uppercase tracking-tight">Kütüphanem</h2>
+                            <p class="mt-2 text-xs sm:text-sm text-gray-300"><span x-text="currentProfile.name"></span> profili için izleme geçmişin, kaldığın yapımlar ve kişisel listen.</p>
+                        </div>
+                        <button type="button" @click="navigateTo('stats')" class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-xs font-bold text-white hover:bg-white/15 transition-colors"><i class="fa-solid fa-chart-simple text-rose-300"></i> İzleme istatistikleri <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
+                    </div>
+                    <div class="relative z-10 mt-7 grid grid-cols-3 gap-2 sm:gap-3">
+                        <div class="rounded-xl border border-white/10 bg-white/5 p-3 sm:p-4"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">Devam eden</p><p class="mt-1 text-2xl sm:text-3xl font-black" x-text="continueWatchingItems.length"></p></div>
+                        <div class="rounded-xl border border-white/10 bg-white/5 p-3 sm:p-4"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">Geçmiş kaydı</p><p class="mt-1 text-2xl sm:text-3xl font-black" x-text="libraryHistoryItems.length"></p></div>
+                        <div class="rounded-xl border border-white/10 bg-white/5 p-3 sm:p-4"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">İzleme listem</p><p class="mt-1 text-2xl sm:text-3xl font-black" x-text="watchlist.length"></p></div>
+                    </div>
+                </section>
+
+                <section class="space-y-4">
+                    <div class="flex items-end justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3">
+                        <div><p class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500">KALDIĞIN YERDEN</p><h3 class="mt-1 text-lg sm:text-xl font-black text-gray-900 dark:text-white">İzlemeye Devam Et</h3></div>
+                        <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="continueWatchingItems.length + ' yapım'"></span>
+                    </div>
+                    <div x-show="continueWatchingItems.length" class="home-card-rail">
+                        <template x-for="entry in continueWatchingItems" :key="'library-continue-' + entry.kind + '-' + entry.item.id">
+                            <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="home-rail-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-500/60 transition-all shadow-sm">
+                                <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900"><img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image || entry.item.tmdbPoster" :srcset="getTmdbImageSrcSet(entry.item.poster || entry.item.image || entry.item.tmdbPoster)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"><span class="absolute top-2 left-2 rounded bg-black/80 px-2 py-1 text-[8px] font-black text-white" x-text="entry.kind === 'series' ? 'DİZİ' : 'FİLM'"></span><span class="absolute bottom-2 left-2 rounded bg-black/80 px-2 py-1 text-[9px] font-bold text-white" x-text="entry.label"></span></div>
+                                <div class="p-2.5 space-y-2"><h4 class="text-xs font-bold text-gray-900 dark:text-white line-clamp-1" x-text="entry.item.title"></h4><div class="h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden"><div class="h-full rounded-full bg-rose-600" :style="'width:' + entry.percent + '%'"></div></div><div class="flex justify-between text-[9px] text-gray-500 dark:text-gray-400"><span x-text="entry.kind === 'series' ? entry.watchedCount + (entry.total ? ' / ' + entry.total + ' bölüm' : ' bölüm izlendi') : Math.floor(entry.time / 60) + ' dk izlendi'"></span><strong class="text-rose-500" x-text="entry.percent + '%'"></strong></div></div>
+                            </button>
+                        </template>
+                    </div>
+                    <div x-show="continueWatchingItems.length === 0" :class="getCardClass()" class="rounded-2xl border px-5 py-10 text-center"><i class="fa-solid fa-play-circle text-3xl text-gray-400"></i><p class="mt-3 text-sm font-bold text-gray-800 dark:text-gray-200">Henüz devam eden bir yapım yok</p><p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Doğrudan video oynatıcıda film izleyebilir veya dizilerde bölümleri izlendi olarak işaretleyebilirsin.</p><button type="button" @click="navigateTo('explore')" class="mt-4 rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-white">Yapım keşfet</button></div>
+                </section>
+
+                <section class="space-y-4">
+                    <div class="flex items-end justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3"><div><p class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500">SON ETKİNLİKLER</p><h3 class="mt-1 text-lg sm:text-xl font-black text-gray-900 dark:text-white">İzleme Geçmişim</h3></div><span class="text-[10px] text-gray-500 dark:text-gray-400">En son kaydedilenler</span></div>
+                    <div x-show="libraryHistoryItems.length" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                        <template x-for="entry in libraryHistoryItems" :key="'history-' + entry.kind + '-' + entry.item.id">
+                            <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="flex items-center gap-3 rounded-xl border p-3 text-left hover:border-rose-500/50 transition-colors min-w-0">
+                                <img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image || entry.item.tmdbPoster" class="h-16 w-11 shrink-0 rounded-lg object-cover bg-gray-900">
+                                <div class="min-w-0 flex-1"><p class="truncate text-xs font-bold text-gray-900 dark:text-white" x-text="entry.item.title"></p><p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400" x-text="entry.label"></p><div class="mt-2 h-1 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden"><div class="h-full rounded-full bg-rose-600" :style="'width:' + entry.percent + '%'"></div></div><p class="mt-1 text-[9px] text-gray-500 dark:text-gray-400" x-text="entry.kind === 'series' ? entry.watchedCount + ' bölüm izlendi' : Math.floor(entry.time / 60) + ' dk kaydedildi'"></p></div>
+                                <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
+                            </button>
+                        </template>
+                    </div>
+                    <div x-show="libraryHistoryItems.length === 0" :class="getCardClass()" class="rounded-2xl border px-5 py-9 text-center text-xs text-gray-500 dark:text-gray-400">İzleme geçmişin oluştuğunda burada görünecek.</div>
+                </section>
+
+                <section class="space-y-4">
+                    <div class="flex items-end justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3"><div><p class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500">SONRA İZLE</p><h3 class="mt-1 text-lg sm:text-xl font-black text-gray-900 dark:text-white">İzleme Listem</h3></div><button type="button" @click="navigateTo('watchlist')" class="text-[10px] font-black text-rose-500 hover:text-rose-400">Tüm liste <i class="fa-solid fa-arrow-right ml-1"></i></button></div>
+                    <div x-show="watchlist.length" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+                        <template x-for="item in watchlist.slice(0,16)" :key="'library-list-' + item.id">
+                            <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="group min-w-0 overflow-hidden rounded-xl border text-left hover:border-rose-500/60 transition-colors"><div class="aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900"><img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.tmdbPoster" class="h-full w-full object-cover group-hover:scale-105 transition-transform"></div><div class="p-2"><p class="line-clamp-2 text-[10px] font-bold text-gray-900 dark:text-white" x-text="item.title"></p></div></button>
+                        </template>
+                    </div>
+                    <div x-show="watchlist.length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 p-6 text-center text-xs text-gray-500 dark:text-gray-400">İzlemek istediğin yapımları yer imine ekleyerek burada toplayabilirsin.</div>
+                </section>
+            </div>
+        </template>
+
         <!-- ==================== WATCHING STATISTICS PAGE ==================== -->
         <template x-if="currentPage === 'stats'">
             <div class="w-full px-6 sm:px-12 pt-8 space-y-7 pb-16">
@@ -1373,6 +1471,7 @@
             <div class="flex space-x-6 font-bold uppercase tracking-wider text-[11px]">
                 <a href="#" @click.prevent="navigateTo('home')" class="hover:text-black dark:hover:text-white transition-colors">Ana Sayfa</a>
                 <a href="#" @click.prevent="navigateTo('explore')" class="hover:text-black dark:hover:text-white transition-colors">Keşfet</a>
+                <a href="#" @click.prevent="navigateTo('library')" class="hover:text-black dark:hover:text-white transition-colors">Kütüphanem</a>
                 <a href="#" @click.prevent="navigateTo('watchlist')" class="hover:text-black dark:hover:text-white transition-colors">İzleme Listem</a>
                 <a href="#" @click.prevent="navigateTo('stats')" class="hover:text-black dark:hover:text-white transition-colors">İstatistikler</a>
             </div>
