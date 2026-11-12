@@ -1,9 +1,7 @@
 name: Lighthouse Performance Audit
 
 on:
-  workflow_run:
-    workflows: ["pages build and deployment"]
-    types: [completed]
+  push:
     branches: [main]
   workflow_dispatch:
 
@@ -12,7 +10,7 @@ permissions:
 
 jobs:
   lighthouse:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     name: Lighthouse mobile and desktop audit
     runs-on: ubuntu-latest
     timeout-minutes: 25
