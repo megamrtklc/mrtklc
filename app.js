@@ -373,7 +373,7 @@
                     const settings = this.homepageConfig?.settings || {};
                     const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
                     const configuredCount = Number(mobile ? settings.mobileCount : settings.desktopCount);
-                    const count = Math.max(1, Math.min(12, configuredCount || (mobile ? 6 : 10)));
+                    const count = Math.max(1, Math.min(mobile ? 12 : 20, configuredCount || (mobile ? 6 : 10)));
                     return this.heroSlides.slice(0, count);
                 },
 
