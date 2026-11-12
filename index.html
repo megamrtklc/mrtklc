@@ -499,6 +499,11 @@
                             <div x-show="isDirectVideoUrl(selectedItem.watchUrl) && !hasPlaybackStarted" class="absolute inset-0 z-10 flex items-center justify-center bg-black cursor-pointer" @click.stop="startPlayback()">
                                 <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 w-full h-full object-cover object-center">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/20"></div>
+                                <button type="button" @click.stop="trailerOpen = true" class="absolute left-3 top-3 sm:left-5 sm:top-5 z-30 inline-flex min-h-11 items-center gap-2.5 rounded-xl border border-amber-300/70 bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200 px-4 sm:px-5 text-xs sm:text-sm font-black tracking-wide text-gray-950 shadow-[0_8px_30px_rgba(251,191,36,0.35)] ring-1 ring-black/20 transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-[0_12px_36px_rgba(251,191,36,0.5)] focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                                    <i class="fa-solid fa-film text-sm sm:text-base"></i>
+                                    <span>FRAGMANI İZLE</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i>
+                                </button>
                                 <button type="button" @click.stop="startPlayback()" class="relative z-10 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/50 bg-rose-600/90 text-white shadow-2xl backdrop-blur-sm transition-all hover:scale-110 hover:bg-rose-500" :aria-label="selectedItem.title + ' filmini oynat'">
                                     <i class="fa-solid fa-play text-2xl sm:text-3xl ml-1"></i>
                                 </button>
@@ -686,12 +691,6 @@
                                 <button @click="toggleWatchlist(selectedItem)" :class="getCardClass()" class="shrink-0 px-4 py-2 rounded-xl hover:opacity-85 text-gray-800 dark:text-white font-bold text-xs uppercase tracking-wider border flex items-center space-x-2 transition-colors">
                                     <i :class="isInWatchlist(selectedItem) ? 'fa-solid fa-bookmark text-rose-500' : 'fa-regular fa-bookmark'"></i>
                                     <span x-text="isInWatchlist(selectedItem) ? 'Listede' : 'Ekle'"></span>
-                                </button>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-3">
-                                <button type="button" @click="trailerOpen = true" class="inline-flex min-h-11 items-center gap-2.5 rounded-xl border border-amber-400/50 bg-gradient-to-r from-amber-400/10 to-amber-500/5 px-5 text-sm font-extrabold text-amber-600 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-400 hover:bg-amber-400/15 hover:shadow-lg hover:shadow-amber-500/10 dark:text-amber-300">
-                                    <i class="fa-solid fa-circle-play text-base"></i>
-                                    <span>Fragmanı İzle</span>
                                 </button>
                             </div>
                             <div>
