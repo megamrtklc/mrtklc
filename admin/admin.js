@@ -79,6 +79,11 @@
     const ok=await persist(nextData,'Yönetici adı güncellendi.');
     if(ok)renderAdminProfile();
   }
+  function renderWelcomePosters(){
+    const host=$('#dashboard-poster-cloud');if(!host)return;
+    const picks=state.catalog.filter(item=>posterOf(item)).sort(()=>Math.random()-.5).slice(0,5);
+    host.innerHTML=picks.map((item,index)=>'<div class="welcome-poster poster-float-'+(index+1)+'"><img src="'+escapeHtml(posterOf(item))+'" alt="" loading="lazy" onerror="this.parentElement.remove()"><span>'+escapeHtml(titleOf(item))+'</span></div>').join('');
+  }
   function renderOverviewInsights(){
     const years=state.catalog.map(yearOf).filter(x=>x!=='—').map(Number).filter(Number.isFinite);
     const ratings=state.catalog.map(x=>Number(x.rating||x.tmdbRating)).filter(x=>Number.isFinite(x)&&x>0);
@@ -373,7 +378,7 @@
   }
   async function init(){
     applyAdminTheme(localStorage.getItem('cv-admin-theme')||'ivory',false);
-    const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;const dashboardDate=$('#dashboard-date');if(dashboardDate)dashboardDate.textContent=formattedDate;
+    const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
     try{
       const apiResponse=await fetch('/api/catalog',{cache:'no-store',credentials:'same-origin'});
@@ -381,6 +386,7 @@
       const payload=await apiResponse.json();state.data=payload.data;state.sha=payload.sha||null;state.apiEnabled=!!state.sha&&payload.writable!==false;
       if(!Array.isArray(state.data?.catalog))throw new Error('Katalog listesi bulunamadı.');
       state.catalog=state.data.catalog.filter(x=>x&&typeof x==='object');
+      renderWelcomePosters();
       $('.environment').innerHTML='<i></i> KORUMALI YÖNETİM';
       const sessionResponse=await fetch('/api/session',{cache:'no-store',credentials:'same-origin'});
       if(!sessionResponse.ok)throw new Error('Yönetici oturumu doğrulanamadı.');
