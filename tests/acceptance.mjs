@@ -287,6 +287,15 @@ try {
     assert.ok(!ids.includes(result.profileOne.seriesId), 'Bölüm takibi olan dizi önerilmemeli');
     assert.ok(!ids.includes(result.profileOne.savedId), 'İzleme listesindeki yapım tekrar önerilmemeli');
     assert.ok(result.profileOne.reasons.every(Boolean), 'Her önerinin kişisel gerekçesi olmalı');
+    if (ids.length === 15) {
+      const types = await page.evaluate(ids => {
+        const catalog = window.Alpine.$data(document.documentElement).catalog;
+        return ids.map(id => catalog.find(item => String(item.id) === id)?.type);
+      }, ids);
+      const movieCount = types.filter(type => type === 'movie').length;
+      const seriesCount = types.filter(type => type === 'tv').length;
+      assert.ok(movieCount <= 10 && seriesCount <= 5, '15 öneride film/dizi dengesi 10/5 hedefini aşmamalı');
+    }
     assert.ok(result.profileTwoIds.length > 0, 'İkinci profil için öneriler üretilmeli');
     assert.ok(result.profileTwoReasons.every(reason => reason === 'Arşivden yüksek puanlı'), 'İlk profilin izleme geçmişi ikinci profilin önerilerini etkilememeli');
   });
