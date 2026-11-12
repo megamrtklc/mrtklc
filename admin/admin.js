@@ -442,7 +442,7 @@
       const move=event.target.closest('[data-move-direction]');
       if(move&&!move.disabled){
         const config=watchLayoutConfig(),index=config[side].indexOf(id);
-        moveWatchCard(side,id,side,index+Number(move.dataset.moveDirection));
+        moveWatchCard(side,id,side,index+Number(move.dataset.moveDirection)+(Number(move.dataset.moveDirection)>0?1:0));
       }
     });
     list.addEventListener('dragstart',event=>{
