@@ -21,6 +21,7 @@
     if(view==='catalog')renderCatalog();
     if(view==='collections')renderCollections();
     if(view==='homepage')renderHomepage();
+    if(view==='watch-layout')renderWatchLayout();
   }
   function applyProfilePhoto(url){
     const targets=[$('#avatar-photo'),$('#profile-photo-preview'),$('#profile-dialog-preview')];
@@ -126,6 +127,7 @@
       state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];
       state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
+      renderWatchLayout();
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.');
       return true;
     }catch(error){toast(error.message);console.error(error);return false;}
@@ -219,6 +221,36 @@
     if(!state.data.homepageConfig.settings)state.data.homepageConfig.settings={};
     if(!Array.isArray(state.data.homepageConfig.heroSlides))state.data.homepageConfig.heroSlides=[];
     return state.data.homepageConfig;
+  }
+  const watchCardDefinitions={
+    left:[['player','Video oynatıcı'],['season','Sezon seçimi'],['episodes','Sezon bölümleri'],['synopsis','Yapım özeti'],['reviews','Yorumlar ve değerlendirmeler']],
+    right:[['credits','Yapım künyesi'],['cast','Oyuncu kadrosu'],['similar','Benzer yapımlar']]
+  };
+  function watchLayoutConfig(){
+    const saved=state.data.watchPageConfig||{};
+    const normalize=(side)=>{const ids=watchCardDefinitions[side].map(x=>x[0]);const order=Array.isArray(saved[side])?saved[side].filter(id=>ids.includes(id)):[];return [...order,...ids.filter(id=>!order.includes(id))];};
+    return {left:normalize('left'),right:normalize('right')};
+  }
+  function renderWatchLayout(){
+    const config=watchLayoutConfig();
+    for(const side of ['left','right']){
+      const root=$('#watch-'+side+'-list');
+      root.innerHTML=config[side].map((id,index)=>{
+        const label=watchCardDefinitions[side].find(x=>x[0]===id)?.[1]||id;
+        return '<div class="watch-order-item" data-card="'+id+'"><span class="watch-order-grip">⠿</span><span class="watch-order-name">'+escapeHtml(label)+'</span><span class="watch-order-number">'+(index+1)+'</span><button type="button" class="watch-order-move" data-dir="-1" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" class="watch-order-move" data-dir="1" aria-label="Aşağı taşı" '+(index===config[side].length-1?'disabled':'')+'>↓</button></div>';
+      }).join('');
+    }
+  }
+  function moveWatchCard(side,id,direction){
+    const config=watchLayoutConfig(),list=config[side],from=list.indexOf(id),to=from+direction;
+    if(from<0||to<0||to>=list.length)return;
+    [list[from],list[to]]=[list[to],list[from]];
+    state.data.watchPageConfig=config;renderWatchLayout();
+  }
+  async function saveWatchLayout(){
+    const config=watchLayoutConfig();
+    const ok=await persist({...state.data,watchPageConfig:config},'İzleme sayfası kart sıralaması kaydedildi.');
+    if(ok)renderWatchLayout();
   }
   function renderHomepage(){
     const config=homepageConfig(),settings=config.settings;
@@ -316,5 +348,7 @@
   $('#collection-search').addEventListener('input',filterCollectionItems);
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
+  $('#watch-layout-save').addEventListener('click',saveWatchLayout);
+  ['left','right'].forEach(side=>$('#watch-'+side+'-list').addEventListener('click',event=>{const button=event.target.closest('[data-dir]');if(!button)return;const item=button.closest('[data-card]');if(item)moveWatchCard(side,item.dataset.card,Number(button.dataset.dir));}));
   init();
 })();
