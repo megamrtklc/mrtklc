@@ -696,3 +696,50 @@ button,input,select,textarea{font-size:inherit}
  .dashboard-insight-stats b{font-size:18px}
  .dashboard-health-row{font-size:10px}
 }
+
+
+/* ── C direction: dark navigation + bright workspace ── */
+.studio-header{
+  background:linear-gradient(180deg,#24232d 0%,#201f28 100%);
+  border-right:1px solid #35333f;
+  color:#f4f1fa;
+  box-shadow:8px 0 30px rgba(30,27,39,.055)
+}
+.studio-header .brand-symbol{background:#f0eafc;color:#292633;box-shadow:0 7px 18px #11101a45}
+.studio-header .brand-symbol span{color:#8b78b8}
+.studio-header .brand-copy b{color:#f7f4fc}
+.studio-header .brand-copy small{color:#aaa4b8}
+.studio-header .header-center{border-color:#3b3946}
+.studio-header .workspace-label{color:#8f899d}
+.studio-header .workspace-name{color:#e1dce9}
+.studio-header .workspace-name i{color:#a69bbd}
+.studio-header .nav-link{color:#b5afc1;background:transparent}
+.studio-header .nav-link:hover{background:#302e3b;color:#fff}
+.studio-header .nav-link.active{
+  color:#f5efff;
+  background:linear-gradient(100deg,#514568 0%,#393344 100%);
+  box-shadow:inset 3px 0 #c7b4ed,0 7px 18px #17151f35
+}
+.studio-header .nav-link span{color:#c5b8df}
+.studio-header .nav-link em{background:#51475f;color:#e7def6}
+.studio-header .header-actions{border-color:#3b3946}
+.studio-header .environment{background:#393342;border-color:#554a5f;color:#d7c7a2}
+.studio-header .environment i{background:#b9a06f}
+.studio-header .site-link{color:#c5bfce}
+.studio-header .site-link:hover{color:#fff}
+.studio-header .avatar{background:#4a4059;color:#f3eaff;border:1px solid #625675}
+.studio-header .logout-button{background:#302e39;border-color:#4a4654;color:#d6d0df}
+.studio-header .logout-button:hover{background:#403b4c;color:#fff}
+.studio-header .sidebar-toggle{background:#302e3a;border-color:#4a4654;color:#d8cdec}
+.studio-header .sidebar-toggle:hover{background:#49415a;color:#fff}
+.sidebar-collapsed .studio-header{background:#24232d}
+@media(max-width:760px){
+  .studio-header{background:linear-gradient(100deg,#24232d,#302b3a);border-bottom:1px solid #403b4b;box-shadow:0 8px 24px #211e2b18}
+  .studio-header .brand-copy b{color:#fff}
+  .studio-header .header-actions{background:transparent}
+  .studio-header .site-link{color:#d2cada}
+  .studio-header .mobile-menu{background:#393544;border-color:#514b5d;color:#f2edf9}
+  .studio-header .nav-list{background:#282631;border-color:#45404f;box-shadow:0 16px 28px #17151f55}
+  .studio-header .nav-link{color:#c3bdcf}
+  .studio-header .nav-link.active{background:#494058;color:#fff}
+}
