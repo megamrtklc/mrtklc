@@ -553,6 +553,63 @@ try {
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
+  await check('Ana sayfa bölümleri farklı ekranlarda çakışmıyor ve içerik sınırlarını koruyor', async () => {
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      return app && !app.catalogLoading && !!window.__cineverseHomeSectionObserver;
+    }, null, { timeout: 20000 });
+
+    for (const viewport of [
+      { width: 360, height: 800 },
+      { width: 768, height: 1024 },
+      { width: 1024, height: 768 },
+      { width: 1440, height: 1000 },
+      { width: 1920, height: 1080 }
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.waitForTimeout(180);
+      const layout = await page.evaluate(() => {
+        const width = document.documentElement.clientWidth;
+        const nodes = [...document.querySelectorAll('#home-page > [data-home-section]')]
+          .filter(element => element.tagName === 'SECTION' || element.dataset.homeSection === 'published-collections')
+          .filter(element => {
+            const style = getComputedStyle(element);
+            const rect = element.getBoundingClientRect();
+            return style.display !== 'none' && style.visibility !== 'hidden' && rect.height > 1;
+          })
+          .map(element => {
+            const rect = element.getBoundingClientRect();
+            return {
+              id: element.id || element.dataset.homeSection,
+              left: Math.round(rect.left),
+              right: Math.round(rect.right),
+              top: Math.round(rect.top),
+              bottom: Math.round(rect.bottom),
+              width: Math.round(rect.width),
+              height: Math.round(rect.height)
+            };
+          })
+          .sort((a, b) => a.top - b.top);
+        const outOfBounds = nodes.filter(item => item.left < -1 || item.right > width + 1);
+        const overlaps = nodes.slice(1).flatMap((item, index) => {
+          const previous = nodes[index];
+          return item.top < previous.bottom - 2
+            ? [{ previous: previous.id, current: item.id, overlap: previous.bottom - item.top }]
+            : [];
+        });
+        return { width, nodes, outOfBounds, overlaps };
+      });
+      console.log('HOMEPAGE SECTION GEOMETRY:', JSON.stringify({ viewport: viewport.width, ...layout }));
+      assert.ok(layout.nodes.length >= 3, `${viewport.width}px ekranda ana sayfa bölümleri yüklenmedi`);
+      assert.equal(layout.outOfBounds.length, 0,
+        `${viewport.width}px ekranda ana sayfa bölümü ekran sınırını aşıyor: ${JSON.stringify(layout.outOfBounds)}`);
+      assert.equal(layout.overlaps.length, 0,
+        `${viewport.width}px ekranda ana sayfa bölümleri çakışıyor: ${JSON.stringify(layout.overlaps)}`);
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
+  });
+
   await check('Üç tema arasında geçiş yapılabiliyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     const themeButton = page.locator('header button').filter({ hasText: /Fil Dişi|Modern Gri|Karanlık Mod/ }).first();
