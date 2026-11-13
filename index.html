@@ -62,6 +62,26 @@
         @media(min-width:768px){.home-rail-card{flex-basis:22%;width:22%}}
         @media(min-width:1024px){.home-rail-card{flex-basis:18%;width:18%}}
         @media(min-width:1280px){.home-rail-card{flex-basis:15.5%;width:15.5%}}
+        /* Personalized editorial showcase — scoped only to its own section. */
+        #home-personalized-section .home-personalized-showcase{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(300px,.88fr);gap:18px;align-items:stretch}
+        #home-personalized-section .home-personalized-feature{min-height:390px;background:#171923;isolation:isolate;box-shadow:0 18px 45px -28px rgba(0,0,0,.7)}
+        #home-personalized-section .home-personalized-feature-image{z-index:-2}
+        #home-personalized-section .home-personalized-feature-shade{z-index:-1;background:linear-gradient(90deg,rgba(7,9,14,.94) 0%,rgba(7,9,14,.72) 48%,rgba(7,9,14,.10) 100%),linear-gradient(0deg,rgba(7,9,14,.62),transparent 65%)}
+        #home-personalized-section .home-personalized-feature:hover .home-personalized-feature-image{transform:scale(1.045)}
+        #home-personalized-section .home-personalized-alternatives{display:grid;grid-template-columns:1fr;grid-template-rows:repeat(6,minmax(0,1fr));gap:10px;min-height:390px}
+        #home-personalized-section .home-personalized-alternative{min-height:0;box-shadow:0 7px 22px -19px rgba(0,0,0,.6)}
+        #home-personalized-section .home-personalized-alternative:hover{border-color:rgba(225,29,72,.55);transform:translateX(3px);box-shadow:0 12px 25px -20px rgba(0,0,0,.65)}
+        #home-personalized-section .home-personalized-feature-dismiss{opacity:.8}
+        #home-personalized-section .home-personalized-feature-dismiss:hover{opacity:1}
+        @media(max-width:767px){
+          #home-personalized-section .home-personalized-showcase{grid-template-columns:minmax(0,1fr);gap:14px}
+          #home-personalized-section .home-personalized-feature{min-height:320px}
+          #home-personalized-section .home-personalized-feature-shade{background:linear-gradient(0deg,rgba(7,9,14,.96) 0%,rgba(7,9,14,.62) 48%,rgba(7,9,14,.08) 100%)}
+          #home-personalized-section .home-personalized-alternatives{display:flex;overflow-x:auto;overflow-y:hidden;gap:10px;min-height:0;padding:2px 2px 10px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+          #home-personalized-section .home-personalized-alternatives::-webkit-scrollbar{display:none}
+          #home-personalized-section .home-personalized-alternative{flex:0 0 min(82%,320px);min-height:112px;scroll-snap-align:start}
+        }
+        @media(prefers-reduced-motion:reduce){#home-personalized-section .home-personalized-feature-image,#home-personalized-section .home-personalized-alternative{transition:none}}
         /* Cinematic recommendation rail: isolated from both desktop and mobile hero. */
         #home-personalized-section .home-personalized-rail{gap:18px;padding:4px 3px 14px;scroll-padding-inline:3px}
         #home-personalized-section .home-personalized-card{flex:0 0 clamp(176px,17vw,218px);width:clamp(176px,17vw,218px);border-color:rgba(148,163,184,.22);box-shadow:0 8px 24px rgba(0,0,0,.10);scroll-snap-align:start}
@@ -450,27 +470,34 @@
                         <div class="min-w-0">
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">SANA ÖZEL • <span x-text="currentProfile.name"></span></p>
                             <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">İzleme Zevkine Göre</h2>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzlediğin türler, oyuncular, yönetmenler ve izleme listen birlikte değerlendirilir</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzleme alışkanlıklarından ilham alan, sana özel seçkiler</p>
                         </div>
                         <div class="flex items-center gap-2 shrink-0"><span class="home-personalized-count text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15 öneri</span><button type="button" @click="scrollHomeCards('home-personalized-rail',-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-personalized-rail',1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div>
                     </div>
-                    <!-- Öneri sıralaması, profil geri bildirimi ve öneriyi gizleme davranışı korunur. -->
-                    <div id="home-personalized-rail" class="home-card-rail home-personalized-rail">
-                        <template x-for="item in personalizedRecommendations.slice(0,15)" :key="'personal-' + item.id">
-                            <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :class="getCardClass()" class="home-rail-card home-personalized-card group min-w-0 text-left rounded-2xl overflow-hidden border transition-all duration-300 shadow-sm">
-                                <div class="personalized-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                    <img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 17vw, 14.5vw" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700">
-                                    <span class="personalized-type absolute top-3 left-3 rounded-md bg-black/75 text-white text-[9px] font-black uppercase tracking-wider px-2 py-1.5" x-text="item.type === 'tv' ? 'Dizi' : 'Film'"></span>
-                                    <span class="personalized-rating absolute bottom-3 right-3 rounded-lg bg-black/80 text-amber-400 text-[10px] font-black px-2.5 py-1.5"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || '—'"></span></span>
+                    <div class="home-personalized-showcase" x-show="personalizedRecommendations.length">
+                        <template x-if="personalizedRecommendations[0]">
+                            <div role="button" tabindex="0" @click="openWatchPage(personalizedRecommendations[0])" @keydown.enter="openWatchPage(personalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(personalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer">
+                                <img @error="handleImageError($event)" :src="personalizedRecommendations[0].backdrop || personalizedRecommendations[0].poster || personalizedRecommendations[0].image" :alt="personalizedRecommendations[0].title" loading="lazy" decoding="async" class="home-personalized-feature-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
+                                <div class="home-personalized-feature-shade absolute inset-0"></div>
+                                <div class="relative z-[1] flex h-full min-h-[310px] sm:min-h-[390px] flex-col justify-end p-5 sm:p-7 lg:p-8">
+                                    <div class="flex items-center gap-2 mb-3"><span class="rounded-md bg-rose-600 text-white px-2.5 py-1 text-[9px] font-black tracking-widest uppercase">SANA ÖZEL SEÇİM</span><span class="rounded-md bg-black/45 text-white/90 px-2.5 py-1 text-[9px] font-bold" x-text="personalizedRecommendations[0].type === 'tv' ? 'DİZİ' : 'FİLM'"></span></div>
+                                    <h3 class="max-w-xl text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-white drop-shadow-lg" x-text="personalizedRecommendations[0].title"></h3>
+                                    <div class="flex flex-wrap items-center gap-3 mt-3 text-xs font-semibold text-white/85"><span x-text="personalizedRecommendations[0].year || '—'"></span><span class="text-white/40">•</span><span class="text-amber-300"><i class="fa-solid fa-star mr-1"></i><span x-text="personalizedRecommendations[0].rating || '—'"></span></span><span class="text-white/40">•</span><span class="line-clamp-1" x-text="personalizedRecommendations[0].genre || personalizedRecommendations[0].category || 'Önerilen yapım'"></span></div>
+                                    <p class="max-w-lg mt-3 text-xs sm:text-sm leading-relaxed text-white/80 line-clamp-2" x-text="personalizedRecommendations[0].tmdbOverview || personalizedRecommendations[0].desc || personalizedRecommendations[0].recommendationReason"></p>
+                                    <div class="flex items-center gap-3 mt-5"><span class="inline-flex items-center gap-2 rounded-full bg-white text-gray-950 px-5 py-2.5 text-xs font-black group-hover:bg-rose-500 group-hover:text-white transition-colors"><i class="fa-solid fa-play"></i> Hemen keşfet</span><span class="text-[10px] font-bold text-white/75" x-text="personalizedRecommendations[0].recommendationReason || 'İzleme profiline uygun'"></span></div>
                                 </div>
-                                <div class="personalized-card-copy p-3 sm:p-3.5 space-y-1.5">
-                                    <h3 class="text-xs font-extrabold leading-snug text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
-                                    <p class="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="(item.year || '') + (item.genre ? ' • ' + item.genre : '')"></p>
-                                    <p class="personalized-reason text-[10px] font-bold text-rose-700 dark:text-rose-400 line-clamp-1" x-text="item.recommendationReason || &quot;Sana özel seçildi&quot;"></p>
-                                    <button type="button" @click.stop="dismissRecommendation(item)" :aria-label="'İlgimi çekmedi: ' + item.title" class="personalized-dismiss mt-1 inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[10px] font-semibold text-gray-500 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"><i class="fa-regular fa-thumbs-down"></i> İlgimi çekmedi</button>
-                                </div>
+                                <button type="button" @click.stop="dismissRecommendation(personalizedRecommendations[0])" aria-label="Bu öneriyi gizle" class="home-personalized-feature-dismiss absolute right-4 top-4 z-[2] rounded-full bg-black/55 text-white w-9 h-9 flex items-center justify-center backdrop-blur-md hover:bg-rose-600 transition-colors"><i class="fa-solid fa-xmark"></i></button>
                             </div>
                         </template>
+                        <div id="home-personalized-rail" class="home-personalized-alternatives">
+                            <template x-for="item in personalizedRecommendations.slice(1,7)" :key="'personal-' + item.id">
+                                <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :class="getCardClass()" class="home-personalized-alternative group min-w-0 flex items-center gap-3 rounded-xl sm:rounded-2xl border p-2.5 sm:p-3 text-left transition-all duration-300">
+                                    <div class="relative w-[66px] sm:w-[76px] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-900"><img @error="handleImageError($event)" :src="item.poster || item.image" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/80 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="item.rating || '—'"></span></span></div>
+                                    <div class="min-w-0 flex-1 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-600 dark:text-rose-400 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3><p class="mt-1.5 text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="mt-2 text-[10px] font-bold text-rose-700 dark:text-rose-400 line-clamp-1" x-text="item.recommendationReason || 'İzleme profiline uygun'"></p></div>
+                                    <button type="button" @click.stop="dismissRecommendation(item)" :aria-label="'İlgimi çekmedi: ' + item.title" class="shrink-0 w-8 h-8 rounded-full text-gray-400 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"><i class="fa-regular fa-thumbs-down text-xs"></i></button>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                     <p x-show="!personalizedRecommendations.length" class="text-xs text-gray-500 dark:text-gray-400 py-5 text-center">Önerileri kişiselleştirmek için birkaç yapım izlemeye başlayabilir veya izleme listene ekleyebilirsin.</p>
                 </section>
