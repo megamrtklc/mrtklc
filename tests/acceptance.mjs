@@ -73,7 +73,7 @@ try {
   }
 
   await page.waitForTimeout(8500);
-  console.log('DESKTOP LAYOUT SHIFT DIAGNOSTIC:', JSON.stringify(await page.evaluate(() => ({
+  const desktopDiagnostics = await page.evaluate(() => ({
     shifts: window.__desktopLayoutShifts || [],
     hero: (() => {
       const section = document.querySelector('#desktopEditorialHero');
@@ -102,7 +102,10 @@ try {
         }))
       };
     })()
-  }))));
+  }));
+  console.log('DESKTOP LAYOUT SHIFT DIAGNOSTIC:', JSON.stringify(desktopDiagnostics));
+  const desktopCls = desktopDiagnostics.shifts.reduce((total, entry) => total + entry.value, 0);
+  assert.ok(desktopCls < 0.05, 'Masaüstü CLS hedefi aşıldı: ' + desktopCls.toFixed(3));
   adaletId = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.find(item => item.title === 'Adalet 2')?.id);
   assert.ok(adaletId, 'Adalet 2 katalogda bulunamadı');
 
