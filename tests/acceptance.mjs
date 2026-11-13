@@ -621,9 +621,16 @@ try {
       await touchPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await touchPage.waitForFunction(() => {
         const app = window.Alpine?.$data(document.documentElement);
-        return app && !app.catalogLoading && app.homeSectionReady?.catalog &&
-          document.querySelector('#home-catalog-rail')?.children.length > 1;
+        return app && !app.catalogLoading && !!window.__cineverseHomeSectionObserver;
       }, null, { timeout: 30000 });
+      await touchPage.locator('#home-catalog-section').evaluate(element =>
+        element.scrollIntoView({ block: 'center', behavior: 'auto' })
+      );
+      await touchPage.waitForFunction(() => {
+        const app = window.Alpine?.$data(document.documentElement);
+        return app?.homeSectionReady?.catalog &&
+          document.querySelector('#home-catalog-rail')?.children.length > 1;
+      }, null, { timeout: 20000 });
 
       const cdp = await touchPage.context().newCDPSession(touchPage);
       await cdp.send('Input.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 1 });
