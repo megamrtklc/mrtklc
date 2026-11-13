@@ -1706,6 +1706,11 @@
                     return result;
                 },
 
+                get homeNewArrivals() {
+                    // Admin paneli yeni kayıtları kataloğun sonuna ekler; güncellemeler mevcut sırayı korur.
+                    return this.catalog.slice(-15).reverse();
+                },
+
                 get homeCatalogPreview() {
                     return this.sortedFilteredCatalog.slice(0, 15);
                 }
