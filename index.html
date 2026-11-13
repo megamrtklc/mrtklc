@@ -89,8 +89,8 @@
           #home-personalized-section .home-personalized-alternative>div:first-child{width:52px;flex-basis:52px}
         }
         @media(min-width:640px) and (max-width:900px){
-          #home-personalized-section #home-personalized-rail{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain;touch-action:pan-x;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;min-width:0}
-          #home-personalized-section #home-personalized-rail>.home-personalized-alternative{flex:0 0 min(50vw,420px)!important;width:min(50vw,420px)!important;min-width:min(50vw,420px)!important;scroll-snap-align:start}
+          #home-personalized-section #home-personalized-rail{display:grid!important;grid-auto-flow:column!important;grid-auto-columns:min(50vw,420px)!important;grid-template-columns:none!important;grid-template-rows:minmax(94px,auto)!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box;overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain;touch-action:pan-x;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+          #home-personalized-section #home-personalized-rail>.home-personalized-alternative{width:auto!important;min-width:0!important;scroll-snap-align:start}
         }
         @media(max-width:420px){
           #home-personalized-section .home-personalized-feature{min-height:120px}
