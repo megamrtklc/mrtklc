@@ -537,6 +537,39 @@ try {
       return app.selectedEpisode;
     });
     assert.equal(resumedEpisode, 1, 'Son izlenen bölüm bilgisi geri yüklenemedi');
+    const episodeNavigation = await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      app.selectedItem.tmdbEpisodesBySeason = {
+        1: Array.from({ length: 9 }, (_, index) => ({
+          number: index + 1, title: `Birinci Sezon ${index + 1}`, duration: '42 dk', still: ''
+        })),
+        2: [{ number: 1, title: 'İkinci Sezon Açılışı', duration: '44 dk', still: '' }]
+      };
+      app.selectedSeason = 1;
+      app.selectedEpisode = 9;
+      app.currentEpisodePage = 2;
+      app.goToNextEpisode();
+      const boundary = {
+        season: app.selectedSeason,
+        episode: app.selectedEpisode,
+        page: app.currentEpisodePage
+      };
+      app.selectedSeason = 1;
+      app.currentEpisodePage = 1;
+      const firstPageCount = app.paginatedEpisodes.length;
+      app.currentEpisodePage = 2;
+      return {
+        boundary,
+        totalPages: app.totalEpisodePages,
+        firstPageCount,
+        secondPageEpisodes: app.paginatedEpisodes.map(ep => ep.number)
+      };
+    });
+    assert.deepEqual(episodeNavigation.boundary, { season: 2, episode: 1, page: 1 },
+      'Son bölümden sonraki sezona geçiş başarısız');
+    assert.equal(episodeNavigation.totalPages, 2, 'Bölüm sayfalaması toplam sayfa sayısını yanlış hesapladı');
+    assert.equal(episodeNavigation.firstPageCount, 8, 'İlk bölüm sayfasında 8 bölüm gösterilmiyor');
+    assert.deepEqual(episodeNavigation.secondPageEpisodes, [9], 'İkinci bölüm sayfası doğru bölümü göstermiyor');
     await page.locator('header select').selectOption('pro_2');
     const isolated = await page.evaluate(() => window.Alpine.$data(document.documentElement).isEpisodeWatched(1, 1));
     assert.equal(isolated, false, 'Çocuk Profili Ana Profil bölüm takibini devraldı');
