@@ -547,6 +547,29 @@ try {
         ]
       };
     });
+    const episodeSource = await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      const video = document.getElementById('customVideoPlayer');
+      video.pause = () => {};
+      video.load = () => {};
+      video.play = () => Promise.resolve();
+      app.selectedItem.episodeWatchUrls = {
+        '1:1': 'https://media.example.test/lost-s01e01.mp4',
+        '1:2': 'https://media.example.test/lost-s01e02.mp4'
+      };
+      app.selectEpisode(2);
+      return {
+        selectedUrl: app.getPlaybackUrl(),
+        videoUrl: video.src,
+        progressKey: app.getPlaybackProgressKey()
+      };
+    });
+    assert.equal(episodeSource.selectedUrl, 'https://media.example.test/lost-s01e02.mp4',
+      'Seçilen bölümün kendi video bağlantısı çözülmedi');
+    assert.equal(episodeSource.videoUrl, episodeSource.selectedUrl,
+      'Bölüm seçildiğinde oynatıcı kaynağı güncellenmedi');
+    assert.equal(episodeSource.progressKey, 'archive-6:s1e2',
+      'Bölüm bazlı izleme ilerlemesi anahtarı doğru oluşturulmadı');
     const watchedButton = page.getByTitle('İzlendi olarak işaretle').first();
     await watchedButton.waitFor({ state: 'visible' });
     await watchedButton.click();
@@ -627,9 +650,9 @@ try {
         Object.defineProperty(video, 'duration', { configurable: true, value: 2400 });
         Object.defineProperty(video, 'currentTime', { configurable: true, writable: true, value: 125 });
         app.updateVideoProgress();
-        const childStored = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}').pro_2?.['archive-6'];
+        const childStored = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}').pro_2?.['archive-6:s1e2'];
         app.switchProfile('pro_1');
-        const mainProfileTime = app.getMovieProgress('archive-6')?.time ?? null;
+        const mainProfileTime = app.getMovieProgress('archive-6:s1e2')?.time ?? null;
         app.switchProfile('pro_2');
         return {
           childTime: childStored?.time ?? null,
