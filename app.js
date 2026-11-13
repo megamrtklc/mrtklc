@@ -371,7 +371,7 @@
                         console.error('Perde katalog yükleme hatası:', error);
                     } finally {
                         // Bölüm sırasını katalog verileri DOM'a işlenmeden belirle;
-                        // aksi hâlde ilk çizimden sonra bölümler yer değiştirerek CLS üretir.
+                        // Alpine'ın bekleyen x-for güncellemeleri doğru sıraya yerleşsin ve CLS oluşmasın.
                         this.applyHomepageSectionOrder();
                         this.catalogLoading = false;
                         this.$nextTick(() => {
