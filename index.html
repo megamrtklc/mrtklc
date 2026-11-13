@@ -220,6 +220,18 @@
         @media(min-width:640px) and (max-width:767px){#home-series-tracking-section .home-series-tracking-card{flex-basis:31%;width:31%}}
         @media(min-width:768px) and (max-width:1023px){#home-series-tracking-section .home-series-tracking-card{flex-basis:24%;width:24%}}
         @media(prefers-reduced-motion:reduce){#home-series-tracking-section .home-series-tracking-card,#home-series-tracking-section .home-series-tracking-poster img{transition:none!important}}
+
+        /* Genre discovery shelf; all rules are scoped to this section. */
+        #home-genre-discovery-section .home-genre-discovery-heading{border-bottom:1px solid rgba(148,163,184,.24)}
+        #home-genre-discovery-section .home-genre-discovery-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+        #home-genre-discovery-section .home-genre-discovery-card{position:relative;display:flex;min-height:142px;flex-direction:column;justify-content:space-between;overflow:hidden;border:1px solid rgba(148,163,184,.22);border-radius:16px;padding:16px;text-align:left;background:linear-gradient(145deg,rgba(127,127,127,.08),rgba(127,127,127,.025));transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+        #home-genre-discovery-section .home-genre-discovery-card:before{content:"";position:absolute;inset:auto -25px -55px auto;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(225,29,72,.16),transparent 68%);pointer-events:none}
+        #home-genre-discovery-section .home-genre-discovery-card:hover{transform:translateY(-4px);border-color:rgba(225,29,72,.62);box-shadow:0 16px 32px -22px rgba(225,29,72,.42)}
+        #home-genre-discovery-section .home-genre-discovery-icon{display:flex;width:38px;height:38px;align-items:center;justify-content:center;border:1px solid rgba(225,29,72,.2);border-radius:12px;background:rgba(225,29,72,.09);color:#fb7185}
+        #home-genre-discovery-section .home-genre-discovery-card:focus-visible{outline:2px solid #fb7185;outline-offset:3px}
+        @media(max-width:1023px){#home-genre-discovery-section .home-genre-discovery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+        @media(max-width:639px){#home-genre-discovery-section .home-genre-discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#home-genre-discovery-section .home-genre-discovery-card{min-height:126px;padding:13px;border-radius:14px}}
+        @media(prefers-reduced-motion:reduce){#home-genre-discovery-section .home-genre-discovery-card{transition:none}}
     </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
@@ -610,6 +622,32 @@
                                         <i class="fa-solid fa-play text-rose-500"></i>
                                     </div>
                                 </div>
+                            </button>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Kişisel izleme geçmişine, yoksa katalog dağılımına göre tür keşfi -->
+                <section id="home-genre-discovery-section" x-show="homeDiscoveryGenres.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                    <div class="home-genre-discovery-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">YENİ HİKÂYELER KEŞFET</p>
+                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Türlere Göre Keşfet</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İlgi alanlarına göre seç veya kataloğun öne çıkan türlerine göz at</p>
+                        </div>
+                        <button type="button" @click="navigateTo('explore')" class="self-start sm:self-auto text-[10px] font-black text-rose-500 hover:text-rose-400">Tüm keşif filtreleri <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    </div>
+                    <div class="home-genre-discovery-grid">
+                        <template x-for="genre in homeDiscoveryGenres" :key="'home-genre-' + genre.name">
+                            <button type="button" @click="selectPersonalizedGenre(genre.name); navigateTo('explore')" class="home-genre-discovery-card group">
+                                <span class="home-genre-discovery-icon">
+                                    <i :class="({'aksiyon':'fa-solid fa-bolt','action':'fa-solid fa-bolt','macera':'fa-solid fa-compass','adventure':'fa-solid fa-compass','komedi':'fa-solid fa-face-laugh','comedy':'fa-solid fa-face-laugh','dram':'fa-solid fa-masks-theater','drama':'fa-solid fa-masks-theater','korku':'fa-solid fa-ghost','horror':'fa-solid fa-ghost','gerilim':'fa-solid fa-eye','thriller':'fa-solid fa-eye','bilim kurgu':'fa-solid fa-rocket','science fiction':'fa-solid fa-rocket','romantik':'fa-solid fa-heart','romance':'fa-solid fa-heart','animasyon':'fa-solid fa-wand-magic-sparkles','animation':'fa-solid fa-wand-magic-sparkles','suç':'fa-solid fa-fingerprint','crime':'fa-solid fa-fingerprint','belgesel':'fa-solid fa-earth-europe','documentary':'fa-solid fa-earth-europe'})[genre.name] || 'fa-solid fa-clapperboard'"></i>
+                                </span>
+                                <span class="relative z-10 mt-4 block text-sm font-black text-gray-900 dark:text-white group-hover:text-rose-500 transition-colors" x-text="genre.label"></span>
+                                <span class="relative z-10 mt-1 flex items-center justify-between gap-2 text-[10px] font-semibold text-gray-500 dark:text-gray-400">
+                                    <span x-text="genre.count + ' yapım'"></span>
+                                    <i class="fa-solid fa-arrow-right text-rose-500 opacity-70 group-hover:translate-x-1 transition-transform"></i>
+                                </span>
                             </button>
                         </template>
                     </div>
