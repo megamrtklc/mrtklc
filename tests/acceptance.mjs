@@ -419,6 +419,32 @@ try {
     }
   });
 
+  await check('Mobil ve tablette yatay kart şeritleri kaydırılabiliyor', async () => {
+    for (const viewport of [{ width: 360, height: 800 }, { width: 768, height: 1024 }]) {
+      await page.setViewportSize(viewport);
+      for (const selector of ['#home-personalized-rail', '#home-catalog-rail']) {
+        const state = await page.locator(selector).evaluate(element => {
+          const maxScroll = element.scrollWidth - element.clientWidth;
+          const overflowX = getComputedStyle(element).overflowX;
+          element.scrollLeft = 0;
+          const start = element.scrollLeft;
+          element.scrollLeft = Math.min(220, Math.max(0, maxScroll));
+          return {
+            maxScroll,
+            start,
+            end: element.scrollLeft,
+            overflowX,
+            cardCount: element.children.length
+          };
+        });
+        assert.ok(state.cardCount > 0, `${selector} kart içermiyor`);
+        assert.ok(state.overflowX === 'auto' || state.overflowX === 'scroll', `${selector} yatay kaydırmaya açık değil`);
+        assert.ok(state.maxScroll > 0 && state.end > state.start, `${viewport.width}px ekranda ${selector} kaydırılamıyor`);
+      }
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
+  });
+
   await check('Üç tema arasında geçiş yapılabiliyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     const themeButton = page.locator('header button').filter({ hasText: /Fil Dişi|Modern Gri|Karanlık Mod/ }).first();
