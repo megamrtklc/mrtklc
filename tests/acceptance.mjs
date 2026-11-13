@@ -592,6 +592,43 @@ try {
     assert.equal(progressIsolation.savedForChild, 75, 'Oynatma ilerlemesi aktif profil anahtarına kaydedilmedi');
     assert.notEqual(progressIsolation.mainProfileTime, 75, 'Çocuk profilinin oynatma ilerlemesi Ana Profile sızdı');
     assert.equal(progressIsolation.restoredChildTime, 75, 'Profil değiştirince önceki oynatma ilerlemesi geri yüklenmedi');
+    const timeupdateProgress = await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      const video = document.getElementById('customVideoPlayer');
+      if (!video) throw new Error('İzleme sayfasında video elementi bulunamadı');
+      const originalDuration = Object.getOwnPropertyDescriptor(video, 'duration');
+      const originalCurrentTime = Object.getOwnPropertyDescriptor(video, 'currentTime');
+      try {
+        Object.defineProperty(video, 'duration', { configurable: true, value: 2400 });
+        Object.defineProperty(video, 'currentTime', { configurable: true, writable: true, value: 125 });
+        app.updateVideoProgress();
+        const childStored = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}').pro_2?.['archive-6'];
+        app.switchProfile('pro_1');
+        const mainProfileTime = app.getMovieProgress('archive-6')?.time ?? null;
+        app.switchProfile('pro_2');
+        return {
+          childTime: childStored?.time ?? null,
+          childDuration: childStored?.duration ?? null,
+          childSavedAt: childStored?.savedAt ?? 0,
+          mainProfileTime,
+          percentage: app.videoProgress,
+          currentTimeFormatted: app.currentTimeFormatted,
+          durationFormatted: app.durationFormatted
+        };
+      } finally {
+        if (originalDuration) Object.defineProperty(video, 'duration', originalDuration);
+        else delete video.duration;
+        if (originalCurrentTime) Object.defineProperty(video, 'currentTime', originalCurrentTime);
+        else delete video.currentTime;
+      }
+    });
+    assert.equal(timeupdateProgress.childTime, 125, 'timeupdate ilerlemesi aktif profile kaydedilmedi');
+    assert.equal(timeupdateProgress.childDuration, 2400, 'Video süresi ilerleme kaydına yazılmadı');
+    assert.ok(timeupdateProgress.childSavedAt > 0, 'İlerleme kaydına zaman damgası eklenmedi');
+    assert.notEqual(timeupdateProgress.mainProfileTime, 125, 'timeupdate ilerlemesi başka profile sızdı');
+    assert.ok(Math.abs(timeupdateProgress.percentage - (125 / 2400 * 100)) < 0.001, 'Oynatma yüzdesi doğru hesaplanmadı');
+    assert.equal(timeupdateProgress.currentTimeFormatted, '02:05', 'Geçerli oynatma zamanı doğru biçimlendirilmedi');
+    assert.equal(timeupdateProgress.durationFormatted, '40:00', 'Video süresi doğru biçimlendirilmedi');
     await page.locator('header select').selectOption('pro_1');
   });
 
