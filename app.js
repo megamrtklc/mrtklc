@@ -1670,9 +1670,8 @@
                         const weight = 1 + Math.min(time / 3600, 1.8) + (completion >= 0.9 ? 0.65 : 0) + recentBoost(saved?.savedAt);
                         history.set(String(item.id), { item, weight });
                     });
-                    Object.entries(episodes).forEach(([key, tracking]) => {
-                        if (!key.startsWith(profileId + ':')) return;
-                        const item = catalogById.get(key.slice(profileId.length + 1));
+                    Object.entries(episodes).forEach(([id, tracking]) => {
+                        const item = catalogById.get(String(id));
                         if (!item) return;
                         const watched = tracking?.watched && typeof tracking.watched === 'object' ? tracking.watched : {};
                         const count = Object.values(watched).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number).filter(number => number > 0)).size : 0), 0);
