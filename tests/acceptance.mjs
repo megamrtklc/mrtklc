@@ -421,6 +421,54 @@ try {
     assert.ok(result.removedFromRecommendations, 'İlgimi çekmedi denilen yapım önerilerde kaldı');
   });
 
+  await check('Ana sayfada sekiz kişisel öneri iki sütunda ve beğeni/ilgi yok kontrolleriyle gösteriliyor', async () => {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 8, { timeout: 10000 });
+    const layout = await page.locator('#home-personalized-rail').evaluate(element => {
+      const cards = [...element.querySelectorAll('.home-personalized-alternative')];
+      const first = cards[0].getBoundingClientRect();
+      const second = cards[1].getBoundingClientRect();
+      const third = cards[2].getBoundingClientRect();
+      return {
+        count: cards.length,
+        columns: getComputedStyle(element).gridTemplateColumns.split(' ').length,
+        firstTwoShareRow: Math.abs(first.top - second.top) < 2,
+        nextRowBelow: third.top > first.top,
+        likeButtons: cards.every(card => !!card.querySelector('.home-personalized-like')),
+        dislikeButtons: cards.every(card => !!card.querySelector('.home-personalized-dislike')),
+        dislikeWidth: cards[0].querySelector('.home-personalized-dislike').getBoundingClientRect().width
+      };
+    });
+    assert.equal(layout.count, 8, 'Tam sekiz küçük öneri gösterilmeli');
+    assert.equal(layout.columns, 2, 'Öneri alanı iki sütun olmalı');
+    assert.ok(layout.firstTwoShareRow && layout.nextRowBelow, 'Kartlar ikişerli satırlara yerleşmeli');
+    assert.ok(layout.likeButtons && layout.dislikeButtons, 'Her kartta Like ve Dislike butonu olmalı');
+    assert.ok(layout.dislikeWidth >= 38, 'Dislike butonu büyütülmüş olmalı');
+
+    const firstCard = page.locator('#home-personalized-rail .home-personalized-alternative').first();
+    const firstId = await firstCard.getAttribute('data-recommendation-id');
+    await firstCard.getByRole('button', { name: /Beğendim:/ }).click();
+    await page.waitForFunction(id => {
+      const likes = JSON.parse(localStorage.getItem('cine_recommendation_likes_v1') || '[]');
+      return likes.includes(String(id));
+    }, firstId);
+    assert.equal(await firstCard.getByRole('button', { name: /Beğendim:/ }).getAttribute('aria-pressed'), 'true',
+      'Beğeni durumu kartta aktif görünmeli');
+
+    const secondCard = page.locator('#home-personalized-rail .home-personalized-alternative').nth(1);
+    const secondId = await secondCard.getAttribute('data-recommendation-id');
+    await secondCard.getByRole('button', { name: /İlgimi çekmedi:/ }).click();
+    await page.waitForFunction(id => {
+      return ![...document.querySelectorAll('#home-personalized-rail .home-personalized-alternative')]
+        .some(card => card.getAttribute('data-recommendation-id') === String(id));
+    }, secondId);
+    assert.ok(true, 'Beğeni ve ilgimi çekmedi geri bildirimleri kaydedildi');
+    await page.setViewportSize({ width: 360, height: 800 });
+    const mobileColumns = await page.locator('#home-personalized-rail').evaluate(element => getComputedStyle(element).gridTemplateColumns.split(' ').length);
+    assert.equal(mobileColumns, 2, 'Mobilde de iki sütun korunmalı');
+    await page.setViewportSize({ width: 1440, height: 1000 });
+  });
+
   await check('Dizi önerileri doğru etiketleniyor ve dar ekran kart ölçüsü uygulanıyor', async () => {
     await page.waitForFunction(() => {
       const card = document.querySelector('#home-personalized-rail [data-recommendation-type="tv"]');
