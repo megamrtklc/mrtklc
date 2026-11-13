@@ -653,7 +653,8 @@
                 </section>
 
                 <!-- Son eklenen yapımlar: admin kataloğuna eklenme sırası -->
-                <section id="home-new-arrivals-section" data-home-section="new-arrivals" x-show="isHomepageSectionVisible('new-arrivals') && (!homeSectionReady['new-arrivals'] || homeNewArrivals.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
+                <div data-home-section="new-arrivals" aria-hidden="true" style="height:1px"></div>
+                <section id="home-new-arrivals-section" x-show="isHomepageSectionVisible('new-arrivals') && homeSectionReady['new-arrivals'] && homeNewArrivals.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-new-arrivals-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">CINEVERSE • ARŞİVE YENİ KATILANLAR</p>
