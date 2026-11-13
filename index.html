@@ -663,7 +663,7 @@
                     </div>
                     <div id="home-new-arrivals-rail" class="home-card-rail home-new-arrivals-rail">
                         <template x-for="(item,index) in homeNewArrivals" :key="'new-arrival-' + item.id">
-                            <button type="button" @click="openWatchPage(item)" :class="getCardClass()" :class="index === 0 ? 'home-new-arrival-feature' : ''" class="home-rail-card home-new-arrival-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
+                            <button type="button" @click="openWatchPage(item)" :class="getCardClass() + (index === 0 ? ' home-new-arrival-feature' : '')" class="home-rail-card home-new-arrival-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
                                 <div class="home-new-arrival-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop)" sizes="(max-width:639px) 44vw, (max-width:1023px) 23vw, 18vw" class="w-full h-full object-cover transition-transform duration-700">
                                     <div class="home-new-arrival-shade absolute inset-0"></div>
