@@ -443,6 +443,22 @@
         html.dark .cineverse-dropdown-item,html.dark .cineverse-profile-option,html.dark .cineverse-admin-shortcut{color:#e5e7eb}
         html.dark .cineverse-dropdown-item:hover,html.dark .cineverse-profile-option:hover,html.dark .cineverse-admin-shortcut:hover{background:#252b38}
         html.dark .cineverse-dropdown-divider{background:#374151}
+        @media(min-width:768px){
+            body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-dropdown-item,
+            body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-profile-option,
+            body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-admin-shortcut{color:#374151 !important}
+            body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-dropdown-item:hover,
+            body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-profile-option:hover,
+            body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-admin-shortcut:hover{background:#f3f4f6 !important}
+        }
+        @media(min-width:768px){
+            html.dark body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-dropdown-item,
+            html.dark body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-profile-option,
+            html.dark body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-admin-shortcut{color:#e5e7eb !important}
+            html.dark body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-dropdown-item:hover,
+            html.dark body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-profile-option:hover,
+            html.dark body:has(#home-page) > header.home-hero-overlay .cineverse-header-dropdown .cineverse-admin-shortcut:hover{background:#252b38 !important}
+        }
         @media(max-width:639px){
             .cineverse-theme-trigger{width:38px;height:38px;flex-basis:38px}
             .cineverse-profile-trigger{min-width:52px;height:42px;gap:6px;padding:4px 6px;border-radius:12px}
