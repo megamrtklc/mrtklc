@@ -564,6 +564,7 @@ try {
       app.selectedItem.watchUrl = 'https://media.example.test/lost-fallback.mp4';
       app.selectedEpisode = 3;
       const fallbackUrl = app.getPlaybackUrl();
+      app.selectedEpisode = 1;
       return { selectedUrl, videoUrl, progressKey, fallbackUrl };
     });
     assert.equal(episodeSource.selectedUrl, 'https://media.example.test/lost-s01e02.mp4',
