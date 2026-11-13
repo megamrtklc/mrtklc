@@ -436,12 +436,9 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
                         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_42%,transparent_0%,transparent_42%,rgba(0,0,0,.28)_100%)]"></div>
                     </div>
-                    <div class="relative mx-auto flex min-h-[590px] max-w-[1800px] flex-col justify-between px-8 pb-7 pt-16 lg:min-h-[630px] lg:px-12 xl:px-16">
-                        <div class="flex min-h-[420px] items-center">
-                            <div class="editorial-copy-enter max-w-[520px] space-y-5 lg:max-w-[570px]">
-                                <span class="inline-flex items-center gap-2 rounded-full border border-amber-400/70 bg-black/25 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-amber-300 backdrop-blur-sm">
-                                    <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span> Öne Çıkan Yapım
-                                </span>
+                    <div class="relative mx-auto flex min-h-[590px] max-w-[1800px] flex-col justify-between px-8 pb-7 pt-10 lg:min-h-[630px] lg:px-12 xl:px-16">
+                        <div class="flex min-h-[420px] items-start pt-5">
+                            <div class="editorial-copy-enter max-w-[520px] space-y-3 lg:max-w-[570px]">
                                 <div class="space-y-2">
                                     <h1 class="block w-full max-w-[520px] overflow-hidden text-ellipsis whitespace-nowrap text-5xl font-black leading-[1.05] tracking-[-0.045em] text-white drop-shadow-2xl lg:max-w-[570px] lg:text-6xl xl:text-7xl" x-text="currentHero.title" :title="currentHero.title"></h1>
                                     <p class="pl-1 text-sm font-black uppercase tracking-[0.62em] text-amber-400" x-text="currentHero.type === 'tv' ? 'DİZİ' : 'SİNEMA'"></p>
@@ -505,9 +502,8 @@
                         <button type="button" @click.stop="navigateHeroSlide(-1)" aria-label="Önceki öne çıkan yapım" class="absolute left-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/35 text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 active:scale-95"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         <button type="button" @click.stop="navigateHeroSlide(1)" aria-label="Sonraki öne çıkan yapım" class="absolute right-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/35 text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 active:scale-95"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
-                    <div class="px-5 pb-6 pt-3 text-white sm:px-7">
-                        <div class="space-y-3">
-                            <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
+                    <div class="px-5 pb-6 pt-1 text-white sm:px-7">
+                        <div class="space-y-2">
                             <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.35rem,5.4vw,2.25rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
                             <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
                                 <span class="inline-flex items-center gap-1.5 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-md"><i class="fa-solid fa-star text-[10px]"></i><span class="text-sm" x-text="currentHero.rating || '—'"></span></span>
