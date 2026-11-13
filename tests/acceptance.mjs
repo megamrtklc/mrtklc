@@ -572,6 +572,33 @@ try {
     assert.match(src || '', /\.mp4(?:$|[?#])/i, 'Oynatıcıya MP4 kaynağı bağlanmadı');
   });
 
+  await check('Detay sayfası mobil, tablet ve masaüstünde taşma yapmıyor', async () => {
+    const originalViewport = page.viewportSize();
+    for (const width of [360, 390, 412, 768, 1024, 1280, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.waitForTimeout(80);
+      const layout = await page.evaluate(() => {
+        const root = document.documentElement;
+        const main = document.querySelector('main');
+        const left = document.querySelector('#watch-left-column');
+        const right = document.querySelector('#watch-right-column');
+        return {
+          viewport: root.clientWidth,
+          document: root.scrollWidth,
+          main: main?.scrollWidth || 0,
+          left: !!left && left.getBoundingClientRect().width > 0,
+          right: !!right && right.getBoundingClientRect().width > 0,
+          player: !!document.querySelector('#customVideoPlayer')
+        };
+      });
+      assert.ok(layout.document <= layout.viewport + 1,
+        'Detay sayfasında yatay taşma var (' + width + 'px): ' + JSON.stringify(layout));
+      assert.ok(layout.left && layout.right && layout.player,
+        'Detay sayfası bölümleri görünmüyor (' + width + 'px): ' + JSON.stringify(layout));
+    }
+    if (originalViewport) await page.setViewportSize(originalViewport);
+  });
+
   await check('İzleme listesine ekleme ve profil izolasyonu çalışıyor', async () => {
     const saveButton = page.locator('button').filter({ has: page.locator('span[x-text*="isInWatchlist"]') }).first();
     await saveButton.waitFor({ state: 'visible' });
