@@ -610,6 +610,80 @@ try {
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
+  await check('Dokunmatik kaydırma mobil ve tablet ekranlarında doğal çalışıyor', async () => {
+    const touchPage = await browser.newPage({
+      viewport: { width: 360, height: 800 },
+      deviceScaleFactor: 1.5,
+      isMobile: true,
+      hasTouch: true
+    });
+    try {
+      await touchPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await touchPage.waitForFunction(() => {
+        const app = window.Alpine?.$data(document.documentElement);
+        return app && !app.catalogLoading && app.homeSectionReady?.catalog &&
+          document.querySelector('#home-catalog-rail')?.children.length > 1;
+      }, null, { timeout: 30000 });
+
+      const cdp = await touchPage.context().newCDPSession(touchPage);
+      await cdp.send('Input.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 1 });
+
+      for (const viewport of [
+        { width: 360, height: 800, label: 'telefon dikey' },
+        { width: 768, height: 1024, label: 'tablet dikey' },
+        { width: 1024, height: 768, label: 'tablet yatay' }
+      ]) {
+        await touchPage.setViewportSize({ width: viewport.width, height: viewport.height });
+        await touchPage.locator('#home-catalog-section').evaluate(element =>
+          element.scrollIntoView({ block: 'center', behavior: 'auto' })
+        );
+        await touchPage.waitForTimeout(180);
+
+        for (const selector of ['#home-catalog-rail', '#home-personalized-rail']) {
+          const rail = touchPage.locator(selector);
+          const before = await rail.evaluate(element => {
+            const rect = element.getBoundingClientRect();
+            element.scrollLeft = 0;
+            return {
+              left: rect.left,
+              top: rect.top,
+              width: rect.width,
+              height: rect.height,
+              maxScroll: element.scrollWidth - element.clientWidth,
+              start: element.scrollLeft
+            };
+          });
+          assert.ok(before.maxScroll > 24, `${viewport.label}: ${selector} yatay kaydırma mesafesi yetersiz`);
+          const x = Math.round(before.left + Math.min(before.width * 0.78, before.width - 18));
+          const y = Math.round(before.top + Math.min(before.height / 2, 80));
+          await cdp.send('Input.dispatchTouchEvent', {
+            type: 'touchStart',
+            touchPoints: [{ x, y, id: 1 }]
+          });
+          await cdp.send('Input.dispatchTouchEvent', {
+            type: 'touchMove',
+            touchPoints: [{ x: x - 150, y, id: 1 }]
+          });
+          await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+          await touchPage.waitForTimeout(220);
+          const after = await rail.evaluate(element => ({
+            scrollLeft: element.scrollLeft,
+            maxScroll: element.scrollWidth - element.clientWidth,
+            overflowX: getComputedStyle(element).overflowX
+          }));
+          assert.ok(
+            (after.overflowX === 'auto' || after.overflowX === 'scroll') &&
+            after.scrollLeft > before.start + 12,
+            `${viewport.label}: ${selector} gerçek dokunmatik hareketle kaymadı (önce=${before.start}, sonra=${after.scrollLeft}, max=${after.maxScroll})`
+          );
+        }
+      }
+      await cdp.detach();
+    } finally {
+      await touchPage.close();
+    }
+  });
+
   await check('Üç tema arasında geçiş yapılabiliyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     const themeButton = page.locator('header button').filter({ hasText: /Fil Dişi|Modern Gri|Karanlık Mod/ }).first();
