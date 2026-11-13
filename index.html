@@ -266,6 +266,21 @@
         @media(min-width:768px) and (max-width:1023px){#home-series-tracking-section .home-series-tracking-card{flex-basis:32%;width:32%}}
         @media(prefers-reduced-motion:reduce){#home-series-tracking-section .home-series-tracking-card,#home-series-tracking-section .home-series-tracking-poster img{transition:none!important}}
 
+        /* Admin-published collections: editorial shelf styling, isolated from other rails. */
+        [data-home-section="published-collections"] .home-published-collection{margin-left:24px;margin-right:24px;padding:18px 18px 16px;border:1px solid rgba(148,163,184,.16);border-radius:18px;background:linear-gradient(120deg,rgba(127,127,127,.055),rgba(127,127,127,.012))}
+        [data-home-section="published-collections"] .home-published-collection-heading{border-bottom:1px solid rgba(148,163,184,.2)}
+        [data-home-section="published-collections"] .home-published-collection-heading>div:first-child{position:relative;padding-left:13px}
+        [data-home-section="published-collections"] .home-published-collection-heading>div:first-child:before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:4px;background:linear-gradient(180deg,#fb7185,#be123c)}
+        [data-home-section="published-collections"] .home-published-collection-rail{gap:13px;padding:2px 1px 10px}
+        [data-home-section="published-collections"] .home-published-card{flex:0 0 224px;width:224px;border-color:rgba(148,163,184,.2);border-radius:13px;background:rgba(127,127,127,.035);box-shadow:0 5px 18px -15px rgba(0,0,0,.45);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+        [data-home-section="published-collections"] .home-published-card:hover{transform:translateY(-3px);border-color:rgba(225,29,72,.55);box-shadow:0 14px 25px -20px rgba(225,29,72,.55)}
+        [data-home-section="published-collections"] .home-published-card>div:first-child{aspect-ratio:16/9!important}
+        [data-home-section="published-collections"] .home-published-card>div:last-child{padding:11px 12px 12px}
+        [data-home-section="published-collections"] .home-published-card h3{font-size:12px;line-height:1.45}
+        [data-home-section="published-collections"] .home-published-card p{font-size:9px;line-height:1.4}
+        @media(max-width:639px){[data-home-section="published-collections"] .home-published-collection{margin-left:12px;margin-right:12px;padding:13px 12px 10px;border-radius:15px}[data-home-section="published-collections"] .home-published-card{flex-basis:190px;width:190px}[data-home-section="published-collections"] .home-published-collection-rail{gap:10px}}
+        @media(prefers-reduced-motion:reduce){[data-home-section="published-collections"] .home-published-card{transition:none}}
+        
         /* Genre discovery shelf; all rules are scoped to this section. */
         #home-genre-discovery-section .home-genre-discovery-heading{border-bottom:1px solid rgba(148,163,184,.24)}
         #home-genre-discovery-section .home-genre-discovery-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -716,8 +731,8 @@
                 <!-- Yönetim panelinden yayınlanan koleksiyonlar -->
                 <div data-home-section="published-collections" x-show="publishedCollections.length > 0 && isHomepageSectionVisible('published-collections')" class="space-y-10">
                 <template x-for="collection in publishedCollections" :key="'published-' + collection.id">
-                    <section class="w-full px-6 sm:px-12 space-y-5">
-                        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                    <section class="home-published-collection w-full mx-6 sm:mx-12 space-y-5">
+                        <div class="home-published-collection-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                             <div class="min-w-0">
                                 <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">CINEVERSE • ÖZEL SEÇKİ</p>
                                 <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white" x-text="collection.title"></h2>
@@ -725,9 +740,9 @@
                             </div>
                             <div class="flex items-center gap-3 shrink-0"><span class="text-[10px] font-bold text-rose-700 dark:text-rose-400" x-text="Math.min(collection.items.length,15) + ' / ' + collection.items.length + ' yapım'"></span><div class="flex items-center gap-2 shrink-0"><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15</span><button type="button" @click="scrollHomeCards('home-collection-rail-' + collection.id,-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-collection-rail-' + collection.id,1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div></div>
                         </div>
-                        <div :id="'home-collection-rail-' + collection.id" class="home-card-rail">
+                        <div :id="'home-collection-rail-' + collection.id" class="home-card-rail home-published-collection-rail">
                             <template x-for="item in collection.items.slice(0,15)" :key="collection.id + '-' + item.id">
-                                <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 shadow-sm">
+                                <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-published-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 shadow-sm">
                                     <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                         <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.backdrop)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 17vw, 14.5vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                         <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'tv' || item.type === 'series' ? 'Dizi' : 'Film'"></span>
