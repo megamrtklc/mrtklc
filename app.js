@@ -1508,7 +1508,8 @@
                         return [...new Set(String(source).toLocaleLowerCase('tr').match(/[a-z0-9ğüşöçıİ]{4,}/gi) || [])]
                             .map(normalize).filter(word => word.length >= 4 && !stop.has(word)).slice(0, 40);
                     };
-                    const history = new Map();                    const recentBoost = timestamp => {
+                    const history = new Map();
+                    const recentBoost = timestamp => {
                         const savedAt = Number(timestamp) || 0;
                         if (!savedAt) return 0;
                         const ageDays = Math.max(0, (Date.now() - savedAt) / 86400000);
