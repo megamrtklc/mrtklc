@@ -62,24 +62,31 @@
         @media(min-width:768px){.home-rail-card{flex-basis:22%;width:22%}}
         @media(min-width:1024px){.home-rail-card{flex-basis:18%;width:18%}}
         @media(min-width:1280px){.home-rail-card{flex-basis:15.5%;width:15.5%}}
-        /* Personalized editorial showcase — scoped only to its own section. */
-        #home-personalized-section .home-personalized-showcase{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(300px,.88fr);gap:18px;align-items:stretch}
-        #home-personalized-section .home-personalized-feature{min-height:390px;background:#171923;isolation:isolate;box-shadow:0 18px 45px -28px rgba(0,0,0,.7)}
+        /* Personalized editorial showcase — compact, overflow-safe layout. */
+        #home-personalized-section{min-width:0;max-width:100%;overflow:hidden}
+        #home-personalized-section .home-personalized-showcase{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:14px;align-items:stretch;width:100%;min-width:0}
+        #home-personalized-section .home-personalized-feature{min-width:0;min-height:310px;background:#171923;isolation:isolate;box-shadow:0 14px 32px -26px rgba(0,0,0,.65)}
         #home-personalized-section .home-personalized-feature-image{z-index:-2}
         #home-personalized-section .home-personalized-feature-shade{z-index:-1;background:linear-gradient(90deg,rgba(7,9,14,.94) 0%,rgba(7,9,14,.72) 48%,rgba(7,9,14,.10) 100%),linear-gradient(0deg,rgba(7,9,14,.62),transparent 65%)}
-        #home-personalized-section .home-personalized-feature:hover .home-personalized-feature-image{transform:scale(1.045)}
-        #home-personalized-section .home-personalized-alternatives{display:grid;grid-template-columns:1fr;grid-template-rows:repeat(6,minmax(0,1fr));gap:10px;min-height:390px}
-        #home-personalized-section .home-personalized-alternative{min-height:0;box-shadow:0 7px 22px -19px rgba(0,0,0,.6)}
-        #home-personalized-section .home-personalized-alternative:hover{border-color:rgba(225,29,72,.55);transform:translateX(3px);box-shadow:0 12px 25px -20px rgba(0,0,0,.65)}
+        #home-personalized-section .home-personalized-feature:hover .home-personalized-feature-image{transform:scale(1.035)}
+        #home-personalized-section .home-personalized-alternatives{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(6,minmax(0,1fr));gap:8px;min-height:310px;min-width:0}
+        #home-personalized-section .home-personalized-alternative{min-width:0;min-height:0;padding:8px;gap:9px;box-shadow:0 7px 22px -19px rgba(0,0,0,.6)}
+        #home-personalized-section .home-personalized-alternative>div:first-child{width:54px;flex-basis:54px}
+        #home-personalized-section .home-personalized-alternative:hover{border-color:rgba(225,29,72,.55);transform:translateX(2px);box-shadow:0 12px 25px -20px rgba(0,0,0,.65)}
         #home-personalized-section .home-personalized-feature-dismiss{opacity:.8}
         #home-personalized-section .home-personalized-feature-dismiss:hover{opacity:1}
-        @media(max-width:767px){
-          #home-personalized-section .home-personalized-showcase{grid-template-columns:minmax(0,1fr);gap:14px}
-          #home-personalized-section .home-personalized-feature{min-height:320px}
+        @media(max-width:900px){
+          #home-personalized-section .home-personalized-showcase{grid-template-columns:minmax(0,1fr);gap:12px}
+          #home-personalized-section .home-personalized-feature{min-height:260px}
           #home-personalized-section .home-personalized-feature-shade{background:linear-gradient(0deg,rgba(7,9,14,.96) 0%,rgba(7,9,14,.62) 48%,rgba(7,9,14,.08) 100%)}
-          #home-personalized-section .home-personalized-alternatives{display:flex;overflow-x:auto;overflow-y:hidden;gap:10px;min-height:0;padding:2px 2px 10px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+          #home-personalized-section .home-personalized-alternatives{display:flex;overflow-x:auto;overflow-y:hidden;gap:9px;min-height:0;min-width:0;padding:2px 2px 9px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
           #home-personalized-section .home-personalized-alternatives::-webkit-scrollbar{display:none}
-          #home-personalized-section .home-personalized-alternative{flex:0 0 min(82%,320px);min-height:112px;scroll-snap-align:start}
+          #home-personalized-section .home-personalized-alternative{flex:0 0 min(78%,270px);min-height:94px;scroll-snap-align:start}
+          #home-personalized-section .home-personalized-alternative>div:first-child{width:52px;flex-basis:52px}
+        }
+        @media(max-width:420px){
+          #home-personalized-section .home-personalized-feature{min-height:235px}
+          #home-personalized-section .home-personalized-alternative{flex-basis:min(86%,260px)}
         }
         @media(prefers-reduced-motion:reduce){#home-personalized-section .home-personalized-feature-image,#home-personalized-section .home-personalized-alternative{transition:none}}
         /* Cinematic recommendation rail: isolated from both desktop and mobile hero. */
@@ -479,7 +486,7 @@
                             <div role="button" tabindex="0" @click="openWatchPage(personalizedRecommendations[0])" @keydown.enter="openWatchPage(personalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(personalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer">
                                 <img @error="handleImageError($event)" :src="personalizedRecommendations[0].backdrop || personalizedRecommendations[0].poster || personalizedRecommendations[0].image" :alt="personalizedRecommendations[0].title" loading="lazy" decoding="async" class="home-personalized-feature-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                                 <div class="home-personalized-feature-shade absolute inset-0"></div>
-                                <div class="relative z-[1] flex h-full min-h-[310px] sm:min-h-[390px] flex-col justify-end p-5 sm:p-7 lg:p-8">
+                                <div class="relative z-[1] flex h-full min-h-[230px] sm:min-h-[280px] lg:min-h-[310px] flex-col justify-end p-4 sm:p-5 lg:p-6">
                                     <div class="flex items-center gap-2 mb-3"><span class="rounded-md bg-rose-600 text-white px-2.5 py-1 text-[9px] font-black tracking-widest uppercase">SANA ÖZEL SEÇİM</span><span class="rounded-md bg-black/45 text-white/90 px-2.5 py-1 text-[9px] font-bold" x-text="personalizedRecommendations[0].type === 'tv' ? 'DİZİ' : 'FİLM'"></span></div>
                                     <h3 class="max-w-xl text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-white drop-shadow-lg" x-text="personalizedRecommendations[0].title"></h3>
                                     <div class="flex flex-wrap items-center gap-3 mt-3 text-xs font-semibold text-white/85"><span x-text="personalizedRecommendations[0].year || '—'"></span><span class="text-white/40">•</span><span class="text-amber-300"><i class="fa-solid fa-star mr-1"></i><span x-text="personalizedRecommendations[0].rating || '—'"></span></span><span class="text-white/40">•</span><span class="line-clamp-1" x-text="personalizedRecommendations[0].genre || personalizedRecommendations[0].category || 'Önerilen yapım'"></span></div>
