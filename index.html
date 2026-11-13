@@ -22,10 +22,14 @@
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
     <link rel="preload" as="fetch" href="./filmvediziler.json" crossorigin="anonymous" fetchpriority="low">
     <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js">
-    <!-- İlk ekran manşetini yalnızca ilgili ekran boyutunda ön yükle. -->
+    <!-- İlk ekranda gerçekten gösterilen manşet görsellerini ekran boyutuna göre önceden yükle. -->
     <link rel="preload" as="image" media="(max-width: 767px)"
-          href="https://image.tmdb.org/t/p/w500/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg"
-          imagesrcset="https://image.tmdb.org/t/p/w342/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg 342w, https://image.tmdb.org/t/p/w500/uEqrGVBELVFaNVMOE4ExjLCMV3j.jpg 500w"
+          href="https://image.tmdb.org/t/p/w500/vyG93jhmPL7tBIhRtCLa5mdBKob.jpg"
+          imagesrcset="https://image.tmdb.org/t/p/w342/vyG93jhmPL7tBIhRtCLa5mdBKob.jpg 342w, https://image.tmdb.org/t/p/w500/vyG93jhmPL7tBIhRtCLa5mdBKob.jpg 500w, https://image.tmdb.org/t/p/w780/vyG93jhmPL7tBIhRtCLa5mdBKob.jpg 780w"
+          imagesizes="100vw" fetchpriority="high">
+    <link rel="preload" as="image" media="(min-width: 768px)"
+          href="https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg"
+          imagesrcset="https://image.tmdb.org/t/p/w780/8sNiAPPYU14PUepFNeSNGUTiHW.jpg 780w, https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg 1280w"
           imagesizes="100vw" fetchpriority="high">
     <!-- Derlenmiş Tailwind CSS: tarayıcıda JIT/derleme betiği çalıştırılmaz. -->
     <link rel="preload" as="style" href="./tailwind.css">
