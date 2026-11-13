@@ -599,6 +599,21 @@ try {
     if (originalViewport) await page.setViewportSize(originalViewport);
   });
 
+  await check('Detay sayfasında uzun konu özeti açılıp kapatılıyor', async () => {
+    await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      app.selectedItem.desc = 'Konu özeti erişilebilirlik testi. '.repeat(24);
+    });
+    const readMore = page.getByRole('button', { name: /Tamamını oku/ });
+    await readMore.waitFor({ state: 'visible' });
+    await readMore.click();
+    const dialog = page.getByRole('dialog', { name: 'Yapım konusu' });
+    await dialog.waitFor({ state: 'visible' });
+    assert.ok((await dialog.innerText()).includes('Konu özeti erişilebilirlik testi'));
+    await dialog.getByRole('button', { name: 'Kapat' }).click();
+    await dialog.waitFor({ state: 'hidden' });
+  });
+
   await check('İzleme listesine ekleme ve profil izolasyonu çalışıyor', async () => {
     const saveButton = page.locator('button').filter({ has: page.locator('span[x-text*="isInWatchlist"]') }).first();
     await saveButton.waitFor({ state: 'visible' });
