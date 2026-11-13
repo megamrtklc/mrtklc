@@ -347,13 +347,13 @@ try {
   await check('Dizi önerileri doğru etiketleniyor ve dar ekran kart ölçüsü uygulanıyor', async () => {
     await page.waitForFunction(() => {
       const card = document.querySelector('#home-personalized-rail [data-recommendation-type="tv"]');
-      return !!card && !!card.querySelector('.relative > span')?.textContent.trim();
+      return !!card && !!card.querySelector('.min-w-0 > p:first-child')?.textContent.trim();
     }, { timeout: 10000 });
     const badge = await page.evaluate(() => {
       const card = document.querySelector('#home-personalized-rail [data-recommendation-type="tv"]');
       return {
         type: card?.getAttribute('data-recommendation-type') || '',
-        label: card?.querySelector('.relative > span')?.textContent.trim() || ''
+        label: card?.querySelector('.min-w-0 > p:first-child')?.textContent.trim() || ''
       };
     });
     console.log('TV RECOMMENDATION BADGE:', JSON.stringify(badge));
