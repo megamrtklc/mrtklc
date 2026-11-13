@@ -411,9 +411,8 @@
     <main class="relative flex-grow w-full min-h-[540px] md:min-h-0">
         <!-- İlk çizim için statik hero: Alpine ve katalog hazırlanırken aynı ölçülerde görseli gösterir. -->
         <section id="hero-initial-shell" inert class="pointer-events-none absolute md:hidden inset-x-0 top-0 z-20 overflow-hidden select-none border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" src="https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg" loading="eager" decoding="async" class="absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-3xl"><div class="absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div>
-            <div class="mx-auto grid min-h-[560px] max-w-[1440px] grid-cols-1 items-center gap-6 px-5 py-7 md:grid-cols-2 md:gap-8 md:px-10 lg:px-14 lg:py-12">
+            <div class="mx-auto grid min-h-[480px] max-w-[1440px] grid-cols-1 items-center gap-5 px-5 py-5 md:grid-cols-2 md:gap-8 md:px-10 lg:px-14 lg:py-8">
                 <div class="order-2 space-y-4 text-white md:order-1 md:max-w-[590px]">
-                    <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.24em] text-rose-300"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span> Öne çıkan yapım</span>
                     <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.35rem,3vw,3.5rem)] font-black leading-tight tracking-tight text-white">Kıyamet Z: Yeni Dünya</h1>
                     <div class="flex flex-wrap items-center gap-2 text-xs font-bold"><span class="inline-flex items-center gap-2 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-lg"><span class="tracking-tight">IMDb</span><span class="text-sm">6.1</span></span><span class="text-gray-600">•</span><span class="text-gray-300">2026</span><span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200">Film</span><span class="text-gray-400">Aksiyon</span></div>
                     <p class="max-w-xl text-sm leading-6 text-gray-300 line-clamp-3">TSJ virüsü salgınının ardından Kanarya Adaları Avrupa'nın son sığınağı hâline gelmiştir. Erzak bulmak için Madrid'e giden bir ekibe Roberto da şüpheli amaçlarla katılır.</p>
@@ -438,9 +437,9 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
                         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_42%,transparent_0%,transparent_42%,rgba(0,0,0,.28)_100%)]"></div>
                     </div>
-                    <div class="relative mx-auto flex min-h-[590px] max-w-[1800px] flex-col justify-between px-8 pb-7 pt-10 lg:min-h-[630px] lg:px-12 xl:px-16">
-                        <div class="flex min-h-[420px] items-start pt-5">
-                            <div class="editorial-copy-enter max-w-[520px] space-y-3 lg:max-w-[570px]">
+                    <div class="relative mx-auto flex min-h-[520px] max-w-[1800px] flex-col justify-between px-8 pb-6 pt-8 lg:min-h-[560px] lg:px-12 xl:px-16">
+                        <div class="flex min-h-[360px] items-center">
+                            <div class="editorial-copy-enter max-w-[520px] space-y-4 lg:max-w-[570px]">
                                 <div class="space-y-2">
                                     <h1 class="block w-full max-w-[520px] overflow-hidden text-ellipsis whitespace-nowrap text-5xl font-black leading-[1.05] tracking-[-0.045em] text-white drop-shadow-2xl lg:max-w-[570px] lg:text-6xl xl:text-7xl" x-text="currentHero.title" :title="currentHero.title"></h1>
                                     <p class="pl-1 text-sm font-black uppercase tracking-[0.62em] text-amber-400" x-text="currentHero.type === 'tv' ? 'DİZİ' : 'SİNEMA'"></p>
@@ -458,7 +457,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="relative z-10 flex items-center justify-between gap-5 border-t border-white/15 pt-5">
+                        <div class="relative z-10 flex items-center justify-between gap-5 border-t border-white/15 pt-4">
                             <div class="flex items-center gap-3">
                                 <button type="button" @click="navigateHeroSlide(-1)" aria-label="Önceki öne çıkan yapım" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/25 text-white backdrop-blur transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                                 <span class="min-w-[66px] text-sm font-bold tabular-nums text-white"><span x-text="String(currentSlideIndex + 1).padStart(2,'0')"></span><span class="mx-1 text-white/40">/</span><span class="text-white/55" x-text="String(heroSlides.length).padStart(2,'0')"></span></span>
@@ -466,7 +465,7 @@
                             </div>
                             <div id="heroThumbContainer" class="flex max-w-[72%] items-center gap-3 overflow-x-auto overflow-y-visible px-1 pb-2 pt-2 no-scrollbar">
                                 <template x-for="(item,index) in heroThumbSlides" :key="'desktop-hero-thumb-'+item.id">
-                                    <button type="button" @click="selectHeroSlide(heroSlides.findIndex(slide => String(slide.id) === String(item.id)))" :data-hero-index="heroSlides.findIndex(slide => String(slide.id) === String(item.id))" :aria-label="item.title + ' yapımını göster'" :aria-current="String(currentHero.id) === String(item.id) ? 'true' : 'false'" class="group relative h-[126px] w-[84px] shrink-0 overflow-hidden rounded-xl border border-white/20 bg-[#101116] shadow-lg shadow-black/30 transition duration-300 hover:-translate-y-1 hover:border-amber-300/80" :class="String(currentHero.id) === String(item.id) ? 'border-2 border-amber-400 shadow-lg shadow-amber-900/30' : 'opacity-65 hover:opacity-100'">
+                                    <button type="button" @click="selectHeroSlide(heroSlides.findIndex(slide => String(slide.id) === String(item.id)))" :data-hero-index="heroSlides.findIndex(slide => String(slide.id) === String(item.id))" :aria-label="item.title + ' yapımını göster'" :aria-current="String(currentHero.id) === String(item.id) ? 'true' : 'false'" class="group relative h-[112px] w-[75px] shrink-0 overflow-hidden rounded-xl border border-white/20 bg-[#101116] shadow-lg shadow-black/30 transition duration-300 hover:-translate-y-1 hover:border-amber-300/80" :class="String(currentHero.id) === String(item.id) ? 'border-2 border-amber-400 shadow-lg shadow-amber-900/30' : 'opacity-65 hover:opacity-100'">
                                         <img :src="item.poster || item.image || item.tmdbPoster" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="h-full w-full object-contain transition duration-500">
                                         <span class="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/90 to-transparent px-2 pb-1 pt-4 text-left text-[9px] font-bold text-white" x-text="item.title"></span>
                                     </button>
@@ -504,8 +503,8 @@
                         <button type="button" @click.stop="navigateHeroSlide(-1)" aria-label="Önceki öne çıkan yapım" class="absolute left-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/35 text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 active:scale-95"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         <button type="button" @click.stop="navigateHeroSlide(1)" aria-label="Sonraki öne çıkan yapım" class="absolute right-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/35 text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 active:scale-95"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
-                    <div class="px-5 pb-6 pt-1 text-white sm:px-7">
-                        <div class="space-y-2">
+                    <div class="px-5 pb-4 pt-1 text-white sm:px-7">
+                        <div class="space-y-1.5">
                             <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.35rem,5.4vw,2.25rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
                             <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
                                 <span class="inline-flex items-center gap-1.5 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-md"><i class="fa-solid fa-star text-[10px]"></i><span class="text-sm" x-text="currentHero.rating || '—'"></span></span>
@@ -513,7 +512,7 @@
                                 <span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200" x-text="currentHero.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                 <span class="text-gray-400" x-text="currentHero.genre"></span>
                             </div>
-                            <p class="max-w-2xl text-sm leading-6 text-gray-300 line-clamp-3" x-text="heroDescription"></p>
+                            <p class="max-w-2xl text-sm leading-6 text-gray-300 line-clamp-2" x-text="heroDescription"></p>
                             <div class="grid min-w-0 grid-cols-2 gap-2 pt-1">
                                 <button type="button" @click="openWatchPage(currentHero)" class="inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-xl bg-rose-600 px-2 sm:px-3 text-[11px] sm:text-xs font-extrabold uppercase tracking-wide text-white shadow-lg shadow-rose-950/30 transition-colors hover:bg-rose-500"><i class="fa-solid fa-play shrink-0"></i><span class="truncate">Şimdi İzle</span></button>
                                 <button type="button" @click="toggleWatchlist(currentHero)" class="inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-2 sm:px-3 text-[11px] sm:text-xs font-bold text-white transition-colors hover:bg-white/10"><i :class="isInWatchlist(currentHero) ? 'fa-solid fa-bookmark text-rose-400' : 'fa-regular fa-bookmark'" class="shrink-0"></i><span class="truncate" x-text="isInWatchlist(currentHero) ? 'Listemde' : 'Listeme Ekle'"></span></button>
