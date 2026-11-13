@@ -785,6 +785,8 @@ try {
       const app = window.Alpine.$data(document.documentElement);
       const movie = app.catalog.find(item => item.type === 'movie');
       const series = app.catalog.find(item => item.type === 'tv');
+      localStorage.removeItem('cine_movie_progress_v1');
+      localStorage.removeItem('cine_watchlist_v1');
       localStorage.setItem('perde_profile_player_progress_v1', JSON.stringify({
         pro_1: { [movie.id]: { time: 123, duration: 1000 } },
         pro_2: { [movie.id]: { time: 456, duration: 1000 } }
