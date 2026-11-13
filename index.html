@@ -266,6 +266,22 @@
         @media(min-width:768px) and (max-width:1023px){#home-series-tracking-section .home-series-tracking-card{flex-basis:32%;width:32%}}
         @media(prefers-reduced-motion:reduce){#home-series-tracking-section .home-series-tracking-card,#home-series-tracking-section .home-series-tracking-poster img{transition:none!important}}
 
+        /* Homepage catalog: poster-led archive rail with a distinct toolbar and card finish. */
+        #home-catalog-section .home-catalog-heading{border-bottom:1px solid rgba(148,163,184,.22)}
+        #home-catalog-section .home-catalog-heading>div:first-child{position:relative;padding-left:14px}
+        #home-catalog-section .home-catalog-heading>div:first-child:before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:4px;background:linear-gradient(180deg,#fb7185,#be123c)}
+        #home-catalog-section .home-catalog-heading>div:first-child h2{letter-spacing:.055em}
+        #home-catalog-section .home-catalog-heading select{min-height:36px;border-color:rgba(148,163,184,.3);background-color:rgba(127,127,127,.055);border-radius:9px}
+        #home-catalog-section .home-catalog-rail{gap:14px;padding:2px 1px 12px}
+        #home-catalog-section .home-catalog-card{flex:0 0 178px;width:178px;border-color:rgba(148,163,184,.2);border-radius:13px;background:rgba(127,127,127,.035);box-shadow:0 6px 20px -16px rgba(0,0,0,.55);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+        #home-catalog-section .home-catalog-card:hover{transform:translateY(-4px);border-color:rgba(225,29,72,.62);box-shadow:0 16px 27px -20px rgba(225,29,72,.48)}
+        #home-catalog-section .home-catalog-card>div:first-child{border-radius:11px 11px 0 0}
+        #home-catalog-section .home-catalog-card>div:last-child{min-height:86px;padding:11px 11px 10px}
+        #home-catalog-section .home-catalog-card h3{font-size:12px;line-height:1.4}
+        #home-catalog-section .home-catalog-card>div:last-child>div:last-child{margin-top:7px;padding-top:7px}
+        @media(max-width:639px){#home-catalog-section .home-catalog-heading{align-items:stretch}#home-catalog-section .home-catalog-heading>div:last-child{gap:7px}#home-catalog-section .home-catalog-heading select{flex:1;min-width:0;padding-left:8px;padding-right:8px;font-size:10px}#home-catalog-section .home-catalog-card{flex-basis:148px;width:148px}#home-catalog-section .home-catalog-rail{gap:10px}}
+        @media(prefers-reduced-motion:reduce){#home-catalog-section .home-catalog-card{transition:none}}
+        
         /* Admin-published collections: editorial shelf styling, isolated from other rails. */
         [data-home-section="published-collections"] .home-published-collection{margin-left:24px;margin-right:24px;padding:18px 18px 16px;border:1px solid rgba(148,163,184,.16);border-radius:18px;background:linear-gradient(120deg,rgba(127,127,127,.055),rgba(127,127,127,.012))}
         [data-home-section="published-collections"] .home-published-collection-heading{border-bottom:1px solid rgba(148,163,184,.2)}
@@ -761,7 +777,7 @@
 
                 <!-- Film & Dizi Katalog -->
                 <section id="home-catalog-section" data-home-section="catalog" x-show="isHomepageSectionVisible('catalog')" class="w-full px-6 sm:px-12 space-y-6">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
+                    <div class="home-catalog-heading flex flex-col xl:flex-row xl:items-end justify-between gap-4 pb-4">
                         <div>
                             <h2 class="text-xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Tüm Yapımlar & Trendler</h2>
                             <p class="text-xs text-gray-500 dark:text-gray-400">Arşivden seçilen yapımlar • En fazla 15 kart</p>
@@ -784,9 +800,9 @@
                         </div>
                     </div>
 
-                    <div id="home-catalog-rail" class="home-card-rail">
+                    <div id="home-catalog-rail" class="home-card-rail home-catalog-rail">
                         <template x-for="item in homeCatalogPreview.slice(0,15)" :key="item.id">
-                            <div @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card group rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
+                            <div @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-catalog-card group rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 17vw, 14.5vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <div class="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 flex items-center space-x-1">
