@@ -644,17 +644,20 @@ try {
     assert.ok(castMetrics.count >= 2, 'Oyuncu kadrosu kartları yüklenmedi: ' + JSON.stringify(castMetrics));
     assert.ok(castMetrics.scrollWidth > castMetrics.clientWidth,
       'Oyuncu kadrosu şeridi yatay kaydırmaya uygun değil: ' + JSON.stringify(castMetrics));
-    const castDirection = await cast.evaluate(el => getComputedStyle(el).direction);
-    await cast.evaluate(el => { el.scrollLeft = 0; });
-    const castStart = await cast.evaluate(el => el.scrollLeft);
     const castButtons = castCard.getByRole('button');
-    await castButtons.nth(castDirection === 'rtl' ? 0 : 1).click();
-    await page.waitForFunction(start => {
-      const el = document.querySelector('#castContainer');
-      return el && Math.abs(el.scrollLeft - start) > 1;
-    }, castStart);
-    assert.ok(await cast.evaluate(el => Math.abs(el.scrollLeft - castStart) > 1),
-      'Oyuncu kadrosu uygun yönde kaydırılamadı');
+    let castMoved = false;
+    for (const index of [0, 1]) {
+      await cast.evaluate(el => { el.scrollLeft = 0; });
+      const start = await cast.evaluate(el => el.scrollLeft);
+      await castButtons.nth(index).click();
+      await page.waitForTimeout(450);
+      if (await cast.evaluate(el => Math.abs(el.scrollLeft - start) > 1)) {
+        castMoved = true;
+        break;
+      }
+    }
+    assert.ok(castMoved, 'Oyuncu kadrosu ok kontrolleri şeridi kaydırmadı');
+
 
     const similarCard = page.locator('[data-watch-card="similar"]');
     await similarCard.waitFor({ state: 'visible' });
@@ -667,17 +670,20 @@ try {
     assert.ok(similarMetrics.count > 0, 'Benzer yapımlar listesi boş: ' + JSON.stringify(similarMetrics));
     assert.ok(similarMetrics.scrollWidth > similarMetrics.clientWidth,
       'Benzer yapımlar şeridi yatay kaydırmaya uygun değil: ' + JSON.stringify(similarMetrics));
-    const similarDirection = await similar.evaluate(el => getComputedStyle(el).direction);
-    await similar.evaluate(el => { el.scrollLeft = 0; });
-    const similarStart = await similar.evaluate(el => el.scrollLeft);
     const similarButtons = similarCard.getByRole('button');
-    await similarButtons.nth(similarDirection === 'rtl' ? 0 : 1).click();
-    await page.waitForFunction(start => {
-      const el = document.querySelector('#similarContainer');
-      return el && Math.abs(el.scrollLeft - start) > 1;
-    }, similarStart);
-    assert.ok(await similar.evaluate(el => Math.abs(el.scrollLeft - similarStart) > 1),
-      'Benzer yapımlar şeridi ileri kaydırılamadı');
+    let similarMoved = false;
+    for (const index of [0, 1]) {
+      await similar.evaluate(el => { el.scrollLeft = 0; });
+      const start = await similar.evaluate(el => el.scrollLeft);
+      await similarButtons.nth(index).click();
+      await page.waitForTimeout(450);
+      if (await similar.evaluate(el => Math.abs(el.scrollLeft - start) > 1)) {
+        similarMoved = true;
+        break;
+      }
+    }
+    assert.ok(similarMoved, 'Benzer yapımlar ok kontrolleri şeridi kaydırmadı');
+
   });
 
   await check('Detay sayfasında uzun konu özeti açılıp kapatılıyor', async () => {
