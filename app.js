@@ -400,7 +400,8 @@
 
                 isHomepageSectionVisible(sectionKey) {
                     if (sectionKey === 'hero') return true;
-                    if (!this.homepageConfig) return false;
+                    // Yapılandırma gelene kadar varsayılan olarak görünür tut;
+                    // veri geldikten sonra kapalı bölümler normal şekilde gizlenir.
                     return this.homepageConfig?.layout?.visibility?.[sectionKey] !== false;
                 },
 
