@@ -21,13 +21,14 @@
    <button class="nav-link" data-view="catalog"><span class="nav-icon">▤</span><span>Yapım Kütüphanesi</span><em id="nav-count">—</em></button>
    <button class="nav-link" data-view="collections"><span class="nav-icon">▧</span><span>Koleksiyon Stüdyosu</span><kbd>03</kbd></button>
    <button class="nav-link" data-view="homepage"><span class="nav-icon">▣</span><span>Vitrin Tasarımı</span><kbd>04</kbd></button>
-   <button class="nav-link" data-view="watch-layout"><span class="nav-icon">▷</span><span>İzleme Deneyimi</span><kbd>05</kbd></button>
+   <button class="nav-link" data-view="homepage-layout"><span class="nav-icon">☷</span><span>Ana Sayfa Düzeni</span><kbd>05</kbd></button>
+   <button class="nav-link" data-view="watch-layout"><span class="nav-icon">▷</span><span>İzleme Deneyimi</span><kbd>06</kbd></button>
   </nav>
   <div class="nav-caption nav-caption-spaced">YÖNETİM</div>
   <nav class="primary-nav">
-   <button class="nav-link" data-view="analytics"><span class="nav-icon">⌁</span><span>Veri Analizi</span><kbd>06</kbd></button>
-   <button class="nav-link" data-view="users"><span class="nav-icon">♙</span><span>Hesap &amp; Erişim</span><kbd>07</kbd></button>
-   <button class="nav-link" data-view="system"><span class="nav-icon">⚙</span><span>Sistem Ayarları</span><kbd>08</kbd></button>
+   <button class="nav-link" data-view="analytics"><span class="nav-icon">⌁</span><span>Veri Analizi</span><kbd>07</kbd></button>
+   <button class="nav-link" data-view="users"><span class="nav-icon">♙</span><span>Hesap &amp; Erişim</span><kbd>08</kbd></button>
+   <button class="nav-link" data-view="system"><span class="nav-icon">⚙</span><span>Sistem Ayarları</span><kbd>09</kbd></button>
   </nav>
   <div class="sidebar-bottom">
    <div class="sidebar-status"><span class="status-pulse"></span><span><b>Yönetim servisi</b><small>Bağlantı bekleniyor</small></span></div>
@@ -126,6 +127,30 @@
  <p class="hero-mode-hint" id="hero-mobile-hint"></p>
  <div id="hero-mobile-slide-list" class="hero-slide-list"></div>
  <div class="hero-preview-wrap"><div class="hero-preview-heading"><b>Manşet önizlemesi</b><span>İlk sıradaki yapım</span></div><div id="hero-mobile-preview" class="hero-preview mobile"></div></div></section></div><div class="homepage-save"><button class="primary-button" type="submit">Manşet ayarlarını kaydet</button></div><details class="config-details"><summary>Kaydedilen yapılandırma</summary><pre id="homepage-config">Yükleniyor…</pre></details></form></section>
+      <section class="view" id="view-homepage-layout">
+        <div class="page-heading">
+          <div><div class="eyebrow">FRONT PAGE / 04</div><h1>Ana sayfa düzeni</h1><p>Ana sayfadaki bölümleri açıp kapat, sıralarını değiştir ve düzeni tek seferde yayınla.</p></div>
+          <button class="primary-button" id="homepage-layout-save" type="button">Düzeni yayınla</button>
+        </div>
+        <div class="homepage-layout-intro panel-card">
+          <span class="homepage-layout-intro-icon">☷</span>
+          <div><b>Vitrininin akışını sen belirle</b><p>Yukarı ve aşağı oklarıyla bölümlerin yerini değiştir. Göz simgesiyle ana sayfada gösterilip gösterilmeyeceğini seç. Değişiklikler kaydedilene kadar taslak olarak kalır.</p></div>
+          <span class="homepage-layout-count" id="homepage-layout-count">—</span>
+        </div>
+        <div class="homepage-layout-columns">
+          <div class="panel-card homepage-layout-panel">
+            <div class="panel-heading"><div><span class="section-index">01 / SIRALAMA</span><h2>Ana sayfa bölümleri</h2><p>Liste sırası, sitedeki yukarıdan aşağıya gösterim sırasıdır.</p></div><span class="homepage-layout-live">CANLI VİTRİN</span></div>
+            <div id="homepage-layout-list" class="homepage-layout-list"><div class="empty-cell">Bölümler yükleniyor…</div></div>
+          </div>
+          <aside class="panel-card homepage-layout-side">
+            <span class="section-index">02 / BİLGİ</span><h2>Nasıl çalışır?</h2>
+            <div class="homepage-layout-note"><b>Manşet sabit kalır</b><p>Masaüstü ve mobil manşet aynı yerde kalır. Görünümü ve çalışma şekli bu ekrandan değiştirilmez.</p></div>
+            <div class="homepage-layout-note"><b>İçerik koşulları korunur</b><p>Örneğin izleme listesi boşsa o bölüm yine otomatik gizlenir. Buradaki anahtar yalnızca bölümü genel olarak açar veya kapatır.</p></div>
+            <div class="homepage-layout-note"><b>Yayınlama</b><p>Kaydettiğinde sıralama ve görünürlük ayarları katalog verisine yazılır ve siteye gönderilir.</p></div>
+            <button class="secondary-button" id="homepage-layout-reset" type="button">Varsayılan sıraya dön</button>
+          </aside>
+        </div>
+      </section>
       <section class="view" id="view-analytics"><div class="page-heading"><div><div class="eyebrow">DATA &amp; INSIGHTS / 04</div><h1>İstatistikler</h1><p>Arşivinin tür ve yıl dağılımını incele.</p></div></div><div class="analytics-grid"><article class="panel-card"><h2>Yapım türleri</h2><div id="type-chart" class="bar-chart"></div></article><article class="panel-card"><h2>Yıllara göre dağılım</h2><div id="year-chart" class="bar-chart"></div></article></div></section>
       <section class="view" id="view-users"><div class="page-heading"><div><div class="eyebrow">ACCESS / 05</div><h1>Kullanıcılar</h1><p>Yönetici profilini ve oturum güvenliğini yönet.</p></div></div>
         <div class="users-profile-layout">
