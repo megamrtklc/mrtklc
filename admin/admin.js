@@ -203,6 +203,7 @@
     setField('field-duration',item?.duration||item?.tmdbRuntime||'');setField('field-country',item?.country||item?.tmdbCountries||'');
     setField('field-director',item?.director||item?.tmdbDirector||'');setField('field-platform',item?.platform||'');
     setField('field-watch',item?.watchUrl||'');setField('field-note',item?.personalNote||'');
+    setField('field-episode-urls',Object.entries(item?.episodeWatchUrls||{}).map(([key,url])=>key.replace(':',':')+' | '+url).join('\n'));
     setField('field-tmdb',item?.tmdbId||'');setField('field-imdb',item?.imdbId||item?.tmdbImdbId||'');
     setField('field-image',item?.image||item?.poster||item?.tmdbPoster||'');setField('field-backdrop',item?.backdrop||item?.tmdbBackdrop||'');
     setField('field-trailer',item?.trailerUrl||item?.tmdbTrailerUrl||'');setField('field-seasons',item?.seasons||'');
@@ -210,15 +211,34 @@
     $('#editor-status').textContent=item?'Mevcut katalog kaydı düzenleniyor.':'Yeni katalog kaydı oluşturuluyor.';
     $('#content-dialog').showModal();
   }
+  function parseEpisodeWatchUrls(value){
+    const result={};
+    const lines=String(value||'').split(/\r?\n/);
+    for(let index=0;index<lines.length;index++){
+      const line=lines[index].trim();
+      if(!line)continue;
+      const match=line.match(/^(\d{1,3}):(\d{1,4})\s*\|\s*(https?:\/\/\S+)$/i);
+      if(!match)throw new Error('Bölüm bağlantısı '+(index+1)+'. satırda hatalı. Biçim: sezon:bölüm | https://…/bolum.mp4');
+      const season=Number(match[1]),episode=Number(match[2]),url=match[3];
+      if(season<1||episode<1)throw new Error('Sezon ve bölüm numarası 1 veya daha büyük olmalı.');
+      if(!/\.mp4(?:$|[?#])/i.test(url))throw new Error('Şimdilik yalnızca doğrudan MP4 video bağlantıları destekleniyor. ('+index+'. satır)');
+      const key=season+':'+episode;
+      if(result[key])throw new Error(key+' için birden fazla bağlantı girilmiş.');
+      result[key]=url;
+    }
+    return result;
+  }
   async function saveContent(event){
     event.preventDefault();if(!canWrite())return;
     const existingId=$('#edit-id').value,existing=existingId?state.catalog.find(x=>String(x.id)===existingId):null;
     const type=$('#field-type').value;
+    let episodeWatchUrls={};
+    try{episodeWatchUrls=parseEpisodeWatchUrls($('#field-episode-urls').value);}catch(error){toast(error.message);return;}
     const record={...(existing||{}),id:existing?.id??('cv-'+Date.now()),title:$('#field-title').value.trim(),type,
       year:$('#field-year').value.trim(),rating:$('#field-rating').value.trim(),genre:$('#field-genre').value.trim(),
       category:$('#field-category').value.trim(),duration:$('#field-duration').value.trim(),country:$('#field-country').value.trim(),
       director:$('#field-director').value.trim(),platform:$('#field-platform').value.trim(),watchUrl:$('#field-watch').value.trim(),
-      personalNote:$('#field-note').value.trim(),tmdbId:$('#field-tmdb').value.trim()?Number($('#field-tmdb').value):null,
+      personalNote:$('#field-note').value.trim(),episodeWatchUrls: type==='tv'?episodeWatchUrls:{},tmdbId:$('#field-tmdb').value.trim()?Number($('#field-tmdb').value):null,
       imdbId:$('#field-imdb').value.trim(),image:$('#field-image').value.trim(),
       backdrop:$('#field-backdrop').value.trim(),trailerUrl:$('#field-trailer').value.trim(),desc:$('#field-desc').value.trim()};
     if(!record.title){toast('Yapım adı zorunludur.');return;}
