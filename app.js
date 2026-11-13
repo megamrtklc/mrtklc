@@ -1514,9 +1514,7 @@
                     const episodeMap = safeRead('cine_episode_tracking_v1');
                     const seriesItems = [];
                     let watchedEpisodes = 0;
-                    Object.entries(episodeMap).forEach(([key, value]) => {
-                        if (!key.startsWith(this.currentProfileId + ':')) return;
-                        const id = key.slice(this.currentProfileId.length + 1);
+                    Object.entries(episodeMap).forEach(([id, value]) => {
                         const item = this.catalog.find(entry => String(entry.id) === id);
                         if (!item || item.type !== 'tv') return;
                         let count = 0;
@@ -1814,9 +1812,7 @@
                         if (item && seconds >= 300) addItem(item, 1 + Math.min(seconds / 3600, 2));
                     });
                     const episodeMap = read('cine_episode_tracking_v1');
-                    Object.entries(episodeMap).forEach(([key, tracking]) => {
-                        if (!key.startsWith(this.currentProfileId + ':')) return;
-                        const id = key.slice(this.currentProfileId.length + 1);
+                    Object.entries(episodeMap).forEach(([id, tracking]) => {
                         const item = this.catalog.find(entry => String(entry.id) === String(id));
                         const count = Object.values(tracking?.watched || {}).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number)).size : 0), 0);
                         if (item && count > 0) addItem(item, 1 + Math.min(count / 5, 3));
