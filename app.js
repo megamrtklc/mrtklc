@@ -448,17 +448,31 @@
                 },
 
                 get currentHero() {
-                    return this.heroSlides[this.currentSlideIndex] || this.heroSlides[0] || {
-                        id: 'archive-1',
-                        title: 'Kıyamet Z: Yeni Dünya',
-                        type: 'movie',
-                        backdrop: 'https://image.tmdb.org/t/p/w1280/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg',
-                        poster: 'https://image.tmdb.org/t/p/w500/mUcJtoyGnYbYNmeIuZASUJfyj3x.jpg',
-                        rating: '6.1',
+                    const active = this.heroSlides[this.currentSlideIndex] || this.heroSlides[0];
+                    if (active) return active;
+                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+                    return mobile ? {
+                        id: 'archive-26',
+                        title: 'Teach You a Lesson',
+                        type: 'tv',
+                        backdrop: 'https://image.tmdb.org/t/p/w1280/vyG93jhmPL7tBIhRtCLa5mdBKob.jpg',
+                        poster: 'https://image.tmdb.org/t/p/w500/44iAuz8HkEDCOxjBmF4oogaXjnI.jpg',
+                        rating: '9.4',
                         year: '2026',
-                        genre: 'Aksiyon',
+                        genre: 'Aksiyon & Macera',
                         starring: '',
-                        desc: "TSJ virüsü salgınının ardından Kanarya Adaları Avrupa'nın son sığınağı hâline gelmiştir. Erzak bulmak için Madrid'e giden bir ekibe Roberto da şüpheli amaçlarla katılır. Enfektelerin kuşattığı ve aralarındaki bağ sarsılmış olan ekip zorlu bir ahlaki ikilemle yüzleşmek zorunda kalır. Kendilerini mi kurtaracaklar yoksa insanlıktan geriye kalanı korumak için her şeyi riske mi atacaklar?"
+                        desc: 'Okullarda otoriteye saygı yerle bir olduğunda işleri yoluna koymak için gelen sıra dışı müfettişler, ders kitaplarında bulunmayan katı ve ciddi dersler vermeye başlar.'
+                    } : {
+                        id: 'archive-112',
+                        title: 'Yıldızlararası',
+                        type: 'movie',
+                        backdrop: 'https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg',
+                        poster: 'https://image.tmdb.org/t/p/w500/xbiycuc84TrieEWwkkuH2hoEa9S.jpg',
+                        rating: '8.5',
+                        year: '2014',
+                        genre: 'Macera',
+                        starring: 'Matthew McConaughey / Anne Hathaway / Michael Caine',
+                        desc: "Dünya'nın kuraklık ve kıtlıkla yok oluşun eşiğine geldiği bir gelecekte, insanlığın hayatta kalabilmesi için yeni bir yuva bulmak şarttır."
                     };
                 },
 
