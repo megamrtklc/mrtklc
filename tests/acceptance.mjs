@@ -619,28 +619,48 @@ try {
     const restoredTime = await page.evaluate(async () => {
       const app = window.Alpine.$data(document.documentElement);
       const item = app.selectedItem;
-      const videoElement = document.getElementById('customVideoPlayer');
       const descriptor = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'currentTime');
-      let assignedTime = null;
+      const assignedTimes = [];
       Object.defineProperty(HTMLMediaElement.prototype, 'currentTime', {
         configurable: true,
         get() { return descriptor.get.call(this); },
         set(value) {
-          assignedTime = Number(value);
+          assignedTimes.push(Number(value));
           try { descriptor.set.call(this, value); } catch (_) {}
         }
       });
-      try {
-        app.saveMovieProgress(item.id, { time: 75, duration: 2400, savedAt: Date.now() });
+      const waitForRestore = async profileId => {
+        app.switchProfile(profileId);
+        assignedTimes.length = 0;
         app.openWatchPage(item, false);
         await new Promise(resolve => setTimeout(resolve, 300));
-        return { assignedTime, playerPresent: !!videoElement };
+        return {
+          assignedTime: assignedTimes.length ? assignedTimes[assignedTimes.length - 1] : null,
+          playerPresent: !!document.getElementById('customVideoPlayer')
+        };
+      };
+      try {
+        app.switchProfile('pro_2');
+        app.saveMovieProgress(item.id, { time: 75, duration: 2400, savedAt: Date.now() });
+        app.switchProfile('pro_1');
+        const mainProgress = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}');
+        delete mainProgress.pro_1?.[item.id];
+        localStorage.setItem('perde_profile_player_progress_v1', JSON.stringify(mainProgress));
+        localStorage.removeItem('perde_player_progress_v3');
+        const mainProfile = await waitForRestore('pro_1');
+        const childProfile = await waitForRestore('pro_2');
+        return { mainProfile, childProfile };
       } finally {
         Object.defineProperty(HTMLMediaElement.prototype, 'currentTime', descriptor);
+        app.switchProfile('pro_1');
       }
     });
-    assert.ok(restoredTime.playerPresent, 'Devam oynatımı sırasında video oynatıcı bulunamadı');
-    assert.equal(restoredTime.assignedTime, 75, 'Yapım yeniden açıldığında oynatıcı kayıtlı saniyeye dönmedi');
+    assert.ok(restoredTime.mainProfile.playerPresent, 'Ana Profilde video oynatıcı bulunamadı');
+    assert.notEqual(restoredTime.mainProfile.assignedTime, 75,
+      'Çocuk profilinin kayıtlı saniyesi Ana Profil oynatıcısına sızdı');
+    assert.ok(restoredTime.childProfile.playerPresent, 'Çocuk Profilde video oynatıcı bulunamadı');
+    assert.equal(restoredTime.childProfile.assignedTime, 75,
+      'Çocuk profile dönüldüğünde oynatıcı kayıtlı saniyeye dönmedi');
   });
 
   await check('Detay sayfası mobil, tablet ve masaüstünde taşma yapmıyor', async () => {
