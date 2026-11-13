@@ -336,11 +336,27 @@
         @media(max-width:639px){#cineverse-footer .cineverse-footer-link{min-height:30px}#cineverse-footer .cineverse-footer-glow{background:radial-gradient(ellipse at 10% 0%,rgba(225,29,72,.07),transparent 55%)}}
         @media(prefers-reduced-motion:reduce){#cineverse-footer .cineverse-footer-link{transition:none}#cineverse-footer .cineverse-footer-link:hover{transform:none}}
     </style>
+
+    <style id="cineverse-home-hero-header">
+        /* Ana sayfada header, masaüstü manşetin üzerine oturur; kaydırmada normal temalı bara dönüşür. */
+        @media (min-width: 768px) {
+            body:has(#home-page) > header.home-hero-overlay { margin-bottom: -4rem; background: linear-gradient(180deg, rgba(5,7,11,.82) 0%, rgba(5,7,11,.42) 68%, rgba(5,7,11,0) 100%) !important; border-color: transparent !important; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); color: #fff; }
+            body:has(#home-page) > header.home-hero-overlay nav { color: rgba(255,255,255,.88) !important; }
+            body:has(#home-page) > header.home-hero-overlay nav a:hover,
+            body:has(#home-page) > header.home-hero-overlay nav a[class*="text-rose"] { color: #fda4af !important; }
+            body:has(#home-page) > header.home-hero-overlay input { color: #fff !important; background: rgba(0,0,0,.24) !important; border-color: rgba(255,255,255,.24) !important; }
+            body:has(#home-page) > header.home-hero-overlay input::placeholder { color: rgba(255,255,255,.62) !important; }
+            body:has(#home-page) > header.home-hero-overlay button,
+            body:has(#home-page) > header.home-hero-overlay select { color: #fff; }
+            body:has(#home-page) > header.home-hero-overlay button.border,
+            body:has(#home-page) > header.home-hero-overlay .border.rounded-lg { border-color: rgba(255,255,255,.24) !important; background-color: rgba(0,0,0,.22) !important; }
+        }
+    </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
-    <header x-data="{ mobileMenuOpen: false }" :class="getHeaderClass()" class="sticky top-0 z-50 backdrop-blur-md border-b transition-colors duration-300">
+    <header x-data="{ mobileMenuOpen: false, headerScrolled: window.scrollY > 40 }" @scroll.window="headerScrolled = window.scrollY > 40" :class="currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass()" class="sticky top-0 z-50 backdrop-blur-md border-b transition-colors duration-300">
         <div class="w-full px-4 sm:px-12 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 lg:space-x-6">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
