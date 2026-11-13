@@ -17355,18 +17355,6 @@
         "archive-37",
         "archive-41"
       ]
-    },
-    {
-      "id": "collection-1794451173006",
-      "title": "Kayıt testi",
-      "description": "gfr5eghfg hfg",
-      "active": true,
-      "items": [
-        "perde-mw67it9i",
-        "perde-mw6xr2mm",
-        "perde-mw6xrtd2",
-        "perde-mw71eehr"
-      ]
     }
   ],
   "homepageConfig": {
@@ -17432,7 +17420,7 @@
     "desktopMode": "auto",
     "desktopCategory": "popular",
     "mobileMode": "auto",
-    "mobileCategory": "top-rated",
+    "mobileCategory": "popular",
     "desktopHeroSlides": [
       {
         "id": "archive-112",
