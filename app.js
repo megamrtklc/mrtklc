@@ -437,6 +437,10 @@
                         return;
                     }
 
+                    const rootMargin = typeof window.matchMedia === 'function' &&
+                        window.matchMedia('(max-width: 900px)').matches
+                        ? '0px 0px -160px 0px'
+                        : '200px 0px';
                     const observer = new IntersectionObserver(entries => {
                         entries.forEach(entry => {
                             if (!entry.isIntersecting) return;
@@ -444,7 +448,7 @@
                             if (key) this.homeSectionReady[key] = true;
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: '200px 0px' });
+                    }, { rootMargin });
 
                     window.__cineverseHomeSectionObserver = observer;
                     sections.forEach(section => observer.observe(section));
