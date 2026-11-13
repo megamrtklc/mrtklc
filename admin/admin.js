@@ -658,8 +658,12 @@
       $$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
     });
   });
-  $$('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{
+  $('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{
     watchDemoType=button.dataset.demoType;
+    renderWatchLayout();
+  }));
+  $('[data-demo-device]').forEach(button=>button.addEventListener('click',()=>{
+    watchDemoViewport=button.dataset.demoDevice;
     renderWatchLayout();
   }));
   init();
