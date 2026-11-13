@@ -1635,6 +1635,31 @@
                         }));
                 },
 
+                get homeDiscoveryGenres() {
+                    const personalized = this.personalizedDiscoveryGenres || [];
+                    if (personalized.length) return personalized.slice(0, 6);
+
+                    const counts = new Map();
+                    const normalize = value => this.normalizeSearchText(value);
+                    this.catalog.forEach(item => {
+                        const genres = [...new Set(String(item.category || item.genre || '')
+                            .split(/[\\/;,]/).map(normalize).filter(Boolean))];
+                        genres.forEach(name => {
+                            const current = counts.get(name) || { name, count: 0 };
+                            current.count += 1;
+                            counts.set(name, current);
+                        });
+                    });
+                    return [...counts.values()]
+                        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'tr'))
+                        .slice(0, 6)
+                        .map(entry => ({
+                            ...entry,
+                            label: entry.name.charAt(0).toLocaleUpperCase('tr-TR') + entry.name.slice(1),
+                            score: entry.count
+                        }));
+                },
+
                 selectPersonalizedGenre(genre) {
                     this.searchQuery = '';
                     this.discoveryType = 'all';
