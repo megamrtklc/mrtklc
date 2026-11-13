@@ -649,6 +649,8 @@ try {
       try {
         Object.defineProperty(video, 'duration', { configurable: true, value: 2400 });
         Object.defineProperty(video, 'currentTime', { configurable: true, writable: true, value: 125 });
+        app.selectedSeason = 1;
+        app.selectedEpisode = 2;
         app.updateVideoProgress();
         const childStored = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}').pro_2?.['archive-6:s1e2'];
         app.switchProfile('pro_1');
