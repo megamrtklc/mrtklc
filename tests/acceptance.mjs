@@ -652,13 +652,11 @@ try {
           );
           await touchPage.waitForTimeout(120);
           await rail.evaluate(element => {
-            element.style.scrollBehavior = 'auto';
-            element.scrollTo({ left: 0, behavior: 'instant' });
+            element.style.setProperty('scroll-behavior', 'auto', 'important');
+            const maxScroll = element.scrollWidth - element.clientWidth;
+            element.scrollLeft = Math.max(0, Math.min(element.scrollLeft, maxScroll - 320));
           });
-          await touchPage.waitForFunction(selector => {
-            const element = document.querySelector(selector);
-            return element && Math.abs(element.scrollLeft) < 1;
-          }, selector, { timeout: 3000 });
+          await touchPage.waitForTimeout(450);
           const before = await rail.evaluate(element => {
             const rect = element.getBoundingClientRect();
             return {
