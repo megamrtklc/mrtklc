@@ -537,6 +537,8 @@ try {
           element.style.scrollBehavior = originalScrollBehavior;
           return {
             maxScroll,
+            clientWidth: element.clientWidth,
+            scrollWidth: element.scrollWidth,
             start,
             end,
             overflowX,
@@ -545,7 +547,7 @@ try {
         });
         assert.ok(state.cardCount > 0, `${selector} kart içermiyor`);
         assert.ok(state.overflowX === 'auto' || state.overflowX === 'scroll', `${selector} yatay kaydırmaya açık değil`);
-        assert.ok(state.maxScroll > 0 && state.end > state.start, `${viewport.width}px ekranda ${selector} kaydırılamıyor`);
+        assert.ok(state.maxScroll > 0 && state.end > state.start, `${viewport.width}px ekranda ${selector} kaydırılamıyor (overflowX=${state.overflowX}, maxScroll=${state.maxScroll}, clientWidth=${state.clientWidth}, scrollWidth=${state.scrollWidth}, cards=${state.cardCount})`);
       }
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
