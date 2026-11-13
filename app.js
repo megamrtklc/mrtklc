@@ -12,12 +12,14 @@
         }
 
         function migrateToSingleProfileStorage() {
-            const progress = safeStorageRead('perde_profile_player_progress_v1', {});
-            if (progress && typeof progress === 'object' && !Array.isArray(progress) &&
-                (Object.prototype.hasOwnProperty.call(progress, 'pro_1') || Object.prototype.hasOwnProperty.call(progress, 'pro_2'))) {
-                const mainProgress = progress.pro_1 && typeof progress.pro_1 === 'object' && !Array.isArray(progress.pro_1) ? progress.pro_1 : {};
-                safeStorageWrite('perde_profile_player_progress_v1', mainProgress);
+            const legacyProgress = safeStorageRead('perde_profile_player_progress_v1', null);
+            if (safeStorageRead('cine_movie_progress_v1', null) === null && legacyProgress && typeof legacyProgress === 'object' && !Array.isArray(legacyProgress)) {
+                const mainProgress = legacyProgress.pro_1 && typeof legacyProgress.pro_1 === 'object' && !Array.isArray(legacyProgress.pro_1)
+                    ? legacyProgress.pro_1
+                    : (Object.prototype.hasOwnProperty.call(legacyProgress, 'pro_2') ? {} : legacyProgress);
+                safeStorageWrite('cine_movie_progress_v1', mainProgress);
             }
+            try { localStorage.removeItem('perde_profile_player_progress_v1'); } catch (_) {}
 
             const episodes = safeStorageRead('cine_episode_tracking_v1', {});
             if (episodes && typeof episodes === 'object' && !Array.isArray(episodes)) {
@@ -29,13 +31,13 @@
                 safeStorageWrite('cine_episode_tracking_v1', migratedEpisodes);
             }
 
-            const watchlists = safeStorageRead('cine_profile_watchlists', {});
-            if (watchlists && typeof watchlists === 'object' && !Array.isArray(watchlists)) {
-                const mainWatchlist = Array.isArray(watchlists.pro_1) ? watchlists.pro_1 : [];
-                safeStorageWrite('cine_profile_watchlists', mainWatchlist);
+            const legacyWatchlists = safeStorageRead('cine_profile_watchlists', null);
+            if (safeStorageRead('cine_watchlist_v1', null) === null && legacyWatchlists && typeof legacyWatchlists === 'object' && !Array.isArray(legacyWatchlists)) {
+                safeStorageWrite('cine_watchlist_v1', Array.isArray(legacyWatchlists.pro_1) ? legacyWatchlists.pro_1 : []);
             }
+            try { localStorage.removeItem('cine_profile_watchlists'); } catch (_) {}
 
-            const feedback = safeStorageRead('cine_recommendation_feedback_v1', {});
+            const feedback = safeStorageRead('cine_recommendation_feedback_v1', []);
             if (feedback && typeof feedback === 'object' && !Array.isArray(feedback)) {
                 const mainFeedback = Array.isArray(feedback.pro_1) ? feedback.pro_1.map(String) : [];
                 safeStorageWrite('cine_recommendation_feedback_v1', mainFeedback);
@@ -963,7 +965,7 @@
 
                 get profileMovieProgress() {
                     try {
-                        const progress = safeStorageRead('perde_profile_player_progress_v1', {});
+                        const progress = safeStorageRead('cine_movie_progress_v1', {});
                         return progress && typeof progress === 'object' && !Array.isArray(progress) ? progress : {};
                     } catch (error) {
                         console.warn('İzleme geçmişi okunamadı:', error);
@@ -988,7 +990,7 @@
                     try {
                         const all = this.profileMovieProgress;
                         all[String(itemId)] = progress;
-                        safeStorageWrite('perde_profile_player_progress_v1', all);
+                        safeStorageWrite('cine_movie_progress_v1', all);
                     } catch (error) {
                         console.warn('Profil izleme ilerlemesi kaydedilemedi:', error);
                     }
@@ -1052,7 +1054,7 @@
                 },
 
                 get watchlist() {
-                    const list = safeStorageRead('cine_profile_watchlists', []);
+                    const list = safeStorageRead('cine_watchlist_v1', []);
                     return Array.isArray(list) ? list.filter(item => item && typeof item === 'object' && item.id != null) : [];
                 },
                 get currentWatchlist() {
@@ -1064,7 +1066,7 @@
                     const index = list.findIndex(m => m && String(m.id) === String(item.id));
                     if (index > -1) list.splice(index, 1);
                     else list.push(item);
-                    safeStorageWrite('cine_profile_watchlists', list);
+                    safeStorageWrite('cine_watchlist_v1', list);
                 },
 
                 isInWatchlist(item) {
