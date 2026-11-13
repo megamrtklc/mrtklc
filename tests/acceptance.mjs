@@ -374,7 +374,7 @@ try {
     const mobileMenu = page.locator('header div[x-show="mobileMenuOpen"]');
     await mobileMenu.waitFor({ state: 'visible' });
     await mobileMenu.getByRole('link', { name: 'Keşfet', exact: true }).click();
-    await page.waitForURL(url => url.hash === '#/explore');
+    await page.waitForFunction(() => window.location.hash === '#/explore');
     assert.ok(await page.getByText('Keşfet & Arşiv Kataloğu', { exact: true }).isVisible());
   });
 
