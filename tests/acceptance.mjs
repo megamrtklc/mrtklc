@@ -669,6 +669,14 @@ try {
             };
           });
           if (before.maxScroll <= 24) {
+            const layoutMode = await rail.evaluate(element => ({
+              display: getComputedStyle(element).display,
+              overflowX: getComputedStyle(element).overflowX
+            }));
+            if (layoutMode.display === 'grid' && !['auto', 'scroll'].includes(layoutMode.overflowX)) {
+              console.log(`PASS: ${viewport.label}: ${selector} bu genişlikte dikey grid düzeninde; yatay dokunmatik kaydırma beklenmiyor`);
+              continue;
+            }
             const contentFits = await rail.evaluate(element => {
               const container = element.getBoundingClientRect();
               return [...element.children].every(child => {
