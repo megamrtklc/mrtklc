@@ -419,6 +419,25 @@ try {
     }
   });
 
+  await check('TV geniş ekranında masaüstü menüsü ve klavye gezinmesi çalışıyor', async () => {
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.waitForFunction(() => window.innerWidth === 1920);
+    const desktopNav = page.locator('header > div nav').first();
+    await desktopNav.waitFor({ state: 'visible' });
+    assert.ok(await desktopNav.getByRole('link', { name: 'Ana Sayfa', exact: true }).isVisible(),
+      'TV geniş ekranında masaüstü navigasyonu görünür değil');
+    assert.ok(await desktopNav.getByRole('link', { name: 'Keşfet', exact: true }).isVisible(),
+      'TV geniş ekranında Keşfet bağlantısı görünür değil');
+    assert.equal(await page.getByRole('button', { name: 'Menüyü aç veya kapat' }).isVisible(), false,
+      'TV geniş ekranında mobil menü düğmesi görünmemeli');
+    await desktopNav.getByRole('link', { name: 'Keşfet', exact: true }).press('Enter');
+    await page.waitForURL(/#\\/explore$/);
+    assert.ok(await page.getByText('Keşfet & Arşiv Kataloğu', { exact: true }).isVisible(),
+      'TV klavyesiyle Keşfet sayfasına geçiş yapılamadı');
+    await page.setViewportSize({ width: 1440, height: 1000 });
+  });
+
   await check('Mobil ve tablette yatay kart şeritleri kaydırılabiliyor', async () => {
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#home-personalized-rail', { timeout: 15000 });
