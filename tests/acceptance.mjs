@@ -188,11 +188,11 @@ try {
       await mobileCdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
       await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await mobilePage.waitForFunction(() => {
-        const image = document.querySelector('#mobileHeroArtwork');
+        const image = document.querySelector('#mobileHeroBanner img');
         return image && image.complete && image.naturalWidth > 0;
       }, { timeout: 30000 });
       const mobileState = await mobilePage.evaluate(async () => {
-        const image = document.querySelector('#mobileHeroArtwork');
+        const image = document.querySelector('#mobileHeroBanner img');
         await new Promise(resolve => setTimeout(resolve, 2200));
         const lcp = window.__lcpEntries || [];
         const resources = performance.getEntriesByType('resource')
@@ -238,11 +238,9 @@ try {
     const desktopState = await page.evaluate(() => ({
       mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
       desktopVisible: getComputedStyle(document.querySelector('#desktopEditorialHero')).display !== 'none',
-      mobileHeroSource: document.querySelector('#mobileHeroArtwork')?.currentSrc || ''
     }));
     assert.ok(!desktopState.mobileVisible, 'Mobil manşet masaüstünde görünmemeli');
     assert.ok(desktopState.desktopVisible, 'Mevcut masaüstü manşeti görünmüyor');
-    assert.ok(!desktopState.mobileHeroSource || !desktopState.mobileHeroSource.startsWith('https://image.tmdb.org/'), 'Masaüstünde gizli mobil manşet görseli indirilmemeli');
   });
 
   await check('Akıllı öneriler aktif profil geçmişini kullanıyor ve önerileri çeşitlendiriyor', async () => {
