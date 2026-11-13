@@ -669,7 +669,7 @@
                             <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="homeSectionReady['new-arrivals'] ? homeNewArrivals.length + ' yeni yapım' : ''"></span>
                             <button type="button" @click="scrollHomeCards('home-new-arrivals-rail',-1)" aria-label="Önceki yeni eklenen yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
                             <button type="button" @click="scrollHomeCards('home-new-arrivals-rail',1)" aria-label="Sonraki yeni eklenen yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
-                            <button type="button" @click="navigateTo('explore')" class="text-[10px] font-black text-rose-500 hover:text-rose-400 ml-1">Kataloğu Gör <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                            <button type="button" @click="navigateTo('explore')" class="text-[10px] font-black text-rose-700 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300 ml-1">Kataloğu Gör <i class="fa-solid fa-arrow-right ml-1"></i></button>
                         </div>
                     </div>
                     <div id="home-new-arrivals-rail" class="home-card-rail home-new-arrivals-rail">
@@ -745,7 +745,7 @@
                             <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Türlere Göre Keşfet</h2>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İlgi alanlarına göre seç veya kataloğun öne çıkan türlerine göz at</p>
                         </div>
-                        <button type="button" @click="navigateTo('explore')" class="self-start sm:self-auto text-[10px] font-black text-rose-500 hover:text-rose-400">Tüm keşif filtreleri <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                        <button type="button" @click="navigateTo('explore')" class="self-start sm:self-auto text-[10px] font-black text-rose-700 dark:text-rose-400 hover:text-rose-800 dark:hover:text-rose-300">Tüm keşif filtreleri <i class="fa-solid fa-arrow-right ml-1"></i></button>
                     </div>
                     <div class="home-genre-discovery-grid">
                         <template x-for="genre in (homeSectionReady['genre-discovery'] ? homeDiscoveryGenres : [])" :key="'home-genre-' + genre.name">
