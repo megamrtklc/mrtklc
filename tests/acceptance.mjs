@@ -611,12 +611,14 @@ try {
     assert.ok(castMetrics.count >= 2, 'Oyuncu kadrosu kartları yüklenmedi: ' + JSON.stringify(castMetrics));
     assert.ok(castMetrics.scrollWidth > castMetrics.clientWidth,
       'Oyuncu kadrosu şeridi yatay kaydırmaya uygun değil: ' + JSON.stringify(castMetrics));
+    const castStart = await cast.evaluate(el => el.scrollLeft);
     await castCard.getByRole('button').last().click();
-    await page.waitForFunction(() => {
+    await page.waitForFunction(start => {
       const el = document.querySelector('#castContainer');
-      return el && el.scrollLeft > 0;
-    });
-    assert.ok(await cast.evaluate(el => el.scrollLeft > 0), 'Oyuncu kadrosu ileri kaydırılamadı');
+      return el && Math.abs(el.scrollLeft - start) > 1;
+    }, castStart);
+    assert.ok(await cast.evaluate(el => Math.abs(el.scrollLeft - castStart) > 1),
+      'Oyuncu kadrosu ileri kaydırılamadı');
 
     const similarCard = page.locator('[data-watch-card="similar"]');
     await similarCard.waitFor({ state: 'visible' });
@@ -629,12 +631,14 @@ try {
     assert.ok(similarMetrics.count > 0, 'Benzer yapımlar listesi boş: ' + JSON.stringify(similarMetrics));
     assert.ok(similarMetrics.scrollWidth > similarMetrics.clientWidth,
       'Benzer yapımlar şeridi yatay kaydırmaya uygun değil: ' + JSON.stringify(similarMetrics));
+    const similarStart = await similar.evaluate(el => el.scrollLeft);
     await similarCard.getByRole('button').last().click();
-    await page.waitForFunction(() => {
+    await page.waitForFunction(start => {
       const el = document.querySelector('#similarContainer');
-      return el && el.scrollLeft > 0;
-    });
-    assert.ok(await similar.evaluate(el => el.scrollLeft > 0), 'Benzer yapımlar şeridi ileri kaydırılamadı');
+      return el && Math.abs(el.scrollLeft - start) > 1;
+    }, similarStart);
+    assert.ok(await similar.evaluate(el => Math.abs(el.scrollLeft - similarStart) > 1),
+      'Benzer yapımlar şeridi ileri kaydırılamadı');
   });
 
   await check('Detay sayfasında uzun konu özeti açılıp kapatılıyor', async () => {
