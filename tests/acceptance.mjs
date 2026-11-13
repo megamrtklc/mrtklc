@@ -447,7 +447,7 @@ try {
         const personalized = document.querySelector('#home-personalized-rail');
         const catalog = document.querySelector('#home-catalog-rail');
         return personalized?.children.length > 1 && catalog?.children.length > 1;
-      }, { timeout: 10000 });
+      }, null, { timeout: 10000 });
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       for (const selector of ['#home-personalized-rail', '#home-catalog-rail']) {
         const state = await page.locator(selector).evaluate(element => {
