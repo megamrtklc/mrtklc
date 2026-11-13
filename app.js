@@ -373,8 +373,30 @@
                         this.catalogLoading = false;
                         this.$nextTick(() => {
                             document.getElementById('hero-initial-shell')?.remove();
+                            this.applyHomepageSectionOrder();
                         });
                     }
+                },
+
+                isHomepageSectionVisible(sectionKey) {
+                    if (sectionKey === 'hero') return true;
+                    return this.homepageConfig?.layout?.visibility?.[sectionKey] !== false;
+                },
+
+                applyHomepageSectionOrder() {
+                    const root = document.getElementById('home-page');
+                    if (!root) return;
+                    const defaultOrder = ['hero', 'personalized', 'continue', 'watchlist', 'new-arrivals', 'series-tracking', 'genre-discovery', 'published-collections', 'catalog'];
+                    const configured = this.homepageConfig?.layout?.order;
+                    const order = Array.isArray(configured) ? configured : defaultOrder;
+                    const rank = new Map(order.map((key, index) => [key, index]));
+                    const sections = [...root.children].filter(element => element.hasAttribute('data-home-section'));
+                    sections.sort((a, b) => {
+                        const aRank = rank.has(a.dataset.homeSection) ? rank.get(a.dataset.homeSection) : defaultOrder.indexOf(a.dataset.homeSection);
+                        const bRank = rank.has(b.dataset.homeSection) ? rank.get(b.dataset.homeSection) : defaultOrder.indexOf(b.dataset.homeSection);
+                        return (aRank < 0 ? 999 : aRank) - (bRank < 0 ? 999 : bRank);
+                    });
+                    sections.forEach(section => root.appendChild(section));
                 },
 
                 get heroSlides() {
