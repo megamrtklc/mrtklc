@@ -73,6 +73,21 @@ try {
   }
 
   await page.waitForTimeout(8500);
+
+  await check('Global arama canlı katalog sonuçlarını afiş ve bilgilerle gösteriyor', async () => {
+    await page.getByRole('button', { name: 'Film ve dizi ara' }).click();
+    const dialog = page.getByRole('dialog', { name: 'Film ve dizi ara' });
+    await dialog.waitFor({ state: 'visible' });
+    await dialog.getByRole('searchbox').fill('Adalet 2');
+    await page.waitForFunction(() => document.querySelectorAll('.cineverse-search-result').length > 0, { timeout: 10000 });
+    const firstResult = dialog.locator('.cineverse-search-result').first();
+    assert.match(await firstResult.innerText(), /Adalet 2/i);
+    assert.ok(await firstResult.locator('img').getAttribute('src'), 'Arama sonucu afişi bulunamadı');
+    assert.ok(await firstResult.locator('.cineverse-search-result-desc').innerText(), 'Arama sonucu kısa açıklaması bulunamadı');
+    await firstResult.click();
+    await page.waitForFunction(() => window.Alpine.$data(document.documentElement).currentPage === 'watch', { timeout: 10000 });
+    await page.evaluate(() => window.Alpine.$data(document.documentElement).navigateTo('home'));
+  });
   const desktopDiagnostics = await page.evaluate(() => ({
     shifts: window.__desktopLayoutShifts || [],
     hero: (() => {
