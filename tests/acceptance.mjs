@@ -83,7 +83,23 @@ try {
         copy: copy?.getBoundingClientRect().toJSON() || null,
         title: section?.querySelector('h1')?.textContent || '',
         description: section?.querySelector('p')?.textContent || '',
-        activeSlide: window.Alpine?.$data(document.documentElement)?.currentSlideIndex ?? null
+        activeSlide: window.Alpine?.$data(document.documentElement)?.currentSlideIndex ?? null,
+        thumbContainer: section?.querySelector('#heroThumbContainer')?.getBoundingClientRect().toJSON() || null
+      };
+    })(),
+    catalog: (() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      const section = document.querySelector('#home-catalog-section');
+      return {
+        exists: !!section,
+        display: section ? getComputedStyle(section).display : null,
+        visibilitySetting: app?.homepageConfig?.layout?.visibility?.catalog ?? null,
+        visibleByMethod: app?.isHomepageSectionVisible?.('catalog') ?? null,
+        rect: section?.getBoundingClientRect().toJSON() || null,
+        parent: section?.parentElement?.id || section?.parentElement?.tagName || null,
+        homeChildren: [...(document.querySelector('#home-page')?.children || [])].map(node => ({
+          tag: node.tagName, id: node.id, section: node.dataset.homeSection || null
+        }))
       };
     })()
   }))));
