@@ -175,6 +175,8 @@
         @media(min-width:1280px){#home-page .home-rail-card{flex-basis:16.6%;width:16.6%}}
         @media(max-width:639px){#home-page section:not(#desktopEditorialHero):not(#mobileHeroBanner)>div:first-child h2{font-size:1.18rem}#home-page .home-card-rail{gap:12px;padding-bottom:14px}}
         @media(prefers-reduced-motion:reduce){#home-page .home-rail-card,#home-page .home-rail-card img{transition:none!important}}
+        /* Mobil manşet, gizli masaüstü manşetinden gelen dikey boşluğu kaldırır. */
+        @media(max-width:767px){#home-page>#mobileHeroBanner{margin-top:0!important}}
         /* Continue-watching cards: isolated cinematic treatment; hero selectors remain untouched. */
         /* Continue-watching uses compact horizontal resume cards, distinct from poster rails. */
         #home-continue-section .home-continue-heading{border-bottom:1px solid rgba(148,163,184,.24)}
