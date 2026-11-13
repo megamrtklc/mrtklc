@@ -579,24 +579,41 @@
                     const episodes = this.getEpisodesForSeason(this.selectedSeason);
                     const next = episodes.find(ep => ep.number > this.selectedEpisode);
                     if (next) {
-                        this.selectedEpisode = next.number;
                         this.currentEpisodePage = Math.floor((next.number - 1) / 8) + 1;
+                        this.selectEpisode(next.number);
                     } else {
                         const nextSeason = this.selectedSeason + 1;
                         const nextSeasonEpisodes = this.getEpisodesForSeason(nextSeason);
                         if (nextSeasonEpisodes.length) {
                             this.selectedSeason = nextSeason;
-                            this.selectedEpisode = nextSeasonEpisodes[0].number;
                             this.currentEpisodePage = 1;
+                            this.selectEpisode(nextSeasonEpisodes[0].number);
                         }
                     }
                 },
 
+                getSelectedEpisodeWatchUrl() {
+                    if (!this.selectedItem || this.selectedItem.type !== 'tv') return '';
+                    const key = Number(this.selectedSeason) + ':' + Number(this.selectedEpisode);
+                    const url = this.selectedItem.episodeWatchUrls?.[key];
+                    return this.isDirectVideoUrl(url) ? url : '';
+                },
+
+                getPlaybackProgressKey() {
+                    if (this.selectedItem?.type === 'tv') {
+                        return String(this.selectedItem.id) + ':s' + Number(this.selectedSeason) + 'e' + Number(this.selectedEpisode);
+                    }
+                    return this.selectedItem?.id;
+                },
+
                 selectEpisode(epNum) {
-                    this.selectedEpisode = epNum;
+                    this.selectedEpisode = Number(epNum);
                     const video = document.getElementById('customVideoPlayer');
-                    if (video && this.isDirectVideoUrl(this.selectedItem?.watchUrl)) {
-                        video.currentTime = 0;
+                    const nextUrl = this.getPlaybackUrl();
+                    if (video && nextUrl) {
+                        video.pause();
+                        video.src = nextUrl;
+                        video.load();
                         video.play().catch(() => { this.playbackError = true; });
                     }
                 },
@@ -647,6 +664,8 @@
                 },
 
                 getPlaybackUrl() {
+                    const episodeUrl = this.getSelectedEpisodeWatchUrl();
+                    if (episodeUrl) return episodeUrl;
                     return this.selectedItem && this.isDirectVideoUrl(this.selectedItem.watchUrl)
                         ? this.selectedItem.watchUrl
                         : '';
@@ -659,7 +678,7 @@
 
                 togglePlay() {
                     const video = document.getElementById('customVideoPlayer');
-                    if (!video || !this.isDirectVideoUrl(this.selectedItem?.watchUrl)) return;
+                    if (!video || !this.isDirectVideoUrl(this.getPlaybackUrl())) return;
                     if (video.paused) {
                         video.play().catch(() => { this.playbackError = true; });
                     } else {
@@ -676,7 +695,7 @@
                         this.durationFormatted = this.formatTime(video.duration);
 
                         if (this.selectedItem) {
-                            this.saveMovieProgress(this.selectedItem.id, {
+                            this.saveMovieProgress(this.getPlaybackProgressKey(), {
                                 time: video.currentTime,
                                 duration: video.duration,
                                 savedAt: Date.now()
@@ -1267,8 +1286,8 @@
                     
                     setTimeout(() => {
                         const video = document.getElementById('customVideoPlayer');
-                        const savedProgress = this.getMovieProgress(item.id);
-                        if (video && savedProgress) {
+                        const savedProgress = this.getMovieProgress(this.getPlaybackProgressKey());
+                        if (video && savedProgress && this.isDirectVideoUrl(this.getPlaybackUrl())) {
                             video.currentTime = savedProgress.time || 0;
                         }
                     }, 200);
