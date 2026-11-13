@@ -647,6 +647,10 @@ try {
 
         for (const selector of ['#home-catalog-rail', '#home-personalized-rail']) {
           const rail = touchPage.locator(selector);
+          await rail.evaluate(element =>
+            element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' })
+          );
+          await touchPage.waitForTimeout(120);
           const before = await rail.evaluate(element => {
             const rect = element.getBoundingClientRect();
             element.scrollLeft = 0;
