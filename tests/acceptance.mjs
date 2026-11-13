@@ -202,7 +202,7 @@ try {
           mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
           desktopVisible: getComputedStyle(document.querySelector('#desktopEditorialHero')).display !== 'none',
           desktopHeroSource: document.querySelector('#desktopEditorialHero img')?.currentSrc || '',
-          source: image.currentSrc,
+          source: image.getAttribute('src') || image.src,
           imageComplete: image.complete,
           imageNaturalWidth: image.naturalWidth,
           navigationControls: document.querySelectorAll('#mobileHeroBanner button[aria-label*=\"öne çıkan yapım\"]').length,
