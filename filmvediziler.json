@@ -17522,14 +17522,16 @@
       "player",
       "season",
       "episodes",
+      "credits",
       "similar"
     ],
     "right": [
       "synopsis",
-      "credits",
       "cast",
       "reviews"
-    ]
+    ],
+    "hidden": [],
+    "removed": []
   },
   "adminProfile": {
     "name": "MRTKLC"
