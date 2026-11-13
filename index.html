@@ -172,6 +172,21 @@
         @media(min-width:640px) and (max-width:767px){#home-continue-section .home-continue-card{flex-basis:29%;width:29%}}
         @media(min-width:768px) and (max-width:1023px){#home-continue-section .home-continue-card{flex-basis:23%;width:23%}}
         @media(prefers-reduced-motion:reduce){#home-continue-section .home-continue-card,#home-continue-section .home-continue-image,#home-continue-section .home-continue-play{transition:none!important}}
+        /* Homepage watchlist preview: compact cinematic shelf, independent of the hero. */
+        #home-watchlist-section .home-watchlist-heading{border-bottom:1px solid rgba(148,163,184,.24)}
+        #home-watchlist-section .home-watchlist-rail{gap:clamp(12px,1.35vw,20px);padding:5px 3px 18px}
+        #home-watchlist-section .home-watchlist-card{flex:0 0 clamp(170px,15.5vw,210px);width:clamp(170px,15.5vw,210px);border-color:rgba(148,163,184,.22);background:rgba(127,127,127,.035);box-shadow:0 8px 24px -20px rgba(0,0,0,.58);scroll-snap-align:start}
+        #home-watchlist-section .home-watchlist-card:hover{border-color:rgba(225,29,72,.68);box-shadow:0 16px 34px -22px rgba(0,0,0,.7);transform:translateY(-4px)}
+        #home-watchlist-section .home-watchlist-poster img{display:block;backface-visibility:hidden}
+        #home-watchlist-section .home-watchlist-card:hover .home-watchlist-poster img{transform:scale(1.055)}
+        #home-watchlist-section .home-watchlist-copy{min-height:40px}
+        @media(max-width:639px){
+            #home-watchlist-section .home-watchlist-rail{gap:12px;padding-bottom:14px}
+            #home-watchlist-section .home-watchlist-card{flex-basis:44%;width:44%;border-radius:14px}
+        }
+        @media(min-width:640px) and (max-width:767px){#home-watchlist-section .home-watchlist-card{flex-basis:29%;width:29%}}
+        @media(min-width:768px) and (max-width:1023px){#home-watchlist-section .home-watchlist-card{flex-basis:23%;width:23%}}
+        @media(prefers-reduced-motion:reduce){#home-watchlist-section .home-watchlist-card,#home-watchlist-section .home-watchlist-poster img{transition:none!important}}
     </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
@@ -449,6 +464,38 @@
                                         <span class="min-w-0 line-clamp-1" x-text="entry.kind === 'series' ? entry.watchedCount + (entry.total ? ' / ' + entry.total + ' bölüm' : ' bölüm izlendi') : Math.floor(entry.time / 60) + ' dk izlendi'"></span>
                                         <span class="font-black text-rose-500 tabular-nums shrink-0" x-text="entry.percent + '%'"></span>
                                     </div>
+                                </div>
+                            </button>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Ana sayfa izleme listesi önizlemesi -->
+                <section id="home-watchlist-section" x-show="watchlist.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                    <div class="home-watchlist-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">SONRA İZLE</p>
+                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">İzleme Listem</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Bir sonraki film veya dizin burada seni bekliyor</p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="watchlist.length + ' yapım'"></span>
+                            <button type="button" @click="scrollHomeCards('home-watchlist-rail',-1)" aria-label="Önceki listedeki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button type="button" @click="scrollHomeCards('home-watchlist-rail',1)" aria-label="Sonraki listedeki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
+                            <button type="button" @click="navigateTo('watchlist')" class="text-[10px] font-black text-rose-500 hover:text-rose-400 ml-1">Tüm liste <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                    <div id="home-watchlist-rail" class="home-card-rail home-watchlist-rail">
+                        <template x-for="item in watchlist.slice(0,8)" :key="'home-watchlist-' + item.id">
+                            <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-watchlist-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
+                                <div class="home-watchlist-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.tmdbPoster" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster)" sizes="(max-width:639px) 44vw, (max-width:1023px) 23vw, 18vw" class="w-full h-full object-cover transition-transform duration-700">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
+                                    <span class="absolute top-3 left-3 w-8 h-8 rounded-full bg-black/65 text-rose-300 flex items-center justify-center backdrop-blur-md"><i class="fa-solid fa-bookmark text-xs"></i></span>
+                                    <span class="absolute bottom-3 left-3 right-3 text-white text-[10px] font-bold leading-snug line-clamp-2" x-text="item.title"></span>
+                                </div>
+                                <div class="home-watchlist-copy px-3 py-2.5">
+                                    <p class="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="item.year || 'İzleme listende'"></p>
                                 </div>
                             </button>
                         </template>
