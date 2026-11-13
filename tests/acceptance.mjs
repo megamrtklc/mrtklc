@@ -508,12 +508,16 @@ try {
     await page.waitForSelector('#home-personalized-rail', { timeout: 15000 });
     for (const viewport of [{ width: 360, height: 800 }, { width: 768, height: 1024 }]) {
       await page.setViewportSize(viewport);
-      await page.locator('#home-catalog-section').scrollIntoViewIfNeeded();
+      await page.locator('#home-catalog-section').evaluate(element =>
+        element.scrollIntoView({ block: 'center', behavior: 'auto' })
+      );
       await page.waitForFunction(() => {
+        const app = window.Alpine?.$data(document.documentElement);
         const personalized = document.querySelector('#home-personalized-rail');
         const catalog = document.querySelector('#home-catalog-rail');
-        return personalized?.children.length > 1 && catalog?.children.length > 1;
-      }, null, { timeout: 10000 });
+        return !app?.catalogLoading && app?.homeSectionReady?.catalog &&
+          personalized?.children.length > 1 && catalog?.children.length > 1;
+      }, null, { timeout: 15000 });
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       for (const selector of ['#home-personalized-rail', '#home-catalog-rail']) {
