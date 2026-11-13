@@ -174,6 +174,16 @@
                 heroPaused: false,
                 catalogLoading: true,
                 catalogError: null,
+                homeSectionReady: {
+                    personalized: false,
+                    continue: false,
+                    watchlist: false,
+                    'new-arrivals': false,
+                    'series-tracking': false,
+                    'genre-discovery': false,
+                    'published-collections': false,
+                    catalog: false
+                },
                 tmdbApiKey: '3108265ab3fdbf3af14175edf64a9c7f',
                 tmdbLanguage: 'tr-TR',
                 tmdbDetailsCache: {},
@@ -309,6 +319,9 @@
                 },
 
                 async init() {
+                    this.$watch('currentPage', page => {
+                        if (page === 'home') this.$nextTick(() => this.initHomeSectionObserver());
+                    });
                     try {
                         const response = await fetch('./filmvediziler.json', { cache: 'default' });
                         if (!response.ok) {
@@ -378,6 +391,7 @@
                         this.catalogLoading = false;
                         this.$nextTick(() => {
                             document.getElementById('hero-initial-shell')?.remove();
+                            this.initHomeSectionObserver();
                         });
                     }
                 },
@@ -401,6 +415,37 @@
                         return (aRank < 0 ? 999 : aRank) - (bRank < 0 ? 999 : bRank);
                     });
                     sections.forEach(section => root.appendChild(section));
+                },
+
+                initHomeSectionObserver() {
+                    const root = document.getElementById('home-page');
+                    if (!root) return;
+                    window.__cineverseHomeSectionObserver?.disconnect();
+
+                    const sections = [...root.children].filter(element =>
+                        element.hasAttribute('data-home-section') &&
+                        element.dataset.homeSection !== 'hero' &&
+                        !this.homeSectionReady[element.dataset.homeSection]
+                    );
+
+                    if (!('IntersectionObserver' in window)) {
+                        sections.forEach(section => {
+                            this.homeSectionReady[section.dataset.homeSection] = true;
+                        });
+                        return;
+                    }
+
+                    const observer = new IntersectionObserver(entries => {
+                        entries.forEach(entry => {
+                            if (!entry.isIntersecting) return;
+                            const key = entry.target.dataset.homeSection;
+                            if (key) this.homeSectionReady[key] = true;
+                            observer.unobserve(entry.target);
+                        });
+                    }, { rootMargin: '200px 0px' });
+
+                    window.__cineverseHomeSectionObserver = observer;
+                    sections.forEach(section => observer.observe(section));
                 },
 
                 get heroSlides() {

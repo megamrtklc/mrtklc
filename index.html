@@ -548,8 +548,8 @@
                         </div>
                         <div class="flex items-center gap-2 shrink-0"><span class="home-personalized-count text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15 öneri</span><button type="button" @click="scrollHomeCards('home-personalized-rail',-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-personalized-rail',1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div>
                     </div>
-                    <div class="home-personalized-showcase" x-show="personalizedRecommendations.length">
-                        <template x-if="personalizedRecommendations[0]">
+                    <div class="home-personalized-showcase" x-show="homeSectionReady.personalized && personalizedRecommendations.length">
+                        <template x-if="homeSectionReady.personalized && personalizedRecommendations[0]">
                             <div role="button" tabindex="0" @click="openWatchPage(personalizedRecommendations[0])" @keydown.enter="openWatchPage(personalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(personalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer">
                                 <img @error="handleImageError($event)" :src="personalizedRecommendations[0].backdrop || personalizedRecommendations[0].poster || personalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(personalizedRecommendations[0].backdrop || personalizedRecommendations[0].poster || personalizedRecommendations[0].image, [342, 500, 780])" sizes="(max-width: 900px) 100vw, 40vw" :alt="personalizedRecommendations[0].title" loading="eager" fetchpriority="high" decoding="async" class="home-personalized-feature-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                                 <div class="home-personalized-feature-shade absolute inset-0"></div>
@@ -564,7 +564,7 @@
                             </div>
                         </template>
                         <div id="home-personalized-rail" class="home-personalized-alternatives">
-                            <template x-for="item in personalizedRecommendations.slice(1,5)" :key="'personal-' + item.id">
+                            <template x-for="item in (homeSectionReady.personalized ? personalizedRecommendations.slice(1,5) : [])" :key="'personal-' + item.id">
                                 <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :class="getCardClass()" class="home-personalized-alternative group min-w-0 flex items-center gap-3 rounded-xl sm:rounded-2xl border p-2.5 sm:p-3 text-left transition-all duration-300">
                                     <div class="relative w-[66px] sm:w-[76px] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-900"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [92, 154, 185])" sizes="76px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/80 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="item.rating || '—'"></span></span></div>
                                     <div class="min-w-0 flex-1 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-600 dark:text-rose-400 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3><p class="mt-1.5 text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="mt-2 text-[10px] font-bold text-rose-700 dark:text-rose-400 line-clamp-1" x-text="item.recommendationReason || 'İzleme profiline uygun'"></p></div>
@@ -573,11 +573,11 @@
                             </template>
                         </div>
                     </div>
-                    <p x-show="!personalizedRecommendations.length" class="text-xs text-gray-500 dark:text-gray-400 py-5 text-center">Önerileri kişiselleştirmek için birkaç yapım izlemeye başlayabilir veya izleme listene ekleyebilirsin.</p>
+                    <p x-show="homeSectionReady.personalized && !personalizedRecommendations.length" class="text-xs text-gray-500 dark:text-gray-400 py-5 text-center">Önerileri kişiselleştirmek için birkaç yapım izlemeye başlayabilir veya izleme listene ekleyebilirsin.</p>
                 </section>
 
                 <!-- İzlemeye Devam Et: aktif profilin kaldığı yapımlar -->
-                <section id="home-continue-section" data-home-section="continue" x-show="continueWatchingItems.length > 0 && isHomepageSectionVisible('continue')" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-continue-section" data-home-section="continue" x-show="isHomepageSectionVisible('continue') && (!homeSectionReady.continue || continueWatchingItems.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-continue-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">KALDIĞIN YERDEN</p>
@@ -585,14 +585,14 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><span x-text="currentProfile.name"></span> profiline ait izleme ilerlemesi</p>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <span class="home-continue-count text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="continueWatchingItems.length + ' yapım'"></span>
+                            <span class="home-continue-count text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="homeSectionReady.continue ? continueWatchingItems.length + ' yapım' : ''"></span>
                             <button type="button" @click="scrollHomeCards('home-continue-rail',-1)" aria-label="Önceki izleme kayıtları" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
                             <button type="button" @click="scrollHomeCards('home-continue-rail',1)" aria-label="Sonraki izleme kayıtları" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
                             <button type="button" @click="navigateTo('library')" class="text-[10px] font-black text-rose-500 hover:text-rose-400 ml-1">Tümünü Gör <i class="fa-solid fa-arrow-right ml-1"></i></button>
                         </div>
                     </div>
                     <div id="home-continue-rail" class="home-card-rail home-continue-rail">
-                        <template x-for="entry in continueWatchingItems.slice(0,15)" :key="'continue-' + entry.kind + '-' + entry.item.id">
+                        <template x-for="entry in (homeSectionReady.continue ? continueWatchingItems.slice(0,15) : [])" :key="'continue-' + entry.kind + '-' + entry.item.id">
                             <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="home-rail-card home-continue-card group min-w-0 flex items-stretch gap-3 p-2.5 text-left rounded-2xl overflow-hidden border transition-all duration-300">
                                 <div class="home-continue-poster relative shrink-0 aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image || entry.item.tmdbPoster" :srcset="getTmdbImageSrcSet(entry.item.poster || entry.item.image || entry.item.tmdbPoster)" sizes="100px" class="home-continue-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
@@ -619,7 +619,7 @@
                 </section>
 
                 <!-- Ana sayfa izleme listesi önizlemesi -->
-                <section id="home-watchlist-section" data-home-section="watchlist" x-show="watchlist.length > 0 && isHomepageSectionVisible('watchlist')" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-watchlist-section" data-home-section="watchlist" x-show="isHomepageSectionVisible('watchlist') && (!homeSectionReady.watchlist || watchlist.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-watchlist-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">SONRA İZLE</p>
@@ -627,14 +627,14 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Bir sonraki film veya dizin burada seni bekliyor</p>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="watchlist.length + ' yapım'"></span>
+                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="homeSectionReady.watchlist ? watchlist.length + ' yapım' : ''"></span>
                             <button type="button" @click="scrollHomeCards('home-watchlist-rail',-1)" aria-label="Önceki listedeki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
                             <button type="button" @click="scrollHomeCards('home-watchlist-rail',1)" aria-label="Sonraki listedeki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
                             <button type="button" @click="navigateTo('watchlist')" class="text-[10px] font-black text-rose-500 hover:text-rose-400 ml-1">Tüm liste <i class="fa-solid fa-arrow-right ml-1"></i></button>
                         </div>
                     </div>
                     <div id="home-watchlist-rail" class="home-card-rail home-watchlist-rail">
-                        <template x-for="item in watchlist.slice(0,8)" :key="'home-watchlist-' + item.id">
+                        <template x-for="item in (homeSectionReady.watchlist ? watchlist.slice(0,8) : [])" :key="'home-watchlist-' + item.id">
                             <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-watchlist-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
                                 <div class="home-watchlist-poster relative aspect-video overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.backdrop || item.backdropPath || item.poster || item.image || item.tmdbPoster" :srcset="getTmdbImageSrcSet(item.backdrop || item.backdropPath || item.poster || item.image || item.tmdbPoster)" sizes="(max-width:639px) 78vw, (max-width:1023px) 31vw, 22vw" class="w-full h-full object-cover transition-transform duration-700">
@@ -651,7 +651,7 @@
                 </section>
 
                 <!-- Son eklenen yapımlar: admin kataloğuna eklenme sırası -->
-                <section id="home-new-arrivals-section" data-home-section="new-arrivals" x-show="homeNewArrivals.length > 0 && isHomepageSectionVisible('new-arrivals')" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-new-arrivals-section" data-home-section="new-arrivals" x-show="isHomepageSectionVisible('new-arrivals') && (!homeSectionReady['new-arrivals'] || homeNewArrivals.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-new-arrivals-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">CINEVERSE • ARŞİVE YENİ KATILANLAR</p>
@@ -659,14 +659,14 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Kataloğa en son eklenen film ve diziler</p>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="homeNewArrivals.length + ' yeni yapım'"></span>
+                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="homeSectionReady['new-arrivals'] ? homeNewArrivals.length + ' yeni yapım' : ''"></span>
                             <button type="button" @click="scrollHomeCards('home-new-arrivals-rail',-1)" aria-label="Önceki yeni eklenen yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
                             <button type="button" @click="scrollHomeCards('home-new-arrivals-rail',1)" aria-label="Sonraki yeni eklenen yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
                             <button type="button" @click="navigateTo('explore')" class="text-[10px] font-black text-rose-500 hover:text-rose-400 ml-1">Kataloğu Gör <i class="fa-solid fa-arrow-right ml-1"></i></button>
                         </div>
                     </div>
                     <div id="home-new-arrivals-rail" class="home-card-rail home-new-arrivals-rail">
-                        <template x-for="(item,index) in homeNewArrivals" :key="'new-arrival-' + item.id">
+                        <template x-for="(item,index) in (homeSectionReady['new-arrivals'] ? homeNewArrivals : [])" :key="'new-arrival-' + item.id">
                             <button type="button" @click="openWatchPage(item)" :class="getCardClass() + (index === 0 ? ' home-new-arrival-feature' : '')" class="home-rail-card home-new-arrival-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
                                 <div class="home-new-arrival-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop)" sizes="(max-width:639px) 44vw, (max-width:1023px) 23vw, 18vw" class="w-full h-full object-cover transition-transform duration-700">
@@ -688,7 +688,7 @@
                 </section>
 
                 <!-- Aktif profilin bölüm takibi bulunan dizileri -->
-                <section id="home-series-tracking-section" data-home-section="series-tracking" x-show="librarySeriesEntries.length > 0 && isHomepageSectionVisible('series-tracking')" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-series-tracking-section" data-home-section="series-tracking" x-show="isHomepageSectionVisible('series-tracking') && (!homeSectionReady['series-tracking'] || librarySeriesEntries.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-series-tracking-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">BÖLÜM BÖLÜM • KALDIĞIN YERİ UNUTMA</p>
@@ -696,14 +696,14 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><span x-text="currentProfile.name"></span> profilinde takip ettiğin diziler ve bölüm ilerlemen</p>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="librarySeriesEntries.length + ' takipteki dizi'"></span>
+                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="homeSectionReady['series-tracking'] ? librarySeriesEntries.length + ' takipteki dizi' : ''"></span>
                             <button type="button" @click="scrollHomeCards('home-series-tracking-rail',-1)" aria-label="Önceki takip edilen diziler" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
                             <button type="button" @click="scrollHomeCards('home-series-tracking-rail',1)" aria-label="Sonraki takip edilen diziler" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
                             <button type="button" @click="navigateTo('library')" class="text-[10px] font-black text-rose-500 hover:text-rose-400 ml-1">Kütüphanem <i class="fa-solid fa-arrow-right ml-1"></i></button>
                         </div>
                     </div>
                     <div id="home-series-tracking-rail" class="home-card-rail home-series-tracking-rail">
-                        <template x-for="entry in librarySeriesEntries.slice(0,12)" :key="'series-tracking-' + entry.item.id">
+                        <template x-for="entry in (homeSectionReady['series-tracking'] ? librarySeriesEntries.slice(0,12) : [])" :key="'series-tracking-' + entry.item.id">
                             <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="home-rail-card home-series-tracking-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
                                 <div class="home-series-tracking-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image || entry.item.tmdbPoster || entry.item.backdrop" :srcset="getTmdbImageSrcSet(entry.item.poster || entry.item.image || entry.item.tmdbPoster || entry.item.backdrop)" sizes="(max-width:639px) 46vw, (max-width:1023px) 24vw, 19vw" class="w-full h-full object-cover transition-transform duration-700">
@@ -731,7 +731,7 @@
                 </section>
 
                 <!-- Kişisel izleme geçmişine, yoksa katalog dağılımına göre tür keşfi -->
-                <section id="home-genre-discovery-section" data-home-section="genre-discovery" x-show="homeDiscoveryGenres.length > 0 && isHomepageSectionVisible('genre-discovery')" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-genre-discovery-section" data-home-section="genre-discovery" x-show="isHomepageSectionVisible('genre-discovery') && (!homeSectionReady['genre-discovery'] || homeDiscoveryGenres.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-genre-discovery-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">YENİ HİKÂYELER KEŞFET</p>
@@ -741,7 +741,7 @@
                         <button type="button" @click="navigateTo('explore')" class="self-start sm:self-auto text-[10px] font-black text-rose-500 hover:text-rose-400">Tüm keşif filtreleri <i class="fa-solid fa-arrow-right ml-1"></i></button>
                     </div>
                     <div class="home-genre-discovery-grid">
-                        <template x-for="genre in homeDiscoveryGenres" :key="'home-genre-' + genre.name">
+                        <template x-for="genre in (homeSectionReady['genre-discovery'] ? homeDiscoveryGenres : [])" :key="'home-genre-' + genre.name">
                             <button type="button" @click="selectPersonalizedGenre(genre.name); navigateTo('explore')" class="home-genre-discovery-card group">
                                 <span class="home-genre-discovery-icon">
                                     <i :class="({'aksiyon':'fa-solid fa-bolt','action':'fa-solid fa-bolt','macera':'fa-solid fa-compass','adventure':'fa-solid fa-compass','komedi':'fa-solid fa-face-laugh','comedy':'fa-solid fa-face-laugh','dram':'fa-solid fa-masks-theater','drama':'fa-solid fa-masks-theater','korku':'fa-solid fa-ghost','horror':'fa-solid fa-ghost','gerilim':'fa-solid fa-eye','thriller':'fa-solid fa-eye','bilim kurgu':'fa-solid fa-rocket','science fiction':'fa-solid fa-rocket','romantik':'fa-solid fa-heart','romance':'fa-solid fa-heart','animasyon':'fa-solid fa-wand-magic-sparkles','animation':'fa-solid fa-wand-magic-sparkles','suç':'fa-solid fa-fingerprint','crime':'fa-solid fa-fingerprint','belgesel':'fa-solid fa-earth-europe','documentary':'fa-solid fa-earth-europe'})[genre.name] || 'fa-solid fa-clapperboard'"></i>
@@ -757,8 +757,8 @@
                 </section>
 
                 <!-- Yönetim panelinden yayınlanan koleksiyonlar -->
-                <div data-home-section="published-collections" x-show="publishedCollections.length > 0 && isHomepageSectionVisible('published-collections')" class="space-y-10">
-                <template x-for="collection in publishedCollections" :key="'published-' + collection.id">
+                <div data-home-section="published-collections" x-show="isHomepageSectionVisible('published-collections') && (!homeSectionReady['published-collections'] || publishedCollections.length > 0)" style="min-height:1px" class="space-y-10">
+                <template x-for="collection in (homeSectionReady['published-collections'] ? publishedCollections : [])" :key="'published-' + collection.id">
                     <section class="home-published-collection w-full mx-6 sm:mx-12 space-y-5">
                         <div class="home-published-collection-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                             <div class="min-w-0">
@@ -769,7 +769,7 @@
                             <div class="flex items-center gap-3 shrink-0"><span class="text-[10px] font-bold text-rose-700 dark:text-rose-400" x-text="Math.min(collection.items.length,15) + ' / ' + collection.items.length + ' yapım'"></span><div class="flex items-center gap-2 shrink-0"><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15</span><button type="button" @click="scrollHomeCards('home-collection-rail-' + collection.id,-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-collection-rail-' + collection.id,1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div></div>
                         </div>
                         <div :id="'home-collection-rail-' + collection.id" class="home-card-rail home-published-collection-rail">
-                            <template x-for="item in collection.items.slice(0,15)" :key="collection.id + '-' + item.id">
+                            <template x-for="item in (homeSectionReady['published-collections'] ? collection.items.slice(0,15) : [])" :key="collection.id + '-' + item.id">
                                 <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-published-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 shadow-sm">
                                     <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                         <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.backdrop)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 17vw, 14.5vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -813,7 +813,7 @@
                     </div>
 
                     <div id="home-catalog-rail" class="home-card-rail home-catalog-rail">
-                        <template x-for="item in homeCatalogPreview.slice(0,15)" :key="item.id">
+                        <template x-for="item in (homeSectionReady.catalog ? homeCatalogPreview.slice(0,15) : [])" :key="item.id">
                             <div @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-catalog-card group rounded-xl overflow-hidden border hover:border-rose-600 transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
                                 <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 17vw, 14.5vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
