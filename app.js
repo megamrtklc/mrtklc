@@ -33,6 +33,41 @@
                 },
                 currentPage: 'home',
                 searchQuery: '',
+                searchOverlayOpen: false,
+                searchPreviousOverflow: '',
+                get quickSearchResults() {
+                    const query = this.normalizeSearchText(this.searchQuery);
+                    if (!query) return [];
+                    return this.catalog.map(item => {
+                        const title = this.normalizeSearchText(item.title || '');
+                        const original = this.normalizeSearchText(item.originalTitle || '');
+                        const cast = (item.tmdbCast || item.cast || []).map(person => typeof person === 'string' ? person : [person.name, person.character].filter(Boolean).join(' ')).join(' ');
+                        const searchable = this.normalizeSearchText([item.title, item.originalTitle, item.genre, item.category, item.desc, item.director, item.starring, item.country, cast].filter(Boolean).join(' '));
+                        const score = title === query ? 100 : title.startsWith(query) ? 85 : original.startsWith(query) ? 75 : title.includes(query) ? 65 : searchable.includes(query) ? 35 : 0;
+                        return { item, score };
+                    }).filter(entry => entry.score > 0)
+                        .sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0))
+                        .slice(0, 10)
+                        .map(entry => entry.item);
+                },
+                openSearchOverlay() {
+                    this.searchPreviousOverflow = document.body.style.overflow;
+                    this.searchOverlayOpen = true;
+                    this.searchQuery = '';
+                    document.body.style.overflow = 'hidden';
+                    this.$nextTick(() => this.$refs.globalSearchInput?.focus());
+                },
+                closeSearchOverlay() {
+                    this.searchOverlayOpen = false;
+                    document.body.style.overflow = this.searchPreviousOverflow;
+                    this.searchPreviousOverflow = '';
+                },
+                selectSearchResult(item) {
+                    if (!item) return;
+                    this.closeSearchOverlay();
+                    this.searchQuery = '';
+                    this.openWatchPage(item);
+                },
                 quickFilter: 'all',
                 sortBy: 'default',
                 discoveryType: 'all',
