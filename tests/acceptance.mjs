@@ -247,7 +247,7 @@ try {
       }, { timeout: 30000 });
       const mobileState = await mobilePage.evaluate(async () => {
         const image = document.querySelector('#mobileHeroBanner img');
-        await new Promise(resolve => setTimeout(resolve, 2200));
+        await new Promise(resolve => setTimeout(resolve, 6000));
         const lcp = window.__lcpEntries || [];
         const resources = performance.getEntriesByType('resource')
           .filter(entry => /image\.tmdb\.org|filmvediziler\.json|alpinejs|fonts\.(googleapis|gstatic)|font-awesome/.test(entry.name))
@@ -259,6 +259,9 @@ try {
           source: image.getAttribute('src') || image.src,
           imageComplete: image.complete,
           imageNaturalWidth: image.naturalWidth,
+          heroArtwork: document.querySelector('#mobileHeroArtwork')?.currentSrc || '',
+          activeSlide: window.Alpine?.$data(document.documentElement)?.currentSlideIndex ?? null,
+          currentHeroTitle: window.Alpine?.$data(document.documentElement)?.currentHero?.title || '',
           navigationControls: document.querySelectorAll('#mobileHeroBanner button[aria-label*=\"öne çıkan yapım\"]').length,
           lcp,
           layoutShifts: window.__layoutShiftEntries || [],
