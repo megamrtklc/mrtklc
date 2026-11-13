@@ -307,6 +307,22 @@ try {
         };
       });
       console.log('MOBILE HERO PERFORMANCE:', JSON.stringify(mobileState));
+
+      await mobilePage.waitForFunction(() => {
+        const app = window.Alpine?.$data(document.documentElement);
+        return app && Array.isArray(app.catalog) && app.catalog.length >= 130;
+      }, { timeout: 30000 });
+      const mobileSearchTrigger = mobilePage.getByRole('button', { name: 'Film ve dizi ara' });
+      assert.ok(await mobileSearchTrigger.isVisible(), 'Mobil arama ikonu görünmüyor');
+      await mobileSearchTrigger.click();
+      const mobileSearchDialog = mobilePage.getByRole('dialog', { name: 'Film ve dizi ara' });
+      await mobileSearchDialog.waitFor({ state: 'visible' });
+      await mobileSearchDialog.getByRole('searchbox').fill('Adalet 2');
+      await mobilePage.waitForFunction(() => document.querySelectorAll('.cineverse-search-result').length > 0, { timeout: 10000 });
+      const mobileSearchRect = await mobileSearchDialog.evaluate(element => element.getBoundingClientRect().toJSON());
+      assert.ok(mobileSearchRect.width <= 412 && mobileSearchRect.height <= 823, 'Mobil arama paneli ekran sınırlarını aşıyor');
+      assert.ok(await mobileSearchDialog.locator('.cineverse-search-result img').first().getAttribute('src'), 'Mobil arama afişi yüklenmedi');
+      await mobileSearchDialog.getByRole('button', { name: 'Aramayı kapat' }).click();
       assert.ok(mobileState.mobileVisible, 'Mobil manşet telefonda görünmüyor');
       assert.ok(!mobileState.desktopVisible, 'Masaüstü manşeti telefonda görünmemeli');
       assert.ok(!mobileState.desktopHeroSource || !mobileState.desktopHeroSource.startsWith('https://image.tmdb.org/'), 'Mobil ekranda gizli masaüstü manşet görseli indirilmemeli');
