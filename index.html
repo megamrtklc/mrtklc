@@ -243,20 +243,27 @@
         @media(min-width:768px) and (max-width:1023px){#home-new-arrivals-section .home-new-arrival-card{flex-basis:23%;width:23%}#home-new-arrivals-section .home-new-arrival-feature{flex-basis:31%;width:31%}}
         @media(prefers-reduced-motion:reduce){#home-new-arrivals-section .home-new-arrival-card,#home-new-arrivals-section .home-new-arrival-poster img{transition:none!important}}
 
-        /* Series tracking shelf: uses the active profile's existing episode history. */
+        /* Series tracking: compact episode-ledger cards, distinct from poster shelves and resume cards. */
         #home-series-tracking-section .home-series-tracking-heading{border-bottom:1px solid rgba(148,163,184,.24)}
-        #home-series-tracking-section .home-series-tracking-rail{gap:clamp(12px,1.35vw,20px);padding:5px 3px 18px}
-        #home-series-tracking-section .home-series-tracking-card{flex:0 0 clamp(190px,18vw,236px);width:clamp(190px,18vw,236px);border-color:rgba(148,163,184,.22);background:rgba(127,127,127,.035);box-shadow:0 8px 24px -20px rgba(0,0,0,.6);scroll-snap-align:start}
-        #home-series-tracking-section .home-series-tracking-card:hover{border-color:rgba(225,29,72,.68);box-shadow:0 17px 36px -22px rgba(0,0,0,.72);transform:translateY(-4px)}
+        #home-series-tracking-section .home-series-tracking-rail{gap:12px;padding:5px 3px 18px}
+        #home-series-tracking-section .home-series-tracking-card{display:flex;align-items:stretch;gap:12px;flex:0 0 clamp(300px,27vw,350px);width:clamp(300px,27vw,350px);min-height:142px;padding:9px;border-color:rgba(148,163,184,.24);background:linear-gradient(120deg,rgba(127,127,127,.075),rgba(127,127,127,.018));box-shadow:0 9px 26px -21px rgba(0,0,0,.62);scroll-snap-align:start}
+        #home-series-tracking-section .home-series-tracking-card:hover{border-color:rgba(225,29,72,.68);box-shadow:0 17px 36px -22px rgba(0,0,0,.72);transform:translateY(-3px)}
+        #home-series-tracking-section .home-series-tracking-poster{width:82px;flex:0 0 82px;min-height:122px;aspect-ratio:auto!important;border-radius:10px}
         #home-series-tracking-section .home-series-tracking-poster img{display:block;backface-visibility:hidden}
         #home-series-tracking-section .home-series-tracking-card:hover .home-series-tracking-poster img{transform:scale(1.045)}
+        #home-series-tracking-section .home-series-tracking-poster>span:first-of-type{top:6px;left:6px;padding:4px 5px;font-size:6px}
+        #home-series-tracking-section .home-series-tracking-poster>span:last-of-type{right:6px;bottom:6px;padding:4px 5px;font-size:9px}
+        #home-series-tracking-section .home-series-tracking-card>.p-3{display:flex;flex:1;min-width:0;flex-direction:column;justify-content:center;gap:9px;padding:5px 5px 5px 0}
+        #home-series-tracking-section .home-series-tracking-card h3{font-size:12px;line-height:1.35}
         #home-series-tracking-section .home-series-tracking-progress{background:linear-gradient(90deg,#e11d48,#fb7185)}
         @media(max-width:639px){
-            #home-series-tracking-section .home-series-tracking-rail{gap:12px;padding-bottom:14px}
-            #home-series-tracking-section .home-series-tracking-card{flex-basis:46%;width:46%;border-radius:14px}
+            #home-series-tracking-section .home-series-tracking-rail{gap:10px;padding-bottom:14px}
+            #home-series-tracking-section .home-series-tracking-card{flex-basis:min(90%,330px);width:min(90%,330px);min-height:132px;border-radius:14px;gap:10px}
+            #home-series-tracking-section .home-series-tracking-poster{width:74px;flex-basis:74px;min-height:112px}
+            #home-series-tracking-section .home-series-tracking-card>.p-3{gap:7px}
         }
-        @media(min-width:640px) and (max-width:767px){#home-series-tracking-section .home-series-tracking-card{flex-basis:31%;width:31%}}
-        @media(min-width:768px) and (max-width:1023px){#home-series-tracking-section .home-series-tracking-card{flex-basis:24%;width:24%}}
+        @media(min-width:640px) and (max-width:767px){#home-series-tracking-section .home-series-tracking-card{flex-basis:46%;width:46%}}
+        @media(min-width:768px) and (max-width:1023px){#home-series-tracking-section .home-series-tracking-card{flex-basis:32%;width:32%}}
         @media(prefers-reduced-motion:reduce){#home-series-tracking-section .home-series-tracking-card,#home-series-tracking-section .home-series-tracking-poster img{transition:none!important}}
 
         /* Genre discovery shelf; all rules are scoped to this section. */
