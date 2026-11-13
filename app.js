@@ -1471,6 +1471,13 @@
                     const catalog = Array.isArray(this.catalog) ? this.catalog : [];
                     if (!catalog.length) return [];
 
+                    const safeRead = key => {
+                        const value = safeStorageRead(key, {});
+                        return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+                    };
+                    const profileId = String(this.currentProfileId || '');
+                    const progress = this.profileMovieProgress;
+                    const episodes = safeRead('cine_episode_tracking_v1');
                     const watchlist = this.watchlist;
                     const feedbackIds = this.recommendationFeedback;
                     const profileEpisodeState = Object.entries(episodes).filter(([key]) => key.startsWith(profileId + ':'));
@@ -1501,15 +1508,7 @@
                         return [...new Set(String(source).toLocaleLowerCase('tr').match(/[a-z0-9ğüşöçıİ]{4,}/gi) || [])]
                             .map(normalize).filter(word => word.length >= 4 && !stop.has(word)).slice(0, 40);
                     };
-                    const safeRead = key => {
-                        const value = safeStorageRead(key, {});
-                        return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
-                    };
-                    const profileId = String(this.currentProfileId || '');
-                    const progress = this.profileMovieProgress;
-                    const episodes = safeRead('cine_episode_tracking_v1');
-                    const history = new Map();
-                    const recentBoost = timestamp => {
+                    const history = new Map();                    const recentBoost = timestamp => {
                         const savedAt = Number(timestamp) || 0;
                         if (!savedAt) return 0;
                         const ageDays = Math.max(0, (Date.now() - savedAt) / 86400000);
