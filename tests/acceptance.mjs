@@ -47,13 +47,6 @@ async function check(name, fn) {
   }
 }
 
-async function selectProfile(profileId) {
-  const name = profileId === 'pro_2' ? 'Çocuk Profili' : 'Ana Profil';
-  const trigger = page.locator('header .cineverse-profile-trigger');
-  await trigger.click();
-  await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name }).click();
-  await page.waitForFunction(expected => JSON.parse(localStorage.getItem('cine_active_profile') || 'null') === expected, profileId);
-}
 
 try {
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
@@ -347,58 +340,49 @@ try {
     assert.ok(desktopState.desktopVisible, 'Mevcut masaüstü manşeti görünmüyor');
   });
 
-  await check('Akıllı öneriler aktif profil geçmişini kullanıyor ve önerileri çeşitlendiriyor', async () => {
+  await check('Akıllı öneriler tek kütüphane geçmişini kullanıyor ve önerileri çeşitlendiriyor', async () => {
     const result = await page.evaluate(() => {
       const app = window.Alpine.$data(document.documentElement);
       const original = {
         progress: localStorage.getItem('perde_profile_player_progress_v1'),
         episodes: localStorage.getItem('cine_episode_tracking_v1'),
-        watchlists: localStorage.getItem('cine_profile_watchlists'),
-        activeProfile: localStorage.getItem('cine_active_profile')
+        watchlists: localStorage.getItem('cine_profile_watchlists')
       };
       const movie = app.catalog.find(item => item.type === 'movie');
       const series = app.catalog.find(item => item.type === 'tv' && String(item.id) !== String(movie?.id));
       const saved = app.catalog.find(item => item.id !== movie?.id && item.id !== series?.id);
       localStorage.setItem('perde_profile_player_progress_v1', JSON.stringify({
-        pro_1: { [movie.id]: { time: 1200, duration: 1800, savedAt: Date.now() } }
+        [movie.id]: { time: 1200, duration: 1800, savedAt: Date.now() }
       }));
       localStorage.setItem('cine_episode_tracking_v1', JSON.stringify({
-        ['pro_1:' + series.id]: { watched: { '1': [1, 2] }, last: { season: 1, episode: 2, updatedAt: Date.now() } }
+        [series.id]: { watched: { '1': [1, 2] }, last: { season: 1, episode: 2, updatedAt: Date.now() } }
       }));
-      localStorage.setItem('cine_profile_watchlists', JSON.stringify({
-        pro_1: [{ id: saved.id, title: saved.title }]
-      }));
+      localStorage.setItem('cine_profile_watchlists', JSON.stringify([{ id: saved.id, title: saved.title }]));
       const recommendations = app.personalizedRecommendations;
-      const profileOne = {
+      const profile = {
         ids: recommendations.map(item => String(item.id)),
         reasons: recommendations.map(item => item.recommendationReason),
         movieId: String(movie.id),
         seriesId: String(series.id),
         savedId: String(saved.id)
       };
-      app.switchProfile('pro_2');
-      const profileTwoRecommendations = app.personalizedRecommendations;
-      const profileTwoIds = profileTwoRecommendations.map(item => String(item.id));
-      const profileTwoReasons = profileTwoRecommendations.map(item => item.recommendationReason);
-      app.switchProfile('pro_1');
       for (const [key, value] of Object.entries({
         perde_profile_player_progress_v1: original.progress,
         cine_episode_tracking_v1: original.episodes,
-        cine_profile_watchlists: original.watchlists,
-        cine_active_profile: original.activeProfile
+        cine_profile_watchlists: original.watchlists
       })) {
         if (value === null) localStorage.removeItem(key);
         else localStorage.setItem(key, value);
       }
-      return { profileOne, profileTwoIds, profileTwoReasons };
+      return profile;
     });
-    const ids = result.profileOne.ids;
+    const ids = result.ids;
     assert.ok(ids.length > 0 && ids.length <= 15, 'Öneri sayısı 1–15 aralığında olmalı');
     assert.equal(new Set(ids).size, ids.length, 'Önerilerde yinelenen yapımlar var');
-    assert.ok(!ids.includes(result.profileOne.movieId), 'İzleme ilerlemesi olan film önerilmemeli');
-    assert.ok(!ids.includes(result.profileOne.seriesId), 'Bölüm takibi olan dizi önerilmemeli');
-    assert.ok(!ids.includes(result.profileOne.savedId), 'İzleme listesindeki yapım tekrar önerilmemeli');
-    assert.ok(result.profileOne.reasons.every(Boolean), 'Her önerinin kişisel gerekçesi olmalı');
+    assert.ok(!ids.includes(result.movieId), 'İzleme ilerlemesi olan film önerilmemeli');
+    assert.ok(!ids.includes(result.seriesId), 'Bölüm takibi olan dizi önerilmemeli');
+    assert.ok(!ids.includes(result.savedId), 'İzleme listesindeki yapım tekrar önerilmemeli');
+    assert.ok(result.reasons.every(Boolean), 'Her önerinin kişisel gerekçesi olmalı');
     if (ids.length === 15) {
       const types = await page.evaluate(ids => {
         const catalog = window.Alpine.$data(document.documentElement).catalog;
@@ -408,42 +392,33 @@ try {
       const seriesCount = types.filter(type => type === 'tv').length;
       assert.ok(movieCount <= 10 && seriesCount <= 5, '15 öneride film/dizi dengesi 10/5 hedefini aşmamalı');
     }
-    assert.ok(result.profileTwoIds.length > 0, 'İkinci profil için öneriler üretilmeli');
-    assert.ok(result.profileTwoReasons.every(reason => reason === 'Arşivden yüksek puanlı'), 'İlk profilin izleme geçmişi ikinci profilin önerilerini etkilememeli');
   });
 
-  await check('Öneri geri bildirimi profile özel kaydediliyor ve benzer yapımları aşağı sıralıyor', async () => {
+  await check('Öneri geri bildirimi tek kütüphaneye kaydediliyor ve benzer yapımları aşağı sıralıyor', async () => {
     const result = await page.evaluate(() => {
       const app = window.Alpine.$data(document.documentElement);
       const key = 'cine_recommendation_feedback_v1';
       const original = localStorage.getItem(key);
-      const originalProfile = app.currentProfileId;
       try {
-        app.switchProfile('pro_1');
         localStorage.removeItem(key);
         const first = app.personalizedRecommendations;
         const target = first[0];
         if (!target) throw new Error('Geri bildirim testi için öneri bulunamadı');
         app.dismissRecommendation(target);
-        const saved = JSON.parse(localStorage.getItem(key) || '{}');
+        const saved = JSON.parse(localStorage.getItem(key) || '[]');
         const after = app.personalizedRecommendations;
-        app.switchProfile('pro_2');
-        const secondProfileFeedback = app.recommendationFeedback;
         return {
           targetId: String(target.id),
-          savedForProfileOne: (saved.pro_1 || []).includes(String(target.id)),
-          removedFromRecommendations: !after.some(item => String(item.id) === String(target.id)),
-          profileTwoUnaffected: secondProfileFeedback.length === 0
+          savedAsSingleList: Array.isArray(saved) && saved.includes(String(target.id)),
+          removedFromRecommendations: !after.some(item => String(item.id) === String(target.id))
         };
       } finally {
         if (original === null) localStorage.removeItem(key);
         else localStorage.setItem(key, original);
-        app.switchProfile(originalProfile);
       }
     });
-    assert.ok(result.savedForProfileOne, 'Geri bildirim aktif profile kaydedilmedi');
+    assert.ok(result.savedAsSingleList, 'Geri bildirim tek listeye kaydedilmedi');
     assert.ok(result.removedFromRecommendations, 'İlgimi çekmedi denilen yapım önerilerde kaldı');
-    assert.ok(result.profileTwoUnaffected, 'Geri bildirim diğer profile sızdı');
   });
 
   await check('Dizi önerileri doğru etiketleniyor ve dar ekran kart ölçüsü uygulanıyor', async () => {
@@ -799,7 +774,7 @@ try {
     assert.match(await themeButton.locator('i').getAttribute('class'), /fa-moon/, 'Karanlık Mod seçiliyken ay ikonu görünmeli');
   });
 
-  await check('Profil menüsü profil değiştirebiliyor ve Admin Paneli kısayolu sunuyor', async () => {
+  await check('Tek profil menüsü Admin Paneli kısayolunu sunuyor ve çocuk profilini içermiyor', async () => {
     const profileButton = page.locator('header .cineverse-profile-trigger');
     assert.ok(await profileButton.locator('img.cineverse-profile-avatar').isVisible(), 'Kare profil görseli görünmeli');
     const avatarRadius = await profileButton.locator('img').evaluate(element => getComputedStyle(element).borderRadius);
@@ -807,15 +782,16 @@ try {
     await profileButton.click();
     const profileMenu = page.locator('header .cineverse-profile-dropdown');
     await profileMenu.waitFor({ state: 'visible' });
+    assert.ok(await profileMenu.getByText('Ana Profil').isVisible(), 'Ana profil adı görünmeli');
+    assert.equal(await profileMenu.getByRole('button').count(), 0, 'Profil değiştirme seçeneği kalmamalı');
+    assert.ok(!(await profileMenu.innerText()).includes('Çocuk Profili'), 'Çocuk profili menüde kalmış');
     const adminLink = profileMenu.getByRole('link', { name: /Admin Paneli/ });
     assert.ok(await adminLink.isVisible(), 'Admin Paneli kısayolu görünmeli');
     assert.equal(await adminLink.getAttribute('href'), 'admin/', 'Admin Paneli doğru adrese gitmeli');
-    await profileMenu.getByRole('button', { name: 'Çocuk Profili' }).click();
-    await page.waitForFunction(() => JSON.parse(localStorage.getItem('cine_active_profile') || 'null') === 'pro_2');
-    await selectProfile('pro_1');
+    assert.equal(await page.evaluate(() => localStorage.getItem('cine_active_profile')), null, 'Eski aktif profil anahtarı temizlenmeli');
   });
 
-  await check('Dizi bölüm takibi ve profil bazlı izleme ilerlemesi', async () => {
+  await check('Tek kütüphanede dizi bölüm takibi ve izleme ilerlemesi', async () => {
     await page.evaluate(() => {
       const app = window.Alpine.$data(document.documentElement);
       const series = app.catalog.find(item => item.id === 'archive-6');
@@ -870,7 +846,7 @@ try {
     await watchedButton.click();
     await page.waitForFunction(() => {
       const all = JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}');
-      return (all['pro_1:archive-6']?.watched?.['1'] || []).includes(1);
+      return (all['archive-6']?.watched?.['1'] || []).includes(1);
     });
     await page.getByRole('button', { name: /Sonraki bölüm/ }).click();
     await page.waitForFunction(() => window.Alpine.$data(document.documentElement).selectedEpisode === 2);
@@ -913,28 +889,12 @@ try {
     assert.equal(episodeNavigation.totalPages, 2, 'Bölüm sayfalaması toplam sayfa sayısını yanlış hesapladı');
     assert.equal(episodeNavigation.firstPageCount, 8, 'İlk bölüm sayfasında 8 bölüm gösterilmiyor');
     assert.deepEqual(episodeNavigation.secondPageEpisodes, [9], 'İkinci bölüm sayfası doğru bölümü göstermiyor');
-    await selectProfile('pro_2');
-    const isolated = await page.evaluate(() => window.Alpine.$data(document.documentElement).isEpisodeWatched(1, 1));
-    assert.equal(isolated, false, 'Çocuk Profili Ana Profil bölüm takibini devraldı');
-    await page.evaluate(() => {
+        await page.evaluate(() => {
       const app = window.Alpine.$data(document.documentElement);
       app.saveMovieProgress('archive-6', { time: 75, duration: 2400, savedAt: Date.now() });
     });
     const progress = await page.evaluate(() => window.Alpine.$data(document.documentElement).getMovieProgress('archive-6'));
     assert.equal(progress.time, 75, 'Profil bazlı oynatma ilerlemesi geri okunamadı');
-    const progressIsolation = await page.evaluate(() => {
-      const app = window.Alpine.$data(document.documentElement);
-      const stored = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}');
-      const savedForChild = stored.pro_2?.['archive-6']?.time;
-      app.switchProfile('pro_1');
-      const mainProfileTime = app.getMovieProgress('archive-6')?.time ?? null;
-      app.switchProfile('pro_2');
-      const restoredChildTime = app.getMovieProgress('archive-6')?.time ?? null;
-      return { savedForChild, mainProfileTime, restoredChildTime };
-    });
-    assert.equal(progressIsolation.savedForChild, 75, 'Oynatma ilerlemesi aktif profil anahtarına kaydedilmedi');
-    assert.notEqual(progressIsolation.mainProfileTime, 75, 'Çocuk profilinin oynatma ilerlemesi Ana Profile sızdı');
-    assert.equal(progressIsolation.restoredChildTime, 75, 'Profil değiştirince önceki oynatma ilerlemesi geri yüklenmedi');
     const timeupdateProgress = await page.evaluate(() => {
       const app = window.Alpine.$data(document.documentElement);
       const video = document.getElementById('customVideoPlayer');
@@ -947,15 +907,11 @@ try {
         app.selectedSeason = 1;
         app.selectedEpisode = 2;
         app.updateVideoProgress();
-        const childStored = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}').pro_2?.['archive-6:s1e2'];
-        app.switchProfile('pro_1');
-        const mainProfileTime = app.getMovieProgress('archive-6:s1e2')?.time ?? null;
-        app.switchProfile('pro_2');
+        const saved = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}')['archive-6:s1e2'];
         return {
-          childTime: childStored?.time ?? null,
-          childDuration: childStored?.duration ?? null,
-          childSavedAt: childStored?.savedAt ?? 0,
-          mainProfileTime,
+          childTime: saved?.time ?? null,
+          childDuration: saved?.duration ?? null,
+          childSavedAt: saved?.savedAt ?? 0,
           percentage: app.videoProgress,
           currentTimeFormatted: app.currentTimeFormatted,
           durationFormatted: app.durationFormatted
@@ -967,14 +923,12 @@ try {
         else delete video.currentTime;
       }
     });
-    assert.equal(timeupdateProgress.childTime, 125, 'timeupdate ilerlemesi aktif profile kaydedilmedi');
+    assert.equal(timeupdateProgress.childTime, 125, 'timeupdate ilerlemesi kütüphaneye kaydedilmedi');
     assert.equal(timeupdateProgress.childDuration, 2400, 'Video süresi ilerleme kaydına yazılmadı');
     assert.ok(timeupdateProgress.childSavedAt > 0, 'İlerleme kaydına zaman damgası eklenmedi');
-    assert.notEqual(timeupdateProgress.mainProfileTime, 125, 'timeupdate ilerlemesi başka profile sızdı');
     assert.ok(Math.abs(timeupdateProgress.percentage - (125 / 2400 * 100)) < 0.001, 'Oynatma yüzdesi doğru hesaplanmadı');
     assert.equal(timeupdateProgress.currentTimeFormatted, '02:05', 'Geçerli oynatma zamanı doğru biçimlendirilmedi');
     assert.equal(timeupdateProgress.durationFormatted, '40:00', 'Video süresi doğru biçimlendirilmedi');
-    await selectProfile('pro_1');
   });
 
   await check('İstatistikler sayfası açılıyor', async () => {
