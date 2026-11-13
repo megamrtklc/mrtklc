@@ -106,6 +106,12 @@ try {
   console.log('DESKTOP LAYOUT SHIFT DIAGNOSTIC:', JSON.stringify(desktopDiagnostics));
   const desktopCls = desktopDiagnostics.shifts.reduce((total, entry) => total + entry.value, 0);
   assert.ok(desktopCls < 0.05, 'Masaüstü CLS hedefi aşıldı: ' + desktopCls.toFixed(3));
+
+  await check('Ana sayfa rafları ekrana yaklaşınca yükleniyor', async () => {
+    await page.locator('#home-catalog-section').scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => window.Alpine.$data(document.documentElement).homeSectionReady?.catalog === true, { timeout: 10000 });
+    await page.evaluate(() => window.scrollTo(0, 0));
+  });
   adaletId = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.find(item => item.title === 'Adalet 2')?.id);
   assert.ok(adaletId, 'Adalet 2 katalogda bulunamadı');
 
@@ -278,6 +284,7 @@ try {
               catalogCount: app?.catalog?.length ?? null,
               catalogLoading: app?.catalogLoading ?? null,
               initialShellPresent: !!document.getElementById('hero-initial-shell'),
+              homeSections: app?.homeSectionReady || null,
               heroTitle: document.querySelector('#mobileHeroBanner')?.innerText?.trim().slice(0, 100) || ''
             };
           })(),
