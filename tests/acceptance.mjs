@@ -237,7 +237,7 @@ try {
     }
     const desktopState = await page.evaluate(() => ({
       mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
-      desktopVisible: getComputedStyle(document.querySelector('main section.hidden.md\\:flex')).display !== 'none',
+      desktopVisible: getComputedStyle(document.querySelector('#desktopEditorialHero')).display !== 'none',
       mobileHeroSource: document.querySelector('#mobileHeroBanner img[srcset]')?.currentSrc || ''
     }));
     assert.ok(!desktopState.mobileVisible, 'Mobil manşet masaüstünde görünmemeli');
