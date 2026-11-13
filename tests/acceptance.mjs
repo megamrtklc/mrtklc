@@ -200,8 +200,8 @@ try {
           .map(entry => ({ name: entry.name, start: Math.round(entry.startTime), duration: Math.round(entry.duration), bytes: entry.transferSize || 0, initiator: entry.initiatorType }));
         return {
           mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
-          desktopVisible: getComputedStyle(document.querySelector('main section.hidden.md\\:flex')).display !== 'none',
-          desktopHeroSource: document.querySelector('main section.hidden.md\\:flex img')?.currentSrc || '',
+          desktopVisible: getComputedStyle(document.querySelector('#desktopEditorialHero')).display !== 'none',
+          desktopHeroSource: document.querySelector('#desktopEditorialHero img')?.currentSrc || '',
           source: image.currentSrc,
           imageComplete: image.complete,
           imageNaturalWidth: image.naturalWidth,
