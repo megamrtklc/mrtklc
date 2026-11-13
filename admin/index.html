@@ -143,9 +143,22 @@
             <article class="panel-card watch-available-panel"><div class="panel-heading"><div><span class="section-index">CARD LIBRARY</span><h2>Kullanılabilir kartlar</h2><p>Düzeninden kaldırdığın kartları buradan tekrar ekleyebilirsin.</p></div></div><div class="watch-available-list" id="watch-available-list"></div></article>
           </div>
           <article class="panel-card watch-live-demo">
-            <div class="watch-demo-heading"><div><span class="section-index">LIVE PREVIEW / DEMO</span><h2>Örnek izleme sayfası</h2><p>Taşıdığın kartların yeni konumunu burada anında gör.</p></div><div class="watch-demo-switch"><button type="button" class="active" data-demo-type="movie">Film</button><button type="button" data-demo-type="tv">Dizi</button></div></div>
-            <div class="watch-demo-browser"><div class="watch-demo-topbar"><span></span><span></span><span></span><b>CINEVERSE · WATCH</b></div><div class="watch-demo-content"><div class="watch-demo-back">← Ana sayfaya dön</div><div class="watch-demo-columns"><div class="watch-demo-column" id="watch-demo-left"></div><div class="watch-demo-column" id="watch-demo-right"></div></div></div></div>
-            <div class="watch-demo-foot"><span class="watch-demo-live-dot"></span> Önizleme değişikliklerle birlikte güncellenir · Gerçek katalog verisi kullanılır</div>
+            <div class="watch-demo-heading">
+              <div><span class="section-index">GERÇEK SAYFA YAPISI</span><h2>İzleme sayfası önizlemesi</h2><p>Gerçek CineVerse izleme ekranının yerleşimi. Kartları taşıdıkça sayfa burada aynı sırayla değişir.</p></div>
+              <div class="watch-preview-tools">
+                <div class="watch-demo-switch" aria-label="İçerik türü"><button type="button" class="active" data-demo-type="movie">Film</button><button type="button" data-demo-type="tv">Dizi</button></div>
+                <div class="watch-demo-switch" aria-label="Ekran boyutu"><button type="button" class="active" data-demo-device="desktop" title="Masaüstü önizleme">▰ <span>Masaüstü</span></button><button type="button" data-demo-device="mobile" title="Mobil önizleme">▯ <span>Mobil</span></button></div>
+              </div>
+            </div>
+            <div class="watch-preview-stage">
+              <div class="watch-preview-frame" id="watch-preview-frame">
+                <div class="watch-preview-sitebar"><b><span>◈</span> CINEVERSE</b><span>ANA SAYFA</span><span>FİLMLER</span><span>DİZİLER</span><i></i><span class="watch-preview-profile">●</span></div>
+                <div class="watch-preview-breadcrumb">‹ <span>Ana Sayfa</span><b>/</b><strong>İzleme sayfası</strong></div>
+                <div class="watch-preview-titlebar"><div><span class="watch-preview-kicker" id="watch-preview-kind">FİLM İZLE</span><h3 id="watch-preview-title">Yapım başlığı</h3><p id="watch-preview-meta">2025 · Film · 120 dk</p></div><span class="watch-preview-score" id="watch-preview-score">★ 8.2 <small>/ 10</small></span></div>
+                <div class="watch-preview-layout"><div class="watch-preview-column" id="watch-demo-left"></div><div class="watch-preview-column" id="watch-demo-right"></div></div>
+              </div>
+            </div>
+            <div class="watch-demo-foot"><span class="watch-demo-live-dot"></span> Katalogdan gerçek afiş ve bilgiler kullanılır; kart sırası, sütun ve gizleme ayarları anında yansıtılır.</div>
           </article>
         </div>
       </section>
