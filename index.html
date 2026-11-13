@@ -377,6 +377,52 @@
         html:not(.dark) header select, html:not(.dark) header select option { color: #1f2937; background-color: #ffffff; }
         html.dark header select, html.dark header select option { color: #f3f4f6; background-color: #161922; }
     </style>
+
+    <style id="cineverse-global-search">
+        .cineverse-search-trigger{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;flex:0 0 42px;border:1px solid rgba(148,163,184,.34);border-radius:13px;background:rgba(127,127,127,.07);color:inherit;font-size:16px;transition:background .2s,border-color .2s,color .2s,transform .2s}
+        .cineverse-search-trigger:hover{background:rgba(225,29,72,.12);border-color:rgba(225,29,72,.55);color:#fb7185;transform:translateY(-1px)}
+        .cineverse-search-trigger:focus-visible{outline:2px solid #fb7185;outline-offset:3px}
+        .home-hero-overlay .cineverse-search-trigger{border-color:rgba(255,255,255,.28);background:rgba(0,0,0,.22);color:#fff}
+        .cineverse-search-backdrop{position:fixed;inset:0;z-index:10000;display:flex;align-items:flex-start;justify-content:center;padding:clamp(28px,8vh,88px) 22px 24px;background:rgba(3,5,10,.82);backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px)}
+        .cineverse-search-dialog{display:flex;flex-direction:column;width:min(920px,100%);max-height:min(82vh,850px);overflow:hidden;border:1px solid rgba(255,255,255,.13);border-radius:24px;background:linear-gradient(145deg,#171b25 0%,#10131b 100%);color:#f8fafc;box-shadow:0 35px 100px rgba(0,0,0,.62)}
+        .cineverse-search-top{display:flex;align-items:center;gap:14px;padding:22px 24px 18px;border-bottom:1px solid rgba(255,255,255,.09)}
+        .cineverse-search-field{display:flex;align-items:center;gap:13px;flex:1;min-width:0;height:58px;padding:0 17px;border:1px solid rgba(255,255,255,.17);border-radius:15px;background:rgba(255,255,255,.07);color:#fda4af}
+        .cineverse-search-field:focus-within{border-color:rgba(251,113,133,.75);box-shadow:0 0 0 3px rgba(225,29,72,.13)}
+        .cineverse-search-field input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#fff;font-size:17px;font-weight:600}
+        .cineverse-search-field input::placeholder{color:#9299a8;font-weight:500}
+        .cineverse-search-close{display:flex;width:44px;height:44px;flex:0 0 44px;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.15);border-radius:13px;color:#cbd5e1;transition:.2s}
+        .cineverse-search-close:hover{border-color:#fb7185;background:rgba(225,29,72,.12);color:#fff}
+        .cineverse-search-hint{padding:19px 26px 22px;color:#aab2c0;font-size:12px}
+        .cineverse-search-results{overflow-y:auto;overscroll-behavior:contain;padding:14px 18px 20px}
+        .cineverse-search-result{display:grid;grid-template-columns:70px minmax(0,1fr);gap:16px;width:100%;min-height:112px;padding:11px;text-align:left;border:1px solid transparent;border-radius:15px;transition:background .18s,border-color .18s}
+        .cineverse-search-result:hover,.cineverse-search-result:focus-visible{outline:0;border-color:rgba(251,113,133,.36);background:rgba(255,255,255,.065)}
+        .cineverse-search-result img{width:70px;height:100px;object-fit:cover;border-radius:9px;background:#252b38;box-shadow:0 5px 15px rgba(0,0,0,.3)}
+        .cineverse-search-result-copy{display:flex;min-width:0;flex-direction:column;justify-content:center;gap:7px}
+        .cineverse-search-result-title{overflow:hidden;color:#fff;font-size:14px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+        .cineverse-search-result-meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;color:#aeb6c4;font-size:10px;font-weight:700}
+        .cineverse-search-result-type{padding:3px 7px;border-radius:5px;background:rgba(225,29,72,.17);color:#fda4af}
+        .cineverse-search-result-desc{display:-webkit-box;overflow:hidden;color:#b7bfcc;font-size:11px;line-height:1.55;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+        .cineverse-search-empty{padding:34px 18px;text-align:center;color:#aab2c0;font-size:13px}
+        @media(max-width:639px){
+            .cineverse-search-trigger{width:40px;height:40px;flex-basis:40px;border-radius:12px}
+            .cineverse-search-backdrop{align-items:flex-start;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 10px)}
+            .cineverse-search-dialog{width:100%;max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px);border-radius:19px}
+            .cineverse-search-top{gap:9px;padding:13px 12px}
+            .cineverse-search-field{height:52px;gap:10px;padding:0 12px;border-radius:13px}
+            .cineverse-search-field input{font-size:15px}
+            .cineverse-search-close{width:42px;height:42px;flex-basis:42px}
+            .cineverse-search-hint{padding:17px 16px 19px;font-size:11px}
+            .cineverse-search-results{padding:9px 8px 14px}
+            .cineverse-search-result{grid-template-columns:58px minmax(0,1fr);gap:12px;min-height:96px;padding:8px;border-radius:12px}
+            .cineverse-search-result img{width:58px;height:84px;border-radius:7px}
+            .cineverse-search-result-copy{gap:5px}
+            .cineverse-search-result-title{font-size:12px}
+            .cineverse-search-result-meta{gap:5px;font-size:9px}
+            .cineverse-search-result-desc{font-size:10px;line-height:1.45;-webkit-line-clamp:2}
+        }
+        @media(prefers-reduced-motion:reduce){.cineverse-search-trigger,.cineverse-search-result,.cineverse-search-close{transition:none}}
+    </style>
+
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
@@ -411,10 +457,9 @@
                 <button @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen.toString()" aria-label="Menüyü aç veya kapat" class="xl:hidden w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-rose-500 transition-colors">
                     <i :class="mobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
                 </button>
-                <div class="relative hidden xl:block">
-                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                    <input type="text" x-model="searchQuery" placeholder="Film veya dizi ara..." :class="getSearchClass()" class="border rounded-lg pl-9 pr-3 py-1.5 text-xs text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-600 w-36 2xl:w-60 transition-all">
-                </div>
+                <button type="button" @click="openSearchOverlay()" aria-label="Film ve dizi ara" aria-haspopup="dialog" class="cineverse-search-trigger" title="Ara">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                </button>
 
                 <!-- 3'LÜ TEMA SEÇİCİ DROPDOWN -->
                 <div class="relative" x-data="{ openThemeMenu: false }">
@@ -452,10 +497,6 @@
             </div>
         </div>
         <div x-show="mobileMenuOpen" x-transition.origin.top.right @click.away="mobileMenuOpen = false" class="xl:hidden absolute top-full right-3 left-3 sm:left-auto sm:w-80 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl p-3 z-50">
-            <div class="relative mb-3">
-                <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                <input type="text" x-model="searchQuery" @keydown.enter="navigateTo('explore'); mobileMenuOpen = false" placeholder="Film veya dizi ara..." :class="getSearchClass()" class="w-full border rounded-lg pl-9 pr-3 py-2.5 text-sm text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:border-rose-600">
-            </div>
             <nav class="grid grid-cols-1 gap-1 text-sm font-bold text-gray-700 dark:text-gray-200">
                 <a href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Ana Sayfa</a>
                 <a href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Keşfet</a>
@@ -466,6 +507,45 @@
             </nav>
         </div>
     </header>
+
+    <template x-teleport="body">
+        <div x-cloak x-show="searchOverlayOpen" x-transition.opacity @click.self="closeSearchOverlay()" @keydown.escape.window="closeSearchOverlay()" class="cineverse-search-backdrop" role="dialog" aria-modal="true" aria-label="Film ve dizi ara">
+            <section class="cineverse-search-dialog" @click.stop>
+                <div class="cineverse-search-top">
+                    <div class="cineverse-search-field">
+                        <i class="fa-solid fa-magnifying-glass text-lg" aria-hidden="true"></i>
+                        <input x-ref="globalSearchInput" type="search" x-model.debounce.100ms="searchQuery" placeholder="Film, dizi veya oyuncu ara..." autocomplete="off" spellcheck="false" aria-label="Arama metni">
+                        <button type="button" x-show="searchQuery" @click="searchQuery = ''; $nextTick(() => $refs.globalSearchInput.focus())" aria-label="Aramayı temizle" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <button type="button" @click="closeSearchOverlay()" aria-label="Aramayı kapat" class="cineverse-search-close"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                <div x-show="!searchQuery.trim()" class="cineverse-search-hint">
+                    <i class="fa-solid fa-sparkles mr-2 text-rose-300"></i>Aradığın yapımı bulmak için yazmaya başla.
+                </div>
+                <div x-show="searchQuery.trim()" class="cineverse-search-results">
+                    <template x-for="item in quickSearchResults" :key="'global-search-' + item.id">
+                        <button type="button" @click="selectSearchResult(item)" class="cineverse-search-result">
+                            <img :src="item.poster || item.image || item.tmdbPoster" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async">
+                            <span class="cineverse-search-result-copy">
+                                <span class="cineverse-search-result-title" x-text="item.title"></span>
+                                <span class="cineverse-search-result-meta">
+                                    <span class="cineverse-search-result-type" x-text="item.type === 'tv' ? 'Dizi' : 'Film'"></span>
+                                    <span x-show="item.year" x-text="item.year"></span>
+                                    <span x-show="item.rating"><i class="fa-solid fa-star mr-1 text-amber-400"></i><span x-text="Number(item.rating).toFixed(1)"></span></span>
+                                    <span x-show="item.category || item.genre" x-text="item.category || item.genre"></span>
+                                </span>
+                                <span class="cineverse-search-result-desc" x-text="item.desc || item.overview || 'Bu yapım için kısa açıklama bulunmuyor.'"></span>
+                            </span>
+                        </button>
+                    </template>
+                    <div x-show="quickSearchResults.length === 0" class="cineverse-search-empty">
+                        <i class="fa-solid fa-film mb-3 block text-2xl text-slate-500"></i>
+                        Bu aramayla eşleşen bir yapım bulunamadı.
+                    </div>
+                </div>
+            </section>
+        </div>
+    </template>
 
     <!-- Main Content Area -->
     <main class="relative flex-grow w-full min-h-[540px] md:min-h-0">
