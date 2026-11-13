@@ -1078,12 +1078,35 @@
                     return Array.isArray(stored) ? [...new Set(stored.map(String))] : [];
                 },
 
+                get recommendationLikes() {
+                    const stored = safeStorageRead('cine_recommendation_likes_v1', []);
+                    return Array.isArray(stored) ? [...new Set(stored.map(String))] : [];
+                },
+
+                likeRecommendation(item) {
+                    if (!item || item.id == null) return;
+                    const id = String(item.id);
+                    const likes = this.recommendationLikes;
+                    if (!likes.includes(id)) likes.push(id);
+                    safeStorageWrite('cine_recommendation_likes_v1', likes.slice(-200));
+                    const dislikes = this.recommendationFeedback.filter(value => value !== id);
+                    safeStorageWrite('cine_recommendation_feedback_v1', dislikes);
+                    personalizedRecommendationCache.delete(this);
+                },
+
+                isRecommendationLiked(item) {
+                    return !!item && this.recommendationLikes.includes(String(item.id));
+                },
+
                 dismissRecommendation(item) {
                     if (!item || item.id == null) return;
-                    const own = this.recommendationFeedback;
                     const id = String(item.id);
+                    const own = this.recommendationFeedback;
                     if (!own.includes(id)) own.push(id);
                     safeStorageWrite('cine_recommendation_feedback_v1', own.slice(-200));
+                    const likes = this.recommendationLikes.filter(value => value !== id);
+                    safeStorageWrite('cine_recommendation_likes_v1', likes);
+                    personalizedRecommendationCache.delete(this);
                 },
 
                 reviews: (() => { const value = safeStorageRead('cine_reviews', {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; })(),
@@ -1600,11 +1623,13 @@
                     const episodes = safeRead('cine_episode_tracking_v1');
                     const watchlist = this.watchlist;
                     const feedbackIds = this.recommendationFeedback;
+                    const likedIds = this.recommendationLikes;
                     const cacheKey = JSON.stringify([
                         progress,
                         Object.entries(episodes),
                         watchlist.map(item => String(item.id)),
-                        feedbackIds
+                        feedbackIds,
+                        likedIds
                     ]);
                     const cached = personalizedRecommendationCache.get(this);
                     if (cached && cached.catalog === catalog && cached.key === cacheKey) return cached.value;
@@ -1663,7 +1688,8 @@
                         if (!history.has(id)) history.set(id, { item, weight: 0.85 });
                     });
                     const feedbackItems = feedbackIds.map(id => catalogById.get(id)).filter(Boolean);
-                    const excluded = new Set([...history.keys(), ...watchlist.map(item => String(item.id)), ...feedbackIds]);
+                    const likedItems = likedIds.map(id => catalogById.get(id)).filter(Boolean);
+                    const excluded = new Set([...history.keys(), ...watchlist.map(item => String(item.id)), ...feedbackIds, ...likedIds]);
                     const prefs = {
                         genres: new Map(), types: new Map(), countries: new Map(),
                         directors: new Map(), actors: new Map(), themes: new Map(),
@@ -1685,6 +1711,14 @@
                         tokens(item.director).forEach(value => add(prefs.negativeDirectors, value, 1));
                         people(item).forEach(actor => add(prefs.negativeActors, actor, 1));
                         plotTerms(item).forEach(value => add(prefs.negativeThemes, value, 0.35));
+                    });
+                    likedItems.forEach(item => {
+                        tokens(item.category || item.genre).forEach(value => add(prefs.genres, value, 2.2));
+                        if (item.type) add(prefs.types, item.type, 1.2);
+                        tokens(item.country).forEach(value => add(prefs.countries, value, 0.6));
+                        tokens(item.director).forEach(value => add(prefs.directors, value, 1.8));
+                        people(item).forEach(actor => add(prefs.actors, actor, 1.4));
+                        plotTerms(item).forEach(value => add(prefs.themes, value, 0.55));
                     });
                     const currentYear = new Date().getFullYear();
                     const selectDiverse = ranked => {
