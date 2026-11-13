@@ -608,6 +608,9 @@
 
                 selectEpisode(epNum) {
                     this.selectedEpisode = Number(epNum);
+                    this.playbackError = false;
+                    this.videoEnded = false;
+                    this.videoProgress = 0;
                     const video = document.getElementById('customVideoPlayer');
                     const nextUrl = this.getPlaybackUrl();
                     if (video && nextUrl) {
