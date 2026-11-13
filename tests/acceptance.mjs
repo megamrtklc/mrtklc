@@ -651,7 +651,7 @@ try {
       const start = await cast.evaluate(el => el.scrollLeft);
       await castButtons.nth(index).click();
       await page.waitForTimeout(450);
-      if (await cast.evaluate(el => Math.abs(el.scrollLeft - start) > 1)) {
+      if (await cast.evaluate((el, initial) => Math.abs(el.scrollLeft - initial) > 1, start)) {
         castMoved = true;
         break;
       }
@@ -677,7 +677,7 @@ try {
       const start = await similar.evaluate(el => el.scrollLeft);
       await similarButtons.nth(index).click();
       await page.waitForTimeout(450);
-      if (await similar.evaluate(el => Math.abs(el.scrollLeft - start) > 1)) {
+      if (await similar.evaluate((el, initial) => Math.abs(el.scrollLeft - initial) > 1, start)) {
         similarMoved = true;
         break;
       }
