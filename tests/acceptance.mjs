@@ -651,9 +651,16 @@ try {
             element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' })
           );
           await touchPage.waitForTimeout(120);
+          await rail.evaluate(element => {
+            element.style.scrollBehavior = 'auto';
+            element.scrollTo({ left: 0, behavior: 'instant' });
+          });
+          await touchPage.waitForFunction(selector => {
+            const element = document.querySelector(selector);
+            return element && Math.abs(element.scrollLeft) < 1;
+          }, selector, { timeout: 3000 });
           const before = await rail.evaluate(element => {
             const rect = element.getBoundingClientRect();
-            element.scrollLeft = 0;
             return {
               left: rect.left,
               top: rect.top,
@@ -664,16 +671,19 @@ try {
             };
           });
           assert.ok(before.maxScroll > 24, `${viewport.label}: ${selector} yatay kaydırma mesafesi yetersiz`);
-          const x = Math.round(before.left + Math.min(before.width * 0.78, before.width - 18));
+          const x = Math.round(before.left + Math.min(before.width * 0.82, before.width - 18));
           const y = Math.round(before.top + Math.min(before.height / 2, 80));
           await cdp.send('Input.dispatchTouchEvent', {
             type: 'touchStart',
             touchPoints: [{ x, y, id: 1 }]
           });
-          await cdp.send('Input.dispatchTouchEvent', {
-            type: 'touchMove',
-            touchPoints: [{ x: x - 150, y, id: 1 }]
-          });
+          for (const delta of [70, 145, 220]) {
+            await cdp.send('Input.dispatchTouchEvent', {
+              type: 'touchMove',
+              touchPoints: [{ x: x - delta, y, id: 1 }]
+            });
+            await touchPage.waitForTimeout(35);
+          }
           await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
           await touchPage.waitForTimeout(220);
           const after = await rail.evaluate(element => ({
