@@ -319,6 +319,14 @@
         @media(max-width:1023px){#home-genre-discovery-section .home-genre-discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
         @media(max-width:639px){#home-genre-discovery-section .home-genre-discovery-grid{gap:9px}#home-genre-discovery-section .home-genre-discovery-card{min-height:88px;grid-template-columns:36px minmax(0,1fr);column-gap:10px;padding:12px;border-radius:13px}#home-genre-discovery-section .home-genre-discovery-icon{width:36px;height:36px;border-radius:11px}#home-genre-discovery-section .home-genre-discovery-card>span:nth-child(2){font-size:12px}#home-genre-discovery-section .home-genre-discovery-card:after{right:5px;font-size:52px}} 
         @media(prefers-reduced-motion:reduce){#home-genre-discovery-section .home-genre-discovery-card{transition:none}}
+        /* Responsive CineVerse footer */
+        #cineverse-footer{isolation:isolate}
+        #cineverse-footer .cineverse-footer-glow{z-index:-1;background:radial-gradient(ellipse at 12% 0%,rgba(225,29,72,.075),transparent 42%),radial-gradient(ellipse at 92% 100%,rgba(225,29,72,.045),transparent 38%)}
+        #cineverse-footer .cineverse-footer-link{display:inline-flex;align-items:center;min-height:24px;color:var(--theme-text-secondary,#6b7280);transition:color .2s ease,transform .2s ease}
+        #cineverse-footer .cineverse-footer-link:hover{color:#e11d48;transform:translateX(3px)}
+        #cineverse-footer a:focus-visible,#cineverse-footer button:focus-visible{outline:2px solid #fb7185;outline-offset:4px}
+        @media(max-width:639px){#cineverse-footer .cineverse-footer-link{min-height:30px}#cineverse-footer .cineverse-footer-glow{background:radial-gradient(ellipse at 10% 0%,rgba(225,29,72,.07),transparent 55%)}}
+        @media(prefers-reduced-motion:reduce){#cineverse-footer .cineverse-footer-link{transition:none}#cineverse-footer .cineverse-footer-link:hover{transform:none}}
     </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
@@ -1841,21 +1849,55 @@
 
     </main>
 
-    <!-- Footer (Full Width) -->
-    <footer x-show="!catalogLoading" :class="getHeaderClass()" class="border-t py-6 mt-auto w-full px-6 sm:px-12 transition-colors duration-300">
-        <div class="w-full flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-400">
-            <div class="flex items-center space-x-2">
-                <span class="font-black uppercase tracking-widest text-gray-900 dark:text-white text-base">CINE<span class="text-rose-700 dark:text-rose-400">VERSE</span></span>
-                <span :class="getCardClass()" class="text-[10px] px-2 py-0.5 rounded text-gray-600 dark:text-gray-400 border">PRO</span>
+    <!-- CineVerse Responsive Footer -->
+    <footer id="cineverse-footer" x-show="!catalogLoading" class="relative isolate mt-auto w-full overflow-hidden border-t border-gray-200/80 bg-gray-50 text-gray-600 transition-colors duration-300 dark:border-white/10 dark:bg-[#08090d] dark:text-gray-400">
+        <div class="cineverse-footer-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
+        <div class="relative mx-auto w-full max-w-[1600px] px-5 pb-5 pt-10 sm:px-8 sm:pt-12 lg:px-12">
+            <div class="grid grid-cols-2 gap-x-6 gap-y-9 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr] lg:gap-12">
+                <div class="col-span-2 max-w-md lg:col-span-1">
+                    <a href="#" @click.prevent="navigateTo('home')" aria-label="CineVerse ana sayfa" class="inline-flex items-center gap-2.5 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-500">
+                        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-600 text-white shadow-lg shadow-rose-950/20"><i class="fa-solid fa-clapperboard text-lg"></i></span>
+                        <span class="text-xl font-black uppercase tracking-[0.13em] text-gray-950 dark:text-white">CINE<span class="text-rose-600 dark:text-rose-400">VERSE</span></span>
+                    </a>
+                    <p class="mt-4 max-w-sm text-xs leading-6 text-gray-500 dark:text-gray-400 sm:text-sm">Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.</p>
+                    <div class="mt-5 flex flex-wrap gap-2">
+                        <span class="rounded-full border border-gray-200 bg-white/70 px-3 py-1.5 text-[9px] font-bold tracking-wide text-gray-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-gray-400">KİŞİSEL KÜTÜPHANE</span>
+                        <span class="rounded-full border border-gray-200 bg-white/70 px-3 py-1.5 text-[9px] font-bold tracking-wide text-gray-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-gray-400">DİZİ TAKİBİ</span>
+                    </div>
+                </div>
+
+                <nav aria-label="Hızlı bağlantılar" class="min-w-0">
+                    <h2 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-950 dark:text-white">CineVerse</h2>
+                    <ul class="space-y-3 text-xs font-semibold">
+                        <li><a href="#" @click.prevent="navigateTo('home')" class="cineverse-footer-link">Ana Sayfa</a></li>
+                        <li><a href="#" @click.prevent="navigateTo('explore')" class="cineverse-footer-link">Keşfet</a></li>
+                        <li><a href="#" @click.prevent="navigateTo('library')" class="cineverse-footer-link">Kütüphanem</a></li>
+                    </ul>
+                </nav>
+
+                <nav aria-label="İzleme alanları" class="min-w-0">
+                    <h2 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-950 dark:text-white">İzleme Alanım</h2>
+                    <ul class="space-y-3 text-xs font-semibold">
+                        <li><a href="#" @click.prevent="navigateTo('watchlist')" class="cineverse-footer-link">İzleme Listem</a></li>
+                        <li><a href="#" @click.prevent="navigateTo('stats')" class="cineverse-footer-link">İstatistikler</a></li>
+                    </ul>
+                </nav>
+
+                <div class="col-span-2 lg:col-span-1">
+                    <h2 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-950 dark:text-white">İzleme keyfini kişiselleştir</h2>
+                    <p class="max-w-xs text-xs leading-6 text-gray-500 dark:text-gray-400">Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.</p>
+                    <button type="button" @click="navigateTo('library')" class="mt-4 inline-flex min-h-10 items-center gap-2 rounded-lg bg-rose-600 px-4 text-[10px] font-black uppercase tracking-wider text-white shadow-lg shadow-rose-950/15 transition hover:-translate-y-0.5 hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-rose-500">
+                        Kütüphaneme Git <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
             </div>
-            <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 font-bold uppercase tracking-wider text-[10px] sm:text-[11px]">
-                <a href="#" @click.prevent="navigateTo('home')" class="hover:text-black dark:hover:text-white transition-colors">Ana Sayfa</a>
-                <a href="#" @click.prevent="navigateTo('explore')" class="hover:text-black dark:hover:text-white transition-colors">Keşfet</a>
-                <a href="#" @click.prevent="navigateTo('library')" class="hover:text-black dark:hover:text-white transition-colors">Kütüphanem</a>
-                <a href="#" @click.prevent="navigateTo('watchlist')" class="hover:text-black dark:hover:text-white transition-colors">İzleme Listem</a>
-                <a href="#" @click.prevent="navigateTo('stats')" class="hover:text-black dark:hover:text-white transition-colors">İstatistikler</a>
+
+            <div class="mt-10 flex flex-col gap-3 border-t border-gray-200/80 pt-5 text-center dark:border-white/10 sm:flex-row sm:items-center sm:justify-between sm:text-left">
+                <p class="text-[10px] leading-5 text-gray-500 dark:text-gray-500">&copy; 2026 CineVerse. Tüm hakları saklıdır.</p>
+                <a href="#" @click.prevent="window.scrollTo({top:0,behavior:'smooth'})" class="inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-wider text-gray-500 transition hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400">
+                    Yukarı dön <i class="fa-solid fa-arrow-up"></i>
+                </a>
             </div>
-            <p class="text-[11px]">&copy; 2026 CineVerse Ultimate Pro. Tüm hakları saklıdır.</p>
         </div>
     </footer>
 
