@@ -599,6 +599,44 @@ try {
     if (originalViewport) await page.setViewportSize(originalViewport);
   });
 
+  await check('Oyuncu ve benzer yapımlar şeritleri kaydırılabiliyor', async () => {
+    const castCard = page.locator('[data-watch-card="cast"]');
+    await castCard.waitFor({ state: 'visible' });
+    const cast = castCard.locator('#castContainer');
+    const castMetrics = await cast.evaluate(el => ({
+      count: el.children.length,
+      clientWidth: el.clientWidth,
+      scrollWidth: el.scrollWidth
+    }));
+    assert.ok(castMetrics.count >= 2, 'Oyuncu kadrosu kartları yüklenmedi: ' + JSON.stringify(castMetrics));
+    assert.ok(castMetrics.scrollWidth > castMetrics.clientWidth,
+      'Oyuncu kadrosu şeridi yatay kaydırmaya uygun değil: ' + JSON.stringify(castMetrics));
+    await castCard.getByRole('button').last().click();
+    await page.waitForFunction(() => {
+      const el = document.querySelector('#castContainer');
+      return el && el.scrollLeft > 0;
+    });
+    assert.ok(await cast.evaluate(el => el.scrollLeft > 0), 'Oyuncu kadrosu ileri kaydırılamadı');
+
+    const similarCard = page.locator('[data-watch-card="similar"]');
+    await similarCard.waitFor({ state: 'visible' });
+    const similar = similarCard.locator('#similarContainer');
+    const similarMetrics = await similar.evaluate(el => ({
+      count: el.children.length,
+      clientWidth: el.clientWidth,
+      scrollWidth: el.scrollWidth
+    }));
+    assert.ok(similarMetrics.count > 0, 'Benzer yapımlar listesi boş: ' + JSON.stringify(similarMetrics));
+    assert.ok(similarMetrics.scrollWidth > similarMetrics.clientWidth,
+      'Benzer yapımlar şeridi yatay kaydırmaya uygun değil: ' + JSON.stringify(similarMetrics));
+    await similarCard.getByRole('button').last().click();
+    await page.waitForFunction(() => {
+      const el = document.querySelector('#similarContainer');
+      return el && el.scrollLeft > 0;
+    });
+    assert.ok(await similar.evaluate(el => el.scrollLeft > 0), 'Benzer yapımlar şeridi ileri kaydırılamadı');
+  });
+
   await check('Detay sayfasında uzun konu özeti açılıp kapatılıyor', async () => {
     await page.evaluate(() => {
       const app = window.Alpine.$data(document.documentElement);
