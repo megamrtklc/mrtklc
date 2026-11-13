@@ -370,10 +370,12 @@
                         this.catalogError = error.message || 'Bilinmeyen katalog hatası';
                         console.error('Perde katalog yükleme hatası:', error);
                     } finally {
+                        // Bölüm sırasını katalog verileri DOM'a işlenmeden belirle;
+                        // aksi hâlde ilk çizimden sonra bölümler yer değiştirerek CLS üretir.
+                        this.applyHomepageSectionOrder();
                         this.catalogLoading = false;
                         this.$nextTick(() => {
                             document.getElementById('hero-initial-shell')?.remove();
-                            this.applyHomepageSectionOrder();
                         });
                     }
                 },
