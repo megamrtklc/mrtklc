@@ -176,28 +176,29 @@
         @media(max-width:639px){#home-page section:not(#desktopEditorialHero):not(#mobileHeroBanner)>div:first-child h2{font-size:1.18rem}#home-page .home-card-rail{gap:12px;padding-bottom:14px}}
         @media(prefers-reduced-motion:reduce){#home-page .home-rail-card,#home-page .home-rail-card img{transition:none!important}}
         /* Continue-watching cards: isolated cinematic treatment; hero selectors remain untouched. */
+        /* Continue-watching uses compact horizontal resume cards, distinct from poster rails. */
         #home-continue-section .home-continue-heading{border-bottom:1px solid rgba(148,163,184,.24)}
-        #home-continue-section .home-continue-rail{gap:clamp(12px,1.35vw,20px);padding:5px 3px 18px}
-        #home-continue-section .home-continue-card{flex:0 0 clamp(190px,17.5vw,232px);width:clamp(190px,17.5vw,232px);border-color:rgba(148,163,184,.24);background:rgba(127,127,127,.035);box-shadow:0 10px 28px -22px rgba(0,0,0,.65);scroll-snap-align:start}
-        #home-continue-section .home-continue-card:hover{border-color:rgba(225,29,72,.7);box-shadow:0 18px 38px -22px rgba(0,0,0,.72);transform:translateY(-4px)}
+        #home-continue-section .home-continue-rail{gap:12px;padding:5px 3px 16px}
+        #home-continue-section .home-continue-card{flex:0 0 clamp(280px,25vw,330px);width:clamp(280px,25vw,330px);min-height:148px;border-color:rgba(148,163,184,.24);background:linear-gradient(125deg,rgba(127,127,127,.08),rgba(127,127,127,.025));box-shadow:0 9px 26px -21px rgba(0,0,0,.62);scroll-snap-align:start}
+        #home-continue-section .home-continue-card:hover{border-color:rgba(225,29,72,.7);box-shadow:0 16px 32px -21px rgba(0,0,0,.7);transform:translateY(-3px)}
+        #home-continue-section .home-continue-poster{width:100px;min-height:128px;flex:0 0 100px;border-radius:10px}
         #home-continue-section .home-continue-image{display:block;backface-visibility:hidden}
-        #home-continue-section .home-continue-card:hover .home-continue-image{transform:scale(1.055)}
-        #home-continue-section .home-continue-shade{background:linear-gradient(180deg,rgba(0,0,0,.22),transparent 28%,transparent 54%,rgba(0,0,0,.82));pointer-events:none}
+        #home-continue-section .home-continue-card:hover .home-continue-image{transform:scale(1.045)}
+        #home-continue-section .home-continue-shade{background:linear-gradient(180deg,rgba(0,0,0,.28),transparent 34%,rgba(0,0,0,.72));pointer-events:none}
         #home-continue-section .home-continue-type{backdrop-filter:blur(8px)}
         #home-continue-section .home-continue-play{background:rgba(225,29,72,.94);box-shadow:0 5px 18px rgba(0,0,0,.35);transition:transform .25s,background .25s}
-        #home-continue-section .home-continue-card:hover .home-continue-play{transform:scale(1.1);background:#be123c}
-        #home-continue-section .home-continue-copy{min-height:91px}
+        #home-continue-section .home-continue-card:hover .home-continue-play{transform:scale(1.08);background:#be123c}
+        #home-continue-section .home-continue-copy{min-height:0;flex:1;min-width:0;padding:7px 8px 7px 0}
         #home-continue-section .home-continue-progress{background:rgba(148,163,184,.25)}
         #home-continue-section .home-continue-progress-fill{background:linear-gradient(90deg,#be123c,#fb7185);box-shadow:0 0 10px rgba(244,63,94,.28)}
         #home-continue-section .home-continue-count{font-variant-numeric:tabular-nums}
         @media(max-width:639px){
-            #home-continue-section .home-continue-rail{gap:12px;padding-bottom:14px}
-            #home-continue-section .home-continue-card{flex-basis:46%;width:46%;border-radius:14px}
-            #home-continue-section .home-continue-copy{padding:10px;min-height:84px}
-            #home-continue-section .home-continue-play{width:32px;height:32px}
+            #home-continue-section .home-continue-rail{gap:10px;padding-bottom:13px}
+            #home-continue-section .home-continue-card{flex-basis:min(86%,310px);width:min(86%,310px);min-height:138px;border-radius:14px}
+            #home-continue-section .home-continue-poster{width:88px;flex-basis:88px;min-height:118px}
+            #home-continue-section .home-continue-copy{padding:6px 7px 6px 0}
+            #home-continue-section .home-continue-play{width:30px;height:30px}
         }
-        @media(min-width:640px) and (max-width:767px){#home-continue-section .home-continue-card{flex-basis:29%;width:29%}}
-        @media(min-width:768px) and (max-width:1023px){#home-continue-section .home-continue-card{flex-basis:23%;width:23%}}
         @media(prefers-reduced-motion:reduce){#home-continue-section .home-continue-card,#home-continue-section .home-continue-image,#home-continue-section .home-continue-play{transition:none!important}}
         /* Homepage watchlist preview: compact cinematic shelf, independent of the hero. */
         #home-watchlist-section .home-watchlist-heading{border-bottom:1px solid rgba(148,163,184,.24)}
@@ -526,22 +527,24 @@
                     </div>
                     <div id="home-continue-rail" class="home-card-rail home-continue-rail">
                         <template x-for="entry in continueWatchingItems.slice(0,15)" :key="'continue-' + entry.kind + '-' + entry.item.id">
-                            <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="home-rail-card home-continue-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
-                                <div class="home-continue-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                    <img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image || entry.item.tmdbPoster" :srcset="getTmdbImageSrcSet(entry.item.poster || entry.item.image || entry.item.tmdbPoster)" sizes="(max-width: 380px) 46vw, (max-width: 639px) 44vw, (max-width: 767px) 28vw, (max-width: 1023px) 21vw, (max-width: 1279px) 18vw, 16vw" class="home-continue-image w-full h-full object-cover transition-transform duration-700">
+                            <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="home-rail-card home-continue-card group min-w-0 flex items-stretch gap-3 p-2.5 text-left rounded-2xl overflow-hidden border transition-all duration-300">
+                                <div class="home-continue-poster relative shrink-0 aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image || entry.item.tmdbPoster" :srcset="getTmdbImageSrcSet(entry.item.poster || entry.item.image || entry.item.tmdbPoster)" sizes="100px" class="home-continue-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                                     <div class="home-continue-shade absolute inset-0"></div>
-                                    <span class="home-continue-type absolute top-3 left-3 rounded-md bg-black/70 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5" x-text="entry.kind === 'series' ? 'DİZİ' : 'FİLM'"></span>
-                                    <div class="home-continue-overlay absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
-                                        <span class="text-white text-[10px] font-bold leading-snug line-clamp-2" x-text="entry.label"></span>
-                                        <span class="home-continue-play shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-play text-xs ml-0.5"></i></span>
-                                    </div>
+                                    <span class="home-continue-type absolute top-2 left-2 rounded-md bg-black/70 text-white text-[8px] font-black uppercase tracking-wider px-1.5 py-1" x-text="entry.kind === 'series' ? 'DİZİ' : 'FİLM'"></span>
+                                    <span class="home-continue-play absolute bottom-2 right-2 w-8 h-8 rounded-full flex items-center justify-center text-white"><i class="fa-solid fa-play text-[10px] ml-0.5"></i></span>
                                 </div>
-                                <div class="home-continue-copy p-3 space-y-2.5">
-                                    <h3 class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-1" x-text="entry.item.title"></h3>
-                                    <div class="home-continue-progress h-1.5 rounded-full overflow-hidden"><div class="home-continue-progress-fill h-full rounded-full" :style="'width:' + entry.percent + '%'"></div></div>
-                                    <div class="flex items-center justify-between gap-2 text-[9px] text-gray-500 dark:text-gray-400">
-                                        <span class="min-w-0 line-clamp-1" x-text="entry.kind === 'series' ? entry.watchedCount + (entry.total ? ' / ' + entry.total + ' bölüm' : ' bölüm izlendi') : Math.floor(entry.time / 60) + ' dk izlendi'"></span>
-                                        <span class="font-black text-rose-500 tabular-nums shrink-0" x-text="entry.percent + '%'"></span>
+                                <div class="home-continue-copy flex flex-1 min-w-0 flex-col justify-between gap-2">
+                                    <div class="min-w-0">
+                                        <h3 class="text-xs sm:text-sm font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="entry.item.title"></h3>
+                                        <p class="mt-1.5 text-[10px] leading-snug text-gray-500 dark:text-gray-400 line-clamp-2" x-text="entry.label"></p>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="home-continue-progress h-1.5 rounded-full overflow-hidden"><div class="home-continue-progress-fill h-full rounded-full" :style="'width:' + entry.percent + '%'"></div></div>
+                                        <div class="flex items-center justify-between gap-2 text-[9px] text-gray-500 dark:text-gray-400">
+                                            <span class="min-w-0 line-clamp-1" x-text="entry.kind === 'series' ? entry.watchedCount + (entry.total ? ' / ' + entry.total + ' bölüm' : ' bölüm izlendi') : Math.floor(entry.time / 60) + ' dk izlendi'"></span>
+                                            <span class="font-black text-rose-500 tabular-nums shrink-0" x-text="entry.percent + '%'"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </button>
