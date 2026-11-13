@@ -12,6 +12,8 @@
         }
 
         const personalizedRecommendationCache = new WeakMap();
+        const recommendationPlotTermsCache = new WeakMap();
+        const recommendationStopWords = new Set(['about','after','again','against','among','because','before','being','between','could','every','first','from','have','into','just','more','most','other','over','same','some','such','than','that','their','them','then','there','these','they','this','those','through','under','until','very','were','what','when','where','which','while','with','would','your','ancak','artık','bazen','belki','birçok','bütün','daha','diğer','eden','eder','edilir','etti','gibi','hem','her','hiç','için','ile','kadar','kendi','kez','ki','kim','nasıl','neden','nerede','olan','olarak','oldu','olduğu','olmak','olmuş','önce','sonra','şey','tüm','üzere','veya','yine']);
 
         function ultimateProApp() {
             return {
@@ -1548,10 +1550,13 @@
                         return [...new Set([...tmdb, ...fallback].map(normalize).filter(Boolean))];
                     };
                     const plotTerms = item => {
-                        const stop = new Set(['about','after','again','against','among','because','before','being','between','could','every','first','from','have','into','just','more','most','other','over','same','some','such','than','that','their','them','then','there','these','they','this','those','through','under','until','very','were','what','when','where','which','while','with','would','your','ancak','artık','bazen','belki','birçok','bütün','daha','diğer','eden','eder','edilir','etti','gibi','hem','her','hiç','için','ile','kadar','kendi','kez','ki','kim','nasıl','neden','nerede','olan','olarak','oldu','olduğu','olmak','olmuş','önce','sonra','şey','tüm','üzere','veya','yine']);
+                        const cachedTerms = recommendationPlotTermsCache.get(item);
+                        if (cachedTerms) return cachedTerms;
                         const source = item?.tmdbOverview || item?.desc || '';
-                        return [...new Set(String(source).toLocaleLowerCase('tr').match(/[a-z0-9ğüşöçıİ]{4,}/gi) || [])]
-                            .map(normalize).filter(word => word.length >= 4 && !stop.has(word)).slice(0, 40);
+                        const terms = [...new Set(String(source).toLocaleLowerCase('tr').match(/[a-z0-9ğüşöçıİ]{4,}/gi) || [])]
+                            .map(normalize).filter(word => word.length >= 4 && !recommendationStopWords.has(word)).slice(0, 40);
+                        recommendationPlotTermsCache.set(item, terms);
+                        return terms;
                     };
                     const history = new Map();
                     const recentBoost = timestamp => {
@@ -1625,6 +1630,10 @@
                             type, Math.max(1, Math.round(15 * count / Math.max(1, ranked.length)))
                         ]));
                         while (remaining.length && selected.length < 15) {
+                            const remainingTypes = new Set(remaining.map(candidate => candidate.item.type || 'unknown'));
+                            const typesNeedingRoom = new Set([...typeTargets.entries()]
+                                .filter(([type, target]) => (typeCounts.get(type) || 0) < target && remainingTypes.has(type))
+                                .map(([type]) => type));
                             let bestIndex = 0;
                             let bestAdjusted = -Infinity;
                             remaining.forEach((entry, index) => {
@@ -1632,10 +1641,7 @@
                                 const type = entry.item.type || 'unknown';
                                 const genreCount = genreCounts.get(genre) || 0;
                                 const typeCount = typeCounts.get(type) || 0;
-                                const otherTypeNeedsRoom = [...typeTargets.entries()].some(([otherType, target]) =>
-                                    otherType !== type && (typeCounts.get(otherType) || 0) < target &&
-                                    remaining.some(candidate => (candidate.item.type || 'unknown') === otherType)
-                                );
+                                const otherTypeNeedsRoom = [...typesNeedingRoom].some(otherType => otherType !== type);
                                 const typeBalancePenalty = typeCount >= (typeTargets.get(type) || 15) && otherTypeNeedsRoom ? 1000 : 0;
                                 const diversityPenalty = Math.max(0, genreCount - 1) * 1.7 + typeBalancePenalty;
                                 const adjusted = entry.score - diversityPenalty;
@@ -1660,7 +1666,7 @@
                             const negativeGenre = tokens(item.category || item.genre).reduce((sum, value) => sum + (prefs.negativeGenres.get(value) || 0), 0);
                             const negativeDirector = tokens(item.director).reduce((sum, value) => sum + (prefs.negativeDirectors.get(value) || 0), 0);
                             const negativeActor = people(item).reduce((sum, value) => sum + (prefs.negativeActors.get(value) || 0), 0);
-                            const negativeTheme = plotTerms(item).reduce((sum, value) => sum + (prefs.negativeThemes.get(value) || 0), 0);
+                            const negativeTheme = prefs.negativeThemes.size ? plotTerms(item).reduce((sum, value) => sum + (prefs.negativeThemes.get(value) || 0), 0) : 0;
                             const feedbackPenalty = negativeGenre * 0.85 + negativeDirector * 1.1 + Math.min(negativeActor, 3) * 0.3 + Math.min(negativeTheme, 4) * 0.12;
                             return {
                                 item,
@@ -1683,7 +1689,7 @@
                         if (directorMatches[0]) push(directorMatches[0] * 2.8, 'Sevdiğin yönetmen');
                         const actorMatches = people(item).map(actor => prefs.actors.get(actor) || 0).filter(Boolean).sort((a, b) => b - a);
                         if (actorMatches.length) push(actorMatches[0] * 2.1 + (actorMatches[1] || 0) * 0.45, 'Tanıdık oyuncu kadrosu');
-                        const themeMatches = plotTerms(item).map(value => prefs.themes.get(value) || 0).filter(Boolean).sort((a, b) => b - a);
+                        const themeMatches = prefs.themes.size ? plotTerms(item).map(value => prefs.themes.get(value) || 0).filter(Boolean).sort((a, b) => b - a) : [];
                         if (themeMatches.length) push(themeMatches.slice(0, 4).reduce((sum, value) => sum + value, 0) * 0.35, 'İzlediğin yapımlara benzer konu');
                         const countryMatches = tokens(item.country).map(value => prefs.countries.get(value) || 0).sort((a, b) => b - a);
                         if (countryMatches[0]) push(countryMatches[0] * 0.9, 'Tercih ettiğin ülke sineması');
@@ -1691,7 +1697,7 @@
                         const negativeGenre = candidateGenres.reduce((sum, value) => sum + (prefs.negativeGenres.get(value) || 0), 0);
                         const negativeDirector = tokens(item.director).reduce((sum, value) => sum + (prefs.negativeDirectors.get(value) || 0), 0);
                         const negativeActor = people(item).reduce((sum, value) => sum + (prefs.negativeActors.get(value) || 0), 0);
-                        const negativeTheme = plotTerms(item).reduce((sum, value) => sum + (prefs.negativeThemes.get(value) || 0), 0);
+                        const negativeTheme = prefs.negativeThemes.size ? plotTerms(item).reduce((sum, value) => sum + (prefs.negativeThemes.get(value) || 0), 0) : 0;
                         const feedbackPenalty = negativeGenre * 0.85 + negativeDirector * 1.1 + Math.min(negativeActor, 3) * 0.3 + Math.min(negativeTheme, 4) * 0.12;
                         const rating = Math.max(0, Number.parseFloat(item.rating) || 0);
                         if (rating > 6) push((rating - 6) * 0.42, 'Yüksek puanlı yapım');
