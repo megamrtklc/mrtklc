@@ -965,38 +965,25 @@ try {
           try { descriptor.set.call(this, value); } catch (_) {}
         }
       });
-      const waitForRestore = async profileId => {
-        app.switchProfile(profileId);
+      try {
+        localStorage.removeItem('cine_movie_progress_v1');
+        localStorage.removeItem('perde_player_progress_v3');
+        app.saveMovieProgress(item.id, { time: 75, duration: 2400, savedAt: Date.now() });
         assignedTimes.length = 0;
         app.openWatchPage(item, false);
         await new Promise(resolve => setTimeout(resolve, 300));
         return {
           assignedTime: assignedTimes.length ? assignedTimes[assignedTimes.length - 1] : null,
-          playerPresent: !!document.getElementById('customVideoPlayer')
+          playerPresent: !!document.getElementById('customVideoPlayer'),
+          savedProgress: app.getMovieProgress(item.id)?.time ?? null
         };
-      };
-      try {
-        app.switchProfile('pro_2');
-        app.saveMovieProgress(item.id, { time: 75, duration: 2400, savedAt: Date.now() });
-        app.switchProfile('pro_1');
-        const mainProgress = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}');
-        delete mainProgress.pro_1?.[item.id];
-        localStorage.setItem('perde_profile_player_progress_v1', JSON.stringify(mainProgress));
-        localStorage.removeItem('perde_player_progress_v3');
-        const mainProfile = await waitForRestore('pro_1');
-        const childProfile = await waitForRestore('pro_2');
-        return { mainProfile, childProfile };
       } finally {
         Object.defineProperty(HTMLMediaElement.prototype, 'currentTime', descriptor);
-        app.switchProfile('pro_1');
       }
     });
-    assert.ok(restoredTime.mainProfile.playerPresent, 'Ana Profilde video oynatıcı bulunamadı');
-    assert.notEqual(restoredTime.mainProfile.assignedTime, 75,
-      'Çocuk profilinin kayıtlı saniyesi Ana Profil oynatıcısına sızdı');
-    assert.ok(restoredTime.childProfile.playerPresent, 'Çocuk Profilde video oynatıcı bulunamadı');
-    assert.equal(restoredTime.childProfile.assignedTime, 75,
-      'Çocuk profile dönüldüğünde oynatıcı kayıtlı saniyeye dönmedi');
+    assert.ok(restoredTime.playerPresent, 'Video oynatıcı bulunamadı');
+    assert.equal(restoredTime.savedProgress, 75, 'Tek kütüphaneye kaydedilen oynatma ilerlemesi geri yüklenmedi');
+    assert.equal(restoredTime.assignedTime, 75, 'Oynatıcı kaydedilen saniyeden devam etmedi');
   });
 
   await check('Detay sayfası mobil, tablet ve masaüstünde taşma yapmıyor', async () => {
@@ -1095,20 +1082,17 @@ try {
     await dialog.waitFor({ state: 'hidden' });
   });
 
-  await check('İzleme listesine ekleme ve profil izolasyonu çalışıyor', async () => {
+  await check('İzleme listesine ekleme ve tek liste kalıcılığı çalışıyor', async () => {
     const saveButton = page.locator('button').filter({ has: page.locator('span[x-text*="isInWatchlist"]') }).first();
     await saveButton.waitFor({ state: 'visible' });
     await saveButton.click();
     await page.waitForFunction(() => window.Alpine.$data(document.documentElement).isInWatchlist(window.Alpine.$data(document.documentElement).selectedItem));
-
-    await selectProfile('pro_2');
+    await page.waitForFunction(expectedId => {
+      const list = JSON.parse(localStorage.getItem('cine_watchlist_v1') || '[]');
+      return Array.isArray(list) && list.some(item => String(item.id) === String(expectedId));
+    }, adaletId);
     await page.locator('header nav a').filter({ hasText: 'İzleme Listem' }).first().click();
     await page.waitForURL(/#\/watchlist$/);
-    await page.getByText('İzleme Listesi Boş', { exact: true }).waitFor({ state: 'visible' });
-
-    await selectProfile('pro_1');
-    await page.waitForFunction(expectedId => window.Alpine.$data(document.documentElement).watchlist.some(item => String(item.id) === String(expectedId)), adaletId);
-    await page.locator('header nav a').filter({ hasText: 'İzleme Listem' }).first().click();
     await page.getByRole('heading', { name: 'Ana Profil - İzleme Listem' }).waitFor({ state: 'visible' });
     await page.getByText('Adalet 2', { exact: true }).waitFor({ state: 'visible' });
   });
