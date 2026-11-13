@@ -525,25 +525,17 @@
                     </div>
                 </div>
 
-                <!-- Profil menüsü -->
+                <!-- Tek profil menüsü -->
                 <div class="relative" x-data="{ openProfileMenu: false }">
-                    <button type="button" @click="openProfileMenu = !openProfileMenu" :aria-expanded="openProfileMenu.toString()" aria-label="Profil menüsünü aç" class="cineverse-profile-trigger">
-                        <img alt="Aktif profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="cineverse-profile-avatar">
+                    <button type="button" @click="openProfileMenu = !openProfileMenu" :aria-expanded="openProfileMenu.toString()" aria-label="Hesap menüsünü aç" class="cineverse-profile-trigger">
+                        <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="cineverse-profile-avatar">
                         <i :class="openProfileMenu ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'" class="text-[10px] opacity-70" aria-hidden="true"></i>
                     </button>
                     <div x-show="openProfileMenu" x-transition.origin.top.right @click.away="openProfileMenu = false" class="cineverse-header-dropdown cineverse-profile-dropdown absolute right-0 mt-2 w-60 rounded-xl border shadow-2xl py-2 z-50">
                         <div class="px-4 pt-2 pb-3">
-                            <p class="text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Aktif profil</p>
+                            <p class="text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Hesap</p>
                             <p class="mt-1 text-sm font-extrabold" x-text="currentProfile.name"></p>
                         </div>
-                        <div class="cineverse-dropdown-divider"></div>
-                        <template x-for="pro in profiles" :key="'header-profile-' + pro.id">
-                            <button type="button" @click="switchProfile(pro.id); openProfileMenu = false" class="cineverse-profile-option">
-                                <img :src="pro.avatar" :alt="pro.name" @error="handleImageError($event)" loading="lazy" decoding="async">
-                                <span x-text="pro.name"></span>
-                                <i x-show="currentProfileId === pro.id" class="fa-solid fa-check ml-auto text-rose-500"></i>
-                            </button>
-                        </template>
                         <div class="cineverse-dropdown-divider my-2"></div>
                         <a href="admin/" class="cineverse-admin-shortcut">
                             <span class="cineverse-admin-icon"><i class="fa-solid fa-shield-halved"></i></span>
