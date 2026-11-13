@@ -39,7 +39,7 @@
   function navigate(view){
     state.view=view;
     $$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
-    $('.nav-link').forEach(el=>{const active=el.dataset.view===view;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
+    $$('.nav-link').forEach(el=>{const active=el.dataset.view===view;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
     const active=$('.nav-link[data-view="'+view+'"]');
     $('#crumb-current').textContent=active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış';
     $('#sidebar').classList.remove('open');$('#mobile-menu')?.setAttribute('aria-expanded','false');$('#mobile-menu')?.setAttribute('aria-label','Menüyü aç');
@@ -669,11 +669,11 @@
       $$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
     });
   });
-  $('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{
+  $$('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{
     watchDemoType=button.dataset.demoType;
     renderWatchLayout();
   }));
-  $('[data-demo-device]').forEach(button=>button.addEventListener('click',()=>{
+  $$('[data-demo-device]').forEach(button=>button.addEventListener('click',()=>{
     watchDemoViewport=button.dataset.demoDevice;
     renderWatchLayout();
   }));
