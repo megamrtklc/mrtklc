@@ -423,6 +423,35 @@
         @media(prefers-reduced-motion:reduce){.cineverse-search-trigger,.cineverse-search-result,.cineverse-search-close{transition:none}}
     </style>
 
+ 
+    <style id="cineverse-header-controls">
+        .cineverse-theme-trigger{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border:1px solid rgba(148,163,184,.32);border-radius:12px;background:rgba(127,127,127,.07);color:inherit;font-size:16px;transition:background .2s,border-color .2s,transform .2s}
+        .cineverse-theme-trigger:hover,.cineverse-profile-trigger:hover{border-color:rgba(244,63,94,.55);background:rgba(244,63,94,.1)}
+        .home-hero-overlay .cineverse-theme-trigger{border-color:rgba(255,255,255,.28);background:rgba(0,0,0,.22);color:#fff}
+        .cineverse-profile-trigger{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-width:58px;height:44px;padding:4px 8px;border:1px solid rgba(148,163,184,.3);border-radius:13px;background:rgba(127,127,127,.06);color:inherit;transition:background .2s,border-color .2s}
+        .home-hero-overlay .cineverse-profile-trigger{border-color:rgba(255,255,255,.26);background:rgba(0,0,0,.2);color:#fff}
+        .cineverse-profile-avatar{display:block;width:32px;height:32px;border-radius:9px;object-fit:cover;border:1px solid rgba(255,255,255,.22);box-shadow:0 2px 7px rgba(0,0,0,.2)}
+        .cineverse-header-dropdown{color:#1f2937;background:#fff;border-color:#e5e7eb;box-shadow:0 18px 48px rgba(15,23,42,.2)}
+        .cineverse-dropdown-item,.cineverse-profile-option{display:flex;align-items:center;gap:11px;width:100%;min-height:40px;padding:9px 15px;text-align:left;font-size:12px;font-weight:700;color:#374151;transition:background .16s}
+        .cineverse-dropdown-item:hover,.cineverse-profile-option:hover{background:#f3f4f6}
+        .cineverse-dropdown-divider{height:1px;margin:5px 0;background:#e5e7eb}
+        .cineverse-profile-option img{width:27px;height:27px;border-radius:8px;object-fit:cover}
+        .cineverse-admin-shortcut{display:flex;align-items:center;gap:11px;margin:0 8px;padding:10px 9px;border-radius:10px;color:#374151;transition:background .16s}
+        .cineverse-admin-shortcut:hover{background:#f3f4f6}
+        .cineverse-admin-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:rgba(225,29,72,.1);color:#e11d48}
+        html.dark .cineverse-header-dropdown{color:#e5e7eb;background:#161922;border-color:#374151}
+        html.dark .cineverse-dropdown-item,html.dark .cineverse-profile-option,html.dark .cineverse-admin-shortcut{color:#e5e7eb}
+        html.dark .cineverse-dropdown-item:hover,html.dark .cineverse-profile-option:hover,html.dark .cineverse-admin-shortcut:hover{background:#252b38}
+        html.dark .cineverse-dropdown-divider{background:#374151}
+        @media(max-width:639px){
+            .cineverse-theme-trigger{width:38px;height:38px;flex-basis:38px}
+            .cineverse-profile-trigger{min-width:52px;height:42px;gap:6px;padding:4px 6px;border-radius:12px}
+            .cineverse-profile-avatar{width:30px;height:30px;border-radius:8px}
+            .cineverse-profile-dropdown{width:min(240px,calc(100vw - 20px))}
+        }
+        @media(prefers-reduced-motion:reduce){.cineverse-theme-trigger,.cineverse-profile-trigger,.cineverse-dropdown-item,.cineverse-profile-option,.cineverse-admin-shortcut{transition:none}}
+    </style>
+
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
@@ -461,38 +490,51 @@
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 </button>
 
-                <!-- 3'LÜ TEMA SEÇİCİ DROPDOWN -->
+                <!-- İkon tabanlı tema seçici -->
                 <div class="relative" x-data="{ openThemeMenu: false }">
-                    <button @click="openThemeMenu = !openThemeMenu" :aria-label="'Tema seçimi: ' + getThemeName()" :class="getButtonClass()" class="px-2 sm:px-3 h-9 rounded-lg border flex items-center space-x-2 text-xs font-bold transition-colors shadow-sm">
-                        <i :class="getThemeIcon()"></i>
-                        <span class="hidden 2xl:inline" x-text="getThemeName()"></span>
-                        <i class="fa-solid fa-chevron-down text-[10px] opacity-70"></i>
+                    <button type="button" @click="openThemeMenu = !openThemeMenu" :aria-expanded="openThemeMenu.toString()" :aria-label="'Tema: ' + getThemeName()" :title="getThemeName()" :class="getButtonClass()" class="cineverse-theme-trigger">
+                        <i :class="getThemeIcon()" aria-hidden="true"></i>
                     </button>
-
-                    <div x-show="openThemeMenu" @click.away="openThemeMenu = false" class="absolute right-0 mt-2 w-48 bg-white dark:bg-[#161922] border border-gray-200 dark:border-gray-800 rounded-xl shadow-xl py-2 z-50 space-y-1">
-                        <button @click="setTheme('ivory'); openThemeMenu = false;" class="w-full text-left px-4 py-2 text-xs font-semibold flex items-center space-x-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200">
-                            <i class="fa-solid fa-sun text-amber-500"></i>
-                            <span>Fil Dişi (Sıcak Krem)</span>
+                    <div x-show="openThemeMenu" x-transition.origin.top.right @click.away="openThemeMenu = false" class="cineverse-header-dropdown absolute right-0 mt-2 w-52 rounded-xl border shadow-2xl py-2 z-50">
+                        <p class="px-4 pb-2 text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Görünüm teması</p>
+                        <button @click="setTheme('ivory'); openThemeMenu = false;" class="cineverse-dropdown-item">
+                            <i class="fa-solid fa-sun text-amber-500"></i><span>Fil Dişi</span><i x-show="theme === 'ivory'" class="fa-solid fa-check ml-auto text-rose-500"></i>
                         </button>
-                        <button @click="setTheme('slate'); openThemeMenu = false;" class="w-full text-left px-4 py-2 text-xs font-semibold flex items-center space-x-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200">
-                            <i class="fa-solid fa-circle-half-stroke text-sky-500"></i>
-                            <span>Modern Gri (Slate)</span>
+                        <button @click="setTheme('slate'); openThemeMenu = false;" class="cineverse-dropdown-item">
+                            <i class="fa-solid fa-circle-half-stroke text-sky-500"></i><span>Modern Gri</span><i x-show="theme === 'slate'" class="fa-solid fa-check ml-auto text-rose-500"></i>
                         </button>
-                        <button @click="setTheme('dark'); openThemeMenu = false;" class="w-full text-left px-4 py-2 text-xs font-semibold flex items-center space-x-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200">
-                            <i class="fa-solid fa-moon text-indigo-400"></i>
-                            <span>Karanlık Mod</span>
+                        <button @click="setTheme('dark'); openThemeMenu = false;" class="cineverse-dropdown-item">
+                            <i class="fa-solid fa-moon text-indigo-400"></i><span>Karanlık Mod</span><i x-show="theme === 'dark'" class="fa-solid fa-check ml-auto text-rose-500"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Profil Seçici -->
-                <div :class="getCardClass()" class="flex items-center space-x-1 sm:space-x-2 border rounded-lg px-1.5 sm:px-2.5 py-1">
-                    <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="hidden sm:block w-6 h-6 rounded-full object-cover">
-                    <select x-model="currentProfileId" aria-label="Aktif profili seç" @change="switchProfile($event.target.value)" class="bg-transparent text-xs font-bold text-gray-900 dark:text-white focus:outline-none cursor-pointer max-w-[76px] 2xl:max-w-none">
-                        <template x-for="pro in profiles" :key="pro.id">
-                            <option :value="pro.id" x-text="pro.name" class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"></option>
+                <!-- Profil menüsü -->
+                <div class="relative" x-data="{ openProfileMenu: false }">
+                    <button type="button" @click="openProfileMenu = !openProfileMenu" :aria-expanded="openProfileMenu.toString()" aria-label="Profil menüsünü aç" class="cineverse-profile-trigger">
+                        <img alt="Aktif profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="cineverse-profile-avatar">
+                        <i :class="openProfileMenu ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'" class="text-[10px] opacity-70" aria-hidden="true"></i>
+                    </button>
+                    <div x-show="openProfileMenu" x-transition.origin.top.right @click.away="openProfileMenu = false" class="cineverse-header-dropdown cineverse-profile-dropdown absolute right-0 mt-2 w-60 rounded-xl border shadow-2xl py-2 z-50">
+                        <div class="px-4 pt-2 pb-3">
+                            <p class="text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Aktif profil</p>
+                            <p class="mt-1 text-sm font-extrabold" x-text="currentProfile.name"></p>
+                        </div>
+                        <div class="cineverse-dropdown-divider"></div>
+                        <template x-for="pro in profiles" :key="'header-profile-' + pro.id">
+                            <button type="button" @click="switchProfile(pro.id); openProfileMenu = false" class="cineverse-profile-option">
+                                <img :src="pro.avatar" :alt="pro.name" @error="handleImageError($event)" loading="lazy" decoding="async">
+                                <span x-text="pro.name"></span>
+                                <i x-show="currentProfileId === pro.id" class="fa-solid fa-check ml-auto text-rose-500"></i>
+                            </button>
                         </template>
-                    </select>
+                        <div class="cineverse-dropdown-divider my-2"></div>
+                        <a href="admin/" class="cineverse-admin-shortcut">
+                            <span class="cineverse-admin-icon"><i class="fa-solid fa-shield-halved"></i></span>
+                            <span class="flex-1"><strong class="block text-xs">Admin Paneli</strong><small class="block mt-0.5 text-[10px] opacity-60">Yönetim merkezini aç</small></span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-55"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
