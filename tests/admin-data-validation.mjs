@@ -43,6 +43,16 @@ const invalidCases = [
 
 for (const [name, mutate] of invalidCases) {
   const candidate = structuredClone(source);
+  if (!Array.isArray(candidate.collections)) candidate.collections = [];
+  if (candidate.collections.length === 0) {
+    candidate.collections.push({
+      id: 'validation-fixture',
+      title: 'Doğrulama koleksiyonu',
+      description: 'Test verisi',
+      active: true,
+      items: candidate.catalog.slice(0, 2).map(item => String(item.id))
+    });
+  }
   mutate(candidate);
   assert.throws(() => validateCatalogData(candidate), undefined, name + ' reddedilmeli');
 }
