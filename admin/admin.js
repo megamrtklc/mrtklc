@@ -42,7 +42,7 @@
     $$('.nav-link').forEach(el=>{const active=el.dataset.view===view;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
     const active=$('.nav-link[data-view="'+view+'"]');
     $('#crumb-current').textContent=active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış';
-    $('#sidebar').classList.remove('open');$('#mobile-menu')?.setAttribute('aria-expanded','false');$('#mobile-menu')?.setAttribute('aria-label','Menüyü aç');
+    setMobileSidebar(false);
     if(view==='catalog')renderCatalog();
     if(view==='collections')renderCollections();
     if(view==='homepage')renderHomepage();
@@ -551,7 +551,11 @@
   // Tema seçici kaldırıldı: yeni yönetim arayüzü tek ve tutarlı bir tasarım sistemidir.
   $$('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
   $$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
-  $('#mobile-menu').addEventListener('click',()=>{const open=$('#sidebar').classList.toggle('open');$('#mobile-menu').setAttribute('aria-expanded',String(open));$('#mobile-menu').setAttribute('aria-label',open?'Menüyü kapat':'Menüyü aç');});
+  function setMobileSidebar(open){const sidebar=$('#sidebar'),toggle=$('#mobile-menu'),backdrop=$('#sidebar-backdrop');sidebar.classList.toggle('open',!!open);backdrop?.classList.toggle('visible',!!open);toggle?.setAttribute('aria-expanded',String(!!open));toggle?.setAttribute('aria-label',open?'Menüyü kapat':'Menüyü aç');document.body.classList.toggle('sidebar-menu-open',!!open);}
+  $('#mobile-menu').addEventListener('click',()=>setMobileSidebar(!$('#sidebar').classList.contains('open')));
+  $('#sidebar-close')?.addEventListener('click',()=>setMobileSidebar(false));
+  $('#sidebar-backdrop')?.addEventListener('click',()=>setMobileSidebar(false));
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&$('#sidebar').classList.contains('open'))setMobileSidebar(false);});
   const shell=$('.app-shell');
   const sidebarToggle=$('#sidebar-toggle');
   const setSidebarCollapsed=collapsed=>{
