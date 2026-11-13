@@ -352,6 +352,31 @@
             body:has(#home-page) > header.home-hero-overlay .border.rounded-lg { border-color: rgba(255,255,255,.24) !important; background-color: rgba(0,0,0,.22) !important; }
         }
     </style>
+
+    <style id="cineverse-dropdown-contrast-fix">
+        /* Header açılır panelleri: manşet üzerindeki beyaz header metin renginden etkilenmesin. */
+        header [x-show="openThemeMenu"],
+        header [x-show="mobileMenuOpen"] { color: #1f2937; background-color: #ffffff; border-color: #e5e7eb; }
+        header [x-show="openThemeMenu"] button { color: #1f2937 !important; }
+        header [x-show="openThemeMenu"] button:hover,
+        header [x-show="mobileMenuOpen"] nav a:hover { background-color: #f3f4f6; }
+        header [x-show="mobileMenuOpen"] nav { color: #374151 !important; }
+        header [x-show="mobileMenuOpen"] nav a { color: #374151 !important; }
+        header [x-show="mobileMenuOpen"] input { color: #111827 !important; background-color: #ffffff !important; border-color: #d1d5db !important; }
+        header [x-show="mobileMenuOpen"] input::placeholder { color: #6b7280 !important; }
+        html.dark header [x-show="openThemeMenu"],
+        html.dark header [x-show="mobileMenuOpen"] { color: #e5e7eb; background-color: #161922; border-color: #374151; }
+        html.dark header [x-show="openThemeMenu"] button,
+        html.dark header [x-show="mobileMenuOpen"] nav,
+        html.dark header [x-show="mobileMenuOpen"] nav a { color: #e5e7eb !important; }
+        html.dark header [x-show="openThemeMenu"] button:hover,
+        html.dark header [x-show="mobileMenuOpen"] nav a:hover { background-color: #252b38; }
+        html.dark header [x-show="mobileMenuOpen"] input { color: #f3f4f6 !important; background-color: #0f1115 !important; border-color: #374151 !important; }
+        html.dark header [x-show="mobileMenuOpen"] input::placeholder { color: #9ca3af !important; }
+        /* Native select açılır seçenekleri açık temada koyu, koyu temada açık metin kullanır. */
+        html:not(.dark) header select, html:not(.dark) header select option { color: #1f2937; background-color: #ffffff; }
+        html.dark header select, html.dark header select option { color: #f3f4f6; background-color: #161922; }
+    </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
