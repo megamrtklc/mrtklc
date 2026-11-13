@@ -647,6 +647,20 @@ try {
 
         for (const selector of ['#home-catalog-rail', '#home-personalized-rail']) {
           const rail = touchPage.locator(selector);
+          // 901px üzerindeki tablet yatay/masaüstü düzeninde kişiselleştirilmiş
+          // öneriler bilinçli olarak dikey grid olur; burada yatay swipe beklenmez.
+          if (selector === '#home-personalized-rail' && viewport.width > 900) {
+            const layout = await rail.evaluate(element => ({
+              display: getComputedStyle(element).display,
+              overflowX: getComputedStyle(element).overflowX,
+              maxScroll: element.scrollWidth - element.clientWidth
+            }));
+            assert.equal(layout.display, 'grid',
+              `${viewport.label}: kişiselleştirilmiş öneriler masaüstü düzeninde grid olmalı`);
+            assert.ok(layout.maxScroll <= 24,
+              `${viewport.label}: dikey öneri düzeninde beklenmeyen yatay taşma var`);
+            continue;
+          }
           await rail.evaluate(element =>
             element.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' })
           );
