@@ -513,21 +513,32 @@
       state.catalog=state.data.catalog.filter(x=>x&&typeof x==='object');
       renderWelcomePosters();
       $('.environment').innerHTML='<i></i> KORUMALI YÖNETİM';
-      const sessionResponse=await fetchWithTimeout('/api/session',{cache:'no-store',credentials:'same-origin'},10000);
-      if(!sessionResponse.ok)throw new Error('Yönetici oturumu doğrulanamadı.');
-      const session=await sessionResponse.json();
-      $('.notice b').textContent='Yönetim bağlantısı aktif';
-      $('.notice p').textContent=payload.readOnlyReason||('Yönetici oturumu etkin: '+(session.email||'Yetkili hesap')+'. Değişiklikler güvenli API üzerinden GitHub kataloğuna kaydedilir.');
-      $('.notice-tag').textContent='CONNECTED';
-      const sideStatus=$('.sidebar-status small');if(sideStatus)sideStatus.textContent='Bağlantı aktif';
-      const sidePulse=$('.status-pulse');if(sidePulse)sidePulse.style.background='var(--green)';
+      // Render the catalog immediately after the data API succeeds. A secondary
+      // session/profile endpoint must never prevent the catalog from appearing.
       $('#health-catalog').textContent='Bağlandı';$('#health-json').textContent='Geçerli';
-      $('#health-auth').textContent='Aktif';$('#health-api').textContent='Aktif';
       $('#data-version').textContent=String(state.data.version??'Belirtilmemiş');
       $('#add-content').disabled=!state.apiEnabled;$('#catalog-add').disabled=!state.apiEnabled;$('#collection-add').disabled=!state.apiEnabled;
-      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();renderAdminProfile();renderWatchLayout();loadProfilePhoto();
-      $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();renderAdminProfile();renderWatchLayout();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
+      $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+      $('.notice b').textContent='Katalog verileri yüklendi';
+      $('.notice p').textContent=payload.readOnlyReason||'Katalog bağlantısı aktif. Yönetim işlemleri güvenli API üzerinden yürütülüyor.';
+      $('.notice-tag').textContent=state.apiEnabled?'CONNECTED':'READ ONLY';
+      const sideStatus=$('.sidebar-status small');if(sideStatus)sideStatus.textContent='Katalog yüklendi';
+      const sidePulse=$('.status-pulse');if(sidePulse)sidePulse.style.background='var(--green)';
+      $('#health-api').textContent='Aktif';
+      // Session status is supplemental: report a problem without hiding valid catalog data.
+      try{
+        const sessionResponse=await fetchWithTimeout('/api/session',{cache:'no-store',credentials:'same-origin'},10000);
+        if(!sessionResponse.ok)throw new Error('Oturum durumu doğrulanamadı ('+sessionResponse.status+').');
+        const session=await sessionResponse.json();
+        $('#health-auth').textContent='Aktif';
+        if(!payload.readOnlyReason)$('.notice p').textContent='Yönetici oturumu etkin: '+(session.email||'Yetkili hesap')+'. Değişiklikler güvenli API üzerinden GitHub kataloğuna kaydedilir.';
+      }catch(sessionError){
+        $('#health-auth').textContent='Kontrol edilemedi';
+        console.warn('Oturum durumu kontrol edilemedi; katalog görünür durumda bırakıldı:',sessionError);
+      }
+      loadProfilePhoto();
     }catch(error){
       showStartupError(error.message||'Katalog yüklenemedi.');
       console.error('Admin yükleme hatası:',error);
