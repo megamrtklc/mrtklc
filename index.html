@@ -851,7 +851,7 @@
                         <!-- Custom Video Player -->
                         <div data-watch-card="player" :style="'order: ' + getWatchCardOrder('player')" :class="cinemaMode ? 'fixed z-[100] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(94vw,1400px)] max-h-[88vh] rounded-xl border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.8)]' : 'relative w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl'" class="aspect-video overflow-hidden bg-black group select-none transition-all duration-300" @mouseenter="showPlayerControls()" @mousemove="showPlayerControls()" @mouseleave="hidePlayerControlsOnLeave()">
                             <video id="customVideoPlayer"
-                                   x-show="isDirectVideoUrl(selectedItem.watchUrl)"
+                                   x-show="isDirectVideoUrl(getPlaybackUrl())"
                                    class="w-full h-full object-contain"
                                    :src="getPlaybackUrl()"
                                    :poster="selectedItem.backdrop"
