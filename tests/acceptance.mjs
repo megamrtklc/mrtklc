@@ -47,6 +47,14 @@ async function check(name, fn) {
   }
 }
 
+async function selectProfile(profileId) {
+  const name = profileId === 'pro_2' ? 'Çocuk Profili' : 'Ana Profil';
+  const trigger = page.locator('header .cineverse-profile-trigger');
+  await trigger.click();
+  await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name }).click();
+  await page.waitForFunction(expected => JSON.parse(localStorage.getItem('cine_active_profile') || 'null') === expected, profileId);
+}
+
 try {
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   try {
@@ -769,53 +777,42 @@ try {
     }
   });
 
-  await check('Üç tema arasında geçiş yapılabiliyor', async () => {
+  await check('İkon tabanlı tema menüsü üç tema arasında geçiş yapabiliyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
-    const themeButton = page.locator('header button').filter({ hasText: /Fil Dişi|Modern Gri|Karanlık Mod/ }).first();
+    const themeButton = page.locator('header .cineverse-theme-trigger');
     await themeButton.click();
+    const themeMenu = page.locator('header .cineverse-header-dropdown').first();
+    await themeMenu.waitFor({ state: 'visible' });
+    assert.equal(await themeMenu.locator('.cineverse-dropdown-item').count(), 3, 'Tema listesinde üç seçenek görünmeli');
+    const menuTextColor = await themeMenu.locator('.cineverse-dropdown-item').first().evaluate(element => getComputedStyle(element).color);
+    assert.notEqual(menuTextColor, 'rgb(255, 255, 255)', 'Açık tema açılır menüsündeki metin okunabilir olmalı');
     await page.getByRole('button', { name: 'Fil Dişi (Sıcak Krem)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-ivory'));
-    const ivoryColors = await page.evaluate(() => {
-      const select = document.querySelector('header select');
-      const surface = select?.closest('div.rounded-lg');
-      if (!select || !surface) return null;
-      const box = getComputedStyle(surface);
-      return { background: box.backgroundColor, text: getComputedStyle(select).color, border: box.borderTopColor };
-    });
-    assert.ok(ivoryColors, 'Fil Dişi temasında gerçek profil kartı bulunamadı');
-    assert.deepEqual(ivoryColors, {
-      background: 'rgb(255, 253, 249)',
-      text: 'rgb(41, 38, 31)',
-      border: 'rgb(235, 231, 221)'
-    }, 'Fil Dişi temasında kutu, metin veya kenarlık kontrastı uygulanmadı');
-
+    assert.match(await themeButton.locator('i').getAttribute('class'), /fa-sun/, 'Fil Dişi seçiliyken güneş ikonu görünmeli');
     await themeButton.click();
     await page.getByRole('button', { name: 'Modern Gri (Slate)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-slate'));
-    const slateColors = await page.evaluate(() => {
-      const select = document.querySelector('header select');
-      const surface = select?.closest('div.rounded-lg');
-      if (!select || !surface) return null;
-      const box = getComputedStyle(surface);
-      return { background: box.backgroundColor, text: getComputedStyle(select).color, border: box.borderTopColor };
-    });
-    assert.ok(slateColors, 'Modern Gri temasında gerçek profil kartı bulunamadı');
-    assert.deepEqual(slateColors, {
-      background: 'rgb(255, 255, 255)',
-      text: 'rgb(32, 36, 43)',
-      border: 'rgb(216, 219, 226)'
-    }, 'Modern Gri temasında kutu, metin veya kenarlık kontrastı uygulanmadı');
-
+    assert.match(await themeButton.locator('i').getAttribute('class'), /fa-circle-half-stroke/, 'Modern Gri seçiliyken ilgili ikon görünmeli');
     await themeButton.click();
     await page.getByRole('button', { name: 'Karanlık Mod' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('dark'));
+    assert.match(await themeButton.locator('i').getAttribute('class'), /fa-moon/, 'Karanlık Mod seçiliyken ay ikonu görünmeli');
   });
 
-  await check('Profil seçimi kalıcı kaydediliyor', async () => {
-    await page.locator('header select').selectOption('pro_2');
+  await check('Profil menüsü profil değiştirebiliyor ve Admin Paneli kısayolu sunuyor', async () => {
+    const profileButton = page.locator('header .cineverse-profile-trigger');
+    assert.ok(await profileButton.locator('img.cineverse-profile-avatar').isVisible(), 'Kare profil görseli görünmeli');
+    const avatarRadius = await profileButton.locator('img').evaluate(element => getComputedStyle(element).borderRadius);
+    assert.notEqual(avatarRadius, '50%', 'Profil görseli daire değil, hafif yuvarlatılmış kare olmalı');
+    await profileButton.click();
+    const profileMenu = page.locator('header .cineverse-profile-dropdown');
+    await profileMenu.waitFor({ state: 'visible' });
+    const adminLink = profileMenu.getByRole('link', { name: /Admin Paneli/ });
+    assert.ok(await adminLink.isVisible(), 'Admin Paneli kısayolu görünmeli');
+    assert.equal(await adminLink.getAttribute('href'), 'admin/', 'Admin Paneli doğru adrese gitmeli');
+    await profileMenu.getByRole('button', { name: 'Çocuk Profili' }).click();
     await page.waitForFunction(() => JSON.parse(localStorage.getItem('cine_active_profile') || 'null') === 'pro_2');
-    await page.locator('header select').selectOption('pro_1');
-    await page.waitForFunction(() => JSON.parse(localStorage.getItem('cine_active_profile') || 'null') === 'pro_1');
+    await selectProfile('pro_1');
   });
 
   await check('Dizi bölüm takibi ve profil bazlı izleme ilerlemesi', async () => {
@@ -916,7 +913,7 @@ try {
     assert.equal(episodeNavigation.totalPages, 2, 'Bölüm sayfalaması toplam sayfa sayısını yanlış hesapladı');
     assert.equal(episodeNavigation.firstPageCount, 8, 'İlk bölüm sayfasında 8 bölüm gösterilmiyor');
     assert.deepEqual(episodeNavigation.secondPageEpisodes, [9], 'İkinci bölüm sayfası doğru bölümü göstermiyor');
-    await page.locator('header select').selectOption('pro_2');
+    await selectProfile('pro_2');
     const isolated = await page.evaluate(() => window.Alpine.$data(document.documentElement).isEpisodeWatched(1, 1));
     assert.equal(isolated, false, 'Çocuk Profili Ana Profil bölüm takibini devraldı');
     await page.evaluate(() => {
@@ -977,7 +974,7 @@ try {
     assert.ok(Math.abs(timeupdateProgress.percentage - (125 / 2400 * 100)) < 0.001, 'Oynatma yüzdesi doğru hesaplanmadı');
     assert.equal(timeupdateProgress.currentTimeFormatted, '02:05', 'Geçerli oynatma zamanı doğru biçimlendirilmedi');
     assert.equal(timeupdateProgress.durationFormatted, '40:00', 'Video süresi doğru biçimlendirilmedi');
-    await page.locator('header select').selectOption('pro_1');
+    await selectProfile('pro_1');
   });
 
   await check('İstatistikler sayfası açılıyor', async () => {
