@@ -428,13 +428,17 @@ try {
         const state = await page.locator(selector).evaluate(element => {
           const maxScroll = element.scrollWidth - element.clientWidth;
           const overflowX = getComputedStyle(element).overflowX;
+          const originalScrollBehavior = element.style.scrollBehavior;
+          element.style.scrollBehavior = 'auto';
           element.scrollLeft = 0;
           const start = element.scrollLeft;
           element.scrollLeft = Math.min(220, Math.max(0, maxScroll));
+          const end = element.scrollLeft;
+          element.style.scrollBehavior = originalScrollBehavior;
           return {
             maxScroll,
             start,
-            end: element.scrollLeft,
+            end,
             overflowX,
             cardCount: element.children.length
           };
