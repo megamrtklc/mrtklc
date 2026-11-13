@@ -774,6 +774,80 @@ try {
     assert.match(await themeButton.locator('i').getAttribute('class'), /fa-moon/, 'Karanlık Mod seçiliyken ay ikonu görünmeli');
   });
 
+  await check('Eski profil kayıtları tek kütüphaneye taşınıyor ve çocuk profili verileri siliniyor', async () => {
+    const keys = [
+      'perde_profile_player_progress_v1', 'cine_movie_progress_v1',
+      'cine_episode_tracking_v1', 'cine_profile_watchlists', 'cine_watchlist_v1',
+      'cine_recommendation_feedback_v1', 'cine_active_profile'
+    ];
+    const original = await page.evaluate(keys => Object.fromEntries(keys.map(key => [key, localStorage.getItem(key)])), keys);
+    await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      const movie = app.catalog.find(item => item.type === 'movie');
+      const series = app.catalog.find(item => item.type === 'tv');
+      localStorage.setItem('perde_profile_player_progress_v1', JSON.stringify({
+        pro_1: { [movie.id]: { time: 123, duration: 1000 } },
+        pro_2: { [movie.id]: { time: 456, duration: 1000 } }
+      }));
+      localStorage.setItem('cine_episode_tracking_v1', JSON.stringify({
+        ['pro_1:' + series.id]: { watched: { '1': [1] }, last: { season: 1, episode: 1 } },
+        ['pro_2:' + series.id]: { watched: { '1': [2] }, last: { season: 1, episode: 2 } }
+      }));
+      localStorage.setItem('cine_profile_watchlists', JSON.stringify({
+        pro_1: [{ id: movie.id, title: movie.title }],
+        pro_2: [{ id: series.id, title: series.title }]
+      }));
+      localStorage.setItem('cine_recommendation_feedback_v1', JSON.stringify({
+        pro_1: ['main-feedback'], pro_2: ['child-feedback']
+      }));
+      localStorage.setItem('cine_active_profile', 'pro_2');
+    });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      return app && Array.isArray(app.catalog) && app.catalog.length >= 130;
+    }, { timeout: 30000 });
+    const migrated = await page.evaluate(() => {
+      const movie = window.Alpine.$data(document.documentElement).catalog.find(item => item.type === 'movie');
+      const series = window.Alpine.$data(document.documentElement).catalog.find(item => item.type === 'tv');
+      const progress = JSON.parse(localStorage.getItem('cine_movie_progress_v1') || '{}');
+      const episodes = JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}');
+      const watchlist = JSON.parse(localStorage.getItem('cine_watchlist_v1') || '[]');
+      const feedback = JSON.parse(localStorage.getItem('cine_recommendation_feedback_v1') || '[]');
+      return {
+        movieTime: progress[movie.id]?.time,
+        hasChildProgress: Object.values(progress).some(value => value?.time === 456),
+        mainEpisode: !!episodes[series.id]?.watched?.['1']?.includes(1),
+        childEpisode: Object.values(episodes).some(value => value?.watched?.['1']?.includes(2)),
+        watchlistIds: watchlist.map(item => String(item.id)),
+        feedback,
+        oldProgressKey: localStorage.getItem('perde_profile_player_progress_v1'),
+        oldWatchlistKey: localStorage.getItem('cine_profile_watchlists'),
+        activeProfileKey: localStorage.getItem('cine_active_profile')
+      };
+    });
+    assert.equal(migrated.movieTime, 123, 'Ana profilin film ilerlemesi korunmalı');
+    assert.equal(migrated.hasChildProgress, false, 'Çocuk profilinin film ilerlemesi silinmeli');
+    assert.ok(migrated.mainEpisode, 'Ana profilin bölüm takibi korunmalı');
+    assert.equal(migrated.childEpisode, false, 'Çocuk profilinin bölüm takibi silinmeli');
+    assert.equal(migrated.watchlistIds.length, 1, 'Yalnızca ana profilin izleme listesi korunmalı');
+    assert.deepEqual(migrated.feedback, ['main-feedback'], 'Yalnızca ana profil geri bildirimi korunmalı');
+    assert.equal(migrated.oldProgressKey, null, 'Eski profil bazlı ilerleme anahtarı silinmeli');
+    assert.equal(migrated.oldWatchlistKey, null, 'Eski profil bazlı liste anahtarı silinmeli');
+    assert.equal(migrated.activeProfileKey, null, 'Aktif profil anahtarı silinmeli');
+    await page.evaluate(original => {
+      for (const [key, value] of Object.entries(original)) {
+        if (value === null) localStorage.removeItem(key);
+        else localStorage.setItem(key, value);
+      }
+    }, original);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      return app && Array.isArray(app.catalog) && app.catalog.length >= 130;
+    }, { timeout: 30000 });
+  });
+
   await check('Tek profil menüsü Admin Paneli kısayolunu sunuyor ve çocuk profilini içermiyor', async () => {
     const profileButton = page.locator('header .cineverse-profile-trigger');
     assert.ok(await profileButton.locator('img.cineverse-profile-avatar').isVisible(), 'Kare profil görseli görünmeli');
