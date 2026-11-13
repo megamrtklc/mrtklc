@@ -579,6 +579,19 @@ try {
     });
     const progress = await page.evaluate(() => window.Alpine.$data(document.documentElement).getMovieProgress('archive-6'));
     assert.equal(progress.time, 75, 'Profil bazlı oynatma ilerlemesi geri okunamadı');
+    const progressIsolation = await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      const stored = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}');
+      const savedForChild = stored.pro_2?.['archive-6']?.time;
+      app.switchProfile('pro_1');
+      const mainProfileTime = app.getMovieProgress('archive-6')?.time ?? null;
+      app.switchProfile('pro_2');
+      const restoredChildTime = app.getMovieProgress('archive-6')?.time ?? null;
+      return { savedForChild, mainProfileTime, restoredChildTime };
+    });
+    assert.equal(progressIsolation.savedForChild, 75, 'Oynatma ilerlemesi aktif profil anahtarına kaydedilmedi');
+    assert.notEqual(progressIsolation.mainProfileTime, 75, 'Çocuk profilinin oynatma ilerlemesi Ana Profile sızdı');
+    assert.equal(progressIsolation.restoredChildTime, 75, 'Profil değiştirince önceki oynatma ilerlemesi geri yüklenmedi');
     await page.locator('header select').selectOption('pro_1');
   });
 
