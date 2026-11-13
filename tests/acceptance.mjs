@@ -362,11 +362,11 @@ try {
     await page.setViewportSize({ width: 360, height: 800 });
     await page.waitForFunction(() => window.innerWidth === 360);
     await page.waitForFunction(() => {
-      const card = document.querySelector('#home-personalized-rail .home-rail-card');
-      return !!card && getComputedStyle(card).flexBasis === '48%';
+      const card = document.querySelector('#home-personalized-rail .home-personalized-alternative');
+      return !!card && card.getBoundingClientRect().width > 0 && card.getBoundingClientRect().width <= 260;
     }, { timeout: 5000 });
-    const railCardBasis = await page.locator('#home-personalized-rail .home-rail-card').first().evaluate(card => getComputedStyle(card).flexBasis);
-    assert.equal(railCardBasis, '48%', '380px altındaki ekranda kart genişliği %48 olmalı');
+    const railCardWidth = await page.locator('#home-personalized-rail .home-personalized-alternative').first().evaluate(card => card.getBoundingClientRect().width);
+    assert.ok(railCardWidth > 0 && railCardWidth <= 260, 'Dar ekranda öneri kartı güvenli genişlikte olmalı');
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
