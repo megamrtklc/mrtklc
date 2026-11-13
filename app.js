@@ -444,7 +444,7 @@
                             if (key) this.homeSectionReady[key] = true;
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: '200px 0px' });
+                    }, { rootMargin: '0px 0px' });
 
                     window.__cineverseHomeSectionObserver = observer;
                     sections.forEach(section => observer.observe(section));
