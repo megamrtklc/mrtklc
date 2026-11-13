@@ -300,29 +300,49 @@
   function watchDemoSample(){
     return state.catalog.find(item=>isSeries(item)===(watchDemoType==='tv'))||state.catalog[0]||null;
   }
+  let watchDemoViewport='desktop';
   function renderWatchDemo(config){
     const sample=watchDemoSample();
-    const title=sample?titleOf(sample):(watchDemoType==='tv'?'Örnek Dizi':'Örnek Film');
+    const isTv=watchDemoType==='tv';
+    const title=sample?titleOf(sample):(isTv?'Örnek Dizi':'Örnek Film');
     const poster=sample?posterOf(sample):'';
-    const year=sample?yearOf(sample):'2026';
-    const rating=sample?(sample.rating||sample.tmdbRating||'8.2'):'8.2';
-    const description=sample?(sample.desc||sample.tmdbOverview||'Sürükleyici bir hikâye, unutulmaz karakterler ve sinematik bir deneyim.'):'Sürükleyici bir hikâye, unutulmaz karakterler ve sinematik bir deneyim.';
-    const labels={
-      player:'<div class="demo-player-screen">'+(poster?'<img src="'+escapeHtml(poster)+'" alt="">':'')+'<div class="demo-player-overlay"><span class="demo-play-icon">▶</span><b>'+escapeHtml(title)+'</b><small>OYNATMAK İÇİN TIKLA</small></div><span class="demo-player-controls">▶　 ━━━━━━━━━━━━━　 ⚙ ⛶</span></div>',
-      season:'<div class="demo-card-head">SEZON SEÇİMİ <b>1. Sezon　⌄</b></div><p class="demo-muted">Sezonlar arasında geçiş yap</p>',
-      episodes:'<div class="demo-card-head">BÖLÜMLER <b>12 bölüm</b></div><div class="demo-episode-row"><span>01</span><b>Yeni bir başlangıç</b><small>48 dk</small></div><div class="demo-episode-row"><span>02</span><b>İlk karşılaşma</b><small>52 dk</small></div>',
-      synopsis:'<div class="demo-title-line"><b>'+escapeHtml(title)+'</b><span>★ '+escapeHtml(rating)+'</span></div><p class="demo-muted">'+escapeHtml(description.slice(0,170))+(description.length>170?'…':'')+'</p><small class="demo-meta">'+escapeHtml(year)+'　·　'+(watchDemoType==='tv'?'DİZİ':'FİLM')+'　·　 Dram / Gerilim</small>',
-      reviews:'<div class="demo-card-head">YORUMLAR <b>＋ Yorum yaz</b></div><p class="demo-muted">İzleyici değerlendirmeleri ve yorumlar burada görünür.</p>',
-      credits:'<div class="demo-card-head">YAPIM KÜNYESİ</div><div class="demo-detail-row"><span>Yönetmen</span><b>'+(sample?escapeHtml(sample.director||sample.tmdbDirector||'—'):'Örnek Yönetmen')+'</b></div><div class="demo-detail-row"><span>Yıl</span><b>'+escapeHtml(year)+'</b></div><div class="demo-detail-row"><span>Tür</span><b>Drama / Gerilim</b></div><div class="demo-detail-row"><span>Tür</span><b>'+(watchDemoType==='tv'?'Dizi':'Film')+'</b></div>',
-      cast:'<div class="demo-card-head">OYUNCU KADROSU</div><div class="demo-cast-row"><i>AK</i><span><b>Oyuncu adı</b><small>Karakter adı</small></span><i>MY</i><span><b>Oyuncu adı</b><small>Karakter adı</small></span></div>',
-      similar:'<div class="demo-card-head">BENZER YAPIMLAR</div><div class="demo-similar-row"><span>▣</span><span>Önerilen yapımlar　 ·　 Keşfet</span></div>'
-    };
-    const renderColumn=(side)=>config[side].filter(id=>!config.hidden.includes(id)&&(watchDemoType==='tv'||(id!=='season'&&id!=='episodes'))).map(id=>'<div class="watch-demo-card demo-'+id+'" data-demo-card="'+id+'"><div class="demo-card-label">'+escapeHtml(watchCardDefinitions[id].label)+'</div>'+labels[id]+'</div>').join('');
-    $('#watch-demo-left').innerHTML=renderColumn('left')||'<div class="watch-demo-empty">Bu sütunda kart yok. Soldaki listeden kart taşı.</div>';
-    $('#watch-demo-right').innerHTML=renderColumn('right')||'<div class="watch-demo-empty">Bu sütunda kart yok. Soldaki listeden kart taşı.</div>';
-    $('#watch-demo-left').classList.toggle('is-empty',!config.left.length);
-    $('#watch-demo-right').classList.toggle('is-empty',!config.right.length);
+    const backdrop=sample?(sample.backdrop||poster):'';
+    const year=sample?yearOf(sample):'2025';
+    const rating=sample?(sample.rating||sample.tmdbRating||'—'):'8.2';
+    const runtime=sample?(sample.duration||sample.runtime||(isTv?'45 dk / bölüm':'120 dk')):(isTv?'45 dk / bölüm':'120 dk');
+    const director=sample?(sample.director||sample.tmdbDirector||'—'):'—';
+    const genre=sample?(sample.category||sample.genre||'Drama / Gerilim'):'Drama / Gerilim';
+    const description=sample?(sample.desc||sample.tmdbOverview||'Bu yapımın hikâye özeti katalog kaydında bulunmuyor.'):'Bu yapımın hikâye özeti burada görüntülenir.';
+    const isDirect=!!(sample?.watchUrl&&/\.mp4(?:$|[?#])/i.test(sample.watchUrl));
+    const hasExternal=!!sample?.watchUrl&&!isDirect;
+    const posterStyle=backdrop?' style="background-image:linear-gradient(0deg,rgba(0,0,0,.92),rgba(0,0,0,.12) 72%),url(\''+escapeHtml(backdrop)+'\')"':'';
+    const player='<div class="watch-real-player"'+posterStyle+'>'+
+      '<div class="watch-real-player-shade"></div>'+
+      '<div class="watch-real-player-top"><span class="watch-real-brand">CINEVERSE <i>●</i></span><span>'+(isDirect?'YERLEŞİK OYNATICI':hasExternal?'HARİCİ İZLEME KAYNAĞI':'İZLEME KAYNAĞI EKLENMEMİŞ')+'</span></div>'+
+      '<div class="watch-real-play"><span>▶</span></div>'+
+      '<div class="watch-real-player-bottom"><div class="watch-real-now"><img src="'+escapeHtml(poster||backdrop)+'" alt="" onerror="this.style.display=\'none\'"><div><b>'+escapeHtml(title)+'</b><small>'+(isTv?'SEZON 1 · BÖLÜM 1':'OYNATMAK İÇİN TIKLA')+'</small></div></div>'+
+      (hasExternal?'<span class="watch-real-source">KAYNAĞI AÇ ↗</span>':'')+
+      '<div class="watch-real-progress"><span></span></div><div class="watch-real-controls"><div><b>▶</b><b>↶ 10</b><b>↷ 10</b><small>00:24 / '+(isTv?'48:12':'02:04:18')+'</small></div><div><b>JENERİĞİ GEÇ</b><b>⚙</b><b>⛶</b></div></div></div></div>';
+    const season='<div class="watch-real-card watch-real-season"><div class="watch-real-section-title"><span>▣</span><div><b>SEZON SEÇİMİ</b><small>İzlemek istediğiniz sezonu belirleyin</small></div></div><select aria-label="Sezon seçimi" tabindex="-1"><option>1. Sezon</option><option>2. Sezon</option></select></div>';
+    const episodes='<div class="watch-real-card watch-real-episodes"><div class="watch-real-card-head"><b>▣　1. SEZON BÖLÜMLERİ</b><small>Toplam '+(sample?.episodes||8)+' Bölüm</small></div><div class="watch-real-progress-info"><div><b>Bu sezon izleme ilerlemesi</b><strong>25%</strong></div><span><i></i></span><small>2 / '+(sample?.episodes||8)+' bölüm izlendi</small><div class="watch-real-episode-actions"><b>▶ Son izlediğimden devam et</b><b>Sonraki bölüm　›</b></div></div><div class="watch-real-episode-grid">'+[1,2,3,4].map((n)=>'<div class="watch-real-episode"><div class="watch-real-still"'+(backdrop?' style="background-image:url(\''+escapeHtml(backdrop)+'\')"':'')+'><span>'+(n===1?'48:12':'45:36')+'</span></div><div><b>'+String(n).padStart(2,'0')+'. '+(['Yeni bir başlangıç','İlk karşılaşma','Kırılma noktası','Yeni karar'][n-1])+'</b><small>'+(n===1?'✓ İzlendi':n===2?'● Seçili bölüm':'Bölümü seç')+'</small></div></div>').join('')+'</div></div>';
+    const synopsis='<div class="watch-real-card"><div class="watch-real-card-head"><b>HİKÂYE</b></div><p class="watch-real-description">'+escapeHtml(description.slice(0,300))+(description.length>300?'…':'')+'</p></div>';
+    const reviews='<div class="watch-real-card"><div class="watch-real-card-head"><b>İZLEYİCİ YORUMLARI</b><small>＋ Yorum yaz</small></div><p class="watch-real-muted">Bu yapım hakkındaki değerlendirmeler ve izleyici yorumları.</p></div>';
+    const credits='<div class="watch-real-card"><div class="watch-real-card-head"><b>ⓘ　YAPIM KÜNYESİ</b><strong>★ '+escapeHtml(rating)+'/10</strong></div>'+
+      [['Orijinal İsim',title],['Yönetmen',director],['Kategori',genre],['Yıl / Süre',year+' • '+runtime],['Ülke',sample?.country||'—']].map(([k,v])=>'<div class="watch-real-detail"><span>'+escapeHtml(k)+'</span><b>'+escapeHtml(v)+'</b></div>').join('')+'</div>';
+    const castItems=Array.isArray(sample?.tmdbCast)?sample.tmdbCast.slice(0,5):[];
+    const cast='<div class="watch-real-card"><div class="watch-real-card-head"><b>OYUNCU KADROSU</b><span>‹　›</span></div><div class="watch-real-cast">'+(castItems.length?castItems.map(x=>'<div><img src="'+escapeHtml(x.profile||'')+'" alt="" onerror="this.style.display=\'none\'"><b>'+escapeHtml(x.name||'Oyuncu')+'</b><small>'+escapeHtml(x.character||x.role||'')+'</small></div>').join(''):[1,2,3].map((n)=>'<div><i>'+['AK','MY','SD'][n-1]+'</i><b>Oyuncu adı</b><small>Karakter</small></div>').join(''))+'</div></div>';
+    const similar='<div class="watch-real-card"><div class="watch-real-card-head"><b>BENZER YAPIMLAR</b><small>Keşfet　›</small></div><div class="watch-real-similar">'+[1,2,3].map((n)=>'<div><span>'+(n===1?'▣':'▧')+'</span><b>Önerilen yapım</b></div>').join('')+'</div></div>';
+    const labels={player,season,episodes,synopsis,reviews,credits,cast,similar};
+    const renderColumn=side=>config[side].filter(id=>!config.hidden.includes(id)&&(isTv||!['season','episodes'].includes(id))).map(id=>'<div class="watch-real-card-wrap" data-demo-card="'+id+'">'+labels[id]+'</div>').join('');
+    $('#watch-demo-left').innerHTML=renderColumn('left')||'<div class="watch-demo-empty">Bu alanda görünür kart yok.</div>';
+    $('#watch-demo-right').innerHTML=renderColumn('right')||'<div class="watch-demo-empty">Bu alanda görünür kart yok.</div>';
+    $('#watch-preview-title').textContent=title;
+    $('#watch-preview-kind').textContent=isTv?'DİZİ İZLE':'FİLM İZLE';
+    $('#watch-preview-meta').textContent=year+' · '+(isTv?'Dizi':'Film')+' · '+runtime+' · '+genre;
+    $('#watch-preview-score').innerHTML='★ '+escapeHtml(rating)+' <small>/ 10</small>';
+    $('#watch-preview-frame').classList.toggle('is-mobile',watchDemoViewport==='mobile');
     $$('[data-demo-type]').forEach(button=>button.classList.toggle('active',button.dataset.demoType===watchDemoType));
+    $$('[data-demo-device]').forEach(button=>button.classList.toggle('active',button.dataset.demoDevice===watchDemoViewport));
   }
   function renderWatchLayout(){
     const config=watchLayoutConfig();
