@@ -6,6 +6,26 @@ const BASE_URL = process.env.BASE_URL || 'https://megamrtklc.github.io/mrtklc/';
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
+await page.addInitScript(() => {
+  window.__desktopLayoutShifts = [];
+  try {
+    new PerformanceObserver(list => {
+      for (const entry of list.getEntries()) {
+        if (!entry.hadRecentInput) window.__desktopLayoutShifts.push({
+          value: entry.value,
+          startTime: Math.round(entry.startTime),
+          sources: (entry.sources || []).slice(0, 8).map(source => ({
+            node: source.node?.tagName || null,
+            id: source.node?.id || null,
+            className: typeof source.node?.className === 'string' ? source.node.className.slice(0, 180) : '',
+            previousRect: source.previousRect || null,
+            currentRect: source.currentRect || null
+          }))
+        });
+      }
+    }).observe({ type: 'layout-shift', buffered: true });
+  } catch {}
+});
 const failures = [];
 const failedResources = [];
 let adaletId = null;
@@ -52,6 +72,21 @@ try {
     throw error;
   }
 
+  await page.waitForTimeout(8500);
+  console.log('DESKTOP LAYOUT SHIFT DIAGNOSTIC:', JSON.stringify(await page.evaluate(() => ({
+    shifts: window.__desktopLayoutShifts || [],
+    hero: (() => {
+      const section = document.querySelector('#desktopEditorialHero');
+      const copy = section?.querySelector('.editorial-copy-enter');
+      return {
+        section: section?.getBoundingClientRect().toJSON() || null,
+        copy: copy?.getBoundingClientRect().toJSON() || null,
+        title: section?.querySelector('h1')?.textContent || '',
+        description: section?.querySelector('p')?.textContent || '',
+        activeSlide: window.Alpine?.$data(document.documentElement)?.currentSlideIndex ?? null
+      };
+    })()
+  }))));
   adaletId = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.find(item => item.title === 'Adalet 2')?.id);
   assert.ok(adaletId, 'Adalet 2 katalogda bulunamadı');
 
