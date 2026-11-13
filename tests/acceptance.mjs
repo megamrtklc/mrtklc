@@ -558,11 +558,13 @@ try {
         '1:2': 'https://media.example.test/lost-s01e02.mp4'
       };
       app.selectEpisode(2);
-      return {
-        selectedUrl: app.getPlaybackUrl(),
-        videoUrl: video.src,
-        progressKey: app.getPlaybackProgressKey()
-      };
+      const selectedUrl = app.getPlaybackUrl();
+      const videoUrl = video.src;
+      const progressKey = app.getPlaybackProgressKey();
+      app.selectedItem.watchUrl = 'https://media.example.test/lost-fallback.mp4';
+      app.selectedEpisode = 3;
+      const fallbackUrl = app.getPlaybackUrl();
+      return { selectedUrl, videoUrl, progressKey, fallbackUrl };
     });
     assert.equal(episodeSource.selectedUrl, 'https://media.example.test/lost-s01e02.mp4',
       'Seçilen bölümün kendi video bağlantısı çözülmedi');
@@ -570,6 +572,8 @@ try {
       'Bölüm seçildiğinde oynatıcı kaynağı güncellenmedi');
     assert.equal(episodeSource.progressKey, 'archive-6:s1e2',
       'Bölüm bazlı izleme ilerlemesi anahtarı doğru oluşturulmadı');
+    assert.equal(episodeSource.fallbackUrl, 'https://media.example.test/lost-fallback.mp4',
+      'Bölüm bağlantısı olmayan eski diziler genel oynatma bağlantısına geri dönemedi');
     const watchedButton = page.getByTitle('İzlendi olarak işaretle').first();
     await watchedButton.waitFor({ state: 'visible' });
     await watchedButton.click();
