@@ -17514,7 +17514,21 @@
         "headline": "",
         "description": ""
       }
-    ]
+    ],
+    "layout": {
+      "order": [
+        "hero",
+        "personalized",
+        "continue",
+        "watchlist",
+        "new-arrivals",
+        "series-tracking",
+        "genre-discovery",
+        "published-collections",
+        "catalog"
+      ],
+      "visibility": {}
+    }
   },
   "exportedAt": "2026-11-10T22:20:23.455Z",
   "watchPageConfig": {
@@ -17522,13 +17536,13 @@
       "player",
       "season",
       "episodes",
-      "credits",
-      "similar"
+      "similar",
+      "reviews"
     ],
     "right": [
       "synopsis",
-      "cast",
-      "reviews"
+      "credits",
+      "cast"
     ],
     "hidden": [],
     "removed": []
