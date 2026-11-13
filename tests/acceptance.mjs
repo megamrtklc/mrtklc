@@ -344,20 +344,20 @@ try {
     const result = await page.evaluate(() => {
       const app = window.Alpine.$data(document.documentElement);
       const original = {
-        progress: localStorage.getItem('perde_profile_player_progress_v1'),
+        progress: localStorage.getItem('cine_movie_progress_v1'),
         episodes: localStorage.getItem('cine_episode_tracking_v1'),
-        watchlists: localStorage.getItem('cine_profile_watchlists')
+        watchlists: localStorage.getItem('cine_watchlist_v1')
       };
       const movie = app.catalog.find(item => item.type === 'movie');
       const series = app.catalog.find(item => item.type === 'tv' && String(item.id) !== String(movie?.id));
       const saved = app.catalog.find(item => item.id !== movie?.id && item.id !== series?.id);
-      localStorage.setItem('perde_profile_player_progress_v1', JSON.stringify({
+      localStorage.setItem('cine_movie_progress_v1', JSON.stringify({
         [movie.id]: { time: 1200, duration: 1800, savedAt: Date.now() }
       }));
       localStorage.setItem('cine_episode_tracking_v1', JSON.stringify({
         [series.id]: { watched: { '1': [1, 2] }, last: { season: 1, episode: 2, updatedAt: Date.now() } }
       }));
-      localStorage.setItem('cine_profile_watchlists', JSON.stringify([{ id: saved.id, title: saved.title }]));
+      localStorage.setItem('cine_watchlist_v1', JSON.stringify([{ id: saved.id, title: saved.title }]));
       const recommendations = app.personalizedRecommendations;
       const profile = {
         ids: recommendations.map(item => String(item.id)),
@@ -367,9 +367,9 @@ try {
         savedId: String(saved.id)
       };
       for (const [key, value] of Object.entries({
-        perde_profile_player_progress_v1: original.progress,
+        cine_movie_progress_v1: original.progress,
         cine_episode_tracking_v1: original.episodes,
-        cine_profile_watchlists: original.watchlists
+        cine_watchlist_v1: original.watchlists
       })) {
         if (value === null) localStorage.removeItem(key);
         else localStorage.setItem(key, value);
@@ -907,7 +907,7 @@ try {
         app.selectedSeason = 1;
         app.selectedEpisode = 2;
         app.updateVideoProgress();
-        const saved = JSON.parse(localStorage.getItem('perde_profile_player_progress_v1') || '{}')['archive-6:s1e2'];
+        const saved = JSON.parse(localStorage.getItem('cine_movie_progress_v1') || '{}')['archive-6:s1e2'];
         return {
           childTime: saved?.time ?? null,
           childDuration: saved?.duration ?? null,
