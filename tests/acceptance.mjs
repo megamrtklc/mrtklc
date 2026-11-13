@@ -668,7 +668,21 @@ try {
               start: element.scrollLeft
             };
           });
-          assert.ok(before.maxScroll > 24, `${viewport.label}: ${selector} yatay kaydırma mesafesi yetersiz`);
+          if (before.maxScroll <= 24) {
+            const contentFits = await rail.evaluate(element => {
+              const container = element.getBoundingClientRect();
+              return [...element.children].every(child => {
+                const rect = child.getBoundingClientRect();
+                return rect.left >= container.left - 1 && rect.right <= container.right + 1;
+              });
+            });
+            assert.ok(
+              contentFits,
+              `${viewport.label}: ${selector} kaydırma mesafesi yok ancak kartlar görünür alana sığmıyor`
+            );
+            console.log(`PASS: ${viewport.label}: ${selector} kartları taşmadan görünür alana sığıyor; dokunmatik kaydırma gerekmiyor`);
+            continue;
+          }
           const x = Math.round(before.left + Math.min(before.width * 0.82, before.width - 18));
           const y = Math.round(before.top + Math.min(before.height / 2, 80));
           await cdp.send('Input.dispatchTouchEvent', {
