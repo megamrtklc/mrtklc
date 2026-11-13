@@ -278,6 +278,7 @@ try {
               catalogCount: app?.catalog?.length ?? null,
               catalogLoading: app?.catalogLoading ?? null,
               initialShellPresent: !!document.getElementById('hero-initial-shell'),
+              homeSections: app?.homeSectionReady || null,
               heroTitle: document.querySelector('#mobileHeroBanner')?.innerText?.trim().slice(0, 100) || ''
             };
           })(),
