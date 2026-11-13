@@ -633,7 +633,6 @@ try {
       }, null, { timeout: 20000 });
 
       const cdp = await touchPage.context().newCDPSession(touchPage);
-      await cdp.send('Input.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 1 });
 
       for (const viewport of [
         { width: 360, height: 800, label: 'telefon dikey' },
