@@ -11,6 +11,8 @@
             catch (error) { console.warn('Yerel kayıt kaydedilemedi:', key, error); return false; }
         }
 
+        const personalizedRecommendationCache = new WeakMap();
+
         function ultimateProApp() {
             return {
                 getTmdbImageSrcSet(url, widths = [154, 185, 342, 500]) {
@@ -1468,6 +1470,23 @@
                 get personalizedRecommendations() {
                     const catalog = Array.isArray(this.catalog) ? this.catalog : [];
                     if (!catalog.length) return [];
+
+                    const watchlist = this.watchlist;
+                    const feedbackIds = this.recommendationFeedback;
+                    const profileEpisodeState = Object.entries(episodes).filter(([key]) => key.startsWith(profileId + ':'));
+                    const cacheKey = JSON.stringify([
+                        profileId,
+                        progress,
+                        profileEpisodeState,
+                        watchlist.map(item => String(item.id)),
+                        feedbackIds
+                    ]);
+                    const cached = personalizedRecommendationCache.get(this);
+                    if (cached && cached.catalog === catalog && cached.key === cacheKey) return cached.value;
+                    const cacheResult = value => {
+                        personalizedRecommendationCache.set(this, { catalog, key: cacheKey, value });
+                        return value;
+                    };
                     const catalogById = new Map(catalog.filter(item => item && item.id != null).map(item => [String(item.id), item]));
                     const normalize = value => this.normalizeSearchText(value);
                     const tokens = value => [...new Set(String(value || '').split(/[\\/;,|]/).map(normalize).filter(Boolean))];
@@ -1517,14 +1536,13 @@
                         const previous = history.get(String(item.id));
                         history.set(String(item.id), { item, weight: Math.max(previous?.weight || 0, weight) });
                     });
-                    const watchlistItems = this.watchlist.map(saved => catalogById.get(String(saved.id))).filter(Boolean);
+                    const watchlistItems = watchlist.map(saved => catalogById.get(String(saved.id))).filter(Boolean);
                     watchlistItems.forEach(item => {
                         const id = String(item.id);
                         if (!history.has(id)) history.set(id, { item, weight: 0.85 });
                     });
-                    const feedbackIds = this.recommendationFeedback;
                     const feedbackItems = feedbackIds.map(id => catalogById.get(id)).filter(Boolean);
-                    const excluded = new Set([...history.keys(), ...this.watchlist.map(item => String(item.id)), ...feedbackIds]);
+                    const excluded = new Set([...history.keys(), ...watchlist.map(item => String(item.id)), ...feedbackIds]);
                     const prefs = {
                         genres: new Map(), types: new Map(), countries: new Map(),
                         directors: new Map(), actors: new Map(), themes: new Map(),
@@ -1606,7 +1624,7 @@
                                 reason: 'Arşivden yüksek puanlı'
                             };
                         }).sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0) || a.item.title.localeCompare(b.item.title, 'tr'));
-                        return selectDiverse(coldStart).map(entry => ({ ...entry.item, recommendationReason: entry.reason }));
+                        return cacheResult(selectDiverse(coldStart).map(entry => ({ ...entry.item, recommendationReason: entry.reason })));
                     }
                     const ranked = catalog.filter(item => item && item.id != null && !excluded.has(String(item.id))).map(item => {
                         const reasons = [];
@@ -1642,7 +1660,7 @@
                             reason
                         };
                     }).sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0) || a.item.title.localeCompare(b.item.title, 'tr'));
-                    return selectDiverse(ranked).map(entry => ({ ...entry.item, recommendationReason: entry.reason }));
+                    return cacheResult(selectDiverse(ranked).map(entry => ({ ...entry.item, recommendationReason: entry.reason })));
                 },
 
 
