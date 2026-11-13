@@ -3,6 +3,18 @@
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
   const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null };
+  const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','new-arrivals','series-tracking','genre-discovery','published-collections','catalog'];
+  const HOMEPAGE_LAYOUT_ITEMS = {
+    hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
+    personalized:{title:'İzleme Zevkine Göre',description:'Kişiselleştirilmiş film ve dizi önerileri',icon:'✦'},
+    continue:{title:'İzlemeye Devam Et',description:'Kaldığın yerden devam ettiğin yapımlar',icon:'▷'},
+    watchlist:{title:'İzleme Listem',description:'Daha sonra izlemek için kaydettiklerin',icon:'♡'},
+    'new-arrivals':{title:'Son Eklenenler',description:'Kataloğa en son eklenen yapımlar',icon:'＋'},
+    'series-tracking':{title:'Dizi Takibi',description:'Sezon ve bölüm ilerlemen',icon:'▤'},
+    'genre-discovery':{title:'Türlere Göre Keşfet',description:'Tür kartları ve keşif filtreleri',icon:'⌕'},
+    'published-collections':{title:'Yayınlanan Koleksiyonlar',description:'Admin panelinde hazırlanan özel seçkiler',icon:'▧'},
+    catalog:{title:'Tüm Yapımlar & Trendler',description:'Katalogdan seçilen genel yapım rafı',icon:'▥'}
+  };
   function applyAdminTheme(){ document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark'); const meta=document.querySelector('meta[name="theme-color"]'); if(meta)meta.content='#f4f3ef'; }
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const titleOf = item => item.title || item.tmdbTitle || item.originalTitle || item.tmdbOriginalTitle || 'Başlıksız yapım';
@@ -46,6 +58,7 @@
     if(view==='catalog')renderCatalog();
     if(view==='collections')renderCollections();
     if(view==='homepage')renderHomepage();
+    if(view==='homepage-layout')renderHomepageLayout();
     if(view==='watch-layout')renderWatchLayout();
   }
   function applyProfilePhoto(url){
@@ -171,7 +184,7 @@
       if(response.status===409)throw new Error('Katalog başka bir işlemde güncellenmiş. Sayfayı yenileyip tekrar deneyin.');
       if(!response.ok)throw new Error(result.error||'Değişiklik kaydedilemedi.');
       state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];
-      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();
+      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderOverviewInsights();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
       renderWatchLayout();renderAdminProfile();
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.');
@@ -429,6 +442,62 @@
     else items.sort((a,b)=>heroRating(b)-heroRating(a)||heroVotes(b)-heroVotes(a));
     return items.slice(0,Math.max(1,Number(count)||10));
   }
+  function homepageLayoutConfig(){
+    const config=homepageConfig();
+    if(!config.layout||typeof config.layout!=='object')config.layout={};
+    if(!Array.isArray(config.layout.order))config.layout.order=[...HOMEPAGE_LAYOUT_DEFAULTS];
+    const known=new Set(HOMEPAGE_LAYOUT_DEFAULTS);
+    config.layout.order=config.layout.order.filter(key=>known.has(key));
+    HOMEPAGE_LAYOUT_DEFAULTS.forEach(key=>{if(!config.layout.order.includes(key))config.layout.order.push(key);});
+    if(!config.layout.visibility||typeof config.layout.visibility!=='object')config.layout.visibility={};
+    return config.layout;
+  }
+  function renderHomepageLayout(){
+    if(!state.data)return;
+    const layout=homepageLayoutConfig();
+    const list=$('#homepage-layout-list');
+    if(!list)return;
+    const visibleCount=HOMEPAGE_LAYOUT_DEFAULTS.filter(key=>key==='hero'||layout.visibility[key]!==false).length;
+    $('#homepage-layout-count').textContent=visibleCount+' / '+HOMEPAGE_LAYOUT_DEFAULTS.length+' açık';
+    list.innerHTML=layout.order.map((key,index)=>{
+      const item=HOMEPAGE_LAYOUT_ITEMS[key];
+      if(!item)return '';
+      const locked=!!item.locked;
+      const active=locked||layout.visibility[key]!==false;
+      const position=index+1;
+      return '<div class="homepage-layout-row'+(active?'':' is-disabled')+'" data-layout-key="'+escapeHtml(key)+'">'+
+        '<span class="homepage-layout-row-icon">'+item.icon+'</span>'+
+        '<div class="homepage-layout-row-copy"><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.description)+'</small></div>'+
+        '<span class="homepage-layout-state '+(locked?'is-locked':(active?'is-active':'is-hidden'))+'">'+(locked?'SABİT':(active?'AÇIK':'GİZLİ'))+'</span>'+
+        '<div class="homepage-layout-actions">'+
+          '<span class="homepage-layout-position">'+String(position).padStart(2,'0')+'</span>'+
+          '<button type="button" data-layout-action="up" aria-label="'+escapeHtml(item.title)+' bölümünü yukarı taşı" '+(locked||index<=1?'disabled':'')+'>↑</button>'+
+          '<button type="button" data-layout-action="down" aria-label="'+escapeHtml(item.title)+' bölümünü aşağı taşı" '+(locked||index===layout.order.length-1?'disabled':'')+'>↓</button>'+
+          (locked?'<span class="homepage-layout-lock" title="Manşet bu ekrandan değiştirilemez">🔒</span>':'<button type="button" class="homepage-layout-toggle" data-layout-action="toggle" aria-label="'+(active?'Bölümü gizle':'Bölümü göster')+'">'+(active?'◉':'○')+'</button>')+
+        '</div></div>';
+    }).join('');
+  }
+  function moveHomepageSection(key,direction){
+    const layout=homepageLayoutConfig();
+    const index=layout.order.indexOf(key);
+    const target=index+direction;
+    if(index<1||target<1||target>=layout.order.length)return;
+    [layout.order[index],layout.order[target]]=[layout.order[target],layout.order[index]];
+    renderHomepageLayout();
+  }
+  function toggleHomepageSection(key){
+    const layout=homepageLayoutConfig();
+    if(!HOMEPAGE_LAYOUT_ITEMS[key]||HOMEPAGE_LAYOUT_ITEMS[key].locked)return;
+    layout.visibility[key]=layout.visibility[key]===false;
+    renderHomepageLayout();
+  }
+  async function saveHomepageLayout(){
+    const config=homepageConfig();
+    const layout=homepageLayoutConfig();
+    const nextLayout={order:[...layout.order],visibility:{...layout.visibility}};
+    const ok=await persist({...state.data,homepageConfig:{...config,layout:nextLayout}},'Ana sayfa bölümleri ve sıralaması kaydedildi.');
+    if(ok)renderHomepageLayout();
+  }
   function renderHomepage(){
     const config=homepageConfig(),settings=config.settings;
     $('#hero-desktop-count').value=settings.desktopCount??10;
@@ -518,7 +587,7 @@
       $('#health-catalog').textContent='Bağlandı';$('#health-json').textContent='Geçerli';
       $('#data-version').textContent=String(state.data.version??'Belirtilmemiş');
       $('#add-content').disabled=!state.apiEnabled;$('#catalog-add').disabled=!state.apiEnabled;$('#collection-add').disabled=!state.apiEnabled;
-      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderOverviewInsights();renderAdminProfile();renderWatchLayout();
+      updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderOverviewInsights();renderAdminProfile();renderWatchLayout();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
       $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
       $('.notice b').textContent='Katalog verileri yüklendi';
@@ -603,6 +672,23 @@
   $('#collection-search').addEventListener('input',filterCollectionItems);
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
+  $('#homepage-layout-save').addEventListener('click',saveHomepageLayout);
+  $('#homepage-layout-list').addEventListener('click',event=>{
+    const button=event.target.closest('[data-layout-action]');
+    const row=event.target.closest('[data-layout-key]');
+    if(!button||!row)return;
+    const key=row.dataset.layoutKey;
+    if(button.dataset.layoutAction==='up')moveHomepageSection(key,-1);
+    if(button.dataset.layoutAction==='down')moveHomepageSection(key,1);
+    if(button.dataset.layoutAction==='toggle')toggleHomepageSection(key);
+  });
+  $('#homepage-layout-reset').addEventListener('click',()=>{
+    const layout=homepageLayoutConfig();
+    layout.order=[...HOMEPAGE_LAYOUT_DEFAULTS];
+    layout.visibility={};
+    renderHomepageLayout();
+    toast('Varsayılan sıra taslağa alındı. Kalıcı olması için Düzeni yayınla.');
+  });
   $('#hero-desktop-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=Array.from(document.querySelectorAll('#hero-desktop-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().desktopMode=event.target.value;renderHomepage();});
   $('#hero-desktop-category').addEventListener('change',event=>{homepageConfig().desktopCategory=event.target.value;renderHomepage();});
   $('#hero-desktop-count').addEventListener('change',event=>{homepageConfig().settings.desktopCount=Number(event.target.value)||10;renderHomepage();});
