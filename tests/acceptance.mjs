@@ -506,6 +506,10 @@ try {
   await check('Mobil ve tablette yatay kart şeritleri kaydırılabiliyor', async () => {
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#home-personalized-rail', { timeout: 15000 });
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      return app && !app.catalogLoading && !!window.__cineverseHomeSectionObserver;
+    }, null, { timeout: 15000 });
     for (const viewport of [{ width: 360, height: 800 }, { width: 768, height: 1024 }]) {
       await page.setViewportSize(viewport);
       await page.locator('#home-catalog-section').evaluate(element =>
