@@ -219,22 +219,28 @@
         @media(min-width:640px) and (max-width:767px){#home-watchlist-section .home-watchlist-card{flex-basis:44%;width:44%}}
         @media(min-width:768px) and (max-width:1023px){#home-watchlist-section .home-watchlist-card{flex-basis:31%;width:31%}}
         @media(prefers-reduced-motion:reduce){#home-watchlist-section .home-watchlist-card,#home-watchlist-section .home-watchlist-poster img{transition:none!important}}
-        /* New arrivals shelf: follows catalog insertion order, with no hero coupling. */
+        /* New arrivals: one editorial lead tile followed by compact archive cards. */
         #home-new-arrivals-section .home-new-arrivals-heading{border-bottom:1px solid rgba(148,163,184,.24)}
-        #home-new-arrivals-section .home-new-arrivals-rail{gap:clamp(12px,1.35vw,20px);padding:5px 3px 18px}
-        #home-new-arrivals-section .home-new-arrival-card{flex:0 0 clamp(176px,16.5vw,216px);width:clamp(176px,16.5vw,216px);border-color:rgba(148,163,184,.22);background:rgba(127,127,127,.035);box-shadow:0 8px 24px -20px rgba(0,0,0,.6);scroll-snap-align:start}
+        #home-new-arrivals-section .home-new-arrivals-rail{gap:14px;padding:5px 3px 18px;align-items:stretch}
+        #home-new-arrivals-section .home-new-arrival-card{flex:0 0 clamp(174px,16vw,210px);width:clamp(174px,16vw,210px);border-color:rgba(148,163,184,.22);background:rgba(127,127,127,.035);box-shadow:0 8px 24px -20px rgba(0,0,0,.6);scroll-snap-align:start}
         #home-new-arrivals-section .home-new-arrival-card:hover{border-color:rgba(225,29,72,.68);box-shadow:0 17px 36px -22px rgba(0,0,0,.72);transform:translateY(-4px)}
         #home-new-arrivals-section .home-new-arrival-poster img{display:block;backface-visibility:hidden}
         #home-new-arrivals-section .home-new-arrival-card:hover .home-new-arrival-poster img{transform:scale(1.055)}
-        #home-new-arrivals-section .home-new-arrival-shade{background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 48%,rgba(0,0,0,.28));pointer-events:none}
+        #home-new-arrivals-section .home-new-arrival-shade{background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 42%,rgba(0,0,0,.48));pointer-events:none}
         #home-new-arrivals-section .home-new-arrival-copy{min-height:76px}
+        #home-new-arrivals-section .home-new-arrival-feature{flex-basis:clamp(280px,29vw,370px);width:clamp(280px,29vw,370px);border-color:rgba(225,29,72,.35);background:linear-gradient(145deg,rgba(225,29,72,.09),rgba(127,127,127,.035))}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-poster{aspect-ratio:16/9!important}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{min-height:78px;padding:12px 14px}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy h3{font-size:14px}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy:before{content:"ARŞİVE EN SON EKLENEN";display:block;margin-bottom:5px;color:#e11d48;font-size:8px;font-weight:900;letter-spacing:.16em}
         @media(max-width:639px){
-            #home-new-arrivals-section .home-new-arrivals-rail{gap:12px;padding-bottom:14px}
+            #home-new-arrivals-section .home-new-arrivals-rail{gap:11px;padding-bottom:14px}
             #home-new-arrivals-section .home-new-arrival-card{flex-basis:44%;width:44%;border-radius:14px}
+            #home-new-arrivals-section .home-new-arrival-feature{flex-basis:min(82%,310px);width:min(82%,310px)}
             #home-new-arrivals-section .home-new-arrival-copy{padding:10px;min-height:78px}
         }
-        @media(min-width:640px) and (max-width:767px){#home-new-arrivals-section .home-new-arrival-card{flex-basis:29%;width:29%}}
-        @media(min-width:768px) and (max-width:1023px){#home-new-arrivals-section .home-new-arrival-card{flex-basis:23%;width:23%}}
+        @media(min-width:640px) and (max-width:767px){#home-new-arrivals-section .home-new-arrival-card{flex-basis:29%;width:29%}#home-new-arrivals-section .home-new-arrival-feature{flex-basis:42%;width:42%}}
+        @media(min-width:768px) and (max-width:1023px){#home-new-arrivals-section .home-new-arrival-card{flex-basis:23%;width:23%}#home-new-arrivals-section .home-new-arrival-feature{flex-basis:31%;width:31%}}
         @media(prefers-reduced-motion:reduce){#home-new-arrivals-section .home-new-arrival-card,#home-new-arrivals-section .home-new-arrival-poster img{transition:none!important}}
 
         /* Series tracking shelf: uses the active profile's existing episode history. */
@@ -605,11 +611,11 @@
                     </div>
                     <div id="home-new-arrivals-rail" class="home-card-rail home-new-arrivals-rail">
                         <template x-for="(item,index) in homeNewArrivals" :key="'new-arrival-' + item.id">
-                            <button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-new-arrival-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
+                            <button type="button" @click="openWatchPage(item)" :class="getCardClass()" :class="index === 0 ? 'home-new-arrival-feature' : ''" class="home-rail-card home-new-arrival-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
                                 <div class="home-new-arrival-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop)" sizes="(max-width:639px) 44vw, (max-width:1023px) 23vw, 18vw" class="w-full h-full object-cover transition-transform duration-700">
                                     <div class="home-new-arrival-shade absolute inset-0"></div>
-                                    <span class="absolute top-3 left-3 rounded-md bg-rose-600 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 shadow-lg">Yeni eklendi</span>
+                                    <span class="absolute top-3 left-3 rounded-md bg-rose-600 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 shadow-lg" x-text="index === 0 ? 'EN YENİ' : 'YENİ EKLENDİ'"></span>
                                     <span class="absolute top-3 right-3 rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
                                     <span class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || item.tmdbRating || '—'"></span></span>
                                 </div>
