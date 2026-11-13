@@ -620,7 +620,8 @@
                 </section>
 
                 <!-- Ana sayfa izleme listesi önizlemesi -->
-                <section id="home-watchlist-section" data-home-section="watchlist" x-show="isHomepageSectionVisible('watchlist') && (!homeSectionReady.watchlist || watchlist.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
+                <div data-home-section="watchlist" aria-hidden="true" style="height:1px"></div>
+                <section id="home-watchlist-section" x-show="isHomepageSectionVisible('watchlist') && homeSectionReady.watchlist && watchlist.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-watchlist-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">SONRA İZLE</p>
