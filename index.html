@@ -62,6 +62,29 @@
         @media(min-width:768px){.home-rail-card{flex-basis:22%;width:22%}}
         @media(min-width:1024px){.home-rail-card{flex-basis:18%;width:18%}}
         @media(min-width:1280px){.home-rail-card{flex-basis:15.5%;width:15.5%}}
+        /* Cinematic recommendation rail: isolated from both desktop and mobile hero. */
+        #home-personalized-section .home-personalized-rail{gap:18px;padding:4px 3px 14px;scroll-padding-inline:3px}
+        #home-personalized-section .home-personalized-card{flex:0 0 clamp(176px,17vw,218px);width:clamp(176px,17vw,218px);border-color:rgba(148,163,184,.22);box-shadow:0 8px 24px rgba(0,0,0,.10);scroll-snap-align:start}
+        #home-personalized-section .home-personalized-card:hover{border-color:rgba(225,29,72,.65);box-shadow:0 16px 34px rgba(0,0,0,.20);transform:translateY(-5px)}
+        #home-personalized-section .personalized-poster:after{content:"";position:absolute;inset:42% 0 0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.24));pointer-events:none}
+        #home-personalized-section .personalized-poster img{display:block}
+        #home-personalized-section .home-personalized-card:hover .personalized-poster img{transform:scale(1.055)}
+        #home-personalized-section .personalized-type,#home-personalized-section .personalized-rating{z-index:1;backdrop-filter:blur(8px)}
+        #home-personalized-section .personalized-card-copy{min-height:116px}
+        #home-personalized-section .personalized-reason{letter-spacing:.01em}
+        #home-personalized-section .personalized-dismiss{opacity:.78}
+        #home-personalized-section .personalized-dismiss:hover{opacity:1}
+        #home-personalized-section .home-personalized-heading{border-color:rgba(148,163,184,.28)}
+        @media(max-width:639px){
+            #home-personalized-section .home-personalized-rail{gap:12px}
+            #home-personalized-section .home-personalized-card{flex-basis:42%;width:42%;border-radius:14px}
+            #home-personalized-section .personalized-card-copy{min-height:112px;padding:10px}
+        }
+        @media(max-width:380px){#home-personalized-section .home-personalized-card{flex-basis:48%;width:48%}}
+        @media(min-width:640px) and (max-width:767px){#home-personalized-section .home-personalized-card{flex-basis:30%;width:30%}}
+        @media(min-width:768px) and (max-width:1023px){#home-personalized-section .home-personalized-card{flex-basis:24%;width:24%}}
+        @media(prefers-reduced-motion:reduce){#home-personalized-section .home-personalized-card,#home-personalized-section .personalized-poster img{transition:none}}
+
 
 
         /* Açık temalar: sabit Tailwind gri/beyaz yardımcı sınıflarını tema paletine uyarla. */
@@ -338,29 +361,29 @@
 
 
                 <!-- Kişiselleştirilmiş Öneriler -->
-                <section class="w-full px-6 sm:px-12 space-y-5">
-                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
-                        <div>
+                <section id="home-personalized-section" class="home-personalized-section w-full px-6 sm:px-12 space-y-5">
+                    <div class="home-personalized-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                        <div class="min-w-0">
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">SANA ÖZEL • <span x-text="currentProfile.name"></span></p>
                             <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">İzleme Zevkine Göre</h2>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzlediğin türler, oyuncular, yönetmenler ve izleme listen birlikte değerlendirilir</p>
                         </div>
-                        <div class="flex items-center gap-2 shrink-0"><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15</span><button type="button" @click="scrollHomeCards('home-personalized-rail',-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-personalized-rail',1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div>
+                        <div class="flex items-center gap-2 shrink-0"><span class="home-personalized-count text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15 öneri</span><button type="button" @click="scrollHomeCards('home-personalized-rail',-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-personalized-rail',1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div>
                     </div>
-                    <!-- Cards support profile-specific feedback; dismissals influence future recommendations. -->
-                    <div id="home-personalized-rail" class="home-card-rail">
+                    <!-- Öneri sıralaması, profil geri bildirimi ve öneriyi gizleme davranışı korunur. -->
+                    <div id="home-personalized-rail" class="home-card-rail home-personalized-rail">
                         <template x-for="item in personalizedRecommendations.slice(0,15)" :key="'personal-' + item.id">
-                            <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :class="getCardClass()" class="home-rail-card group min-w-0 text-left rounded-xl overflow-hidden border hover:border-rose-500/60 hover:-translate-y-1 transition-all duration-300 shadow-sm">
-                                <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                    <img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 17vw, 14.5vw" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                    <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'tv' ? 'Dizi' : 'Film'"></span>
-                                    <span class="absolute bottom-2 right-2 rounded bg-black/75 text-amber-400 text-[9px] font-black px-1.5 py-1"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || '—'"></span></span>
+                            <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :class="getCardClass()" class="home-rail-card home-personalized-card group min-w-0 text-left rounded-2xl overflow-hidden border transition-all duration-300 shadow-sm">
+                                <div class="personalized-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 17vw, 14.5vw" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700">
+                                    <span class="personalized-type absolute top-3 left-3 rounded-md bg-black/75 text-white text-[9px] font-black uppercase tracking-wider px-2 py-1.5" x-text="item.type === 'tv' ? 'Dizi' : 'Film'"></span>
+                                    <span class="personalized-rating absolute bottom-3 right-3 rounded-lg bg-black/80 text-amber-400 text-[10px] font-black px-2.5 py-1.5"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || '—'"></span></span>
                                 </div>
-                                <div class="p-2.5 space-y-1">
-                                    <h3 class="text-[11px] font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
-                                    <p class="text-[9px] text-gray-500 dark:text-gray-400" x-text="(item.year || '') + (item.genre ? ' • ' + item.genre : '')"></p>
-                                    <p class="text-[9px] font-semibold text-rose-700 dark:text-rose-400 line-clamp-1" x-text="item.recommendationReason || &quot;Sana özel seçildi&quot;"></p>
-                                    <button type="button" @click.stop="dismissRecommendation(item)" :aria-label="'İlgimi çekmedi: ' + item.title" class="mt-1 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-[9px] font-semibold text-gray-500 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"><i class="fa-regular fa-thumbs-down"></i> İlgimi çekmedi</button>
+                                <div class="personalized-card-copy p-3 sm:p-3.5 space-y-1.5">
+                                    <h3 class="text-xs font-extrabold leading-snug text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
+                                    <p class="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="(item.year || '') + (item.genre ? ' • ' + item.genre : '')"></p>
+                                    <p class="personalized-reason text-[10px] font-bold text-rose-700 dark:text-rose-400 line-clamp-1" x-text="item.recommendationReason || &quot;Sana özel seçildi&quot;"></p>
+                                    <button type="button" @click.stop="dismissRecommendation(item)" :aria-label="'İlgimi çekmedi: ' + item.title" class="personalized-dismiss mt-1 inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[10px] font-semibold text-gray-500 hover:text-rose-500 hover:bg-rose-500/10 transition-colors"><i class="fa-regular fa-thumbs-down"></i> İlgimi çekmedi</button>
                                 </div>
                             </div>
                         </template>
