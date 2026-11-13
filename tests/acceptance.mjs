@@ -616,6 +616,31 @@ try {
     assert.ok(await video.isVisible(), 'Doğrudan video oynatıcı görünür değil');
     const src = await video.getAttribute('src');
     assert.match(src || '', /\.mp4(?:$|[?#])/i, 'Oynatıcıya MP4 kaynağı bağlanmadı');
+    const restoredTime = await page.evaluate(async () => {
+      const app = window.Alpine.$data(document.documentElement);
+      const item = app.selectedItem;
+      const videoElement = document.getElementById('customVideoPlayer');
+      const descriptor = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'currentTime');
+      let assignedTime = null;
+      Object.defineProperty(HTMLMediaElement.prototype, 'currentTime', {
+        configurable: true,
+        get() { return descriptor.get.call(this); },
+        set(value) {
+          assignedTime = Number(value);
+          try { descriptor.set.call(this, value); } catch (_) {}
+        }
+      });
+      try {
+        app.saveMovieProgress(item.id, { time: 75, duration: 2400, savedAt: Date.now() });
+        app.openWatchPage(item, false);
+        await new Promise(resolve => setTimeout(resolve, 300));
+        return { assignedTime, playerPresent: !!videoElement };
+      } finally {
+        Object.defineProperty(HTMLMediaElement.prototype, 'currentTime', descriptor);
+      }
+    });
+    assert.ok(restoredTime.playerPresent, 'Devam oynatımı sırasında video oynatıcı bulunamadı');
+    assert.equal(restoredTime.assignedTime, 75, 'Yapım yeniden açıldığında oynatıcı kayıtlı saniyeye dönmedi');
   });
 
   await check('Detay sayfası mobil, tablet ve masaüstünde taşma yapmıyor', async () => {
