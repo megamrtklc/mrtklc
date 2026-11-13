@@ -420,6 +420,8 @@ try {
   });
 
   await check('Mobil ve tablette yatay kart şeritleri kaydırılabiliyor', async () => {
+    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#home-personalized-rail', { timeout: 15000 });
     for (const viewport of [{ width: 360, height: 800 }, { width: 768, height: 1024 }]) {
       await page.setViewportSize(viewport);
       for (const selector of ['#home-personalized-rail', '#home-catalog-rail']) {
