@@ -358,7 +358,7 @@ try {
     });
     console.log('TV RECOMMENDATION BADGE:', JSON.stringify(badge));
     assert.equal(badge.type, 'tv', 'Test kartı dizi türünde olmalı');
-    assert.equal(badge.label, 'Dizi', 'Dizi önerisi Film olarak etiketlenmiş');
+    assert.equal(badge.label, 'DİZİ ÖNERİSİ', 'Dizi önerisi yanlış etiketlenmiş');
     await page.setViewportSize({ width: 360, height: 800 });
     await page.waitForFunction(() => window.innerWidth === 360);
     await page.waitForFunction(() => {
