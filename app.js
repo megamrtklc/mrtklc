@@ -408,17 +408,51 @@
                 applyHomepageSectionOrder() {
                     const root = document.getElementById('home-page');
                     if (!root) return;
-                    const defaultOrder = ['hero', 'personalized', 'continue', 'watchlist', 'new-arrivals', 'series-tracking', 'genre-discovery', 'published-collections', 'catalog'];
+                    const defaultOrder = ['hero', 'personalized', 'continue', 'watchlist', 'new-arrivals', 'series-tracking', 'published-collections', 'catalog', 'genre-discovery'];
                     const configured = this.homepageConfig?.layout?.order;
                     const order = Array.isArray(configured) ? configured : defaultOrder;
-                    const rank = new Map(order.map((key, index) => [key, index]));
-                    const sections = [...root.children].filter(element => element.hasAttribute('data-home-section'));
-                    sections.sort((a, b) => {
-                        const aRank = rank.has(a.dataset.homeSection) ? rank.get(a.dataset.homeSection) : defaultOrder.indexOf(a.dataset.homeSection);
-                        const bRank = rank.has(b.dataset.homeSection) ? rank.get(b.dataset.homeSection) : defaultOrder.indexOf(b.dataset.homeSection);
-                        return (aRank < 0 ? 999 : aRank) - (bRank < 0 ? 999 : bRank);
+                    const contentIds = {
+                        continue: 'home-continue-section',
+                        watchlist: 'home-watchlist-section',
+                        'new-arrivals': 'home-new-arrivals-section'
+                    };
+                    const children = [...root.children];
+                    const groups = new Map();
+                    children.forEach(element => {
+                        const key = element.dataset.homeSection;
+                        if (!key) return;
+                        if (!groups.has(key)) groups.set(key, []);
+                        groups.get(key).push(element);
                     });
-                    sections.forEach(section => root.appendChild(section));
+                    Object.entries(contentIds).forEach(([key, id]) => {
+                        const content = document.getElementById(id);
+                        if (content && content.parentElement === root) {
+                            if (!groups.has(key)) groups.set(key, []);
+                            groups.get(key).push(content);
+                        }
+                    });
+                    const ordered = [];
+                    const placed = new Set();
+                    order.forEach(key => {
+                        const group = groups.get(key) || [];
+                        // Keep the 1px observer anchor before its corresponding lazy section.
+                        group.sort((a, b) => {
+                            const aAnchor = a.getAttribute('aria-hidden') === 'true' ? 0 : 1;
+                            const bAnchor = b.getAttribute('aria-hidden') === 'true' ? 0 : 1;
+                            return aAnchor - bAnchor;
+                        });
+                        group.forEach(element => {
+                            if (!placed.has(element)) {
+                                ordered.push(element);
+                                placed.add(element);
+                            }
+                        });
+                    });
+                    // Retain any future/unconfigured homepage blocks without dropping them.
+                    children.forEach(element => {
+                        if (!placed.has(element)) ordered.push(element);
+                    });
+                    ordered.forEach(element => root.appendChild(element));
                 },
 
                 initHomeSectionObserver() {
