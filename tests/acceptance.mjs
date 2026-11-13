@@ -1147,12 +1147,12 @@ try {
     await saveButton.click();
     await page.waitForFunction(() => window.Alpine.$data(document.documentElement).isInWatchlist(window.Alpine.$data(document.documentElement).selectedItem));
 
-    await page.locator('header select').selectOption('pro_2');
+    await selectProfile('pro_2');
     await page.locator('header nav a').filter({ hasText: 'İzleme Listem' }).first().click();
     await page.waitForURL(/#\/watchlist$/);
     await page.getByText('İzleme Listesi Boş', { exact: true }).waitFor({ state: 'visible' });
 
-    await page.locator('header select').selectOption('pro_1');
+    await selectProfile('pro_1');
     await page.waitForFunction(expectedId => window.Alpine.$data(document.documentElement).watchlist.some(item => String(item.id) === String(expectedId)), adaletId);
     await page.locator('header nav a').filter({ hasText: 'İzleme Listem' }).first().click();
     await page.getByRole('heading', { name: 'Ana Profil - İzleme Listem' }).waitFor({ state: 'visible' });
