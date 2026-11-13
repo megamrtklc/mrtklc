@@ -11,6 +11,41 @@
             catch (error) { console.warn('Yerel kayıt kaydedilemedi:', key, error); return false; }
         }
 
+        function migrateToSingleProfileStorage() {
+            const progress = safeStorageRead('perde_profile_player_progress_v1', {});
+            if (progress && typeof progress === 'object' && !Array.isArray(progress) &&
+                (Object.prototype.hasOwnProperty.call(progress, 'pro_1') || Object.prototype.hasOwnProperty.call(progress, 'pro_2'))) {
+                const mainProgress = progress.pro_1 && typeof progress.pro_1 === 'object' && !Array.isArray(progress.pro_1) ? progress.pro_1 : {};
+                safeStorageWrite('perde_profile_player_progress_v1', mainProgress);
+            }
+
+            const episodes = safeStorageRead('cine_episode_tracking_v1', {});
+            if (episodes && typeof episodes === 'object' && !Array.isArray(episodes)) {
+                const migratedEpisodes = {};
+                Object.entries(episodes).forEach(([key, value]) => {
+                    if (key.startsWith('pro_2:')) return;
+                    migratedEpisodes[key.startsWith('pro_1:') ? key.slice(5) : key] = value;
+                });
+                safeStorageWrite('cine_episode_tracking_v1', migratedEpisodes);
+            }
+
+            const watchlists = safeStorageRead('cine_profile_watchlists', {});
+            if (watchlists && typeof watchlists === 'object' && !Array.isArray(watchlists)) {
+                const mainWatchlist = Array.isArray(watchlists.pro_1) ? watchlists.pro_1 : [];
+                safeStorageWrite('cine_profile_watchlists', mainWatchlist);
+            }
+
+            const feedback = safeStorageRead('cine_recommendation_feedback_v1', {});
+            if (feedback && typeof feedback === 'object' && !Array.isArray(feedback)) {
+                const mainFeedback = Array.isArray(feedback.pro_1) ? feedback.pro_1.map(String) : [];
+                safeStorageWrite('cine_recommendation_feedback_v1', mainFeedback);
+            }
+
+            try { localStorage.removeItem('cine_active_profile'); } catch (_) {}
+        }
+
+        migrateToSingleProfileStorage();
+
         const personalizedRecommendationCache = new WeakMap();
         const recommendationPlotTermsCache = new WeakMap();
         const recommendationStopWords = new Set(['about','after','again','against','among','because','before','being','between','could','every','first','from','have','into','just','more','most','other','over','same','some','such','than','that','their','them','then','there','these','they','this','those','through','under','until','very','were','what','when','where','which','while','with','would','your','ancak','artık','bazen','belki','birçok','bütün','daha','diğer','eden','eder','edilir','etti','gibi','hem','her','hiç','için','ile','kadar','kendi','kez','ki','kim','nasıl','neden','nerede','olan','olarak','oldu','olduğu','olmak','olmuş','önce','sonra','şey','tüm','üzere','veya','yine']);
@@ -654,7 +689,7 @@
                 getEpisodeTracking() {
                     const all = safeStorageRead('cine_episode_tracking_v1', {});
                     if (!all || typeof all !== 'object' || Array.isArray(all)) return { watched: {}, last: null };
-                    const key = this.currentProfileId + ':' + (this.selectedItem?.id || '');
+                    const key = String(this.selectedItem?.id || '');
                     const tracking = all[key];
                     return tracking && typeof tracking === 'object' && !Array.isArray(tracking) ? { watched: tracking.watched && typeof tracking.watched === 'object' ? tracking.watched : {}, last: tracking.last ?? null } : { watched: {}, last: null };
                 },
@@ -662,7 +697,7 @@
                 saveEpisodeTracking(tracking) {
                     const stored = safeStorageRead('cine_episode_tracking_v1', {});
                     const all = stored && typeof stored === 'object' && !Array.isArray(stored) ? stored : {};
-                    const key = this.currentProfileId + ':' + (this.selectedItem?.id || '');
+                    const key = String(this.selectedItem?.id || '');
                     if (!tracking || typeof tracking !== 'object' || Array.isArray(tracking)) return false;
                     all[key] = tracking;
                     return safeStorageWrite('cine_episode_tracking_v1', all);
@@ -921,26 +956,17 @@
                     }
                 },
 
-                profiles: [
-                    { id: 'pro_1', name: 'Ana Profil', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop' },
-                    { id: 'pro_2', name: 'Çocuk Profili', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=200&auto=format&fit=crop' }
-                ],
-                currentProfileId: ['pro_1','pro_2'].includes(safeStorageRead('cine_active_profile','pro_1')) ? safeStorageRead('cine_active_profile','pro_1') : 'pro_1',
-
-                get currentProfile() {
-                    return this.profiles.find(p => p.id === this.currentProfileId) || this.profiles[0];
+                currentProfile: {
+                    name: 'Ana Profil',
+                    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop'
                 },
 
-                // Film ilerlemesi artık profil bazında tutulur. Eski ortak kayıtlar korunur,
-                // ancak hangi profile ait oldukları bilinmediği için önerilere dahil edilmez.
                 get profileMovieProgress() {
                     try {
-                        const all = safeStorageRead('perde_profile_player_progress_v1', {});
-                        if (!all || typeof all !== 'object' || Array.isArray(all)) return {};
-                        const current = all[this.currentProfileId];
-                        return current && typeof current === 'object' ? current : {};
+                        const progress = safeStorageRead('perde_profile_player_progress_v1', {});
+                        return progress && typeof progress === 'object' && !Array.isArray(progress) ? progress : {};
                     } catch (error) {
-                        console.warn('Profil izleme geçmişi okunamadı:', error);
+                        console.warn('İzleme geçmişi okunamadı:', error);
                         return {};
                     }
                 },
@@ -960,23 +986,14 @@
 
                 saveMovieProgress(itemId, progress) {
                     try {
-                        const stored = safeStorageRead('perde_profile_player_progress_v1', {});
-                        const all = stored && typeof stored === 'object' && !Array.isArray(stored) ? stored : {};
-                        if (!all[this.currentProfileId] || typeof all[this.currentProfileId] !== 'object' || Array.isArray(all[this.currentProfileId])) {
-                            all[this.currentProfileId] = {};
-                        }
-                        all[this.currentProfileId][String(itemId)] = progress;
+                        const all = this.profileMovieProgress;
+                        all[String(itemId)] = progress;
                         safeStorageWrite('perde_profile_player_progress_v1', all);
                     } catch (error) {
                         console.warn('Profil izleme ilerlemesi kaydedilemedi:', error);
                     }
                 },
 
-                switchProfile(id) {
-                    if (!this.profiles.some(profile => profile.id === id)) return;
-                    this.currentProfileId = id;
-                    safeStorageWrite('cine_active_profile', id);
-                },
 
                 get libraryMovieEntries() {
                     return Object.entries(this.profileMovieProgress).map(([id, saved]) => {
@@ -992,9 +1009,7 @@
                 get librarySeriesEntries() {
                     const all = safeStorageRead('cine_episode_tracking_v1', {});
                     if (!all || typeof all !== 'object' || Array.isArray(all)) return [];
-                    const prefix = this.currentProfileId + ':';
-                    return Object.entries(all).filter(([key]) => key.startsWith(prefix)).map(([key, tracking]) => {
-                        const itemId = key.slice(prefix.length);
+                    return Object.entries(all).map(([itemId, tracking]) => {
                         const item = this.catalog.find(entry => String(entry.id) === itemId);
                         if (!item || item.type !== 'tv') return null;
                         const watched = tracking?.watched && typeof tracking.watched === 'object' ? tracking.watched : {};
@@ -1037,9 +1052,7 @@
                 },
 
                 get watchlist() {
-                    const storedLists = safeStorageRead('cine_profile_watchlists', {});
-                    const allLists = storedLists && typeof storedLists === 'object' && !Array.isArray(storedLists) ? storedLists : {};
-                    const list = allLists[this.currentProfileId];
+                    const list = safeStorageRead('cine_profile_watchlists', []);
                     return Array.isArray(list) ? list.filter(item => item && typeof item === 'object' && item.id != null) : [];
                 },
                 get currentWatchlist() {
@@ -1047,17 +1060,11 @@
                 },
 
                 toggleWatchlist(item) {
-                    const storedLists = safeStorageRead('cine_profile_watchlists', {});
-                    const allLists = storedLists && typeof storedLists === 'object' && !Array.isArray(storedLists) ? storedLists : {};
-                    if (!Array.isArray(allLists[this.currentProfileId])) allLists[this.currentProfileId] = [];
-                    const list = allLists[this.currentProfileId];
+                    const list = this.watchlist;
                     const index = list.findIndex(m => m && String(m.id) === String(item.id));
-                    if (index > -1) {
-                        list.splice(index, 1);
-                    } else {
-                        list.push(item);
-                    }
-                    safeStorageWrite('cine_profile_watchlists', allLists);
+                    if (index > -1) list.splice(index, 1);
+                    else list.push(item);
+                    safeStorageWrite('cine_profile_watchlists', list);
                 },
 
                 isInWatchlist(item) {
@@ -1065,20 +1072,16 @@
                 },
 
                 get recommendationFeedback() {
-                    const all = safeStorageRead('cine_recommendation_feedback_v1', {});
-                    const own = all && typeof all === 'object' && !Array.isArray(all) ? all[this.currentProfileId] : [];
-                    return Array.isArray(own) ? [...new Set(own.map(String))] : [];
+                    const stored = safeStorageRead('cine_recommendation_feedback_v1', []);
+                    return Array.isArray(stored) ? [...new Set(stored.map(String))] : [];
                 },
 
                 dismissRecommendation(item) {
                     if (!item || item.id == null) return;
-                    const stored = safeStorageRead('cine_recommendation_feedback_v1', {});
-                    const all = stored && typeof stored === 'object' && !Array.isArray(stored) ? stored : {};
-                    const own = Array.isArray(all[this.currentProfileId]) ? all[this.currentProfileId].map(String) : [];
+                    const own = this.recommendationFeedback;
                     const id = String(item.id);
                     if (!own.includes(id)) own.push(id);
-                    all[this.currentProfileId] = own.slice(-200);
-                    safeStorageWrite('cine_recommendation_feedback_v1', all);
+                    safeStorageWrite('cine_recommendation_feedback_v1', own.slice(-200));
                 },
 
                 reviews: (() => { const value = safeStorageRead('cine_reviews', {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; })(),
@@ -1593,16 +1596,13 @@
                         const value = safeStorageRead(key, {});
                         return value && typeof value === 'object' && !Array.isArray(value) ? value : {};
                     };
-                    const profileId = String(this.currentProfileId || '');
                     const progress = this.profileMovieProgress;
                     const episodes = safeRead('cine_episode_tracking_v1');
                     const watchlist = this.watchlist;
                     const feedbackIds = this.recommendationFeedback;
-                    const profileEpisodeState = Object.entries(episodes).filter(([key]) => key.startsWith(profileId + ':'));
                     const cacheKey = JSON.stringify([
-                        profileId,
                         progress,
-                        profileEpisodeState,
+                        Object.entries(episodes),
                         watchlist.map(item => String(item.id)),
                         feedbackIds
                     ]);
