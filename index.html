@@ -577,7 +577,8 @@
                 </section>
 
                 <!-- İzlemeye Devam Et: aktif profilin kaldığı yapımlar -->
-                <section id="home-continue-section" data-home-section="continue" x-show="isHomepageSectionVisible('continue') && (!homeSectionReady.continue || continueWatchingItems.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
+                <div data-home-section="continue" aria-hidden="true" style="height:1px"></div>
+                <section id="home-continue-section" x-show="isHomepageSectionVisible('continue') && homeSectionReady.continue && continueWatchingItems.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-continue-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">KALDIĞIN YERDEN</p>
