@@ -400,6 +400,7 @@
 
                 isHomepageSectionVisible(sectionKey) {
                     if (sectionKey === 'hero') return true;
+                    if (!this.homepageConfig) return false;
                     return this.homepageConfig?.layout?.visibility?.[sectionKey] !== false;
                 },
 
