@@ -205,7 +205,7 @@ try {
           source: image.currentSrc,
           imageComplete: image.complete,
           imageNaturalWidth: image.naturalWidth,
-          thumbnails: document.querySelectorAll('#mobileHeroThumbs img').length,
+          navigationControls: document.querySelectorAll('#mobileHeroBanner button[aria-label*=\"öne çıkan yapım\"]').length,
           lcp,
           layoutShifts: window.__layoutShiftEntries || [],
           longTasks: window.__longTasks || [],
@@ -231,7 +231,7 @@ try {
       assert.ok(!mobileState.desktopVisible, 'Masaüstü manşeti telefonda görünmemeli');
       assert.ok(!mobileState.desktopHeroSource || !mobileState.desktopHeroSource.startsWith('https://image.tmdb.org/'), 'Mobil ekranda gizli masaüstü manşet görseli indirilmemeli');
       assert.match(mobileState.source, /\/w(342|500|780)\//);
-      assert.ok(mobileState.thumbnails > 0, 'Mobil manşet afiş şeridi yüklenmedi');
+      assert.ok(mobileState.navigationControls >= 2, 'Mobil manşet gezinme kontrolleri yüklenmedi');
     } finally {
       await mobilePage.close();
     }
