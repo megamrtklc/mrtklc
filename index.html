@@ -107,6 +107,31 @@
         .theme-ivory .border-gray-100, .theme-slate .border-gray-100,
         .theme-ivory .border-gray-200, .theme-slate .border-gray-200 { border-color: var(--theme-border); }
         .theme-ivory .border-gray-300, .theme-slate .border-gray-300 { border-color: var(--theme-border-strong); }
+
+        /* CineVerse Cinematic Home Refresh — yalnızca ana sayfa kapsamı */
+        #home-page{position:relative;isolation:isolate;overflow:clip}
+        #home-page:before{content:"";position:absolute;z-index:-1;pointer-events:none;inset:0 0 auto;height:1100px;background:radial-gradient(ellipse at 12% 16%,rgba(190,24,93,.075),transparent 44%),radial-gradient(ellipse at 88% 38%,rgba(217,119,6,.055),transparent 38%)}
+        .dark #home-page:before{background:radial-gradient(ellipse at 12% 16%,rgba(190,24,93,.13),transparent 44%),radial-gradient(ellipse at 88% 38%,rgba(217,119,6,.09),transparent 38%)}
+        #desktopEditorialHero{border-bottom:1px solid rgba(255,255,255,.12);box-shadow:0 26px 70px -48px rgba(0,0,0,.85)}
+        #desktopEditorialHero #heroThumbContainer button{flex-shrink:0;transition:opacity .25s ease,transform .3s ease,border-color .3s ease,box-shadow .3s ease}
+        #desktopEditorialHero #heroThumbContainer button[aria-current="true"]{opacity:1;transform:translateY(-3px);box-shadow:0 12px 28px -12px rgba(245,158,11,.55)}
+        #mobileHeroBanner{box-shadow:0 22px 50px -38px rgba(0,0,0,.7)}
+        #home-page section:not(#desktopEditorialHero):not(#mobileHeroBanner){max-width:1800px;margin-left:auto;margin-right:auto}
+        #home-page section>div:first-child{position:relative;border-color:rgba(148,163,184,.22);padding-bottom:1rem}
+        #home-page section>div:first-child:after{content:"";position:absolute;left:0;bottom:-1px;width:58px;height:2px;border-radius:2px;background:linear-gradient(90deg,#e11d48,#f59e0b)}
+        #home-page section>div:first-child h2{letter-spacing:-.025em;text-wrap:balance}
+        #home-page section>div:first-child p{line-height:1.55}
+        #home-page .home-card-rail{gap:clamp(12px,1.25vw,20px);padding:6px 3px 18px;scroll-padding-inline:3px}
+        #home-page .home-rail-card{border-radius:16px;border-color:rgba(148,163,184,.22);box-shadow:0 8px 24px -20px rgba(0,0,0,.55);transform:translateZ(0)}
+        #home-page .home-rail-card:hover{border-color:rgba(225,29,72,.65);box-shadow:0 18px 34px -22px rgba(0,0,0,.72);transform:translateY(-4px)}
+        #home-page .home-rail-card img{backface-visibility:hidden}
+        #home-page .home-rail-arrow{width:36px;height:36px;border-color:rgba(148,163,184,.32);background:rgba(127,127,127,.07)}
+        #home-page .home-rail-arrow:focus-visible{outline:2px solid #f59e0b;outline-offset:3px}
+        @media(min-width:768px){#home-page .home-rail-card{flex-basis:23%;width:23%}}
+        @media(min-width:1024px){#home-page .home-rail-card{flex-basis:19%;width:19%}}
+        @media(min-width:1280px){#home-page .home-rail-card{flex-basis:16.6%;width:16.6%}}
+        @media(max-width:639px){#home-page section>div:first-child h2{font-size:1.18rem}#home-page .home-card-rail{gap:12px;padding-bottom:14px}#mobileHeroBanner{border-radius:0 0 18px 18px}}
+        @media(prefers-reduced-motion:reduce){#home-page .home-rail-card,#home-page .home-rail-card img,#desktopEditorialHero #heroThumbContainer button{transition:none!important}}
     </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
@@ -219,7 +244,7 @@
 
         <!-- ==================== HOME PAGE ==================== -->
         <template x-if="currentPage === 'home'">
-            <div class="w-full space-y-10 pb-16">
+            <div id="home-page" class="w-full space-y-10 md:space-y-14 pb-16">
                 
                 <!-- DESKTOP EDITORIAL HERO: mobil manşetten bağımsız yeni masaüstü kompozisyonu -->
                 <section id="desktopEditorialHero" x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
