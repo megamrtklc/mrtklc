@@ -62,18 +62,15 @@ if (firstDesktopItem) {
     : descriptionSource);
   let html = await readFile('index.html', 'utf8');
   const replacements = [
-    ['id="hero-initial-desktop-title"></h1>', `id="hero-initial-desktop-title">${title}</h1>`],
-    ['id="hero-initial-desktop-type"></p>', `id="hero-initial-desktop-type">${type}</p>`],
-    ['id="hero-initial-desktop-meta" class="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-200"></div>',
-      `id="hero-initial-desktop-meta" class="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-200"><span class="inline-flex items-center gap-2"><i class="fa-solid fa-star text-amber-400"></i><strong class="text-white">${rating}</strong><span class="text-gray-400">IMDb</span></span><span class="text-white/35">|</span><span>${year}</span><span class="text-white/35">|</span><span>${genre}</span></div>`],
-    ['id="hero-initial-desktop-description" class="max-w-[620px] text-[15px] leading-7 text-gray-200/90 line-clamp-3"></p>',
-      `id="hero-initial-desktop-description" class="max-w-[620px] text-[15px] leading-7 text-gray-200/90 line-clamp-3">${description}</p>`],
-    ['id="hero-initial-desktop-footer-title" class="text-sm font-semibold text-white/65"></span>',
-      `id="hero-initial-desktop-footer-title" class="text-sm font-semibold text-white/65">${title}</span>`]
+    [/(<h1\\b[^>]*\\bid="hero-initial-desktop-title"[^>]*>)[\\s\\S]*?(<\\/h1>)/, `$1${title}$2`],
+    [/(<p\\b[^>]*\\bid="hero-initial-desktop-type"[^>]*>)[\\s\\S]*?(<\\/p>)/, `$1${type}$2`],
+    [/(<div\\b[^>]*\\bid="hero-initial-desktop-meta"[^>]*>)[\\s\\S]*?(<\\/div>)/, `$1<span class="inline-flex items-center gap-2"><i class="fa-solid fa-star text-amber-400"></i><strong class="text-white">${rating}</strong><span class="text-gray-400">IMDb</span></span><span class="text-white/35">|</span><span>${year}</span><span class="text-white/35">|</span><span>${genre}</span>$2`],
+    [/(<p\\b[^>]*\\bid="hero-initial-desktop-description"[^>]*>)[\\s\\S]*?(<\\/p>)/, `$1${description}$2`],
+    [/(<span\\b[^>]*\\bid="hero-initial-desktop-footer-title"[^>]*>)[\\s\\S]*?(<\\/span>)/, `$1${title}$2`]
   ];
-  for (const [before, after] of replacements) {
-    if (!html.includes(before)) throw new Error(`Desktop initial hero content slot missing: ${before.slice(0, 70)}`);
-    html = html.replace(before, after);
+  for (const [pattern, replacement] of replacements) {
+    if (!pattern.test(html)) throw new Error(`Desktop initial hero content slot missing: ${String(pattern)}`);
+    html = html.replace(pattern, replacement);
   }
   await writeFile('index.html', html);
 }
