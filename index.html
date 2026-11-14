@@ -1706,36 +1706,36 @@
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
-    <header x-data="{ mobileMenuOpen: false, headerScrolled: window.scrollY > 40 }" @scroll.window="headerScrolled = window.scrollY > 40" :class="currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass()" class="sticky top-0 z-50 backdrop-blur-md border-b transition-colors duration-300">
+    <header x-show="headerConfig.enabled !== false" x-data="{ mobileMenuOpen: false, headerScrolled: window.scrollY > 40 }" @scroll.window="headerScrolled = window.scrollY > 40" :class="(headerConfig.sticky === false ? 'relative' : 'sticky') + ' z-50 ' + (currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass())" class="backdrop-blur-md border-b transition-colors duration-300">
         <div class="w-full px-4 sm:px-12 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 lg:space-x-6">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
+                    <div x-show="headerConfig.showLogoIcon !== false" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-film text-white text-sm"></i>
                     </div>
-                    <span class="text-xl font-black tracking-wider uppercase max-[360px]:hidden">CINE<span class="text-rose-700 dark:text-rose-400">VERSE</span></span>
+                    <span class="text-xl font-black tracking-wider uppercase max-[360px]:hidden"><span x-text="headerConfig.brandPrimary || 'CINE'">CINE</span><span class="text-rose-700 dark:text-rose-400" x-text="headerConfig.brandAccent || 'VERSE'">VERSE</span></span>
                 </a>
                 
                 <nav class="hidden xl:flex items-center space-x-4 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
-                    <a href="#" @click.prevent="navigateTo('home')" :class="currentPage === 'home' ? 'text-rose-700 dark:text-rose-400' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Ana Sayfa</a>
-                    <a href="#" @click.prevent="navigateTo('explore')" :class="currentPage === 'explore' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">Keşfet</a>
-                    <a href="#" @click.prevent="navigateTo('video-links')" :class="currentPage === 'video-links' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center gap-1.5">
-                        <span>Video Bağlantıları</span>
+                    <a x-show="headerConfig.showHome !== false" href="#" @click.prevent="navigateTo('home')" :class="currentPage === 'home' ? 'text-rose-700 dark:text-rose-400' : 'hover:text-black dark:hover:text-white'" class="transition-colors" x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</a>
+                    <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore')" :class="currentPage === 'explore' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors" x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</a>
+                    <a x-show="headerConfig.showVideo !== false" href="#" @click.prevent="navigateTo('video-links')" :class="currentPage === 'video-links' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center gap-1.5">
+                        <span x-text="headerConfig.videoLabel || 'Video Bağlantıları'">Video Bağlantıları</span>
                         <span class="px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px]" x-text="watchableCatalog.length"></span>
                     </a>
                 </nav>
             </div>
             
             <div class="flex items-center space-x-1 sm:space-x-4">
-                <button @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen.toString()" aria-label="Menüyü aç veya kapat" class="xl:hidden w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-rose-500 transition-colors">
+                <button x-show="headerConfig.showMobileMenu !== false" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen.toString()" aria-label="Menüyü aç veya kapat" class="xl:hidden w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-rose-500 transition-colors">
                     <i :class="mobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
                 </button>
-                <button type="button" @click="openSearchOverlay()" aria-label="Film ve dizi ara" aria-haspopup="dialog" class="cineverse-search-trigger" title="Ara">
+                <button x-show="headerConfig.showSearch !== false" type="button" @click="openSearchOverlay()" aria-label="Film ve dizi ara" aria-haspopup="dialog" class="cineverse-search-trigger" title="Ara">
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 </button>
 
                 <!-- Tek profil menüsü -->
-                <div class="relative" x-data="{ openProfileMenu: false }">
+                <div x-show="headerConfig.showProfile !== false" class="relative" x-data="{ openProfileMenu: false }">
                     <button type="button" @click="openProfileMenu = !openProfileMenu" :aria-expanded="openProfileMenu.toString()" aria-label="Hesap menüsünü aç" class="cineverse-profile-trigger">
                         <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="cineverse-profile-avatar">
                         <i :class="openProfileMenu ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'" class="text-[10px] opacity-70" aria-hidden="true"></i>
@@ -1777,11 +1777,11 @@
                 </div>
             </div>
         </div>
-        <div x-show="mobileMenuOpen" x-transition.origin.top.right @click.away="mobileMenuOpen = false" class="xl:hidden absolute top-full right-3 left-3 sm:left-auto sm:w-80 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl p-3 z-50">
+        <div x-show="headerConfig.showMobileMenu !== false && mobileMenuOpen" x-transition.origin.top.right @click.away="mobileMenuOpen = false" class="xl:hidden absolute top-full right-3 left-3 sm:left-auto sm:w-80 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl p-3 z-50">
             <nav class="grid grid-cols-1 gap-1 text-sm font-bold text-gray-700 dark:text-gray-200">
-                <a href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Ana Sayfa</a>
-                <a href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Keşfet</a>
-                <a href="#" @click.prevent="navigateTo('video-links'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span>Video Bağlantıları</span><span class="text-xs text-rose-500" x-text="watchableCatalog.length"></span></a>
+                <a href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"><span x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</span></a>
+                <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"><span x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</span></a>
+                <a x-show="headerConfig.showVideo !== false" href="#" @click.prevent="navigateTo('video-links'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span x-text="headerConfig.videoLabel || 'Video Bağlantıları'">Video Bağlantıları</span><span class="text-xs text-rose-500" x-text="watchableCatalog.length"></span></a>
             </nav>
         </div>
     </header>
