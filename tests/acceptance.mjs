@@ -421,10 +421,13 @@ try {
     assert.ok(result.removedFromRecommendations, 'İlgimi çekmedi denilen yapım önerilerde kaldı');
   });
 
-  await check('Ana sayfada sekiz kişisel öneri iki sütunda ve beğeni/ilgi yok kontrolleriyle gösteriliyor', async () => {
+  await check('Ana sayfada kişisel öneriler dört kartla başlıyor, tümünü açabiliyor ve geri bildirimleri koruyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 8, { timeout: 10000 });
-    const layout = await page.locator('#home-personalized-rail').evaluate(element => {
+    const rail = page.locator('#home-personalized-rail');
+    await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 4, { timeout: 10000 });
+    const expand = page.getByRole('button', { name: 'Tüm önerileri gör' });
+    assert.ok(await expand.isVisible(), 'Tüm önerileri gör kontrolü görünmeli');
+    const initialLayout = await rail.evaluate(element => {
       const cards = [...element.querySelectorAll('.home-personalized-alternative')];
       const first = cards[0].getBoundingClientRect();
       const second = cards[1].getBoundingClientRect();
@@ -433,19 +436,24 @@ try {
         count: cards.length,
         columns: getComputedStyle(element).gridTemplateColumns.split(' ').length,
         firstTwoShareRow: Math.abs(first.top - second.top) < 2,
-        nextRowBelow: third.top > first.top,
-        likeButtons: cards.every(card => !!card.querySelector('.home-personalized-like')),
-        dislikeButtons: cards.every(card => !!card.querySelector('.home-personalized-dislike')),
-        dislikeWidth: cards[0].querySelector('.home-personalized-dislike').getBoundingClientRect().width
+        nextRowBelow: third.top > first.top
       };
     });
-    assert.equal(layout.count, 8, 'Tam sekiz küçük öneri gösterilmeli');
-    assert.equal(layout.columns, 2, 'Öneri alanı iki sütun olmalı');
-    assert.ok(layout.firstTwoShareRow && layout.nextRowBelow, 'Kartlar ikişerli satırlara yerleşmeli');
-    assert.ok(layout.likeButtons && layout.dislikeButtons, 'Her kartta Like ve Dislike butonu olmalı');
-    assert.ok(layout.dislikeWidth >= 38, 'Dislike butonu büyütülmüş olmalı');
+    assert.equal(initialLayout.count, 4, 'İlk görünümde dört küçük öneri gösterilmeli');
+    assert.equal(initialLayout.columns, 2, 'Öneri alanı iki sütun olmalı');
+    assert.ok(initialLayout.firstTwoShareRow && initialLayout.nextRowBelow, 'Kartlar ikişerli satırlara yerleşmeli');
 
-    const firstCard = page.locator('#home-personalized-rail .home-personalized-alternative').first();
+    await expand.click();
+    await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 8);
+    const cards = rail.locator('.home-personalized-alternative');
+    const allCardsHaveFeedback = await cards.evaluateAll(items => items.every(card =>
+      !!card.querySelector('.home-personalized-like') && !!card.querySelector('.home-personalized-dislike')
+    ));
+    assert.ok(allCardsHaveFeedback, 'Açılan sekiz kartın tamamında Like ve Dislike olmalı');
+    const dislikeWidth = await cards.first().locator('.home-personalized-dislike').evaluate(element => element.getBoundingClientRect().width);
+    assert.ok(dislikeWidth >= 38, 'Dislike butonu büyütülmüş olmalı');
+
+    const firstCard = cards.first();
     const firstId = await firstCard.getAttribute('data-recommendation-id');
     await firstCard.getByRole('button', { name: /Beğendim:/ }).click();
     await page.waitForFunction(id => {
@@ -455,16 +463,15 @@ try {
     assert.equal(await firstCard.getByRole('button', { name: /Beğendim:/ }).getAttribute('aria-pressed'), 'true',
       'Beğeni durumu kartta aktif görünmeli');
 
-    const secondCard = page.locator('#home-personalized-rail .home-personalized-alternative').nth(1);
+    const secondCard = cards.nth(1);
     const secondId = await secondCard.getAttribute('data-recommendation-id');
     await secondCard.getByRole('button', { name: /İlgimi çekmedi:/ }).click();
     await page.waitForFunction(id => {
       return ![...document.querySelectorAll('#home-personalized-rail .home-personalized-alternative')]
         .some(card => card.getAttribute('data-recommendation-id') === String(id));
     }, secondId);
-    assert.ok(true, 'Beğeni ve ilgimi çekmedi geri bildirimleri kaydedildi');
     await page.setViewportSize({ width: 360, height: 800 });
-    const mobileColumns = await page.locator('#home-personalized-rail').evaluate(element => getComputedStyle(element).gridTemplateColumns.split(' ').length);
+    const mobileColumns = await rail.evaluate(element => getComputedStyle(element).gridTemplateColumns.split(' ').length);
     assert.equal(mobileColumns, 2, 'Mobilde de iki sütun korunmalı');
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
