@@ -21783,6 +21783,207 @@
       "tmdbImdbId": "tt10838180",
       "tmdbRating": "6.3",
       "tmdbVoteCount": 6860
+    },
+    {
+      "id": "cv-1794698428751",
+      "title": "Karayip Korsanları: Ölü Adam'ın Sandığı",
+      "type": "movie",
+      "year": "2006",
+      "rating": "7.4",
+      "genre": "Macera",
+      "category": "Macera / Fantastik / Aksiyon",
+      "duration": "151 dk",
+      "country": "United States of America",
+      "director": "Gore Verbinski",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 58,
+      "imdbId": "tt0383574",
+      "image": "https://image.tmdb.org/t/p/w500/kbHReT65bMcy0jyz7tMUi9NMuOd.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/vr6n6ZFUZvedvIlhfYcbCWcaKyW.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=VKwn1kQyYpk",
+      "trailerProvider": "auto",
+      "desc": "Kaptan Jack Sparrow, lanetli hayalet gemi Uçan Hollandalı'nın kaptanı Davy Jones'a kan borcu olduğunu öğrenir. Davy Jones, mürettebatı ve gemisiyle birlikte denizlerin korkulan bir hayalet korsanıdır. Jack, borcunu ödeyemezse, Davy'nin kölesi olarak sonsuza kadar onun hizmetinde kalmaya mahkum olacaktır. Jack, bu durumdan kurtulmak için Ölü Adamın Sandığı'nı bulması gerektiğini anlar. Sandığa sahip olan kişi, Davy Jones'un kalbini kontrol edebilir ve onu kontrol altında tutabilir. Bu macerada, Jack'e Will Turner ve Elizabeth Swann de eşlik eder. Üçlü, deniz canavarları, hırsızlar ve lanetli korsanlarla dolu bir maceraya atılır.",
+      "cast": [
+        "Johnny Depp",
+        "Orlando Bloom",
+        "Keira Knightley",
+        "Jack Davenport",
+        "Bill Nighy",
+        "Jonathan Pryce",
+        "Lee Arenberg",
+        "Mackenzie Crook",
+        "Kevin McNally",
+        "David Bailie",
+        "Stellan Skarsgård",
+        "Tom Hollander",
+        "Naomie Harris",
+        "Martin Klebba",
+        "David Schofield",
+        "Alex Norton",
+        "Lauren Maher",
+        "Nej Adamson",
+        "Jimmy Roussounis",
+        "Moray Treadwell"
+      ],
+      "tmdbTitle": "Karayip Korsanları: Ölü Adam'ın Sandığı",
+      "tmdbOriginalTitle": "Pirates of the Caribbean: Dead Man's Chest",
+      "tmdbReleaseDate": "2006-07-06",
+      "tmdbGenres": "Macera / Fantastik / Aksiyon",
+      "tmdbRuntime": "151 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Gore Verbinski",
+      "tmdbCast": [
+        {
+          "id": 85,
+          "name": "Johnny Depp",
+          "character": "Jack Sparrow",
+          "profile": "https://image.tmdb.org/t/p/w185/k2xt6EUxQDwYRKIyI4IBdZxfs8n.jpg",
+          "order": 0
+        },
+        {
+          "id": 114,
+          "name": "Orlando Bloom",
+          "character": "Will Turner",
+          "profile": "https://image.tmdb.org/t/p/w185/lwQoA0qJTCZ6l2FH6PjmhRQjiaB.jpg",
+          "order": 1
+        },
+        {
+          "id": 116,
+          "name": "Keira Knightley",
+          "character": "Elizabeth Swann",
+          "profile": "https://image.tmdb.org/t/p/w185/bRC1B2VwV0wK3ElciFAK6QZf2wD.jpg",
+          "order": 2
+        },
+        {
+          "id": 1709,
+          "name": "Jack Davenport",
+          "character": "Norrington",
+          "profile": "https://image.tmdb.org/t/p/w185/shGH0YWJBfiJznidS0f2ZfN056c.jpg",
+          "order": 3
+        },
+        {
+          "id": 2440,
+          "name": "Bill Nighy",
+          "character": "Davy Jones",
+          "profile": "https://image.tmdb.org/t/p/w185/ixFI2YCGNGJfwlpI8iyhvVZRg8C.jpg",
+          "order": 4
+        },
+        {
+          "id": 378,
+          "name": "Jonathan Pryce",
+          "character": "Governor Weatherby Swann",
+          "profile": "https://image.tmdb.org/t/p/w185/3nQ01F9WPNPzzLblY7XyaihT9JT.jpg",
+          "order": 5
+        },
+        {
+          "id": 1710,
+          "name": "Lee Arenberg",
+          "character": "Pintel",
+          "profile": "https://image.tmdb.org/t/p/w185/sjv8tdXzLwC8lZi6Ou6i6z5RbrW.jpg",
+          "order": 6
+        },
+        {
+          "id": 1711,
+          "name": "Mackenzie Crook",
+          "character": "Ragetti",
+          "profile": "https://image.tmdb.org/t/p/w185/lN96i9ez4FUrQgpYdLMYr0l3Ggy.jpg",
+          "order": 7
+        },
+        {
+          "id": 2449,
+          "name": "Kevin McNally",
+          "character": "Gibbs",
+          "profile": "https://image.tmdb.org/t/p/w185/1QvG7MbfeWxb4LlZrlR4OtwvB8v.jpg",
+          "order": 8
+        },
+        {
+          "id": 1715,
+          "name": "David Bailie",
+          "character": "Cotton",
+          "profile": "https://image.tmdb.org/t/p/w185/vhw5e7800XoyugmLc4Kd6IEQzsl.jpg",
+          "order": 9
+        },
+        {
+          "id": 1640,
+          "name": "Stellan Skarsgård",
+          "character": "Bootstrap Bill",
+          "profile": "https://image.tmdb.org/t/p/w185/mW7xmtGV4y79kQGn0zkKVGDMAmw.jpg",
+          "order": 10
+        },
+        {
+          "id": 2441,
+          "name": "Tom Hollander",
+          "character": "Cutler Beckett",
+          "profile": "https://image.tmdb.org/t/p/w185/cqZiJsImFZ6TaeShRRg49AZ9TyT.jpg",
+          "order": 11
+        },
+        {
+          "id": 2038,
+          "name": "Naomie Harris",
+          "character": "Tia Dalma",
+          "profile": "https://image.tmdb.org/t/p/w185/41TVAcYqKKF7PGf3x7QfaLvkLSW.jpg",
+          "order": 12
+        },
+        {
+          "id": 4030,
+          "name": "Martin Klebba",
+          "character": "Marty",
+          "profile": "https://image.tmdb.org/t/p/w185/schnhMaXtfv5EC7EJODTgMcfzPe.jpg",
+          "order": 13
+        },
+        {
+          "id": 939,
+          "name": "David Schofield",
+          "character": "Mercer",
+          "profile": "https://image.tmdb.org/t/p/w185/2Dlxu9pqbjKA0dbfy4yMUFjiqeW.jpg",
+          "order": 14
+        },
+        {
+          "id": 2451,
+          "name": "Alex Norton",
+          "character": "Captain Bellamy",
+          "profile": "https://image.tmdb.org/t/p/w185/fnP1fFkqoIhOohylSrkfnFyMOuC.jpg",
+          "order": 15
+        },
+        {
+          "id": 2450,
+          "name": "Lauren Maher",
+          "character": "Scarlett",
+          "profile": "https://image.tmdb.org/t/p/w185/udtzRPT5cf5wQSW7QT7UcnD79Os.jpg",
+          "order": 16
+        },
+        {
+          "id": 1227685,
+          "name": "Nej Adamson",
+          "character": "Short Sailor",
+          "profile": "https://image.tmdb.org/t/p/w185/w9IixgRkp8dDkkvp88GRkAFBTzG.jpg",
+          "order": 17
+        },
+        {
+          "id": 1380903,
+          "name": "Jimmy Roussounis",
+          "character": "Large Sailor",
+          "profile": "https://image.tmdb.org/t/p/w185/pghKbSymxan8qSHTFQ5uv0rq5ef.jpg",
+          "order": 18
+        },
+        {
+          "id": 1791599,
+          "name": "Moray Treadwell",
+          "character": "Sunburned Sailor",
+          "profile": "https://image.tmdb.org/t/p/w185/hmaqML3iwGouEACUzjWDBJN6Sdz.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Kaptan Jack Sparrow, lanetli hayalet gemi Uçan Hollandalı'nın kaptanı Davy Jones'a kan borcu olduğunu öğrenir. Davy Jones, mürettebatı ve gemisiyle birlikte denizlerin korkulan bir hayalet korsanıdır. Jack, borcunu ödeyemezse, Davy'nin kölesi olarak sonsuza kadar onun hizmetinde kalmaya mahkum olacaktır. Jack, bu durumdan kurtulmak için Ölü Adamın Sandığı'nı bulması gerektiğini anlar. Sandığa sahip olan kişi, Davy Jones'un kalbini kontrol edebilir ve onu kontrol altında tutabilir. Bu macerada, Jack'e Will Turner ve Elizabeth Swann de eşlik eder. Üçlü, deniz canavarları, hırsızlar ve lanetli korsanlarla dolu bir maceraya atılır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/kbHReT65bMcy0jyz7tMUi9NMuOd.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/vr6n6ZFUZvedvIlhfYcbCWcaKyW.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=VKwn1kQyYpk",
+      "tmdbImdbId": "tt0383574",
+      "tmdbRating": "7.4",
+      "tmdbVoteCount": 17848
     }
   ],
   "collections": [],
