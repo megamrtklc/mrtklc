@@ -5150,7 +5150,7 @@ html.perde-tv-wide #dashboard-view #home-page #filmm-hero-section.filmm-hero-sec
                 </section>
 
 
-         <section id="filmm-hero-section" class="filmm-hero-section relative min-h-[640px] flex items-center overflow-hidden" x-show="homepageConfig?.heroStyle === 'perde'" x-cloak @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)">
+         <section id="filmm-hero-section" class="filmm-hero-section relative min-h-[640px] flex items-center overflow-hidden" x-show="homepageConfig?.heroStyle === 'perde'" x-cloak @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" @touchstart.passive="startHeroTouch($event)" @touchend.passive="endHeroTouch($event)">
   <div class="absolute inset-0 z-0">
     <img id="filmm-hero-bg" :src="currentHero.backdrop || currentHero.poster || currentHero.image || ''" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster || currentHero.image, [780,1280])" sizes="100vw" :alt="currentHero.title + ' arka plan görseli'" class="w-full h-full object-cover object-top scale-100 transition-all duration-700" @error="handleImageError($event)" fetchpriority="high" decoding="async">
     <div class="absolute inset-0 filmm-hero-vignette"></div>
@@ -5184,7 +5184,7 @@ html.perde-tv-wide #dashboard-view #home-page #filmm-hero-section.filmm-hero-sec
     </div>
   </div>
 </section>
-<section id="filmm-mobile-hero-section" class="filmm-mobile-hero-section" aria-label="Öne çıkan yapım" x-show="homepageConfig?.heroStyle === 'perde'" x-cloak @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)">
+<section id="filmm-mobile-hero-section" class="filmm-mobile-hero-section" aria-label="Öne çıkan yapım" x-show="homepageConfig?.heroStyle === 'perde'" x-cloak @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" @touchstart.passive="startHeroTouch($event)" @touchend.passive="endHeroTouch($event)">
   <div class="filmm-mobile-hero-art">
     <img id="filmm-mobile-hero-bg" :src="currentHero.backdrop || currentHero.poster || currentHero.image || ''" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster || currentHero.image,[342,500])" sizes="100vw" :alt="currentHero.title + ' arka plan görseli'" fetchpriority="high" @error="handleImageError($event)">
     <div class="filmm-mobile-hero-shade"></div>
