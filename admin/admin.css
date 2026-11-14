@@ -132,3 +132,19 @@
 .homepage-layout-side .secondary-button{width:100%;margin-top:10px}
 @media(max-width:900px){.homepage-layout-columns{grid-template-columns:minmax(0,1fr)}.homepage-layout-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}.homepage-layout-side>.section-index,.homepage-layout-side h2,.homepage-layout-side>.secondary-button{grid-column:1/-1}.homepage-layout-note{align-self:start}}
 @media(max-width:560px){.homepage-layout-intro{align-items:flex-start;flex-wrap:wrap;padding:16px}.homepage-layout-intro-icon{flex-basis:40px;height:40px}.homepage-layout-count{margin-left:56px}.homepage-layout-panel,.homepage-layout-side{padding:15px}.homepage-layout-row{gap:8px;padding:9px}.homepage-layout-row-icon{flex-basis:32px;height:32px}.homepage-layout-row-copy b{font-size:10px}.homepage-layout-row-copy small{font-size:9px}.homepage-layout-state{padding:4px 5px;font-size:7px}.homepage-layout-actions{gap:3px}.homepage-layout-actions button{width:25px;height:27px}.homepage-layout-position{display:none}.homepage-layout-side{display:block}}
+
+/* Header & footer management */
+.hf-editor{padding:24px;display:grid;gap:20px}
+.hf-section-head{padding:3px 0 15px;border-bottom:1px solid #2b3948}
+.hf-section-head h2{margin:7px 0 5px;color:#f0f4f8;font:800 20px Manrope,sans-serif}
+.hf-section-head p,.hf-subhead span{margin:0;color:#91a0b0;font-size:11px;line-height:1.6}
+.hf-footer-head{padding-top:25px}
+.hf-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
+.hf-grid .wide{grid-column:1/-1}
+.hf-subhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:8px 0 2px}
+.hf-subhead h3{margin:0;color:#e8eef5;font:800 13px Manrope,sans-serif}
+.hf-nav-row{display:grid;grid-template-columns:minmax(0,1fr) 150px;align-items:end;gap:18px;padding:12px 0;border-bottom:1px solid #293746}
+.hf-nav-row .toggle-field{min-height:42px}
+.hf-save-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:18px;border-top:1px solid #2b3948}
+.hf-save-row p{max-width:440px;margin:0;color:#93a1af;font-size:11px;line-height:1.6}
+@media(max-width:650px){.hf-editor{padding:16px}.hf-grid{grid-template-columns:1fr}.hf-grid .wide{grid-column:auto}.hf-subhead{align-items:flex-start;flex-direction:column;gap:4px}.hf-nav-row{grid-template-columns:minmax(0,1fr) 105px;gap:10px}.hf-save-row{align-items:stretch;flex-direction:column}.hf-save-row .primary-button{width:100%}}
