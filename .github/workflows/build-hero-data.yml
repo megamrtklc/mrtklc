@@ -1,0 +1,38 @@
+name: Build compact hero data
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'filmvediziler.json'
+      - 'scripts/build-hero-data.mjs'
+      - '.github/workflows/build-hero-data.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-hero-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate compact hero feed
+        run: node scripts/build-hero-data.mjs
+      - name: Commit generated hero feed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add hero-data.json
+          if git diff --cached --quiet; then
+            echo "Hero feed is already current."
+            exit 0
+          fi
+          git commit -m "Generate compact homepage hero data"
+          git push
