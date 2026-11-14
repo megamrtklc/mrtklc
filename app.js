@@ -596,6 +596,26 @@
                     sections.forEach(section => observer.observe(section));
                 },
 
+                startHeroAutoplay() {
+                    if (this.heroAutoplayTimer) {
+                        window.clearTimeout(this.heroAutoplayTimer);
+                        window.clearInterval(this.heroAutoplayTimer);
+                    }
+                    const settings = this.homepageConfig?.settings || {};
+                    if (settings.autoplay === false || this.heroSlides.length < 2) return;
+                    const seconds = Math.max(2, Math.min(60, Number(settings.interval) || 6));
+                    const advance = () => {
+                        if (this.heroPaused || document.hidden || this.heroSlides.length < 2) return;
+                        this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
+                    };
+                    // İlk manşeti okuyabilmek ve LCP'nin sonraki slayt görseliyle gecikmemesi için
+                    // otomatik geçişi ilk yüklemede 10 saniye beklet; sonraki geçişler ayarlı aralıkta sürer.
+                    this.heroAutoplayTimer = window.setTimeout(() => {
+                        advance();
+                        this.heroAutoplayTimer = window.setInterval(advance, seconds * 1000);
+                    }, Math.max(10000, seconds * 1000));
+                },
+
                 setHeroPaused(value) {
                     this.heroPaused = !!value;
                 },
