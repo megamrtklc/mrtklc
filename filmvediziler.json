@@ -17496,9 +17496,16 @@
         "catalog",
         "genre-discovery"
       ],
-      "visibility": {}
+      "visibility": {
+        "personalized": false
+      }
     },
-    "heroStyle": "current"
+    "heroStyle": "current",
+    "personalizedSection": {
+      "eyebrow": "SANA ÖZEL",
+      "title": "İzleme Zevkine Göre",
+      "description": "İzleme alışkanlıklarından ilham alan, sana özel seçkiler"
+    }
   },
   "exportedAt": "2026-11-10T22:20:23.455Z",
   "watchPageConfig": {
