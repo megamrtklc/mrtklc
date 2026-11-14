@@ -586,11 +586,12 @@
                         'published-collections': 'home-published-collections',
                         catalog: 'home-catalog-section'
                     };
-                    const sections = [...root.children].filter(element =>
-                        element.hasAttribute('data-home-section') &&
-                        element.dataset.homeSection !== 'hero' &&
-                        !this.homeSectionReady[element.dataset.homeSection]
-                    );
+                    const sections = [...root.children].filter(element => {
+                        if (!element.hasAttribute('data-home-section') || element.dataset.homeSection === 'hero') return false;
+                        const key = element.dataset.homeSection;
+                        const content = contentIds[key] ? document.getElementById(contentIds[key]) : element;
+                        return !this.homeSectionReady[key] || !!content?.hasAttribute('x-ignore');
+                    });
 
                     const activateSection = anchor => {
                         const key = anchor.dataset.homeSection;
