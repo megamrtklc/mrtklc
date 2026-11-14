@@ -19,7 +19,7 @@
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const titleOf = item => item.title || item.tmdbTitle || item.originalTitle || item.tmdbOriginalTitle || 'Başlıksız yapım';
   const posterOf = item => item.image || item.poster || item.tmdbPoster || '';
-  const isSeries = item => ['tv','series','dizi'].includes(String(item.type||'').toLowerCase());
+  const isSeries = item => ['tv','series','dizi'].includes(String(item?.type||'').toLowerCase());
   const yearOf = item => Number(item.year || item.releaseYear || (item.tmdbReleaseDate || '').slice(0,4)) || '—';
   const collectionList = () => Array.isArray(state.data?.collections) ? state.data.collections : [];
   const toast = message => { const el=$('#toast'); if(!el)return; el.textContent=message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),3000); };
