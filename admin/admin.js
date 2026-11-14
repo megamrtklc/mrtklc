@@ -222,7 +222,7 @@
     $('#franchise-backdrop').value=item?.backdrop||item?.poster||'';
     $('#franchise-active').checked=item?.active!==false;
     const selected=new Set((item?.items||[]).map(String));
-    $('#franchise-items').innerHTML=state.catalog.filter(x=>!isSeries(x)).map(x=>'<label class="collection-pick"><input type="checkbox" value="'+escapeHtml(x.id)+'" '+(selected.has(String(x.id))?'checked':'')+'><span><b>'+escapeHtml(titleOf(x))+'</b><small>Film · '+escapeHtml(yearOf(x))+'</small></span></label>').join('');
+    $('#franchise-items').innerHTML=state.catalog.filter(x=>!isSeries(x)).sort((a,b)=>yearOf(a)-yearOf(b)).map(x=>'<label class="collection-pick"><input type="checkbox" value="'+escapeHtml(x.id)+'" '+(selected.has(String(x.id))?'checked':'')+'><span><b>'+escapeHtml(titleOf(x))+'</b><small>Film · '+escapeHtml(yearOf(x))+'</small></span></label>').join('');
     $('#franchise-search').value='';filterFranchiseItems();
     $('#franchise-dialog-title').textContent=item?'Film serisini düzenle':'Yeni film serisi';
     $('#franchise-dialog').showModal();
