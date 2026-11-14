@@ -1813,6 +1813,23 @@
                     return String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i').replace(/\bturkey\b/g, 'turkiye').trim();
                 },
 
+                normalizeGenreName(value) {
+                    const name = this.normalizeSearchText(value).replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+                    const aliases = { drama: 'dram', comedy: 'komedi', 'science fiction': 'bilim kurgu', 'sci fi': 'bilim kurgu' };
+                    return aliases[name] || name;
+                },
+
+                getItemGenreNames(item) {
+                    const source = [item?.category, item?.genre, item?.tmdbGenres].filter(Boolean).join(' / ');
+                    return [...new Set(source.split(/[\\/;,|&]/).map(value => this.normalizeGenreName(value)).filter(Boolean))];
+                },
+
+                getGenreDisplayName(value) {
+                    const name = this.normalizeGenreName(value);
+                    const labels = { aksiyon:'Aksiyon', macera:'Macera', dram:'Dram', komedi:'Komedi', suc:'Suç', gerilim:'Gerilim', korku:'Korku', 'bilim kurgu':'Bilim-Kurgu', romantik:'Romantik', animasyon:'Animasyon', aile:'Aile', gizem:'Gizem', tarih:'Tarih', belgesel:'Belgesel', spor:'Spor', biyografi:'Biyografi', fantastik:'Fantastik', fantazi:'Fantazi', savas:'Savaş', politik:'Politik', muzik:'Müzik', 'vahsi bati':'Vahşi Batı', western:'Vahşi Batı', polisiye:'Polisiye' };
+                    return labels[name] || name.replace(/(^|\s)\S/g, value => value.toLocaleUpperCase('tr-TR'));
+                },
+
                 getCountryEntries(value) {
                     const countries = {
                         'turkey':['TR','Türkiye'],'turkiye':['TR','Türkiye'],
@@ -1870,8 +1887,8 @@
                 },
 
                 get availableGenres() {
-                    const values = this.catalog.flatMap(item => String(item.category || item.genre || '').split(/[\/;,]/).map(value => value.trim()).filter(Boolean));
-                    return [...new Set(values)].sort((a, b) => a.localeCompare(b, 'tr'));
+                    const values = this.catalog.flatMap(item => this.getItemGenreNames(item));
+                    return [...new Set(values)].map(value => this.getGenreDisplayName(value)).sort((a, b) => a.localeCompare(b, 'tr'));
                 },
 
                 get availableCountries() {
@@ -2276,43 +2293,22 @@
                 },
 
                 get homeDiscoveryGenres() {
-                    const personalized = this.personalizedDiscoveryGenres || [];
-                    let genres;
-                    if (personalized.length) {
-                        genres = personalized.slice(0, 6);
-                    } else {
-                        const counts = new Map();
-                        const normalize = value => this.normalizeSearchText(value);
-                        this.catalog.forEach(item => {
-                            const names = [...new Set(String(item.category || item.genre || '')
-                                .split(/[\\/;,]/).map(normalize).filter(Boolean))];
-                            names.forEach(name => {
-                                const current = counts.get(name) || { name, count: 0 };
-                                current.count += 1;
-                                counts.set(name, current);
-                            });
+                    const counts = new Map();
+                    this.catalog.forEach(item => {
+                        this.getItemGenreNames(item).forEach(name => {
+                            const current = counts.get(name) || { name, count: 0 };
+                            current.count += 1;
+                            counts.set(name, current);
                         });
-                        genres = [...counts.values()]
-                            .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'tr'))
-                            .slice(0, 6)
-                            .map(entry => ({
-                                ...entry,
-                                label: entry.name.charAt(0).toLocaleUpperCase('tr-TR') + entry.name.slice(1),
-                                score: entry.count
-                            }));
-                    }
-
-                    // Bu üç keşif türü, katalogdaki yoğunluktan bağımsız olarak her zaman görünür.
-                    const requiredGenres = [
-                        { name: 'belgesel', label: 'Belgesel', count: 0, score: 0 },
-                        { name: 'spor', label: 'Spor', count: 0, score: 0 },
-                        { name: 'biyografi', label: 'Biyografi', count: 0, score: 0 }
-                    ];
-                    const seen = new Set(genres.map(item => this.normalizeSearchText(item.name || item.label)));
-                    requiredGenres.forEach(item => {
-                        if (!seen.has(item.name)) genres.push(item);
                     });
-                    return genres;
+                    return [...counts.values()]
+                        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'tr'))
+                        .slice(0, 20)
+                        .map(entry => ({
+                            ...entry,
+                            label: this.getGenreDisplayName(entry.name),
+                            score: entry.count
+                        }));
                 },
 
                 selectPersonalizedGenre(genre) {
@@ -2392,9 +2388,9 @@
                                         : rule.include.some(genre => hasMoodGenre(genre));
                                     return hasIncludedGenre && !hasBlockedMoodGenre(...rule.exclude);
                                 })());
-                        const genres = String(item.category || item.genre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value));
-                        const selectedGenres = String(this.discoveryGenre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value)).filter(Boolean);
-                        const matchesGenre = this.discoveryGenre === 'all' || selectedGenres.some(genre => genres.includes(genre) || this.normalizeSearchText(item.genre) === genre);
+                        const genres = this.getItemGenreNames(item);
+                        const selectedGenres = String(this.discoveryGenre || '').split(/[\\/;,|&]/).map(value => this.normalizeGenreName(value)).filter(Boolean);
+                        const matchesGenre = this.discoveryGenre === 'all' || selectedGenres.some(genre => genres.includes(genre));
                         const countries = String(item.country || '').split(/[,\/;]/).map(value => this.normalizeSearchText(value));
                         const selectedCountries = String(this.discoveryCountry || '').split(/[,\/;]/).map(value => this.normalizeSearchText(value)).filter(Boolean);
                         const matchesCountry = this.discoveryCountry === 'all' || (this.discoveryCountryCode
