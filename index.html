@@ -976,6 +976,93 @@
 
 </style>
 
+
+    <style id="cineverse-personalized-layout-final">
+        /* Son katman: önceki kişiselleştirilmiş kart kurallarının !important tanımlarını geçersiz kılar. */
+        @media(min-width:901px){
+          #home-personalized-section .home-personalized-showcase{
+            grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr)!important;
+            gap:18px!important;
+          }
+          #home-personalized-section .home-personalized-feature{
+            height:370px!important;min-height:370px!important;
+          }
+          #home-personalized-section .home-personalized-alternatives{
+            display:grid!important;
+            height:370px!important;
+            grid-template-columns:repeat(2,minmax(0,1fr))!important;
+            grid-template-rows:repeat(2,minmax(0,1fr))!important;
+            grid-auto-rows:minmax(0,1fr)!important;
+            align-self:stretch!important;
+            gap:14px!important;
+            overflow:visible!important;
+          }
+          #home-personalized-section .home-personalized-alternative{
+            display:grid!important;
+            height:100%!important;min-height:0!important;
+            grid-template-columns:88px minmax(0,1fr)!important;
+            grid-template-rows:minmax(0,1fr) auto!important;
+            column-gap:11px!important;row-gap:4px!important;
+            padding:10px!important;overflow:hidden!important;
+          }
+          #home-personalized-section .home-personalized-poster{
+            grid-column:1!important;grid-row:1 / span 2!important;
+            width:88px!important;max-width:100%!important;
+            align-self:center!important;overflow:hidden!important;
+          }
+        }
+        @media(max-width:900px){
+          #home-personalized-section .home-personalized-showcase{
+            grid-template-columns:minmax(0,1fr)!important;gap:14px!important;
+          }
+          #home-personalized-section .home-personalized-feature{
+            height:auto!important;min-height:230px!important;
+          }
+          #home-personalized-section .home-personalized-alternatives{
+            display:grid!important;height:auto!important;
+            grid-template-columns:repeat(2,minmax(0,1fr))!important;
+            grid-template-rows:none!important;
+            grid-auto-rows:minmax(165px,auto)!important;
+            gap:14px!important;overflow:visible!important;
+          }
+          #home-personalized-section .home-personalized-alternative{
+            height:auto!important;min-height:165px!important;
+            grid-template-columns:78px minmax(0,1fr)!important;
+            column-gap:9px!important;padding:9px!important;
+            overflow:hidden!important;
+          }
+          #home-personalized-section .home-personalized-poster{width:78px!important}
+        }
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-feature{min-height:200px!important}
+          #home-personalized-section .home-personalized-alternatives{
+            grid-template-columns:repeat(2,minmax(0,1fr))!important;
+            grid-template-rows:none!important;
+            grid-auto-rows:minmax(158px,auto)!important;
+            gap:10px!important;
+          }
+          #home-personalized-section .home-personalized-alternative{
+            min-height:158px!important;
+            grid-template-columns:56px minmax(0,1fr)!important;
+            column-gap:7px!important;padding:7px!important;
+          }
+          #home-personalized-section .home-personalized-poster{width:56px!important}
+          #home-personalized-section .home-personalized-copy h3{font-size:11px!important}
+          #home-personalized-section .home-personalized-copy>p:last-child{font-size:9px!important}
+        }
+        @media(max-width:360px){
+          #home-personalized-section .home-personalized-alternative{
+            grid-template-columns:48px minmax(0,1fr)!important;
+            column-gap:6px!important;padding:6px!important;
+          }
+          #home-personalized-section .home-personalized-poster{width:48px!important}
+        }
+        #home-personalized-section .home-personalized-poster img{
+          display:block!important;width:100%!important;height:100%!important;
+          object-fit:cover!important;
+        }
+    </style>
+
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
