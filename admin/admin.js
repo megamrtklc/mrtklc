@@ -792,6 +792,7 @@
   }
   function renderHomepage(){
     const config=homepageConfig(),settings=config.settings;
+    $('#hero-style').value=config.heroStyle==='perde'?'perde':'current';
     $('#hero-desktop-count').value=Math.max(5,Math.min(15,Number(settings.desktopCount)||10));
     $('#hero-mobile-count').value=settings.mobileCount??6;
     $('#hero-interval').value=settings.interval??6;
@@ -883,7 +884,7 @@
       });
     };
     const desktopHeroSlides=buildSlides('desktop'),mobileHeroSlides=buildSlides('mobile');
-    const config={...previous,version:4,desktopMode:$('#hero-desktop-mode').value,desktopCategory:$('#hero-desktop-category').value,
+    const config={...previous,version:4,heroStyle:$('#hero-style').value==='perde'?'perde':'current',desktopMode:$('#hero-desktop-mode').value,desktopCategory:$('#hero-desktop-category').value,
       mobileMode:$('#hero-mobile-mode').value,mobileCategory:$('#hero-mobile-category').value,
       settings:{...previous.settings,desktopCount:Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)),mobileCount:Number($('#hero-mobile-count').value)||6,
         interval:Number($('#hero-interval').value)||6,descriptionLength:Math.max(80,Math.min(500,Number($('#hero-description-length').value)||220)),
