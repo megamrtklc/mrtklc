@@ -439,7 +439,10 @@
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     });
                     this.$watch('currentPage', page => {
-                        if (page === 'home') this.$nextTick(() => this.initHomeSectionObserver());
+                        if (page === 'home') this.$nextTick(() => {
+                            this.scheduleHomePageHydration();
+                            this.initHomeSectionObserver();
+                        });
                     });
                     const catalogRequest = fetch('./filmvediziler.json', { cache: 'default', priority: 'low' });
                     try {
@@ -457,13 +460,13 @@
                             this.currentSlideIndex = 0;
                             this.startHeroAutoplay();
                             this.$nextTick(() => {
-                                document.getElementById('hero-initial-shell')?.remove();
-                                document.getElementById('hero-initial-shell-desktop')?.remove();
+                                if (this.currentPage !== 'home') this.removeHeroInitialShell();
                             });
                         }
                     } catch (heroError) {
                         console.warn('Hızlı manşet verisi yüklenemedi; ana katalog kullanılacak:', heroError);
                     }
+                    if (this.currentPage === 'home') this.scheduleHomePageHydration();
                     try {
                         const response = await catalogRequest;
                         if (!response.ok) {
@@ -508,8 +511,7 @@
                         this.applyHomepageSectionOrder();
                         this.catalogLoading = false;
                         this.$nextTick(() => {
-                            document.getElementById('hero-initial-shell')?.remove();
-                            document.getElementById('hero-initial-shell-desktop')?.remove();
+                            if (this.currentPage !== 'home') this.removeHeroInitialShell();
                             this.initHomeSectionObserver();
                         });
                     }
@@ -520,6 +522,30 @@
                     // Yapılandırma gelene kadar varsayılan olarak görünür tut;
                     // veri geldikten sonra kapalı bölümler normal şekilde gizlenir.
                     return this.homepageConfig?.layout?.visibility?.[sectionKey] !== false;
+                },
+
+                removeHeroInitialShell() {
+                    document.getElementById('hero-initial-shell')?.remove();
+                    document.getElementById('hero-initial-shell-desktop')?.remove();
+                },
+
+                onHomePageReady() {
+                    this.$nextTick(() => this.removeHeroInitialShell());
+                },
+
+                scheduleHomePageHydration() {
+                    this.$nextTick(() => {
+                        const root = document.getElementById('home-page');
+                        if (!root || !root.hasAttribute('x-ignore') || root.dataset.homeHydrationScheduled === 'true') return;
+                        root.dataset.homeHydrationScheduled = 'true';
+                        const delay = window.matchMedia('(min-width: 1024px)').matches ? 450 : 0;
+                        window.setTimeout(() => {
+                            if (document.getElementById('home-page') !== root) return;
+                            root.removeAttribute('x-ignore');
+                            window.Alpine?.initTree?.(root);
+                            this.$nextTick(() => this.initHomeSectionObserver());
+                        }, delay);
+                    });
                 },
 
                 applyHomepageSectionOrder() {
