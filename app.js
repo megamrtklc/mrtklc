@@ -587,14 +587,14 @@
                         catalog: 'home-catalog-section'
                     };
                     const sections = [...root.children].filter(element => {
-                        if (!element.hasAttribute('data-home-section') || element.dataset.homeSection === 'hero') return false;
-                        const key = element.dataset.homeSection;
+                        const key = element.dataset.homeSectionAnchor || element.dataset.homeSection;
+                        if (!key || key === 'hero' || element.hasAttribute('x-ignore')) return false;
                         const content = contentIds[key] ? document.getElementById(contentIds[key]) : element;
                         return !this.homeSectionReady[key] || !!content?.hasAttribute('x-ignore');
                     });
 
                     const activateSection = anchor => {
-                        const key = anchor.dataset.homeSection;
+                        const key = anchor.dataset.homeSectionAnchor || anchor.dataset.homeSection;
                         if (!key) return;
                         this.homeSectionReady[key] = true;
                         const content = contentIds[key]
