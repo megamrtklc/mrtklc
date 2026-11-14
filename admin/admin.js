@@ -268,7 +268,8 @@
   }
   function setField(id,value){const el=$('#'+id);if(el)el.value=value??'';}
   function openEditor(item=null){
-    if(!canWrite())return;
+    // Formu salt-okunur durumda da aç: böylece kullanıcı içerik hazırlayabilir;
+    // kaydetme sırasında canWrite() güvenlik kontrolü yine uygulanır.
     $('#content-form').reset();$('#edit-id').value=item?String(item.id??''):'';
     state.tmdbSelected=item?{...item}:null;
     $('#tmdb-search-input').value='';$('#tmdb-search-results').hidden=true;$('#tmdb-search-results').innerHTML='';
@@ -285,7 +286,7 @@
     setField('field-image',item?.image||item?.poster||item?.tmdbPoster||'');setField('field-backdrop',item?.backdrop||item?.tmdbBackdrop||'');
     setField('field-trailer',item?.trailerUrl||item?.tmdbTrailerUrl||'');setField('field-seasons',item?.seasons||'');
     setField('field-episodes',item?.episodes||'');setField('field-desc',item?.desc||item?.tmdbOverview||'');
-    $('#editor-status').textContent=item?'Mevcut katalog kaydı düzenleniyor.':'Yeni katalog kaydı oluşturuluyor.';
+    $('#editor-status').textContent=!state.apiEnabled?'Önizleme ve manuel düzenleme açık. Kaydetmek için GitHub erişim anahtarı yenilenmeli.':(item?'Mevcut katalog kaydı düzenleniyor.':'Yeni katalog kaydı oluşturuluyor.');
     renderContentPreview();
     $('#content-dialog').showModal();
   }
@@ -836,7 +837,9 @@
       // session/profile endpoint must never prevent the catalog from appearing.
       $('#health-catalog').textContent='Bağlandı';$('#health-json').textContent='Geçerli';
       $('#data-version').textContent=String(state.data.version??'Belirtilmemiş');
-      $('#add-content').disabled=!state.apiEnabled;$('#catalog-add').disabled=!state.apiEnabled;$('#collection-add').disabled=!state.apiEnabled;
+      $('#add-content').disabled=false;$('#catalog-add').disabled=false;$('#collection-add').disabled=false;
+      const writeHint=state.apiEnabled?'Yeni yapım ekle':'Form açılır; kaydetmek için GitHub yazma bağlantısı gerekir.';
+      $('#add-content').title=writeHint;$('#catalog-add').title=writeHint;$('#collection-add').title=state.apiEnabled?'Yeni koleksiyon ekle':'Kayıt için GitHub yazma bağlantısı gerekir.';
       updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderOverviewInsights();renderAdminProfile();renderWatchLayout();renderHeaderFooter();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
       $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
