@@ -21180,6 +21180,207 @@
       "tmdbImdbId": "tt11389872",
       "tmdbRating": "7.0",
       "tmdbVoteCount": 4574
+    },
+    {
+      "id": "cv-1794698369607",
+      "title": "Matrix Reloaded",
+      "type": "movie",
+      "year": "2003",
+      "rating": "7.1",
+      "genre": "Aksiyon",
+      "category": "Aksiyon / Gerilim / Bilim-Kurgu",
+      "duration": "138 dk",
+      "country": "United States of America",
+      "director": "Lana Wachowski, Lilly Wachowski",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 604,
+      "imdbId": "tt0234215",
+      "image": "https://image.tmdb.org/t/p/w500/8xEVAe84zlL9rkfYT6dZXero4KK.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/ihOJcrorpDQtHTzIOrobbOhpJsj.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Matrix'te tasvir edilen olaylardan altı ay sonra, Neo, özgür insanlar için iyi bir kehanet olduğunu kanıtladı, çünkü giderek daha fazla insan Matrix'ten kurtulup Direniş'in tek kalesi olan Zion'a getiriliyor. Neo'nun kendisi, süper hız, Matrix'in içindeki şeylerin kodlarını görme yeteneği ve belirli bir dereceye kadar ön biliş gibi süper güçlerini keşfetti. Ancak bu direnişe kötü bir haber var: 250.000 makineli nöbetçi Zion'u kazıyor ve onlara 72 saat içinde ulaşacak. Zion nihai savaşa hazırlanırken Kahin Neo, Morpheus ve Trinity'ye Kaynağa ulaşmalarına yardım edecek Anahtarcı'yı bulmalarını söyler. Bu arada Neo'yu Trinity'nin ölümünü tasvir eden tekrarlayan rüyalar endişelendiriyor ve sanki bu yeterli değilmiş gibi, Ajan Smith bir şekilde silinmekten kurtulmuş, eskisinden daha güçlü hale gelmiş ve Neo'yu bir sonraki hedefi olarak belirlemiştir.",
+      "cast": [
+        "Keanu Reeves",
+        "Laurence Fishburne",
+        "Carrie-Anne Moss",
+        "Hugo Weaving",
+        "Jada Pinkett Smith",
+        "Gloria Foster",
+        "Harold Perrineau",
+        "Monica Bellucci",
+        "Harry Lennix",
+        "Lambert Wilson",
+        "Randall Duk Kim",
+        "Nona Gaye",
+        "Anthony Zerbe",
+        "Daniel Bernhardt",
+        "Helmut Bakaitis",
+        "David Kilde",
+        "Matt McColm",
+        "Collin Chou",
+        "Neil Rayment",
+        "Adrian Rayment"
+      ],
+      "tmdbTitle": "Matrix Reloaded",
+      "tmdbOriginalTitle": "The Matrix Reloaded",
+      "tmdbReleaseDate": "2003-05-15",
+      "tmdbGenres": "Aksiyon / Gerilim / Bilim-Kurgu",
+      "tmdbRuntime": "138 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Lana Wachowski, Lilly Wachowski",
+      "tmdbCast": [
+        {
+          "id": 6384,
+          "name": "Keanu Reeves",
+          "character": "Neo",
+          "profile": "https://image.tmdb.org/t/p/w185/8RZLOyYGsoRe9p44q3xin9QkMHv.jpg",
+          "order": 0
+        },
+        {
+          "id": 2975,
+          "name": "Laurence Fishburne",
+          "character": "Morpheus",
+          "profile": "https://image.tmdb.org/t/p/w185/2GbXERENPpl5MmlqOLlPVaVtifD.jpg",
+          "order": 1
+        },
+        {
+          "id": 530,
+          "name": "Carrie-Anne Moss",
+          "character": "Trinity",
+          "profile": "https://image.tmdb.org/t/p/w185/9zya72vRZYBQILfetACsnmCBgdj.jpg",
+          "order": 2
+        },
+        {
+          "id": 1331,
+          "name": "Hugo Weaving",
+          "character": "Agent Smith",
+          "profile": "https://image.tmdb.org/t/p/w185/lSC8Et0PYi5zeQb3IpPkFje7hgR.jpg",
+          "order": 3
+        },
+        {
+          "id": 9575,
+          "name": "Jada Pinkett Smith",
+          "character": "Niobe",
+          "profile": "https://image.tmdb.org/t/p/w185/3RyvVVSlgRbZANDFkYiAsRMaHW.jpg",
+          "order": 4
+        },
+        {
+          "id": 9364,
+          "name": "Gloria Foster",
+          "character": "The Oracle",
+          "profile": "https://image.tmdb.org/t/p/w185/AriGXtC9fjBOia9Zr8CZjn4o3rx.jpg",
+          "order": 5
+        },
+        {
+          "id": 6195,
+          "name": "Harold Perrineau",
+          "character": "Link",
+          "profile": "https://image.tmdb.org/t/p/w185/bVSLpGUaislREbujmknOqadrxYM.jpg",
+          "order": 6
+        },
+        {
+          "id": 28782,
+          "name": "Monica Bellucci",
+          "character": "Persephone",
+          "profile": "https://image.tmdb.org/t/p/w185/7g3k3u2gZpE7XU8GRYwHDuN1jlM.jpg",
+          "order": 7
+        },
+        {
+          "id": 9464,
+          "name": "Harry Lennix",
+          "character": "Commander Lock",
+          "profile": "https://image.tmdb.org/t/p/w185/kNGiizWpetf4pyAkINkjkWacmCL.jpg",
+          "order": 8
+        },
+        {
+          "id": 2192,
+          "name": "Lambert Wilson",
+          "character": "The Merovingian",
+          "profile": "https://image.tmdb.org/t/p/w185/pFuLPZtgrKsnRXJCKWILQ69k6Ta.jpg",
+          "order": 9
+        },
+        {
+          "id": 9462,
+          "name": "Randall Duk Kim",
+          "character": "Keymaker",
+          "profile": "https://image.tmdb.org/t/p/w185/31T1gSUP67F2qPI3x6uLJn3Sat7.jpg",
+          "order": 10
+        },
+        {
+          "id": 18286,
+          "name": "Nona Gaye",
+          "character": "Zee",
+          "profile": "https://image.tmdb.org/t/p/w185/nD6Gawyx0QOQIKsFtJXBWMzjLw3.jpg",
+          "order": 11
+        },
+        {
+          "id": 2516,
+          "name": "Anthony Zerbe",
+          "character": "Councillor Hamann",
+          "profile": "https://image.tmdb.org/t/p/w185/ctp83m2ntqbz69jOU8W5aU4sBtI.jpg",
+          "order": 12
+        },
+        {
+          "id": 9452,
+          "name": "Daniel Bernhardt",
+          "character": "Agent Johnson",
+          "profile": "https://image.tmdb.org/t/p/w185/3BLz32inDr1jznU6pKQmh20zfhK.jpg",
+          "order": 13
+        },
+        {
+          "id": 9443,
+          "name": "Helmut Bakaitis",
+          "character": "The Architect",
+          "profile": "https://image.tmdb.org/t/p/w185/p7YMk9Gk2BZsvo2EUp7x903gdLZ.jpg",
+          "order": 14
+        },
+        {
+          "id": 9459,
+          "name": "David Kilde",
+          "character": "Agent Jackson",
+          "profile": "https://image.tmdb.org/t/p/w185/3jdMdpa8kAUJCziFk50U4PS8n5e.jpg",
+          "order": 15
+        },
+        {
+          "id": 9466,
+          "name": "Matt McColm",
+          "character": "Agent Thompson",
+          "profile": "https://image.tmdb.org/t/p/w185/9SlVkQdWGURamicfGScV8BJNs2M.jpg",
+          "order": 16
+        },
+        {
+          "id": 52908,
+          "name": "Collin Chou",
+          "character": "Seraph",
+          "profile": "https://image.tmdb.org/t/p/w185/1bxUqslOLipmTgsg7lcHHN6pPf1.jpg",
+          "order": 17
+        },
+        {
+          "id": 9450,
+          "name": "Neil Rayment",
+          "character": "Twin #1",
+          "profile": "https://image.tmdb.org/t/p/w185/fc6WyX6ChzoPdLeMjZTRsnL04H3.jpg",
+          "order": 18
+        },
+        {
+          "id": 9448,
+          "name": "Adrian Rayment",
+          "character": "Twin #2",
+          "profile": "https://image.tmdb.org/t/p/w185/7O4WqJue7XynCvDjUhYAIDmkcu4.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Matrix'te tasvir edilen olaylardan altı ay sonra, Neo, özgür insanlar için iyi bir kehanet olduğunu kanıtladı, çünkü giderek daha fazla insan Matrix'ten kurtulup Direniş'in tek kalesi olan Zion'a getiriliyor. Neo'nun kendisi, süper hız, Matrix'in içindeki şeylerin kodlarını görme yeteneği ve belirli bir dereceye kadar ön biliş gibi süper güçlerini keşfetti. Ancak bu direnişe kötü bir haber var: 250.000 makineli nöbetçi Zion'u kazıyor ve onlara 72 saat içinde ulaşacak. Zion nihai savaşa hazırlanırken Kahin Neo, Morpheus ve Trinity'ye Kaynağa ulaşmalarına yardım edecek Anahtarcı'yı bulmalarını söyler. Bu arada Neo'yu Trinity'nin ölümünü tasvir eden tekrarlayan rüyalar endişelendiriyor ve sanki bu yeterli değilmiş gibi, Ajan Smith bir şekilde silinmekten kurtulmuş, eskisinden daha güçlü hale gelmiş ve Neo'yu bir sonraki hedefi olarak belirlemiştir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/8xEVAe84zlL9rkfYT6dZXero4KK.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/ihOJcrorpDQtHTzIOrobbOhpJsj.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt0234215",
+      "tmdbRating": "7.1",
+      "tmdbVoteCount": 12539
     }
   ],
   "collections": [],
