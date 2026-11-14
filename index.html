@@ -3298,26 +3298,26 @@
          x-show="open" x-cloak
          class="fixed inset-0 z-[120] flex items-center justify-center p-4"
          role="dialog" aria-modal="true" aria-labelledby="watchlist-confirm-title">
-        <button type="button" class="absolute inset-0 h-full w-full cursor-default bg-black/55 backdrop-blur-[3px]" aria-label="Pencereyi kapat" @click="open = false"></button>
+        <button type="button" class="absolute inset-0 h-full w-full cursor-default bg-black/60 backdrop-blur-sm" aria-label="Pencereyi kapat" @click="open = false"></button>
         <div x-show="open" x-transition:enter="transition ease-out duration-200"
              x-transition:enter-start="opacity-0 translate-y-2 scale-95"
              x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-             :class="theme === 'dark' ? 'border-white/10 bg-gradient-to-br from-[#20232d] via-[#171923] to-[#11131a] text-white shadow-black/40' : (theme === 'ivory' ? 'border-amber-200 bg-gradient-to-br from-[#fffdf7] via-[#fffaf0] to-[#f8f0df] text-[#29251f] shadow-amber-950/15' : 'border-slate-300 bg-gradient-to-br from-white via-slate-50 to-slate-100 text-slate-900 shadow-slate-900/15')"
-             class="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl border p-6 text-center shadow-2xl">
+             :style="theme === 'dark' ? 'background:#171923;color:#f9fafb;border-color:rgba(255,255,255,.12);box-shadow:0 24px 70px rgba(0,0,0,.55)' : (theme === 'ivory' ? 'background:#fffaf0;color:#29251f;border-color:#eadfc8;box-shadow:0 24px 70px rgba(91,65,28,.18)' : 'background:#f8fafc;color:#0f172a;border-color:#cbd5e1;box-shadow:0 24px 70px rgba(15,23,42,.20)')"
+             class="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl border p-6 text-center">
             <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-500/10 text-rose-500 ring-1 ring-rose-500/20">
                 <i class="fa-solid fa-bookmark text-lg"></i>
             </div>
             <p class="mb-1 text-[9px] font-black uppercase tracking-[0.22em] text-rose-500">CINEVERSE • KÜTÜPHANEM</p>
             <h2 id="watchlist-confirm-title" class="text-base font-extrabold leading-relaxed">İzleme listesine eklemek istiyor musunuz?</h2>
-            <p class="mt-2 line-clamp-2 text-xs opacity-65" x-text="item?.title || ''"></p>
+            <p class="mt-2 line-clamp-2 text-xs opacity-70" x-text="item?.title || ''"></p>
             <div class="mt-6 grid grid-cols-2 gap-3">
                 <button type="button" @click="if (item && !isInWatchlist(item)) toggleWatchlist(item); open = false"
-                        class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 text-xs font-extrabold text-white shadow-lg shadow-rose-950/20 transition hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500">
+                        class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 text-xs font-extrabold text-white shadow-lg transition hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500">
                     <i class="fa-solid fa-check"></i> Evet
                 </button>
                 <button type="button" @click="open = false"
-                        :class="theme === 'dark' ? 'border-white/15 bg-white/[0.06] text-gray-200 hover:bg-white/10' : 'border-gray-300 bg-black/[0.03] text-gray-700 hover:bg-black/[0.07]'"
-                        class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-xs font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500">
+                        :style="theme === 'dark' ? 'border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#e5e7eb' : 'border-color:#cbd5e1;background:rgba(15,23,42,.04);color:#334155'"
+                        class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-xs font-bold transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500">
                     <i class="fa-solid fa-xmark"></i> Hayır
                 </button>
             </div>
