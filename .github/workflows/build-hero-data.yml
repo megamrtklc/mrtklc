@@ -31,7 +31,7 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             node scripts/build-hero-data.mjs
-            git add hero-data.json
+            git add hero-data.json index.html
             if git diff --cached --quiet; then
               echo "Hero feed is already current."
               exit 0
