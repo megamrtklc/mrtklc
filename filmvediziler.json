@@ -17503,15 +17503,15 @@
   "watchPageConfig": {
     "left": [
       "player",
+      "synopsis",
       "season",
       "episodes",
-      "similar",
       "reviews"
     ],
     "right": [
-      "synopsis",
       "credits",
-      "cast"
+      "cast",
+      "similar"
     ],
     "hidden": [],
     "removed": []
