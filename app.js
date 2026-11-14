@@ -596,6 +596,38 @@
                     sections.forEach(section => observer.observe(section));
                 },
 
+                get heroSlides() {
+                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+                    const sourceCatalog = this.heroCatalog.length ? this.heroCatalog : this.catalog;
+                    const configured = this.homepageConfig?.[mobile ? 'mobileHeroSlides' : 'desktopHeroSlides'] || this.homepageConfig?.heroSlides;
+                    if (!Array.isArray(configured) || !configured.length) return sourceCatalog;
+                    const byId = new Map(sourceCatalog.map(item => [String(item.id), item]));
+                    const selected = configured.filter(entry => entry && entry.active !== false)
+                        .map(entry => byId.get(String(entry.id))).filter(Boolean);
+                    return selected.length ? selected : sourceCatalog;
+                },
+
+                get publishedCollections() {
+                    const byId = new Map(this.catalog.map(item => [String(item.id), item]));
+                    return (Array.isArray(this.collections) ? this.collections : [])
+                        .filter(collection => collection && collection.active !== false && String(collection.title || '').trim())
+                        .map(collection => ({
+                            ...collection,
+                            items: (Array.isArray(collection.items) ? collection.items : [])
+                                .map(id => byId.get(String(id)))
+                                .filter(item => item && (item.poster || item.image || item.backdrop))
+                        }))
+                        .filter(collection => collection.items.length > 0);
+                },
+
+                get heroThumbSlides() {
+                    const settings = this.homepageConfig?.settings || {};
+                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+                    const configuredCount = Number(mobile ? settings.mobileCount : settings.desktopCount);
+                    const count = Math.max(1, Math.min(mobile ? 12 : 20, configuredCount || (mobile ? 6 : 10)));
+                    return this.heroSlides.slice(0, count);
+                },
+
                 startHeroAutoplay() {
                     if (this.heroAutoplayTimer) {
                         window.clearTimeout(this.heroAutoplayTimer);
