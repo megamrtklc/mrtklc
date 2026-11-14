@@ -2502,7 +2502,7 @@
                         <div x-data="{ synopsisOpen: false }" data-watch-card="synopsis" :style="'order: ' + getWatchCardOrder('synopsis')" :class="getCardClass()" class="p-5 sm:p-6 rounded-2xl border space-y-4 shadow-sm">
                             <div class="flex items-center justify-between gap-3">
                                 <h1 class="text-xl font-black text-gray-900 dark:text-white uppercase" x-text="selectedItem.title"></h1>
-                                <button type="button" @click="if (!isInWatchlist(selectedItem)) $dispatch('watchlist-confirm', { item: selectedItem })" :aria-label="isInWatchlist(selectedItem) ? 'İzleme listesinde' : 'İzleme listesine ekle'" :class="isInWatchlist(selectedItem) ? 'border-rose-500 bg-rose-600 text-white shadow-md shadow-rose-950/15' : 'border-gray-300 bg-white/70 text-gray-800 hover:border-rose-500 hover:bg-rose-50 dark:border-gray-700 dark:bg-white/5 dark:text-white dark:hover:border-rose-500 dark:hover:bg-rose-500/10'" class="shrink-0 px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider border flex items-center space-x-2 transition-all duration-200">
+                                <button type="button" @click="$dispatch('watchlist-confirm', { item: selectedItem, action: isInWatchlist(selectedItem) ? 'remove' : 'add' })" :aria-label="isInWatchlist(selectedItem) ? 'İzleme listesinde' : 'İzleme listesine ekle'" :class="isInWatchlist(selectedItem) ? 'border-rose-500 bg-rose-600 text-white shadow-md shadow-rose-950/15' : 'border-gray-300 bg-white/70 text-gray-800 hover:border-rose-500 hover:bg-rose-50 dark:border-gray-700 dark:bg-white/5 dark:text-white dark:hover:border-rose-500 dark:hover:bg-rose-500/10'" class="shrink-0 px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider border flex items-center space-x-2 transition-all duration-200">
                                     <i :class="isInWatchlist(selectedItem) ? 'fa-solid fa-bookmark text-white' : 'fa-regular fa-bookmark'"></i>
                                     <span x-text="isInWatchlist(selectedItem) ? 'Listede' : 'İzleme Listesine Ekle'"></span>
                                 </button>
@@ -3292,8 +3292,8 @@
     </main>
 
     <!-- İzleme listesi onay penceresi -->
-    <div x-data="{ open: false, item: null }"
-         @watchlist-confirm.window="item = $event.detail.item; open = true"
+    <div x-data="{ open: false, item: null, action: 'add' }"
+         @watchlist-confirm.window="item = $event.detail.item; action = $event.detail.action || 'add'; open = true"
          @keydown.escape.window="open = false"
          x-show="open" x-cloak
          class="fixed inset-0 z-[120] flex items-center justify-center p-4"
@@ -3305,13 +3305,13 @@
              :style="theme === 'dark' ? 'background:#171923;color:#f9fafb;border-color:rgba(255,255,255,.12);box-shadow:0 24px 70px rgba(0,0,0,.55)' : (theme === 'ivory' ? 'background:#fffaf0;color:#29251f;border-color:#eadfc8;box-shadow:0 24px 70px rgba(91,65,28,.18)' : 'background:#f8fafc;color:#0f172a;border-color:#cbd5e1;box-shadow:0 24px 70px rgba(15,23,42,.20)')"
              class="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl border p-6 text-center">
             <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-rose-500/10 text-rose-500 ring-1 ring-rose-500/20">
-                <i class="fa-solid fa-bookmark text-lg"></i>
+                <i :class="action === 'remove' ? 'fa-solid fa-bookmark-slash' : 'fa-solid fa-bookmark'" class="text-lg"></i>
             </div>
             <p class="mb-1 text-[9px] font-black uppercase tracking-[0.22em] text-rose-500">CINEVERSE • KÜTÜPHANEM</p>
-            <h2 id="watchlist-confirm-title" class="text-base font-extrabold leading-relaxed">İzleme listesine eklemek istiyor musunuz?</h2>
+            <h2 id="watchlist-confirm-title" class="text-base font-extrabold leading-relaxed" x-text="action === 'remove' ? 'İzleme listesinden çıkarmak istiyor musunuz?' : 'İzleme listesine eklemek istiyor musunuz?'"></h2>
             <p class="mt-2 line-clamp-2 text-xs opacity-70" x-text="item?.title || ''"></p>
             <div class="mt-6 grid grid-cols-2 gap-3">
-                <button type="button" @click="if (item && !isInWatchlist(item)) toggleWatchlist(item); open = false"
+                <button type="button" @click="if (item && action === 'add' && !isInWatchlist(item)) toggleWatchlist(item); else if (item && action === 'remove' && isInWatchlist(item)) toggleWatchlist(item); open = false"
                         class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 text-xs font-extrabold text-white shadow-lg transition hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500">
                     <i class="fa-solid fa-check"></i> Evet
                 </button>
