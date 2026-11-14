@@ -181,6 +181,7 @@
                     this.openWatchPage(item);
                 },
                 quickFilter: 'all',
+                homeCatalogShuffleSeed: Math.floor(Math.random() * 0x7fffffff),
                 sortBy: 'default',
                 discoveryType: 'all',
                 discoveryMood: 'all',
@@ -2383,7 +2384,18 @@
                 },
 
                 get homeCatalogPreview() {
-                    return this.sortedFilteredCatalog.slice(0, 15);
+                    const result = this.sortedFilteredCatalog.slice();
+                    if (this.sortBy === 'default') {
+                        const seed = String(this.homeCatalogShuffleSeed || 1);
+                        const score = item => {
+                            const key = seed + '|' + String(item.id ?? item.title ?? '');
+                            let hash = 2166136261;
+                            for (let i = 0; i < key.length; i++) hash = Math.imul(hash ^ key.charCodeAt(i), 16777619);
+                            return hash >>> 0;
+                        };
+                        result.sort((a, b) => score(a) - score(b));
+                    }
+                    return result.slice(0, 15);
                 }
             }
         }
