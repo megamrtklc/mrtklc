@@ -644,9 +644,10 @@
   function heroVotes(item){return Number(item.tmdbVoteCount||item.voteCount||0);}
   function autoHeroItems(category,count){
     let items=state.catalog.filter(item=>posterOf(item));
+    if(['user-watchlist','user-watched','user-favorites'].includes(category))return [];
+    if(category==='new-arrivals')return items.slice().reverse().slice(0,Math.max(1,Number(count)||10));
     if(category==='movies')items=items.filter(item=>!isSeries(item));
     if(category==='series')items=items.filter(item=>isSeries(item));
-    if(['user-watchlist','user-watched','user-favorites'].includes(category))items.sort((a,b)=>heroRating(b)-heroRating(a)||heroVotes(b)-heroVotes(a));
     if(category==='random'){
       // Fisher-Yates: her manşet için katalogdan tekrarsız rastgele yapımlar seç.
       items=items.slice();
@@ -765,7 +766,8 @@
       const limit=device==='desktop'?Math.max(5,Math.min(15,rawLimit)):Math.max(1,Math.min(12,rawLimit));
       $('#hero-'+device+'-count').value=limit;
       const saved=Array.isArray(draft[device])?draft[device]:(Array.isArray(config[device+'HeroSlides'])?config[device+'HeroSlides']:config.heroSlides);
-      let pool=state.catalog;
+      const personalCategory=mode==='auto'&&['user-watchlist','user-watched','user-favorites'].includes(category);
+      let pool=personalCategory?[]:state.catalog;
       if(mode==='auto'&&category==='random'){
         const source=Array.isArray(draft[device])?draft[device]:saved;
         const savedIds=source.map(x=>String(typeof x==='object'?x.id:x));
@@ -789,6 +791,11 @@
         const firstId=$$('#hero-'+device+'-slide-list input:checked')[0]?.value;
         const item=state.catalog.find(x=>String(x.id)===String(firstId));
         const host=$('#hero-'+device+'-preview');
+        if(personalCategory){
+          const label={'user-watchlist':'ziyaretçinin izleme listesi','user-watched':'izledikleri','user-favorites':'favorileri'}[category];
+          host.innerHTML='<div class="hero-preview-empty"><b>Kişiye özel canlı vitrin</b><br>Bu alan her ziyaretçide kendi '+label+' kayıtlarından oluşur.<br><small>Yönetici önizlemesinde kişisel kayıtlar görüntülenmez.</small></div>';
+          return;
+        }
         if(!item){host.innerHTML='<div class="hero-preview-empty">Henüz manşet yapımı seçilmedi.</div>';return;}
         const max=Math.max(80,Math.min(500,Number($('#hero-description-length').value)||220));
         const desc=String(item.desc||item.tmdbOverview||'');
@@ -810,9 +817,9 @@
         $$('#hero-'+device+'-slide-list .hero-pick').forEach(row=>{row.hidden=!!q&&!row.dataset.search.includes(q);});
       };
       $('#hero-'+device+'-hint').textContent=mode==='auto'
-        ?(['user-watchlist','user-watched','user-favorites'].includes(category)
-          ?'Canlı sitede her ziyaretçinin kendi '+({'user-watchlist':'izleme listesi','user-watched':'izledikleri','user-favorites':'favorileri'}[category])+' kayıtları gösterilir. Buradaki önizleme örnek katalog yapımlarını kullanır.'
-          :(category==='random'?'Katalogdan belirlenen sayı kadar tekrarsız rastgele yapım seçildi.':'Seçilen ölçüte göre katalogdan otomatik '+pool.length+' yapım getirildi.'))
+        ?(personalCategory
+          ?'Canlı sitede her ziyaretçinin yalnızca kendi '+({'user-watchlist':'izleme listesi','user-watched':'izledikleri','user-favorites':'favorileri'}[category])+' gösterilir. Herkes için aynı katalog listesini kullanmaz.'
+          :(category==='new-arrivals'?'Kataloğa en son eklenen yapımlar, en yeni kayıt üstte olacak şekilde getirilir.':category==='random'?'Katalogdan belirlenen sayı kadar tekrarsız rastgele yapım seçildi.':'Seçilen ölçüte göre katalogdan otomatik '+pool.length+' yapım getirildi.'))
         :'Katalogda ara; kutucuğu işaretleyerek manşete ekle, işareti kaldırarak çıkar.';
     });
     $('#homepage-config').textContent=JSON.stringify(config,null,2);
