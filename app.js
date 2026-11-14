@@ -79,6 +79,8 @@
                 schedulePersonSearch(value) {
                     if (this.personSearchTimer) clearTimeout(this.personSearchTimer);
                     const query = String(value || '').trim();
+                    const normalizePersonSearchText = value => String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
+                    const queryTokens = normalizePersonSearchText(query).split(/\\s+/).filter(Boolean);
                     const requestId = ++this.personSearchRequestId;
                     this.personSearchResults = [];
                     if (query.length < 2) {
@@ -92,7 +94,11 @@
                             const payload = await this.fetchTmdb('search/person?query=' + encodeURIComponent(query) + '&include_adult=false&page=1');
                             if (requestId !== this.personSearchRequestId) return;
                             this.personSearchResults = (Array.isArray(payload.results) ? payload.results : [])
-                                .filter(person => person && person.id && ['Acting', 'Directing'].includes(person.known_for_department))
+                                .filter(person => {
+                                    if (!person || !person.id || !['Acting', 'Directing'].includes(person.known_for_department)) return false;
+                                    const nameTokens = normalizePersonSearchText(person.name).split(/\\s+/).filter(Boolean);
+                                    return queryTokens.every(token => nameTokens.some(nameToken => nameToken.startsWith(token)));
+                                })
                                 .slice(0, 6)
                                 .map(person => ({ ...person, known_for: Array.isArray(person.known_for) ? person.known_for.slice(0, 6) : [] }));
                         } catch (error) {
