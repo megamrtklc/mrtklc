@@ -18221,6 +18221,207 @@
       "tmdbImdbId": "tt0765429",
       "tmdbRating": "7.6",
       "tmdbVoteCount": 6382
+    },
+    {
+      "id": "cv-1794697995185",
+      "title": "Soysuzlar Çetesi",
+      "type": "movie",
+      "year": "2009",
+      "rating": "8.2",
+      "genre": "Dram",
+      "category": "Dram / Gerilim / Savaş",
+      "duration": "153 dk",
+      "country": "Germany, United States of America",
+      "director": "Quentin Tarantino",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 16869,
+      "imdbId": "tt0361748",
+      "image": "https://image.tmdb.org/t/p/w500/w3M2SpS71EBl3oXmUGHet2rCm71.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/bMJxwgLyD47CDQ6BFCT2AMMlID7.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Inglourious Basterds, Shosanna Dreyfus 'un ailesinin Nazi Yüzbaşısı Hans Landa 'un elinde idam edilmesi sırasında, Alman işgalindeki Fransa'da başlar. Shosanna kıl payı kurtulur ve bir sinema sahibi olarak yeni bir kimlik uyduracağı Fransa'ya gider. Avrupa'nın başka bir yerinde Teğmen Aldo Raine bir grup Yahudi askerini organize ederek hedef alınan bölgelere doğru yönlendirir. Düşmanları tarafından \"Soysuzlar\" olarak bilinen Raine'ın ekibi, etmek göreviyle Alman film yıldızı ve gizli ajan Bridget Von Hammersmark'a katılırlar. Kaderleri, Shosanna'nın hazır tuttuğu intikam planını gerçekleştireceği bir sinemanın altında birleşir...",
+      "cast": [
+        "Brad Pitt",
+        "Mélanie Laurent",
+        "Christoph Waltz",
+        "Eli Roth",
+        "Michael Fassbender",
+        "Diane Kruger",
+        "Daniel Brühl",
+        "Til Schweiger",
+        "Gedeon Burkhard",
+        "Jacky Ido",
+        "B.J. Novak",
+        "Omar Doom",
+        "August Diehl",
+        "Denis Ménochet",
+        "Sylvester Groth",
+        "Martin Wuttke",
+        "Mike Myers",
+        "Julie Dreyfus",
+        "Richard Sammel",
+        "Alexander Fehling"
+      ],
+      "tmdbTitle": "Soysuzlar Çetesi",
+      "tmdbOriginalTitle": "Inglourious Basterds",
+      "tmdbReleaseDate": "2009-08-02",
+      "tmdbGenres": "Dram / Gerilim / Savaş",
+      "tmdbRuntime": "153 dk",
+      "tmdbCountries": "Germany, United States of America",
+      "tmdbDirector": "Quentin Tarantino",
+      "tmdbCast": [
+        {
+          "id": 287,
+          "name": "Brad Pitt",
+          "character": "LT. Aldo Raine",
+          "profile": "https://image.tmdb.org/t/p/w185/ajNaPmXVVMJFg9GWmu6MJzTaXdV.jpg",
+          "order": 0
+        },
+        {
+          "id": 19119,
+          "name": "Mélanie Laurent",
+          "character": "Shosanna",
+          "profile": "https://image.tmdb.org/t/p/w185/i99ogEo4gQyanCmHWYYoS6hsUqL.jpg",
+          "order": 1
+        },
+        {
+          "id": 27319,
+          "name": "Christoph Waltz",
+          "character": "COL. Hans Landa",
+          "profile": "https://image.tmdb.org/t/p/w185/jMvLGCVXLaBqjRLf5olyvEucZob.jpg",
+          "order": 2
+        },
+        {
+          "id": 16847,
+          "name": "Eli Roth",
+          "character": "SGT. Donny Donowitz",
+          "profile": "https://image.tmdb.org/t/p/w185/qQTkpxzh1FlBGL1HD5hzdUMxv49.jpg",
+          "order": 3
+        },
+        {
+          "id": 17288,
+          "name": "Michael Fassbender",
+          "character": "LT. Archie Hicox",
+          "profile": "https://image.tmdb.org/t/p/w185/xvbnUiB2ZBR3QIt595OzNy657Vw.jpg",
+          "order": 4
+        },
+        {
+          "id": 9824,
+          "name": "Diane Kruger",
+          "character": "Bridget von Hammersmark",
+          "profile": "https://image.tmdb.org/t/p/w185/o5gVowcjVw4ThYi0L3883Y4X7kH.jpg",
+          "order": 5
+        },
+        {
+          "id": 3872,
+          "name": "Daniel Brühl",
+          "character": "Fredrick Zoller",
+          "profile": "https://image.tmdb.org/t/p/w185/3YlmTfiy5qZXkrdKGjaM1uMjGKP.jpg",
+          "order": 6
+        },
+        {
+          "id": 1844,
+          "name": "Til Schweiger",
+          "character": "SGT. Hugo Stiglitz",
+          "profile": "https://image.tmdb.org/t/p/w185/3Jk7y4sKgckrN9RzAAt0drlR0QG.jpg",
+          "order": 7
+        },
+        {
+          "id": 32823,
+          "name": "Gedeon Burkhard",
+          "character": "CPL. Wilhelm Wicki",
+          "profile": "https://image.tmdb.org/t/p/w185/oC2C7AEh5WUa7XShz7SMpuNwheP.jpg",
+          "order": 8
+        },
+        {
+          "id": 51636,
+          "name": "Jacky Ido",
+          "character": "Marcel",
+          "profile": "https://image.tmdb.org/t/p/w185/qvPeXby2lTt0bHCk6diaUY0pmdv.jpg",
+          "order": 9
+        },
+        {
+          "id": 107770,
+          "name": "B.J. Novak",
+          "character": "PFC. Smithson Utivich",
+          "profile": "https://image.tmdb.org/t/p/w185/o8Xf1khxhKGTz3QAplXD35opRA8.jpg",
+          "order": 10
+        },
+        {
+          "id": 23286,
+          "name": "Omar Doom",
+          "character": "PFC. Omar Ulmer",
+          "profile": "https://image.tmdb.org/t/p/w185/uIyS0Rx2hDJNBBSoC3wQH49FXVi.jpg",
+          "order": 11
+        },
+        {
+          "id": 6091,
+          "name": "August Diehl",
+          "character": "Major Hellstrom",
+          "profile": "https://image.tmdb.org/t/p/w185/tZfdH3EXLr5OmXBtxV1zT8eYbpT.jpg",
+          "order": 12
+        },
+        {
+          "id": 81125,
+          "name": "Denis Ménochet",
+          "character": "Perrier LaPadite",
+          "profile": "https://image.tmdb.org/t/p/w185/qpCPmm12kbzMKniYF6iKmKLZCjY.jpg",
+          "order": 13
+        },
+        {
+          "id": 41965,
+          "name": "Sylvester Groth",
+          "character": "Joseph Goebbels",
+          "profile": "https://image.tmdb.org/t/p/w185/fmmWf9lOWmIsJX7IxroTuyiyTtQ.jpg",
+          "order": 14
+        },
+        {
+          "id": 49056,
+          "name": "Martin Wuttke",
+          "character": "Hitler",
+          "profile": "https://image.tmdb.org/t/p/w185/sywdmaZIpQOOCzAymFixwypDe1g.jpg",
+          "order": 15
+        },
+        {
+          "id": 12073,
+          "name": "Mike Myers",
+          "character": "General Ed Fenech",
+          "profile": "https://image.tmdb.org/t/p/w185/gjfDl52Kk02MPgUYFjs9bOy33OY.jpg",
+          "order": 16
+        },
+        {
+          "id": 2539,
+          "name": "Julie Dreyfus",
+          "character": "Francesca Mondino",
+          "profile": "https://image.tmdb.org/t/p/w185/4dOHTPwEdCsRkMQZtUMFqpTzX9g.jpg",
+          "order": 17
+        },
+        {
+          "id": 49487,
+          "name": "Richard Sammel",
+          "character": "SGT. Rachtman",
+          "profile": "https://image.tmdb.org/t/p/w185/91IPxy0IuHhIqcrJdI0hYBpJmOg.jpg",
+          "order": 18
+        },
+        {
+          "id": 31663,
+          "name": "Alexander Fehling",
+          "character": "Master SGT. Wilhelm / Pola Negri",
+          "profile": "https://image.tmdb.org/t/p/w185/lWT09NCEmy3dh9cZ8fbYGvnm1pl.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Inglourious Basterds, Shosanna Dreyfus 'un ailesinin Nazi Yüzbaşısı Hans Landa 'un elinde idam edilmesi sırasında, Alman işgalindeki Fransa'da başlar. Shosanna kıl payı kurtulur ve bir sinema sahibi olarak yeni bir kimlik uyduracağı Fransa'ya gider. Avrupa'nın başka bir yerinde Teğmen Aldo Raine bir grup Yahudi askerini organize ederek hedef alınan bölgelere doğru yönlendirir. Düşmanları tarafından \"Soysuzlar\" olarak bilinen Raine'ın ekibi, etmek göreviyle Alman film yıldızı ve gizli ajan Bridget Von Hammersmark'a katılırlar. Kaderleri, Shosanna'nın hazır tuttuğu intikam planını gerçekleştireceği bir sinemanın altında birleşir...",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/w3M2SpS71EBl3oXmUGHet2rCm71.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/bMJxwgLyD47CDQ6BFCT2AMMlID7.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt0361748",
+      "tmdbRating": "8.2",
+      "tmdbVoteCount": 25153
     }
   ],
   "collections": [],
