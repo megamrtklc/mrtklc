@@ -536,7 +536,7 @@
                     const children = [...root.children];
                     const groups = new Map();
                     children.forEach(element => {
-                        const key = element.dataset.homeSection;
+                        const key = element.dataset.homeSection || element.dataset.homeSectionAnchor;
                         if (!key) return;
                         if (!groups.has(key)) groups.set(key, []);
                         groups.get(key).push(element);
