@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
     <link id="desktop-hero-image-preload" rel="preload" as="image" href="https://image.tmdb.org/t/p/w780/fRR6jHutlHuYxMeZp4cZfjgafzd.jpg" fetchpriority="high" media="(min-width: 768px)">
 
-    <link rel="preload" as="script" href="./app.min.js?v=20261114-critical-app-priority-v1" fetchpriority="high">
+    <link rel="preload" as="script" href="./app.min.js?v=20261114-home-manual-hydration-v1" fetchpriority="high">
     <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" crossorigin fetchpriority="high">
     <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js">
     <!-- Derlenmiş Tailwind CSS: tarayıcıda JIT/derleme betiği çalıştırılmaz. -->
@@ -1851,7 +1851,7 @@
     </template>
 
     <!-- Main Content Area -->
-    <main class="relative flex-grow w-full min-h-[540px] md:min-h-0">
+    <main class="relative flex-grow w-full min-h-[540px] md:min-h-[calc(100vh-64px)]">
         <div x-show="currentPage !== 'home' && !cinemaMode" x-cloak class="cv-back-wrap">
             <button type="button" @click="navigateBack()" class="cv-back-button">
                 <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
@@ -1900,7 +1900,7 @@
 
         <!-- ==================== HOME PAGE ==================== -->
         <template x-if="currentPage === 'home'">
-            <div id="home-page" class="w-full space-y-10 pb-16">
+            <div id="home-page" x-ignore x-cloak x-init="onHomePageReady()" class="w-full min-h-[560px] space-y-10 pb-16">
                 
 
 
