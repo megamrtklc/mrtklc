@@ -443,6 +443,32 @@
         #home-new-arrivals-section .home-new-arrival-feature:hover .home-new-arrival-poster img{transform:scale(1.045)}
         @media(max-width:639px){#home-new-arrivals-section .home-new-arrival-feature{flex-basis:min(84%,340px);width:min(84%,340px);aspect-ratio:16/9}#home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{padding:11px 12px 12px}#home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{font-size:9px;-webkit-line-clamp:2}}
 
+
+        /* Öneri kartı konu penceresi: hover'da zarif cam panel, mobilde bilgi düğmesiyle açılır. */
+        #home-personalized-section .home-personalized-plot{
+            position:absolute!important;left:10px!important;right:10px!important;top:10px!important;bottom:auto!important;
+            z-index:5!important;display:block!important;max-height:calc(100% - 20px);overflow:auto;
+            margin:0!important;padding:15px 15px 14px!important;border:1px solid rgba(255,255,255,.2);
+            border-radius:13px;color:rgba(255,255,255,.94);font-size:11px;line-height:1.6;
+            background:rgba(12,16,26,.96)!important;box-shadow:0 16px 38px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.07);
+            -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+            opacity:0!important;visibility:hidden;transform:translateY(7px) scale(.985);
+            transition:opacity .2s ease,transform .2s ease,visibility .2s ease;pointer-events:none;
+        }
+        #home-personalized-section .home-personalized-plot:before{
+            content:"KONU";display:block;margin-bottom:7px;color:#fda4af;font-size:8px;font-weight:900;letter-spacing:.2em;
+        }
+        #home-personalized-section .home-personalized-alternative:hover .home-personalized-plot,
+        #home-personalized-section .home-personalized-alternative:focus-within .home-personalized-plot,
+        #home-personalized-section .home-personalized-plot.is-plot-open{
+            opacity:1!important;visibility:visible;transform:translateY(0) scale(1);
+        }
+        @media(max-width:639px){
+            #home-personalized-section .home-personalized-plot{max-height:calc(100% - 20px);font-size:11px}
+            #home-personalized-section .home-personalized-alternative:hover .home-personalized-plot{opacity:0!important;visibility:hidden;transform:translateY(7px) scale(.985)}
+            #home-personalized-section .home-personalized-plot.is-plot-open{opacity:1!important;visibility:visible;transform:translateY(0) scale(1)}
+        }
+        @media(prefers-reduced-motion:reduce){#home-personalized-section .home-personalized-plot{transition:none}}
     </style>
 
     <style id="cineverse-home-hero-header">
