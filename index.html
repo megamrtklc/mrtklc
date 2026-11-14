@@ -54,6 +54,12 @@
         .actor-filmography-grid > button { transform-origin: center center; }
         .has-initial-route #hero-initial-shell { display: none !important; }
         .has-initial-route main { min-height: 0; }
+        .cv-back-wrap{width:100%;padding:14px clamp(16px,4vw,48px) 0}
+        .cv-back-button{display:inline-flex;align-items:center;gap:9px;min-height:38px;padding:8px 15px;border:1px solid rgba(148,163,184,.28);border-radius:9999px;background:rgba(255,255,255,.82);color:#596273;font-size:13px;font-weight:650;letter-spacing:.01em;box-shadow:0 5px 18px rgba(15,23,42,.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background .2s,border-color .2s,color .2s,transform .2s,box-shadow .2s}
+        .cv-back-button:hover{transform:translateY(-1px);border-color:rgba(225,29,72,.38);background:rgba(255,241,242,.92);color:#e11d48;box-shadow:0 8px 22px rgba(15,23,42,.09)}
+        .dark .cv-back-button{border-color:rgba(148,163,184,.2);background:rgba(21,25,34,.82);color:#cbd5e1;box-shadow:0 6px 20px rgba(0,0,0,.16)}
+        .dark .cv-back-button:hover{border-color:rgba(244,63,94,.48);background:rgba(136,19,55,.18);color:#fda4af}
+        @media(prefers-reduced-motion:reduce){.cv-back-button{transition:none}}
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .home-card-rail{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:2px 2px 12px;scrollbar-width:none;-ms-overflow-style:none}
@@ -1833,6 +1839,12 @@
 
     <!-- Main Content Area -->
     <main class="relative flex-grow w-full min-h-[540px] md:min-h-0">
+        <div x-show="currentPage !== 'home' && !cinemaMode" x-cloak class="cv-back-wrap">
+            <button type="button" @click="navigateBack()" class="cv-back-button">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                <span>Geri dön</span>
+            </button>
+        </div>
         <!-- İlk çizim için statik hero: Alpine ve katalog hazırlanırken aynı ölçülerde görseli gösterir. -->
         <section id="hero-initial-shell" inert class="pointer-events-none absolute md:hidden inset-x-0 top-0 z-20 overflow-hidden select-none border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" src="https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg" srcset="https://image.tmdb.org/t/p/w342/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 342w, https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w" sizes="100vw" loading="eager" fetchpriority="low" decoding="async" class="absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-3xl"><div class="absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div>
             <div class="mx-auto grid min-h-[480px] max-w-[1440px] grid-cols-1 items-center gap-5 px-5 py-5 md:grid-cols-2 md:gap-8 md:px-10 lg:px-14 lg:py-8">
@@ -2718,9 +2730,6 @@
         <!-- ==================== EXPLORE PAGE ==================== -->
         <template x-if="currentPage === 'actor' || currentPage === 'director'">
             <div class="w-full px-4 sm:px-8 lg:px-12 pt-5 sm:pt-8 pb-16 space-y-7">
-                <button @click="navigateTo('home')" class="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-rose-500 transition-colors">
-                    <i class="fa-solid fa-arrow-left"></i><span>Ana sayfaya dön</span>
-                </button>
                 <template x-if="selectedActor">
                     <section class="relative overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#151922] shadow-xl">
                         <div class="absolute inset-0 opacity-20 pointer-events-none" style="background:radial-gradient(ellipse at 20% 15%,rgba(225,29,72,.55),transparent 48%),linear-gradient(120deg,transparent,rgba(148,163,184,.12))"></div>
