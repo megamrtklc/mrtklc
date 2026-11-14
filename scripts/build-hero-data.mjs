@@ -14,7 +14,10 @@ const mobileSlides = Array.isArray(config.mobileHeroSlides) && config.mobileHero
 const ids = new Set([...desktopSlides, ...mobileSlides]
   .filter(slide => slide && slide.active !== false && slide.id != null)
   .map(slide => String(slide.id)));
-const heroCatalog = catalog.filter(item => item && ids.has(String(item.id ?? item.tmdbId ?? item.title)));
+const heroCatalog = catalog
+  .filter(item => item && ids.has(String(item.id ?? item.tmdbId ?? item.title)))
+  // Cast verileri manşette kullanılmıyor; detay sayfası TMDB'den kendi kadrosunu alır.
+  .map(({ cast, tmdbCast, ...item }) => item);
 if (!heroCatalog.length) throw new Error('Manşet listeleriyle eşleşen katalog kaydı bulunamadı.');
 
 const output = {
