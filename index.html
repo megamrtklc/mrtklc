@@ -39,7 +39,7 @@
     <!-- Inter fontları önceden istenir; CSS yerleşimden önce uygulanır. -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <!-- Alpine.js -->
-    <script defer src="./app.min.js?v=20261114-clean-hero-v1"></script>
+    <script defer src="./app.min.js?v=20261114-performance-v1"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         @keyframes editorialCopyEnter{0%{opacity:0;transform:translateY(18px);filter:blur(5px)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}
@@ -1887,8 +1887,7 @@
                 <!-- DESKTOP EDITORIAL HERO: mobil manşetten bağımsız yeni masaüstü kompozisyonu -->
                 <section id="desktopEditorialHero" data-home-section="hero" x-cloak  x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0 overflow-hidden bg-[#090a0d]">
-                        <img aria-hidden="true" :src="currentHero.backdrop || currentHero.poster" @error="handleImageError($event)" fetchpriority="low" decoding="async" class="absolute inset-0 h-full w-full scale-110 object-cover object-center opacity-35 blur-2xl">
-                        <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780, 1280])" sizes="100vw"><img :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-cover object-right transition-transform duration-[1200ms] ease-out"></picture>
+                        <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780, 1280])" sizes="100vw"><img :src="window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-cover object-right transition-transform duration-[1200ms] ease-out"></picture>
                         <div class="absolute inset-0 bg-gradient-to-r from-[#090a0d] via-[#090a0d]/95 via-[34%] to-[#090a0d]/5"></div>
                         <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
                         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_42%,transparent_0%,transparent_42%,rgba(0,0,0,.28)_100%)]"></div>
