@@ -606,7 +606,9 @@
       const category=config[device+'Category']||'top-rated';
       $('#hero-'+device+'-mode').value=mode;
       $('#hero-'+device+'-category').value=category;
-      const rawLimit=Number($('#hero-'+device+'-count').value)||(device==='desktop'?10:6);\n      const limit=device==='desktop'?Math.max(5,Math.min(15,rawLimit)):Math.max(1,Math.min(12,rawLimit));\n      $('#hero-'+device+'-count').value=limit;
+      const rawLimit=Number($('#hero-'+device+'-count').value)||(device==='desktop'?10:6);
+      const limit=device==='desktop'?Math.max(5,Math.min(15,rawLimit)):Math.max(1,Math.min(12,rawLimit));
+      $('#hero-'+device+'-count').value=limit;
       const saved=Array.isArray(draft[device])?draft[device]:(Array.isArray(config[device+'HeroSlides'])?config[device+'HeroSlides']:config.heroSlides);
       const selectedIds=(mode==='auto'?autoHeroItems(category,limit).map(x=>String(x.id)):saved.map(x=>String(typeof x==='object'?x.id:x))).slice(0,limit);
       const selected=new Set(selectedIds);
@@ -628,7 +630,14 @@
         host.innerHTML='<div class="hero-preview-art" style="background-image:linear-gradient(90deg,rgba(5,7,12,.96),rgba(5,7,12,.62) 58%,rgba(5,7,12,.12)),url(\''+escapeHtml(item.backdrop||posterOf(item))+'\')"><div class="hero-preview-copy"><span class="hero-preview-kicker">● ÖNE ÇIKAN YAPIM</span><h3>'+escapeHtml(titleOf(item))+'</h3><div class="hero-preview-meta">★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'　·　'+escapeHtml(yearOf(item))+'　·　'+(isSeries(item)?'DİZİ':'FİLM')+'</div><p>'+escapeHtml(excerpt)+'</p></div></div>';
       };
       count();preview();
-      $('#hero-'+device+'-slide-list input').forEach(input=>input.addEventListener('change',()=>{\n        if(device==='desktop'&&input.checked){\n          const checked=$('#hero-desktop-slide-list input:checked');\n          const max=Number($('#hero-desktop-count').value)||10;\n          if(checked.length>max){input.checked=false;toast('Masaüstü manşetinde en fazla '+max+' yapım seçebilirsin.');}\n        }\n        count();preview();\n      }));
+      $('#hero-'+device+'-slide-list input').forEach(input=>input.addEventListener('change',()=>{
+        if(device==='desktop'&&input.checked){
+          const checked=$$('#hero-desktop-slide-list input:checked');
+          const max=Number($('#hero-desktop-count').value)||10;
+          if(checked.length>max){input.checked=false;toast('Masaüstü manşetinde en fazla '+max+' yapım seçebilirsin.');}
+        }
+        count();preview();
+      }));
       $('#hero-'+device+'-search').value='';
       $('#hero-'+device+'-search').oninput=event=>{
         const q=event.target.value.trim().toLocaleLowerCase('tr-TR');
@@ -648,7 +657,9 @@
       const listId='#hero-'+device+'-slide-list';
       const oldEntries=Array.isArray(previous[device+'HeroSlides'])?previous[device+'HeroSlides']:previous.heroSlides;
       const oldMap=new Map(oldEntries.map(x=>[String(x.id),x]));
-      const selectedInputs=$(listId+' input:checked');\n      const max=device==='desktop'?Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)):12;\n      return selectedInputs.slice(0,max).map(input=>{
+      const selectedInputs=$$(listId+' input:checked');
+      const max=device==='desktop'?Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)):12;
+      return selectedInputs.slice(0,max).map(input=>{
         const id=input.value,old=oldMap.get(String(id))||legacyById.get(String(id))||{};
         return {...old,id,active:true,headline:old.headline||'',description:old.description||''};
       });
@@ -791,7 +802,14 @@
   });
   $('#hero-desktop-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=Array.from(document.querySelectorAll('#hero-desktop-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().desktopMode=event.target.value;renderHomepage();});
   $('#hero-desktop-category').addEventListener('change',event=>{homepageConfig().desktopCategory=event.target.value;renderHomepage();});
-  $('#hero-desktop-count').addEventListener('change',event=>{\n    const next=Math.max(5,Math.min(15,Number(event.target.value)||10));\n    event.target.value=next;\n    state.heroDraft=state.heroDraft||{};\n    state.heroDraft.desktop=Array.from(document.querySelectorAll('#hero-desktop-slide-list input:checked')).slice(0,next).map(x=>({id:x.value,active:true}));\n    homepageConfig().settings.desktopCount=next;\n    renderHomepage();\n  });
+  $('#hero-desktop-count').addEventListener('change',event=>{
+    const next=Math.max(5,Math.min(15,Number(event.target.value)||10));
+    event.target.value=next;
+    state.heroDraft=state.heroDraft||{};
+    state.heroDraft.desktop=Array.from(document.querySelectorAll('#hero-desktop-slide-list input:checked')).slice(0,next).map(x=>({id:x.value,active:true}));
+    homepageConfig().settings.desktopCount=next;
+    renderHomepage();
+  });
   $('#hero-mobile-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=Array.from(document.querySelectorAll('#hero-mobile-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().mobileMode=event.target.value;renderHomepage();});
   $('#hero-mobile-category').addEventListener('change',event=>{homepageConfig().mobileCategory=event.target.value;renderHomepage();});
   $('#hero-mobile-count').addEventListener('change',event=>{homepageConfig().settings.mobileCount=Number(event.target.value)||6;renderHomepage();});
