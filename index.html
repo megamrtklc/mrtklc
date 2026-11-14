@@ -1863,39 +1863,34 @@
                 <span>Geri dön</span>
             </button>
         </div>
-        <!-- İlk çizim için statik hero: Alpine ve katalog hazırlanırken aynı ölçülerde görseli gösterir. -->
-        <section id="hero-initial-shell" inert class="pointer-events-none absolute md:hidden inset-x-0 top-0 z-20 overflow-hidden select-none border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><picture class="absolute inset-0 -z-10"><source media="(max-width: 767px)" srcset="https://image.tmdb.org/t/p/w342/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 342w, https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w" sizes="100vw"><img aria-hidden="true" loading="lazy" fetchpriority="low" decoding="async" class="h-full w-full scale-110 object-cover opacity-30 blur-3xl"></picture><div class="absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div>
-            <div class="mx-auto grid min-h-[480px] max-w-[1440px] grid-cols-1 items-center gap-5 px-5 py-5 md:grid-cols-2 md:gap-8 md:px-10 lg:px-14 lg:py-8">
-                <div class="order-2 space-y-4 text-white md:order-1 md:max-w-[590px]">
-                    <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.35rem,3vw,3.5rem)] font-black leading-tight tracking-tight text-white">Kıyamet Z: Yeni Dünya</h1>
-                    <div class="flex flex-wrap items-center gap-2 text-xs font-bold"><span class="inline-flex items-center gap-2 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-lg"><span class="tracking-tight">IMDb</span><span class="text-sm">6.1</span></span><span class="text-gray-600">•</span><span class="text-gray-300">2026</span><span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200">Film</span><span class="text-gray-400">Aksiyon</span></div>
-                    <p class="max-w-xl text-sm leading-6 text-gray-300 line-clamp-3">TSJ virüsü salgınının ardından Kanarya Adaları Avrupa'nın son sığınağı hâline gelmiştir. Erzak bulmak için Madrid'e giden bir ekibe Roberto da şüpheli amaçlarla katılır.</p>
-                    <div class="flex flex-wrap gap-3 pt-2"><span class="inline-flex min-h-11 items-center gap-2 rounded-full bg-rose-600 px-6 text-xs font-extrabold uppercase tracking-wide text-white"><span>▶</span> Şimdi İzle</span><span class="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 text-xs font-bold text-white"><span>▣</span> İzleme Listeme Ekle</span></div>
+        <!-- Katalog yüklenene kadar yanlış yapım bilgisi göstermeyen nötr manşet iskeleti. -->
+        <section id="hero-initial-shell" aria-hidden="true" inert class="pointer-events-none absolute md:hidden inset-x-0 top-0 z-20 min-h-[480px] overflow-hidden select-none border-b border-gray-800/80 bg-[#090a0d]">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_20%,rgba(120,65,45,.22),transparent_55%),linear-gradient(110deg,#090a0d,#17151a_55%,#090a0d)]"></div>
+            <div class="relative mx-auto grid min-h-[480px] max-w-[1440px] grid-cols-1 items-center gap-5 px-5 py-5">
+                <div class="order-1 relative">
+                    <div class="aspect-[16/9] w-full rounded-2xl border border-white/10 bg-white/[0.045] shadow-2xl shadow-black/30"></div>
                 </div>
-                <div class="order-1 relative md:order-2">
-                    <div class="absolute -inset-5 rounded-[2rem] bg-rose-600/10 blur-3xl"></div>
-                    <picture class="relative block w-full"><source media="(max-width: 767px)" srcset="https://image.tmdb.org/t/p/w342/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 342w, https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w" sizes="100vw"><img alt="" loading="lazy" fetchpriority="low" decoding="async" class="relative aspect-[16/9] w-full rounded-2xl object-cover shadow-2xl shadow-black/40 ring-1 ring-white/10 md:rounded-[1.75rem]"></picture>
+                <div class="order-2 space-y-4">
+                    <div class="h-7 w-3/4 max-w-[360px] rounded-md bg-white/10"></div>
+                    <div class="flex items-center gap-2"><span class="h-6 w-16 rounded-md bg-white/10"></span><span class="h-3 w-10 rounded bg-white/[0.07]"></span><span class="h-3 w-14 rounded bg-white/[0.07]"></span><span class="h-5 w-12 rounded-full bg-white/[0.07]"></span></div>
+                    <div class="space-y-2"><div class="h-3 w-full rounded bg-white/[0.08]"></div><div class="h-3 w-11/12 rounded bg-white/[0.08]"></div><div class="h-3 w-2/3 rounded bg-white/[0.08]"></div></div>
+                    <div class="flex gap-3 pt-2"><span class="h-11 w-32 rounded-full bg-white/10"></span><span class="h-11 w-36 rounded-full border border-white/10 bg-white/[0.04]"></span></div>
                 </div>
             </div>
         </section>
-        <!-- Masaüstünde Alpine/katalog hazırlanırken LCP'yi bekletmeyen statik manşet. -->
-        <section id="hero-initial-shell-desktop" inert class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md:block overflow-hidden select-none bg-[#090a0d] text-white">
-            <picture class="absolute inset-0"><source media="(min-width: 768px)" srcset="https://image.tmdb.org/t/p/w780/fRR6jHutlHuYxMeZp4cZfjgafzd.jpg" fetchpriority="high"><img aria-hidden="true" alt="" decoding="async" class="h-full w-full object-cover object-right opacity-90"></picture>
-            <div class="absolute inset-0 bg-gradient-to-r from-[#090a0d] via-[#090a0d]/95 via-[34%] to-[#090a0d]/5"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
+        <!-- Masaüstü için de içerik yerine aynı nötr yükleme iskeleti kullanılır. -->
+        <section id="hero-initial-shell-desktop" aria-hidden="true" inert class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden min-h-[520px] overflow-hidden select-none bg-[#090a0d] text-white md:block">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_78%_32%,rgba(120,65,45,.24),transparent_48%),linear-gradient(105deg,#090a0d_8%,#17151a_55%,#090a0d)]"></div>
             <div class="relative mx-auto flex min-h-[520px] max-w-[1800px] flex-col justify-between px-8 pb-6 pt-8 lg:min-h-[560px] lg:px-12 xl:px-16">
                 <div class="flex min-h-[360px] items-center">
-                    <div class="max-w-[640px] space-y-4 lg:max-w-[680px]">
-                        <div class="space-y-2">
-                            <h1 class="block w-full max-w-[650px] overflow-hidden text-ellipsis whitespace-nowrap text-3xl font-black leading-[1.05] tracking-[-0.045em] text-white drop-shadow-2xl lg:max-w-[680px] lg:text-4xl xl:text-5xl">Made in Korea</h1>
-                            <p class="pl-1 text-sm font-black uppercase tracking-[0.62em] text-amber-400">DİZİ</p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-200"><span class="inline-flex items-center gap-2"><span class="text-amber-400">★</span><strong class="text-white">8.2</strong><span class="text-gray-400">IMDb</span></span><span class="text-white/35">|</span><span>2025</span><span class="text-white/35">|</span><span>Suç / Dram</span></div>
-                        <p class="max-w-[620px] text-[15px] leading-7 text-gray-200/90">1970'lerde geçen hikayede, Baek Gi Tae zenginlik ve güce susamış hırslı bir adamdır. Jang Gun Yeong ise vahşi içgüdüleri ve korkutucu azmiyle tanınan bir savcıdır. Büyük bir olayla karşı karşıya kalan Jang Gun Yeong, Baek Gi Tae'yi durdurmak için her şeyini ortaya koyar.</p>
-                        <div class="flex flex-wrap items-center gap-3 pt-1"><span class="inline-flex min-h-12 items-center gap-3 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 px-8 text-sm font-black uppercase tracking-wide text-[#17120a]">▶ ŞİMDİ İZLE</span><span class="inline-flex min-h-12 items-center gap-3 rounded-full border border-white/35 bg-black/25 px-7 text-sm font-bold text-white">▣ LİSTEME EKLE</span><span class="inline-flex min-h-12 items-center gap-2 rounded-full border border-amber-300/55 bg-black/25 px-6 text-sm font-bold text-amber-100">◉ FRAGMAN</span></div>
+                    <div class="w-full max-w-[640px] space-y-5">
+                        <div class="h-10 w-3/4 max-w-[520px] rounded-md bg-white/10 xl:h-12"></div>
+                        <div class="flex gap-3"><span class="h-4 w-16 rounded bg-white/[0.08]"></span><span class="h-4 w-12 rounded bg-white/[0.08]"></span><span class="h-4 w-28 rounded bg-white/[0.08]"></span></div>
+                        <div class="space-y-3 pt-2"><div class="h-3 w-full rounded bg-white/[0.08]"></div><div class="h-3 w-11/12 rounded bg-white/[0.08]"></div><div class="h-3 w-4/5 rounded bg-white/[0.08]"></div></div>
+                        <div class="flex gap-3 pt-2"><span class="h-12 w-36 rounded-full bg-white/10"></span><span class="h-12 w-40 rounded-full border border-white/10 bg-white/[0.04]"></span><span class="h-12 w-32 rounded-full border border-white/10 bg-white/[0.04]"></span></div>
                     </div>
                 </div>
-                <div class="flex items-center justify-start gap-6 border-t border-white/15 pt-4"><span class="text-sm font-bold tabular-nums text-white">01 <span class="mx-1 text-white/40">/</span><span class="text-white/55">08</span></span><span class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">ÖNE ÇIKAN YAPIMLAR</span></div>
+                <div class="flex items-center justify-start gap-6 border-t border-white/10 pt-4"><span class="h-4 w-12 rounded bg-white/[0.08]"></span><span class="h-3 w-44 rounded bg-white/[0.06]"></span></div>
             </div>
         </section>
 
