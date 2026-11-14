@@ -72,6 +72,52 @@
                 searchQuery: '',
                 searchOverlayOpen: false,
                 searchPreviousOverflow: '',
+                personSearchResults: [],
+                personSearchLoading: false,
+                personSearchTimer: null,
+                personSearchRequestId: 0,
+                schedulePersonSearch(value) {
+                    if (this.personSearchTimer) clearTimeout(this.personSearchTimer);
+                    const query = String(value || '').trim();
+                    const requestId = ++this.personSearchRequestId;
+                    if (query.length < 2) {
+                        this.personSearchResults = [];
+                        this.personSearchLoading = false;
+                        return;
+                    }
+                    this.personSearchLoading = true;
+                    this.personSearchTimer = setTimeout(async () => {
+                        try {
+                            const payload = await this.fetchTmdb('search/person?query=' + encodeURIComponent(query) + '&include_adult=false&page=1');
+                            if (requestId !== this.personSearchRequestId) return;
+                            this.personSearchResults = (Array.isArray(payload.results) ? payload.results : [])
+                                .filter(person => person && person.id && ['Acting', 'Directing'].includes(person.known_for_department))
+                                .slice(0, 6)
+                                .map(person => ({ ...person, known_for: Array.isArray(person.known_for) ? person.known_for.slice(0, 6) : [] }));
+                        } catch (error) {
+                            if (requestId === this.personSearchRequestId) {
+                                this.personSearchResults = [];
+                                console.warn('Oyuncu/yönetmen araması başarısız:', error);
+                            }
+                        } finally {
+                            if (requestId === this.personSearchRequestId) this.personSearchLoading = false;
+                        }
+                    }, 350);
+                },
+                selectPersonSearchResult(person) {
+                    if (!person || !person.id) return;
+                    const profile = {
+                        id: Number(person.id),
+                        name: person.name || 'İsimsiz kişi',
+                        profile: person.profile_path ? 'https://image.tmdb.org/t/p/h632' + person.profile_path : '',
+                        known_for_department: person.known_for_department || 'Acting'
+                    };
+                    this.closeSearchOverlay();
+                    this.searchQuery = '';
+                    this.personSearchResults = [];
+                    if (profile.known_for_department === 'Directing') this.openDirectorProfile(profile);
+                    else this.openActorProfile(profile);
+                },
                 get quickSearchResults() {
                     const query = this.normalizeSearchText(this.searchQuery);
                     if (!query) return [];
