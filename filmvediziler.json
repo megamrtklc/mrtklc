@@ -18265,6 +18265,206 @@
       "tmdbImdbId": "tt13611778",
       "tmdbRating": "6.3",
       "tmdbVoteCount": 156
+    },
+    {
+      "id": "cv-1794683744189",
+      "title": "Mayday",
+      "type": "movie",
+      "year": "2026",
+      "rating": "7.8",
+      "genre": "Aksiyon",
+      "category": "Aksiyon / Komedi",
+      "duration": "111 dk",
+      "country": "United States of America",
+      "director": "Jonathan Goldstein, John Francis Daley",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1137844,
+      "imdbId": "tt28014327",
+      "image": "https://image.tmdb.org/t/p/w500/hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/g7Ccid5kuD7A8hXWlsQiNfwOxaD.jpg",
+      "trailerUrl": "",
+      "desc": "Bir ABD Deniz Kuvvetleri pilotu, Soğuk Savaş sırasında çok gizli bir göreve çıkar ve düşman hattının ardında mahsur kalır. Kurtulmak için tek şansı eski bir KGB ajanı ile iş birliği yapmaktır.",
+      "cast": [
+        "Ryan Reynolds",
+        "Kenneth Branagh",
+        "Marcin Dorociński",
+        "Mariya Bakalova",
+        "David Morse",
+        "Clark Johnson",
+        "Wendy Crewson",
+        "Louis Cancelmi",
+        "Josh Hamilton",
+        "Alex Mallari Jr.",
+        "Alden Adair",
+        "Lovell Adams-Gray",
+        "John Francis Daley",
+        "Robert Crooks",
+        "Lorrie Odom",
+        "Jean Bernard",
+        "Vadim Kroll",
+        "Andrey Kovski",
+        "Александр Дрожжин",
+        "Patrick Kerton"
+      ],
+      "tmdbTitle": "Mayday",
+      "tmdbOriginalTitle": "Mayday",
+      "tmdbReleaseDate": "2026-09-03",
+      "tmdbGenres": "Aksiyon / Komedi",
+      "tmdbRuntime": "111 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Jonathan Goldstein, John Francis Daley",
+      "tmdbCast": [
+        {
+          "id": 10859,
+          "name": "Ryan Reynolds",
+          "character": "Troy Kelly",
+          "profile": "https://image.tmdb.org/t/p/w185/trzgptffGvAlAT6MEu01fz47cLW.jpg",
+          "order": 0
+        },
+        {
+          "id": 11181,
+          "name": "Kenneth Branagh",
+          "character": "Nikolai Ustinov",
+          "profile": "https://image.tmdb.org/t/p/w185/AbCqqFxNi5w3nDUFdQt0DGMFh5H.jpg",
+          "order": 1
+        },
+        {
+          "id": 591295,
+          "name": "Marcin Dorociński",
+          "character": "Alexander Volkov",
+          "profile": "https://image.tmdb.org/t/p/w185/pyPUnMHxNPKKYxn8PehQJfSbZzO.jpg",
+          "order": 2
+        },
+        {
+          "id": 2408703,
+          "name": "Mariya Bakalova",
+          "character": "Anna Ustinov",
+          "profile": "https://image.tmdb.org/t/p/w185/vCz0ycZr1PgJVOAeS29fIiZE8pN.jpg",
+          "order": 3
+        },
+        {
+          "id": 52,
+          "name": "David Morse",
+          "character": "Harold Kelly",
+          "profile": "https://image.tmdb.org/t/p/w185/A6zGbkFjM3uajIakgsSeNTmSKqY.jpg",
+          "order": 4
+        },
+        {
+          "id": 47640,
+          "name": "Clark Johnson",
+          "character": "CDR Keith Hardwick",
+          "profile": "https://image.tmdb.org/t/p/w185/k4EcCKRI7lqxrqYqVuffdSe9JBN.jpg",
+          "order": 5
+        },
+        {
+          "id": 19957,
+          "name": "Wendy Crewson",
+          "character": "Assistant Director Karen Meadows",
+          "profile": "https://image.tmdb.org/t/p/w185/6hplkzK8KV5Cw8Z8SVKwlt3nU5I.jpg",
+          "order": 6
+        },
+        {
+          "id": 163731,
+          "name": "Louis Cancelmi",
+          "character": "Maj Pete Sanders",
+          "profile": "https://image.tmdb.org/t/p/w185/4MUGuoK0WbLsTt3sg2CD4OsLynZ.jpg",
+          "order": 7
+        },
+        {
+          "id": 52419,
+          "name": "Josh Hamilton",
+          "character": "Consul General Dan Hennessy",
+          "profile": "https://image.tmdb.org/t/p/w185/7nuAUPd7E8iOE5lhUcNpogS2akP.jpg",
+          "order": 8
+        },
+        {
+          "id": 1020687,
+          "name": "Alex Mallari Jr.",
+          "character": "Danny 'Longshot' Bowers",
+          "profile": "https://image.tmdb.org/t/p/w185/nhFJW8vwez6KzdYDgNu5B5L94lV.jpg",
+          "order": 9
+        },
+        {
+          "id": 1582530,
+          "name": "Alden Adair",
+          "character": "James 'Mullet' Mullen",
+          "profile": "https://image.tmdb.org/t/p/w185/tn1Lt2jxuuGOhcdygpcX2lmgmPL.jpg",
+          "order": 10
+        },
+        {
+          "id": 1927708,
+          "name": "Lovell Adams-Gray",
+          "character": "Tomas 'Boomer' Garcia",
+          "profile": "https://image.tmdb.org/t/p/w185/5eysJfGCUOtKWi3ap53TCivqYVz.jpg",
+          "order": 11
+        },
+        {
+          "id": 52935,
+          "name": "John Francis Daley",
+          "character": "LSO",
+          "profile": "https://image.tmdb.org/t/p/w185/rKZL3e8gI2tQD6Kv0QojXK5sG4u.jpg",
+          "order": 12
+        },
+        {
+          "id": 60906,
+          "name": "Robert Crooks",
+          "character": "Air Boss #1",
+          "profile": "https://image.tmdb.org/t/p/w185/nrGJWpytpp8zZzjZM0KdrzgwnhP.jpg",
+          "order": 13
+        },
+        {
+          "id": 1461344,
+          "name": "Lorrie Odom",
+          "character": "Nurse",
+          "profile": "https://image.tmdb.org/t/p/w185/p3UKPBPPRkt5YWq3C5wsZF2gMEb.jpg",
+          "order": 14
+        },
+        {
+          "id": 2880116,
+          "name": "Jean Bernard",
+          "character": "Bouncer",
+          "profile": "",
+          "order": 15
+        },
+        {
+          "id": 1461311,
+          "name": "Vadim Kroll",
+          "character": "Belsky",
+          "profile": "https://image.tmdb.org/t/p/w185/FzV0P1NAt64kqm76akUjl4AQA0.jpg",
+          "order": 16
+        },
+        {
+          "id": 1259944,
+          "name": "Andrey Kovski",
+          "character": "Yuri",
+          "profile": "https://image.tmdb.org/t/p/w185/psUNrDYvjbiidHe1FuEjYaOUSHJ.jpg",
+          "order": 17
+        },
+        {
+          "id": 2865285,
+          "name": "Александр Дрожжин",
+          "character": "Lev",
+          "profile": "",
+          "order": 18
+        },
+        {
+          "id": 207818,
+          "name": "Patrick Kerton",
+          "character": "Ivan",
+          "profile": "https://image.tmdb.org/t/p/w185/jj9uVCBSSUFvOi663jMbs7YJ3G3.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Bir ABD Deniz Kuvvetleri pilotu, Soğuk Savaş sırasında çok gizli bir göreve çıkar ve düşman hattının ardında mahsur kalır. Kurtulmak için tek şansı eski bir KGB ajanı ile iş birliği yapmaktır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/hVXjX1jLZ1ljFSNGXpjJfbTUOa7.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/g7Ccid5kuD7A8hXWlsQiNfwOxaD.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt28014327",
+      "tmdbRating": "7.8",
+      "tmdbVoteCount": 1076
     }
   ],
   "collections": [],
