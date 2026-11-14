@@ -1443,6 +1443,34 @@
         }
     </style>
 
+
+    <style id="cineverse-feature-feedback-light-contrast">
+      /* Büyük kart: açık temalarda posterden bağımsız, net ama yumuşak beğeni kontrolleri. */
+      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
+      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike,
+      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
+      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{
+        width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
+        background:rgba(250,250,248,.96)!important;color:#456b50!important;
+        border:1px solid rgba(51,65,85,.20)!important;border-radius:11px!important;
+        box-shadow:0 3px 12px rgba(15,23,42,.20)!important;
+        backdrop-filter:blur(8px)!important;
+      }
+      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike,
+      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{
+        color:#985d68!important;
+      }
+      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-like:hover,
+      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-like.is-liked,
+      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-like:hover,
+      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-like.is-liked{
+        background:#e7f0e8!important;border-color:#a8c3ad!important;color:#365f42!important;
+      }
+      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike:hover,
+      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike:hover{
+        background:#f5e9eb!important;border-color:#d8b5bb!important;color:#8d4f5b!important;
+      }
+    </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
