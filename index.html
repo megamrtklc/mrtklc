@@ -45,7 +45,11 @@
         @keyframes heroSlidePrev{0%{opacity:0;transform:translateX(-14%) scale(1.075);filter:blur(12px)}62%{opacity:.82;filter:blur(3px)}100%{opacity:1;transform:translateX(0) scale(1.075);filter:blur(0)}}
         .hero-slide-next{animation:heroSlideNext .72s cubic-bezier(.18,.72,.24,1) both}
         .hero-slide-prev{animation:heroSlidePrev .72s cubic-bezier(.18,.72,.24,1) both}
-        @media(prefers-reduced-motion:reduce){.hero-slide-next,.hero-slide-prev{animation-duration:.01ms}}
+        @keyframes heroSoftArtwork{0%{opacity:.62;transform:scale(1.025)}100%{opacity:1;transform:scale(1)}}
+        @keyframes heroSoftCopy{0%{opacity:.45;transform:translateY(9px)}100%{opacity:1;transform:translateY(0)}}
+        .hero-soft-artwork{animation:heroSoftArtwork .56s cubic-bezier(.22,.7,.25,1) both}
+        .hero-soft-copy{animation:heroSoftCopy .48s cubic-bezier(.22,.7,.25,1) both}
+        @media(prefers-reduced-motion:reduce){.hero-slide-next,.hero-slide-prev,.hero-soft-artwork,.hero-soft-copy{animation-duration:.01ms}}
         /* Filmografi afişleri büyürken ekran kenarına çarpmasın; güvenli iç boşluk bırak. */
         .actor-filmography-grid > button { transform-origin: center center; }
         .has-initial-route #hero-initial-shell, .has-initial-route #hero-initial-shell-desktop { display: none !important; }
@@ -2340,7 +2344,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
             <img id="hero-initial-shell-desktop-artwork" src="https://image.tmdb.org/t/p/w780/h0OC7ouop8YLwbAVfS3UUE2Lw4T.jpg" alt="" fetchpriority="high" decoding="async" class="absolute inset-0 h-full w-full object-cover object-right opacity-45">
             <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_78%_32%,rgba(120,65,45,.24),transparent_48%),linear-gradient(105deg,#090a0d_8%,#17151a_55%,#090a0d)]"></div>
             <div class="relative mx-auto flex min-h-[520px] max-w-[1800px] flex-col justify-between px-8 pb-6 pt-8 lg:min-h-[560px] lg:px-12 xl:px-16">
-                <div class="flex min-h-[360px] items-center">
+                <div x-effect="currentHero.id; $el.classList.remove('hero-soft-copy'); void $el.offsetWidth; $el.classList.add('hero-soft-copy')" class="flex min-h-[360px] items-center">
                     <div class="w-full max-w-[640px] space-y-4 lg:max-w-[680px]">
                         <div class="space-y-2">
                             <h1 id="hero-initial-desktop-title" class="block w-full max-w-[650px] overflow-hidden text-ellipsis whitespace-nowrap text-3xl font-black leading-[1.05] tracking-[-0.045em] text-white drop-shadow-2xl lg:max-w-[680px] lg:text-4xl xl:text-5xl">MobLand</h1>
@@ -2372,7 +2376,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 <section id="desktopEditorialHero" data-home-section="hero" x-cloak  x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0 overflow-hidden bg-[#090a0d]">
                         <img class="cv-hero-left-color-spread" :src="currentHero.backdrop || currentHero.poster || ''" alt="" aria-hidden="true" @error="handleImageError($event)" decoding="async">
-                        <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780])" sizes="100vw"><img :src="window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-contain object-right transition-none"></picture>
+                        <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780])" sizes="100vw"><img x-effect="currentHero.id; $el.classList.remove('hero-soft-artwork'); void $el.offsetWidth; $el.classList.add('hero-soft-artwork')" :src="window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-contain object-right transition-none"></picture>
                         <div class="absolute inset-0 z-[1]" style="background:linear-gradient(90deg,#090a0d 0%,#090a0d 25%,rgba(9,10,13,.94) 38%,rgba(9,10,13,.72) 49%,rgba(9,10,13,.28) 63%,rgba(9,10,13,.04) 82%,transparent 100%);"></div>
                         <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
                         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_42%,transparent_0%,transparent_42%,rgba(0,0,0,.28)_100%)]"></div>
