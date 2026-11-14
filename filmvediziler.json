@@ -19427,6 +19427,207 @@
       "tmdbImdbId": "tt1950186",
       "tmdbRating": "8.0",
       "tmdbVoteCount": 9486
+    },
+    {
+      "id": "cv-1794698111552",
+      "title": "Yeşil Rehber",
+      "type": "movie",
+      "year": "2018",
+      "rating": "8.2",
+      "genre": "Dram",
+      "category": "Dram / Komedi / Tarih",
+      "duration": "130 dk",
+      "country": "United States of America",
+      "director": "Peter Farrelly",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 490132,
+      "imdbId": "tt6966692",
+      "image": "https://image.tmdb.org/t/p/w500/vEzS2VOhdpBIANoEYBHRvcaeBXD.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/5En0fmDagt3Pk8d7P3uTwfeQceg.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=_rPFXcqBWuU",
+      "trailerProvider": "auto",
+      "desc": "1962 yılında geçen, gerçek bir hikâyeden esinlenen film, ırkçılığın Amerika Birleşik Devletleri'nin güneyinde hâlâ çok yaygın olduğu bir dönemde, Afro-Amerikalı dünyaca ünlü piyanist Dr. Don Shirley ve İtalyan-Amerikalı kaba saba şoförü Tony Lip arasındaki beklenmedik dostluğu konu alır. Don Shirley, Güney Amerika’da bir konser turuna çıkmaya karar verir. Ancak o dönemde ırkçılık hâlâ büyük bir sorundur ve özellikle güney eyaletlerinde siyahi vatandaşlara yönelik ayrımcılık yoğundur. Dr. Shirley, güvenliği için Tony Lip adlı sert mizaçlı, sokak zekâsına sahip bir adamı şoför ve koruma olarak tutar. İkili, Shirley'nin güvenli bir şekilde konaklamasına yardımcı olması için dönemin Afro-Amerikan sürücülerine yönelik özel bir rehber olan “The Green Book” (Yeşil Rehber) adlı kılavuzu kullanır. Başlangıçta zıt karakterlere sahip olan Tony ve Shirley, zamanla aralarındaki önyargıları kırarak güçlü bir dostluk kurarlar.",
+      "cast": [
+        "Viggo Mortensen",
+        "Mahershala Ali",
+        "Linda Cardellini",
+        "Sebastian Maniscalco",
+        "Dimiter D. Marinov",
+        "Mike Hatton",
+        "P.J. Byrne",
+        "Joe Cortese",
+        "Mary Agnes Nixon",
+        "Von Lewis",
+        "Jon Sortland",
+        "Don Stark",
+        "Anthony Mangano",
+        "Paul Sloan",
+        "Quinn Duffy",
+        "Seth Hurwitz",
+        "Hudson Galloway",
+        "Gavin Foley",
+        "Iqbal Theba",
+        "Ricky Muse"
+      ],
+      "tmdbTitle": "Yeşil Rehber",
+      "tmdbOriginalTitle": "Green Book",
+      "tmdbReleaseDate": "2018-11-16",
+      "tmdbGenres": "Dram / Komedi / Tarih",
+      "tmdbRuntime": "130 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Peter Farrelly",
+      "tmdbCast": [
+        {
+          "id": 110,
+          "name": "Viggo Mortensen",
+          "character": "Tony Lip",
+          "profile": "https://image.tmdb.org/t/p/w185/vH5gVSpHAMhDaFWfh0Q7BG61O1y.jpg",
+          "order": 0
+        },
+        {
+          "id": 932967,
+          "name": "Mahershala Ali",
+          "character": "Dr. Don Shirley",
+          "profile": "https://image.tmdb.org/t/p/w185/9ZmSejm5lnUVY5IJ1iNx2QEjnHb.jpg",
+          "order": 1
+        },
+        {
+          "id": 1817,
+          "name": "Linda Cardellini",
+          "character": "Dolores",
+          "profile": "https://image.tmdb.org/t/p/w185/bcycvynDprC1rrhBNrnBjn5uOUd.jpg",
+          "order": 2
+        },
+        {
+          "id": 299743,
+          "name": "Sebastian Maniscalco",
+          "character": "Johnny Venere",
+          "profile": "https://image.tmdb.org/t/p/w185/bvJQGVOI8fJ9Y4eAvYqoQcOAbHZ.jpg",
+          "order": 3
+        },
+        {
+          "id": 1613744,
+          "name": "Dimiter D. Marinov",
+          "character": "Oleg",
+          "profile": "https://image.tmdb.org/t/p/w185/lZwHZ27xqsPsuswcxyx6uWSh5VP.jpg",
+          "order": 4
+        },
+        {
+          "id": 130532,
+          "name": "Mike Hatton",
+          "character": "George",
+          "profile": "https://image.tmdb.org/t/p/w185/f1dQlVm0plWWCcFczq4d9jTQUxN.jpg",
+          "order": 5
+        },
+        {
+          "id": 1211946,
+          "name": "P.J. Byrne",
+          "character": "Record Exec",
+          "profile": "https://image.tmdb.org/t/p/w185/1JVBaxRy3OxkHymD3nwBd5kVWWL.jpg",
+          "order": 6
+        },
+        {
+          "id": 830,
+          "name": "Joe Cortese",
+          "character": "Gio Loscudo",
+          "profile": "https://image.tmdb.org/t/p/w185/4Z2PvYRrpZ27xLKnDrtX6iRmJ3e.jpg",
+          "order": 7
+        },
+        {
+          "id": 5907315,
+          "name": "Mary Agnes Nixon",
+          "character": "Copa Coat Check Girl",
+          "profile": "",
+          "order": 8
+        },
+        {
+          "id": 2256705,
+          "name": "Von Lewis",
+          "character": "Bobby Rydell",
+          "profile": "https://image.tmdb.org/t/p/w185/bD92UEjqBKe3Tu075Ww8BENDCaO.jpg",
+          "order": 9
+        },
+        {
+          "id": 2949700,
+          "name": "Jon Sortland",
+          "character": "Rydell Band Leader",
+          "profile": "",
+          "order": 10
+        },
+        {
+          "id": 130129,
+          "name": "Don Stark",
+          "character": "Jules Podell",
+          "profile": "https://image.tmdb.org/t/p/w185/lkPWvElz5RxR4t4v3hM4SRy5E1j.jpg",
+          "order": 11
+        },
+        {
+          "id": 77585,
+          "name": "Anthony Mangano",
+          "character": "Copa Bouncer Danny",
+          "profile": "https://image.tmdb.org/t/p/w185/mfCIhsVXY5M0j5ZUHV93tgulqQX.jpg",
+          "order": 12
+        },
+        {
+          "id": 78335,
+          "name": "Paul Sloan",
+          "character": "Copa Maitre D' Carmine",
+          "profile": "https://image.tmdb.org/t/p/w185/xv187orDP1MOO0aKp2LadhMI81T.jpg",
+          "order": 13
+        },
+        {
+          "id": 179954,
+          "name": "Quinn Duffy",
+          "character": "Mikey Cerrone",
+          "profile": "https://image.tmdb.org/t/p/w185/8xBIEOXmMSgaDMWYcHDVR5MReY6.jpg",
+          "order": 14
+        },
+        {
+          "id": 2949703,
+          "name": "Seth Hurwitz",
+          "character": "Johnny Randazzo",
+          "profile": "https://image.tmdb.org/t/p/w185/yhM80wPIUpmxD0AAgbSiT6lQiuQ.jpg",
+          "order": 15
+        },
+        {
+          "id": 2949704,
+          "name": "Hudson Galloway",
+          "character": "Nick Vallelonga",
+          "profile": "",
+          "order": 16
+        },
+        {
+          "id": 2949705,
+          "name": "Gavin Foley",
+          "character": "Frankie Vallelonga",
+          "profile": "https://image.tmdb.org/t/p/w185/sRltdzqpc2JdZNmXa3Z6UPXckFe.jpg",
+          "order": 17
+        },
+        {
+          "id": 154182,
+          "name": "Iqbal Theba",
+          "character": "Amit",
+          "profile": "https://image.tmdb.org/t/p/w185/ySSf1uWuGkyRgNwyFjB3jJipzgQ.jpg",
+          "order": 18
+        },
+        {
+          "id": 1181570,
+          "name": "Ricky Muse",
+          "character": "Barkeep",
+          "profile": "https://image.tmdb.org/t/p/w185/2tGntlFcMUEzZYyfzpKRF3DyhS7.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "1962 yılında geçen, gerçek bir hikâyeden esinlenen film, ırkçılığın Amerika Birleşik Devletleri'nin güneyinde hâlâ çok yaygın olduğu bir dönemde, Afro-Amerikalı dünyaca ünlü piyanist Dr. Don Shirley ve İtalyan-Amerikalı kaba saba şoförü Tony Lip arasındaki beklenmedik dostluğu konu alır. Don Shirley, Güney Amerika’da bir konser turuna çıkmaya karar verir. Ancak o dönemde ırkçılık hâlâ büyük bir sorundur ve özellikle güney eyaletlerinde siyahi vatandaşlara yönelik ayrımcılık yoğundur. Dr. Shirley, güvenliği için Tony Lip adlı sert mizaçlı, sokak zekâsına sahip bir adamı şoför ve koruma olarak tutar. İkili, Shirley'nin güvenli bir şekilde konaklamasına yardımcı olması için dönemin Afro-Amerikan sürücülerine yönelik özel bir rehber olan “The Green Book” (Yeşil Rehber) adlı kılavuzu kullanır. Başlangıçta zıt karakterlere sahip olan Tony ve Shirley, zamanla aralarındaki önyargıları kırarak güçlü bir dostluk kurarlar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/vEzS2VOhdpBIANoEYBHRvcaeBXD.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/5En0fmDagt3Pk8d7P3uTwfeQceg.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=_rPFXcqBWuU",
+      "tmdbImdbId": "tt6966692",
+      "tmdbRating": "8.2",
+      "tmdbVoteCount": 13489
     }
   ],
   "collections": [],
