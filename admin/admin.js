@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null };
+  const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','new-arrivals','series-tracking','genre-discovery','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -270,12 +270,15 @@
   function openEditor(item=null){
     if(!canWrite())return;
     $('#content-form').reset();$('#edit-id').value=item?String(item.id??''):'';
-    $('#editor-title').textContent=item?'İçeriği düzenle':'Yeni içerik';
+    state.tmdbSelected=item?{...item}:null;
+    $('#tmdb-search-input').value='';$('#tmdb-search-results').hidden=true;$('#tmdb-search-results').innerHTML='';
+    $('#tmdb-search-status').textContent=item?'Mevcut kayıt düzenleniyor. İstersen başka bir TMDB sonucu seçerek bilgileri yenileyebilirsin.':'Başlık yazmaya başla; TMDB eşleşmelerini listeleyelim. Manuel giriş de her zaman açık.';
+    $('#editor-title').textContent=item?'İçeriği düzenle':'Yeni yapım';
     setField('field-title',item?.title||'');setField('field-type',isSeries(item)?'tv':'movie');
     setField('field-year',item?.year||'');setField('field-rating',item?.rating||item?.tmdbRating||'');
     setField('field-genre',item?.genre||'');setField('field-category',item?.category||item?.tmdbGenres||'');
     setField('field-duration',item?.duration||item?.tmdbRuntime||'');setField('field-country',item?.country||item?.tmdbCountries||'');
-    setField('field-director',item?.director||item?.tmdbDirector||'');setField('field-platform',item?.platform||'');
+    setField('field-director',item?.director||item?.tmdbDirector||'');setField('field-platform',item?.platform||'');setField('field-cast',(item?.cast||item?.tmdbCast||[]).map(x=>typeof x==='string'?x:(x?.name||'')).join(', '));
     setField('field-watch',item?.watchUrl||'');setField('field-note',item?.personalNote||'');
     setField('field-episode-urls',Object.entries(item?.episodeWatchUrls||{}).map(([key,url])=>key.replace(':',':')+' | '+url).join('\n'));
     setField('field-tmdb',item?.tmdbId||'');setField('field-imdb',item?.imdbId||item?.tmdbImdbId||'');
@@ -283,7 +286,95 @@
     setField('field-trailer',item?.trailerUrl||item?.tmdbTrailerUrl||'');setField('field-seasons',item?.seasons||'');
     setField('field-episodes',item?.episodes||'');setField('field-desc',item?.desc||item?.tmdbOverview||'');
     $('#editor-status').textContent=item?'Mevcut katalog kaydı düzenleniyor.':'Yeni katalog kaydı oluşturuluyor.';
+    renderContentPreview();
     $('#content-dialog').showModal();
+  }
+  const TMDB_API_KEY='3108265ab3fdbf3af14175edf64a9c7f';
+  const TMDB_IMAGE='https://image.tmdb.org/t/p/';
+  async function tmdbRequest(path){
+    const response=await fetch('https://api.themoviedb.org/3/'+path+(path.includes('?')?'&':'?')+'api_key='+TMDB_API_KEY+'&language=tr-TR');
+    if(!response.ok)throw new Error('TMDB yanıt vermedi (HTTP '+response.status+').');
+    return response.json();
+  }
+  function renderTmdbResults(results){
+    const host=$('#tmdb-search-results');
+    host.innerHTML=results.map(item=>{
+      const name=item.title||item.name||item.original_title||item.original_name||'İsimsiz yapım';
+      const date=item.release_date||item.first_air_date||'';
+      const year=date.slice(0,4)||'Yıl bilinmiyor';
+      const kind=item.media_type==='tv'?'Dizi':'Film';
+      const poster=item.poster_path?TMDB_IMAGE+'w92'+item.poster_path:'';
+      return '<button type="button" class="tmdb-result" data-tmdb-id="'+Number(item.id)+'" data-tmdb-type="'+item.media_type+'"><span class="tmdb-result-poster">'+(poster?'<img src="'+escapeHtml(poster)+'" alt="">':'<i>▣</i>')+'</span><span class="tmdb-result-copy"><b>'+escapeHtml(name)+'</b><small>'+kind+' · '+escapeHtml(year)+' · '+escapeHtml(item.original_title||item.original_name||'')+'</small><em>'+escapeHtml((item.overview||'Açıklama bulunmuyor.').slice(0,145))+'</em></span><span class="tmdb-result-arrow">↗</span></button>';
+    }).join('');
+    host.hidden=!results.length;
+  }
+  async function searchTmdbTitles(query){
+    const request=++state.tmdbSearchRequest;
+    const host=$('#tmdb-search-results'),status=$('#tmdb-search-status');
+    if(query.length<2){host.hidden=true;host.innerHTML='';status.textContent='En az iki karakter yaz. Manuel giriş de her zaman açık.';return;}
+    status.textContent='TMDB kataloğunda aranıyor…';host.hidden=true;
+    try{
+      const data=await tmdbRequest('search/multi?query='+encodeURIComponent(query)+'&include_adult=false&page=1');
+      if(request!==state.tmdbSearchRequest)return;
+      const results=(data.results||[]).filter(x=>['movie','tv'].includes(x.media_type)).slice(0,8);
+      if(!results.length){status.textContent='Eşleşme bulunamadı. Başlığı manuel girebilirsin.';return;}
+      status.textContent=results.length+' eşleşme bulundu. Bilgilerini almak için bir yapım seç.';
+      renderTmdbResults(results);
+    }catch(error){if(request!==state.tmdbSearchRequest)return;status.textContent='TMDB araması yapılamadı. Bilgileri manuel girebilirsin.';toast(error.message);}
+  }
+  async function selectTmdbTitle(id,type){
+    const status=$('#tmdb-search-status'),host=$('#tmdb-search-results');
+    host.hidden=true;status.textContent='Yapım bilgileri, oyuncular ve görseller alınıyor…';
+    try{
+      const detail=await tmdbRequest((type==='tv'?'tv/':'movie/')+id+'?append_to_response=credits,videos,external_ids');
+      const isTv=type==='tv',title=detail.title||detail.name||'';
+      const release=detail.release_date||detail.first_air_date||'';
+      const genres=(detail.genres||[]).map(x=>x.name).filter(Boolean);
+      const countries=(detail.production_countries||[]).map(x=>x.name).filter(Boolean);
+      const cast=(detail.credits?.cast||[]).slice(0,20).map((x,index)=>({id:x.id,name:x.name,character:x.character||'',profile:x.profile_path?TMDB_IMAGE+'w185'+x.profile_path:'',order:x.order??index}));
+      const directors=isTv?(detail.created_by||[]).map(x=>x.name):(detail.credits?.crew||[]).filter(x=>x.job==='Director').map(x=>x.name);
+      const trailer=(detail.videos?.results||[]).find(x=>x.site==='YouTube'&&x.type==='Trailer'&&x.key);
+      const runtime=isTv?(detail.episode_run_time||[])[0]:detail.runtime;
+      const trailerUrl=trailer?'https://www.youtube.com/watch?v='+trailer.key:'';
+      const record={
+        tmdbId:Number(detail.id),tmdbTitle:title,tmdbOriginalTitle:detail.original_title||detail.original_name||title,
+        tmdbReleaseDate:release,tmdbGenres:genres.join(' / '),tmdbRuntime:runtime?runtime+' dk':'',
+        tmdbCountries:countries.join(', '),tmdbDirector:directors.join(', '),tmdbCast:cast,
+        tmdbOverview:detail.overview||'',tmdbPoster:detail.poster_path?TMDB_IMAGE+'w500'+detail.poster_path:'',
+        tmdbBackdrop:detail.backdrop_path?TMDB_IMAGE+'w1280'+detail.backdrop_path:'',
+        tmdbTrailerUrl:trailerUrl,tmdbImdbId:detail.external_ids?.imdb_id||detail.imdb_id||'',
+        tmdbRating:detail.vote_average?Number(detail.vote_average).toFixed(1):'',tmdbVoteCount:detail.vote_count||0
+      };
+      state.tmdbSelected=record;
+      setField('field-title',title);setField('field-type',type);setField('field-year',release.slice(0,4));
+      setField('field-rating',record.tmdbRating);setField('field-genre',genres[0]||'');
+      setField('field-category',record.tmdbGenres);setField('field-duration',record.tmdbRuntime);
+      setField('field-country',record.tmdbCountries);setField('field-director',record.tmdbDirector);
+      setField('field-cast',cast.map(x=>x.name).join(', '));setField('field-tmdb',record.tmdbId);
+      setField('field-imdb',record.tmdbImdbId);setField('field-image',record.tmdbPoster);
+      setField('field-backdrop',record.tmdbBackdrop);setField('field-trailer',record.tmdbTrailerUrl);
+      setField('field-seasons',isTv?detail.number_of_seasons:'');setField('field-episodes',isTv?detail.number_of_episodes:'');
+      setField('field-desc',record.tmdbOverview);
+      status.textContent='✓ '+title+' bilgileri alındı. Alanları düzenleyebilir veya eksik bilgileri manuel tamamlayabilirsin.';
+      renderContentPreview();
+    }catch(error){status.textContent='Yapım bilgileri alınamadı. Alanları manuel doldurabilirsin.';toast(error.message);}
+  }
+  function renderContentPreview(){
+    const value=id=>String($('#'+id)?.value||'').trim();
+    const title=value('field-title')||'Yeni yapımın burada görünecek';
+    const type=$('#field-type')?.value==='tv'?'Dizi':'Film';
+    const year=value('field-year')||'Yıl belirtilmedi',rating=value('field-rating')||'—';
+    const poster=value('field-image'),backdrop=value('field-backdrop')||poster;
+    const description=value('field-desc')||'TMDB’den bir yapım seç veya bilgileri manuel doldur. Önizleme otomatik güncellenecek.';
+    const genres=value('field-category')||'Tür bilgisi eklenmedi';
+    $('#content-preview-title').textContent=title;
+    $('#content-preview-meta').textContent=type+' · '+year+' · ★ '+rating;
+    $('#content-preview-description').textContent=description;
+    $('#content-preview-tags').innerHTML=genres.split(/[\\/,;]+/).map(x=>x.trim()).filter(Boolean).slice(0,5).map(x=>'<span>'+escapeHtml(x)+'</span>').join('')||'<span>Tür bilgisi eklenmedi</span>';
+    const image=$('#content-preview-poster');
+    if(poster){image.src=poster;image.hidden=false;$('#content-preview-poster-empty').hidden=true;}
+    else{image.removeAttribute('src');image.hidden=true;$('#content-preview-poster-empty').hidden=false;}
+    $('#content-preview-backdrop').style.backgroundImage=backdrop?'linear-gradient(90deg,rgba(8,12,18,.98),rgba(8,12,18,.86) 48%,rgba(8,12,18,.42)),url("'+backdrop.replace(/["\\]/g,'')+'")':'linear-gradient(120deg,#263541,#111923)';
   }
   function parseEpisodeWatchUrls(value){
     const result={};
@@ -314,7 +405,11 @@
       director:$('#field-director').value.trim(),platform:$('#field-platform').value.trim(),watchUrl:$('#field-watch').value.trim(),
       personalNote:$('#field-note').value.trim(),episodeWatchUrls: type==='tv'?episodeWatchUrls:{},tmdbId:$('#field-tmdb').value.trim()?Number($('#field-tmdb').value):null,
       imdbId:$('#field-imdb').value.trim(),image:$('#field-image').value.trim(),
-      backdrop:$('#field-backdrop').value.trim(),trailerUrl:$('#field-trailer').value.trim(),desc:$('#field-desc').value.trim()};
+      backdrop:$('#field-backdrop').value.trim(),trailerUrl:$('#field-trailer').value.trim(),desc:$('#field-desc').value.trim(),cast:$('#field-cast').value.split(',').map(x=>x.trim()).filter(Boolean)};
+    if(state.tmdbSelected&&String(state.tmdbSelected.tmdbId||'')===String(record.tmdbId||'')){
+      const source=state.tmdbSelected;
+      ['tmdbTitle','tmdbOriginalTitle','tmdbReleaseDate','tmdbGenres','tmdbRuntime','tmdbCountries','tmdbDirector','tmdbCast','tmdbOverview','tmdbPoster','tmdbBackdrop','tmdbTrailerUrl','tmdbImdbId','tmdbRating','tmdbVoteCount'].forEach(key=>{if(source[key]!==undefined)record[key]=source[key];});
+    }
     if(!record.title){toast('Yapım adı zorunludur.');return;}
     if(type==='tv'){record.seasons=Number($('#field-seasons').value)||1;record.episodes=Number($('#field-episodes').value)||0;}else{delete record.seasons;delete record.episodes;}
     const nextData={...state.data,catalog:[...state.catalog]};
@@ -816,6 +911,10 @@
   $('#next-page').addEventListener('click',()=>{state.page++;renderCatalog();});
   $('#add-content').addEventListener('click',()=>openEditor());$('#catalog-add').addEventListener('click',()=>openEditor());
   $('#content-form').addEventListener('submit',saveContent);
+  $('#tmdb-search-input').addEventListener('input',event=>{clearTimeout(state.tmdbSearchTimer);const query=event.target.value.trim();state.tmdbSearchTimer=setTimeout(()=>searchTmdbTitles(query),320);});
+  $('#tmdb-search-results').addEventListener('click',event=>{const result=event.target.closest('[data-tmdb-id]');if(result)selectTmdbTitle(result.dataset.tmdbId,result.dataset.tmdbType);});
+  $('#content-form').addEventListener('input',event=>{if(event.target.closest('.editor-grid'))renderContentPreview();});
+  $('#content-form').addEventListener('change',event=>{if(event.target.closest('.editor-grid'))renderContentPreview();});
   $('#close-editor').addEventListener('click',()=>$('#content-dialog').close());$('#cancel-editor').addEventListener('click',()=>$('#content-dialog').close());
   $('#collection-add').addEventListener('click',()=>openCollectionEditor(null));
   $('#collection-form').addEventListener('submit',saveCollection);
