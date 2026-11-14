@@ -18623,6 +18623,207 @@
       "tmdbImdbId": "tt2948372",
       "tmdbRating": "8.1",
       "tmdbVoteCount": 11908
+    },
+    {
+      "id": "cv-1794698024448",
+      "title": "Baskın 2",
+      "type": "movie",
+      "year": "2014",
+      "rating": "7.6",
+      "genre": "Aksiyon",
+      "category": "Aksiyon / Suç / Gerilim",
+      "duration": "150 dk",
+      "country": "Indonesia, United States of America",
+      "director": "Gareth Evans",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 180299,
+      "imdbId": "tt2265171",
+      "image": "https://image.tmdb.org/t/p/w500/22nwWHCWwkNdsYtUqbBraSJVXMG.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/wJD1VaO6XMkOSAacUGLkzOKAd4D.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=f8JA22ZGLF0",
+      "trailerProvider": "auto",
+      "desc": "Elit bir özel kuvvetler ekibinin acemi üyesi Rama'ya suç dünyasının ünlü bir isminin de ihraç edildiği bir gizli görev esnasında geride durması emredilir. Ancak bir gözcü planlarını bozunca patron Tama binadaki her katile, tecavüzcüye ve hırsıza ekiptekilerin kelleleri karşılığında barınak vermeyi teklif eder. Bunun üzerine Rama ekibin lideri öldürülünce onun yerine geçmek zorunda kalır ve gücünün son zerresine kadar savaşır. Görevi tamamlamak ve hayatını kurtarabilmek için neredeyse her odada mücadele eder.",
+      "cast": [
+        "Iko Uwais",
+        "Arifin Putra",
+        "Tio Pakusadewo",
+        "Oka Antara",
+        "Alex Abbad",
+        "Cecep Arif Rahman",
+        "Julie Estelle",
+        "Very Tri Yulisman",
+        "Ryuhei Matsuda",
+        "Keniçi Endo",
+        "Kazuki Kitamura",
+        "Yayan Ruhian",
+        "Cok Simbara",
+        "Roy Marten",
+        "Epy Kusnandar",
+        "Zack Lee",
+        "Deddy Sutomo",
+        "Marsha Timothy",
+        "Donny Alamsyah",
+        "Mike Lucock"
+      ],
+      "tmdbTitle": "Baskın 2",
+      "tmdbOriginalTitle": "The Raid 2: Berandal",
+      "tmdbReleaseDate": "2014-03-27",
+      "tmdbGenres": "Aksiyon / Suç / Gerilim",
+      "tmdbRuntime": "150 dk",
+      "tmdbCountries": "Indonesia, United States of America",
+      "tmdbDirector": "Gareth Evans",
+      "tmdbCast": [
+        {
+          "id": 113732,
+          "name": "Iko Uwais",
+          "character": "Rama",
+          "profile": "https://image.tmdb.org/t/p/w185/9WngJ2lOCy3UczLv3L2JRZvX0UM.jpg",
+          "order": 0
+        },
+        {
+          "id": 1290939,
+          "name": "Arifin Putra",
+          "character": "Ucok",
+          "profile": "https://image.tmdb.org/t/p/w185/An0p5UDfq1Seeyg80E9lVFlfZmw.jpg",
+          "order": 1
+        },
+        {
+          "id": 1155281,
+          "name": "Tio Pakusadewo",
+          "character": "Bangun",
+          "profile": "https://image.tmdb.org/t/p/w185/uAbKPJPbXVg1pi1bAEEkaMxc0Br.jpg",
+          "order": 2
+        },
+        {
+          "id": 1154465,
+          "name": "Oka Antara",
+          "character": "Eka",
+          "profile": "https://image.tmdb.org/t/p/w185/hxa27iexJSLga0x1NNxmpzQLh8V.jpg",
+          "order": 3
+        },
+        {
+          "id": 142018,
+          "name": "Alex Abbad",
+          "character": "Bejo",
+          "profile": "https://image.tmdb.org/t/p/w185/uY4sA189EoVvanm1hmM0gUriDeV.jpg",
+          "order": 4
+        },
+        {
+          "id": 1379749,
+          "name": "Cecep Arif Rahman",
+          "character": "The Assassin",
+          "profile": "https://image.tmdb.org/t/p/w185/n5V0iZrpuim3jUd9BH0e9vIuq5g.jpg",
+          "order": 5
+        },
+        {
+          "id": 145882,
+          "name": "Julie Estelle",
+          "character": "Alicia \"Hammer Girl\"",
+          "profile": "https://image.tmdb.org/t/p/w185/baPOO8LdOV1X6bbONRCjEaYP4SM.jpg",
+          "order": 6
+        },
+        {
+          "id": 1304642,
+          "name": "Very Tri Yulisman",
+          "character": "Baseball \"Bat Man\"",
+          "profile": "https://image.tmdb.org/t/p/w185/1vLmPZWujBPIOKadDu4ZlaDQ6Rc.jpg",
+          "order": 7
+        },
+        {
+          "id": 72932,
+          "name": "Ryuhei Matsuda",
+          "character": "Keiichi",
+          "profile": "https://image.tmdb.org/t/p/w185/tG3wMOri6LdDV0ccnP0nNNF5TM4.jpg",
+          "order": 8
+        },
+        {
+          "id": 35642,
+          "name": "Keniçi Endo",
+          "character": "Hideaki Goto",
+          "profile": "https://image.tmdb.org/t/p/w185/5NyLtChKpQ0KLiYjZ3aSDylBIou.jpg",
+          "order": 9
+        },
+        {
+          "id": 2542,
+          "name": "Kazuki Kitamura",
+          "character": "Ryuichi",
+          "profile": "https://image.tmdb.org/t/p/w185/8wbssNyn2yLASfRLj22dk4G5zVN.jpg",
+          "order": 10
+        },
+        {
+          "id": 142019,
+          "name": "Yayan Ruhian",
+          "character": "Prakoso",
+          "profile": "https://image.tmdb.org/t/p/w185/y8ZLh6FZMuLFw8PhqDxcEsyozjJ.jpg",
+          "order": 11
+        },
+        {
+          "id": 1379748,
+          "name": "Cok Simbara",
+          "character": "Bunawar",
+          "profile": "https://image.tmdb.org/t/p/w185/hrYBWp336utUgRqBQjAsPEgcais.jpg",
+          "order": 12
+        },
+        {
+          "id": 1307923,
+          "name": "Roy Marten",
+          "character": "Reza",
+          "profile": "https://image.tmdb.org/t/p/w185/1evtWUS9nKJupZQCRvPX12DEOie.jpg",
+          "order": 13
+        },
+        {
+          "id": 1180616,
+          "name": "Epy Kusnandar",
+          "character": "Topan",
+          "profile": "https://image.tmdb.org/t/p/w185/6LXexZevRnRyWtkn0jy2r4s4iKt.jpg",
+          "order": 14
+        },
+        {
+          "id": 1679986,
+          "name": "Zack Lee",
+          "character": "Benny",
+          "profile": "https://image.tmdb.org/t/p/w185/9p5odbiZl58RbpDYfLrU2fEhzFi.jpg",
+          "order": 15
+        },
+        {
+          "id": 1500182,
+          "name": "Deddy Sutomo",
+          "character": "Mediator",
+          "profile": "https://image.tmdb.org/t/p/w185/pVIvvZZOEVoqh2wcIKUCIDjHiuH.jpg",
+          "order": 16
+        },
+        {
+          "id": 1028466,
+          "name": "Marsha Timothy",
+          "character": "Dwi",
+          "profile": "https://image.tmdb.org/t/p/w185/o1egclqHgdiyp5QJ333Hgk5AyMJ.jpg",
+          "order": 17
+        },
+        {
+          "id": 1202416,
+          "name": "Donny Alamsyah",
+          "character": "Andi",
+          "profile": "https://image.tmdb.org/t/p/w185/zfv0xvwhealzqRwI0BUQpbzrUuD.jpg",
+          "order": 18
+        },
+        {
+          "id": 581684,
+          "name": "Mike Lucock",
+          "character": "Johnny",
+          "profile": "https://image.tmdb.org/t/p/w185/LtCJOYBn9p8TG6gOHh4GxvKiHi.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Elit bir özel kuvvetler ekibinin acemi üyesi Rama'ya suç dünyasının ünlü bir isminin de ihraç edildiği bir gizli görev esnasında geride durması emredilir. Ancak bir gözcü planlarını bozunca patron Tama binadaki her katile, tecavüzcüye ve hırsıza ekiptekilerin kelleleri karşılığında barınak vermeyi teklif eder. Bunun üzerine Rama ekibin lideri öldürülünce onun yerine geçmek zorunda kalır ve gücünün son zerresine kadar savaşır. Görevi tamamlamak ve hayatını kurtarabilmek için neredeyse her odada mücadele eder.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/22nwWHCWwkNdsYtUqbBraSJVXMG.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/wJD1VaO6XMkOSAacUGLkzOKAd4D.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=f8JA22ZGLF0",
+      "tmdbImdbId": "tt2265171",
+      "tmdbRating": "7.6",
+      "tmdbVoteCount": 2745
     }
   ],
   "collections": [],
