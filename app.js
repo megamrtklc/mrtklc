@@ -243,7 +243,7 @@
                 catalog: [],
                 collections: [],
                 homepageConfig: null,
-                headerConfig: { enabled:true, sticky:true, showLogoIcon:true, brandPrimary:'CINE', brandAccent:'VERSE', showHome:true, homeLabel:'Ana Sayfa', showExplore:true, exploreLabel:'Keşfet', showVideo:true, videoLabel:'Video Bağlantıları', showSearch:true, showProfile:true, showMobileMenu:true, customLinks:[] },
+                headerConfig: { enabled:true, sticky:true, showLogoIcon:true, brandPrimary:'CINE', brandAccent:'VERSE', showHome:true, homeLabel:'Ana Sayfa', showExplore:true, exploreLabel:'Keşfet', showVideo:true, videoLabel:'Video Bağlantıları', showSearch:true, showProfile:true, showMobileMenu:true, catalogMenusInitialized:false, customLinks:[] },
                 footerConfig: { enabled:true, customLinks:[], brandPrimary:'CINE', brandAccent:'VERSE', description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.', showBadges:true, badgeOne:'KİŞİSEL KÜTÜPHANE', badgeTwo:'DİZİ TAKİBİ', columnOneTitle:'CineVerse', homeLabel:'Ana Sayfa', exploreLabel:'Keşfet', libraryLabel:'Kütüphanem', columnTwoTitle:'İzleme Alanım', watchlistLabel:'İzleme Listem', statsLabel:'İstatistikler', featureTitle:'İzleme keyfini kişiselleştir', featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.', ctaLabel:'Kütüphaneme Git', showCta:true, copyright:'© 2026 CineVerse. Tüm hakları saklıdır.', showBackToTop:true },
                 watchPageConfig: null,
                 heroAutoplayTimer: null,
@@ -413,6 +413,13 @@
                         const data = await response.json();
                         this.homepageConfig = data && typeof data === 'object' ? (data.homepageConfig || null) : null;
                         this.headerConfig = { ...this.headerConfig, ...(data?.headerConfig || {}) };
+                        if (!this.headerConfig.catalogMenusInitialized) {
+                            const requiredCatalogMenus = [{label:'Filmler',page:'movies'},{label:'Diziler',page:'series'},{label:'Yerli Yapımlar',page:'turkish'}];
+                            const links = Array.isArray(this.headerConfig.customLinks) ? this.headerConfig.customLinks : [];
+                            requiredCatalogMenus.forEach(link => { if (!links.some(existing => existing.page === link.page)) links.push(link); });
+                            this.headerConfig.customLinks = links;
+                            this.headerConfig.catalogMenusInitialized = true;
+                        }
                         this.footerConfig = { ...this.footerConfig, ...(data?.footerConfig || {}) };
                         this.collections = Array.isArray(data?.collections) ? data.collections : [];
                         this.watchPageConfig = data && typeof data === 'object' ? (data.watchPageConfig || null) : null;
