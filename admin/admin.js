@@ -195,8 +195,8 @@
   }
   function headerFooterDefaults(){
     return {
-      header:{enabled:true,sticky:true,showLogoIcon:true,brandPrimary:'CINE',brandAccent:'VERSE',showHome:true,homeLabel:'Ana Sayfa',showExplore:true,exploreLabel:'Keşfet',showVideo:true,videoLabel:'Video Bağlantıları',showSearch:true,showProfile:true,showMobileMenu:true},
-      footer:{enabled:true,brandPrimary:'CINE',brandAccent:'VERSE',description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.',showBadges:true,badgeOne:'KİŞİSEL KÜTÜPHANE',badgeTwo:'DİZİ TAKİBİ',columnOneTitle:'CineVerse',homeLabel:'Ana Sayfa',exploreLabel:'Keşfet',libraryLabel:'Kütüphanem',columnTwoTitle:'İzleme Alanım',watchlistLabel:'İzleme Listem',statsLabel:'İstatistikler',featureTitle:'İzleme keyfini kişiselleştir',featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.',ctaLabel:'Kütüphaneme Git',showCta:true,copyright:'© 2026 CineVerse. Tüm hakları saklıdır.',showBackToTop:true}
+      header:{enabled:true,sticky:true,showLogoIcon:true,brandPrimary:'CINE',brandAccent:'VERSE',showHome:true,homeLabel:'Ana Sayfa',showExplore:true,exploreLabel:'Keşfet',showVideo:true,videoLabel:'Video Bağlantıları',showSearch:true,showProfile:true,showMobileMenu:true,customLinks:[]},
+      footer:{enabled:true,customLinks:[],brandPrimary:'CINE',brandAccent:'VERSE',description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.',showBadges:true,badgeOne:'KİŞİSEL KÜTÜPHANE',badgeTwo:'DİZİ TAKİBİ',columnOneTitle:'CineVerse',homeLabel:'Ana Sayfa',exploreLabel:'Keşfet',libraryLabel:'Kütüphanem',columnTwoTitle:'İzleme Alanım',watchlistLabel:'İzleme Listem',statsLabel:'İstatistikler',featureTitle:'İzleme keyfini kişiselleştir',featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.',ctaLabel:'Kütüphaneme Git',showCta:true,copyright:'© 2026 CineVerse. Tüm hakları saklıdır.',showBackToTop:true}
     };
   }
   function headerFooterConfig(){
@@ -204,6 +204,15 @@
     state.data.headerConfig={...defaults.header,...(state.data.headerConfig||{})};
     state.data.footerConfig={...defaults.footer,...(state.data.footerConfig||{})};
     return {header:state.data.headerConfig,footer:state.data.footerConfig};
+  }
+  const CUSTOM_LINK_PAGES=[['home','Ana Sayfa'],['explore','Keşfet'],['video-links','Video Bağlantıları'],['library','Kütüphanem'],['watchlist','İzleme Listem'],['stats','İstatistikler']];
+  function renderCustomLinkRows(kind,links){
+    const root=$('#hf-'+kind+'-custom-links');if(!root)return;
+    const safe=Array.isArray(links)?links:[];
+    root.innerHTML=safe.map((link,index)=>'<div class="hf-custom-link-row" data-custom-link-row="'+kind+'"><label class="field"><span>Menü adı</span><input type="text" maxlength="40" data-custom-link-label value="'+escapeHtml(link.label||'')+'" placeholder="Örn. Hakkımızda"></label><label class="field"><span>Yönlendirilecek sayfa</span><select data-custom-link-page>'+CUSTOM_LINK_PAGES.map(([page,label])=>'<option value="'+page+'" '+(link.page===page?'selected':'')+'>'+label+'</option>').join('')+'</select></label><button type="button" class="hf-remove-link" data-remove-custom-link aria-label="Menüyü sil">Sil</button></div>').join('');
+  }
+  function readCustomLinkRows(kind){
+    return $$('#hf-'+kind+'-custom-links [data-custom-link-row]').map(row=>({label:row.querySelector('[data-custom-link-label]').value.trim(),page:row.querySelector('[data-custom-link-page]').value})).filter(link=>link.label);
   }
   function renderHeaderFooter(){
     if(!state.data)return;
@@ -222,6 +231,7 @@
       'hf-footer-enabled':f.enabled!==false,'hf-footer-badges':f.showBadges!==false,'hf-footer-cta':f.showCta!==false,'hf-footer-backtop':f.showBackToTop!==false
     };
     Object.entries(checks).forEach(([id,value])=>{const el=$('#'+id);if(el)el.checked=value;});
+    renderCustomLinkRows('header',h.customLinks);renderCustomLinkRows('footer',f.customLinks);
   }
   async function saveHeaderFooter(event){
     event.preventDefault();
@@ -235,7 +245,7 @@
       showHome:checked('hf-header-home'),homeLabel:value('hf-header-home-label')||'Ana Sayfa',
       showExplore:checked('hf-header-explore'),exploreLabel:value('hf-header-explore-label')||'Keşfet',
       showVideo:checked('hf-header-video'),videoLabel:value('hf-header-video-label')||'Video Bağlantıları',
-      showSearch:checked('hf-header-search'),showProfile:checked('hf-header-profile'),showMobileMenu:checked('hf-header-mobile')
+      showSearch:checked('hf-header-search'),showProfile:checked('hf-header-profile'),showMobileMenu:checked('hf-header-mobile'),customLinks:readCustomLinkRows('header')
     };
     const footer={
       enabled:checked('hf-footer-enabled'),brandPrimary:value('hf-footer-primary')||'CINE',brandAccent:value('hf-footer-accent')||'VERSE',
@@ -243,7 +253,7 @@
       columnOneTitle:value('hf-footer-col-one'),homeLabel:value('hf-footer-home-label'),exploreLabel:value('hf-footer-explore-label'),libraryLabel:value('hf-footer-library-label'),
       columnTwoTitle:value('hf-footer-col-two'),watchlistLabel:value('hf-footer-watchlist-label'),statsLabel:value('hf-footer-stats-label'),
       featureTitle:value('hf-footer-feature-title'),featureDescription:value('hf-footer-feature-description'),ctaLabel:value('hf-footer-cta-label'),
-      showCta:checked('hf-footer-cta'),copyright:value('hf-footer-copyright'),showBackToTop:checked('hf-footer-backtop')
+      showCta:checked('hf-footer-cta'),copyright:value('hf-footer-copyright'),showBackToTop:checked('hf-footer-backtop'),customLinks:readCustomLinkRows('footer')
     };
     const ok=await persist({...state.data,headerConfig:header,footerConfig:footer},'Header ve Footer ayarları kaydedildi.');
     if(ok)renderHeaderFooter();
@@ -749,6 +759,12 @@
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
+  $('#header-footer-form').addEventListener('click',event=>{
+    const add=event.target.closest('[data-add-custom-link]');
+    if(add){const kind=add.dataset.addCustomLink;const root=$('#hf-'+kind+'-custom-links');const current=readCustomLinkRows(kind);current.push({label:'',page:'home'});renderCustomLinkRows(kind,current);const inputs=root.querySelectorAll('[data-custom-link-label]');if(inputs.length)inputs[inputs.length-1].focus();return;}
+    const remove=event.target.closest('[data-remove-custom-link]');
+    if(remove){const row=remove.closest('[data-custom-link-row]');const kind=row.dataset.customLinkRow;const current=$('#hf-'+kind+'-custom-links [data-custom-link-row]').filter(item=>item!==row).map(item=>({label:item.querySelector('[data-custom-link-label]').value.trim(),page:item.querySelector('[data-custom-link-page]').value}));renderCustomLinkRows(kind,current);}
+  });
   $('#homepage-layout-save').addEventListener('click',saveHomepageLayout);
   $('#homepage-layout-list').addEventListener('click',event=>{
     const button=event.target.closest('[data-layout-action]');
