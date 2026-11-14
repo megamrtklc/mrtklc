@@ -37,7 +37,7 @@ const heroCatalog = catalog
     trailerUrl: item.trailerUrl || item.tmdbTrailerUrl || '',
     seasons: item.seasons ?? item.tmdbSeasons ?? null,
     episodes: item.episodes ?? item.tmdbEpisodes ?? null
-  })));
+  }));
 if (!heroCatalog.length) throw new Error('Manşet listeleriyle eşleşen katalog kaydı bulunamadı.');
 
 const output = {
