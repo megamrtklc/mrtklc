@@ -43,6 +43,8 @@ jobs:
             exit 0
           fi
           git commit -m "Build production Tailwind CSS"
+          git fetch origin main
+          git rebase origin/main
           git push
       - name: Upload compiled CSS
         uses: actions/upload-artifact@v4
