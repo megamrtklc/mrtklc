@@ -577,24 +577,43 @@
                     if (!root) return;
                     window.__cineverseHomeSectionObserver?.disconnect();
 
+                    const contentIds = {
+                        continue: 'home-continue-section',
+                        watchlist: 'home-watchlist-section',
+                        'new-arrivals': 'home-new-arrivals-section',
+                        'series-tracking': 'home-series-tracking-section',
+                        'genre-discovery': 'home-genre-discovery-section',
+                        'published-collections': 'home-published-collections',
+                        catalog: 'home-catalog-section'
+                    };
                     const sections = [...root.children].filter(element =>
                         element.hasAttribute('data-home-section') &&
                         element.dataset.homeSection !== 'hero' &&
                         !this.homeSectionReady[element.dataset.homeSection]
                     );
 
+                    const activateSection = anchor => {
+                        const key = anchor.dataset.homeSection;
+                        if (!key) return;
+                        this.homeSectionReady[key] = true;
+                        const content = contentIds[key]
+                            ? document.getElementById(contentIds[key])
+                            : anchor;
+                        if (content?.hasAttribute('x-ignore')) {
+                            content.removeAttribute('x-ignore');
+                            window.Alpine?.initTree?.(content);
+                        }
+                    };
+
                     if (!('IntersectionObserver' in window)) {
-                        sections.forEach(section => {
-                            this.homeSectionReady[section.dataset.homeSection] = true;
-                        });
+                        sections.forEach(activateSection);
                         return;
                     }
 
                     const observer = new IntersectionObserver(entries => {
                         entries.forEach(entry => {
                             if (!entry.isIntersecting) return;
-                            const key = entry.target.dataset.homeSection;
-                            if (key) this.homeSectionReady[key] = true;
+                            activateSection(entry.target);
                             observer.unobserve(entry.target);
                         });
                     }, { rootMargin: '200px 0px' });
