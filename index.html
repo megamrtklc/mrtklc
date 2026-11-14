@@ -914,6 +914,72 @@
           }
         }
 
+        /* İzleme Zevkine Göre: dengeli ölçülerde, bağımsız konu penceresi. */
+        #home-personalized-section .home-personalized-alternative .home-personalized-plot{
+          position:fixed!important;
+          inset:auto!important;
+          left:50%!important;
+          top:50%!important;
+          right:auto!important;
+          bottom:auto!important;
+          z-index:10000!important;
+          display:block!important;
+          width:min(390px,calc(100vw - 36px))!important;
+          max-width:calc(100vw - 36px)!important;
+          max-height:min(224px,calc(100dvh - 40px))!important;
+          overflow-y:auto!important;
+          overflow-x:hidden!important;
+          overscroll-behavior:contain;
+          padding:22px 23px 21px!important;
+          border:1px solid rgba(148,163,184,.28)!important;
+          border-radius:16px!important;
+          background:linear-gradient(145deg,rgba(19,29,48,.98),rgba(8,14,26,.985))!important;
+          box-shadow:0 22px 65px rgba(0,0,0,.58),0 0 0 1px rgba(255,255,255,.035) inset!important;
+          color:rgba(241,245,249,.94)!important;
+          font-size:13px!important;
+          font-weight:500!important;
+          line-height:1.62!important;
+          letter-spacing:.005em;
+          text-align:left!important;
+          white-space:normal!important;
+          -webkit-line-clamp:unset!important;
+          -webkit-box-orient:initial!important;
+          transform:translate(-50%,-47%) scale(.985)!important;
+          opacity:0;
+          pointer-events:none!important;
+          transition:opacity .2s ease,transform .2s ease!important;
+          scrollbar-width:thin;
+          scrollbar-color:rgba(148,163,184,.42) transparent;
+        }
+        #home-personalized-section .home-personalized-alternative:hover .home-personalized-plot,
+        #home-personalized-section .home-personalized-alternative:focus-within .home-personalized-plot,
+        #home-personalized-section .home-personalized-plot.is-plot-open{
+          opacity:1!important;
+          transform:translate(-50%,-50%) scale(1)!important;
+        }
+        #home-personalized-section .home-personalized-plot.is-plot-open{
+          pointer-events:auto!important;
+        }
+        #home-personalized-section .home-personalized-plot:before{
+          display:block!important;
+          margin:0 0 10px!important;
+          color:#fda4af!important;
+          font-size:9px!important;
+          font-weight:900!important;
+          letter-spacing:.2em!important;
+        }
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-alternative .home-personalized-plot{
+            width:min(370px,calc(100vw - 32px))!important;
+            max-width:calc(100vw - 32px)!important;
+            max-height:min(216px,calc(100dvh - 36px))!important;
+            padding:19px 20px 18px!important;
+            border-radius:15px!important;
+            font-size:12.5px!important;
+            line-height:1.58!important;
+          }
+        }
+
 </style>
 
 </head>
