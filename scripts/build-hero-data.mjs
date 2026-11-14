@@ -66,7 +66,7 @@ if (artworkUrl) {
   if (preloadTag.test(updatedHtml)) {
     updatedHtml = updatedHtml.replace(preloadTag, `$1${optimizedArtworkUrl}$2`);
   } else {
-    const preloadLink = `    <link id="desktop-hero-image-preload" rel="preload" as="image" href="${optimizedArtworkUrl}" fetchpriority="high" media="(min-width: 768px)">\\n`;
+    const preloadLink = `    <link id="desktop-hero-image-preload" rel="preload" as="image" href="${optimizedArtworkUrl}" fetchpriority="high" media="(min-width: 768px)">` + String.fromCharCode(10);
     updatedHtml = updatedHtml.replace('</head>', preloadLink + '</head>');
   }
   await writeFile('index.html', updatedHtml);
