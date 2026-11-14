@@ -405,6 +405,21 @@
             #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{width:34px;height:34px;min-width:34px;min-height:34px}
         }
 
+    
+        /* Featured newest arrival: cinematic landscape card with readable overlay. */
+        #home-new-arrivals-section .home-new-arrival-feature{position:relative;flex-basis:clamp(300px,31vw,400px);width:clamp(300px,31vw,400px);aspect-ratio:16/9;border-color:rgba(244,63,94,.42);background:#090d16;isolation:isolate;box-shadow:0 16px 38px -24px rgba(0,0,0,.82)}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-poster{position:absolute;inset:0;z-index:-1;aspect-ratio:auto!important;height:100%;width:100%}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-poster img{object-position:center 35%;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-shade{background:linear-gradient(90deg,rgba(5,8,15,.82) 0%,rgba(5,8,15,.42) 54%,rgba(5,8,15,.08) 100%),linear-gradient(0deg,rgba(5,8,15,.96) 0%,rgba(5,8,15,.56) 38%,transparent 78%)}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{position:absolute;inset:auto 0 0;z-index:2;min-height:0;padding:15px 17px 16px;background:linear-gradient(0deg,rgba(5,8,15,.92),rgba(5,8,15,.54) 78%,transparent);text-shadow:0 1px 8px rgba(0,0,0,.55)}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy:before{content:"ARŞİVE EN SON EKLENEN";display:block;margin-bottom:6px;color:#fda4af;font-size:8px;font-weight:900;letter-spacing:.16em}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy h3{font-size:clamp(14px,1.2vw,18px);line-height:1.2;font-weight:900;letter-spacing:-.02em;color:#fff}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:5px;color:rgba(255,255,255,.82);font-size:10px;line-height:1.45}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{margin-top:8px;color:rgba(255,255,255,.72)}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div span:last-child{color:rgba(255,255,255,.82)}
+        #home-new-arrivals-section .home-new-arrival-feature:hover .home-new-arrival-poster img{transform:scale(1.045)}
+        @media(max-width:639px){#home-new-arrivals-section .home-new-arrival-feature{flex-basis:min(84%,340px);width:min(84%,340px);aspect-ratio:16/9}#home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{padding:11px 12px 12px}#home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{font-size:9px;-webkit-line-clamp:2}}
+
     </style>
 
     <style id="cineverse-home-hero-header">
@@ -917,7 +932,7 @@
                         <template x-for="(item,index) in (homeSectionReady['new-arrivals'] ? homeNewArrivals : [])" :key="'new-arrival-' + item.id">
                             <button type="button" @click="openWatchPage(item)" :class="getCardClass() + (index === 0 ? ' home-new-arrival-feature' : '')" class="home-rail-card home-new-arrival-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
                                 <div class="home-new-arrival-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                    <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, index === 0 ? [342, 500, 780] : [154, 185, 342, 500])" :sizes="index === 0 ? '(max-width:639px) min(calc(82vw - 39px), 310px), (max-width:767px) calc(42vw - 40px), (max-width:1023px) calc(31vw - 30px), (max-width:1275px) 29vw, 370px' : '(max-width:639px) calc(44vw - 21px), (max-width:767px) calc(29vw - 28px), (max-width:1023px) calc(23vw - 22px), (max-width:1087px) 174px, (max-width:1312px) 16vw, 210px'" class="w-full h-full object-cover transition-transform duration-700">
+                                    <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="index === 0 ? (item.backdrop || item.poster || item.image || item.tmdbPoster) : (item.poster || item.image || item.tmdbPoster || item.backdrop)" :srcset="getTmdbImageSrcSet(index === 0 ? (item.backdrop || item.poster || item.image || item.tmdbPoster) : (item.poster || item.image || item.tmdbPoster || item.backdrop), index === 0 ? [500, 780, 1280] : [154, 185, 342, 500])" :sizes="index === 0 ? '(max-width:639px) min(calc(82vw - 39px), 310px), (max-width:767px) calc(42vw - 40px), (max-width:1023px) calc(31vw - 30px), (max-width:1275px) 29vw, 370px' : '(max-width:639px) calc(44vw - 21px), (max-width:767px) calc(29vw - 28px), (max-width:1023px) calc(23vw - 22px), (max-width:1087px) 174px, (max-width:1312px) 16vw, 210px'" class="w-full h-full object-cover transition-transform duration-700">
                                     <div class="home-new-arrival-shade absolute inset-0"></div>
                                     <span class="absolute top-3 left-3 rounded-md bg-rose-600 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 shadow-lg" x-text="index === 0 ? 'EN YENİ' : 'YENİ EKLENDİ'"></span>
                                     <span class="absolute top-3 right-3 rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
@@ -925,6 +940,7 @@
                                 </div>
                                 <div class="home-new-arrival-copy p-3 space-y-2">
                                     <h3 class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
+                                     <p x-show="index === 0" x-text="item.overview || item.plot || item.description || item.tmdbOverview || &quot;Kataloğa yeni eklenen bu yapımı keşfet.&quot;"></p>
                                     <div class="flex items-center justify-between gap-2 text-[9px] text-gray-500 dark:text-gray-400">
                                         <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
                                         <span class="truncate text-right" x-text="item.genre || item.category || item.tmdbGenres || ''"></span>
