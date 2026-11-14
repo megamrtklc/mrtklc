@@ -52,6 +52,26 @@
         const recommendationPlotTermsCache = new WeakMap();
         const recommendationStopWords = new Set(['about','after','again','against','among','because','before','being','between','could','every','first','from','have','into','just','more','most','other','over','same','some','such','than','that','their','them','then','there','these','they','this','those','through','under','until','very','were','what','when','where','which','while','with','would','your','ancak','artık','bazen','belki','birçok','bütün','daha','diğer','eden','eder','edilir','etti','gibi','hem','her','hiç','için','ile','kadar','kendi','kez','ki','kim','nasıl','neden','nerede','olan','olarak','oldu','olduğu','olmak','olmuş','önce','sonra','şey','tüm','üzere','veya','yine']);
 
+        // Keep the desktop hero's server-rendered first frame visible while Alpine prepares
+        // the large homepage tree. The homepage itself resumes during an idle period.
+        document.addEventListener('alpine:init', () => {
+            const alpine = window.Alpine;
+            if (!alpine?.interceptInit || !alpine?.deferInit) return;
+            alpine.interceptInit(element => {
+                if (element.id !== 'home-page' || !window.matchMedia('(min-width: 768px)').matches) return;
+                alpine.deferInit(element, new Promise(resolve => {
+                    const deferUntilIdle = () => {
+                        if (typeof window.requestIdleCallback === 'function') {
+                            window.requestIdleCallback(resolve, { timeout: 1200 });
+                        } else {
+                            window.setTimeout(resolve, 700);
+                        }
+                    };
+                    window.setTimeout(deferUntilIdle, 250);
+                }));
+            });
+        });
+
         function ultimateProApp() {
             return {
                 getTmdbImageSrcSet(url, widths = [154, 185, 342, 500]) {
@@ -457,8 +477,7 @@
                             this.currentSlideIndex = 0;
                             this.startHeroAutoplay();
                             this.$nextTick(() => {
-                                document.getElementById('hero-initial-shell')?.remove();
-                                document.getElementById('hero-initial-shell-desktop')?.remove();
+                                if (this.currentPage !== 'home') this.removeHeroInitialShell();
                             });
                         }
                     } catch (heroError) {
@@ -508,8 +527,7 @@
                         this.applyHomepageSectionOrder();
                         this.catalogLoading = false;
                         this.$nextTick(() => {
-                            document.getElementById('hero-initial-shell')?.remove();
-                            document.getElementById('hero-initial-shell-desktop')?.remove();
+                            if (this.currentPage !== 'home') this.removeHeroInitialShell();
                             this.initHomeSectionObserver();
                         });
                     }
@@ -520,6 +538,15 @@
                     // Yapılandırma gelene kadar varsayılan olarak görünür tut;
                     // veri geldikten sonra kapalı bölümler normal şekilde gizlenir.
                     return this.homepageConfig?.layout?.visibility?.[sectionKey] !== false;
+                },
+
+                removeHeroInitialShell() {
+                    document.getElementById('hero-initial-shell')?.remove();
+                    document.getElementById('hero-initial-shell-desktop')?.remove();
+                },
+
+                onHomePageReady() {
+                    this.$nextTick(() => this.removeHeroInitialShell());
                 },
 
                 applyHomepageSectionOrder() {
