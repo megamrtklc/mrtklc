@@ -87,8 +87,11 @@
 
                     const people = new Map();
                     const matchesName = name => {
-                        const nameTokens = this.normalizeSearchText(name).split(/\s+/).filter(Boolean);
-                        return queryTokens.every(token => nameTokens.some(nameToken => nameToken.startsWith(token)));
+                        const normalizedName = this.normalizeSearchText(name).trim();
+                        const nameTokens = normalizedName.split(/\s+/).filter(Boolean);
+                        return queryTokens.length > 1
+                            ? normalizedName.startsWith(queryTokens.join(' '))
+                            : nameTokens.some(nameToken => nameToken.startsWith(queryTokens[0]));
                     };
                     const addPerson = (person, item, department) => {
                         const name = typeof person === 'string' ? person : (person?.name || '');
