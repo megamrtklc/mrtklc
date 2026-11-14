@@ -875,7 +875,45 @@
             -webkit-line-clamp:3!important;font-size:12px!important;line-height:1.45!important;
           }
         }
-    </style>
+    
+        /* Öneri küçük kartı popup'ı: aktif kartı kardeş kartların üstüne çıkar. */
+        #home-personalized-section .home-personalized-alternative{
+          position:relative!important;
+        }
+        #home-personalized-section .home-personalized-alternative:hover,
+        #home-personalized-section .home-personalized-alternative:focus-within,
+        #home-personalized-section .home-personalized-alternative:has(.home-personalized-plot.is-plot-open){
+          z-index:100!important;
+        }
+        #home-personalized-section .home-personalized-alternative .home-personalized-plot{
+          z-index:120!important;
+          font-size:10px!important;
+          line-height:1.45!important;
+          max-height:76px!important;
+          overflow:hidden!important;
+          padding:12px 13px 10px!important;
+          display:block!important;
+          -webkit-line-clamp:3;
+          -webkit-box-orient:vertical;
+        }
+        #home-personalized-section .home-personalized-alternative .home-personalized-plot:before{
+          margin-bottom:5px!important;
+          font-size:7px!important;
+        }
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-alternative:hover,
+          #home-personalized-section .home-personalized-alternative:focus-within{
+            z-index:auto!important;
+          }
+          #home-personalized-section .home-personalized-alternative:has(.home-personalized-plot.is-plot-open){
+            z-index:100!important;
+          }
+          #home-personalized-section .home-personalized-alternative .home-personalized-plot{
+            font-size:10px!important;line-height:1.4!important;max-height:72px!important;
+          }
+        }
+
+</style>
 
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
