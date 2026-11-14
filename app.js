@@ -1548,6 +1548,35 @@
                     return String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i').replace(/\bturkey\b/g, 'turkiye').trim();
                 },
 
+                getCountryEntries(value) {
+                    const countries = {
+                        'turkey':['TR','Türkiye'],'turkiye':['TR','Türkiye'],
+                        'united states of america':['US','ABD'],'united states':['US','ABD'],'usa':['US','ABD'],'us':['US','ABD'],
+                        'united kingdom':['GB','Birleşik Krallık'],'uk':['GB','Birleşik Krallık'],'great britain':['GB','Birleşik Krallık'],
+                        'germany':['DE','Almanya'],'france':['FR','Fransa'],'spain':['ES','İspanya'],'italy':['IT','İtalya'],'japan':['JP','Japonya'],
+                        'south korea':['KR','Güney Kore'],'korea, republic of':['KR','Güney Kore'],'republic of korea':['KR','Güney Kore'],'china':['CN','Çin'],
+                        'canada':['CA','Kanada'],'australia':['AU','Avustralya'],'india':['IN','Hindistan'],'russia':['RU','Rusya'],'brazil':['BR','Brezilya'],
+                        'mexico':['MX','Meksika'],'netherlands':['NL','Hollanda'],'belgium':['BE','Belçika'],'sweden':['SE','İsveç'],'norway':['NO','Norveç'],
+                        'denmark':['DK','Danimarka'],'switzerland':['CH','İsviçre'],'ireland':['IE','İrlanda'],'new zealand':['NZ','Yeni Zelanda'],
+                        'poland':['PL','Polonya'],'czech republic':['CZ','Çekya'],'czechia':['CZ','Çekya'],'greece':['GR','Yunanistan'],'portugal':['PT','Portekiz'],
+                        'argentina':['AR','Arjantin'],'south africa':['ZA','Güney Afrika'],'iran':['IR','İran'],'israel':['IL','İsrail'],
+                        'united arab emirates':['AE','Birleşik Arap Emirlikleri'],'uae':['AE','Birleşik Arap Emirlikleri'],'saudi arabia':['SA','Suudi Arabistan'],
+                        'taiwan':['TW','Tayvan'],'hong kong':['HK','Hong Kong'],'romania':['RO','Romanya'],'hungary':['HU','Macaristan'],
+                        'austria':['AT','Avusturya'],'finland':['FI','Finlandiya'],'iceland':['IS','İzlanda'],'thailand':['TH','Tayland'],
+                        'indonesia':['ID','Endonezya'],'malaysia':['MY','Malezya'],'philippines':['PH','Filipinler'],'vietnam':['VN','Vietnam'],
+                        'pakistan':['PK','Pakistan'],'ukraine':['UA','Ukrayna'],'serbia':['RS','Sırbistan'],'croatia':['HR','Hırvatistan'],
+                        'bulgaria':['BG','Bulgaristan'],'egypt':['EG','Mısır'],'morocco':['MA','Fas'],'nigeria':['NG','Nijerya'],'kenya':['KE','Kenya'],
+                        'turkish':['TR','Türkiye'],'united mexican states':['MX','Meksika']
+                    };
+                    return [...new Set(String(value || '').split(/[,;|/]+/).map(country => country.trim()).filter(Boolean))].map(country => {
+                        const key = country.toLocaleLowerCase('en-US').replace(/\\s+/g, ' ');
+                        const match = countries[key];
+                        const code = match?.[0] || '';
+                        const flag = code ? String.fromCodePoint(...code.split('').map(letter => 127397 + letter.charCodeAt(0))) : '';
+                        return { code: code || key, name: match?.[1] || country, flag };
+                    });
+                },
+
                 openRelatedDiscoveries(kind, value) {
                     const selected = String(value || '').trim();
                     if (!selected) return;
