@@ -15949,141 +15949,6 @@
       "episodes": null
     },
     {
-      "title": "Akira",
-      "originalTitle": "AKIRA",
-      "year": 1988,
-      "category": "Animasyon / Bilim-Kurgu / Aksiyon",
-      "genre": "Animasyon",
-      "rating": "7.9",
-      "duration": "124 dk",
-      "country": "Japan",
-      "director": "大友克洋",
-      "tmdbId": 149,
-      "desc": "Yıl 2019. 3. Dünya Savaşı'ndan 31 yıl sonra. Yıkılan Tokyo yerine yapılan Neo-Tokyo'da kaos hüküm sürmektedir. Polis ve hükümet güçleri yeraltı örgütlerine karşı mücadele etmektedirler.  Kaneda ve motosiklet çetesi, otoriteyi hiçe sayarak bildikleri gibi yaşamakta ve zamanalarını serserilik etmekle geçirmektedirler. Birgün çete üyesi Tetsuo, küçük bir çocuğun da bulunduğu bir kazaya karışır ve ağır yaralanır. Olay yerine gelen askeri birlikler Tetsuo'yu da alarak ayrılırlar ve üzerinde bir takım deneyler yaparlar.  3. Dünya Savaşı'na yol açan ve Tokyo'nun yıkılmasına sebep olan Akira Fenomeni nedir? Tetsuo'yu ne bekliyor? Kei ve örgütü neyin peşinde? Gizemler birbiri üzerine gelecek ve cevapları bu görsel şölende kendini gösterecek.",
-      "image": "https://image.tmdb.org/t/p/w500/oVc2I0WBRaVCmnL3DO0LaPQuEqh.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/fK40VGYIm7hmKrLJ26fgPQU0qRG.jpg",
-      "imdbId": "tt0094625",
-      "watchUrl": "https://ok.ru/video/3774914890262",
-      "platform": [],
-      "personalNote": "",
-      "type": "movie",
-      "subtitles": [
-        {
-          "language": "tr",
-          "languageLabel": "Türkçe",
-          "fileName": "Akira.HDTV[720p]_(H.264_DTS-5",
-          "url": "https://megamrtklc.github.io/filmm/assets/subtitles/tmdb-149/tr-Akira-HDTV-720p-_-H-1794094246670.vtt",
-          "default": true,
-          "season": null,
-          "episode": null
-        }
-      ],
-      "cast": [
-        "岩田光央",
-        "Nozomu Sasaki",
-        "小山茉美",
-        "石田太郎",
-        "鈴木瑞穂",
-        "Tessyo Genda",
-        "北村弘一",
-        "渕崎ゆり子",
-        "大倉正章",
-        "Takeşi Kusao",
-        "Kazuhiro Kamifuji",
-        "Tatsuhiko Nakamura"
-      ],
-      "tmdbCast": [
-        {
-          "id": 1678,
-          "name": "岩田光央",
-          "character": "Shotaro Kaneda (voice)",
-          "profile": "https://image.tmdb.org/t/p/w185/xCAsuzc5OBQZWhG5WSZIyhBZ7xj.jpg",
-          "order": 0
-        },
-        {
-          "id": 1679,
-          "name": "Nozomu Sasaki",
-          "character": "Tetsuo Shima (voice)",
-          "profile": "https://image.tmdb.org/t/p/w185/7usoPlvc9Xa1rDA2vxmVi0OvLDb.jpg",
-          "order": 1
-        },
-        {
-          "id": 1680,
-          "name": "小山茉美",
-          "character": "Kei (voice)",
-          "profile": "https://image.tmdb.org/t/p/w185/4KjDxYsa7mMh8gbqSKCV2DixDAx.jpg",
-          "order": 2
-        },
-        {
-          "id": 58158,
-          "name": "石田太郎",
-          "character": "Colonel Shikishima",
-          "profile": "https://image.tmdb.org/t/p/w185/Av6X1jpMQgFaC5HndFFsh7lRoZr.jpg",
-          "order": 3
-        },
-        {
-          "id": 239550,
-          "name": "鈴木瑞穂",
-          "character": "Doctor Ônishi",
-          "profile": "https://image.tmdb.org/t/p/w185/y89g5jIMc2HeOq3JJLoaPWndL32.jpg",
-          "order": 4
-        },
-        {
-          "id": 1681,
-          "name": "Tessyo Genda",
-          "character": "Ryûsaku (voice)",
-          "profile": "https://image.tmdb.org/t/p/w185/7eJeYv2OCHKAadeFVdabVkpWldo.jpg",
-          "order": 5
-        },
-        {
-          "id": 1683,
-          "name": "北村弘一",
-          "character": "Priestess Miyako / Council A (voice)",
-          "profile": "https://image.tmdb.org/t/p/w185/dr4UyDAnOYVpbjNaVhDgPYsA8RM.jpg",
-          "order": 6
-        },
-        {
-          "id": 1684,
-          "name": "渕崎ゆり子",
-          "character": "Kaori (voice)",
-          "profile": "https://image.tmdb.org/t/p/w185/15FGHjJ4WbzJFbolJzEnuKkLC3b.jpg",
-          "order": 7
-        },
-        {
-          "id": 1685,
-          "name": "大倉正章",
-          "character": "Yamagata (voice)",
-          "profile": "https://image.tmdb.org/t/p/w185/lQmV0Nzww7i3cmbr2ToqGJ5q6qr.jpg",
-          "order": 8
-        },
-        {
-          "id": 1686,
-          "name": "Takeşi Kusao",
-          "character": "Kai (voice)",
-          "profile": "https://image.tmdb.org/t/p/w185/gDiYLUdl9zXXJmhE0bAuB1Jm3FJ.jpg",
-          "order": 9
-        },
-        {
-          "id": 1687,
-          "name": "Kazuhiro Kamifuji",
-          "character": "Masaru / No. 27 (voice)",
-          "profile": "",
-          "order": 10
-        },
-        {
-          "id": 1688,
-          "name": "Tatsuhiko Nakamura",
-          "character": "Takashi / No. 26 (voice)",
-          "profile": "",
-          "order": 11
-        }
-      ],
-      "themeColor": "#101014",
-      "id": "perde-mw71eehr",
-      "seasons": null,
-      "episodes": null
-    },
-    {
       "title": "Mazisi Olmayan Adam",
       "originalTitle": "아저씨",
       "year": 2010,
@@ -17935,7 +17800,9 @@
         "series-tracking",
         "published-collections",
         "catalog",
-        "genre-discovery"
+        "genre-discovery",
+        "watched",
+        "favorites"
       ],
       "visibility": {
         "personalized": false
