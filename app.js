@@ -617,7 +617,7 @@
                             activateSection(entry.target);
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: '200px 0px' });
+                    }, { rootMargin: '0px' });
 
                     window.__cineverseHomeSectionObserver = observer;
                     sections.forEach(section => observer.observe(section));
