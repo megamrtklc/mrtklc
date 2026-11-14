@@ -20979,6 +20979,207 @@
       "tmdbImdbId": "tt3450958",
       "tmdbRating": "7.2",
       "tmdbVoteCount": 10097
+    },
+    {
+      "id": "cv-1794698320791",
+      "title": "Maymunlar Cehennemi: Yeni Krallık",
+      "type": "movie",
+      "year": "2024",
+      "rating": "7.0",
+      "genre": "Bilim-Kurgu",
+      "category": "Bilim-Kurgu / Macera / Aksiyon",
+      "duration": "145 dk",
+      "country": "United States of America",
+      "director": "Wes Ball",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 653346,
+      "imdbId": "tt11389872",
+      "image": "https://image.tmdb.org/t/p/w500/tty533HQ3OiTAzdZRUnwOxPT2zm.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/fqv8v6AycXKsivp1T5yKtLbGXce.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Sezar'ın saltanatından yıllar sonra genç bir maymun, kendisine geçmişle ilgili öğretilen her şeyi sorgulamasına ve hem maymunlar hem de insanlar için geleceği tanımlayacak seçimler yapmasına yol açacak bir yolculuğa çıkar.",
+      "cast": [
+        "Owen Teague",
+        "Freya Allan",
+        "Kevin Durand",
+        "Peter Macon",
+        "William H. Macy",
+        "Eka Darville",
+        "Travis Jeffery",
+        "Lydia Peckham",
+        "Neil Sandilands",
+        "Ras-Samuel Welda'abzgi",
+        "Sara Wiseman",
+        "Kaden Hartcher",
+        "Andy McPhee",
+        "Nina Gallas",
+        "Samuel Falé",
+        "Dichen Lachman",
+        "Virginie Laverdure",
+        "Markus Hamilton",
+        "Benjamin Scott",
+        "Nirish Bhat Surambadka"
+      ],
+      "tmdbTitle": "Maymunlar Cehennemi: Yeni Krallık",
+      "tmdbOriginalTitle": "Kingdom of the Planet of the Apes",
+      "tmdbReleaseDate": "2024-05-08",
+      "tmdbGenres": "Bilim-Kurgu / Macera / Aksiyon",
+      "tmdbRuntime": "145 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Wes Ball",
+      "tmdbCast": [
+        {
+          "id": 1586047,
+          "name": "Owen Teague",
+          "character": "Noa",
+          "profile": "https://image.tmdb.org/t/p/w185/tgCkGE0LIggyjMmgSwHhpZAkfJs.jpg",
+          "order": 0
+        },
+        {
+          "id": 2146942,
+          "name": "Freya Allan",
+          "character": "Nova / Mae",
+          "profile": "https://image.tmdb.org/t/p/w185/8RuLG2mePw8YgFNUjWROBuxMrwT.jpg",
+          "order": 1
+        },
+        {
+          "id": 79072,
+          "name": "Kevin Durand",
+          "character": "Proximus Caesar",
+          "profile": "https://image.tmdb.org/t/p/w185/hINvryvce5tpod6kTnUg9ZTH8wg.jpg",
+          "order": 2
+        },
+        {
+          "id": 1444816,
+          "name": "Peter Macon",
+          "character": "Raka",
+          "profile": "https://image.tmdb.org/t/p/w185/jF4jzgtWB2NAJ6BfVTSDQOlOHLr.jpg",
+          "order": 3
+        },
+        {
+          "id": 3905,
+          "name": "William H. Macy",
+          "character": "Trevathan",
+          "profile": "https://image.tmdb.org/t/p/w185/hdVEGSrP8qWlJnt0v5vSVcGOjy7.jpg",
+          "order": 4
+        },
+        {
+          "id": 966554,
+          "name": "Eka Darville",
+          "character": "Sylva",
+          "profile": "https://image.tmdb.org/t/p/w185/7tNdST92WSTGHmEJbExaRlQHWcW.jpg",
+          "order": 5
+        },
+        {
+          "id": 1394427,
+          "name": "Travis Jeffery",
+          "character": "Anaya",
+          "profile": "https://image.tmdb.org/t/p/w185/picKz6F5ZNpZeDF1oRXHpSR8V8w.jpg",
+          "order": 6
+        },
+        {
+          "id": 2435321,
+          "name": "Lydia Peckham",
+          "character": "Soona",
+          "profile": "https://image.tmdb.org/t/p/w185/tcBJklZSsP2JuQIYataJHW3pJXE.jpg",
+          "order": 7
+        },
+        {
+          "id": 136295,
+          "name": "Neil Sandilands",
+          "character": "Koro",
+          "profile": "https://image.tmdb.org/t/p/w185/ehl64LZJ9jnlYNhoIfNDzKaO2kX.jpg",
+          "order": 8
+        },
+        {
+          "id": 3757983,
+          "name": "Ras-Samuel Welda'abzgi",
+          "character": "Lightning",
+          "profile": "https://image.tmdb.org/t/p/w185/pZhLFFEjzbg5fEl53TgagusDGp1.jpg",
+          "order": 9
+        },
+        {
+          "id": 103406,
+          "name": "Sara Wiseman",
+          "character": "Dar",
+          "profile": "https://image.tmdb.org/t/p/w185/oZUbTYeLBywjNv6Ul1nZryFsffq.jpg",
+          "order": 10
+        },
+        {
+          "id": 2646671,
+          "name": "Kaden Hartcher",
+          "character": "Oda / Rust",
+          "profile": "https://image.tmdb.org/t/p/w185/4SbhcfR8yKTII0PAcNZDxczXN38.jpg",
+          "order": 11
+        },
+        {
+          "id": 78962,
+          "name": "Andy McPhee",
+          "character": "Honored Elder",
+          "profile": "https://image.tmdb.org/t/p/w185/uC0QWuaaOoIcLl6f5ebkFgTyF1r.jpg",
+          "order": 12
+        },
+        {
+          "id": 4472548,
+          "name": "Nina Gallas",
+          "character": "Youngster #1",
+          "profile": "https://image.tmdb.org/t/p/w185/wbGuLaj0ve34ktfli5aEW66PXsK.jpg",
+          "order": 13
+        },
+        {
+          "id": 2632353,
+          "name": "Samuel Falé",
+          "character": "Youngster #2",
+          "profile": "https://image.tmdb.org/t/p/w185/1aZqQhJEPP2FVdFgvOJ7CLyZ7IO.jpg",
+          "order": 14
+        },
+        {
+          "id": 94797,
+          "name": "Dichen Lachman",
+          "character": "Korina",
+          "profile": "https://image.tmdb.org/t/p/w185/yLrpMHBNtuUAu3M9EjaYHnn5EEY.jpg",
+          "order": 15
+        },
+        {
+          "id": 2637893,
+          "name": "Virginie Laverdure",
+          "character": "Lead Tech",
+          "profile": "https://image.tmdb.org/t/p/w185/ujTTbrapu2km7ApWOIoYZn7IybZ.jpg",
+          "order": 16
+        },
+        {
+          "id": 166703,
+          "name": "Markus Hamilton",
+          "character": "Tech #1",
+          "profile": "https://image.tmdb.org/t/p/w185/7AgC90kPSOZmUkBIFrCvrkXSL8G.jpg",
+          "order": 17
+        },
+        {
+          "id": 2128650,
+          "name": "Benjamin Scott",
+          "character": "Tech #2",
+          "profile": "https://image.tmdb.org/t/p/w185/6EKEBeIrrW7C43TJkknJ7KpiM4l.jpg",
+          "order": 18
+        },
+        {
+          "id": 3085693,
+          "name": "Nirish Bhat Surambadka",
+          "character": "Youngster #3",
+          "profile": "",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Sezar'ın saltanatından yıllar sonra genç bir maymun, kendisine geçmişle ilgili öğretilen her şeyi sorgulamasına ve hem maymunlar hem de insanlar için geleceği tanımlayacak seçimler yapmasına yol açacak bir yolculuğa çıkar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/tty533HQ3OiTAzdZRUnwOxPT2zm.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/fqv8v6AycXKsivp1T5yKtLbGXce.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt11389872",
+      "tmdbRating": "7.0",
+      "tmdbVoteCount": 4574
     }
   ],
   "collections": [],
