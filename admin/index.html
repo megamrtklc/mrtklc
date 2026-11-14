@@ -23,6 +23,7 @@
    <button class="nav-link" data-view="homepage"><span class="nav-icon">▣</span><span>Vitrin Tasarımı</span><kbd>04</kbd></button>
    <button class="nav-link" data-view="homepage-layout"><span class="nav-icon">☷</span><span>Ana Sayfa Düzeni</span><kbd>05</kbd></button>
    <button class="nav-link" data-view="watch-layout"><span class="nav-icon">▷</span><span>İzleme Deneyimi</span><kbd>06</kbd></button>
+   <button class="nav-link" data-view="header-footer"><span class="nav-icon">▤</span><span>Header &amp; Footer</span><kbd>07</kbd></button>
   </nav>
   <div class="nav-caption nav-caption-spaced">YÖNETİM</div>
   <nav class="primary-nav">
@@ -151,7 +152,57 @@
           </aside>
         </div>
       </section>
-      <section class="view" id="view-analytics"><div class="page-heading"><div><div class="eyebrow">DATA &amp; INSIGHTS / 04</div><h1>İstatistikler</h1><p>Arşivinin tür ve yıl dağılımını incele.</p></div></div><div class="analytics-grid"><article class="panel-card"><h2>Yapım türleri</h2><div id="type-chart" class="bar-chart"></div></article><article class="panel-card"><h2>Yıllara göre dağılım</h2><div id="year-chart" class="bar-chart"></div></article></div></section>
+      <section class="view" id="view-header-footer">
+ <div class="page-heading"><div><div class="eyebrow">SITE CHROME / 07</div><h1>Header &amp; Footer yönetimi</h1><p>Sitenin üst ve alt alanlarını tek merkezden düzenle. Değişiklikler canlı siteye kaydedilir.</p></div></div>
+ <form id="header-footer-form" class="panel-card hf-editor">
+  <div class="hf-section-head"><span class="section-index">01 / HEADER</span><h2>Üst alan ayarları</h2><p>Logo, menü bağlantıları, arama, profil ve mobil menü davranışlarını yönet.</p></div>
+  <div class="hf-grid">
+   <label class="field"><span>Logo ana metni</span><input id="hf-header-primary" maxlength="24"></label>
+   <label class="field"><span>Logo vurgu metni</span><input id="hf-header-accent" maxlength="24"></label>
+   <label class="toggle-field"><input id="hf-header-enabled" type="checkbox"><span>Header alanını göster</span></label>
+   <label class="toggle-field"><input id="hf-header-sticky" type="checkbox"><span>Sayfa kaydırılırken üstte sabit tut</span></label>
+   <label class="toggle-field"><input id="hf-header-logo-icon" type="checkbox"><span>Logo simgesini göster</span></label>
+   <label class="toggle-field"><input id="hf-header-search" type="checkbox"><span>Arama düğmesini göster</span></label>
+   <label class="toggle-field"><input id="hf-header-profile" type="checkbox"><span>Profil menüsünü göster</span></label>
+   <label class="toggle-field"><input id="hf-header-mobile" type="checkbox"><span>Mobil menü düğmesini göster</span></label>
+  </div>
+  <div class="hf-subhead"><h3>Menü bağlantıları</h3><span>Her bağlantının metnini değiştir veya görünürlüğünü kapat.</span></div>
+  <div class="hf-nav-row"><label class="field"><span>Ana sayfa menü adı</span><input id="hf-header-home-label" maxlength="32"></label><label class="toggle-field"><input id="hf-header-home" type="checkbox"><span>Göster</span></label></div>
+  <div class="hf-nav-row"><label class="field"><span>Keşfet menü adı</span><input id="hf-header-explore-label" maxlength="32"></label><label class="toggle-field"><input id="hf-header-explore" type="checkbox"><span>Göster</span></label></div>
+  <div class="hf-nav-row"><label class="field"><span>Video bağlantıları menü adı</span><input id="hf-header-video-label" maxlength="40"></label><label class="toggle-field"><input id="hf-header-video" type="checkbox"><span>Göster</span></label></div>
+  <div class="hf-section-head hf-footer-head"><span class="section-index">02 / FOOTER</span><h2>Alt alan ayarları</h2><p>Marka metinleri, açıklama, bağlantı sütunları, rozetler ve alt bilgi metnini düzenle.</p></div>
+  <div class="hf-grid">
+   <label class="field"><span>Logo ana metni</span><input id="hf-footer-primary" maxlength="24"></label>
+   <label class="field"><span>Logo vurgu metni</span><input id="hf-footer-accent" maxlength="24"></label>
+   <label class="toggle-field"><input id="hf-footer-enabled" type="checkbox"><span>Footer alanını göster</span></label>
+   <label class="toggle-field"><input id="hf-footer-badges" type="checkbox"><span>Tanıtım rozetlerini göster</span></label>
+   <label class="field wide"><span>Marka açıklaması</span><textarea id="hf-footer-description" rows="2" maxlength="260"></textarea></label>
+   <label class="field"><span>Birinci rozet</span><input id="hf-footer-badge-one" maxlength="36"></label>
+   <label class="field"><span>İkinci rozet</span><input id="hf-footer-badge-two" maxlength="36"></label>
+  </div>
+  <div class="hf-subhead"><h3>Bağlantı sütunları</h3><span>Mevcut site sayfalarına yönlendirilir.</span></div>
+  <div class="hf-grid">
+   <label class="field"><span>Birinci sütun başlığı</span><input id="hf-footer-col-one" maxlength="36"></label>
+   <label class="field"><span>Ana sayfa bağlantı adı</span><input id="hf-footer-home-label" maxlength="32"></label>
+   <label class="field"><span>Keşfet bağlantı adı</span><input id="hf-footer-explore-label" maxlength="32"></label>
+   <label class="field"><span>Kütüphanem bağlantı adı</span><input id="hf-footer-library-label" maxlength="32"></label>
+   <label class="field"><span>İkinci sütun başlığı</span><input id="hf-footer-col-two" maxlength="36"></label>
+   <label class="field"><span>İzleme listem bağlantı adı</span><input id="hf-footer-watchlist-label" maxlength="32"></label>
+   <label class="field"><span>İstatistikler bağlantı adı</span><input id="hf-footer-stats-label" maxlength="32"></label>
+   <label class="field"><span>Öne çıkan alan başlığı</span><input id="hf-footer-feature-title" maxlength="60"></label>
+   <label class="field wide"><span>Öne çıkan alan açıklaması</span><textarea id="hf-footer-feature-description" rows="2" maxlength="240"></textarea></label>
+   <label class="field"><span>Buton metni</span><input id="hf-footer-cta-label" maxlength="36"></label>
+   <label class="toggle-field"><input id="hf-footer-cta" type="checkbox"><span>Footer çağrı butonunu göster</span></label>
+  </div>
+  <div class="hf-subhead"><h3>Alt bilgi satırı</h3><span>Telif metni ve sayfa başına dönüş bağlantısı.</span></div>
+  <div class="hf-grid">
+   <label class="field wide"><span>Telif / alt bilgi metni</span><input id="hf-footer-copyright" maxlength="120"></label>
+   <label class="toggle-field"><input id="hf-footer-backtop" type="checkbox"><span>Yukarı dön bağlantısını göster</span></label>
+  </div>
+  <div class="hf-save-row"><p>Kaydettiğinde ayarlar katalog yapılandırmasına yazılır ve site yenilendiğinde uygulanır.</p><button class="primary-button" type="submit">Header &amp; Footer ayarlarını kaydet</button></div>
+ </form>
+</section>
+<section class="view" id="view-analytics"><div class="page-heading"><div><div class="eyebrow">DATA &amp; INSIGHTS / 04</div><h1>İstatistikler</h1><p>Arşivinin tür ve yıl dağılımını incele.</p></div></div><div class="analytics-grid"><article class="panel-card"><h2>Yapım türleri</h2><div id="type-chart" class="bar-chart"></div></article><article class="panel-card"><h2>Yıllara göre dağılım</h2><div id="year-chart" class="bar-chart"></div></article></div></section>
       <section class="view" id="view-users"><div class="page-heading"><div><div class="eyebrow">ACCESS / 05</div><h1>Kullanıcılar</h1><p>Yönetici profilini ve oturum güvenliğini yönet.</p></div></div>
         <div class="users-profile-layout">
           <article class="panel-card users-profile-card"><div class="panel-heading"><div><span class="section-index">05 / YÖNETİCİ PROFİLİ</span><h2>Yönetici hesabı</h2><p>Görünen adını değiştir; fotoğrafını ekle veya yenile.</p></div></div>
