@@ -18553,6 +18553,206 @@
       "tmdbImdbId": "tt22023218",
       "tmdbRating": "6.0",
       "tmdbVoteCount": 242
+    },
+    {
+      "id": "cv-1794683819669",
+      "title": "Resident Evil",
+      "type": "movie",
+      "year": "2026",
+      "rating": "7.5",
+      "genre": "Korku",
+      "category": "Korku / Bilim-Kurgu / Macera",
+      "duration": "94 dk",
+      "country": "United States of America, Germany, France",
+      "director": "Zach Cregger",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1423191,
+      "imdbId": "tt35538033",
+      "image": "https://image.tmdb.org/t/p/w500/yXs3qdcTxteZnZZH78xvm7Q6iK2.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/8R79AZjX1Bt4219Ub3CrRMsPQsW.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=FrjdaJJS3J4",
+      "desc": "Uzak bir hastaneye paket götürmekle görevlendirilen talihsiz bir kurye, vardığında kendini aniden bir salgının tam ortasında bulur. Hayatta kalabilmek için mutasyona uğramış yaratık sürülerine karşı amansız bir mücadele vermek zorundadır.",
+      "cast": [
+        "Austin Abrams",
+        "Paul Walter Hauser",
+        "Kali Reis",
+        "Zach Cherry",
+        "Johnno Wilson",
+        "Shaun W. Loeser",
+        "Zach Cregger",
+        "Emily Piggford",
+        "Will Merrick",
+        "Zoé Bellas",
+        "Chris Lew Kum Hoi",
+        "Griffin Newman",
+        "Magdalena Šittová",
+        "Andrea Miltner",
+        "Sara Paxton",
+        "Karel Dobrý",
+        "Devon Deshaun Stewart",
+        "Kellen Goff",
+        "Isla McRae",
+        "James Beaumont"
+      ],
+      "tmdbTitle": "Resident Evil",
+      "tmdbOriginalTitle": "Resident Evil",
+      "tmdbReleaseDate": "2026-09-16",
+      "tmdbGenres": "Korku / Bilim-Kurgu / Macera",
+      "tmdbRuntime": "94 dk",
+      "tmdbCountries": "United States of America, Germany, France",
+      "tmdbDirector": "Zach Cregger",
+      "tmdbCast": [
+        {
+          "id": 148992,
+          "name": "Austin Abrams",
+          "character": "Bryan",
+          "profile": "https://image.tmdb.org/t/p/w185/nvbJNwyhIICUFcS4lhxj9mGvL5z.jpg",
+          "order": 0
+        },
+        {
+          "id": 1294982,
+          "name": "Paul Walter Hauser",
+          "character": "Paul",
+          "profile": "https://image.tmdb.org/t/p/w185/hXjjbYg1Ah8mFf5ZcaakyXzDKMx.jpg",
+          "order": 1
+        },
+        {
+          "id": 3119545,
+          "name": "Kali Reis",
+          "character": "Maxine",
+          "profile": "https://image.tmdb.org/t/p/w185/ruLDXHnKA4aHEQCcFGDAJ7bLTdt.jpg",
+          "order": 2
+        },
+        {
+          "id": 1838225,
+          "name": "Zach Cherry",
+          "character": "Carl",
+          "profile": "https://image.tmdb.org/t/p/w185/fT3Wv8ef0Vn0daHWAObCp2Bd4Y.jpg",
+          "order": 3
+        },
+        {
+          "id": 1169291,
+          "name": "Johnno Wilson",
+          "character": "Officer Wilson",
+          "profile": "https://image.tmdb.org/t/p/w185/eZtBoBE0F7Qb9ZyNpacMOQtmWnM.jpg",
+          "order": 4
+        },
+        {
+          "id": 2445714,
+          "name": "Shaun W. Loeser",
+          "character": "Puker",
+          "profile": "https://image.tmdb.org/t/p/w185/pMV7kzy7OHk4X93uRGbrdvuFgQB.jpg",
+          "order": 5
+        },
+        {
+          "id": 84833,
+          "name": "Zach Cregger",
+          "character": "Intercom (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/bpFGFfWYIrZVK7WjwkVLwIoMKEb.jpg",
+          "order": 6
+        },
+        {
+          "id": 1362996,
+          "name": "Emily Piggford",
+          "character": "Dr. Maria Stokes",
+          "profile": "https://image.tmdb.org/t/p/w185/ruijvaNNXzGXqGphQXsoHts1Ovc.jpg",
+          "order": 7
+        },
+        {
+          "id": 1221073,
+          "name": "Will Merrick",
+          "character": "Dave",
+          "profile": "https://image.tmdb.org/t/p/w185/zqyH01TJ9WW6TaAULCG2ChSbNwI.jpg",
+          "order": 8
+        },
+        {
+          "id": 5848547,
+          "name": "Zoé Bellas",
+          "character": "Birdie",
+          "profile": "https://image.tmdb.org/t/p/w185/3nw4EhStA4IcJQxz4Yevm25u5ov.jpg",
+          "order": 9
+        },
+        {
+          "id": 1548222,
+          "name": "Chris Lew Kum Hoi",
+          "character": "Stanley",
+          "profile": "https://image.tmdb.org/t/p/w185/7kHYxjhnRErXDRNYaSRemLCx9J7.jpg",
+          "order": 10
+        },
+        {
+          "id": 225377,
+          "name": "Griffin Newman",
+          "character": "Wade",
+          "profile": "https://image.tmdb.org/t/p/w185/vRnjx2UGdMhvFn5coYZJLKHVWbq.jpg",
+          "order": 11
+        },
+        {
+          "id": 2832950,
+          "name": "Magdalena Šittová",
+          "character": "Agatha",
+          "profile": "https://image.tmdb.org/t/p/w185/6QDtKNoL6DXwJHpzDrvWG3rKSwa.jpg",
+          "order": 12
+        },
+        {
+          "id": 183729,
+          "name": "Andrea Miltner",
+          "character": "Pedestrian",
+          "profile": "https://image.tmdb.org/t/p/w185/oBdyio9RROvtUgauXJH6kE2dWEY.jpg",
+          "order": 13
+        },
+        {
+          "id": 60072,
+          "name": "Sara Paxton",
+          "character": "Michelle (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/DWrjFhjSLY4EFanCMKNPrUmP2p.jpg",
+          "order": 14
+        },
+        {
+          "id": 231246,
+          "name": "Karel Dobrý",
+          "character": "Farmer",
+          "profile": "https://image.tmdb.org/t/p/w185/mcvTqsqIPTVZiT4saALPljNUQ5B.jpg",
+          "order": 15
+        },
+        {
+          "id": 2347838,
+          "name": "Devon Deshaun Stewart",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/qZ5BMtEva7XEEdO3BpB9pCPzqMx.jpg",
+          "order": 16
+        },
+        {
+          "id": 1807446,
+          "name": "Kellen Goff",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/3HWEo27RznochUzqPYsffYPzC8A.jpg",
+          "order": 17
+        },
+        {
+          "id": 5024369,
+          "name": "Isla McRae",
+          "character": "RV Girl",
+          "profile": "https://image.tmdb.org/t/p/w185/t39ROabYVn1fmcA8TUWWyfDy6xN.jpg",
+          "order": 18
+        },
+        {
+          "id": 2563021,
+          "name": "James Beaumont",
+          "character": "Surgeon",
+          "profile": "https://image.tmdb.org/t/p/w185/8r0hnzq1U6YJizyM1qEAxB2Oqx7.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Uzak bir hastaneye paket götürmekle görevlendirilen talihsiz bir kurye, vardığında kendini aniden bir salgının tam ortasında bulur. Hayatta kalabilmek için mutasyona uğramış yaratık sürülerine karşı amansız bir mücadele vermek zorundadır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/yXs3qdcTxteZnZZH78xvm7Q6iK2.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/8R79AZjX1Bt4219Ub3CrRMsPQsW.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=FrjdaJJS3J4",
+      "tmdbImdbId": "tt35538033",
+      "tmdbRating": "7.5",
+      "tmdbVoteCount": 2150
     }
   ],
   "collections": [],
