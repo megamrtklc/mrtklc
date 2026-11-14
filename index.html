@@ -147,6 +147,32 @@
 
 
 
+        /* İzleme Zevkine Göre — kart oranı, aralıklar ve taşmayan afiş boyutları. */
+        #home-personalized-section .home-personalized-showcase{grid-template-columns:minmax(0,.95fr) minmax(0,1.52fr)}
+        #home-personalized-section .home-personalized-alternatives{gap:16px}
+        #home-personalized-section .home-personalized-alternative{grid-template-columns:88px minmax(0,1fr);column-gap:12px;overflow:hidden}
+        #home-personalized-section .home-personalized-poster{width:88px;max-width:100%;overflow:hidden}
+        #home-personalized-section .home-personalized-poster img{width:100%;height:100%;object-fit:cover}
+        @media(max-width:900px){
+          #home-personalized-section .home-personalized-showcase{grid-template-columns:minmax(0,1fr)}
+          #home-personalized-section .home-personalized-alternatives{gap:14px}
+          #home-personalized-section .home-personalized-alternative{grid-template-columns:88px minmax(0,1fr)}
+          #home-personalized-section .home-personalized-poster{width:88px}
+        }
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-alternatives{gap:14px}
+          #home-personalized-section .home-personalized-alternative{grid-template-columns:78px minmax(0,1fr)}
+          #home-personalized-section .home-personalized-poster{width:78px}
+        }
+        @media(max-width:520px){
+          #home-personalized-section .home-personalized-alternative{grid-template-columns:72px minmax(0,1fr);column-gap:9px}
+          #home-personalized-section .home-personalized-poster{width:72px}
+        }
+        @media(max-width:380px){
+          #home-personalized-section .home-personalized-alternative{grid-template-columns:68px minmax(0,1fr)}
+          #home-personalized-section .home-personalized-poster{width:68px}
+        }
+
         /* Açık temalar: sabit Tailwind gri/beyaz yardımcı sınıflarını tema paletine uyarla. */
         .theme-ivory {
             --theme-surface: #FFFDF9;
