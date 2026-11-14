@@ -1793,6 +1793,134 @@
       }
     </style>
 
+
+    <style id="cineverse-cinematic-hero-effects">
+      /* Desktop: sıcak sinematik ışık, yavaş kamera yaklaşımı ve afiş odağı */
+      #desktopEditorialHero {
+        isolation: isolate;
+        background:
+          radial-gradient(ellipse at 76% 38%, rgba(245, 158, 11, .10), transparent 38%),
+          #090a0d;
+      }
+      #desktopEditorialHero > div:first-child {
+        isolation: isolate;
+      }
+      #desktopEditorialHero > div:first-child::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        background:
+          radial-gradient(ellipse 48% 68% at 76% 43%, rgba(190, 62, 28, .17), transparent 72%),
+          linear-gradient(115deg, transparent 48%, rgba(245, 158, 11, .055) 74%, transparent 100%);
+        mix-blend-mode: screen;
+      }
+      #desktopEditorialHero > div:first-child picture img {
+        transform-origin: 72% 46%;
+        animation: cvHeroCinematicDrift 28s ease-in-out infinite alternate;
+        filter: saturate(1.08) contrast(1.035);
+        will-change: transform;
+      }
+      #desktopEditorialHero > div.relative.mx-auto {
+        z-index: 2;
+      }
+      #desktopEditorialHero .editorial-copy-enter h1 {
+        text-shadow: 0 4px 28px rgba(0, 0, 0, .48), 0 0 34px rgba(245, 158, 11, .08);
+      }
+      #desktopEditorialHero .editorial-copy-enter > div button:first-child {
+        box-shadow: 0 10px 30px rgba(180, 83, 9, .22), 0 0 0 1px rgba(255, 224, 150, .16);
+        transition: transform .28s ease, box-shadow .28s ease, filter .28s ease;
+      }
+      #desktopEditorialHero .editorial-copy-enter > div button:first-child:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 36px rgba(180, 83, 9, .34), 0 0 24px rgba(245, 158, 11, .16);
+        filter: brightness(1.06);
+      }
+      #desktopEditorialHero #heroThumbContainer button {
+        transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease, opacity .28s ease;
+      }
+      #desktopEditorialHero #heroThumbContainer button[aria-current="true"] {
+        transform: translateY(-4px) scale(1.035);
+        border-color: rgba(252, 211, 77, .95);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .42), 0 0 0 2px rgba(245, 158, 11, .20), 0 0 22px rgba(245, 158, 11, .18);
+      }
+
+      /* Mobile: daha hafif ışık ve performans dostu görsel hareketi */
+      #mobileHeroBanner {
+        isolation: isolate;
+        background:
+          radial-gradient(ellipse at 50% 0%, rgba(190, 62, 28, .12), transparent 62%),
+          #030712;
+      }
+      #mobileHeroBanner > div:nth-of-type(1) {
+        isolation: isolate;
+      }
+      #mobileHeroBanner > div:nth-of-type(1)::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        background:
+          radial-gradient(ellipse 76% 82% at 50% 45%, transparent 38%, rgba(190, 62, 28, .10) 100%),
+          linear-gradient(135deg, rgba(245, 158, 11, .07), transparent 42%);
+        mix-blend-mode: screen;
+      }
+      #mobileHeroArtwork {
+        transform-origin: 50% 45%;
+        animation: cvHeroMobileDrift 24s ease-in-out infinite alternate;
+        filter: saturate(1.055) contrast(1.025);
+        will-change: transform;
+      }
+      #mobileHeroBanner h1 {
+        text-shadow: 0 3px 18px rgba(0, 0, 0, .52);
+      }
+      #mobileHeroBanner .bg-rose-600 {
+        box-shadow: 0 7px 22px rgba(225, 29, 72, .22);
+        transition: box-shadow .25s ease, filter .25s ease, transform .25s ease;
+      }
+      #mobileHeroBanner .bg-rose-600:active {
+        transform: scale(.985);
+        filter: brightness(1.08);
+      }
+      #mobileHeroBanner .border-amber-300\/50.bg-\[\#f5c518\] {
+        box-shadow: 0 2px 14px rgba(245, 197, 24, .16);
+      }
+
+      @keyframes cvHeroCinematicDrift {
+        from { transform: scale(1.025) translate3d(0, 0, 0); }
+        to   { transform: scale(1.085) translate3d(-.7%, -.35%, 0); }
+      }
+      @keyframes cvHeroMobileDrift {
+        from { transform: scale(1.015); }
+        to   { transform: scale(1.055); }
+      }
+      @media (hover: hover) and (pointer: fine) {
+        #desktopEditorialHero:hover > div:first-child picture img {
+          animation-play-state: paused;
+        }
+      }
+      @media (max-width: 767px) {
+        #mobileHeroArtwork {
+          animation-duration: 30s;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #desktopEditorialHero > div:first-child picture img,
+        #mobileHeroArtwork {
+          animation: none !important;
+          transform: none !important;
+          will-change: auto;
+        }
+        #desktopEditorialHero #heroThumbContainer button,
+        #desktopEditorialHero .editorial-copy-enter > div button:first-child,
+        #mobileHeroBanner .bg-rose-600 {
+          transition: none !important;
+        }
+      }
+    </style>
+
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
