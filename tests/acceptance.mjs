@@ -124,7 +124,7 @@ try {
   assert.ok(desktopCls < 0.05, 'Masaüstü CLS hedefi aşıldı: ' + desktopCls.toFixed(3));
 
   await check('Ana sayfa rafları ekrana yaklaşınca yükleniyor', async () => {
-    await page.locator('[data-home-section-anchor="catalog"]').scrollIntoViewIfNeeded();
+    await page.locator('#home-catalog-section').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => window.Alpine.$data(document.documentElement).homeSectionReady?.catalog === true, { timeout: 10000 });
     await page.evaluate(() => window.scrollTo(0, 0));
   });
