@@ -3,7 +3,7 @@
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
   const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
-  const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','published-collections','catalog'];
+  const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
     personalized:{title:'İzleme Zevkine Göre',description:'Kişiselleştirilmiş film ve dizi önerileri',icon:'✦'},
@@ -14,6 +14,7 @@
     'new-arrivals':{title:'Son Eklenenler',description:'Kataloğa en son eklenen yapımlar',icon:'＋'},
     'series-tracking':{title:'Dizi Takibi',description:'Sezon ve bölüm ilerlemen',icon:'▤'},
     'genre-discovery':{title:'Türlere Göre Keşfet',description:'Tür kartları ve keşif filtreleri',icon:'⌕'},
+    franchises:{title:'Seri Filmler',description:'Film serileri ve vizyon sıraları',icon:'▧'},
     'published-collections':{title:'Yayınlanan Koleksiyonlar',description:'Admin panelinde hazırlanan özel seçkiler',icon:'▧'},
     catalog:{title:'Tüm Yapımlar & Trendler',description:'Katalogdan seçilen genel yapım rafı',icon:'▥'}
   };
@@ -24,6 +25,7 @@
   const isSeries = item => ['tv','series','dizi'].includes(String(item?.type||'').toLowerCase());
   const yearOf = item => Number(item.year || item.releaseYear || (item.tmdbReleaseDate || '').slice(0,4)) || '—';
   const collectionList = () => Array.isArray(state.data?.collections) ? state.data.collections : [];
+  const franchiseList = () => Array.isArray(state.data?.franchises) ? state.data.franchises : [];
   const toast = message => { const el=$('#toast'); if(!el)return; el.textContent=message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),3000); };
   async function fetchWithTimeout(url,options={},timeoutMs=15000){
     const controller=new AbortController();
@@ -59,10 +61,9 @@
       return;
     }
     const collectionButton=event.target.closest?.('#collection-add');
-    if(collectionButton){
-      event.preventDefault();
-      try{openCollectionEditor(null);}catch(error){console.error('Koleksiyon formu açılamadı:',error);toast('Koleksiyon formu açılamadı: '+(error.message||'Beklenmeyen hata.'));}
-    }
+    if(collectionButton){event.preventDefault();try{openCollectionEditor(null);}catch(error){console.error('Koleksiyon formu açılamadı:',error);toast('Koleksiyon formu açılamadı: '+(error.message||'Beklenmeyen hata.'));}return;}
+    const franchiseButton=event.target.closest?.('#franchise-add');
+    if(franchiseButton){event.preventDefault();try{openFranchiseEditor(null);}catch(error){console.error('Seri formu açılamadı:',error);toast('Seri formu açılamadı: '+(error.message||'Beklenmeyen hata.'));}return;}
   });
   function canWrite(){ if(!state.apiEnabled||!state.sha){toast('Katalog şu anda salt okunur. GitHub erişim bağlantısı doğrulanınca düzenleme açılacak.');return false;} return true; }
   function navigate(view){
@@ -75,6 +76,7 @@
     if(view==='catalog')renderCatalog();
     if(view==='trailers-missing')renderMissingTrailers();
     if(view==='collections')renderCollections();
+    if(view==='franchises')renderFranchises();
     if(view==='homepage')renderHomepage();
     if(view==='homepage-layout')renderHomepageLayout();
     if(view==='personalized-section')renderPersonalizedSection();
@@ -203,6 +205,53 @@
     $$('#collection-grid [data-collection-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteCollection(btn.dataset.collectionDelete)));
     updateMetrics();
   }
+  function renderFranchises(){
+    const list=franchiseList();
+    $('#franchise-grid').innerHTML=list.length?list.map(item=>{
+      const count=Array.isArray(item.items)?item.items.length:0;
+      return '<article class="collection-card"><div class="collection-card-top"><span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Pasif':'Yayında')+'</span><span class="collection-id">'+escapeHtml(item.id||'')+'</span></div><h3>'+escapeHtml(item.title||'İsimsiz seri')+'</h3><p>'+escapeHtml(item.description||'Açıklama eklenmemiş')+'</p><strong>'+count+'</strong><small>Film kaydı</small><div class="collection-actions"><button class="row-action" data-franchise-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-franchise-delete="'+escapeHtml(item.id)+'">Sil</button></div></article>';
+    }).join(''):'<article class="panel-card empty-state"><span>▤</span><h2>Henüz film serisi bulunamadı</h2><p>Yeni seri oluşturarak mevcut filmleri bir araya getirebilirsin.</p></article>';
+    $$('#franchise-grid [data-franchise-edit]').forEach(btn=>btn.addEventListener('click',()=>openFranchiseEditor(btn.dataset.franchiseEdit)));
+    $$('#franchise-grid [data-franchise-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteFranchise(btn.dataset.franchiseDelete)));
+  }
+  function openFranchiseEditor(id){
+    if(!canWrite())return;
+    const item=franchiseList().find(x=>String(x.id)===String(id));
+    $('#franchise-form').reset();$('#franchise-id').value=item?.id||'';
+    $('#franchise-title').value=item?.title||'';$('#franchise-description').value=item?.description||'';
+    $('#franchise-backdrop').value=item?.backdrop||item?.poster||'';
+    $('#franchise-active').checked=item?.active!==false;
+    const selected=new Set((item?.items||[]).map(String));
+    $('#franchise-items').innerHTML=state.catalog.filter(x=>!isSeries(x)).map(x=>'<label class="collection-pick"><input type="checkbox" value="'+escapeHtml(x.id)+'" '+(selected.has(String(x.id))?'checked':'')+'><span><b>'+escapeHtml(titleOf(x))+'</b><small>Film · '+escapeHtml(yearOf(x))+'</small></span></label>').join('');
+    $('#franchise-search').value='';filterFranchiseItems();
+    $('#franchise-dialog-title').textContent=item?'Film serisini düzenle':'Yeni film serisi';
+    $('#franchise-dialog').showModal();
+  }
+  function filterFranchiseItems(){
+    const q=$('#franchise-search').value.trim().toLocaleLowerCase('tr');
+    $$('#franchise-items .collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
+  }
+  async function saveFranchise(event){
+    event.preventDefault();if(!canWrite())return;
+    const id=$('#franchise-id').value||('franchise-'+Date.now());
+    const existing=franchiseList().find(x=>String(x.id)===String(id));
+    const selected=$$('#franchise-items input:checked').map(x=>x.value);
+    if(selected.length<2){toast('Bir seri oluşturmak için en az iki film seçmelisin.');return;}
+    const title=$('#franchise-title').value.trim();
+    if(!title){toast('Seri adı zorunludur.');return;}
+    const record={...(existing||{}),id,title,description:$('#franchise-description').value.trim(),backdrop:$('#franchise-backdrop').value.trim(),active:$('#franchise-active').checked,items:selected};
+    const nextData={...state.data,franchises:[...franchiseList()]};
+    const index=nextData.franchises.findIndex(x=>String(x.id)===String(id));
+    if(index>=0)nextData.franchises[index]=record;else nextData.franchises.push(record);
+    const ok=await persist(nextData,existing?'Film serisi güncellendi.':'Film serisi oluşturuldu.');
+    if(ok)$('#franchise-dialog').close();
+  }
+  async function deleteFranchise(id){
+    if(!canWrite())return;
+    const item=franchiseList().find(x=>String(x.id)===String(id));if(!item)return;
+    if(!confirm('“'+item.title+'” film serisini silmek istiyor musun? Filmler katalogda kalır.'))return;
+    await persist({...state.data,franchises:franchiseList().filter(x=>String(x.id)!==String(id))},'Film serisi silindi; katalogdaki filmler korundu.');
+  }
   function renderAnalytics(){
     const movies=state.catalog.filter(x=>!isSeries(x)).length,series=state.catalog.length-movies,max=Math.max(movies,series,1);
     $('#type-chart').innerHTML=[['Film',movies],['Dizi',series]].map(([name,n])=>'<div class="bar-row"><span>'+name+'</span><div class="bar-track"><div class="bar-fill" style="width:'+(n/max*100)+'%"></div></div><b>'+n+'</b></div>').join('');
@@ -226,7 +275,7 @@
       if(response.status===409)throw new Error('Katalog başka bir işlemde güncellenmiş. Sayfayı yenileyip tekrar deneyin.');
       if(!response.ok)throw new Error(result.error||'Değişiklik kaydedilemedi.');
       state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];
-      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderMissingTrailers();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderPersonalizedSection();renderOverviewInsights();
+      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderMissingTrailers();renderCollections();renderFranchises();renderAnalytics();renderHomepage();renderHomepageLayout();renderPersonalizedSection();renderOverviewInsights();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
       renderWatchLayout();renderAdminProfile();
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.');
@@ -1003,6 +1052,10 @@
   $('#collection-form').addEventListener('submit',saveCollection);
   $('#collection-search').addEventListener('input',filterCollectionItems);
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
+  $('#franchise-form').addEventListener('submit',saveFranchise);
+  $('#franchise-search').addEventListener('input',filterFranchiseItems);
+  $('#franchise-close').addEventListener('click',()=>$('#franchise-dialog').close());
+  $('#franchise-cancel').addEventListener('click',()=>$('#franchise-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
   ['header','footer'].forEach(kind=>{
