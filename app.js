@@ -1248,21 +1248,31 @@
                             ...(person.tv_credits?.cast || []).map(item => ({ ...item, mediaType: 'tv' }))
                         ];
                         const seen = new Set();
+                        const catalogByTmdb = new Map((this.catalog || [])
+                            .filter(entry => entry && entry.tmdbId != null)
+                            .map(entry => [entry.type + ':' + String(entry.tmdbId), entry]));
                         const filmography = credits
                             .filter(item => item.id && !seen.has(item.mediaType + ':' + item.id) && seen.add(item.mediaType + ':' + item.id))
-                            .sort((a,b) => String(b.release_date || b.first_air_date || '').localeCompare(String(a.release_date || a.first_air_date || '')) || Number(b.popularity || 0) - Number(a.popularity || 0))
-                            .slice(0, 48)
-                            .map(item => ({
-                                id: item.id,
-                                type: item.mediaType,
-                                title: item.title || item.name || 'İsimsiz yapım',
-                                character: item.character || '',
-                                year: String(item.release_date || item.first_air_date || '').slice(0,4),
-                                poster: item.poster_path ? 'https://image.tmdb.org/t/p/w342' + item.poster_path : '',
-                                rating: Number(item.vote_average || 0),
-                                genres: (item.genre_ids || []).map(id => ({28:'Aksiyon',12:'Macera',16:'Animasyon',35:'Komedi',80:'Suç',99:'Belgesel',18:'Dram',10751:'Aile',14:'Fantastik',36:'Tarih',27:'Korku',10402:'Müzik',9648:'Gizem',10749:'Romantik',878:'Bilim Kurgu',10770:'TV Filmi',53:'Gerilim',10752:'Savaş',37:'Vahşi Batı',10759:'Aksiyon & Macera',10762:'Çocuk',10763:'Haber',10764:'Reality',10765:'Bilim Kurgu & Fantastik',10766:'Pembe Dizi',10767:'Talk Show',10768:'Savaş & Politika'})[id]).filter(Boolean),
-                                overview: item.overview || ''
-                            }));
+                            .map(item => {
+                                const archiveItem = catalogByTmdb.get(item.mediaType + ':' + String(item.id));
+                                const imdbRating = Number.parseFloat(archiveItem?.imdbRating ?? archiveItem?.imdb_rating ?? archiveItem?.imdbScore ?? item.imdbRating ?? 0) || 0;
+                                const tmdbRating = Number(item.vote_average || archiveItem?.tmdbRating || archiveItem?.rating || 0);
+                                return {
+                                    id: item.id,
+                                    type: item.mediaType,
+                                    title: item.title || item.name || 'İsimsiz yapım',
+                                    character: item.character || item.job || '',
+                                    year: String(item.release_date || item.first_air_date || '').slice(0,4),
+                                    poster: item.poster_path ? 'https://image.tmdb.org/t/p/w342' + item.poster_path : '',
+                                    rating: tmdbRating,
+                                    imdbRating,
+                                    inCatalog: Boolean(archiveItem),
+                                    sortRating: imdbRating || tmdbRating,
+                                    genres: (item.genre_ids || []).map(id => ({28:'Aksiyon',12:'Macera',16:'Animasyon',35:'Komedi',80:'Suç',99:'Belgesel',18:'Dram',10751:'Aile',14:'Fantastik',36:'Tarih',27:'Korku',10402:'Müzik',9648:'Gizem',10749:'Romantik',878:'Bilim Kurgu',10770:'TV Filmi',53:'Gerilim',10752:'Savaş',37:'Vahşi Batı',10759:'Aksiyon & Macera',10762:'Çocuk',10763:'Haber',10764:'Reality',10765:'Bilim Kurgu & Fantastik',10766:'Pembe Dizi',10767:'Talk Show',10768:'Savaş & Politika'})[id]).filter(Boolean),
+                                    overview: item.overview || ''
+                                };
+                            })
+                            .sort((a,b) => Number(b.inCatalog) - Number(a.inCatalog) || b.sortRating - a.sortRating || String(b.year).localeCompare(String(a.year)));
                         const profile = {
                             id: person.id,
                             name: person.name || actor.name || 'Oyuncu',
@@ -1321,21 +1331,31 @@
                             ...(person.tv_credits?.crew || []).filter(item => item.job === 'Director').map(item => ({ ...item, mediaType: 'tv' }))
                         ];
                         const seen = new Set();
+                        const catalogByTmdb = new Map((this.catalog || [])
+                            .filter(entry => entry && entry.tmdbId != null)
+                            .map(entry => [entry.type + ':' + String(entry.tmdbId), entry]));
                         const filmography = credits
                             .filter(item => item.id && !seen.has(item.mediaType + ':' + item.id) && seen.add(item.mediaType + ':' + item.id))
-                            .sort((a,b) => String(b.release_date || b.first_air_date || '').localeCompare(String(a.release_date || a.first_air_date || '')) || Number(b.popularity || 0) - Number(a.popularity || 0))
-                            .slice(0, 48)
-                            .map(item => ({
-                                id: item.id,
-                                type: item.mediaType,
-                                title: item.title || item.name || 'İsimsiz yapım',
-                                character: item.job || 'Yönetmen',
-                                year: String(item.release_date || item.first_air_date || '').slice(0,4),
-                                poster: item.poster_path ? 'https://image.tmdb.org/t/p/w342' + item.poster_path : '',
-                                rating: Number(item.vote_average || 0),
-                                genres: (item.genre_ids || []).map(id => ({28:'Aksiyon',12:'Macera',16:'Animasyon',35:'Komedi',80:'Suç',99:'Belgesel',18:'Dram',10751:'Aile',14:'Fantastik',36:'Tarih',27:'Korku',10402:'Müzik',9648:'Gizem',10749:'Romantik',878:'Bilim Kurgu',10770:'TV Filmi',53:'Gerilim',10752:'Savaş',37:'Vahşi Batı',10759:'Aksiyon & Macera',10762:'Çocuk',10763:'Haber',10764:'Reality',10765:'Bilim Kurgu & Fantastik',10766:'Pembe Dizi',10767:'Talk Show',10768:'Savaş & Politika'})[id]).filter(Boolean),
-                                overview: item.overview || ''
-                            }));
+                            .map(item => {
+                                const archiveItem = catalogByTmdb.get(item.mediaType + ':' + String(item.id));
+                                const imdbRating = Number.parseFloat(archiveItem?.imdbRating ?? archiveItem?.imdb_rating ?? archiveItem?.imdbScore ?? item.imdbRating ?? 0) || 0;
+                                const tmdbRating = Number(item.vote_average || archiveItem?.tmdbRating || archiveItem?.rating || 0);
+                                return {
+                                    id: item.id,
+                                    type: item.mediaType,
+                                    title: item.title || item.name || 'İsimsiz yapım',
+                                    character: item.character || item.job || '',
+                                    year: String(item.release_date || item.first_air_date || '').slice(0,4),
+                                    poster: item.poster_path ? 'https://image.tmdb.org/t/p/w342' + item.poster_path : '',
+                                    rating: tmdbRating,
+                                    imdbRating,
+                                    inCatalog: Boolean(archiveItem),
+                                    sortRating: imdbRating || tmdbRating,
+                                    genres: (item.genre_ids || []).map(id => ({28:'Aksiyon',12:'Macera',16:'Animasyon',35:'Komedi',80:'Suç',99:'Belgesel',18:'Dram',10751:'Aile',14:'Fantastik',36:'Tarih',27:'Korku',10402:'Müzik',9648:'Gizem',10749:'Romantik',878:'Bilim Kurgu',10770:'TV Filmi',53:'Gerilim',10752:'Savaş',37:'Vahşi Batı',10759:'Aksiyon & Macera',10762:'Çocuk',10763:'Haber',10764:'Reality',10765:'Bilim Kurgu & Fantastik',10766:'Pembe Dizi',10767:'Talk Show',10768:'Savaş & Politika'})[id]).filter(Boolean),
+                                    overview: item.overview || ''
+                                };
+                            })
+                            .sort((a,b) => Number(b.inCatalog) - Number(a.inCatalog) || b.sortRating - a.sortRating || String(b.year).localeCompare(String(a.year)));
                         const profile = {
                             id: person.id,
                             name: person.name || actor.name || 'Yönetmen',
