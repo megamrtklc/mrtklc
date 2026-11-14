@@ -2241,7 +2241,8 @@
                             item.category, item.genre, item.desc, item.title, item.originalTitle
                         ].filter(Boolean).join(' '));
                         const moodGenreTokens = String([item.category, item.genre].filter(Boolean).join(','))
-                            .split(/[\\/;,]/)
+                            .split(/[;,]/)
+                            .flatMap(value => value.split('/'))
                             .map(value => this.normalizeSearchText(value).trim())
                             .filter(Boolean);
                         const familyGenreAllowlist = ['aile', 'animasyon', 'cocuk', 'cocuk filmi', 'family'];
