@@ -242,6 +242,7 @@
                 },
                 
                 catalog: [],
+                heroCatalog: [],
                 collections: [],
                 homepageConfig: null,
                 headerConfig: { enabled:true, sticky:true, showLogoIcon:true, brandPrimary:'CINE', brandAccent:'VERSE', showHome:true, homeLabel:'Ana Sayfa', showExplore:true, exploreLabel:'Keşfet', showVideo:true, videoLabel:'Video Bağlantıları', showSearch:true, showProfile:true, showMobileMenu:true, catalogMenusInitialized:false, customLinks:[] },
@@ -395,6 +396,41 @@
                     }
                 },
 
+                normalizeCatalogItem(item) {
+                    const cast = Array.isArray(item.tmdbCast) && item.tmdbCast.length
+                        ? item.tmdbCast
+                        : (Array.isArray(item.cast) ? item.cast.map((person, index) => ({
+                            name: typeof person === 'string' ? person : (person && typeof person === 'object' ? (person.name || '') : ''),
+                            character: typeof person === 'string' || !person || typeof person !== 'object' ? '' : (person.character || ''),
+                            profile: typeof person === 'string' || !person || typeof person !== 'object' ? '' : (person.profile || ''),
+                            order: index
+                        })) : []);
+                    const genreText = item.genre || item.tmdbGenres || item.category || '';
+                    return {
+                        ...item,
+                        id: item.id || item.tmdbId || item.title,
+                        title: item.title || item.tmdbTitle || item.originalTitle || 'İsimsiz yapım',
+                        type: item.type === 'tv' || item.type === 'series' ? 'tv' : 'movie',
+                        category: item.category || item.tmdbGenres || genreText,
+                        genre: String(genreText).split('/')[0].trim(),
+                        rating: String(item.rating ?? item.tmdbRating ?? '0'),
+                        year: String(item.year || item.tmdbReleaseDate || '').slice(0, 4),
+                        duration: item.duration || item.tmdbRuntime || '',
+                        country: item.country || item.tmdbCountries || '',
+                        countryFlag: item.countryFlag || '',
+                        poster: item.poster || item.tmdbPoster || item.image || '',
+                        backdrop: item.backdrop || item.tmdbBackdrop || item.tmdbPoster || item.image || '',
+                        starring: item.starring || cast.slice(0, 3).map(person => person.name).filter(Boolean).join(' / '),
+                        desc: item.desc || item.tmdbOverview || '',
+                        director: item.director || item.tmdbDirector || '',
+                        originalTitle: item.originalTitle || item.tmdbOriginalTitle || item.title || '',
+                        tmdbCast: cast,
+                        trailerUrl: item.trailerUrl || item.tmdbTrailerUrl || '',
+                        seasons: item.seasons ?? item.tmdbSeasons ?? null,
+                        episodes: item.episodes ?? item.tmdbEpisodes ?? null
+                    };
+                },
+
                 async init() {
                     this.routeHistoryReady = false;
                     window.addEventListener('popstate', event => {
@@ -405,8 +441,28 @@
                     this.$watch('currentPage', page => {
                         if (page === 'home') this.$nextTick(() => this.initHomeSectionObserver());
                     });
+                    const catalogRequest = fetch('./filmvediziler.json', { cache: 'default' });
                     try {
-                        const response = await fetch('./filmvediziler.json', { cache: 'default' });
+                        const heroResponse = await fetch('./hero-data.json', { cache: 'default' });
+                        if (heroResponse.ok) {
+                            const heroData = await heroResponse.json();
+                            const heroSource = Array.isArray(heroData?.catalog) ? heroData.catalog : [];
+                            if (heroSource.length) {
+                                this.homepageConfig = heroData.homepageConfig || this.homepageConfig;
+                                this.heroCatalog = heroSource.map(item => this.normalizeCatalogItem(item));
+                                this.currentSlideIndex = 0;
+                                this.startHeroAutoplay();
+                                this.$nextTick(() => {
+                                    document.getElementById('hero-initial-shell')?.remove();
+                                    document.getElementById('hero-initial-shell-desktop')?.remove();
+                                });
+                            }
+                        }
+                    } catch (heroError) {
+                        console.warn('Hızlı manşet verisi yüklenemedi; ana katalog kullanılacak:', heroError);
+                    }
+                    try {
+                        const response = await catalogRequest;
                         if (!response.ok) {
                             throw new Error('Katalog dosyası yüklenemedi (HTTP ' + response.status + ')');
                         }
@@ -433,42 +489,8 @@
                         const validCatalog = sourceCatalog.filter(item => item && typeof item === 'object' && !Array.isArray(item) && (item.id != null || item.tmdbId != null || item.title || item.tmdbTitle || item.originalTitle));
                         if (!validCatalog.length) throw new Error('Katalogda kullanılabilir bir film veya dizi kaydı bulunamadı.');
                         if (validCatalog.length !== sourceCatalog.length) console.warn('Geçersiz katalog kayıtları atlandı:', sourceCatalog.length - validCatalog.length);
-                        this.catalog = validCatalog.map((item) => {
-                            const cast = Array.isArray(item.tmdbCast) && item.tmdbCast.length
-                                ? item.tmdbCast
-                                : (Array.isArray(item.cast) ? item.cast.map((person, index) => ({
-                                    name: typeof person === 'string' ? person : (person && typeof person === 'object' ? (person.name || '') : ''),
-                                    character: typeof person === 'string' || !person || typeof person !== 'object' ? '' : (person.character || ''),
-                                    profile: typeof person === 'string' || !person || typeof person !== 'object' ? '' : (person.profile || ''),
-                                    order: index
-                                })) : []);
-
-                            const genreText = item.genre || item.tmdbGenres || item.category || '';
-
-                            return {
-                                ...item,
-                                id: item.id || item.tmdbId || item.title,
-                                title: item.title || item.tmdbTitle || item.originalTitle || 'İsimsiz yapım',
-                                type: item.type === 'tv' || item.type === 'series' ? 'tv' : 'movie',
-                                category: item.category || item.tmdbGenres || genreText,
-                                genre: String(genreText).split('/')[0].trim(),
-                                rating: String(item.rating ?? item.tmdbRating ?? '0'),
-                                year: String(item.year || item.tmdbReleaseDate || '').slice(0, 4),
-                                duration: item.duration || item.tmdbRuntime || '',
-                                country: item.country || item.tmdbCountries || '',
-                                countryFlag: item.countryFlag || '',
-                                poster: item.poster || item.tmdbPoster || item.image || '',
-                                backdrop: item.backdrop || item.tmdbBackdrop || item.tmdbPoster || item.image || '',
-                                starring: item.starring || cast.slice(0, 3).map(person => person.name).filter(Boolean).join(' / '),
-                                desc: item.desc || item.tmdbOverview || '',
-                                director: item.director || item.tmdbDirector || '',
-                                originalTitle: item.originalTitle || item.tmdbOriginalTitle || item.title || '',
-                                tmdbCast: cast,
-                                trailerUrl: item.trailerUrl || item.tmdbTrailerUrl || '',
-                                seasons: item.seasons ?? item.tmdbSeasons ?? null,
-                                episodes: item.episodes ?? item.tmdbEpisodes ?? null
-                            };
-                        });
+                        this.catalog = validCatalog.map(item => this.normalizeCatalogItem(item));
+                        this.heroCatalog = this.catalog;
 
                         this.currentSlideIndex = 0;
                         this.startHeroAutoplay();
@@ -580,12 +602,13 @@
 
                 get heroSlides() {
                     const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+                    const sourceCatalog = this.heroCatalog.length ? this.heroCatalog : this.catalog;
                     const configured = this.homepageConfig?.[mobile ? 'mobileHeroSlides' : 'desktopHeroSlides'] || this.homepageConfig?.heroSlides;
-                    if (!Array.isArray(configured) || !configured.length) return this.catalog;
-                    const byId = new Map(this.catalog.map(item => [String(item.id), item]));
+                    if (!Array.isArray(configured) || !configured.length) return sourceCatalog;
+                    const byId = new Map(sourceCatalog.map(item => [String(item.id), item]));
                     const selected = configured.filter(entry => entry && entry.active !== false)
                         .map(entry => byId.get(String(entry.id))).filter(Boolean);
-                    return selected.length ? selected : this.catalog;
+                    return selected.length ? selected : sourceCatalog;
                 },
 
                 get publishedCollections() {
