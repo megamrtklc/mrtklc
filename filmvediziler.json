@@ -20175,6 +20175,207 @@
       "tmdbImdbId": "tt1675434",
       "tmdbRating": "8.3",
       "tmdbVoteCount": 19065
+    },
+    {
+      "id": "cv-1794698223567",
+      "title": "Leon: Sevginin Gücü",
+      "type": "movie",
+      "year": "1994",
+      "rating": "8.3",
+      "genre": "Suç",
+      "category": "Suç / Dram / Aksiyon",
+      "duration": "111 dk",
+      "country": "France",
+      "director": "Luc Besson",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 101,
+      "imdbId": "tt0110413",
+      "image": "https://image.tmdb.org/t/p/w500/5wc5a1z0POdwMfDVrjbeTEhfygV.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/fj0hwDJEOOHllRim2BMt5L7tbjf.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=rilULX65faQ",
+      "trailerProvider": "auto",
+      "desc": "Mathilda, New York’ta yaşayan ailesi dağılmış 12 yaşında küçük bir kızdır. Ailesini sevmeyen Mathilda için en değerli varlığı küçük kardeşidir. Babası uyuşturucu işlerine bulaşınca mafya ailenin tüm bireylerini öldürür. O sırada alışverişte olan Mathilda ise olaydan kılpayı kurtulur ve Leon’un kaldığı daireye saklanır. Leon ise çok soğukkanlı bir katildir. Ancak Mathilda’ya karşı içten bir sevgi besler ve ona kol kanat gerer. Aslında babalık, arkadaşlık gibi kavramlar ona çok yabancıdır.",
+      "cast": [
+        "Jean Reno",
+        "Natalie Portman",
+        "Gary Oldman",
+        "Danny Aiello",
+        "Peter Appel",
+        "Michael Badalucco",
+        "Ellen Greene",
+        "Frank Senger",
+        "Elizabeth Regen",
+        "Carl J. Matusovich",
+        "Eric Challier",
+        "Willi One Blood",
+        "Don Creech",
+        "Keith A. Glascoe",
+        "Jernard Burks",
+        "Matt De Matt",
+        "Stuart Rudin",
+        "Lucius Wyatt Cherokee",
+        "Maïwenn",
+        "Luc Bernard"
+      ],
+      "tmdbTitle": "Leon: Sevginin Gücü",
+      "tmdbOriginalTitle": "Léon",
+      "tmdbReleaseDate": "1994-09-14",
+      "tmdbGenres": "Suç / Dram / Aksiyon",
+      "tmdbRuntime": "111 dk",
+      "tmdbCountries": "France",
+      "tmdbDirector": "Luc Besson",
+      "tmdbCast": [
+        {
+          "id": 1003,
+          "name": "Jean Reno",
+          "character": "Léon Montana",
+          "profile": "https://image.tmdb.org/t/p/w185/mw0EZJYz3kiFq9fNxsML773gotF.jpg",
+          "order": 0
+        },
+        {
+          "id": 524,
+          "name": "Natalie Portman",
+          "character": "Mathilda Lando",
+          "profile": "https://image.tmdb.org/t/p/w185/edPU5HxncLWa1YkgRPNkSd68ONG.jpg",
+          "order": 1
+        },
+        {
+          "id": 64,
+          "name": "Gary Oldman",
+          "character": "Norman Stansfield",
+          "profile": "https://image.tmdb.org/t/p/w185/yhaSM5habNNI1Tf4ALRwRk3VvSZ.jpg",
+          "order": 2
+        },
+        {
+          "id": 1004,
+          "name": "Danny Aiello",
+          "character": "Old Tony",
+          "profile": "https://image.tmdb.org/t/p/w185/2WiZ8SkiFU355GUT2QuSPlenrfM.jpg",
+          "order": 3
+        },
+        {
+          "id": 1005,
+          "name": "Peter Appel",
+          "character": "Agent Malky",
+          "profile": "https://image.tmdb.org/t/p/w185/AvOZjWVwklfJHNHD2AwLmYRhSXw.jpg",
+          "order": 4
+        },
+        {
+          "id": 1010,
+          "name": "Michael Badalucco",
+          "character": "Mathilda's Father",
+          "profile": "https://image.tmdb.org/t/p/w185/ntqAjxrBsyXbRzAaln4ynSBTE1r.jpg",
+          "order": 5
+        },
+        {
+          "id": 13420,
+          "name": "Ellen Greene",
+          "character": "Mathilda's Mother",
+          "profile": "https://image.tmdb.org/t/p/w185/nJzE8dS38hxbALr5LZ88BYt8dm0.jpg",
+          "order": 6
+        },
+        {
+          "id": 138401,
+          "name": "Frank Senger",
+          "character": "Fatman",
+          "profile": "https://image.tmdb.org/t/p/w185/x9BmH7tqATglaoDgxTed0Nwg4G.jpg",
+          "order": 7
+        },
+        {
+          "id": 122230,
+          "name": "Elizabeth Regen",
+          "character": "Mathilda's Sister",
+          "profile": "https://image.tmdb.org/t/p/w185/bC7qS0SFXOqJ2rUAGItxhZTAV1k.jpg",
+          "order": 8
+        },
+        {
+          "id": 977543,
+          "name": "Carl J. Matusovich",
+          "character": "Mathilda's Brother",
+          "profile": "https://image.tmdb.org/t/p/w185/2HkLgKM58cgp5ysmYPleZiCsRhi.jpg",
+          "order": 9
+        },
+        {
+          "id": 1171233,
+          "name": "Eric Challier",
+          "character": "Bodyguard Chief",
+          "profile": "https://image.tmdb.org/t/p/w185/1GFuPK17DFHxToC07qSfwIENwuq.jpg",
+          "order": 10
+        },
+        {
+          "id": 1006,
+          "name": "Willi One Blood",
+          "character": "1st Stansfield Man",
+          "profile": "https://image.tmdb.org/t/p/w185/5n71rk2UbxcQhwX1D5q8Gxl3le6.jpg",
+          "order": 11
+        },
+        {
+          "id": 1007,
+          "name": "Don Creech",
+          "character": "2nd Stansfield man",
+          "profile": "https://image.tmdb.org/t/p/w185/tNUnAKPneKllW5cdYVoesrhi0qf.jpg",
+          "order": 12
+        },
+        {
+          "id": 1008,
+          "name": "Keith A. Glascoe",
+          "character": "3rd Stansfield man (Benny)",
+          "profile": "https://image.tmdb.org/t/p/w185/xq6o65epeveHXxR9jSmT79EBhRT.jpg",
+          "order": 13
+        },
+        {
+          "id": 55275,
+          "name": "Jernard Burks",
+          "character": "Stansfield man",
+          "profile": "https://image.tmdb.org/t/p/w185/qllyoFXhAjdzWuh5fA7zhlOwCC1.jpg",
+          "order": 14
+        },
+        {
+          "id": 60638,
+          "name": "Matt De Matt",
+          "character": "Stansfield man",
+          "profile": "",
+          "order": 15
+        },
+        {
+          "id": 94435,
+          "name": "Stuart Rudin",
+          "character": "Leon's Taxi driver",
+          "profile": "https://image.tmdb.org/t/p/w185/2jhEJ2zLnRL0iuG5i3fYw4FObgl.jpg",
+          "order": 16
+        },
+        {
+          "id": 1684441,
+          "name": "Lucius Wyatt Cherokee",
+          "character": "Tonto",
+          "profile": "https://image.tmdb.org/t/p/w185/mruqGyyf3ZXrnBUbBa2lucMn9cI.jpg",
+          "order": 17
+        },
+        {
+          "id": 64210,
+          "name": "Maïwenn",
+          "character": "Blond Babe",
+          "profile": "https://image.tmdb.org/t/p/w185/p5eS3Zq4V9eau8Xcf77bm5hrVUM.jpg",
+          "order": 18
+        },
+        {
+          "id": 185351,
+          "name": "Luc Bernard",
+          "character": "Mickey",
+          "profile": "https://image.tmdb.org/t/p/w185/hGQBImBfXpEzAFTK2MBkjRJK5ao.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Mathilda, New York’ta yaşayan ailesi dağılmış 12 yaşında küçük bir kızdır. Ailesini sevmeyen Mathilda için en değerli varlığı küçük kardeşidir. Babası uyuşturucu işlerine bulaşınca mafya ailenin tüm bireylerini öldürür. O sırada alışverişte olan Mathilda ise olaydan kılpayı kurtulur ve Leon’un kaldığı daireye saklanır. Leon ise çok soğukkanlı bir katildir. Ancak Mathilda’ya karşı içten bir sevgi besler ve ona kol kanat gerer. Aslında babalık, arkadaşlık gibi kavramlar ona çok yabancıdır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/5wc5a1z0POdwMfDVrjbeTEhfygV.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/fj0hwDJEOOHllRim2BMt5L7tbjf.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=rilULX65faQ",
+      "tmdbImdbId": "tt0110413",
+      "tmdbRating": "8.3",
+      "tmdbVoteCount": 16796
     }
   ],
   "collections": [],
