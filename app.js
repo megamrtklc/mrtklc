@@ -713,10 +713,14 @@
                     const personalCategory = this.homepageConfig?.[device + 'Category'] || '';
                     if (personalMode === 'auto' && ['user-watchlist','user-watched','user-favorites'].includes(personalCategory)) {
                         const personalItems = this.getPersonalStatusItems(personalCategory).filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
-                        if (personalItems.length) {
-                            const personalCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']) || (mobile ? 6 : 10);
-                            return personalItems.slice(0, Math.max(1, personalCount));
-                        }
+                        const personalCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']) || (mobile ? 6 : 10);
+                        // Kişisel kaynak boşsa genel katalog/manşet seçimine düşme.
+                        return personalItems.slice(0, Math.max(1, personalCount));
+                    }
+                    if (personalMode === 'auto' && personalCategory === 'new-arrivals') {
+                        const newestCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']) || (mobile ? 6 : 10);
+                        return this.catalog.slice(-Math.max(1, newestCount)).reverse()
+                            .filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
                     }
                     const configured = this.homepageConfig?.[mobile ? 'mobileHeroSlides' : 'desktopHeroSlides'] || this.homepageConfig?.heroSlides;
                     if (!Array.isArray(configured) || !configured.length) return sourceCatalog;
