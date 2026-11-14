@@ -346,6 +346,9 @@
         @media(min-width:640px) and (max-width:767px){#home-watchlist-section .home-watchlist-card{flex-basis:44%;width:44%}}
         @media(min-width:768px) and (max-width:1023px){#home-watchlist-section .home-watchlist-card{flex-basis:31%;width:31%}}
         @media(prefers-reduced-motion:reduce){#home-watchlist-section .home-watchlist-card,#home-watchlist-section .home-watchlist-poster img{transition:none!important}}
+        /* Tighten the vertical transition into Son Eklenenler without changing card layout. */
+        #home-new-arrivals-section{margin-top:-22px!important}
+        @media(max-width:639px){#home-new-arrivals-section{margin-top:-16px!important}}
         /* New arrivals: one editorial lead tile followed by compact archive cards. */
         #home-new-arrivals-section .home-new-arrivals-heading{border-bottom:1px solid rgba(148,163,184,.24)}
         #home-new-arrivals-section .home-new-arrivals-rail{gap:14px;padding:5px 3px 18px;align-items:stretch}
