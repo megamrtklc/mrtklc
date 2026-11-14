@@ -191,7 +191,7 @@
     $('#missing-trailer-page-info').textContent='Sayfa '+state.missingTrailerPage+' / '+pages;
     $('#missing-trailer-prev').disabled=state.missingTrailerPage<=1;
     $('#missing-trailer-next').disabled=state.missingTrailerPage>=pages;
-    $('#missing-trailer-rows [data-missing-trailer-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.missingTrailerEdit);if(item)openEditor(item);}));
+    $('#missing-trailer-rows [data-missing-trailer-edit]').forEach(btn=>btn.addEventListener('click',event=>{event.preventDefault();const item=state.catalog.find(x=>String(x.id)===btn.dataset.missingTrailerEdit);if(!item){toast('Düzenlenecek yapım katalogda bulunamadı.');return;}try{openEditor(item);}catch(error){console.error('Fragman kaydı düzenleyicisi açılamadı:',error);toast('Düzenleme ekranı açılamadı: '+(error.message||'Beklenmeyen hata.'));}}));
   }
   function renderCollections(){
     const list=collectionList();
