@@ -20778,6 +20778,207 @@
       "tmdbImdbId": "tt2103281",
       "tmdbRating": "7.3",
       "tmdbVoteCount": 12651
+    },
+    {
+      "id": "cv-1794698302624",
+      "title": "Maymunlar Cehennemi: Savaş",
+      "type": "movie",
+      "year": "2017",
+      "rating": "7.2",
+      "genre": "Dram",
+      "category": "Dram / Bilim-Kurgu / Savaş",
+      "duration": "140 dk",
+      "country": "United States of America",
+      "director": "Matt Reeves",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 281338,
+      "imdbId": "tt3450958",
+      "image": "https://image.tmdb.org/t/p/w500/CX5H9KDaukasw8We246N0c40yi.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/ulMscezy9YX0bhknvJbZoUgQxO5.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=jcRseykxHnQ",
+      "trailerProvider": "auto",
+      "desc": "Sezar ve onun liderliğindeki maymunlar, acımasız Albay'ın yönettiği insan ordusuyla büyük bir çatışmaya zorlanır. Maymunların hayal edilemez kayıplarından sonra Sezar, karanlık içgüdülerine yenik düşer ve türünün intikamını almak için kendi efsanevi macerasına başlar. Yolculuk onları en sonunda yüz yüze getirdiğinde; Sezar ve Albay, türlerinin ve gezegenin kaderini belirleyecek epik bir savaşta birbirlerine karşı savaşırlar.",
+      "cast": [
+        "Andy Serkis",
+        "Woody Harrelson",
+        "Karin Konoval",
+        "Terry Notary",
+        "Steve Zahn",
+        "Amiah Miller",
+        "Ty Olsson",
+        "Michael Adamthwaite",
+        "Toby Kebbell",
+        "Gabriel Chavarria",
+        "Sara Canning",
+        "Judy Greer",
+        "Devyn Dalton",
+        "Aleks Paunovic",
+        "Alessandro Juliani",
+        "Max Lloyd-Jones",
+        "Timothy Webber",
+        "Lauro David Chartrand-DelValle",
+        "Shaun Omaid",
+        "Roger Cross"
+      ],
+      "tmdbTitle": "Maymunlar Cehennemi: Savaş",
+      "tmdbOriginalTitle": "War for the Planet of the Apes",
+      "tmdbReleaseDate": "2017-07-11",
+      "tmdbGenres": "Dram / Bilim-Kurgu / Savaş",
+      "tmdbRuntime": "140 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Matt Reeves",
+      "tmdbCast": [
+        {
+          "id": 1333,
+          "name": "Andy Serkis",
+          "character": "Caesar",
+          "profile": "https://image.tmdb.org/t/p/w185/eNGqhebQ4cDssjVeNFrKtUvweV5.jpg",
+          "order": 0
+        },
+        {
+          "id": 57755,
+          "name": "Woody Harrelson",
+          "character": "The Colonel",
+          "profile": "https://image.tmdb.org/t/p/w185/igxYDQBbTEdAqaJxaW6ffqswmUU.jpg",
+          "order": 1
+        },
+        {
+          "id": 58395,
+          "name": "Karin Konoval",
+          "character": "Maurice",
+          "profile": "https://image.tmdb.org/t/p/w185/5e8YyNQjWre2UbExYBlJ7zva934.jpg",
+          "order": 2
+        },
+        {
+          "id": 236696,
+          "name": "Terry Notary",
+          "character": "Rocket",
+          "profile": "https://image.tmdb.org/t/p/w185/gcn5cL4TGmtiYcjFCl29GsclDVl.jpg",
+          "order": 3
+        },
+        {
+          "id": 18324,
+          "name": "Steve Zahn",
+          "character": "Bad Ape",
+          "profile": "https://image.tmdb.org/t/p/w185/rwrPdKGwXnByxUVMxMf8Y7oswi3.jpg",
+          "order": 4
+        },
+        {
+          "id": 1493969,
+          "name": "Amiah Miller",
+          "character": "Nova",
+          "profile": "https://image.tmdb.org/t/p/w185/mW10rLTAmuPD5TncX8KkRzsbvXU.jpg",
+          "order": 5
+        },
+        {
+          "id": 42711,
+          "name": "Ty Olsson",
+          "character": "Red Donkey",
+          "profile": "https://image.tmdb.org/t/p/w185/9KnJ0453movkUNTYuucHXCFVbU0.jpg",
+          "order": 6
+        },
+        {
+          "id": 63566,
+          "name": "Michael Adamthwaite",
+          "character": "Luca",
+          "profile": "https://image.tmdb.org/t/p/w185/J9R1DkSkmGDioXJmHIMg5Vt8pb.jpg",
+          "order": 7
+        },
+        {
+          "id": 20286,
+          "name": "Toby Kebbell",
+          "character": "Koba",
+          "profile": "https://image.tmdb.org/t/p/w185/mlYytYJvoEHmhDH2enLtES1098Q.jpg",
+          "order": 8
+        },
+        {
+          "id": 35231,
+          "name": "Gabriel Chavarria",
+          "character": "Preacher",
+          "profile": "https://image.tmdb.org/t/p/w185/aLvEXygc9wN4DqTNNY1h69gaEdS.jpg",
+          "order": 9
+        },
+        {
+          "id": 221840,
+          "name": "Sara Canning",
+          "character": "Lake",
+          "profile": "https://image.tmdb.org/t/p/w185/55AL7y8ybTE7uvpQALughR7bkkB.jpg",
+          "order": 10
+        },
+        {
+          "id": 20750,
+          "name": "Judy Greer",
+          "character": "Cornelia",
+          "profile": "https://image.tmdb.org/t/p/w185/pTLjIjh83R424RGxIfq4U0yx947.jpg",
+          "order": 11
+        },
+        {
+          "id": 1164341,
+          "name": "Devyn Dalton",
+          "character": "Cornelius",
+          "profile": "https://image.tmdb.org/t/p/w185/rYkYdtv2grwzDX4RFCIK3zzP4gD.jpg",
+          "order": 12
+        },
+        {
+          "id": 107810,
+          "name": "Aleks Paunovic",
+          "character": "Winter",
+          "profile": "https://image.tmdb.org/t/p/w185/k8j9Nr0xS2vEUMV8Wl0y5cC2NeB.jpg",
+          "order": 13
+        },
+        {
+          "id": 59312,
+          "name": "Alessandro Juliani",
+          "character": "Spear",
+          "profile": "https://image.tmdb.org/t/p/w185/f8pVEpYsRU30EsMoWcBsTkUN9e0.jpg",
+          "order": 14
+        },
+        {
+          "id": 83186,
+          "name": "Max Lloyd-Jones",
+          "character": "Blue Eyes",
+          "profile": "https://image.tmdb.org/t/p/w185/4ZXdk1YXG3xYonid1DPDOVKsNPE.jpg",
+          "order": 15
+        },
+        {
+          "id": 53720,
+          "name": "Timothy Webber",
+          "character": "Ape Elder",
+          "profile": "https://image.tmdb.org/t/p/w185/Av0mtgZ9DeopXP9NQjzd8q9ZPd6.jpg",
+          "order": 16
+        },
+        {
+          "id": 134859,
+          "name": "Lauro David Chartrand-DelValle",
+          "character": "Look Out Ape",
+          "profile": "https://image.tmdb.org/t/p/w185/4XqwVZCR6t7H0aB8zVT0i9gfehg.jpg",
+          "order": 17
+        },
+        {
+          "id": 1460719,
+          "name": "Shaun Omaid",
+          "character": "Soldier Who Sees Ape",
+          "profile": "https://image.tmdb.org/t/p/w185/qttbi8RNm4wCNyymG7HcDmLRyVx.jpg",
+          "order": 18
+        },
+        {
+          "id": 25877,
+          "name": "Roger Cross",
+          "character": "Captain",
+          "profile": "https://image.tmdb.org/t/p/w185/p3B3Ex5PqNaTXIcdiYe8Ww5vIXi.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Sezar ve onun liderliğindeki maymunlar, acımasız Albay'ın yönettiği insan ordusuyla büyük bir çatışmaya zorlanır. Maymunların hayal edilemez kayıplarından sonra Sezar, karanlık içgüdülerine yenik düşer ve türünün intikamını almak için kendi efsanevi macerasına başlar. Yolculuk onları en sonunda yüz yüze getirdiğinde; Sezar ve Albay, türlerinin ve gezegenin kaderini belirleyecek epik bir savaşta birbirlerine karşı savaşırlar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/CX5H9KDaukasw8We246N0c40yi.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/ulMscezy9YX0bhknvJbZoUgQxO5.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=jcRseykxHnQ",
+      "tmdbImdbId": "tt3450958",
+      "tmdbRating": "7.2",
+      "tmdbVoteCount": 10097
     }
   ],
   "collections": [],
