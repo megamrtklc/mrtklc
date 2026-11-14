@@ -1965,6 +1965,49 @@
         box-shadow: 0 2px 14px rgba(245, 197, 24, .16);
       }
 
+      /* Yumuşak ışık huzmesi: mevcut manşet kompozisyonuna ek katman, yerleşime dokunmaz. */
+      #desktopEditorialHero > div:first-child::before {
+        content: "";
+        position: absolute;
+        inset: -18% -12%;
+        z-index: 1;
+        pointer-events: none;
+        opacity: .46;
+        background: linear-gradient(108deg, transparent 39%, rgba(255,226,166,.025) 46%, rgba(255,226,166,.12) 50%, rgba(255,226,166,.035) 54%, transparent 62%);
+        transform: translateX(-38%) skewX(-8deg);
+        animation: cvHeroLightSweep 19s cubic-bezier(.45,0,.55,1) infinite;
+        mix-blend-mode: screen;
+      }
+      #desktopEditorialHero > div:first-child::after {
+        animation: cvHeroVignette 11s ease-in-out infinite alternate;
+      }
+      /* Mobilde huzme daha dar, daha düşük opaklıkta ve daha yavaş. */
+      #mobileHeroBanner > div:nth-of-type(1)::before {
+        content: "";
+        position: absolute;
+        inset: -10% -25%;
+        z-index: 2;
+        pointer-events: none;
+        opacity: .25;
+        background: linear-gradient(112deg, transparent 38%, rgba(255,225,160,.025) 46%, rgba(255,225,160,.12) 50%, rgba(255,225,160,.025) 54%, transparent 62%);
+        transform: translateX(-42%) skewX(-8deg);
+        animation: cvHeroLightSweep 24s cubic-bezier(.45,0,.55,1) infinite;
+        mix-blend-mode: screen;
+      }
+      #mobileHeroBanner > div:nth-of-type(1)::after {
+        animation: cvHeroVignette 14s ease-in-out infinite alternate;
+      }
+      @keyframes cvHeroLightSweep {
+        0%, 18% { transform: translateX(-42%) skewX(-8deg); opacity: 0; }
+        35% { opacity: .75; }
+        68% { opacity: .42; }
+        88%, 100% { transform: translateX(42%) skewX(-8deg); opacity: 0; }
+      }
+      @keyframes cvHeroVignette {
+        from { opacity: .82; }
+        to { opacity: 1; }
+      }
+
       @keyframes cvHeroCinematicDrift {
         from { transform: scale(1.025) translate3d(0, 0, 0); }
         to   { transform: scale(1.085) translate3d(-.7%, -.35%, 0); }
@@ -1984,6 +2027,12 @@
         }
       }
       @media (prefers-reduced-motion: reduce) {
+        #desktopEditorialHero > div:first-child::before,
+        #desktopEditorialHero > div:first-child::after,
+        #mobileHeroBanner > div:nth-of-type(1)::before,
+        #mobileHeroBanner > div:nth-of-type(1)::after {
+          animation: none !important;
+        }
         #desktopEditorialHero > div:first-child picture img,
         #mobileHeroArtwork {
           animation: none !important;
