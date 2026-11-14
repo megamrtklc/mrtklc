@@ -500,15 +500,22 @@
         #home-personalized-section .home-personalized-card-backdrop,
         #home-personalized-section .home-personalized-card-shade{border-radius:inherit;overflow:hidden}
         #home-personalized-section .home-personalized-plot{
-          position:fixed;inset:auto auto auto auto;left:50%;top:50%;
-          width:min(340px,calc(100vw - 32px));max-height:min(220px,calc(100vh - 48px));
-          overflow:auto;z-index:10000;display:block;margin:0;padding:16px 18px;
-          border:1px solid rgba(255,255,255,.14);border-radius:14px;
-          background:#171b24;color:#f3f4f6;font-size:12px;line-height:1.6;
-          box-shadow:0 16px 44px rgba(0,0,0,.32);
+          position:fixed;left:50%;top:50%;right:auto;bottom:auto;
+          width:min(380px,calc(100vw - 32px));max-height:min(190px,calc(100vh - 40px));
+          overflow:hidden;z-index:10000;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;
+          margin:0;padding:20px 22px 18px;
+          border:1px solid rgba(148,163,184,.28);border-radius:18px;
+          background:linear-gradient(145deg,rgba(25,33,48,.98),rgba(13,18,29,.98));
+          color:#f8fafc;font-size:14px;line-height:1.75;font-weight:500;letter-spacing:.005em;
+          text-shadow:none;box-shadow:0 24px 70px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.07);
+          -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
           opacity:0;visibility:hidden;transform:translate(-50%,-46%);
-          transition:opacity .18s ease,transform .18s ease,visibility .18s ease;
+          transition:opacity .2s ease,transform .2s ease,visibility .2s ease;
           pointer-events:none;
+        }
+        #home-personalized-section .home-personalized-plot:before{
+          content:"KONU ÖZETİ";display:block;margin-bottom:10px;
+          color:#fda4af;font-size:9px;font-weight:900;letter-spacing:.2em;
         }
         #home-personalized-section .home-personalized-alternative:hover .home-personalized-plot,
         #home-personalized-section .home-personalized-alternative:focus-within .home-personalized-plot,
@@ -516,7 +523,11 @@
           opacity:1;visibility:visible;transform:translate(-50%,-50%);
         }
         @media(max-width:639px){
-          #home-personalized-section .home-personalized-plot{width:min(320px,calc(100vw - 28px));max-height: min(200px,calc(100vh - 40px));padding:14px 16px}
+          #home-personalized-section .home-personalized-plot{
+            width:min(340px,calc(100vw - 28px));max-height:min(168px,calc(100vh - 36px));
+            padding:16px 18px;font-size:13px;line-height:1.65;-webkit-line-clamp:4;
+            border-radius:16px;
+          }
         }
 
     
