@@ -1073,6 +1073,8 @@
                     return this.watchlist.some(m => m && String(m.id) === String(item.id));
                 },
 
+                recommendationFeedbackRevision: 0,
+
                 get recommendationFeedback() {
                     const stored = safeStorageRead('cine_recommendation_feedback_v1', []);
                     return Array.isArray(stored) ? [...new Set(stored.map(String))] : [];
@@ -1092,6 +1094,7 @@
                     const dislikes = this.recommendationFeedback.filter(value => value !== id);
                     safeStorageWrite('cine_recommendation_feedback_v1', dislikes);
                     personalizedRecommendationCache.delete(this);
+                    this.recommendationFeedbackRevision += 1;
                 },
 
                 isRecommendationLiked(item) {
@@ -1107,6 +1110,7 @@
                     const likes = this.recommendationLikes.filter(value => value !== id);
                     safeStorageWrite('cine_recommendation_likes_v1', likes);
                     personalizedRecommendationCache.delete(this);
+                    this.recommendationFeedbackRevision += 1;
                 },
 
                 reviews: (() => { const value = safeStorageRead('cine_reviews', {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; })(),
@@ -1612,6 +1616,7 @@
                 },
 
                 get personalizedRecommendations() {
+                    const feedbackRevision = this.recommendationFeedbackRevision;
                     const catalog = Array.isArray(this.catalog) ? this.catalog : [];
                     if (!catalog.length) return [];
 
@@ -1629,7 +1634,8 @@
                         Object.entries(episodes),
                         watchlist.map(item => String(item.id)),
                         feedbackIds,
-                        likedIds
+                        likedIds,
+                        feedbackRevision
                     ]);
                     const cached = personalizedRecommendationCache.get(this);
                     if (cached && cached.catalog === catalog && cached.key === cacheKey) return cached.value;
@@ -1688,7 +1694,7 @@
                     });
                     const feedbackItems = feedbackIds.map(id => catalogById.get(id)).filter(Boolean);
                     const likedItems = likedIds.map(id => catalogById.get(id)).filter(Boolean);
-                    const excluded = new Set([...history.keys(), ...watchlist.map(item => String(item.id)), ...feedbackIds, ...likedIds]);
+                    const excluded = new Set([...history.keys(), ...watchlist.map(item => String(item.id)), ...feedbackIds]);
                     const prefs = {
                         genres: new Map(), types: new Map(), countries: new Map(),
                         directors: new Map(), actors: new Map(), themes: new Map(),
