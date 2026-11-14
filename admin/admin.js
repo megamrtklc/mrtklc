@@ -59,6 +59,7 @@
     if(view==='collections')renderCollections();
     if(view==='homepage')renderHomepage();
     if(view==='homepage-layout')renderHomepageLayout();
+    if(view==='personalized-section')renderPersonalizedSection();
     if(view==='watch-layout')renderWatchLayout();
     if(view==='header-footer')renderHeaderFooter();
   }
@@ -185,7 +186,7 @@
       if(response.status===409)throw new Error('Katalog başka bir işlemde güncellenmiş. Sayfayı yenileyip tekrar deneyin.');
       if(!response.ok)throw new Error(result.error||'Değişiklik kaydedilemedi.');
       state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];
-      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderOverviewInsights();
+      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderPersonalizedSection();renderOverviewInsights();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
       renderWatchLayout();renderAdminProfile();
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.');
@@ -598,6 +599,33 @@
     const ok=await persist({...state.data,homepageConfig:{...config,layout:nextLayout}},'Ana sayfa bölümleri ve sıralaması kaydedildi.');
     if(ok)renderHomepageLayout();
   }
+  function renderPersonalizedSection(){
+    if(!state.data)return;
+    const config=homepageConfig();
+    const section={eyebrow:'SANA ÖZEL',title:'İzleme Zevkine Göre',description:'İzleme alışkanlıklarından ilham alan, sana özel seçkiler',...(config.personalizedSection||{})};
+    const layout=homepageLayoutConfig();
+    $('#personalized-enabled').checked=layout.visibility.personalized!==false;
+    $('#personalized-eyebrow').value=section.eyebrow;
+    $('#personalized-title').value=section.title;
+    $('#personalized-description').value=section.description;
+  }
+  async function savePersonalizedSection(event){
+    event.preventDefault();
+    if(!canWrite())return;
+    const config=homepageConfig();
+    const layout=homepageLayoutConfig();
+    const visibility={...layout.visibility};
+    if($('#personalized-enabled').checked)delete visibility.personalized;
+    else visibility.personalized=false;
+    const personalizedSection={
+      eyebrow:$('#personalized-eyebrow').value.trim()||'SANA ÖZEL',
+      title:$('#personalized-title').value.trim()||'İzleme Zevkine Göre',
+      description:$('#personalized-description').value.trim()
+    };
+    const nextConfig={...config,personalizedSection,layout:{order:[...layout.order],visibility}};
+    const ok=await persist({...state.data,homepageConfig:nextConfig},'İzleme Zevkine Göre ayarları kaydedildi.');
+    if(ok)renderPersonalizedSection();
+  }
   function renderHomepage(){
     const config=homepageConfig(),settings=config.settings;
     $('#hero-desktop-count').value=Math.max(5,Math.min(15,Number(settings.desktopCount)||10));
@@ -802,6 +830,7 @@
     if(remove){const row=remove.closest('[data-custom-link-row]');const kind=row.dataset.customLinkRow;const current=$('#hf-'+kind+'-custom-links [data-custom-link-row]').filter(item=>item!==row).map(item=>({label:item.querySelector('[data-custom-link-label]').value.trim(),page:item.querySelector('[data-custom-link-page]').value}));renderCustomLinkRows(kind,current);}
   });
   $('#homepage-layout-save').addEventListener('click',saveHomepageLayout);
+  $('#personalized-section-form').addEventListener('submit',savePersonalizedSection);
   $('#homepage-layout-list').addEventListener('click',event=>{
     const button=event.target.closest('[data-layout-action]');
     const row=event.target.closest('[data-layout-key]');
