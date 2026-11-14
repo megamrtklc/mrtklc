@@ -17,15 +17,34 @@ const ids = new Set([...desktopSlides, ...mobileSlides]
 const heroCatalog = catalog
   .filter(item => item && ids.has(String(item.id ?? item.tmdbId ?? item.title)))
   // Cast verileri manşette kullanılmıyor; detay sayfası TMDB'den kendi kadrosunu alır.
-  .map(({ cast, tmdbCast, ...item }) => item);
+  .map(item => ({
+    id: item.id ?? item.tmdbId ?? item.title,
+    tmdbId: item.tmdbId,
+    title: item.title || item.tmdbTitle || item.originalTitle || 'İsimsiz yapım',
+    type: item.type === 'tv' || item.type === 'series' ? 'tv' : 'movie',
+    category: item.category || item.tmdbGenres || item.genre || '',
+    genre: item.genre || item.tmdbGenres || item.category || '',
+    rating: String(item.rating ?? item.tmdbRating ?? '0'),
+    year: String(item.year || item.tmdbReleaseDate || '').slice(0, 4),
+    duration: item.duration || item.tmdbRuntime || '',
+    country: item.country || item.tmdbCountries || '',
+    poster: item.poster || item.tmdbPoster || item.image || '',
+    backdrop: item.backdrop || item.tmdbBackdrop || item.tmdbPoster || item.image || '',
+    desc: item.desc || item.tmdbOverview || '',
+    director: item.director || item.tmdbDirector || '',
+    originalTitle: item.originalTitle || item.tmdbOriginalTitle || item.title || '',
+    starring: item.starring || '',
+    trailerUrl: item.trailerUrl || item.tmdbTrailerUrl || '',
+    seasons: item.seasons ?? item.tmdbSeasons ?? null,
+    episodes: item.episodes ?? item.tmdbEpisodes ?? null
+  })));
 if (!heroCatalog.length) throw new Error('Manşet listeleriyle eşleşen katalog kaydı bulunamadı.');
 
 const output = {
   homepageConfig: {
     settings: config.settings || {},
-    desktopHeroSlides: desktopSlides,
-    mobileHeroSlides: mobileSlides,
-    heroSlides: Array.isArray(config.heroSlides) ? config.heroSlides : [],
+    desktopHeroSlides: desktopSlides.map(({ id, active }) => ({ id, active })),
+    mobileHeroSlides: mobileSlides.map(({ id, active }) => ({ id, active })),
     heroStyle: config.heroStyle || 'current'
   },
   catalog: heroCatalog
