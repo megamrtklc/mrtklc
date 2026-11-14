@@ -17454,31 +17454,31 @@
     ],
     "mobileHeroSlides": [
       {
-        "id": "archive-26",
+        "id": "archive-112",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-103",
+        "id": "archive-125",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-99",
+        "id": "archive-124",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-110",
+        "id": "archive-14",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-102",
+        "id": "archive-27",
         "active": true,
         "headline": "",
         "description": ""
@@ -17497,7 +17497,8 @@
         "genre-discovery"
       ],
       "visibility": {}
-    }
+    },
+    "heroStyle": "apple"
   },
   "exportedAt": "2026-11-10T22:20:23.455Z",
   "watchPageConfig": {
@@ -17533,10 +17534,26 @@
     "videoLabel": "Video Bağlantıları",
     "showSearch": true,
     "showProfile": true,
-    "showMobileMenu": true
+    "showMobileMenu": true,
+    "catalogMenusInitialized": true,
+    "customLinks": [
+      {
+        "label": "Filmler",
+        "page": "movies"
+      },
+      {
+        "label": "Diziler",
+        "page": "series"
+      },
+      {
+        "label": "Yerli Yapımlar",
+        "page": "turkish"
+      }
+    ]
   },
   "footerConfig": {
     "enabled": true,
+    "customLinks": [],
     "brandPrimary": "KLC",
     "brandAccent": "MRT",
     "description": "Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.",
