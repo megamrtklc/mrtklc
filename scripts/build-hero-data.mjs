@@ -53,7 +53,7 @@ const bootstrapEnd = bootstrapStart < 0 ? -1 : html.indexOf(bootstrapSuffix, boo
 if (bootstrapStart < 0 || bootstrapEnd < 0) throw new Error('Inline hero bootstrap slot is missing from index.html.');
 const inlineJson = JSON.stringify(output).replace(/</g, '\\u003c');
 let updatedHtml = html.slice(0, bootstrapStart) + bootstrapPrefix + inlineJson + bootstrapSuffix + html.slice(bootstrapEnd + bootstrapSuffix.length);
-updatedHtml = updatedHtml.replace('    <link rel="preload" as="fetch" href="./hero-data.json" crossorigin="anonymous" fetchpriority="high">\\n', '');
+updatedHtml = updatedHtml.split('    <link rel="preload" as="fetch" href="./hero-data.json" crossorigin="anonymous" fetchpriority="high">').join('');
 await writeFile('index.html', updatedHtml);
 await writeFile('hero-data.json', JSON.stringify(output, null, 2) + '\n');
 console.log(`hero-data.json üretildi: ${heroCatalog.length} yapım / ${Buffer.byteLength(JSON.stringify(output))} byte`);
