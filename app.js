@@ -57,8 +57,10 @@
         document.addEventListener('alpine:init', () => {
             const alpine = window.Alpine;
             if (!alpine?.interceptInit || !alpine?.deferInit) return;
+            const deferredHomePages = new WeakSet();
             alpine.interceptInit(element => {
-                if (element.id !== 'home-page' || !window.matchMedia('(min-width: 768px)').matches) return;
+                if (element.id !== 'home-page' || deferredHomePages.has(element) || !window.matchMedia('(min-width: 768px)').matches) return;
+                deferredHomePages.add(element);
                 alpine.deferInit(element, new Promise(resolve => {
                     const deferUntilIdle = () => {
                         if (typeof window.requestIdleCallback === 'function') {
