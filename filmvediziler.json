@@ -17628,11 +17628,17 @@
       "interval": 6,
       "autoplay": true,
       "pauseOnHover": true,
-      "descriptionLength": 220
+      "descriptionLength": 300
     },
     "heroSlides": [
       {
-        "id": "archive-43",
+        "id": "cv-1794683819669",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683794445",
         "active": true,
         "headline": "",
         "description": ""
@@ -17644,121 +17650,17 @@
         "description": ""
       },
       {
-        "id": "perde-mw5zwmbz",
+        "id": "cv-1794683709989",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-110",
+        "id": "cv-1794683689165",
         "active": true,
         "headline": "",
         "description": ""
       },
-      {
-        "id": "cv-1794683639717",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1794683623677",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-60",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-114",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-15",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-87",
-        "active": true,
-        "headline": "",
-        "description": ""
-      }
-    ],
-    "desktopMode": "auto",
-    "desktopCategory": "random",
-    "mobileMode": "auto",
-    "mobileCategory": "random",
-    "desktopHeroSlides": [
-      {
-        "id": "archive-43",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1794683744189",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw5zwmbz",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-110",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1794683639717",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1794683623677",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-60",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-114",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-15",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-87",
-        "active": true,
-        "headline": "",
-        "description": ""
-      }
-    ],
-    "mobileHeroSlides": [
       {
         "id": "cv-1794683662829",
         "active": true,
@@ -17766,25 +17668,123 @@
         "description": ""
       },
       {
-        "id": "archive-38",
+        "id": "cv-1794683639717",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-37",
+        "id": "cv-1794683623677",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-104",
+        "id": "perde-mwawheyh",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-58",
+        "id": "perde-mwawc4g1",
+        "active": true,
+        "headline": "",
+        "description": ""
+      }
+    ],
+    "desktopMode": "auto",
+    "desktopCategory": "new-arrivals",
+    "mobileMode": "auto",
+    "mobileCategory": "new-arrivals",
+    "desktopHeroSlides": [
+      {
+        "id": "cv-1794683819669",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683794445",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683744189",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683709989",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683689165",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683662829",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683639717",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683623677",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "perde-mwawheyh",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "perde-mwawc4g1",
+        "active": true,
+        "headline": "",
+        "description": ""
+      }
+    ],
+    "mobileHeroSlides": [
+      {
+        "id": "cv-1794683819669",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683794445",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683744189",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683709989",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683689165",
         "active": true,
         "headline": "",
         "description": ""
