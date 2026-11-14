@@ -425,6 +425,9 @@
         #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{position:absolute;inset:auto 0 0;z-index:2;min-height:0;padding:15px 17px 16px;background:linear-gradient(0deg,rgba(5,8,15,.92),rgba(5,8,15,.54) 78%,transparent);text-shadow:0 1px 8px rgba(0,0,0,.55)}
         #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy:before{content:"ARŞİVE EN SON EKLENEN";display:block;margin-bottom:6px;color:#fda4af;font-size:8px;font-weight:900;letter-spacing:.16em}
         #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy h3{font-size:clamp(14px,1.2vw,18px);line-height:1.2;font-weight:900;letter-spacing:-.02em;color:#fff}
+        #home-new-arrivals-section .home-new-arrival-feature-title-row{width:100%;margin:0 0 5px}
+        #home-new-arrivals-section .home-new-arrival-feature-title-row h3{min-width:0;overflow-wrap:anywhere}
+        #home-new-arrivals-section .home-new-arrival-feature-rating{line-height:1.1;white-space:nowrap}
         #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:5px;color:rgba(255,255,255,.82);font-size:10px;line-height:1.45}
         #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{margin-top:8px;color:rgba(255,255,255,.72)}
         #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div span:last-child{color:rgba(255,255,255,.82)}
@@ -947,10 +950,14 @@
                                     <div class="home-new-arrival-shade absolute inset-0"></div>
                                     <span class="absolute top-3 left-3 rounded-md bg-rose-600 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 shadow-lg" x-text="index === 0 ? 'EN YENİ' : 'YENİ EKLENDİ'"></span>
                                     <span class="absolute top-3 right-3 rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
-                                    <span class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || item.tmdbRating || '—'"></span></span>
+                                    <span x-show="index !== 0" class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || item.tmdbRating || '—'"></span></span>
                                 </div>
                                 <div class="home-new-arrival-copy p-3 space-y-2">
-                                    <h3 class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
+                                    <div x-show="index === 0" class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
+                                        <h3 class="min-w-0 flex-1 text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" x-text="item.title"></h3>
+                                        <span class="home-new-arrival-feature-rating inline-flex shrink-0 items-center gap-1 rounded-md border border-amber-300/40 bg-black/65 px-2 py-1 text-[10px] font-black text-amber-300 backdrop-blur-md"><i class="fa-solid fa-star"></i><span x-text="item.rating || item.tmdbRating || '—'"></span></span>
+                                    </div>
+                                    <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
                                      <p x-show="index === 0" x-text="item.overview || item.plot || item.description || item.tmdbOverview || &quot;Kataloğa yeni eklenen bu yapımı keşfet.&quot;"></p>
                                     <div class="flex items-center justify-between gap-2 text-[9px] text-gray-500 dark:text-gray-400">
                                         <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
