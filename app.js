@@ -153,7 +153,8 @@
                     return this.catalog.map(item => {
                         const title = this.normalizeSearchText(item.title || '');
                         const original = this.normalizeSearchText(item.originalTitle || '');
-                        const searchable = this.normalizeSearchText([item.title, item.originalTitle, item.genre, item.category, item.desc, item.director, item.starring, item.country].filter(Boolean).join(' '));
+                        const castNames = (item.tmdbCast || item.cast || []).map(person => typeof person === 'string' ? person : (person?.name || '')).join(' ');
+                        const searchable = this.normalizeSearchText([item.title, item.originalTitle, item.genre, item.category, item.desc, item.director, item.starring, item.country, castNames].filter(Boolean).join(' '));
                         const score = title === query ? 100 : title.startsWith(query) ? 85 : original.startsWith(query) ? 75 : title.includes(query) ? 65 : searchable.includes(query) ? 35 : 0;
                         return { item, score };
                     }).filter(entry => entry.score > 0)
