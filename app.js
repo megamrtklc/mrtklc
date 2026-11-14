@@ -1194,14 +1194,34 @@
 
                     const pageMatch = hash.match(/^#\/([^/?#]+)$/);
                     const page = pageMatch ? decodeURIComponent(pageMatch[1]) : 'home';
+                    const catalogPages = ['movies', 'series', 'turkish'];
+                    if (catalogPages.includes(page)) { this.navigateTo(page); return; }
                     const allowedPages = ['home', 'explore', 'video-links', 'library', 'watchlist', 'stats'];
                     this.currentPage = allowedPages.includes(page) ? page : 'home';
                     this.syncRouteToUrl(this.currentPage, null);
                 },
 
                 navigateTo(page) {
-                    this.currentPage = page;
-                    this.syncRouteToUrl(page, null);
+                    const catalogViews = { movies: 'movies', series: 'series', turkish: 'turkish' };
+                    if (catalogViews[page]) {
+                        this.searchQuery = '';
+                        this.discoveryType = 'all';
+                        this.discoveryMood = 'all';
+                        this.discoveryGenre = 'all';
+                        this.discoveryCountry = page === 'turkish' ? 'Türkiye' : 'all';
+                        this.discoveryDirector = '';
+                        this.discoveryPlatform = 'all';
+                        this.discoveryRating = '0';
+                        this.discoveryYearFrom = '';
+                        this.discoveryYearTo = '';
+                        this.quickFilter = page === 'movies' ? 'movies' : (page === 'series' ? 'series' : 'all');
+                        this.sortBy = 'default';
+                        this.currentPage = 'explore';
+                        this.syncRouteToUrl('explore', null);
+                    } else {
+                        this.currentPage = page;
+                        this.syncRouteToUrl(page, null);
+                    }
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 },
 
@@ -1518,7 +1538,7 @@
                 },
 
                 normalizeSearchText(value) {
-                    return String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i').trim();
+                    return String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i').replace(/\bturkey\b/g, 'turkiye').trim();
                 },
 
                 openRelatedDiscoveries(kind, value) {
