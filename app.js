@@ -636,7 +636,13 @@
                     const byId = new Map(sourceCatalog.map(item => [String(item.id), item]));
                     const selected = configured.filter(entry => entry && entry.active !== false)
                         .map(entry => byId.get(String(entry.id))).filter(Boolean);
-                    if (!selected.length) return sourceCatalog;\n                    if (!mobile) {\n                        const configuredCount = Number(this.homepageConfig?.settings?.desktopCount);\n                        const count = Math.max(5, Math.min(15, configuredCount || 10));\n                        return selected.slice(0, count);\n                    }\n                    return selected;
+                    if (!selected.length) return sourceCatalog;
+                    if (!mobile) {
+                        const configuredCount = Number(this.homepageConfig?.settings?.desktopCount);
+                        const count = Math.max(5, Math.min(15, configuredCount || 10));
+                        return selected.slice(0, count);
+                    }
+                    return selected;                    return selected;
                 },
 
                 get publishedCollections() {
