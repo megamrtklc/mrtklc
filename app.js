@@ -638,9 +638,9 @@
                 applyHomepageSectionOrder() {
                     const root = document.getElementById('home-page');
                     if (!root) return;
-                    const defaultOrder = ['hero', 'personalized', 'continue', 'watchlist', 'watched', 'favorites', 'new-arrivals', 'series-tracking', 'published-collections', 'catalog', 'genre-discovery'];
+                    const defaultOrder = ['hero', 'personalized', 'continue', 'watchlist', 'watched', 'favorites', 'new-arrivals', 'series-tracking', 'genre-discovery', 'franchises', 'published-collections', 'catalog'];
                     const configured = this.homepageConfig?.layout?.order;
-                    const order = Array.isArray(configured) ? configured : defaultOrder;
+                    const order = Array.isArray(configured) ? [...configured, ...defaultOrder.filter(key => !configured.includes(key))] : defaultOrder;
                     const contentIds = {
                         continue: 'home-continue-section',
                         watchlist: 'home-watchlist-section',
