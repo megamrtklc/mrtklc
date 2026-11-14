@@ -3931,5 +3931,34 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
     <!-- Script Application Logic -->
     
+
+    <!-- Görsel kopyalamayı zorlaştırır; görsel yükleme ve etkileşim akışına müdahale etmez. -->
+    <style id="cv-image-copy-guard">
+        img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
+    </style>
+    <script id="cv-image-copy-guard-script">
+        (() => {
+            const isImageSurface = (target) => {
+                let element = target instanceof Element ? target : target?.parentElement;
+                for (let depth = 0; element && depth < 6; depth++, element = element.parentElement) {
+                    if (element.tagName === 'IMG' || element.tagName === 'PICTURE') return true;
+                    if (getComputedStyle(element).backgroundImage !== 'none') return true;
+                }
+                return false;
+            };
+
+            document.addEventListener('contextmenu', (event) => {
+                if (isImageSurface(event.target)) event.preventDefault();
+            }, true);
+
+            document.addEventListener('dragstart', (event) => {
+                const target = event.target;
+                if (target instanceof Element && (target.tagName === 'IMG' || target.closest('picture'))) {
+                    event.preventDefault();
+                }
+            }, true);
+        })();
+    </script>
+
 </body>
 </html>
