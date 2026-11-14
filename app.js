@@ -1055,16 +1055,6 @@
                         ...this.librarySeriesEntries.filter(entry => entry.percent < 100)
                     ].sort((a, b) => b.savedAt - a.savedAt);
                 },
-                get heroRailItems() {
-                    const continuing = this.continueWatchingItems;
-                    if (continuing.length) return continuing;
-                    const history = this.libraryHistoryItems;
-                    if (history.length) return history;
-                    return (Array.isArray(this.catalog) ? this.catalog : []).slice(0, 8).map(item => ({
-                        kind: item?.type === 'tv' ? 'series' : 'movie', item, percent: 0,
-                        savedAt: 0, season: 1, episode: 1, label: 'Arşive eklenen yapım'
-                    })).filter(entry => entry.item);
-                },
 
                 get libraryHistoryItems() {
                     return [...this.libraryMovieEntries, ...this.librarySeriesEntries]
