@@ -228,3 +228,10 @@
  .score{font-size:12px}
  .row-action{padding:8px 11px;font-size:10px}
 }
+/* Header & footer logo upload controls */
+.hf-logo-upload{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 18px;border:1px solid #344254;border-radius:13px;background:linear-gradient(135deg,rgba(30,42,57,.72),rgba(18,25,36,.72))}
+.hf-logo-copy{display:grid;gap:6px;min-width:0}.hf-logo-copy>b{color:#edf3f8;font-size:12px}.hf-logo-copy>span{color:#91a0b0;font-size:10px}
+.hf-logo-preview{display:flex;align-items:center;justify-content:center;width:min(100%,300px);height:76px;margin-top:5px;padding:10px 14px;border:1px dashed #526276;border-radius:9px;background:rgba(5,9,15,.42);overflow:hidden;color:#8190a1;font-size:10px}
+.hf-logo-preview img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.hf-logo-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.hf-upload-button{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.hf-remove-logo{padding:10px 13px;border:1px solid #75404a;border-radius:8px;background:rgba(128,43,57,.14);color:#f0a0a8;font-size:10px;font-weight:700}.hf-remove-logo:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:640px){.hf-logo-upload{align-items:stretch;flex-direction:column}.hf-logo-actions{width:100%}.hf-logo-actions>*{flex:1;text-align:center}.hf-logo-preview{width:100%}}
