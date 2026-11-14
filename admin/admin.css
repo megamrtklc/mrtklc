@@ -235,3 +235,6 @@
 .hf-logo-preview img{display:block;max-width:100%;max-height:100%;object-fit:contain}
 .hf-logo-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.hf-upload-button{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.hf-remove-logo{padding:10px 13px;border:1px solid #75404a;border-radius:8px;background:rgba(128,43,57,.14);color:#f0a0a8;font-size:10px;font-weight:700}.hf-remove-logo:disabled{opacity:.35;cursor:not-allowed}
 @media(max-width:640px){.hf-logo-upload{align-items:stretch;flex-direction:column}.hf-logo-actions{width:100%}.hf-logo-actions>*{flex:1;text-align:center}.hf-logo-preview{width:100%}}
+
+/* Logo metin alanları için kısa açıklama */
+.hf-logo-note{margin:-4px 0 2px;padding:10px 12px;border:1px solid rgba(148,163,184,.2);border-radius:9px;background:rgba(148,163,184,.07);color:#aab7c6;font-size:10px;line-height:1.6}
