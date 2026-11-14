@@ -818,7 +818,7 @@
     renderHomepageLayout();
     toast('Varsayılan sıra taslağa alındı. Kalıcı olması için Düzeni yayınla.');
   });
-  $('#hero-desktop-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=Array.from(document.querySelectorAll('#hero-desktop-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().desktopMode=event.target.value;renderHomepage();});
+  $('#hero-desktop-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=event.target.value==='auto'&&$('#hero-desktop-category').value==='random'?[]:Array.from(document.querySelectorAll('#hero-desktop-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().desktopMode=event.target.value;renderHomepage();});
   $('#hero-desktop-category').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=[];homepageConfig().desktopCategory=event.target.value;renderHomepage();});
   $('#hero-desktop-count').addEventListener('change',event=>{
     const next=Math.max(5,Math.min(15,Number(event.target.value)||10));
@@ -828,7 +828,7 @@
     homepageConfig().settings.desktopCount=next;
     renderHomepage();
   });
-  $('#hero-mobile-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=Array.from(document.querySelectorAll('#hero-mobile-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().mobileMode=event.target.value;renderHomepage();});
+  $('#hero-mobile-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=event.target.value==='auto'&&$('#hero-mobile-category').value==='random'?[]:Array.from(document.querySelectorAll('#hero-mobile-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().mobileMode=event.target.value;renderHomepage();});
   $('#hero-mobile-category').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=[];homepageConfig().mobileCategory=event.target.value;renderHomepage();});
   $('#hero-mobile-count').addEventListener('change',event=>{homepageConfig().settings.mobileCount=Number(event.target.value)||6;renderHomepage();});
   $('#hero-description-length').addEventListener('change',event=>{homepageConfig().settings.descriptionLength=Number(event.target.value)||220;renderHomepage();});
