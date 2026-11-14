@@ -238,3 +238,9 @@
 
 /* Logo metin alanları için kısa açıklama */
 .hf-logo-note{margin:-4px 0 2px;padding:10px 12px;border:1px solid rgba(148,163,184,.2);border-radius:9px;background:rgba(148,163,184,.07);color:#aab7c6;font-size:10px;line-height:1.6}
+
+/* Fragmanı olmayanlar yönetim alanı */
+.missing-trailer-toolbar{grid-template-columns:minmax(240px,1fr) auto}
+.trailer-missing-status{display:inline-flex;padding:5px 8px;border-radius:6px;background:rgba(226,164,91,.12);color:#e5b777;font-size:9px;white-space:nowrap}
+#missing-trailer-rows .row-action{min-width:74px}
+@media(max-width:640px){.missing-trailer-toolbar{grid-template-columns:1fr auto}}
