@@ -18759,7 +18759,7 @@
   "homepageConfig": {
     "version": 4,
     "settings": {
-      "desktopCount": 8,
+      "desktopCount": 10,
       "mobileCount": 5,
       "interval": 6,
       "autoplay": true,
@@ -18768,49 +18768,61 @@
     },
     "heroSlides": [
       {
-        "id": "archive-45",
+        "id": "archive-43",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-117",
+        "id": "cv-1794683744189",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-55",
+        "id": "perde-mw5zwmbz",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-26",
+        "id": "archive-110",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-125",
+        "id": "cv-1794683639717",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-118",
+        "id": "cv-1794683623677",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-82",
+        "id": "archive-60",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-86",
+        "id": "archive-114",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-15",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-87",
         "active": true,
         "headline": "",
         "description": ""
@@ -18822,49 +18834,61 @@
     "mobileCategory": "random",
     "desktopHeroSlides": [
       {
-        "id": "archive-45",
+        "id": "archive-43",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-117",
+        "id": "cv-1794683744189",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-55",
+        "id": "perde-mw5zwmbz",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-26",
+        "id": "archive-110",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-125",
+        "id": "cv-1794683639717",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-118",
+        "id": "cv-1794683623677",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-82",
+        "id": "archive-60",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-86",
+        "id": "archive-114",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-15",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-87",
         "active": true,
         "headline": "",
         "description": ""
@@ -18872,31 +18896,31 @@
     ],
     "mobileHeroSlides": [
       {
-        "id": "archive-56",
+        "id": "cv-1794683662829",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "perde-mw5zzv1n",
+        "id": "archive-38",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-95",
+        "id": "archive-37",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-90",
+        "id": "archive-104",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-84",
+        "id": "archive-58",
         "active": true,
         "headline": "",
         "description": ""
