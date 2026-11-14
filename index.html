@@ -1337,6 +1337,110 @@
           #home-personalized-section .home-personalized-like,
           #home-personalized-section .home-personalized-dislike{transition:none!important}
         }
+
+        /* Personalized feature poster: independent, crisp artwork on the right. */
+        #home-personalized-section .home-personalized-feature-poster{
+          width:112px;
+          height:168px;
+          overflow:hidden;
+          border-radius:12px;
+          border:1px solid rgba(255,255,255,.42);
+          box-shadow:0 14px 32px rgba(0,0,0,.42),0 0 22px rgba(255,255,255,.10);
+          transform:translateZ(0);
+          transition:transform .35s ease,box-shadow .35s ease;
+        }
+        #home-personalized-section .home-personalized-feature:hover .home-personalized-feature-poster{
+          transform:translateY(-3px) scale(1.025);
+          box-shadow:0 18px 38px rgba(0,0,0,.5),0 0 26px rgba(255,255,255,.14);
+        }
+        #home-personalized-section .home-personalized-feature-poster img{display:block}
+        #home-personalized-section .home-personalized-feature > div.relative.z-\\[1\\]{
+          width:calc(100% - 126px);
+          max-width:calc(100% - 126px);
+          min-width:0;
+        }
+        @media(max-width:900px){
+          #home-personalized-section .home-personalized-feature-poster{
+            width:100px;height:150px;right:18px;bottom:15px;
+          }
+          #home-personalized-section .home-personalized-feature > div.relative.z-\\[1\\]{
+            width:calc(100% - 122px);
+            max-width:calc(100% - 122px);
+          }
+        }
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-feature-poster{
+            width:86px;height:129px;right:13px;bottom:13px;border-radius:9px;
+          }
+          #home-personalized-section .home-personalized-feature > div.relative.z-\\[1\\]{
+            width:calc(100% - 100px);
+            max-width:calc(100% - 100px);
+            padding-right:0!important;
+            padding-left:14px!important;
+          }
+          #home-personalized-section .home-personalized-feature h3{
+            font-size:clamp(15px,4.4vw,18px)!important;
+            overflow-wrap:anywhere;
+          }
+          #home-personalized-section .home-personalized-feature-labels{right:104px!important}
+        }
+        /* Minimal reaction icons shared by the featured and compact cards. */
+        #home-personalized-section .home-personalized-like,
+        #home-personalized-section .home-personalized-dislike{
+          width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;
+          padding:0!important;border:0!important;border-radius:9px!important;
+          background:transparent!important;backdrop-filter:none!important;
+          box-shadow:none!important;font-size:15px!important;
+          transition:color .18s ease,background-color .18s ease,transform .18s ease!important;
+        }
+        #home-personalized-section .home-personalized-like{color:rgba(209,220,214,.78)!important}
+        #home-personalized-section .home-personalized-dislike{color:rgba(222,205,208,.76)!important}
+        #home-personalized-section .home-personalized-like:hover,
+        #home-personalized-section .home-personalized-like.is-liked{
+          color:#a8d2b4!important;background:rgba(112,157,126,.15)!important;
+          transform:translateY(-1px);
+        }
+        #home-personalized-section .home-personalized-dislike:hover{
+          color:#d8a0a8!important;background:rgba(177,111,122,.14)!important;
+          transform:translateY(-1px);
+        }
+        #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
+        #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{
+          background:rgba(8,11,18,.24)!important;
+          color:rgba(255,255,255,.82)!important;
+          border:0!important;backdrop-filter:none!important;
+        }
+        #home-personalized-section .home-personalized-feature-actions .home-personalized-like:hover,
+        #home-personalized-section .home-personalized-feature-actions .home-personalized-like.is-liked{
+          color:#b8dfc1!important;background:rgba(8,11,18,.38)!important;
+        }
+        #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike:hover{
+          color:#e2b0b6!important;background:rgba(8,11,18,.38)!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-like,
+        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-like{
+          color:#789b81!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-dislike,
+        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-dislike{
+          color:#b7868d!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-like:hover,
+        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-like.is-liked,
+        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-like:hover,
+        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-like.is-liked{
+          color:#4f805d!important;background:rgba(84,130,99,.12)!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-dislike:hover,
+        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-dislike:hover{
+          color:#9b5d68!important;background:rgba(169,101,112,.11)!important;
+        }
+        @media(max-width:420px){
+          #home-personalized-section .home-personalized-feature-poster{width:78px;height:117px;right:10px;bottom:12px}
+          #home-personalized-section .home-personalized-feature > div.relative.z-\\[1\\]{
+            width:calc(100% - 91px);max-width:calc(100% - 91px)
+          }
+        }
     </style>
 
 </head>
@@ -1594,6 +1698,10 @@
                             <div role="button" tabindex="0" @click="openWatchPage(personalizedRecommendations[0])" @keydown.enter="openWatchPage(personalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(personalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer">
                                 <img @error="handleImageError($event)" :src="personalizedRecommendations[0].backdrop || personalizedRecommendations[0].poster || personalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(personalizedRecommendations[0].backdrop || personalizedRecommendations[0].poster || personalizedRecommendations[0].image, [342, 500, 780])" sizes="(max-width: 900px) 100vw, 40vw" :alt="personalizedRecommendations[0].title" loading="lazy" fetchpriority="low" decoding="async" class="home-personalized-feature-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                                 <div class="home-personalized-feature-shade absolute inset-0"></div>
+                                <div class="home-personalized-feature-poster absolute z-[1] right-4 bottom-4 sm:right-5 sm:bottom-5 pointer-events-none">
+                                    <img @error="handleImageError($event)" :src="personalizedRecommendations[0].poster || personalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(personalizedRecommendations[0].poster || personalizedRecommendations[0].image, [185, 342, 500])" sizes="(max-width: 639px) 88px, 112px" :alt="personalizedRecommendations[0].title + ' afişi'" loading="lazy" decoding="async" class="w-full h-full object-cover rounded-xl">
+                                </div>
+
                                 <div class="home-personalized-feature-labels absolute left-4 top-4 z-[2] flex items-center gap-2">
                                     <span class="rounded-md bg-rose-600 text-white px-2.5 py-1 text-[9px] font-black tracking-widest uppercase">SANA ÖZEL SEÇİM</span>
                                     <span class="rounded-md bg-black/55 text-white/90 px-2.5 py-1 text-[9px] font-bold backdrop-blur-sm" x-text="personalizedRecommendations[0].type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
