@@ -79,8 +79,8 @@
                 schedulePersonSearch(value) {
                     if (this.personSearchTimer) clearTimeout(this.personSearchTimer);
                     const query = String(value || '').trim();
-                    const normalizePersonSearchText = value => String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');
-                    const queryTokens = normalizePersonSearchText(query).split(/\\s+/).filter(Boolean);
+                    const normalizePersonSearchText = value => String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                    const queryTokens = normalizePersonSearchText(query).split(/\s+/).filter(Boolean);
                     const requestId = ++this.personSearchRequestId;
                     this.personSearchResults = [];
                     if (query.length < 2) {
