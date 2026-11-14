@@ -80,6 +80,7 @@
                     if (this.personSearchTimer) clearTimeout(this.personSearchTimer);
                     const query = String(value || '').trim();
                     const requestId = ++this.personSearchRequestId;
+                    this.personSearchResults = [];
                     if (query.length < 2) {
                         this.personSearchResults = [];
                         this.personSearchLoading = false;
