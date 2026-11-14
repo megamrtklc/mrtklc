@@ -18465,6 +18465,94 @@
       "tmdbImdbId": "tt28014327",
       "tmdbRating": "7.8",
       "tmdbVoteCount": 1076
+    },
+    {
+      "id": "cv-1794683794445",
+      "title": "Beni Asla Bulamayacaksın",
+      "type": "movie",
+      "year": "2024",
+      "rating": "6.0",
+      "genre": "Korku",
+      "category": "Korku / Gerilim",
+      "duration": "100 dk",
+      "country": "Australia",
+      "director": "Indianna Bell, Josiah Allen",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1117321,
+      "imdbId": "tt22023218",
+      "image": "https://image.tmdb.org/t/p/w500/dfaN69DMjxGmhuoYkWFmsAYwBT0.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/fXpkyFsWFaYW1KN2odqalxguTj2.jpg",
+      "trailerUrl": "",
+      "desc": "Garip ve yalnız bir sakin olan Patrick (Brendan Rock), bir karavan parkının arka tarafındaki karavanda yaşamaktadır. Şiddetli bir fırtına patlak verdikten sonra, gizemli bir genç kadın (Jordan Cowan) hava koşullarından korunmak için kapısına dayanır. Gece uzadıkça ve kadın Patrick hakkında daha fazla şey keşfettikçe, oradan ayrılmakta daha da zorlanır. Kısa süre sonra kadın Patrick'in niyetini sorgulamaya başlarken, Patrick de kendi gerçeklik kavramını sorgulamaya başlar.",
+      "cast": [
+        "Brendan Rock",
+        "Jordan Cowan",
+        "Elena Carapetis",
+        "Angela Korng",
+        "Finn Watson",
+        "Luca Trimboli"
+      ],
+      "tmdbTitle": "Beni Asla Bulamayacaksın",
+      "tmdbOriginalTitle": "You'll Never Find Me",
+      "tmdbReleaseDate": "2024-03-14",
+      "tmdbGenres": "Korku / Gerilim",
+      "tmdbRuntime": "100 dk",
+      "tmdbCountries": "Australia",
+      "tmdbDirector": "Indianna Bell, Josiah Allen",
+      "tmdbCast": [
+        {
+          "id": 1172833,
+          "name": "Brendan Rock",
+          "character": "Patrick",
+          "profile": "https://image.tmdb.org/t/p/w185/11zTQERJqs45QkwLwPyDyuz16jx.jpg",
+          "order": 0
+        },
+        {
+          "id": 1961706,
+          "name": "Jordan Cowan",
+          "character": "The Visitor",
+          "profile": "https://image.tmdb.org/t/p/w185/snn78uWcOGn1v58gKbzkXSbijjj.jpg",
+          "order": 1
+        },
+        {
+          "id": 79696,
+          "name": "Elena Carapetis",
+          "character": "Woman",
+          "profile": "https://image.tmdb.org/t/p/w185/sIbZfOYmNpVNohAgRNEksbSzxVB.jpg",
+          "order": 2
+        },
+        {
+          "id": 4202413,
+          "name": "Angela Korng",
+          "character": "Dead Woman",
+          "profile": "",
+          "order": 3
+        },
+        {
+          "id": 4202414,
+          "name": "Finn Watson",
+          "character": "Caravan Park Kid #1",
+          "profile": "",
+          "order": 4
+        },
+        {
+          "id": 4202415,
+          "name": "Luca Trimboli",
+          "character": "Caravan Park Kid #2",
+          "profile": "",
+          "order": 5
+        }
+      ],
+      "tmdbOverview": "Garip ve yalnız bir sakin olan Patrick (Brendan Rock), bir karavan parkının arka tarafındaki karavanda yaşamaktadır. Şiddetli bir fırtına patlak verdikten sonra, gizemli bir genç kadın (Jordan Cowan) hava koşullarından korunmak için kapısına dayanır. Gece uzadıkça ve kadın Patrick hakkında daha fazla şey keşfettikçe, oradan ayrılmakta daha da zorlanır. Kısa süre sonra kadın Patrick'in niyetini sorgulamaya başlarken, Patrick de kendi gerçeklik kavramını sorgulamaya başlar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/dfaN69DMjxGmhuoYkWFmsAYwBT0.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/fXpkyFsWFaYW1KN2odqalxguTj2.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt22023218",
+      "tmdbRating": "6.0",
+      "tmdbVoteCount": 242
     }
   ],
   "collections": [],
