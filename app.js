@@ -1826,7 +1826,7 @@
 
                 getGenreDisplayName(value) {
                     const name = this.normalizeGenreName(value);
-                    const labels = { aksiyon:'Aksiyon', macera:'Macera', dram:'Dram', komedi:'Komedi', suc:'Suç', gerilim:'Gerilim', korku:'Korku', 'bilim kurgu':'Bilim-Kurgu', romantik:'Romantik', animasyon:'Animasyon', aile:'Aile', gizem:'Gizem', tarih:'Tarih', belgesel:'Belgesel', spor:'Spor', biyografi:'Biyografi', fantastik:'Fantastik', fantazi:'Fantazi', savas:'Savaş', politik:'Politik', muzik:'Müzik', 'vahsi bati':'Vahşi Batı', western:'Vahşi Batı', polisiye:'Polisiye' };
+                    const labels = { aksiyon:'Aksiyon', macera:'Macera', dram:'Dram', komedi:'Komedi', diger:'Diğer', suc:'Suç', gerilim:'Gerilim', korku:'Korku', 'bilim kurgu':'Bilim-Kurgu', romantik:'Romantik', animasyon:'Animasyon', aile:'Aile', gizem:'Gizem', tarih:'Tarih', belgesel:'Belgesel', spor:'Spor', biyografi:'Biyografi', fantastik:'Fantastik', fantazi:'Fantazi', savas:'Savaş', politik:'Politik', muzik:'Müzik', 'vahsi bati':'Vahşi Batı', western:'Vahşi Batı', polisiye:'Polisiye' };
                     return labels[name] || name.replace(/(^|\s)\S/g, value => value.toLocaleUpperCase('tr-TR'));
                 },
 
