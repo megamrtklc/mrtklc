@@ -2245,22 +2245,38 @@
                             .flatMap(value => value.split('/'))
                             .map(value => this.normalizeSearchText(value).trim())
                             .filter(Boolean);
-                        const familyGenreAllowlist = ['aile', 'animasyon', 'cocuk', 'cocuk filmi', 'family'];
-                        const familyGenreBlocklist = ['suc', 'korku', 'gerilim', 'polisiye', 'erotik', 'yetiskin', 'savas'];
+                        const hasMoodGenre = (...genres) => moodGenreTokens.some(genre => genres.includes(genre));
+                        const hasBlockedMoodGenre = (...genres) => hasMoodGenre(...genres);
                         const moodRules = {
-                            feelgood: ['komedi','eğlence','aile','animasyon','romantik','macera','müzik','müzikal','feel good','feelgood'],
-                            thriller: ['gerilim','gizem','suç','korku','polisiye','aksiyon','dedektif','psikolojik gerilim','suspense'],
-                            comedy: ['komedi','eğlence','mizah','stand up','sitcom','absürt'],
-                            emotional: ['dram','romantik','aile','biyografi','tarih','melodram','duygusal'],
-                            mind: ['bilim kurgu','gizem','gerilim','fantastik','psikolojik','distopya','zihin','zeka','ters köşe']
+                            feelgood: {
+                                include: ['komedi', 'aile', 'animasyon', 'romantik', 'muzik'],
+                                exclude: ['suc', 'korku', 'gerilim', 'polisiye', 'savas & politik']
+                            },
+                            emotional: {
+                                include: ['dram', 'drama', 'romantik', 'tarih'],
+                                exclude: ['suc', 'korku', 'gerilim', 'aksiyon', 'aksiyon & macera', 'savas & politik']
+                            },
+                            mind: {
+                                include: ['bilim-kurgu', 'bilim kurgu', 'bilim kurgu & fantazi', 'gizem', 'fantastik'],
+                                exclude: ['korku', 'suc', 'polisiye', 'savas & politik']
+                            },
+                            family: {
+                                include: ['aile', 'animasyon'],
+                                exclude: ['suc', 'korku', 'gerilim', 'polisiye', 'erotik', 'yetiskin', 'savas & politik']
+                            }
                         };
                         const matchesMood = this.discoveryMood === 'all'
                             || (this.discoveryMood === 'top'
                                 ? (Number.parseFloat(item.rating) || 0) >= 7.5
-                                : this.discoveryMood === 'family'
-                                    ? moodGenreTokens.some(genre => familyGenreAllowlist.includes(genre))
-                                        && !moodGenreTokens.some(genre => familyGenreBlocklist.includes(genre))
-                                    : (moodRules[this.discoveryMood] || []).some(term => moodText.includes(this.normalizeSearchText(term))));
+                                : (() => {
+                                    const rule = moodRules[this.discoveryMood];
+                                    if (!rule) return false;
+                                    const hasIncludedGenre = this.discoveryMood === 'feelgood'
+                                        ? hasMoodGenre('komedi', 'aile', 'animasyon', 'romantik', 'muzik')
+                                            || (hasMoodGenre('macera') && hasMoodGenre('fantastik'))
+                                        : rule.include.some(genre => hasMoodGenre(genre));
+                                    return hasIncludedGenre && !hasBlockedMoodGenre(...rule.exclude);
+                                })());
                         const genres = String(item.category || item.genre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value));
                         const selectedGenres = String(this.discoveryGenre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value)).filter(Boolean);
                         const matchesGenre = this.discoveryGenre === 'all' || selectedGenres.some(genre => genres.includes(genre) || this.normalizeSearchText(item.genre) === genre);
