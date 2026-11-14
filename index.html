@@ -1809,7 +1809,7 @@
                                 <span class="cineverse-search-result-meta">
                                     <span class="cineverse-search-result-type" x-text="item.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                     <span x-show="item.year" x-text="item.year"></span>
-                                    <span x-show="item.rating"><i class="fa-solid fa-star mr-1 text-amber-400"></i><span x-text="Number(item.rating).toFixed(1)"></span></span>
+                                    <span x-show="item.rating"><i class="fa-solid fa-star mr-1 text-amber-400"></i><span x-text="Math.round(Number(item.rating))"></span></span>
                                     <span x-show="item.category || item.genre" x-text="item.category || item.genre"></span>
                                 </span>
                                 <span class="cineverse-search-result-desc" x-text="item.desc || item.overview || 'Bu yapım için kısa açıklama bulunmuyor.'"></span>
@@ -1864,7 +1864,7 @@
                                     <p class="pl-1 text-sm font-black uppercase tracking-[0.62em] text-amber-400" x-text="currentHero.type === 'tv' ? 'DİZİ' : 'SİNEMA'"></p>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-200">
-                                    <span class="inline-flex items-center gap-2"><i class="fa-solid fa-star text-amber-400"></i><strong class="text-white" x-text="currentHero.rating || '—'"></strong><span class="text-gray-400">IMDb</span></span>
+                                    <span class="inline-flex items-center gap-2"><i class="fa-solid fa-star text-amber-400"></i><strong class="text-white" x-text="(currentHero.rating ? Math.round(Number(currentHero.rating)) : '—')"></strong><span class="text-gray-400">IMDb</span></span>
                                     <span class="text-white/35">|</span><span x-text="currentHero.year"></span>
                                     <span class="text-white/35">|</span><span x-text="currentHero.genre"></span>
                                 </div>
@@ -1926,7 +1926,7 @@
                         <div class="space-y-1.5">
                             <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.2rem,4.8vw,2rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
                             <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
-                                <span class="inline-flex items-center gap-1.5 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-md"><i class="fa-solid fa-star text-[10px]"></i><span class="text-sm" x-text="currentHero.rating || '—'"></span></span>
+                                <span class="inline-flex items-center gap-1.5 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-md"><i class="fa-solid fa-star text-[10px]"></i><span class="text-sm" x-text="(currentHero.rating ? Math.round(Number(currentHero.rating)) : '—')"></span></span>
                                 <span class="text-gray-600">•</span><span class="text-gray-300" x-text="currentHero.year"></span>
                                 <span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200" x-text="currentHero.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                 <span class="text-gray-400" x-text="currentHero.genre"></span>
@@ -1967,7 +1967,7 @@
                                 </div>
                                 <div class="relative z-[1] flex h-full min-h-[120px] sm:min-h-[132px] lg:min-h-[150px] flex-col justify-end p-4 sm:p-5 lg:p-6">
                                     <h3 class="max-w-xl text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-white drop-shadow-lg" x-text="personalizedRecommendations[0].title"></h3>
-                                    <div class="flex flex-wrap items-center gap-3 mt-3 text-xs font-semibold text-white/85"><span x-text="personalizedRecommendations[0].year || '—'"></span><span class="text-white/40">•</span><span class="text-amber-300"><i class="fa-solid fa-star mr-1"></i><span x-text="personalizedRecommendations[0].rating || '—'"></span></span><span class="text-white/40">•</span><span class="line-clamp-1" x-text="personalizedRecommendations[0].genre || personalizedRecommendations[0].category || 'Önerilen yapım'"></span></div>
+                                    <div class="flex flex-wrap items-center gap-3 mt-3 text-xs font-semibold text-white/85"><span x-text="personalizedRecommendations[0].year || '—'"></span><span class="text-white/40">•</span><span class="text-amber-300"><i class="fa-solid fa-star mr-1"></i><span x-text="(personalizedRecommendations[0].rating ? Math.round(Number(personalizedRecommendations[0].rating)) : '—')"></span></span><span class="text-white/40">•</span><span class="line-clamp-1" x-text="personalizedRecommendations[0].genre || personalizedRecommendations[0].category || 'Önerilen yapım'"></span></div>
                                     <p class="max-w-lg mt-3 text-xs sm:text-sm leading-relaxed text-white/80 line-clamp-2" x-text="personalizedRecommendations[0].tmdbOverview || personalizedRecommendations[0].desc || personalizedRecommendations[0].recommendationReason"></p>
                                     <div class="flex items-center gap-3 mt-5"><span class="inline-flex items-center gap-2 rounded-full bg-white text-gray-950 px-5 py-2.5 text-xs font-black group-hover:bg-rose-500 group-hover:text-white transition-colors"><i class="fa-solid fa-play"></i> Hemen keşfet</span><span class="text-[10px] font-bold text-white/75" x-text="personalizedRecommendations[0].recommendationReason || 'İzleme profiline uygun'"></span></div>
                                 </div>
@@ -1988,7 +1988,7 @@
                                 <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :data-recommendation-id="item.id" :class="getCardClass()" class="home-personalized-alternative group relative isolate overflow-hidden min-w-0 rounded-xl sm:rounded-2xl border text-left transition-all duration-300">
                                     <img class="home-personalized-card-backdrop absolute inset-0 w-full h-full object-cover" @error="handleImageError($event)" :src="item.backdrop || item.poster || item.image" :alt="''" aria-hidden="true" loading="lazy" decoding="async">
                                     <div class="home-personalized-card-shade absolute inset-0"></div>
-                                    <div class="home-personalized-poster relative z-[1] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-900 shadow-xl"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [154, 185, 342])" sizes="96px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/85 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="item.rating || '—'"></span></span></div>
+                                    <div class="home-personalized-poster relative z-[1] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-900 shadow-xl"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [154, 185, 342])" sizes="96px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/85 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="(item.rating ? Math.round(Number(item.rating)) : '—')"></span></span></div>
                                     <div class="home-personalized-copy relative z-[1] min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-300 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="item.title"></h3><p class="mt-1 text-[10px] text-white/75 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="home-personalized-plot" x-text="item.tmdbOverview || item.desc || item.recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p></div>
                                     <div class="home-personalized-actions relative z-[1] flex items-center justify-end gap-1.5"><button type="button" @click.stop="likeRecommendation(item)" :aria-label="'Beğendim: ' + item.title" :aria-pressed="isRecommendationLiked(item).toString()" :class="isRecommendationLiked(item) ? 'is-liked' : ''" class="home-personalized-like" title="Beğendim"><i :class="isRecommendationLiked(item) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button>
                                         <button type="button" @click.stop="dismissRecommendation(item)" :aria-label="'İlgimi çekmedi: ' + item.title" class="home-personalized-dislike" title="İlgimi çekmedi"><i class="fa-regular fa-thumbs-down"></i></button>
@@ -2099,13 +2099,13 @@
                                 <div class="home-new-arrival-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="index === 0 ? (item.backdrop || item.poster || item.image || item.tmdbPoster) : (item.poster || item.image || item.tmdbPoster || item.backdrop)" :srcset="getTmdbImageSrcSet(index === 0 ? (item.backdrop || item.poster || item.image || item.tmdbPoster) : (item.poster || item.image || item.tmdbPoster || item.backdrop), index === 0 ? [500, 780, 1280] : [154, 185, 342, 500])" :sizes="index === 0 ? '(max-width:639px) min(calc(82vw - 39px), 310px), (max-width:767px) calc(42vw - 40px), (max-width:1023px) calc(31vw - 30px), (max-width:1275px) 29vw, 370px' : '(max-width:639px) calc(44vw - 21px), (max-width:767px) calc(29vw - 28px), (max-width:1023px) calc(23vw - 22px), (max-width:1087px) 174px, (max-width:1312px) 16vw, 210px'" class="w-full h-full object-cover transition-transform duration-700">
                                     <div class="home-new-arrival-shade absolute inset-0"></div>
-                                    <span x-show="index === 0" class="absolute top-3 left-3 z-[4] inline-flex items-center gap-1.5 rounded-md border border-amber-300/40 bg-black/80 px-2.5 py-1.5 text-[11px] font-black text-amber-300 shadow-lg"><i class="fa-solid fa-star"></i><span x-text="item.rating || item.tmdbRating || '—'"></span></span>
+                                    <span x-show="index === 0" class="absolute top-3 left-3 z-[4] inline-flex items-center gap-1.5 rounded-md border border-amber-300/40 bg-black/80 px-2.5 py-1.5 text-[11px] font-black text-amber-300 shadow-lg"><i class="fa-solid fa-star"></i><span x-text="((item.rating || item.tmdbRating) ? Math.round(Number(item.rating || item.tmdbRating)) : '—')"></span></span>
                                     <span x-show="index !== 0" class="absolute top-3 left-3 rounded-md bg-rose-600 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 shadow-lg">YENİ EKLENDİ</span>
                                     <div class="absolute top-3 right-3 flex max-w-[72%] items-center justify-end gap-1.5">
                                         <span class="rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
                                         <span class="max-w-[150px] truncate rounded-md bg-black/75 text-white/90 text-[8px] font-bold tracking-wide px-2 py-1.5 backdrop-blur-md" x-text="item.genre || item.category || item.tmdbGenres || 'GENEL'"></span>
                                     </div>
-                                    <span x-show="index !== 0" class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || item.tmdbRating || '—'"></span></span>
+                                    <span x-show="index !== 0" class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span x-text="((item.rating || item.tmdbRating) ? Math.round(Number(item.rating || item.tmdbRating)) : '—')"></span></span>
                                 </div>
                                 <div class="home-new-arrival-copy p-3 space-y-2">
                                     <img x-show="index === 0" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster">
@@ -2211,7 +2211,7 @@
                                     <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                         <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.backdrop)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 17vw, 14.5vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                         <span class="absolute top-2 left-2 rounded bg-black/75 text-white text-[8px] font-black uppercase px-1.5 py-1" x-text="item.type === 'tv' || item.type === 'series' ? 'Dizi' : 'Film'"></span>
-                                        <span class="absolute bottom-2 right-2 rounded bg-black/80 text-amber-400 text-[9px] font-black px-1.5 py-1"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || '—'"></span></span>
+                                        <span class="absolute bottom-2 right-2 rounded bg-black/80 text-amber-400 text-[9px] font-black px-1.5 py-1"><i class="fa-solid fa-star mr-1"></i><span x-text="(item.rating ? Math.round(Number(item.rating)) : '—')"></span></span>
                                     </div>
                                     <div class="p-2.5 space-y-1">
                                         <h3 class="text-[11px] font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
@@ -2256,7 +2256,7 @@
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 639px) 148px, 178px" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     <div class="absolute top-2 right-2 bg-black/80 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-bold text-amber-400 flex items-center space-x-1">
                                         <i class="fa-solid fa-star text-[9px]"></i>
-                                        <span x-text="item.rating"></span>
+                                        <span x-text="item.rating ? Math.round(Number(item.rating)) : '—'"></span>
                                     </div>
                                     <button @click.stop="toggleWatchlist(item)" :aria-label="isInWatchlist(item) ? 'İzleme listesinden çıkar' : 'İzleme listeme ekle'" class="absolute top-2 left-2 w-7 h-7 rounded bg-black/70 backdrop-blur-md flex items-center justify-center text-gray-200 hover:text-rose-500 transition-colors">
                                         <i :class="isInWatchlist(item) ? 'fa-solid fa-bookmark text-rose-500' : 'fa-regular fa-bookmark text-xs'"></i>
@@ -2582,10 +2582,11 @@
                                     <span>Yapım Künyesi</span>
                                 </h3>
 
-                                <div :class="getCardClass()" class="px-2.5 py-1 rounded-lg border border-amber-400 text-amber-500 dark:text-amber-400 text-xs font-extrabold flex items-center space-x-1 shadow-sm">
-                                    <i class="fa-solid fa-star text-[10px]"></i>
-                                    <span x-text="selectedItem.rating"></span>
-                                    <span class="text-[10px] text-gray-400 font-normal">/10</span>
+                                <div :class="getCardClass()" class="px-2.5 py-1 rounded-lg border border-amber-400 text-amber-500 dark:text-amber-400 flex items-center gap-2 shadow-sm">
+                                    <i class="fa-solid fa-star text-sm"></i>
+                                    <span class="text-sm font-black" x-text="selectedItem.rating ? Math.round(Number(selectedItem.rating)) : '—'"></span>
+                                    <span class="text-sm font-bold text-gray-500 dark:text-gray-300">/10</span>
+                                    <span class="rounded bg-[#f5c518] px-1.5 py-0.5 text-sm font-black leading-none text-black">IMDb</span>
                                 </div>
                             </div>
 
@@ -2811,7 +2812,7 @@
                                         <span class="rounded-md border border-white/25 bg-black/85 backdrop-blur-md px-1.5 py-1 text-[9px] font-black uppercase tracking-wide text-white shadow-lg" x-text="work.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                         <span x-show="work.year" class="rounded-md border border-white/15 bg-black/75 backdrop-blur-md px-1.5 py-1 text-[9px] font-extrabold text-white shadow-lg" x-text="work.year"></span>
                                     </div>
-                                    <span x-show="work.rating > 0" class="absolute top-1.5 right-1.5 inline-flex items-center gap-1 rounded-md border border-amber-300/30 bg-black/90 backdrop-blur-md px-1.5 py-1 text-[9px] font-black text-amber-300 shadow-lg"><i class="fa-solid fa-star text-[8px]"></i><span x-text="work.rating.toFixed(1)"></span></span>
+                                    <span x-show="work.rating > 0" class="absolute top-1.5 right-1.5 inline-flex items-center gap-1 rounded-md border border-amber-300/30 bg-black/90 backdrop-blur-md px-1.5 py-1 text-[9px] font-black text-amber-300 shadow-lg"><i class="fa-solid fa-star text-[8px]"></i><span x-text="Math.round(Number(work.rating))"></span></span>
                                     <div class="absolute inset-x-0 bottom-0 p-2 sm:p-2.5 bg-gradient-to-t from-black via-black/90 to-transparent">
                                         <h3 class="text-[10px] sm:text-[11px] font-black leading-tight text-white line-clamp-2 drop-shadow-lg" x-text="work.title"></h3>
                                         <p x-show="work.character" class="mt-1 text-[9px] sm:text-[10px] font-semibold text-white/90 line-clamp-1 drop-shadow" x-text="(currentPage === 'director' ? 'Görevi: ' : 'Rolü: ') + work.character"></p>
@@ -3002,7 +3003,7 @@
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                 <img @error="handleImageError($event)" decoding="async" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 15vw, 14.5vw" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400">
-                                    <i class="fa-solid fa-star text-[8px]"></i><span x-text="item.rating"></span>
+                                    <i class="fa-solid fa-star text-[8px]"></i><span x-text="item.rating ? Math.round(Number(item.rating)) : '—'"></span>
                                 </div>
                                 <span class="absolute bottom-2 left-2 px-2 py-1 rounded bg-black/75 text-white text-[9px] font-bold" x-text="item.type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
                             </div>
@@ -3046,7 +3047,7 @@
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900 w-full">
                                 <img @error="handleImageError($event)" decoding="async" :src="item.poster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.backdrop)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 15vw, 14.5vw" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <span class="absolute top-2 left-2 px-2 py-1 rounded bg-rose-600 text-white text-[9px] font-black uppercase" x-text="item.type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
-                                <span class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400"><i class="fa-solid fa-star text-[8px]"></i> <span x-text="item.rating || '—'"></span></span>
+                                <span class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400"><i class="fa-solid fa-star text-[8px]"></i> <span x-text="(item.rating ? Math.round(Number(item.rating)) : '—')"></span></span>
                                 <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent px-3 pt-8 pb-3 text-white flex items-center gap-2">
                                     <i class="fa-solid fa-circle-play text-rose-400"></i>
                                     <span class="text-[10px] font-bold uppercase tracking-wide">Oynatma sayfasını aç</span>
