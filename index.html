@@ -2894,15 +2894,21 @@
                 </div>
 
                 
-                <section :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm overflow-hidden">
+                <section x-data="{ expanded: false }" :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm overflow-hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div>
                             <span class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500">KEŞİF ROTAN • <span x-text="currentProfile.name"></span></span>
                             <h3 class="text-lg sm:text-xl font-black text-gray-900 dark:text-white mt-1">İlgi alanlarına göre keşfet</h3>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzleme geçmişinde ve listende öne çıkan türlerden yeni yapımlar bul.</p>
                         </div>
-                        <span :class="getMutedTextClass()" class="text-[10px] font-semibold" x-show="personalizedDiscoveryGenres.length" x-text="personalizedDiscoveryGenres.length + ' ilgi alanı bulundu'"></span>
+                        <div class="flex items-center gap-3">
+                            <span :class="getMutedTextClass()" class="text-[10px] font-semibold" x-show="personalizedDiscoveryGenres.length" x-text="personalizedDiscoveryGenres.length + ' ilgi alanı bulundu'"></span>
+                            <button type="button" @click="expanded = !expanded" :aria-expanded="expanded.toString()" class="inline-flex shrink-0 items-center gap-2 rounded-lg border border-rose-500/25 bg-rose-500/5 px-3 py-2 text-[11px] font-bold text-rose-600 transition hover:bg-rose-500/10 dark:text-rose-400">
+                                <span x-text="expanded ? 'Gizle' : 'Göster'"></span><i class="fa-solid" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                            </button>
+                        </div>
                     </div>
+                    <div x-show="expanded" x-cloak x-transition.opacity class="space-y-4">
                     <div x-show="personalizedDiscoveryGenres.length" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                         <template x-for="(genre, index) in personalizedDiscoveryGenres" :key="'taste-' + genre.name">
                             <button type="button" @click="selectPersonalizedGenre(genre.label)" :class="getDiscoveryTileClass()" class="relative text-left rounded-xl border hover:border-rose-500 hover:bg-rose-500/5 p-3 sm:p-4 transition-all group overflow-hidden">
@@ -2919,9 +2925,10 @@
                     <div x-show="personalizedDiscoveryGenres.length" class="flex justify-end">
                         <button type="button" @click="resetDiscoveryFilters()" class="text-[10px] font-bold text-rose-500 hover:text-rose-600 transition-colors">Tüm keşif filtrelerini göster <i class="fa-solid fa-arrow-right ml-1"></i></button>
                     </div>
+                    </div>
                 </section>
 
-<section :class="getCardClass()" class="relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-sm">
+<section x-data="{ expanded: false }" :class="getCardClass()" class="relative overflow-hidden rounded-2xl border p-4 sm:p-5 shadow-sm">
                     <div class="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-rose-500/10 blur-3xl"></div>
                     <div class="relative mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                         <div class="min-w-0">
@@ -2933,6 +2940,12 @@
                             <span x-show="discoveryMood !== 'all'" x-cloak class="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-[10px] font-bold text-rose-700 dark:text-rose-400"><i class="fa-solid fa-check-circle"></i> Filtre aktif</span>
                             <button type="button" x-show="discoveryMood !== 'all'" x-cloak @click.stop="setDiscoveryMood('all')" class="text-[11px] font-semibold text-gray-500 transition hover:text-rose-500">Temizle</button>
                         </div>
+                            <button type="button" @click="expanded = !expanded" :aria-expanded="expanded.toString()" class="inline-flex shrink-0 items-center gap-2 rounded-lg border border-rose-500/25 bg-rose-500/5 px-3 py-2 text-[11px] font-bold text-rose-600 transition hover:bg-rose-500/10 dark:text-rose-400">
+                                <span x-text="expanded ? 'Gizle' : 'Göster'"></span><i class="fa-solid" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                            </button>
+                    </div>
+                    <div x-show="expanded" x-cloak x-transition.opacity class="space-y-4">
+>
                     </div>
                     <div class="relative grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3" role="group" aria-label="Ruh haline göre film ve dizi filtreleri">
                         <button type="button" @click.stop.prevent="setDiscoveryMood('all')" :aria-pressed="discoveryMood === 'all'" :class="discoveryMood === 'all' ? 'border-rose-500 bg-rose-500/10 text-rose-600 shadow-sm dark:text-rose-400' : 'border-gray-200 bg-white/70 text-gray-600 hover:border-rose-300 hover:bg-rose-50/70 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-300 dark:hover:border-rose-500/50'" class="group flex min-h-[76px] w-full min-w-0 flex-col items-center justify-center gap-2 rounded-xl border px-2 py-3 text-center transition-all duration-200">
@@ -2959,6 +2972,7 @@
                         <button type="button" @click.stop.prevent="setDiscoveryMood('top')" :aria-pressed="discoveryMood === 'top'" :class="discoveryMood === 'top' ? 'border-rose-500 bg-rose-500/10 text-rose-600 shadow-sm dark:text-rose-400' : 'border-gray-200 bg-white/70 text-gray-600 hover:border-rose-300 hover:bg-rose-50/70 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-300 dark:hover:border-rose-500/50'" class="group flex min-h-[76px] w-full min-w-0 flex-col items-center justify-center gap-2 rounded-xl border px-2 py-3 text-center transition-all duration-200">
                             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500/10 text-orange-500 transition group-hover:scale-105"><i class="fa-solid fa-star text-sm"></i></span><span class="text-xs font-bold leading-tight">Yüksek puanlı</span>
                         </button>
+                    </div>
                     </div>
                 </section>
 
