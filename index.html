@@ -1936,7 +1936,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
   if (!value) return '';
   let url;
   try { url = new URL(value); } catch (_) { return value; }
-  const host = url.hostname.toLowerCase().replace(/^www\\./, '');
+  const host = url.hostname.toLowerCase().replace(/^www\./, '');
   let provider = preferredProvider || 'auto';
   if (provider === 'auto') {
     if (host === 'youtu.be' || host.includes('youtube.com') || host === 'youtube-nocookie.com') provider = 'youtube';
@@ -1952,7 +1952,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     return id ? 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0' : value;
   }
   if (provider === 'vimeo') {
-    const id = pathParts.find(part => /^\\d+$/.test(part));
+    const id = pathParts.find(part => /^\d+$/.test(part));
     return id ? 'https://player.vimeo.com/video/' + id + '?autoplay=1' : value;
   }
   if (provider === 'dailymotion') {
