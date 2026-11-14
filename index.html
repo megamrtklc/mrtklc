@@ -1470,6 +1470,79 @@
       html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike:hover{
         background:#f5e9eb!important;border-color:#d8b5bb!important;color:#8d4f5b!important;
       }
+
+    <style id="cineverse-personalized-final-visual-tune">
+      /* Yalnızca İzleme Zevkine Göre: büyük kart metin grubunu masaüstünde hafifçe yükselt. */
+      @media (min-width:901px){
+        #home-personalized-section .home-personalized-feature > div.flex.h-full{
+          transform:translateY(-12px);
+        }
+      }
+
+      /* Küçük kartların kapak görseli: hover'da daha net, yazılar için dengeli kontrast. */
+      #home-personalized-section .home-personalized-card-backdrop{
+        opacity:.30!important;
+        filter:saturate(1.12) contrast(1.06)!important;
+        transform:scale(1.045)!important;
+        transition:opacity .28s ease,transform .45s ease,filter .28s ease!important;
+      }
+      #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-backdrop,
+      #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-backdrop{
+        opacity:.52!important;
+        transform:scale(1.10)!important;
+        filter:saturate(1.2) contrast(1.09)!important;
+      }
+
+      /* Açık temalarda varsayılan görünürlük artırılır; hover'da kapak daha da belirginleşir. */
+      html.theme-ivory #home-personalized-section .home-personalized-alternative,
+      html.theme-slate #home-personalized-section .home-personalized-alternative{
+        background:rgba(255,255,255,.84)!important;
+      }
+      html.theme-ivory #home-personalized-section .home-personalized-card-backdrop,
+      html.theme-slate #home-personalized-section .home-personalized-card-backdrop{
+        opacity:.27!important;
+        filter:saturate(1.18) contrast(1.08)!important;
+      }
+      html.theme-ivory #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-backdrop,
+      html.theme-ivory #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-backdrop,
+      html.theme-slate #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-backdrop,
+      html.theme-slate #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-backdrop{
+        opacity:.46!important;
+        transform:scale(1.10)!important;
+        filter:saturate(1.22) contrast(1.10)!important;
+      }
+      html.theme-ivory #home-personalized-section .home-personalized-card-shade{
+        background:linear-gradient(110deg,rgba(255,255,255,.79),rgba(255,255,255,.65))!important;
+      }
+      html.theme-slate #home-personalized-section .home-personalized-card-shade{
+        background:linear-gradient(110deg,rgba(241,245,249,.82),rgba(226,232,240,.68))!important;
+      }
+      html.theme-ivory #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-shade,
+      html.theme-ivory #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-shade{
+        background:linear-gradient(110deg,rgba(255,255,255,.66),rgba(255,255,255,.49))!important;
+      }
+      html.theme-slate #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-shade,
+      html.theme-slate #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-shade{
+        background:linear-gradient(110deg,rgba(241,245,249,.69),rgba(226,232,240,.52))!important;
+      }
+
+      /* Dokunmatik cihazlarda hover olmadığından görsel başlangıçta da belirgin kalır. */
+      @media(hover:none){
+        #home-personalized-section .home-personalized-card-backdrop{
+          opacity:.38!important;
+          transform:scale(1.06)!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-card-backdrop,
+        html.theme-slate #home-personalized-section .home-personalized-card-backdrop{
+          opacity:.34!important;
+        }
+      }
+      @media(prefers-reduced-motion:reduce){
+        #home-personalized-section .home-personalized-card-backdrop{
+          transition:none!important;
+        }
+      }
+    </style>
     </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
