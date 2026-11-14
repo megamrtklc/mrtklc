@@ -17518,5 +17518,43 @@
   },
   "adminProfile": {
     "name": "MRTKLC"
+  },
+  "headerConfig": {
+    "enabled": true,
+    "sticky": true,
+    "showLogoIcon": true,
+    "brandPrimary": "MRT",
+    "brandAccent": "KLC",
+    "showHome": true,
+    "homeLabel": "Ana Sayfa",
+    "showExplore": true,
+    "exploreLabel": "Keşfet",
+    "showVideo": true,
+    "videoLabel": "Video Bağlantıları",
+    "showSearch": true,
+    "showProfile": true,
+    "showMobileMenu": true
+  },
+  "footerConfig": {
+    "enabled": true,
+    "brandPrimary": "KLC",
+    "brandAccent": "MRT",
+    "description": "Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.",
+    "showBadges": true,
+    "badgeOne": "KİŞİSEL KÜTÜPHANE",
+    "badgeTwo": "DİZİ TAKİBİ",
+    "columnOneTitle": "MrtKlc",
+    "homeLabel": "Ana Sayfa",
+    "exploreLabel": "Keşfet",
+    "libraryLabel": "Kütüphanem",
+    "columnTwoTitle": "İzleme Alanım",
+    "watchlistLabel": "Listem",
+    "statsLabel": "İstatistikler",
+    "featureTitle": "İzleme keyfini kişiselleştir",
+    "featureDescription": "Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.",
+    "ctaLabel": "Kütüphaneme Git",
+    "showCta": true,
+    "copyright": "© 2026 CineVerse. Tüm hakları saklıdır.",
+    "showBackToTop": true
   }
 }
