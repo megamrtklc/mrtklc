@@ -2027,35 +2027,30 @@
                 </div>
                 <div x-show="searchQuery.trim()" class="cineverse-search-results">
                     <div x-show="personSearchLoading" class="px-4 py-3 text-xs text-slate-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Oyuncu ve yönetmen aranıyor...</div>
-                    <div x-show="personSearchResults.length" class="border-b border-white/10 px-3 py-3">
-                        <p class="mb-3 px-1 text-[10px] font-black uppercase tracking-[0.18em] text-rose-300">Oyuncu / Yönetmen eşleşmeleri</p>
+                                        <div x-show="personSearchResults.length" class="border-b border-white/10 px-3 py-3">
+                        <p class="mb-3 px-1 text-[10px] font-black uppercase tracking-[0.18em] text-rose-300">Perde kataloğundaki kişiler</p>
                         <div class="space-y-4">
-                            <template x-for="person in personSearchResults" :key="'global-person-' + person.id">
-                                <section class="overflow-hidden rounded-xl border border-white/10 bg-white/[0.035]">
-                                    <button type="button" @click="selectPersonSearchResult(person)" class="flex w-full items-center gap-3 p-3 text-left transition hover:bg-white/[0.06]">
-                                        <img :src="person.profile_path ? 'https://image.tmdb.org/t/p/w185' + person.profile_path : ''" :alt="person.name" @error="handleImageError($event)" loading="lazy" decoding="async" class="h-[76px] w-[58px] shrink-0 rounded-lg object-cover bg-white/10">
+                            <template x-for="person in personSearchResults" :key="'global-person-' + person.id + '-' + person.known_for_department">
+                                <section class="px-1">
+                                    <div class="flex items-center gap-3">
+                                        <img :src="person.profile || ''" :alt="person.name" @error="handleImageError($event)" loading="lazy" decoding="async" class="h-[76px] w-[58px] shrink-0 rounded-lg object-cover bg-white/10">
                                         <span class="min-w-0 flex-1">
                                             <span class="block text-sm font-extrabold text-white" x-text="person.name"></span>
                                             <span class="mt-1 inline-flex rounded-full bg-rose-500/15 px-2 py-0.5 text-[10px] font-bold text-rose-200" x-text="person.known_for_department === 'Directing' ? 'Yönetmen' : 'Oyuncu'"></span>
-                                            <span class="mt-1 block text-[10px] text-slate-400">Kişi profili ve filmografisi</span>
+                                            <span class="mt-1 block text-[10px] text-slate-400" x-text="person.known_for.length + ' yapım Perde kataloğunda'"></span>
                                         </span>
-                                        <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
-                                    </button>
-                                    <div x-show="person.known_for && person.known_for.length" class="border-t border-white/10 px-3 pb-3 pt-2">
-                                        <p class="mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">İlgili yapımlar</p>
-                                        <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                                            <template x-for="work in (person.known_for || []).slice(0,6)" :key="'person-work-' + person.id + '-' + work.id">
-                                                <div class="flex min-w-0 items-center gap-2 rounded-lg bg-black/20 p-2">
-                                                    <img :src="work.poster_path ? 'https://image.tmdb.org/t/p/w92' + work.poster_path : ''" :alt="work.title || work.name || 'Yapım afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="h-12 w-8 shrink-0 rounded object-cover bg-white/10">
-                                                    <span class="min-w-0">
-                                                        <span class="block line-clamp-2 text-[11px] font-semibold leading-snug text-slate-200" x-text="work.title || work.name"></span>
-                                                        <span class="mt-1 block text-[10px] text-slate-500" x-text="(work.media_type === 'tv' ? 'Dizi' : 'Film') + (work.release_date || work.first_air_date ? ' · ' + (work.release_date || work.first_air_date).slice(0,4) : '')"></span>
-                                                    </span>
-                                                </div>
-                                            </template>
-                                        </div>
                                     </div>
-                                    <div x-show="!person.known_for || !person.known_for.length" class="border-t border-white/10 px-3 py-2 text-[11px] text-slate-500">İlgili yapım bilgisi bulunamadı.</div>
+                                    <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                                        <template x-for="work in person.known_for" :key="'person-work-' + person.id + '-' + work.id">
+                                            <button type="button" @click="selectSearchResult(work)" class="flex min-w-0 items-center gap-2 rounded-lg bg-white/[0.045] p-2 text-left transition hover:bg-white/[0.09]">
+                                                <img :src="work.poster || work.image || ''" :alt="work.title || 'Yapım afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="h-12 w-8 shrink-0 rounded object-cover bg-white/10">
+                                                <span class="min-w-0">
+                                                    <span class="block line-clamp-2 text-[11px] font-semibold leading-snug text-slate-200" x-text="work.title"></span>
+                                                    <span class="mt-1 block text-[10px] text-slate-500" x-text="(work.type === 'tv' ? 'Dizi' : 'Film') + (work.year ? ' · ' + work.year : '')"></span>
+                                                </span>
+                                            </button>
+                                        </template>
+                                    </div>
                                 </section>
                             </template>
                         </div>
