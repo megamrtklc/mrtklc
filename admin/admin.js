@@ -161,6 +161,13 @@
       const searchable=[titleOf(item),item.director,item.tmdbDirector,...cast].join(' ').toLocaleLowerCase('tr');
       return (!query||searchable.includes(query))&&(type==='all'||(type==='tv'?isSeries(item):!isSeries(item)))&&(year==='all'||String(yearOf(item))===year);
     });
+    const sort=$('#catalog-sort')?.value||'newest';
+    if(sort==='oldest')state.filtered.reverse();
+    else if(sort==='rating')state.filtered.sort((a,b)=>{
+      const scoreA=Number(a.rating||a.tmdbRating)||0,scoreB=Number(b.rating||b.tmdbRating)||0;
+      return scoreB-scoreA;
+    });
+    else state.filtered.reverse();
     const pages=Math.max(1,Math.ceil(state.filtered.length/state.pageSize));state.page=Math.min(state.page,pages);
     const rows=state.filtered.slice((state.page-1)*state.pageSize,state.page*state.pageSize);
     $('#catalog-rows').innerHTML=rows.length?rows.map(item=>'<tr><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+escapeHtml(item.director||item.tmdbDirector||'Yönetmen bilgisi yok')+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><span class="score">★ '+escapeHtml(item.rating||item.tmdbRating||'—')+'</span></td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td class="row-actions"><button class="row-action" data-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-delete="'+escapeHtml(item.id)+'">Sil</button></td></tr>').join(''):'<tr><td colspan="6" class="empty-cell">Aramanızla eşleşen kayıt bulunamadı.</td></tr>';
@@ -943,6 +950,7 @@
   $('#catalog-search').addEventListener('input',()=>{state.page=1;renderCatalog();});
   $('#type-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
+  $('#catalog-sort').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#prev-page').addEventListener('click',()=>{state.page=Math.max(1,state.page-1);renderCatalog();});
   $('#next-page').addEventListener('click',()=>{state.page++;renderCatalog();});
   // Yeni yapım düğmeleri üstteki delege edilmiş olay dinleyicisiyle yönetilir.
