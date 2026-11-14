@@ -79,51 +79,60 @@
                 schedulePersonSearch(value) {
                     if (this.personSearchTimer) clearTimeout(this.personSearchTimer);
                     const query = String(value || '').trim();
-                    const normalizePersonSearchText = value => String(value || '').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                    const queryTokens = normalizePersonSearchText(query).split(/\s+/).filter(Boolean);
+                    const queryTokens = this.normalizeSearchText(query).split(/\\s+/).filter(Boolean);
                     const requestId = ++this.personSearchRequestId;
                     this.personSearchResults = [];
-                    if (query.length < 2) {
-                        this.personSearchResults = [];
-                        this.personSearchLoading = false;
-                        return;
-                    }
-                    this.personSearchLoading = true;
-                    this.personSearchTimer = setTimeout(async () => {
-                        try {
-                            const payload = await this.fetchTmdb('search/person?query=' + encodeURIComponent(query) + '&include_adult=false&page=1');
-                            if (requestId !== this.personSearchRequestId) return;
-                            this.personSearchResults = (Array.isArray(payload.results) ? payload.results : [])
-                                .filter(person => {
-                                    if (!person || !person.id || !['Acting', 'Directing'].includes(person.known_for_department)) return false;
-                                    const nameTokens = normalizePersonSearchText(person.name).split(/\\s+/).filter(Boolean);
-                                    return queryTokens.every(token => nameTokens.some(nameToken => nameToken.startsWith(token)));
-                                })
-                                .slice(0, 6)
-                                .map(person => ({ ...person, known_for: Array.isArray(person.known_for) ? person.known_for.slice(0, 6) : [] }));
-                        } catch (error) {
-                            if (requestId === this.personSearchRequestId) {
-                                this.personSearchResults = [];
-                                console.warn('Oyuncu/yönetmen araması başarısız:', error);
-                            }
-                        } finally {
-                            if (requestId === this.personSearchRequestId) this.personSearchLoading = false;
-                        }
-                    }, 350);
-                },
-                selectPersonSearchResult(person) {
-                    if (!person || !person.id) return;
-                    const profile = {
-                        id: Number(person.id),
-                        name: person.name || 'İsimsiz kişi',
-                        profile: person.profile_path ? 'https://image.tmdb.org/t/p/h632' + person.profile_path : '',
-                        known_for_department: person.known_for_department || 'Acting'
+                    this.personSearchLoading = false;
+                    if (query.length < 2 || !queryTokens.length) return;
+
+                    const people = new Map();
+                    const matchesName = name => {
+                        const nameTokens = this.normalizeSearchText(name).split(/\\s+/).filter(Boolean);
+                        return queryTokens.every(token => nameTokens.some(nameToken => nameToken.startsWith(token)));
                     };
-                    this.closeSearchOverlay();
-                    this.searchQuery = '';
-                    this.personSearchResults = [];
-                    if (profile.known_for_department === 'Directing') this.openDirectorProfile(profile);
-                    else this.openActorProfile(profile);
+                    const addPerson = (person, item, department) => {
+                        const name = typeof person === 'string' ? person : (person?.name || '');
+                        if (!name || !matchesName(name)) return;
+                        const normalizedName = this.normalizeSearchText(name);
+                        const personId = typeof person === 'object' && person?.id ? String(person.id) : normalizedName;
+                        const key = department + ':' + personId;
+                        if (!people.has(key)) {
+                            people.set(key, {
+                                id: personId,
+                                tmdbId: typeof person === 'object' && person?.id ? Number(person.id) : null,
+                                name,
+                                profile: typeof person === 'object' ? (person.profile || (person.profile_path ? 'https://image.tmdb.org/t/p/w185' + person.profile_path : '')) : '',
+                                known_for_department: department,
+                                known_for: [],
+                                _workIds: new Set()
+                            });
+                        }
+                        const entry = people.get(key);
+                        const workKey = String(item.id || item.tmdbId || item.title);
+                        if (!entry._workIds.has(workKey)) {
+                            entry._workIds.add(workKey);
+                            entry.known_for.push(item);
+                        }
+                        if (!entry.profile && typeof person === 'object') entry.profile = person.profile || '';
+                    };
+
+                    (this.catalog || []).forEach(item => {
+                        const cast = Array.isArray(item.tmdbCast) && item.tmdbCast.length
+                            ? item.tmdbCast
+                            : (Array.isArray(item.cast) ? item.cast : []);
+                        cast.forEach(person => addPerson(person, item, 'Acting'));
+                        const directorName = item.tmdbDirector || item.director || '';
+                        if (directorName) addPerson({ name: directorName }, item, 'Directing');
+                    });
+
+                    if (requestId !== this.personSearchRequestId) return;
+                    this.personSearchResults = Array.from(people.values())
+                        .map(person => ({
+                            ...person,
+                            known_for: person.known_for.sort((a, b) => String(b.year || '').localeCompare(String(a.year || ''))).slice(0, 6)
+                        }))
+                        .sort((a, b) => b.known_for.length - a.known_for.length || a.name.localeCompare(b.name, 'tr'))
+                        .slice(0, 6);
                 },
                 get quickSearchResults() {
                     const query = this.normalizeSearchText(this.searchQuery);
