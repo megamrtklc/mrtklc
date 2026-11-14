@@ -320,6 +320,8 @@
                 catalog: [],
                 heroCatalog: [],
                 collections: [],
+                franchises: [],
+                selectedFranchiseId: null,
                 homepageConfig: null,
                 headerConfig: { enabled:true, sticky:true, showLogoIcon:true, brandPrimary:'CINE', brandAccent:'VERSE', showHome:true, homeLabel:'Ana Sayfa', showExplore:true, exploreLabel:'Keşfet', showVideo:true, videoLabel:'Video Bağlantıları', showSearch:true, showProfile:true, showMobileMenu:true, catalogMenusInitialized:false, customLinks:[] },
                 footerConfig: { enabled:true, customLinks:[], brandPrimary:'CINE', brandAccent:'VERSE', description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.', showBadges:true, badgeOne:'KİŞİSEL KÜTÜPHANE', badgeTwo:'DİZİ TAKİBİ', columnOneTitle:'CineVerse', homeLabel:'Ana Sayfa', exploreLabel:'Keşfet', libraryLabel:'Kütüphanem', columnTwoTitle:'İzleme Alanım', watchlistLabel:'İzleme Listem', statsLabel:'İstatistikler', featureTitle:'İzleme keyfini kişiselleştir', featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.', ctaLabel:'Kütüphaneme Git', showCta:true, copyright:'© 2026 CineVerse. Tüm hakları saklıdır.', showBackToTop:true },
@@ -563,6 +565,7 @@
                         }
                         this.footerConfig = { ...this.footerConfig, ...(data?.footerConfig || {}) };
                         this.collections = Array.isArray(data?.collections) ? data.collections : [];
+                        this.franchises = Array.isArray(data?.franchises) ? data.franchises : [];
                         this.watchPageConfig = data && typeof data === 'object' ? (data.watchPageConfig || null) : null;
                         const sourceCatalog = Array.isArray(data) ? data : (data && typeof data === 'object' ? data.catalog : null);
 
@@ -1350,8 +1353,31 @@
                     this.userCommentText = '';
                 },
 
+                get franchiseEntries() {
+                    return (this.franchises || []).filter(franchise => franchise && franchise.active !== false).map(franchise => {
+                        const items = (Array.isArray(franchise.items) ? franchise.items : []).map(id => this.catalog.find(item => String(item.id) === String(id))).filter(item => item && item.type === 'movie').sort((a,b) => Number(a.year || 0) - Number(b.year || 0));
+                        const years = items.map(item => Number(item.year || String(item.tmdbReleaseDate || '').slice(0, 4))).filter(Number.isFinite);
+                        return { ...franchise, items, count: items.length, firstYear: years.length ? Math.min(...years) : '', lastYear: years.length ? Math.max(...years) : '', poster: franchise.poster || items[0]?.poster || items[0]?.image || '', backdrop: franchise.backdrop || items[0]?.backdrop || items[0]?.poster || items[0]?.image || '' };
+                    }).filter(franchise => franchise.items.length >= 2);
+                },
+                get featuredFranchises() { return this.franchiseEntries.slice(0, 8); },
+                get selectedFranchise() { return this.franchiseEntries.find(franchise => String(franchise.id) === String(this.selectedFranchiseId)) || null; },
+                openFranchise(franchiseOrId, updateRoute = true) {
+                    const id = typeof franchiseOrId === 'object' ? franchiseOrId?.id : franchiseOrId;
+                    const franchise = this.franchiseEntries.find(entry => String(entry.id) === String(id));
+                    if (!franchise) return;
+                    this.selectedFranchiseId = String(franchise.id); this.currentPage = 'franchises';
+                    if (updateRoute) this.syncRouteToUrl('franchise', franchise);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+                closeFranchiseDetail() {
+                    this.selectedFranchiseId = null; this.currentPage = 'franchises';
+                    this.syncRouteToUrl('franchises', null); window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+
                 getRouteHash(page = this.currentPage, item = this.selectedItem) {
                     if (page === 'watch' && item?.id) return '#/watch/' + encodeURIComponent(item.id);
+                    if (page === 'franchise' && item?.id) return '#/franchise/' + encodeURIComponent(item.id);
                     if (page === 'actor' && this.selectedActor?.id) return '#/actor/' + encodeURIComponent(this.selectedActor.id);
                     if (page === 'director' && this.selectedActor?.id) return '#/director/' + encodeURIComponent(this.selectedActor.id);
                     return '#/' + encodeURIComponent(page || 'home');
@@ -1385,6 +1411,8 @@
                         this.openDirectorProfile({ id: Number(directorMatch[1]), name: 'Yönetmen' }, false);
                         return;
                     }
+                    const franchiseMatch = hash.match(/^#\/franchise\/([^/?#]+)$/);
+                    if (franchiseMatch) { this.openFranchise(decodeURIComponent(franchiseMatch[1]), false); return; }
                     const match = hash.match(/^#\/watch\/(.+)$/);
                     if (match) {
                         const itemId = decodeURIComponent(match[1]);
@@ -1399,8 +1427,9 @@
                     const page = pageMatch ? decodeURIComponent(pageMatch[1]) : 'home';
                     const catalogPages = ['movies', 'series', 'turkish'];
                     if (catalogPages.includes(page)) { this.navigateTo(page); return; }
-                    const allowedPages = ['home', 'explore', 'video-links', 'library', 'watchlist', 'stats'];
+                    const allowedPages = ['home', 'explore', 'video-links', 'library', 'watchlist', 'stats', 'franchises'];
                     this.currentPage = allowedPages.includes(page) ? page : 'home';
+                    if (this.currentPage === 'franchises') this.selectedFranchiseId = null;
                     this.syncRouteToUrl(this.currentPage, null);
                 },
 
@@ -1423,6 +1452,7 @@
                         this.currentPage = 'explore';
                         this.syncRouteToUrl('explore', null);
                     } else {
+                        if (page === 'franchises') this.selectedFranchiseId = null;
                         this.currentPage = page;
                         this.syncRouteToUrl(page, null);
                     }
