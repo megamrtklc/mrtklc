@@ -76,7 +76,7 @@
                 personSearchLoading: false,
                 personSearchTimer: null,
                 personSearchRequestId: 0,
-                schedulePersonSearch(value) {
+                async schedulePersonSearch(value) {
                     if (this.personSearchTimer) clearTimeout(this.personSearchTimer);
                     const query = String(value || '').trim();
                     const queryTokens = this.normalizeSearchText(query).split(/\s+/).filter(Boolean);
@@ -125,6 +125,16 @@
                         if (directorName) addPerson({ name: directorName }, item, 'Directing');
                     });
 
+                    for (const person of people.values()) {
+                        if (person.known_for_department !== 'Directing' || person.profile) continue;
+                        const resolved = await this.resolveDirectorPerson({ name: person.name });
+                        if (requestId !== this.personSearchRequestId) return;
+                        if (resolved?.id) {
+                            person.tmdbId = Number(resolved.id);
+                            person.id = String(resolved.id);
+                            person.profile = resolved.profile || '';
+                        }
+                    }
                     if (requestId !== this.personSearchRequestId) return;
                     this.personSearchResults = Array.from(people.values())
                         .map(person => ({
