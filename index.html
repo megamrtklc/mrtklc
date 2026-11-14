@@ -980,6 +980,116 @@
           }
         }
 
+        /* Sana özel öneriler: dört kartlık sabit 2x2 düzen, açıklama kart içinde. */
+        #home-personalized-section .home-personalized-alternatives{
+          display:grid!important;
+          grid-template-columns:repeat(2,minmax(0,1fr))!important;
+          grid-template-rows:repeat(2,minmax(0,1fr))!important;
+          grid-auto-rows:minmax(0,1fr)!important;
+          gap:12px!important;
+          min-width:0!important;
+          overflow:visible!important;
+          padding:2px 0!important;
+          touch-action:pan-y!important;
+        }
+        #home-personalized-section .home-personalized-alternative{
+          display:grid!important;
+          grid-template-columns:64px minmax(0,1fr)!important;
+          grid-template-rows:minmax(0,1fr) auto!important;
+          column-gap:10px!important;
+          row-gap:5px!important;
+          min-width:0!important;
+          min-height:172px!important;
+          height:100%!important;
+          padding:10px!important;
+          overflow:hidden!important;
+        }
+        #home-personalized-section .home-personalized-poster{
+          grid-column:1!important;
+          grid-row:1 / span 2!important;
+          width:64px!important;
+          align-self:center!important;
+        }
+        #home-personalized-section .home-personalized-copy{
+          grid-column:2!important;
+          grid-row:1!important;
+          align-self:center!important;
+          min-width:0!important;
+          overflow:hidden!important;
+        }
+        #home-personalized-section .home-personalized-copy h3{
+          font-size:12px!important;
+          line-height:1.35!important;
+          display:-webkit-box!important;
+          -webkit-line-clamp:2!important;
+          -webkit-box-orient:vertical!important;
+          overflow:hidden!important;
+        }
+        #home-personalized-section .home-personalized-copy>p:last-child{
+          display:-webkit-box!important;
+          -webkit-line-clamp:3!important;
+          -webkit-box-orient:vertical!important;
+          overflow:hidden!important;
+          margin-top:6px!important;
+          color:rgba(226,232,240,.82)!important;
+          font-size:10px!important;
+          line-height:1.45!important;
+        }
+        #home-personalized-section .home-personalized-actions{
+          grid-column:2!important;
+          grid-row:2!important;
+          align-self:end!important;
+        }
+        #home-personalized-section .home-personalized-plot{
+          position:static!important;
+          inset:auto!important;
+          display:-webkit-box!important;
+          width:auto!important;
+          max-width:none!important;
+          max-height:none!important;
+          padding:0!important;
+          overflow:hidden!important;
+          border:0!important;
+          border-radius:0!important;
+          background:none!important;
+          box-shadow:none!important;
+          color:rgba(226,232,240,.82)!important;
+          font-size:10px!important;
+          line-height:1.45!important;
+          opacity:1!important;
+          transform:none!important;
+          pointer-events:none!important;
+          -webkit-line-clamp:3!important;
+          -webkit-box-orient:vertical!important;
+        }
+        #home-personalized-section .home-personalized-plot:before{display:none!important}
+        #home-personalized-section .home-personalized-info{display:none!important}
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-alternatives{
+            display:grid!important;
+            grid-template-columns:repeat(2,minmax(0,1fr))!important;
+            grid-template-rows:repeat(2,minmax(138px,auto))!important;
+            gap:8px!important;
+            overflow:visible!important;
+            padding:2px 0!important;
+          }
+          #home-personalized-section .home-personalized-alternative{
+            grid-template-columns:48px minmax(0,1fr)!important;
+            min-height:148px!important;
+            padding:8px!important;
+            column-gap:7px!important;
+          }
+          #home-personalized-section .home-personalized-poster{width:48px!important}
+          #home-personalized-section .home-personalized-copy h3{font-size:11px!important}
+          #home-personalized-section .home-personalized-copy>p:last-child{
+            font-size:9px!important;
+            line-height:1.4!important;
+            -webkit-line-clamp:3!important;
+          }
+          #home-personalized-section .home-personalized-like{width:30px!important;height:30px!important;font-size:12px!important}
+          #home-personalized-section .home-personalized-dislike{width:32px!important;height:32px!important;font-size:12px!important}
+        }
+
 </style>
 
 </head>
@@ -1230,7 +1340,7 @@
                             <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">İzleme Zevkine Göre</h2>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzleme alışkanlıklarından ilham alan, sana özel seçkiler</p>
                         </div>
-                        <div class="flex items-center gap-3 shrink-0"><span class="home-personalized-count text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="Math.min(6, Math.max(0, personalizedRecommendations.length - 1)) + ' / 6 öneri'">6 öneri</span></div>
+                        <div class="flex items-center gap-3 shrink-0"><span class="home-personalized-count text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="Math.min(4, Math.max(0, personalizedRecommendations.length - 1)) + ' / 4 öneri'">4 öneri</span></div>
                     </div>
                     <div class="home-personalized-showcase" x-show="homeSectionReady.personalized && personalizedRecommendations.length">
                         <template x-if="homeSectionReady.personalized && personalizedRecommendations[0]">
@@ -1247,15 +1357,14 @@
                                 <div class="home-personalized-feature-actions absolute right-4 top-4 z-[2] flex items-center gap-2"><button type="button" @click.stop="likeRecommendation(personalizedRecommendations[0])" :aria-label="'Beğendim: ' + personalizedRecommendations[0].title" :aria-pressed="isRecommendationLiked(personalizedRecommendations[0]).toString()" :class="isRecommendationLiked(personalizedRecommendations[0]) ? 'is-liked' : ''" class="home-personalized-like" title="Beğendim"><i :class="isRecommendationLiked(personalizedRecommendations[0]) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button><button type="button" @click.stop="dismissRecommendation(personalizedRecommendations[0])" :aria-label="'İlgimi çekmedi: ' + personalizedRecommendations[0].title" class="home-personalized-dislike" title="İlgimi çekmedi"><i class="fa-regular fa-thumbs-down"></i></button></div>
                             </div>
                         </template>
-                        <div id="home-personalized-rail" class="home-personalized-alternatives" aria-label="Sana özel altı öneri, üç sütun">
-                            <template x-for="item in (homeSectionReady.personalized ? personalizedRecommendations.slice(1, 7) : [])" :key="'personal-' + item.id">
-                                <div x-data="{ showPlot: false }" role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :data-recommendation-id="item.id" :class="getCardClass()" class="home-personalized-alternative group relative isolate overflow-hidden min-w-0 rounded-xl sm:rounded-2xl border text-left transition-all duration-300">
+                        <div id="home-personalized-rail" class="home-personalized-alternatives" aria-label="Sana özel dört öneri, iki sütun">
+                            <template x-for="item in (homeSectionReady.personalized ? personalizedRecommendations.slice(1, 5) : [])" :key="'personal-' + item.id">
+                                <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :data-recommendation-id="item.id" :class="getCardClass()" class="home-personalized-alternative group relative isolate overflow-hidden min-w-0 rounded-xl sm:rounded-2xl border text-left transition-all duration-300">
                                     <img class="home-personalized-card-backdrop absolute inset-0 w-full h-full object-cover" @error="handleImageError($event)" :src="item.backdrop || item.poster || item.image" :alt="''" aria-hidden="true" loading="lazy" decoding="async">
                                     <div class="home-personalized-card-shade absolute inset-0"></div>
                                     <div class="home-personalized-poster relative z-[1] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-900 shadow-xl"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [154, 185, 342])" sizes="96px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/85 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="item.rating || '—'"></span></span></div>
-                                    <div class="home-personalized-copy relative z-[1] min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-300 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="item.title"></h3><p class="mt-1 text-[10px] text-white/75 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p :class="showPlot ? 'is-plot-open' : ''" class="home-personalized-plot" x-text="item.tmdbOverview || item.desc || item.recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p></div>
-                                    <div class="home-personalized-actions relative z-[1] flex items-center justify-end gap-1.5"><button type="button" @click.stop="showPlot = !showPlot" :aria-expanded="showPlot.toString()" :aria-label="showPlot ? 'Açıklamayı gizle' : 'Açıklamayı göster'" class="home-personalized-info" title="Hikâyeyi gör"><i class="fa-solid fa-circle-info"></i></button>
-                                        <button type="button" @click.stop="likeRecommendation(item)" :aria-label="'Beğendim: ' + item.title" :aria-pressed="isRecommendationLiked(item).toString()" :class="isRecommendationLiked(item) ? 'is-liked' : ''" class="home-personalized-like" title="Beğendim"><i :class="isRecommendationLiked(item) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button>
+                                    <div class="home-personalized-copy relative z-[1] min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-300 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="item.title"></h3><p class="mt-1 text-[10px] text-white/75 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="home-personalized-plot" x-text="item.tmdbOverview || item.desc || item.recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p></div>
+                                    <div class="home-personalized-actions relative z-[1] flex items-center justify-end gap-1.5"><button type="button" @click.stop="likeRecommendation(item)" :aria-label="'Beğendim: ' + item.title" :aria-pressed="isRecommendationLiked(item).toString()" :class="isRecommendationLiked(item) ? 'is-liked' : ''" class="home-personalized-like" title="Beğendim"><i :class="isRecommendationLiked(item) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button>
                                         <button type="button" @click.stop="dismissRecommendation(item)" :aria-label="'İlgimi çekmedi: ' + item.title" class="home-personalized-dislike" title="İlgimi çekmedi"><i class="fa-regular fa-thumbs-down"></i></button>
                                     </div>
                                 </div>
