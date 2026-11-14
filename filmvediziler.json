@@ -20376,6 +20376,207 @@
       "tmdbImdbId": "tt0110413",
       "tmdbRating": "8.3",
       "tmdbVoteCount": 16796
+    },
+    {
+      "id": "cv-1794698259535",
+      "title": "Maymunlar Cehennemi: Başlangıç",
+      "type": "movie",
+      "year": "2011",
+      "rating": "7.4",
+      "genre": "Gerilim",
+      "category": "Gerilim / Aksiyon / Dram / Bilim-Kurgu",
+      "duration": "105 dk",
+      "country": "United Kingdom, United States of America",
+      "director": "Rupert Wyatt",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 61791,
+      "imdbId": "tt1318514",
+      "image": "https://image.tmdb.org/t/p/w500/ma0zzr1wSWDmDqRulMIEVFBLpk6.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/6cCF0KMUO2QmrVsQFujkQduREXX.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=StvDUi2Xofg",
+      "trailerProvider": "auto",
+      "desc": "Bilim adamı Will Rodman, babasını yavaşça tüketen Alzheimer için bir tedavi bulmaya kararlıdır. Will, sonuca yakın olduğunu olduğunu hissettiği için en son serumunu maymunlar üzerinde test etmeye karar verir. Test sonucunda maymun deneklerde zeka ve beyin aktivitesinde, özellikle de evcil hayvan şempanzesi Caesar'da çarpıcı artışlar fark eder.",
+      "cast": [
+        "Andy Serkis",
+        "James Franco",
+        "Freida Pinto",
+        "John Lithgow",
+        "Brian Cox",
+        "Tom Felton",
+        "Tyler Labine",
+        "Karin Konoval",
+        "Terry Notary",
+        "Christopher Gordon",
+        "Richard Ridings",
+        "Devyn Dalton",
+        "Jay Caputo",
+        "David Hewlett",
+        "David Oyelowo",
+        "Jamie Harris",
+        "Ty Olsson",
+        "Joey Roche",
+        "Madison Bell",
+        "Makena Joy"
+      ],
+      "tmdbTitle": "Maymunlar Cehennemi: Başlangıç",
+      "tmdbOriginalTitle": "Rise of the Planet of the Apes",
+      "tmdbReleaseDate": "2011-08-03",
+      "tmdbGenres": "Gerilim / Aksiyon / Dram / Bilim-Kurgu",
+      "tmdbRuntime": "105 dk",
+      "tmdbCountries": "United Kingdom, United States of America",
+      "tmdbDirector": "Rupert Wyatt",
+      "tmdbCast": [
+        {
+          "id": 1333,
+          "name": "Andy Serkis",
+          "character": "Caesar",
+          "profile": "https://image.tmdb.org/t/p/w185/eNGqhebQ4cDssjVeNFrKtUvweV5.jpg",
+          "order": 0
+        },
+        {
+          "id": 17051,
+          "name": "James Franco",
+          "character": "Will Rodman",
+          "profile": "https://image.tmdb.org/t/p/w185/bjmAntHGiibLZixH8nTNVBzaFQn.jpg",
+          "order": 1
+        },
+        {
+          "id": 76792,
+          "name": "Freida Pinto",
+          "character": "Caroline Aranha",
+          "profile": "https://image.tmdb.org/t/p/w185/tub18dfDNMxlempVIuPXh8fmZVs.jpg",
+          "order": 2
+        },
+        {
+          "id": 12074,
+          "name": "John Lithgow",
+          "character": "Charles Rodman",
+          "profile": "https://image.tmdb.org/t/p/w185/ajfuBSm1HuVqFJlbTmAlza62Xxr.jpg",
+          "order": 3
+        },
+        {
+          "id": 1248,
+          "name": "Brian Cox",
+          "character": "John Landon",
+          "profile": "https://image.tmdb.org/t/p/w185/scSjbFCTRngXlkJRoKptM5kQGw7.jpg",
+          "order": 4
+        },
+        {
+          "id": 10993,
+          "name": "Tom Felton",
+          "character": "Dodge Landon",
+          "profile": "https://image.tmdb.org/t/p/w185/etmtUBzJ1i1XJTLS6MkotJFE1se.jpg",
+          "order": 5
+        },
+        {
+          "id": 51383,
+          "name": "Tyler Labine",
+          "character": "Robert Franklin",
+          "profile": "https://image.tmdb.org/t/p/w185/uTg5k0mflhBju9Q1tOYmYDzdBu6.jpg",
+          "order": 6
+        },
+        {
+          "id": 58395,
+          "name": "Karin Konoval",
+          "character": "Maurice / Court Clerk",
+          "profile": "https://image.tmdb.org/t/p/w185/5e8YyNQjWre2UbExYBlJ7zva934.jpg",
+          "order": 7
+        },
+        {
+          "id": 236696,
+          "name": "Terry Notary",
+          "character": "Rocket / Bright Eyes",
+          "profile": "https://image.tmdb.org/t/p/w185/gcn5cL4TGmtiYcjFCl29GsclDVl.jpg",
+          "order": 8
+        },
+        {
+          "id": 189696,
+          "name": "Christopher Gordon",
+          "character": "Koba",
+          "profile": "https://image.tmdb.org/t/p/w185/x3yZlw5ZqSCT4RWNdt7VxVmJgMh.jpg",
+          "order": 9
+        },
+        {
+          "id": 6645,
+          "name": "Richard Ridings",
+          "character": "Buck",
+          "profile": "https://image.tmdb.org/t/p/w185/eH3QE45JSgJtw0j14PLcGmEaVOG.jpg",
+          "order": 10
+        },
+        {
+          "id": 1164341,
+          "name": "Devyn Dalton",
+          "character": "Cornelia",
+          "profile": "https://image.tmdb.org/t/p/w185/rYkYdtv2grwzDX4RFCIK3zzP4gD.jpg",
+          "order": 11
+        },
+        {
+          "id": 14050,
+          "name": "Jay Caputo",
+          "character": "Alpha",
+          "profile": "https://image.tmdb.org/t/p/w185/n2naFzleYqAO9sHI03H2muTk35H.jpg",
+          "order": 12
+        },
+        {
+          "id": 5892,
+          "name": "David Hewlett",
+          "character": "Douglas Hunsiker",
+          "profile": "https://image.tmdb.org/t/p/w185/bm6Tjfaj7iuRLI0hkvxHBlP4pUO.jpg",
+          "order": 13
+        },
+        {
+          "id": 35013,
+          "name": "David Oyelowo",
+          "character": "Steven Jacobs",
+          "profile": "https://image.tmdb.org/t/p/w185/7UZHRwOKe2cYxj8SeNUklyPYkns.jpg",
+          "order": 14
+        },
+        {
+          "id": 111195,
+          "name": "Jamie Harris",
+          "character": "Rodney",
+          "profile": "https://image.tmdb.org/t/p/w185/iqc9RropHWLe2wLCgUHtZZDJ7w.jpg",
+          "order": 15
+        },
+        {
+          "id": 42711,
+          "name": "Ty Olsson",
+          "character": "Chief John Hamil",
+          "profile": "https://image.tmdb.org/t/p/w185/9KnJ0453movkUNTYuucHXCFVbU0.jpg",
+          "order": 16
+        },
+        {
+          "id": 1865693,
+          "name": "Joey Roche",
+          "character": "Todd Hunsiker",
+          "profile": "",
+          "order": 17
+        },
+        {
+          "id": 1565027,
+          "name": "Madison Bell",
+          "character": "Alice Hunsiker",
+          "profile": "",
+          "order": 18
+        },
+        {
+          "id": 1832997,
+          "name": "Makena Joy",
+          "character": "Alice Hunsiker (Teen)",
+          "profile": "https://image.tmdb.org/t/p/w185/3RJE69ZA7xv79xO0WGruvQTIfSd.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Bilim adamı Will Rodman, babasını yavaşça tüketen Alzheimer için bir tedavi bulmaya kararlıdır. Will, sonuca yakın olduğunu olduğunu hissettiği için en son serumunu maymunlar üzerinde test etmeye karar verir. Test sonucunda maymun deneklerde zeka ve beyin aktivitesinde, özellikle de evcil hayvan şempanzesi Caesar'da çarpıcı artışlar fark eder.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/ma0zzr1wSWDmDqRulMIEVFBLpk6.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/6cCF0KMUO2QmrVsQFujkQduREXX.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=StvDUi2Xofg",
+      "tmdbImdbId": "tt1318514",
+      "tmdbRating": "7.4",
+      "tmdbVoteCount": 13243
     }
   ],
   "collections": [],
