@@ -8857,58 +8857,6 @@
       "tmdbEpisodes": 6
     },
     {
-      "id": "archive-79",
-      "title": "Gezegenimiz",
-      "type": "tv",
-      "category": "Belgesel / Aile",
-      "genre": "Belgesel",
-      "rating": "8.5",
-      "ratingCount": "IMDb 8.5",
-      "year": "2019",
-      "duration": "Bilinmiyor",
-      "themeColor": "#101014",
-      "image": "https://image.tmdb.org/t/p/w500/jX41B5T0d04YZohAWzr6eiSV3zn.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/p8EUX6MPSNLxVwqO3fCYTi896Ro.jpg",
-      "desc": "Muazzam bir içeriğe sahip olan bu çarpıcı belgeselde, gezegenimizin doğal güzelliğine şahit olurken iklim değişikliğinin tüm canlıları nasıl etkilediğini göreceksiniz.",
-      "director": "Bilinmiyor",
-      "cast": [
-        "David Attenborough"
-      ],
-      "trailerUrl": "https://www.youtube.com/watch?v=aETNYyrqNYE",
-      "country": "United Kingdom, United States of America",
-      "tmdbId": 83880,
-      "seasons": 2,
-      "episodes": 12,
-      "tmdbRating": "8.5",
-      "tmdbVoteCount": 492,
-      "tmdbTitle": "Gezegenimiz",
-      "tmdbOriginalTitle": "Our Planet",
-      "tmdbReleaseDate": "2019-04-05",
-      "tmdbGenres": "Belgesel / Aile",
-      "tmdbRuntime": "",
-      "tmdbCountries": "GB",
-      "tmdbDirector": "",
-      "tmdbCast": [
-        {
-          "id": 86543,
-          "name": "David Attenborough",
-          "character": "Self - Narrator (voice)",
-          "profile": "https://image.tmdb.org/t/p/w185/xE6aLZ2Ma1VSoZGhOUW8TcbBMN6.jpg",
-          "order": 0
-        }
-      ],
-      "tmdbOverview": "Muazzam bir içeriğe sahip olan bu çarpıcı belgeselde, gezegenimizin doğal güzelliğine şahit olurken iklim değişikliğinin tüm canlıları nasıl etkilediğini göreceksiniz.",
-      "tmdbPoster": "https://image.tmdb.org/t/p/w500/jX41B5T0d04YZohAWzr6eiSV3zn.jpg",
-      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/p8EUX6MPSNLxVwqO3fCYTi896Ro.jpg",
-      "tmdbTrailerUrl": "",
-      "tmdbImdbId": "tt9253866",
-      "tmdbSyncedAt": "2026-11-07T06:45:52.521Z",
-      "originalTitle": "Our Planet",
-      "imdbId": "tt9253866",
-      "tmdbSeasons": 2,
-      "tmdbEpisodes": 12
-    },
-    {
       "id": "archive-80",
       "title": "Dangal",
       "type": "movie",
