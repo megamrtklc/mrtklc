@@ -17633,19 +17633,31 @@
     },
     "heroSlides": [
       {
-        "id": "cv-1794683819669",
+        "id": "archive-46",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683794445",
+        "id": "archive-52",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683744189",
+        "id": "archive-18",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-29",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-24",
         "active": true,
         "headline": "",
         "description": ""
@@ -17657,61 +17669,61 @@
         "description": ""
       },
       {
-        "id": "cv-1794683689165",
+        "id": "archive-116",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683662829",
+        "id": "perde-mw6xrtd2",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683639717",
+        "id": "archive-110",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683623677",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mwawheyh",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mwawc4g1",
+        "id": "archive-80",
         "active": true,
         "headline": "",
         "description": ""
       }
     ],
     "desktopMode": "auto",
-    "desktopCategory": "new-arrivals",
+    "desktopCategory": "random",
     "mobileMode": "auto",
     "mobileCategory": "new-arrivals",
     "desktopHeroSlides": [
       {
-        "id": "cv-1794683819669",
+        "id": "archive-46",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683794445",
+        "id": "archive-52",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683744189",
+        "id": "archive-18",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-29",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-24",
         "active": true,
         "headline": "",
         "description": ""
@@ -17723,37 +17735,25 @@
         "description": ""
       },
       {
-        "id": "cv-1794683689165",
+        "id": "archive-116",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683662829",
+        "id": "perde-mw6xrtd2",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683639717",
+        "id": "archive-110",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683623677",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mwawheyh",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mwawc4g1",
+        "id": "archive-80",
         "active": true,
         "headline": "",
         "description": ""
