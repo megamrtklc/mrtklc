@@ -17465,6 +17465,206 @@
       "tmdbVoteCount": 735,
       "seasons": 3,
       "episodes": 25
+    },
+    {
+      "id": "cv-1794683639717",
+      "title": "Saplantı",
+      "type": "movie",
+      "year": "2026",
+      "rating": "8.2",
+      "genre": "Korku",
+      "category": "Korku / Gerilim",
+      "duration": "109 dk",
+      "country": "United States of America, United Kingdom",
+      "director": "Curry Barker",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1339713,
+      "imdbId": "tt37287335",
+      "image": "https://image.tmdb.org/t/p/w500/nriiXc6VbD6qWBj7INOElJbX8mp.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/5lTZyuBTNOfawsfPT8Q0cIg6qAF.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=GodRHmQvbFE",
+      "desc": "​Hoşlandığı kızın kalbini kazanmak için gizemli \"Tek Dilek Söğüdü\"nü (One Wish Willow) kıran umutsuz bir romantik, tam da dilediği şeye kavuşur; ancak çok geçmeden bazı arzuların karanlık ve tekinsiz bir bedeli olduğunu keşfeder.",
+      "cast": [
+        "Michael Johnston",
+        "Inde Navarrette",
+        "Cooper Tomlinson",
+        "Megan Lawless",
+        "Andy Richter",
+        "Haley Fitzgerald",
+        "Darin Toonder",
+        "Anthony Pavone",
+        "Justice",
+        "Anthony Casabianca",
+        "Chloe Breen",
+        "Malcolm Kelner",
+        "Charles Santa Cruz",
+        "Alex Maystrik",
+        "Mariana Silva",
+        "Kyle Blumenthal",
+        "Jorge Luquin",
+        "Jose Herrera",
+        "Emilio Flores",
+        "Manny Liotta"
+      ],
+      "tmdbTitle": "Saplantı",
+      "tmdbOriginalTitle": "Obsession",
+      "tmdbReleaseDate": "2026-05-13",
+      "tmdbGenres": "Korku / Gerilim",
+      "tmdbRuntime": "109 dk",
+      "tmdbCountries": "United States of America, United Kingdom",
+      "tmdbDirector": "Curry Barker",
+      "tmdbCast": [
+        {
+          "id": 1561370,
+          "name": "Michael Johnston",
+          "character": "Bear",
+          "profile": "https://image.tmdb.org/t/p/w185/fbpcCkBzu43kMdlXxEAMuLhseL8.jpg",
+          "order": 0
+        },
+        {
+          "id": 2638587,
+          "name": "Inde Navarrette",
+          "character": "Nikki",
+          "profile": "https://image.tmdb.org/t/p/w185/qlNBUGON8FebgzcqVhhRSVFYSa5.jpg",
+          "order": 1
+        },
+        {
+          "id": 2823609,
+          "name": "Cooper Tomlinson",
+          "character": "Ian",
+          "profile": "https://image.tmdb.org/t/p/w185/vBMQbYT1DyWPCUp11dIiqZR9zhd.jpg",
+          "order": 2
+        },
+        {
+          "id": 1519711,
+          "name": "Megan Lawless",
+          "character": "Sarah",
+          "profile": "https://image.tmdb.org/t/p/w185/6qW63YEgB1qro01sM7T2HvhtFkh.jpg",
+          "order": 3
+        },
+        {
+          "id": 28637,
+          "name": "Andy Richter",
+          "character": "Carter",
+          "profile": "https://image.tmdb.org/t/p/w185/5Qr7N6TzC8cI0ULxDm6EC5GpZ4C.jpg",
+          "order": 4
+        },
+        {
+          "id": 3095494,
+          "name": "Haley Fitzgerald",
+          "character": "Viola",
+          "profile": "https://image.tmdb.org/t/p/w185/xbKqZ5Epz0IaSCPLXDnByDACw2X.jpg",
+          "order": 5
+        },
+        {
+          "id": 1352948,
+          "name": "Darin Toonder",
+          "character": "Harry",
+          "profile": "https://image.tmdb.org/t/p/w185/bD7Y9T7Y6XwDXjGJ8Suabyt1ZGo.jpg",
+          "order": 6
+        },
+        {
+          "id": 4030428,
+          "name": "Anthony Pavone",
+          "character": "Reggie",
+          "profile": "https://image.tmdb.org/t/p/w185/hxiqY9gHgwXGYnXSD11Wacm5Nmi.jpg",
+          "order": 7
+        },
+        {
+          "id": 3592074,
+          "name": "Justice",
+          "character": "Joe",
+          "profile": "https://image.tmdb.org/t/p/w185/YFxKf2HHJvyavQf54NO5wXFOJX.jpg",
+          "order": 8
+        },
+        {
+          "id": 5618033,
+          "name": "Anthony Casabianca",
+          "character": "Chris",
+          "profile": "https://image.tmdb.org/t/p/w185/xNJUKqKQhMeyZ74erQvETr3AqV0.jpg",
+          "order": 9
+        },
+        {
+          "id": 5423994,
+          "name": "Chloe Breen",
+          "character": "Ruthie",
+          "profile": "https://image.tmdb.org/t/p/w185/oKBTQeGcQBM5aHNHwAqVWPjDVfz.jpg",
+          "order": 10
+        },
+        {
+          "id": 3729434,
+          "name": "Malcolm Kelner",
+          "character": "Bartender",
+          "profile": "https://image.tmdb.org/t/p/w185/xlojlX1dlu1OY0Vf2owDWv5PV3l.jpg",
+          "order": 11
+        },
+        {
+          "id": 6242973,
+          "name": "Charles Santa Cruz",
+          "character": "Background",
+          "profile": "",
+          "order": 12
+        },
+        {
+          "id": 6242975,
+          "name": "Alex Maystrik",
+          "character": "Background",
+          "profile": "",
+          "order": 13
+        },
+        {
+          "id": 6242979,
+          "name": "Mariana Silva",
+          "character": "Background",
+          "profile": "",
+          "order": 14
+        },
+        {
+          "id": 5657289,
+          "name": "Kyle Blumenthal",
+          "character": "Background",
+          "profile": "",
+          "order": 15
+        },
+        {
+          "id": 4653191,
+          "name": "Jorge Luquin",
+          "character": "Background",
+          "profile": "",
+          "order": 16
+        },
+        {
+          "id": 6318023,
+          "name": "Jose Herrera",
+          "character": "Background",
+          "profile": "",
+          "order": 17
+        },
+        {
+          "id": 3889803,
+          "name": "Emilio Flores",
+          "character": "Background",
+          "profile": "https://image.tmdb.org/t/p/w185/j5HG24bZUjr7Nw8NtB4dGENelWx.jpg",
+          "order": 18
+        },
+        {
+          "id": 2055980,
+          "name": "Manny Liotta",
+          "character": "Background",
+          "profile": "https://image.tmdb.org/t/p/w185/sMOebSAJzglALejW2rNuPI0ii5r.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "​Hoşlandığı kızın kalbini kazanmak için gizemli \"Tek Dilek Söğüdü\"nü (One Wish Willow) kıran umutsuz bir romantik, tam da dilediği şeye kavuşur; ancak çok geçmeden bazı arzuların karanlık ve tekinsiz bir bedeli olduğunu keşfeder.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/nriiXc6VbD6qWBj7INOElJbX8mp.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/5lTZyuBTNOfawsfPT8Q0cIg6qAF.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=GodRHmQvbFE",
+      "tmdbImdbId": "tt37287335",
+      "tmdbRating": "8.2",
+      "tmdbVoteCount": 6609
     }
   ],
   "collections": [],
