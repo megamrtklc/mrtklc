@@ -21582,6 +21582,207 @@
       "tmdbImdbId": "tt0242653",
       "tmdbRating": "6.8",
       "tmdbVoteCount": 11327
+    },
+    {
+      "id": "cv-1794698407327",
+      "title": "Matrix Resurrections",
+      "type": "movie",
+      "year": "2021",
+      "rating": "6.3",
+      "genre": "Bilim-Kurgu",
+      "category": "Bilim-Kurgu / Aksiyon / Macera",
+      "duration": "147 dk",
+      "country": "United States of America",
+      "director": "Lana Wachowski",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 624860,
+      "imdbId": "tt10838180",
+      "image": "https://image.tmdb.org/t/p/w500/8c4a8kE7PizaGQQnditMmI1xbRp.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/eNI7PtK6DEYgZmHWP9gQNuff8pv.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=pQFtCkBKn4s",
+      "trailerProvider": "auto",
+      "desc": "Tuhaf anılarla boğuşan Neo, kendisini tekrar Matrix'in içinde bulmasıyla kaynağa beklenmedik bir dönüş yapar.",
+      "cast": [
+        "Keanu Reeves",
+        "Carrie-Anne Moss",
+        "Yahya Abdul-Mateen II",
+        "Jonathan Groff",
+        "Jessica Henwick",
+        "Neil Patrick Harris",
+        "Jada Pinkett Smith",
+        "Priyanka Chopra Jonas",
+        "Christina Ricci",
+        "Lambert Wilson",
+        "Andrew Lewis Caldwell",
+        "Toby Onwumere",
+        "Max Riemelt",
+        "Joshua Grothe",
+        "Brian J. Smith",
+        "Eréndira Ibarra",
+        "Michael X. Sommers",
+        "L. Trey Wilson",
+        "Mumbi Maina",
+        "Max Mauff"
+      ],
+      "tmdbTitle": "Matrix Resurrections",
+      "tmdbOriginalTitle": "The Matrix Resurrections",
+      "tmdbReleaseDate": "2021-12-16",
+      "tmdbGenres": "Bilim-Kurgu / Aksiyon / Macera",
+      "tmdbRuntime": "147 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Lana Wachowski",
+      "tmdbCast": [
+        {
+          "id": 6384,
+          "name": "Keanu Reeves",
+          "character": "Neo / Thomas Anderson",
+          "profile": "https://image.tmdb.org/t/p/w185/8RZLOyYGsoRe9p44q3xin9QkMHv.jpg",
+          "order": 0
+        },
+        {
+          "id": 530,
+          "name": "Carrie-Anne Moss",
+          "character": "Trinity / Tiffany",
+          "profile": "https://image.tmdb.org/t/p/w185/9zya72vRZYBQILfetACsnmCBgdj.jpg",
+          "order": 1
+        },
+        {
+          "id": 1639847,
+          "name": "Yahya Abdul-Mateen II",
+          "character": "Morpheus / Agent Smith",
+          "profile": "https://image.tmdb.org/t/p/w185/79VdVjUoiYGcgjOT9UmE5XIpoZM.jpg",
+          "order": 2
+        },
+        {
+          "id": 221611,
+          "name": "Jonathan Groff",
+          "character": "Smith",
+          "profile": "https://image.tmdb.org/t/p/w185/3kmnYKAzSc3Lp7iK5pcj97Hx9Cm.jpg",
+          "order": 3
+        },
+        {
+          "id": 1202689,
+          "name": "Jessica Henwick",
+          "character": "Bugs",
+          "profile": "https://image.tmdb.org/t/p/w185/ayMJbMeg68uJyirPKmcAtHYML8r.jpg",
+          "order": 4
+        },
+        {
+          "id": 41686,
+          "name": "Neil Patrick Harris",
+          "character": "The Analyst",
+          "profile": "https://image.tmdb.org/t/p/w185/r2twLWLwDpKJ7JyhWsD1YsL7rJV.jpg",
+          "order": 5
+        },
+        {
+          "id": 9575,
+          "name": "Jada Pinkett Smith",
+          "character": "Niobe",
+          "profile": "https://image.tmdb.org/t/p/w185/3RyvVVSlgRbZANDFkYiAsRMaHW.jpg",
+          "order": 6
+        },
+        {
+          "id": 77234,
+          "name": "Priyanka Chopra Jonas",
+          "character": "Sati",
+          "profile": "https://image.tmdb.org/t/p/w185/hh48u9scic0nITGtzi9b6rJeAtT.jpg",
+          "order": 7
+        },
+        {
+          "id": 6886,
+          "name": "Christina Ricci",
+          "character": "Gwyn de Vere",
+          "profile": "https://image.tmdb.org/t/p/w185/m2cY5Er1loPgHkZYdFMEz6YeiwG.jpg",
+          "order": 8
+        },
+        {
+          "id": 2192,
+          "name": "Lambert Wilson",
+          "character": "The Merovingian",
+          "profile": "https://image.tmdb.org/t/p/w185/pFuLPZtgrKsnRXJCKWILQ69k6Ta.jpg",
+          "order": 9
+        },
+        {
+          "id": 77912,
+          "name": "Andrew Lewis Caldwell",
+          "character": "Jude",
+          "profile": "https://image.tmdb.org/t/p/w185/re79YZi81oxsk1D2yfaa35kfU1T.jpg",
+          "order": 10
+        },
+        {
+          "id": 1726859,
+          "name": "Toby Onwumere",
+          "character": "Sequoia",
+          "profile": "https://image.tmdb.org/t/p/w185/nlRElwoVrV6etxnt7vpnqM0MmD1.jpg",
+          "order": 11
+        },
+        {
+          "id": 38773,
+          "name": "Max Riemelt",
+          "character": "Sheperd",
+          "profile": "https://image.tmdb.org/t/p/w185/ocv67YrgSDo6uZepXtORJuv8oTx.jpg",
+          "order": 12
+        },
+        {
+          "id": 124698,
+          "name": "Joshua Grothe",
+          "character": "FunktIøn",
+          "profile": "https://image.tmdb.org/t/p/w185/w2PtiAkorYBR3DDaMLajYdb52jB.jpg",
+          "order": 13
+        },
+        {
+          "id": 22541,
+          "name": "Brian J. Smith",
+          "character": "Berg",
+          "profile": "https://image.tmdb.org/t/p/w185/sAlWlK9mtX9BVGFybx7wQ9SSzTp.jpg",
+          "order": 14
+        },
+        {
+          "id": 970672,
+          "name": "Eréndira Ibarra",
+          "character": "Lexy",
+          "profile": "https://image.tmdb.org/t/p/w185/iDRhMVCEfKPweKuRSicBFNjCrgm.jpg",
+          "order": 15
+        },
+        {
+          "id": 1069833,
+          "name": "Michael X. Sommers",
+          "character": "Skroce",
+          "profile": "https://image.tmdb.org/t/p/w185/vIAE1c2J8SkxY7XchAoXp5aIvaf.jpg",
+          "order": 16
+        },
+        {
+          "id": 2485018,
+          "name": "L. Trey Wilson",
+          "character": "Hanno",
+          "profile": "https://image.tmdb.org/t/p/w185/8ZLvEwGJ07uwEGzQi9Ocb4S8Ge5.jpg",
+          "order": 17
+        },
+        {
+          "id": 1811913,
+          "name": "Mumbi Maina",
+          "character": "Ellster",
+          "profile": "https://image.tmdb.org/t/p/w185/8mb70XITC2XNo1n1ogGysJjOs72.jpg",
+          "order": 18
+        },
+        {
+          "id": 28432,
+          "name": "Max Mauff",
+          "character": "Quillion",
+          "profile": "https://image.tmdb.org/t/p/w185/iLbPfx8jKCWKxYkh27yVgJTmHQB.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Tuhaf anılarla boğuşan Neo, kendisini tekrar Matrix'in içinde bulmasıyla kaynağa beklenmedik bir dönüş yapar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/8c4a8kE7PizaGQQnditMmI1xbRp.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/eNI7PtK6DEYgZmHWP9gQNuff8pv.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=pQFtCkBKn4s",
+      "tmdbImdbId": "tt10838180",
+      "tmdbRating": "6.3",
+      "tmdbVoteCount": 6860
     }
   ],
   "collections": [],
