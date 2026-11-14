@@ -484,6 +484,7 @@
                         this.catalogLoading = false;
                         this.$nextTick(() => {
                             document.getElementById('hero-initial-shell')?.remove();
+                            document.getElementById('hero-initial-shell-desktop')?.remove();
                             this.initHomeSectionObserver();
                         });
                     }
