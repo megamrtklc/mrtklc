@@ -1544,6 +1544,164 @@
       }
     </style>
     </style>
+
+    <style id="cineverse-watch-card-artwork">
+      /* İzleme sayfası: kartın içeriğine özel, metni örtmeyen dekoratif arka planlar. */
+      [data-watch-card]{
+        position:relative;
+        isolation:isolate;
+        background-image:
+          radial-gradient(ellipse at 96% 8%,rgba(225,29,72,.095),transparent 38%),
+          linear-gradient(135deg,rgba(255,255,255,.018),transparent 58%);
+        transition:background-color .22s ease,border-color .22s ease,box-shadow .22s ease;
+      }
+      [data-watch-card]::before{
+        position:absolute;
+        z-index:-1;
+        top:-.34em;
+        right:14px;
+        pointer-events:none;
+        user-select:none;
+        line-height:1;
+        font-family:Georgia,"Times New Roman",serif;
+        font-weight:700;
+        opacity:.13;
+        transform:rotate(-5deg);
+      }
+      [data-watch-card="synopsis"]::before{
+        content:"“";
+        top:-.30em;
+        right:18px;
+        font-size:clamp(112px,15vw,174px);
+        color:#fb7185;
+        opacity:.17;
+      }
+      [data-watch-card="reviews"]{
+        background-image:
+          radial-gradient(ellipse at 96% 7%,rgba(56,189,248,.13),transparent 40%),
+          linear-gradient(135deg,rgba(255,255,255,.018),transparent 58%);
+      }
+      [data-watch-card="reviews"]::before{
+        content:"✎";
+        top:5px;
+        right:18px;
+        font-family:Georgia,serif;
+        font-size:104px;
+        color:#38bdf8;
+        opacity:.13;
+        transform:rotate(-12deg);
+      }
+      [data-watch-card="credits"]{
+        background-image:
+          radial-gradient(ellipse at 96% 8%,rgba(245,158,11,.13),transparent 40%),
+          linear-gradient(135deg,rgba(255,255,255,.018),transparent 58%);
+      }
+      [data-watch-card="credits"]::before{
+        content:"▤";
+        top:10px;
+        right:18px;
+        font-family:Arial,sans-serif;
+        font-size:92px;
+        color:#fbbf24;
+        opacity:.12;
+        transform:rotate(-8deg);
+      }
+      [data-watch-card="player"]::before{
+        content:"▶";
+        top:12px;
+        right:22px;
+        font-family:Arial,sans-serif;
+        font-size:92px;
+        color:#fb7185;
+        opacity:.10;
+      }
+      [data-watch-card="season"]::before{
+        content:"▤";
+        top:4px;
+        right:18px;
+        font-family:Arial,sans-serif;
+        font-size:88px;
+        color:#a78bfa;
+        opacity:.12;
+      }
+      [data-watch-card="episodes"]::before{
+        content:"▥";
+        top:8px;
+        right:18px;
+        font-family:Arial,sans-serif;
+        font-size:92px;
+        color:#60a5fa;
+        opacity:.12;
+        transform:rotate(5deg);
+      }
+      [data-watch-card="cast"]::before{
+        content:"✺";
+        top:2px;
+        right:18px;
+        font-size:100px;
+        color:#f9a8d4;
+        opacity:.12;
+      }
+      [data-watch-card="similar"]::before{
+        content:"✦";
+        top:5px;
+        right:20px;
+        font-size:100px;
+        color:#fbbf24;
+        opacity:.13;
+      }
+
+      /* Açık temalar: aynı motifler daha hafif, sıcak ve yüzey rengiyle uyumlu. */
+      html.theme-ivory [data-watch-card],
+      html.theme-slate [data-watch-card]{
+        background-image:
+          radial-gradient(ellipse at 96% 8%,rgba(190,24,93,.065),transparent 40%),
+          linear-gradient(135deg,rgba(255,255,255,.30),transparent 62%);
+      }
+      html.theme-ivory [data-watch-card="synopsis"]::before,
+      html.theme-slate [data-watch-card="synopsis"]::before{color:#be5671;opacity:.12}
+      html.theme-ivory [data-watch-card="reviews"],
+      html.theme-slate [data-watch-card="reviews"]{
+        background-image:
+          radial-gradient(ellipse at 96% 8%,rgba(2,132,199,.065),transparent 40%),
+          linear-gradient(135deg,rgba(255,255,255,.30),transparent 62%);
+      }
+      html.theme-ivory [data-watch-card="reviews"]::before,
+      html.theme-slate [data-watch-card="reviews"]::before{color:#287fa4;opacity:.10}
+      html.theme-ivory [data-watch-card="credits"],
+      html.theme-slate [data-watch-card="credits"]{
+        background-image:
+          radial-gradient(ellipse at 96% 8%,rgba(180,120,20,.075),transparent 40%),
+          linear-gradient(135deg,rgba(255,255,255,.30),transparent 62%);
+      }
+      html.theme-ivory [data-watch-card="credits"]::before,
+      html.theme-slate [data-watch-card="credits"]::before{color:#a87924;opacity:.10}
+      html.theme-ivory [data-watch-card="player"]::before,
+      html.theme-slate [data-watch-card="player"]::before{color:#be5671;opacity:.09}
+      html.theme-ivory [data-watch-card="season"]::before,
+      html.theme-slate [data-watch-card="season"]::before{color:#7862ad;opacity:.10}
+      html.theme-ivory [data-watch-card="episodes"]::before,
+      html.theme-slate [data-watch-card="episodes"]::before{color:#397da8;opacity:.10}
+      html.theme-ivory [data-watch-card="cast"]::before,
+      html.theme-slate [data-watch-card="cast"]::before{color:#ad668b;opacity:.10}
+      html.theme-ivory [data-watch-card="similar"]::before,
+      html.theme-slate [data-watch-card="similar"]::before{color:#a87924;opacity:.10}
+
+      @media(max-width:640px){
+        [data-watch-card]::before{right:10px}
+        [data-watch-card="synopsis"]::before{font-size:118px;right:10px}
+        [data-watch-card="reviews"]::before,
+        [data-watch-card="credits"]::before,
+        [data-watch-card="player"]::before,
+        [data-watch-card="season"]::before,
+        [data-watch-card="episodes"]::before,
+        [data-watch-card="cast"]::before,
+        [data-watch-card="similar"]::before{font-size:76px;right:12px}
+      }
+      @media(prefers-reduced-motion:reduce){
+        [data-watch-card]{transition:none}
+      }
+    </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
