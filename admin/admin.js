@@ -219,8 +219,8 @@
   }
   function headerFooterDefaults(){
     return {
-      header:{enabled:true,sticky:true,showLogoIcon:true,brandPrimary:'CINE',brandAccent:'VERSE',showHome:true,homeLabel:'Ana Sayfa',showExplore:true,exploreLabel:'Keşfet',showVideo:true,videoLabel:'Video Bağlantıları',showSearch:true,showProfile:true,showMobileMenu:true,catalogMenusInitialized:false,customLinks:[]},
-      footer:{enabled:true,customLinks:[],brandPrimary:'CINE',brandAccent:'VERSE',description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.',showBadges:true,badgeOne:'KİŞİSEL KÜTÜPHANE',badgeTwo:'DİZİ TAKİBİ',columnOneTitle:'CineVerse',homeLabel:'Ana Sayfa',exploreLabel:'Keşfet',libraryLabel:'Kütüphanem',columnTwoTitle:'İzleme Alanım',watchlistLabel:'İzleme Listem',statsLabel:'İstatistikler',featureTitle:'İzleme keyfini kişiselleştir',featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.',ctaLabel:'Kütüphaneme Git',showCta:true,copyright:'© 2026 CineVerse. Tüm hakları saklıdır.',showBackToTop:true}
+      header:{enabled:true,sticky:true,showLogoIcon:true,brandPrimary:'CINE',brandAccent:'VERSE',logoImage:'',showHome:true,homeLabel:'Ana Sayfa',showExplore:true,exploreLabel:'Keşfet',showVideo:true,videoLabel:'Video Bağlantıları',showSearch:true,showProfile:true,showMobileMenu:true,catalogMenusInitialized:false,customLinks:[]},
+      footer:{enabled:true,customLinks:[],brandPrimary:'CINE',brandAccent:'VERSE',logoImage:'',description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.',showBadges:true,badgeOne:'KİŞİSEL KÜTÜPHANE',badgeTwo:'DİZİ TAKİBİ',columnOneTitle:'CineVerse',homeLabel:'Ana Sayfa',exploreLabel:'Keşfet',libraryLabel:'Kütüphanem',columnTwoTitle:'İzleme Alanım',watchlistLabel:'İzleme Listem',statsLabel:'İstatistikler',featureTitle:'İzleme keyfini kişiselleştir',featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.',ctaLabel:'Kütüphaneme Git',showCta:true,copyright:'© 2026 CineVerse. Tüm hakları saklıdır.',showBackToTop:true}
     };
   }
   function headerFooterConfig(){
@@ -245,6 +245,23 @@
   function readCustomLinkRows(kind){
     return $$('#hf-'+kind+'-custom-links [data-custom-link-row]').map(row=>({label:row.querySelector('[data-custom-link-label]').value.trim(),page:row.querySelector('[data-custom-link-page]').value})).filter(link=>link.label);
   }
+
+  function renderLogoPreview(kind,src){
+    const preview=$('#hf-'+kind+'-logo-preview');if(!preview)return;
+    preview.innerHTML=src?'<img src="'+src+'" alt="'+kind+' logo önizlemesi">':'<span>Logo yüklenmedi</span>';
+    const remove=$('[data-remove-logo="'+kind+'"]');if(remove)remove.disabled=!src;
+  }
+  async function readLogoFile(file){
+    if(!file)return '';
+    if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw new Error('Yalnızca PNG, JPG veya WebP dosyası yükleyebilirsin.');
+    if(file.size>4*1024*1024)throw new Error('Logo dosyası 4 MB sınırını aşamaz.');
+    const source=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Logo dosyası okunamadı.'));reader.readAsDataURL(file);});
+    const image=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Görsel açılamadı.'));img.src=source;});
+    const scale=Math.min(1,900/image.width,320/image.height),canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));
+    canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+    return canvas.toDataURL('image/webp',.88);
+  }
   function renderHeaderFooter(){
     if(!state.data)return;
     const {header:h,footer:f}=headerFooterConfig();
@@ -263,6 +280,7 @@
     };
     Object.entries(checks).forEach(([id,value])=>{const el=$('#'+id);if(el)el.checked=value;});
     renderCustomLinkRows('header',h.customLinks);renderCustomLinkRows('footer',f.customLinks);
+    renderLogoPreview('header',h.logoImage);renderLogoPreview('footer',f.logoImage);
   }
   async function saveHeaderFooter(event){
     event.preventDefault();
@@ -273,6 +291,7 @@
     const header={
       enabled:checked('hf-header-enabled'),sticky:checked('hf-header-sticky'),showLogoIcon:checked('hf-header-logo-icon'),
       brandPrimary:value('hf-header-primary')||'CINE',brandAccent:value('hf-header-accent')||'VERSE',
+      logoImage:state.data.headerConfig?.logoImage||'',
       showHome:checked('hf-header-home'),homeLabel:value('hf-header-home-label')||'Ana Sayfa',
       showExplore:checked('hf-header-explore'),exploreLabel:value('hf-header-explore-label')||'Keşfet',
       showVideo:checked('hf-header-video'),videoLabel:value('hf-header-video-label')||'Video Bağlantıları',
@@ -280,6 +299,7 @@
     };
     const footer={
       enabled:checked('hf-footer-enabled'),brandPrimary:value('hf-footer-primary')||'CINE',brandAccent:value('hf-footer-accent')||'VERSE',
+      logoImage:state.data.footerConfig?.logoImage||'',
       description:value('hf-footer-description'),showBadges:checked('hf-footer-badges'),badgeOne:value('hf-footer-badge-one'),badgeTwo:value('hf-footer-badge-two'),
       columnOneTitle:value('hf-footer-col-one'),homeLabel:value('hf-footer-home-label'),exploreLabel:value('hf-footer-explore-label'),libraryLabel:value('hf-footer-library-label'),
       columnTwoTitle:value('hf-footer-col-two'),watchlistLabel:value('hf-footer-watchlist-label'),statsLabel:value('hf-footer-stats-label'),
@@ -965,6 +985,16 @@
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
+  ['header','footer'].forEach(kind=>{
+    $('#hf-'+kind+'-logo-file')?.addEventListener('change',async event=>{
+      const file=event.target.files?.[0];if(!file)return;
+      try{const data=await readLogoFile(file);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage=data;renderLogoPreview(kind,data);toast('Logo yüklendi. Değişikliği uygulamak için ayarları kaydet.');}
+      catch(error){toast(error.message);}finally{event.target.value='';}
+    });
+    $('[data-remove-logo="'+kind+'"]')?.addEventListener('click',()=>{
+      state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');toast('Logo kaldırıldı. Değişikliği uygulamak için ayarları kaydet.');
+    });
+  });
   $('#header-footer-form').addEventListener('click',event=>{
     const add=event.target.closest('[data-add-custom-link]');
     if(add){const kind=add.dataset.addCustomLink;const root=$('#hf-'+kind+'-custom-links');const current=readCustomLinkRows(kind);current.push({label:'',page:'home'});renderCustomLinkRows(kind,current);const inputs=root.querySelectorAll('[data-custom-link-label]');if(inputs.length)inputs[inputs.length-1].focus();return;}
