@@ -19226,6 +19226,207 @@
       "tmdbImdbId": "tt0112573",
       "tmdbRating": "7.9",
       "tmdbVoteCount": 11629
+    },
+    {
+      "id": "cv-1794698096216",
+      "title": "Asfaltın Kralları",
+      "type": "movie",
+      "year": "2019",
+      "rating": "8.0",
+      "genre": "Dram",
+      "category": "Dram / Tarih / Aksiyon",
+      "duration": "152 dk",
+      "country": "United States of America",
+      "director": "James Mangold",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 359724,
+      "imdbId": "tt1950186",
+      "image": "https://image.tmdb.org/t/p/w500/7yXOh2PqutxhruHzVuoR35D1r4m.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/2vq5GTJOahE03mNYZGxIynlHcWr.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=-z5MzOj23jU",
+      "trailerProvider": "auto",
+      "desc": "Ford v. Ferrari, 1966 yılında düzenlenen Le Mans 24 Saat Yarışı’nın gerçek hikayesini konu alıyor. Henry Ford II ve Lee Iacocca ikilisi, tuhaf ancak kararlı bir grup Amerikalı mühendis ve tasarımcıdan sıfırdan bir otomobil yapmalarını ister. Otomotiv vizyoneri Carroll Shelby (Matt Damon) ve İngiliz şoförü Ken Miles’ın (Christian Bale) başını çektiği ekip, uzun yıllardır pistlere egemen olan Ferrari’yi Fransa’da düzenlenen 1966 Le Mans Dünya Şampiyonası’nda alt etmek için işe koyulur.",
+      "cast": [
+        "Matt Damon",
+        "Christian Bale",
+        "Jon Bernthal",
+        "Caitríona Balfe",
+        "Josh Lucas",
+        "Noah Jupe",
+        "Tracy Letts",
+        "Remo Girone",
+        "Ray McKinnon",
+        "JJ Feild",
+        "Jack McMullen",
+        "Corrado Invernizzi",
+        "Joe Williamson",
+        "Ian Harding",
+        "Christopher Darga",
+        "Shawn Law",
+        "Emil Beheshti",
+        "Darrin Prescott",
+        "Alex Gurney",
+        "Benjamin Rigby"
+      ],
+      "tmdbTitle": "Asfaltın Kralları",
+      "tmdbOriginalTitle": "Ford v Ferrari",
+      "tmdbReleaseDate": "2019-11-13",
+      "tmdbGenres": "Dram / Tarih / Aksiyon",
+      "tmdbRuntime": "152 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "James Mangold",
+      "tmdbCast": [
+        {
+          "id": 1892,
+          "name": "Matt Damon",
+          "character": "Carroll Shelby",
+          "profile": "https://image.tmdb.org/t/p/w185/aCvBXTAR9B1qRjIRzMBYhhbm1fR.jpg",
+          "order": 0
+        },
+        {
+          "id": 3894,
+          "name": "Christian Bale",
+          "character": "Ken Miles",
+          "profile": "https://image.tmdb.org/t/p/w185/7Pxez9J8fuPd2Mn9kex13YALrCQ.jpg",
+          "order": 1
+        },
+        {
+          "id": 19498,
+          "name": "Jon Bernthal",
+          "character": "Lee Iacocca",
+          "profile": "https://image.tmdb.org/t/p/w185/bjcglF1IpDcZNs1HwFxakGpzBo6.jpg",
+          "order": 2
+        },
+        {
+          "id": 147056,
+          "name": "Caitríona Balfe",
+          "character": "Mollie Miles",
+          "profile": "https://image.tmdb.org/t/p/w185/lerCNTjO6FQIam2lF5SXHA4dY7H.jpg",
+          "order": 3
+        },
+        {
+          "id": 6164,
+          "name": "Josh Lucas",
+          "character": "Leo Beebe",
+          "profile": "https://image.tmdb.org/t/p/w185/ueR4CH32f22DGjFxuhnW1o3YKB3.jpg",
+          "order": 4
+        },
+        {
+          "id": 1590759,
+          "name": "Noah Jupe",
+          "character": "Peter Miles",
+          "profile": "https://image.tmdb.org/t/p/w185/xbswZN0SHgeCbyo5GQ0xfZKH3vs.jpg",
+          "order": 5
+        },
+        {
+          "id": 72638,
+          "name": "Tracy Letts",
+          "character": "Henry Ford II",
+          "profile": "https://image.tmdb.org/t/p/w185/x318yEddF10ASORC5U958C2kowf.jpg",
+          "order": 6
+        },
+        {
+          "id": 41527,
+          "name": "Remo Girone",
+          "character": "Enzo Ferrari",
+          "profile": "https://image.tmdb.org/t/p/w185/gRS90yn20ZMlq4pvVQjtUM5DLqN.jpg",
+          "order": 7
+        },
+        {
+          "id": 1472,
+          "name": "Ray McKinnon",
+          "character": "Phil Remington",
+          "profile": "https://image.tmdb.org/t/p/w185/nZSmJVTSq2eEcE4FeEoKVNYUGM9.jpg",
+          "order": 8
+        },
+        {
+          "id": 30710,
+          "name": "JJ Feild",
+          "character": "Roy Lunn",
+          "profile": "https://image.tmdb.org/t/p/w185/ixelMubtR3MlwmkAkeVsie5dLoT.jpg",
+          "order": 9
+        },
+        {
+          "id": 233093,
+          "name": "Jack McMullen",
+          "character": "Charlie Agapiou",
+          "profile": "https://image.tmdb.org/t/p/w185/AlhkqFswcHJaMENwwvgxq1rPpD0.jpg",
+          "order": 10
+        },
+        {
+          "id": 105869,
+          "name": "Corrado Invernizzi",
+          "character": "Franco Gozzi",
+          "profile": "https://image.tmdb.org/t/p/w185/eT0noHS5TtUTr0O1bcE8yqWkRoI.jpg",
+          "order": 11
+        },
+        {
+          "id": 588333,
+          "name": "Joe Williamson",
+          "character": "Don Frey",
+          "profile": "https://image.tmdb.org/t/p/w185/o3ncOH2qBMIRAOJ0JpgEQ0If8d6.jpg",
+          "order": 12
+        },
+        {
+          "id": 222089,
+          "name": "Ian Harding",
+          "character": "Ford Executive - Ian",
+          "profile": "https://image.tmdb.org/t/p/w185/xPbPmEZvRnqJsp3r6S8Invnxuv8.jpg",
+          "order": 13
+        },
+        {
+          "id": 75923,
+          "name": "Christopher Darga",
+          "character": "John Holman",
+          "profile": "https://image.tmdb.org/t/p/w185/39irRa9HgDnxq0wYfyuezP8lKbo.jpg",
+          "order": 14
+        },
+        {
+          "id": 2103899,
+          "name": "Shawn Law",
+          "character": "AJ \"Gus\" Scussel",
+          "profile": "https://image.tmdb.org/t/p/w185/wmXdWE4UlDp3v1FVopW1wtjBy7w.jpg",
+          "order": 15
+        },
+        {
+          "id": 202691,
+          "name": "Emil Beheshti",
+          "character": "Aeronutronics Chief Engineer",
+          "profile": "https://image.tmdb.org/t/p/w185/o7QAbl9AFkJzXHbEA9m40pQLVo1.jpg",
+          "order": 16
+        },
+        {
+          "id": 1357063,
+          "name": "Darrin Prescott",
+          "character": "Bob Bondurant",
+          "profile": "https://image.tmdb.org/t/p/w185/yTN1eNBSos16vWSgajcdxKuOGKw.jpg",
+          "order": 17
+        },
+        {
+          "id": 2581814,
+          "name": "Alex Gurney",
+          "character": "Dan Gurney",
+          "profile": "https://image.tmdb.org/t/p/w185/rYW93pZWYaxzOFCnmb44HqMuwRe.jpg",
+          "order": 18
+        },
+        {
+          "id": 1371541,
+          "name": "Benjamin Rigby",
+          "character": "Bruce McLaren",
+          "profile": "https://image.tmdb.org/t/p/w185/le5qTKDolOJBZ5mWjnx5QwNbCPA.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Ford v. Ferrari, 1966 yılında düzenlenen Le Mans 24 Saat Yarışı’nın gerçek hikayesini konu alıyor. Henry Ford II ve Lee Iacocca ikilisi, tuhaf ancak kararlı bir grup Amerikalı mühendis ve tasarımcıdan sıfırdan bir otomobil yapmalarını ister. Otomotiv vizyoneri Carroll Shelby (Matt Damon) ve İngiliz şoförü Ken Miles’ın (Christian Bale) başını çektiği ekip, uzun yıllardır pistlere egemen olan Ferrari’yi Fransa’da düzenlenen 1966 Le Mans Dünya Şampiyonası’nda alt etmek için işe koyulur.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/7yXOh2PqutxhruHzVuoR35D1r4m.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/2vq5GTJOahE03mNYZGxIynlHcWr.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=-z5MzOj23jU",
+      "tmdbImdbId": "tt1950186",
+      "tmdbRating": "8.0",
+      "tmdbVoteCount": 9486
     }
   ],
   "collections": [],
