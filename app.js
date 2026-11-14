@@ -1418,7 +1418,7 @@
                         this.discoveryYearFrom = '';
                         this.discoveryYearTo = '';
                         this.quickFilter = page === 'movies' ? 'movies' : (page === 'series' ? 'series' : 'all');
-                        this.sortBy = 'default';
+                        this.sortBy = 'newest';
                         this.currentPage = 'explore';
                         this.syncRouteToUrl('explore', null);
                     } else {
@@ -2369,9 +2369,10 @@
                         return matchesSearch && matchesType && matchesMood && matchesGenre && matchesCountry && matchesDirector && matchesPlatform && matchesRating && matchesYearFrom && matchesYearTo && matchesQuick;
                     });
 
-                    if (this.sortBy === 'rating') result.sort((a, b) => (Number.parseFloat(b.rating) || 0) - (Number.parseFloat(a.rating) || 0));
+                    if (this.sortBy === 'newest') result.sort((a, b) => this.catalog.indexOf(b) - this.catalog.indexOf(a));
+                    else if (this.sortBy === 'rating') result.sort((a, b) => (Number.parseFloat(b.rating) || 0) - (Number.parseFloat(a.rating) || 0));
                     else if (this.sortBy === 'year') result.sort((a, b) => (Number.parseInt(b.year, 10) || 0) - (Number.parseInt(a.year, 10) || 0));
-                    else if (this.sortBy === 'oldest') result.sort((a, b) => (Number.parseInt(a.year, 10) || 9999) - (Number.parseInt(b.year, 10) || 9999));
+                    else if (this.sortBy === 'oldest') result.sort((a, b) => this.catalog.indexOf(a) - this.catalog.indexOf(b));
                     else if (this.sortBy === 'title') result.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
                     return result;
                 },
