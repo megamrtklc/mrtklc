@@ -1203,6 +1203,51 @@
           text-shadow:none!important;
         }
 
+
+        /* Mobilde büyük öneri kartının etiketleri ile yapım adını ayrı alanlara yerleştir. */
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-feature{
+            height:210px!important;
+            min-height:210px!important;
+            max-height:210px!important;
+          }
+          #home-personalized-section .home-personalized-feature-labels{
+            top:10px!important;
+            left:12px!important;
+            right:58px!important;
+            display:flex!important;
+            flex-wrap:wrap!important;
+            gap:5px!important;
+            max-width:calc(100% - 76px)!important;
+          }
+          #home-personalized-section .home-personalized-feature-labels span{
+            font-size:8px!important;
+            padding:5px 7px!important;
+            line-height:1.15!important;
+          }
+          #home-personalized-section .home-personalized-feature > div.relative.z-\\[1\\]{
+            justify-content:flex-end!important;
+            padding:54px 14px 12px!important;
+            min-height:0!important;
+          }
+          #home-personalized-section .home-personalized-feature h3{
+            display:-webkit-box!important;
+            -webkit-box-orient:vertical!important;
+            -webkit-line-clamp:2!important;
+            overflow:hidden!important;
+            max-width:100%!important;
+            margin-top:auto!important;
+            font-size:18px!important;
+            line-height:1.12!important;
+          }
+          #home-personalized-section .home-personalized-feature .mt-3{
+            margin-top:6px!important;
+          }
+          #home-personalized-section .home-personalized-feature .mt-5{
+            margin-top:8px!important;
+          }
+        }
+
     </style>
 
 </head>
