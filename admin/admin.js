@@ -617,7 +617,18 @@
       const limit=device==='desktop'?Math.max(5,Math.min(15,rawLimit)):Math.max(1,Math.min(12,rawLimit));
       $('#hero-'+device+'-count').value=limit;
       const saved=Array.isArray(draft[device])?draft[device]:(Array.isArray(config[device+'HeroSlides'])?config[device+'HeroSlides']:config.heroSlides);
-      const pool=mode==='auto'?autoHeroItems(category,limit):state.catalog;
+      let pool=state.catalog;
+      if(mode==='auto'&&category==='random'){
+        const source=Array.isArray(draft[device])?draft[device]:saved;
+        const savedIds=source.map(x=>String(typeof x==='object'?x.id:x));
+        const savedRandom=savedIds.length===limit?savedIds.map(id=>state.catalog.find(item=>String(item.id)===id)).filter(item=>item&&posterOf(item)):[];
+        if(savedRandom.length===limit)pool=savedRandom;
+        else{
+          pool=autoHeroItems('random',limit);
+          state.heroDraft=state.heroDraft||{};
+          state.heroDraft[device]=pool.map(item=>({id:item.id,active:true}));
+        }
+      }else if(mode==='auto')pool=autoHeroItems(category,limit);
       const selectedIds=(mode==='auto'?pool.map(x=>String(x.id)):saved.map(x=>String(typeof x==='object'?x.id:x))).slice(0,limit);
       const selected=new Set(selectedIds);
       const list=$('#hero-'+device+'-slide-list');
@@ -808,7 +819,7 @@
     toast('Varsayılan sıra taslağa alındı. Kalıcı olması için Düzeni yayınla.');
   });
   $('#hero-desktop-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=Array.from(document.querySelectorAll('#hero-desktop-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().desktopMode=event.target.value;renderHomepage();});
-  $('#hero-desktop-category').addEventListener('change',event=>{homepageConfig().desktopCategory=event.target.value;renderHomepage();});
+  $('#hero-desktop-category').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.desktop=[];homepageConfig().desktopCategory=event.target.value;renderHomepage();});
   $('#hero-desktop-count').addEventListener('change',event=>{
     const next=Math.max(5,Math.min(15,Number(event.target.value)||10));
     event.target.value=next;
@@ -818,7 +829,7 @@
     renderHomepage();
   });
   $('#hero-mobile-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=Array.from(document.querySelectorAll('#hero-mobile-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().mobileMode=event.target.value;renderHomepage();});
-  $('#hero-mobile-category').addEventListener('change',event=>{homepageConfig().mobileCategory=event.target.value;renderHomepage();});
+  $('#hero-mobile-category').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=[];homepageConfig().mobileCategory=event.target.value;renderHomepage();});
   $('#hero-mobile-count').addEventListener('change',event=>{homepageConfig().settings.mobileCount=Number(event.target.value)||6;renderHomepage();});
   $('#hero-description-length').addEventListener('change',event=>{homepageConfig().settings.descriptionLength=Number(event.target.value)||220;renderHomepage();});
 
