@@ -1132,6 +1132,77 @@
           #home-personalized-section .home-personalized-alternative{flex-basis:88%!important;width:88%!important;grid-template-columns:58px minmax(0,1fr)!important}
           #home-personalized-section .home-personalized-poster{width:58px!important;max-width:58px!important}
         }
+
+        /* İzleme Zevkine Göre: küçük kartlarda blur kaldırıldı, tema kontrastı düzeltildi. */
+        #home-personalized-section .home-personalized-alternative{
+          -webkit-backdrop-filter:none!important;
+          backdrop-filter:none!important;
+          background:rgba(12,15,22,.88)!important;
+          border:1px solid rgba(255,255,255,.14)!important;
+          box-shadow:0 8px 24px rgba(0,0,0,.18)!important;
+        }
+        #home-personalized-section .home-personalized-card-backdrop{
+          opacity:.18!important;
+          filter:none!important;
+          transform:none!important;
+        }
+        #home-personalized-section .home-personalized-card-shade{
+          background:linear-gradient(110deg,rgba(7,10,16,.94),rgba(7,10,16,.76))!important;
+          -webkit-backdrop-filter:none!important;
+          backdrop-filter:none!important;
+        }
+        #home-personalized-section .home-personalized-copy>p:first-child{
+          color:#fda4af!important;
+          text-shadow:none!important;
+        }
+        #home-personalized-section .home-personalized-copy h3{
+          color:#fff!important;
+          text-shadow:none!important;
+        }
+        #home-personalized-section .home-personalized-copy>p:nth-of-type(2),
+        #home-personalized-section .home-personalized-copy .home-personalized-plot,
+        #home-personalized-section .home-personalized-copy>p:last-child{
+          color:rgba(255,255,255,.84)!important;
+          text-shadow:none!important;
+        }
+
+        /* Fil dişi ve modern gri temalarında temiz, açık yüzey ve koyu metin. */
+        html.theme-ivory #home-personalized-section .home-personalized-alternative,
+        html.theme-slate #home-personalized-section .home-personalized-alternative{
+          background:rgba(255,255,255,.97)!important;
+          border-color:rgba(100,116,139,.24)!important;
+          box-shadow:0 7px 22px rgba(15,23,42,.08)!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-card-backdrop,
+        html.theme-slate #home-personalized-section .home-personalized-card-backdrop{
+          opacity:.07!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-card-shade{
+          background:linear-gradient(110deg,rgba(255,255,255,.97),rgba(255,255,255,.90))!important;
+        }
+        html.theme-slate #home-personalized-section .home-personalized-card-shade{
+          background:linear-gradient(110deg,rgba(241,245,249,.98),rgba(226,232,240,.92))!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-copy>p:first-child,
+        html.theme-slate #home-personalized-section .home-personalized-copy>p:first-child{
+          color:#be123c!important;
+          text-shadow:none!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-copy h3,
+        html.theme-slate #home-personalized-section .home-personalized-copy h3{
+          color:#172033!important;
+          text-shadow:none!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-copy>p:nth-of-type(2),
+        html.theme-ivory #home-personalized-section .home-personalized-copy .home-personalized-plot,
+        html.theme-ivory #home-personalized-section .home-personalized-copy>p:last-child,
+        html.theme-slate #home-personalized-section .home-personalized-copy>p:nth-of-type(2),
+        html.theme-slate #home-personalized-section .home-personalized-copy .home-personalized-plot,
+        html.theme-slate #home-personalized-section .home-personalized-copy>p:last-child{
+          color:#475569!important;
+          text-shadow:none!important;
+        }
+
     </style>
 
 </head>
