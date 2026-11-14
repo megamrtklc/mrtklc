@@ -44,5 +44,13 @@ if (artworkUrl) {
   if (!artworkTag.test(html)) throw new Error('Desktop hero skeleton artwork marker is missing from index.html.');
   await writeFile('index.html', html.replace(artworkTag, `$1${optimizedArtworkUrl}$2`));
 }
+// Manşet verisini HTML'e göm: init() ilk boyamada ayrı bir ağ isteği beklemesin.
+const html = await readFile('index.html', 'utf8');
+const bootstrapTag = /(<script id="cineverse-hero-bootstrap">window\\.__CV_HERO_BOOTSTRAP__ = )null;(\\<\\/script>)/;
+if (!bootstrapTag.test(html)) throw new Error('Inline hero bootstrap slot is missing from index.html.');
+const inlineJson = JSON.stringify(output).replace(/</g, '\\u003c').replace(/\\u2028/g, '\\\\u2028').replace(/\\u2029/g, '\\\\u2029');
+let updatedHtml = html.replace(bootstrapTag, `$1${inlineJson};$2`);
+updatedHtml = updatedHtml.replace(/    <link rel="preload" as="fetch" href="\\.\\/hero-data\\.json" crossorigin="anonymous" fetchpriority="high">\\n/, '');
+await writeFile('index.html', updatedHtml);
 await writeFile('hero-data.json', JSON.stringify(output, null, 2) + '\n');
 console.log(`hero-data.json üretildi: ${heroCatalog.length} yapım / ${Buffer.byteLength(JSON.stringify(output))} byte`);
