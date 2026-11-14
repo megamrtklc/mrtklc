@@ -22657,5 +22657,129 @@
     "showCta": true,
     "copyright": "© 2026 CineVerse. Tüm hakları saklıdır.",
     "showBackToTop": true
-  }
+  },
+  "franchises": [
+    {
+      "id": "toy-story",
+      "title": "Oyuncak Hikayesi",
+      "description": "Woody, Buzz ve arkadaşlarının yıllara yayılan maceraları.",
+      "items": [
+        "perde-mw5zyt37",
+        "perde-mw5zz3o5",
+        "perde-mw5zzgfl",
+        "perde-mw5zzoru",
+        "perde-mw5zzv1n"
+      ],
+      "active": true
+    },
+    {
+      "id": "matrix",
+      "title": "Matrix Serisi",
+      "description": "Gerçeklik, özgür irade ve makineler arasındaki savaş.",
+      "items": [
+        "cv-1794697915528",
+        "cv-1794698369607",
+        "cv-1794698391656",
+        "cv-1794698407327"
+      ],
+      "active": true
+    },
+    {
+      "id": "planet-of-the-apes",
+      "title": "Maymunlar Cehennemi",
+      "description": "İnsanlık ile yükselen maymun uygarlığının değişen dengesi.",
+      "items": [
+        "cv-1794698259535",
+        "cv-1794698287703",
+        "cv-1794698302624",
+        "cv-1794698320791"
+      ],
+      "active": true
+    },
+    {
+      "id": "pirates",
+      "title": "Karayip Korsanları",
+      "description": "Jack Sparrow ve denizlerin efsanevi maceraları.",
+      "items": [
+        "archive-108",
+        "cv-1794698428751",
+        "archive-107"
+      ],
+      "active": true
+    },
+    {
+      "id": "transformers",
+      "title": "Transformers",
+      "description": "Autobotlar ve Decepticonlar arasındaki dünya savaşı.",
+      "items": [
+        "archive-117",
+        "archive-11",
+        "archive-10"
+      ],
+      "active": true
+    },
+    {
+      "id": "avatar",
+      "title": "Avatar",
+      "description": "Pandora'nın büyüleyici dünyasında geçen destansı hikâye.",
+      "items": [
+        "archive-14",
+        "archive-13",
+        "archive-12"
+      ],
+      "active": true
+    },
+    {
+      "id": "godfather",
+      "title": "Baba (The Godfather)",
+      "description": "Corleone ailesinin suç, güç ve sadakat hikâyesi.",
+      "items": [
+        "archive-110",
+        "archive-109"
+      ],
+      "active": true
+    },
+    {
+      "id": "the-raid",
+      "title": "Baskın",
+      "description": "Tek bir binada başlayan, giderek büyüyen amansız mücadele.",
+      "items": [
+        "perde-mw5zwmbz",
+        "cv-1794698024448"
+      ],
+      "active": true
+    },
+    {
+      "id": "escape-room",
+      "title": "Ölümcül Labirent",
+      "description": "Hayatta kalmak için ölümcül bulmacaları çözmek zorundalar.",
+      "items": [
+        "archive-105",
+        "archive-104"
+      ],
+      "active": true
+    },
+    {
+      "id": "the-roundup",
+      "title": "Kuralsızlar (The Roundup)",
+      "description": "Dedektif Ma Seok-do'nun suç dünyasına karşı mücadelesi.",
+      "items": [
+        "archive-44",
+        "archive-46",
+        "archive-45",
+        "archive-41"
+      ],
+      "active": true
+    },
+    {
+      "id": "fall",
+      "title": "Düşüş",
+      "description": "Yükseklik korkusunu sınayan hayatta kalma hikâyesi.",
+      "items": [
+        "archive-76",
+        "archive-77"
+      ],
+      "active": true
+    }
+  ]
 }
