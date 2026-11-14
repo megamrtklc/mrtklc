@@ -91,6 +91,7 @@
           #home-personalized-section .home-personalized-alternatives{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(160px,auto);gap:10px;overflow:visible;padding:2px 0;touch-action:pan-y}
           #home-personalized-section .home-personalized-alternative{width:auto;min-width:0;min-height:160px;scroll-snap-align:none}
         }
+        @media(max-width:1100px){#home-genre-discovery-section .home-genre-discovery-grid{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:auto}}
         @media(max-width:639px){
           #home-personalized-section .home-personalized-alternatives{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x;scroll-snap-type:x mandatory;padding:3px 2px 14px;scrollbar-width:none}
           #home-personalized-section .home-personalized-alternatives::-webkit-scrollbar{display:none}
@@ -436,15 +437,15 @@
         #home-genre-discovery-section .home-genre-discovery-more{display:inline-flex;align-items:center;gap:9px;min-height:38px;padding:9px 14px;border:1px solid rgba(148,163,184,.28);border-radius:999px;background:rgba(148,163,184,.07);color:#334155;font-size:11px;font-weight:850;white-space:nowrap;transition:background .2s,border-color .2s,transform .2s}
         #home-genre-discovery-section .home-genre-discovery-more:hover{transform:translateY(-1px);background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.48)}
         .dark #home-genre-discovery-section .home-genre-discovery-more{color:#f8fafc;border-color:rgba(148,163,184,.24);background:rgba(15,23,42,.42)}
-        #home-genre-discovery-section .home-genre-discovery-grid{display:grid;grid-template-columns:repeat(8,max-content);grid-template-rows:repeat(2,minmax(40px,auto));grid-auto-flow:row;align-items:center;align-content:start;gap:9px;min-width:0;width:100%;overflow-x:auto;overflow-y:hidden;padding:2px 2px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+        #home-genre-discovery-section .home-genre-discovery-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));grid-template-rows:repeat(2,minmax(40px,auto));grid-auto-flow:row;align-items:center;align-content:start;gap:9px;min-width:0;width:100%;overflow:visible;padding:2px 2px 8px}
         #home-genre-discovery-section .home-genre-discovery-grid::-webkit-scrollbar{display:none}
-        #home-genre-discovery-section .home-genre-discovery-card{position:relative;isolation:isolate;display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:9px;min-height:48px;max-width:none;overflow:hidden;border:1px solid rgba(148,163,184,.28);border-radius:999px;padding:0 17px;text-align:center;white-space:nowrap;background:rgba(255,255,255,.76);color:#1f2937;box-shadow:0 3px 12px rgba(15,23,42,.035);transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease}
+        #home-genre-discovery-section .home-genre-discovery-card{position:relative;isolation:isolate;display:inline-flex;flex:0 1 auto;align-items:center;justify-content:center;gap:7px;width:100%;min-width:0;min-height:46px;max-width:100%;overflow:hidden;border:1px solid rgba(148,163,184,.28);border-radius:999px;padding:0 8px;text-align:center;white-space:nowrap;background:rgba(255,255,255,.76);color:#1f2937;box-shadow:0 3px 12px rgba(15,23,42,.035);transition:transform .2s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease}
         .dark #home-genre-discovery-section .home-genre-discovery-card{border-color:rgba(203,213,225,.23);background:rgba(15,19,29,.72);color:#f8fafc;box-shadow:0 5px 18px rgba(0,0,0,.16)}
         #home-genre-discovery-section .home-genre-discovery-card:hover{transform:translateY(-1px);border-color:rgba(245,158,11,.72);background:rgba(245,158,11,.12);box-shadow:0 7px 18px rgba(245,158,11,.10)}
         .dark #home-genre-discovery-section .home-genre-discovery-card:hover{background:rgba(245,158,11,.13);border-color:rgba(251,191,36,.72)}
         #home-genre-discovery-section .home-genre-discovery-icon{display:inline-flex;flex:0 0 25px;width:25px;height:25px;align-items:center;justify-content:center;border:0;border-radius:50%;background:rgba(148,163,184,.12);color:#475569;font-size:13px;box-shadow:none}
         .dark #home-genre-discovery-section .home-genre-discovery-icon{background:rgba(255,255,255,.08);color:#f8fafc}
-        #home-genre-discovery-section .home-genre-discovery-name{display:block;margin:0;color:inherit;font-size:13px;font-weight:800;line-height:1;letter-spacing:.005em;white-space:nowrap;overflow-wrap:normal}
+        #home-genre-discovery-section .home-genre-discovery-name{display:block;min-width:0;margin:0;color:inherit;font-size:11px;font-weight:800;line-height:1;letter-spacing:.005em;white-space:nowrap;overflow-wrap:normal;text-overflow:ellipsis;overflow:hidden}
         #home-genre-discovery-section .home-genre-discovery-card:hover .home-genre-discovery-name{color:#a16207}
         .dark #home-genre-discovery-section .home-genre-discovery-card:hover .home-genre-discovery-name{color:#fcd34d}
         #home-genre-discovery-section .home-genre-discovery-card:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
@@ -453,7 +454,7 @@
             #home-genre-discovery-section .home-genre-discovery-heading h2{font-size:19px}
             #home-genre-discovery-section .home-genre-discovery-subtitle{font-size:11px;margin-top:5px}
             #home-genre-discovery-section .home-genre-discovery-more{min-height:34px;padding:7px 11px;font-size:10px}
-            #home-genre-discovery-section .home-genre-discovery-grid{gap:7px;padding-bottom:7px}
+            #home-genre-discovery-section .home-genre-discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto;gap:7px;padding-bottom:7px}
             #home-genre-discovery-section .home-genre-discovery-card{min-height:40px;gap:7px;padding:0 13px}
             #home-genre-discovery-section .home-genre-discovery-icon{width:21px;height:21px;flex-basis:21px;font-size:11px}
             #home-genre-discovery-section .home-genre-discovery-name{font-size:11px}
@@ -2709,49 +2710,19 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Türlere Göre Keşfet</h2>
                             <p class="home-genre-discovery-subtitle mt-2">Sana uygun türü seç, keşfetmeye hemen başla.</p>
                         </div>
-                        <button type="button" @click="navigateTo('explore')" class="home-genre-discovery-more self-start sm:self-auto">
+                        <button type="button" x-show="availableGenres.length > 20" @click="resetDiscoveryFilters(); navigateTo('explore')" class="home-genre-discovery-more self-start sm:self-auto">
                             <span>Tüm türleri gör</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                         </button>
                     </div>
                     <div class="home-genre-discovery-grid">
-                        <button type="button" @click="resetDiscoveryFilters(); selectPersonalizedGenre('Animasyon'); navigateTo('explore')" class="home-genre-discovery-card group" aria-label="Animasyon yapımlarını keşfet">
-                            <span class="home-genre-discovery-icon"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i></span>
-                            <span class="home-genre-discovery-name">Animasyon</span>
-                        </button>
-                        <button type="button" @click="resetDiscoveryFilters(); discoveryCountry = 'Türkiye'; discoveryCountryCode = 'TR'; navigateTo('explore')" class="home-genre-discovery-card group" aria-label="Yerli yapımları keşfet">
-                            <span class="home-genre-discovery-icon"><i class="fa-solid fa-flag" aria-hidden="true"></i></span>
-                            <span class="home-genre-discovery-name">Yerli yapımlar</span>
-                        </button>
-
-                        <button type="button" @click="resetDiscoveryFilters(); setDiscoveryMood('feelgood'); navigateTo('explore')" class="home-genre-discovery-card group" aria-label="Keyifli vakit kategorisindeki yapımları keşfet">
-                            <span class="home-genre-discovery-icon"><i class="fa-solid fa-sun" aria-hidden="true"></i></span>
-                            <span class="home-genre-discovery-name">Keyifli vakit</span>
-                        </button>
-                        <button type="button" @click="resetDiscoveryFilters(); setDiscoveryMood('emotional'); navigateTo('explore')" class="home-genre-discovery-card group" aria-label="Duygusal yapımları keşfet">
-                            <span class="home-genre-discovery-icon"><i class="fa-solid fa-heart" aria-hidden="true"></i></span>
-                            <span class="home-genre-discovery-name">Duygusal</span>
-                        </button>
-                        <button type="button" @click="resetDiscoveryFilters(); setDiscoveryMood('mind'); navigateTo('explore')" class="home-genre-discovery-card group" aria-label="Zihin açıcı yapımları keşfet">
-                            <span class="home-genre-discovery-icon"><i class="fa-solid fa-brain" aria-hidden="true"></i></span>
-                            <span class="home-genre-discovery-name">Zihin Açıcı</span>
-                        </button>
-                        <button type="button" @click="resetDiscoveryFilters(); setDiscoveryMood('family'); navigateTo('explore')" class="home-genre-discovery-card group" aria-label="Ailece izlenebilecek yapımları keşfet">
-                            <span class="home-genre-discovery-icon"><i class="fa-solid fa-people-roof" aria-hidden="true"></i></span>
-                            <span class="home-genre-discovery-name">Ailece izle</span>
-                        </button>
-                        <button type="button" @click="resetDiscoveryFilters(); setDiscoveryMood('top'); navigateTo('explore')" class="home-genre-discovery-card group" aria-label="Yüksek puanlı yapımları keşfet">
-                            <span class="home-genre-discovery-icon"><i class="fa-solid fa-star" aria-hidden="true"></i></span>
-                            <span class="home-genre-discovery-name">Yüksek puanlı</span>
-                        </button>
-
-                        <template x-for="genre in (homeSectionReady['genre-discovery'] ? homeDiscoveryGenres.slice(0, 9) : [])" :key="'home-genre-' + genre.name">
-                            <button type="button" @click="selectPersonalizedGenre(genre.name); navigateTo('explore')" class="home-genre-discovery-card group">
+                        <template x-for="genre in (homeSectionReady['genre-discovery'] ? homeDiscoveryGenres : [])" :key="'home-genre-' + genre.name">
+                            <button type="button" @click="selectPersonalizedGenre(genre.name); navigateTo('explore')" class="home-genre-discovery-card group" :aria-label="genre.label + ' yapımlarını keşfet'">
                                 <span class="home-genre-discovery-icon">
-                                    <i :class="({'aksiyon':'fa-solid fa-bolt','action':'fa-solid fa-bolt','macera':'fa-solid fa-compass','adventure':'fa-solid fa-compass','komedi':'fa-solid fa-face-laugh','comedy':'fa-solid fa-face-laugh','dram':'fa-solid fa-masks-theater','drama':'fa-solid fa-masks-theater','korku':'fa-solid fa-ghost','horror':'fa-solid fa-ghost','gerilim':'fa-solid fa-eye','thriller':'fa-solid fa-eye','bilim kurgu':'fa-solid fa-rocket','science fiction':'fa-solid fa-rocket','romantik':'fa-solid fa-heart','romance':'fa-solid fa-heart','animasyon':'fa-solid fa-wand-magic-sparkles','animation':'fa-solid fa-wand-magic-sparkles','suç':'fa-solid fa-fingerprint','crime':'fa-solid fa-fingerprint','belgesel':'fa-solid fa-earth-europe','documentary':'fa-solid fa-earth-europe','spor':'fa-solid fa-trophy','biyografi':'fa-solid fa-user-tie'})[genre.name] || 'fa-solid fa-clapperboard'"></i>
+                                    <i :class="({'aksiyon':'fa-solid fa-bolt','macera':'fa-solid fa-compass','komedi':'fa-solid fa-face-laugh','dram':'fa-solid fa-masks-theater','korku':'fa-solid fa-ghost','gerilim':'fa-solid fa-eye','bilim kurgu':'fa-solid fa-rocket','romantik':'fa-solid fa-heart','animasyon':'fa-solid fa-wand-magic-sparkles','suc':'fa-solid fa-fingerprint','belgesel':'fa-solid fa-earth-europe','spor':'fa-solid fa-trophy','biyografi':'fa-solid fa-user-tie','aile':'fa-solid fa-people-roof','gizem':'fa-solid fa-magnifying-glass','tarih':'fa-solid fa-landmark','fantastik':'fa-solid fa-dragon','fantazi':'fa-solid fa-wand-sparkles','savas':'fa-solid fa-shield-halved','vahsi bati':'fa-solid fa-hat-cowboy','muzik':'fa-solid fa-music','politik':'fa-solid fa-scale-balanced'})[genre.name] || 'fa-solid fa-clapperboard'"></i>
                                 </span>
                                 <span class="home-genre-discovery-name" x-text="genre.label"></span>
                             </button>
-                        </template>
+                        </template>             </template>
                     </div>
                 </section>
 
