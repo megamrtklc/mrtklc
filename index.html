@@ -1061,6 +1061,47 @@
           display:block!important;width:100%!important;height:100%!important;
           object-fit:cover!important;
         }
+
+        /* Son görsel rötuşlar: cam/bulanık küçük kartlar, daha kompakt yükseklik ve yumuşak köşeler. */
+        #home-personalized-section .home-personalized-feature{
+          border-radius:14px!important;
+        }
+        #home-personalized-section .home-personalized-alternative{
+          border-radius:10px!important;
+          background:rgba(12,15,22,.48)!important;
+          -webkit-backdrop-filter:blur(12px)!important;
+          backdrop-filter:blur(12px)!important;
+          border-color:rgba(255,255,255,.16)!important;
+        }
+        #home-personalized-section .home-personalized-card-backdrop{
+          display:block!important;
+          opacity:.62!important;
+          filter:blur(9px)!important;
+          transform:scale(1.12)!important;
+        }
+        #home-personalized-section .home-personalized-card-shade{
+          display:block!important;
+          background:linear-gradient(110deg,rgba(7,10,16,.78),rgba(7,10,16,.46))!important;
+          -webkit-backdrop-filter:blur(3px)!important;
+          backdrop-filter:blur(3px)!important;
+        }
+        #home-personalized-section .home-personalized-poster{
+          border-radius:6px!important;
+        }
+        @media(min-width:901px){
+          #home-personalized-section .home-personalized-feature{height:340px!important;min-height:340px!important}
+          #home-personalized-section .home-personalized-alternatives{height:340px!important}
+        }
+        @media(max-width:900px){
+          #home-personalized-section .home-personalized-feature{min-height:215px!important}
+          #home-personalized-section .home-personalized-alternatives{grid-auto-rows:minmax(150px,auto)!important}
+          #home-personalized-section .home-personalized-alternative{min-height:150px!important}
+        }
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-feature{min-height:185px!important}
+          #home-personalized-section .home-personalized-alternatives{grid-auto-rows:minmax(146px,auto)!important}
+          #home-personalized-section .home-personalized-alternative{min-height:146px!important}
+        }
     </style>
 
 </head>
