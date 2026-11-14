@@ -17665,6 +17665,206 @@
       "tmdbImdbId": "tt37287335",
       "tmdbRating": "8.2",
       "tmdbVoteCount": 6609
+    },
+    {
+      "id": "cv-1794683662829",
+      "title": "Odyssey",
+      "type": "movie",
+      "year": "2026",
+      "rating": "8.0",
+      "genre": "Macera",
+      "category": "Macera / Aksiyon / Fantastik",
+      "duration": "173 dk",
+      "country": "United Kingdom, United States of America",
+      "director": "Christopher Nolan",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1368337,
+      "imdbId": "tt33764258",
+      "image": "https://image.tmdb.org/t/p/w500/edC4JzDHJUoQddhbHlBNSU3RHPR.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/twiVn9oFXOVR0uoYgawyEBlnFu8.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=H6W_1XF4HEI",
+      "desc": "İthaka'nın efsanevi kralı Odysseus, Truva Savaşı'nın ardından evine dönmek üzere uzun ve tehlikeli bir yolculuğa çıkar. Yolculuğu boyunca tanrıların keyfi istekleriyle, mitolojik canavarlarla ve insanlığını kırılma noktasına kadar zorlayan çetin sınavlarla yüzleşmek zorunda kalır.",
+      "cast": [
+        "Matt Damon",
+        "Tom Holland",
+        "Anne Hathaway",
+        "Robert Pattinson",
+        "Himesh Patel",
+        "Charlize Theron",
+        "John Leguizamo",
+        "Travis Scott",
+        "Corey Hawkins",
+        "Jarreth J. Merz",
+        "Niko Nicotera",
+        "Elliot Page",
+        "Shiloh Fernandez",
+        "Rafi Gavron",
+        "Elyes Gabel",
+        "Iddo Goldberg",
+        "Jamie Harris",
+        "John Ales",
+        "Raimy Lang",
+        "Mason Cufari"
+      ],
+      "tmdbTitle": "Odyssey",
+      "tmdbOriginalTitle": "The Odyssey",
+      "tmdbReleaseDate": "2026-07-15",
+      "tmdbGenres": "Macera / Aksiyon / Fantastik",
+      "tmdbRuntime": "173 dk",
+      "tmdbCountries": "United Kingdom, United States of America",
+      "tmdbDirector": "Christopher Nolan",
+      "tmdbCast": [
+        {
+          "id": 1892,
+          "name": "Matt Damon",
+          "character": "Odysseus",
+          "profile": "https://image.tmdb.org/t/p/w185/aCvBXTAR9B1qRjIRzMBYhhbm1fR.jpg",
+          "order": 0
+        },
+        {
+          "id": 1136406,
+          "name": "Tom Holland",
+          "character": "Telemachus",
+          "profile": "https://image.tmdb.org/t/p/w185/tH8bNDcjiS399DlcnC5oubxNh23.jpg",
+          "order": 1
+        },
+        {
+          "id": 1813,
+          "name": "Anne Hathaway",
+          "character": "Penelope",
+          "profile": "https://image.tmdb.org/t/p/w185/dUnrbrn2FeqfdpGRArPZeWPsS2g.jpg",
+          "order": 2
+        },
+        {
+          "id": 11288,
+          "name": "Robert Pattinson",
+          "character": "Antinous",
+          "profile": "https://image.tmdb.org/t/p/w185/3qZ09UE7lN6AtorfXFRYpEtSY93.jpg",
+          "order": 3
+        },
+        {
+          "id": 1227717,
+          "name": "Himesh Patel",
+          "character": "Eurylochus",
+          "profile": "https://image.tmdb.org/t/p/w185/icqsXLmU0FxBGTv63kkA0GcrecO.jpg",
+          "order": 4
+        },
+        {
+          "id": 6885,
+          "name": "Charlize Theron",
+          "character": "Calypso",
+          "profile": "https://image.tmdb.org/t/p/w185/gd7ShD0yt4bsR2STeQ19KQ6hvXL.jpg",
+          "order": 5
+        },
+        {
+          "id": 5723,
+          "name": "John Leguizamo",
+          "character": "Eumaeus",
+          "profile": "https://image.tmdb.org/t/p/w185/kwYCdxTlDh9zauUCg4mp2XTCQTw.jpg",
+          "order": 6
+        },
+        {
+          "id": 1978406,
+          "name": "Travis Scott",
+          "character": "Bard",
+          "profile": "https://image.tmdb.org/t/p/w185/eBdm7HQS6lLGg4BocgfoJ5qB9yp.jpg",
+          "order": 7
+        },
+        {
+          "id": 1154054,
+          "name": "Corey Hawkins",
+          "character": "Polybus",
+          "profile": "https://image.tmdb.org/t/p/w185/wRt0Bc0chN5BSjvYzmg2evgqNzp.jpg",
+          "order": 8
+        },
+        {
+          "id": 84706,
+          "name": "Jarreth J. Merz",
+          "character": "Leodes",
+          "profile": "https://image.tmdb.org/t/p/w185/ze8WDEujZmTXdCLcUy0IaymwlcS.jpg",
+          "order": 9
+        },
+        {
+          "id": 1008750,
+          "name": "Niko Nicotera",
+          "character": "Peisander",
+          "profile": "https://image.tmdb.org/t/p/w185/ffSAiwXMmvQP1vJuPguLznNpPOI.jpg",
+          "order": 10
+        },
+        {
+          "id": 27578,
+          "name": "Elliot Page",
+          "character": "Sinon",
+          "profile": "https://image.tmdb.org/t/p/w185/eCeFgzS8dYHnMfWQT0oQitCrsSz.jpg",
+          "order": 11
+        },
+        {
+          "id": 79795,
+          "name": "Shiloh Fernandez",
+          "character": "First Trojan",
+          "profile": "https://image.tmdb.org/t/p/w185/ug0p4QtE1Am7JySNClm7u8iISOB.jpg",
+          "order": 12
+        },
+        {
+          "id": 21660,
+          "name": "Rafi Gavron",
+          "character": "Second Trojan",
+          "profile": "https://image.tmdb.org/t/p/w185/avCWoO9fLwEhbT6cvu0TJcSj49g.jpg",
+          "order": 13
+        },
+        {
+          "id": 78050,
+          "name": "Elyes Gabel",
+          "character": "Elatus",
+          "profile": "https://image.tmdb.org/t/p/w185/z9IqYTYxhVR9ADxaksbPQwiYQns.jpg",
+          "order": 14
+        },
+        {
+          "id": 94958,
+          "name": "Iddo Goldberg",
+          "character": "Amphimedon",
+          "profile": "https://image.tmdb.org/t/p/w185/dJGHbLmYKxLy87jduKGm5jDtBnR.jpg",
+          "order": 15
+        },
+        {
+          "id": 111195,
+          "name": "Jamie Harris",
+          "character": "Agelus",
+          "profile": "https://image.tmdb.org/t/p/w185/iqc9RropHWLe2wLCgUHtZZDJ7w.jpg",
+          "order": 16
+        },
+        {
+          "id": 64343,
+          "name": "John Ales",
+          "character": "Beggar in Ithaca",
+          "profile": "https://image.tmdb.org/t/p/w185/rASQsyvYk1VD8hvo2Pi1Tq3Wwlm.jpg",
+          "order": 17
+        },
+        {
+          "id": 6342035,
+          "name": "Raimy Lang",
+          "character": "Teenage Antinous",
+          "profile": "https://image.tmdb.org/t/p/w185/blAgz5a4IRmwycftKnrRMfWCYF3.jpg",
+          "order": 18
+        },
+        {
+          "id": 3235164,
+          "name": "Mason Cufari",
+          "character": "Teenage Sinon",
+          "profile": "https://image.tmdb.org/t/p/w185/9o9bNDomtugse7iHQtPfVY6S6LM.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "İthaka'nın efsanevi kralı Odysseus, Truva Savaşı'nın ardından evine dönmek üzere uzun ve tehlikeli bir yolculuğa çıkar. Yolculuğu boyunca tanrıların keyfi istekleriyle, mitolojik canavarlarla ve insanlığını kırılma noktasına kadar zorlayan çetin sınavlarla yüzleşmek zorunda kalır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/edC4JzDHJUoQddhbHlBNSU3RHPR.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/twiVn9oFXOVR0uoYgawyEBlnFu8.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=H6W_1XF4HEI",
+      "tmdbImdbId": "tt33764258",
+      "tmdbRating": "8.0",
+      "tmdbVoteCount": 4803
     }
   ],
   "collections": [],
