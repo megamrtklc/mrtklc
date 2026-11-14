@@ -1963,24 +1963,31 @@
         filter: brightness(1.06);
       }
       #desktopEditorialHero #heroThumbContainer button {
-        opacity: .42;
+        opacity: .48;
         transform-origin: center center;
-        transition: transform .32s cubic-bezier(.2,.75,.25,1), border-color .28s ease, box-shadow .28s ease, opacity .28s ease;
+        transition:
+          transform .58s cubic-bezier(.22,.72,.18,1),
+          border-color .48s ease,
+          box-shadow .58s ease,
+          opacity .48s ease,
+          filter .58s ease;
+        will-change: transform;
       }
-      /* Hover edilen veya otomatik geçişle seçilen afiş %30 büyür; diğerleri geri planda kalır. */
+      /* Afiş odağı: büyük sıçrama yerine yumuşak yükselme ve hafif büyüme. */
       #desktopEditorialHero #heroThumbContainer button:hover {
         z-index: 30 !important;
         opacity: 1 !important;
-        transform: translateY(-4px) scale(1.3) !important;
-        border-color: rgba(252, 211, 77, .95);
-        box-shadow: 0 10px 28px rgba(0, 0, 0, .5), 0 0 0 2px rgba(245, 158, 11, .22), 0 0 24px rgba(245, 158, 11, .2);
+        transform: translateY(-3px) scale(1.08) !important;
+        border-color: rgba(252, 211, 77, .9);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, .42), 0 0 0 1px rgba(245, 158, 11, .18), 0 0 18px rgba(245, 158, 11, .14);
+        filter: saturate(1.06) brightness(1.04);
       }
       #desktopEditorialHero #heroThumbContainer button[aria-current="true"] {
         z-index: 20;
         opacity: 1;
-        transform: translateY(-4px) scale(1.3);
-        border-color: rgba(252, 211, 77, .95);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, .42), 0 0 0 2px rgba(245, 158, 11, .20), 0 0 22px rgba(245, 158, 11, .18);
+        transform: translateY(-3px) scale(1.08);
+        border-color: rgba(252, 211, 77, .9);
+        box-shadow: 0 7px 20px rgba(0, 0, 0, .38), 0 0 0 1px rgba(245, 158, 11, .16), 0 0 16px rgba(245, 158, 11, .12);
       }
 
       /* Mobile: daha hafif ışık ve performans dostu görsel hareketi */
@@ -2396,7 +2403,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 <span class="min-w-[66px] text-sm font-bold tabular-nums text-white"><span x-text="String(currentSlideIndex + 1).padStart(2,'0')"></span><span class="mx-1 text-white/40">/</span><span class="text-white/55" x-text="String(heroSlides.length).padStart(2,'0')"></span></span>
                                 <button type="button" @click="navigateHeroSlide(1)" aria-label="Sonraki öne çıkan yapım" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/25 text-white backdrop-blur transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                             </div>
-                            <div id="heroThumbContainer" class="flex min-h-[160px] w-full max-w-[72%] flex-1 items-center gap-3 overflow-x-auto overflow-y-visible px-3 pb-4 pt-4 no-scrollbar">
+                            <div id="heroThumbContainer" @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="flex min-h-[160px] w-full max-w-[72%] flex-1 items-center gap-3 overflow-x-auto overflow-y-visible px-3 pb-4 pt-4 no-scrollbar">
                                 <template x-for="(item,index) in heroThumbSlides" :key="'desktop-hero-thumb-'+item.id">
                                     <button type="button" @click="selectHeroSlide(heroSlides.findIndex(slide => String(slide.id) === String(item.id)))" :data-hero-index="heroSlides.findIndex(slide => String(slide.id) === String(item.id))" :aria-label="item.title + ' yapımını göster'" :aria-current="String(currentHero.id) === String(item.id) ? 'true' : 'false'" class="group relative z-0 h-[112px] w-[75px] shrink-0 overflow-hidden rounded-xl border border-white/20 bg-[#101116] shadow-lg shadow-black/30 transition duration-300 hover:z-20 hover:-translate-y-1 hover:scale-[1.06] hover:border-amber-300/80" :class="String(currentHero.id) === String(item.id) ? 'border-2 border-amber-400 shadow-lg shadow-amber-900/30' : 'opacity-65 hover:opacity-100'">
                                         <img :src="item.poster || item.image || item.tmdbPoster" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster, [92, 154, 185])" sizes="75px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="h-full w-full object-contain transition duration-500">
