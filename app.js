@@ -534,9 +534,14 @@
                 },
 
                 scheduleHomePageHydration() {
+                    if (this.currentPage !== 'home') return;
                     this.$nextTick(() => {
                         const root = document.getElementById('home-page');
-                        if (!root || !root.hasAttribute('x-ignore') || root.dataset.homeHydrationScheduled === 'true') return;
+                        if (!root) {
+                            window.setTimeout(() => this.scheduleHomePageHydration(), 50);
+                            return;
+                        }
+                        if (!root.hasAttribute('x-ignore') || root.dataset.homeHydrationScheduled === 'true') return;
                         root.dataset.homeHydrationScheduled = 'true';
                         const delay = window.matchMedia('(min-width: 1024px)').matches ? 450 : 0;
                         window.setTimeout(() => {
