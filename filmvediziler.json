@@ -17804,9 +17804,7 @@
         "watched",
         "favorites"
       ],
-      "visibility": {
-        "personalized": false
-      }
+      "visibility": {}
     },
     "heroStyle": "current",
     "personalizedSection": {
