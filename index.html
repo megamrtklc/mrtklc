@@ -2047,7 +2047,7 @@
                                 </div>
                             </div>
                         <div id="home-personalized-rail" class="home-personalized-alternatives" x-ref="rail" @scroll.passive="updateSlide()" aria-label="Sana özel öneriler, yatay kaydırılabilir">
-                            <template x-for="item in (homeSectionReady.personalized ? personalizedRecommendations.slice(1, 5) : [])" :key="'personal-' + item.id">
+                            <template x-for="item in (homeSectionReady.personalized ? personalizedRecommendations.slice(1, showAllPersonalized ? 9 : 5) : [])" :key="'personal-' + item.id">
                                 <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :data-recommendation-id="item.id" :class="getCardClass()" class="home-personalized-alternative group relative isolate overflow-hidden min-w-0 rounded-xl sm:rounded-2xl border text-left transition-all duration-300">
                                     <img class="home-personalized-card-backdrop absolute inset-0 w-full h-full object-cover" @error="handleImageError($event)" :src="item.backdrop || item.poster || item.image" :srcset="getTmdbImageSrcSet(item.backdrop || item.poster || item.image, [342, 500])" sizes="(max-width: 767px) 320px, 420px" :alt="''" aria-hidden="true" loading="lazy" decoding="async">
                                     <div class="home-personalized-card-shade absolute inset-0"></div>
@@ -2059,6 +2059,14 @@
                                 </div>
                             </template>
                         </div>
+                            <div class="flex justify-center pt-2" x-show="personalizedRecommendations.length > 5">
+                                <button type="button"
+                                    @click="showAllPersonalized = !showAllPersonalized"
+                                    :aria-expanded="showAllPersonalized.toString()"
+                                    class="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-rose-500/30 bg-rose-500/10 px-5 py-2 text-xs font-bold text-rose-700 transition-colors hover:border-rose-500/60 hover:bg-rose-500/15 dark:text-rose-300"
+                                    x-text="showAllPersonalized ? 'Daha az göster' : 'Tüm önerileri gör'">
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <p x-show="homeSectionReady.personalized && !personalizedRecommendations.length" class="text-xs text-gray-500 dark:text-gray-400 py-5 text-center">Önerileri kişiselleştirmek için birkaç yapım izlemeye başlayabilir veya izleme listene ekleyebilirsin.</p>
