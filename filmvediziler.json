@@ -17341,15 +17341,15 @@
       "duration": "100 dk",
       "country": "Australia",
       "director": "Indianna Bell, Josiah Allen",
-      "platform": "",
+      "platform": "Amazon Prime, Apple TV",
       "watchUrl": "",
-      "personalNote": "",
+      "personalNote": "İzlenilecek...",
       "episodeWatchUrls": {},
       "tmdbId": 1117321,
       "imdbId": "tt22023218",
       "image": "https://image.tmdb.org/t/p/w500/dfaN69DMjxGmhuoYkWFmsAYwBT0.jpg",
       "backdrop": "https://image.tmdb.org/t/p/w1280/fXpkyFsWFaYW1KN2odqalxguTj2.jpg",
-      "trailerUrl": "",
+      "trailerUrl": "https://www.youtube.com/watch?v=EjFG0Eth7ig",
       "desc": "Garip ve yalnız bir sakin olan Patrick (Brendan Rock), bir karavan parkının arka tarafındaki karavanda yaşamaktadır. Şiddetli bir fırtına patlak verdikten sonra, gizemli bir genç kadın (Jordan Cowan) hava koşullarından korunmak için kapısına dayanır. Gece uzadıkça ve kadın Patrick hakkında daha fazla şey keşfettikçe, oradan ayrılmakta daha da zorlanır. Kısa süre sonra kadın Patrick'in niyetini sorgulamaya başlarken, Patrick de kendi gerçeklik kavramını sorgulamaya başlar.",
       "cast": [
         "Brendan Rock",
@@ -17416,7 +17416,8 @@
       "tmdbTrailerUrl": "",
       "tmdbImdbId": "tt22023218",
       "tmdbRating": "6.0",
-      "tmdbVoteCount": 242
+      "tmdbVoteCount": 242,
+      "trailerProvider": "auto"
     },
     {
       "id": "cv-1794683819669",
