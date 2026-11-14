@@ -38,18 +38,8 @@
     <script defer fetchpriority="high" src="./app.min.js?v=20261114-home-trends-random-v1"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        @keyframes editorialCopyEnter{0%{opacity:0;transform:translateY(18px);filter:blur(5px)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}
-        .editorial-copy-enter{animation:editorialCopyEnter .58s cubic-bezier(.2,.75,.25,1) both}
-        @media(prefers-reduced-motion:reduce){.editorial-copy-enter{animation:none}}
-        @keyframes heroSlideNext{0%{opacity:0;transform:translateX(14%) scale(1.075);filter:blur(12px)}62%{opacity:.82;filter:blur(3px)}100%{opacity:1;transform:translateX(0) scale(1.075);filter:blur(0)}}
-        @keyframes heroSlidePrev{0%{opacity:0;transform:translateX(-14%) scale(1.075);filter:blur(12px)}62%{opacity:.82;filter:blur(3px)}100%{opacity:1;transform:translateX(0) scale(1.075);filter:blur(0)}}
-        .hero-slide-next{animation:heroSlideNext .72s cubic-bezier(.18,.72,.24,1) both}
-        .hero-slide-prev{animation:heroSlidePrev .72s cubic-bezier(.18,.72,.24,1) both}
-        @keyframes heroSoftArtwork{0%{opacity:.62;transform:scale(1.025)}100%{opacity:1;transform:scale(1)}}
-        @keyframes heroSoftCopy{0%{opacity:.45;transform:translateY(9px)}100%{opacity:1;transform:translateY(0)}}
-        .hero-soft-artwork{animation:heroSoftArtwork .56s cubic-bezier(.22,.7,.25,1) both}
-        .hero-soft-copy{animation:heroSoftCopy .48s cubic-bezier(.22,.7,.25,1) both}
-        @media(prefers-reduced-motion:reduce){.hero-slide-next,.hero-slide-prev,.hero-soft-artwork,.hero-soft-copy{animation-duration:.01ms}}
+        /* Manşet metni sabit kalır; görsel geçişi yalnızca hafif opacity/scale ile yapılır. */
+        @media(prefers-reduced-motion:reduce){#desktopEditorialHero img{scroll-behavior:auto}}
         /* Filmografi afişleri büyürken ekran kenarına çarpmasın; güvenli iç boşluk bırak. */
         .actor-filmography-grid > button { transform-origin: center center; }
         .has-initial-route #hero-initial-shell, .has-initial-route #hero-initial-shell-desktop { display: none !important; }
@@ -2376,7 +2366,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 <section id="desktopEditorialHero" data-home-section="hero" x-cloak  x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0 overflow-hidden bg-[#090a0d]">
                         <img class="cv-hero-left-color-spread" :src="currentHero.backdrop || currentHero.poster || ''" alt="" aria-hidden="true" @error="handleImageError($event)" decoding="async">
-                        <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780])" sizes="100vw"><img x-effect="currentHero.id; $el.classList.remove('hero-soft-artwork'); void $el.offsetWidth; $el.classList.add('hero-soft-artwork')" :src="window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-contain object-right transition-none"></picture>
+                        <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780])" sizes="100vw"><img x-effect="(() => { const id = currentHero.id; if (!id) return; const previousId = $el.dataset.heroSlideId; if (previousId && previousId !== String(id) && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) { $el.getAnimations().forEach(animation => animation.cancel()); $el.animate([{ opacity: 0.97, transform: 'scale(1.004)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 210, easing: 'ease-out' }); } $el.dataset.heroSlideId = String(id); })()" :src="window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-contain object-right transition-none"></picture>
                         <div class="absolute inset-0 z-[1]" style="background:linear-gradient(90deg,#090a0d 0%,#090a0d 25%,rgba(9,10,13,.94) 38%,rgba(9,10,13,.72) 49%,rgba(9,10,13,.28) 63%,rgba(9,10,13,.04) 82%,transparent 100%);"></div>
                         <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
                         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_42%,transparent_0%,transparent_42%,rgba(0,0,0,.28)_100%)]"></div>
