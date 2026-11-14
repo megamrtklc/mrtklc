@@ -18065,6 +18065,206 @@
       "tmdbImdbId": "tt33311069",
       "tmdbRating": "8.2",
       "tmdbVoteCount": 899
+    },
+    {
+      "id": "cv-1794683709989",
+      "title": "Firavun Faresi",
+      "type": "movie",
+      "year": "2026",
+      "rating": "6.3",
+      "genre": "Aksiyon",
+      "category": "Aksiyon / Gerilim",
+      "duration": "99 dk",
+      "country": "Australia",
+      "director": "Mark Vanselow",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1294189,
+      "imdbId": "tt13611778",
+      "image": "https://image.tmdb.org/t/p/w500/l80bthReoL08m8oU74R4ZMxgnGZ.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/bySCyjQXNPgsnLTlgJpSMnRazPD.jpg",
+      "trailerUrl": "",
+      "desc": "Kaybedecek hiçbir şeyi olmayan, haksız yere suçlanan bir savaş kahramanı, eski Özel Kuvvetler taburundaki askerlerin yardımıyla, güvenli bir şekilde kaçmasını destekleyen ve olayları hayranlıkla izleyen halkın yakından takip ettiği, televizyonda yayınlanan, ülke çapında epik bir araba kovalamacasına polisle birlikte girişir.",
+      "cast": [
+        "Liam Neeson",
+        "Marisa Tomei",
+        "Ving Rhames",
+        "Marcus Thomas",
+        "Michael Chiklis",
+        "Maurice Marvel Meredith",
+        "Brett Tucker",
+        "Ryan Morgan",
+        "Laura Coates",
+        "Geoff Morrell",
+        "Charles Allen",
+        "Jack Kenny",
+        "Stella Stocker",
+        "Aisha Aidara",
+        "Elias Anton",
+        "Eddie Baroo",
+        "Nicole Chapman",
+        "Dor Gvirtsman",
+        "Kim Denman",
+        "Jacob Ehlefeldt"
+      ],
+      "tmdbTitle": "Firavun Faresi",
+      "tmdbOriginalTitle": "The Mongoose",
+      "tmdbReleaseDate": "2026-10-29",
+      "tmdbGenres": "Aksiyon / Gerilim",
+      "tmdbRuntime": "99 dk",
+      "tmdbCountries": "Australia",
+      "tmdbDirector": "Mark Vanselow",
+      "tmdbCast": [
+        {
+          "id": 3896,
+          "name": "Liam Neeson",
+          "character": "Ryan 'Fang' Flanagan",
+          "profile": "https://image.tmdb.org/t/p/w185/sRLev3wJioBgun3ZoeAUFpkLy0D.jpg",
+          "order": 0
+        },
+        {
+          "id": 3141,
+          "name": "Marisa Tomei",
+          "character": "Tara",
+          "profile": "https://image.tmdb.org/t/p/w185/5NCCKQooVCQD36R6JL3a1hOeBVn.jpg",
+          "order": 1
+        },
+        {
+          "id": 10182,
+          "name": "Ving Rhames",
+          "character": "Tanker",
+          "profile": "https://image.tmdb.org/t/p/w185/tOVDvu1EQP78AwaUw6uh1wN818E.jpg",
+          "order": 2
+        },
+        {
+          "id": 55174,
+          "name": "Marcus Thomas",
+          "character": "Munch",
+          "profile": "https://image.tmdb.org/t/p/w185/wpsm5roIsSqaOX9ApIJqCxDAqgD.jpg",
+          "order": 3
+        },
+        {
+          "id": 19654,
+          "name": "Michael Chiklis",
+          "character": "Major Walter Pope",
+          "profile": "https://image.tmdb.org/t/p/w185/pAkKjbzxP6Z6Y5zAGpwmWQo1iji.jpg",
+          "order": 4
+        },
+        {
+          "id": 4056071,
+          "name": "Maurice Marvel Meredith",
+          "character": "Major James Tilton",
+          "profile": "https://image.tmdb.org/t/p/w185/kM7vENDYHJQRhZh83F8IRCznIXP.jpg",
+          "order": 5
+        },
+        {
+          "id": 1224188,
+          "name": "Brett Tucker",
+          "character": "Todd",
+          "profile": "https://image.tmdb.org/t/p/w185/6IUQyy2pA8PRXX1MEx088JH6pcu.jpg",
+          "order": 6
+        },
+        {
+          "id": 3072766,
+          "name": "Ryan Morgan",
+          "character": "Wiz",
+          "profile": "https://image.tmdb.org/t/p/w185/zogTGGsLvQCxvuwkyOtwtbKAz3o.jpg",
+          "order": 7
+        },
+        {
+          "id": 2500993,
+          "name": "Laura Coates",
+          "character": "Laura Coates",
+          "profile": "https://image.tmdb.org/t/p/w185/m7mBluZQoWKPvYqDKFsiS0oCnXm.jpg",
+          "order": 8
+        },
+        {
+          "id": 93119,
+          "name": "Geoff Morrell",
+          "character": "Ernie",
+          "profile": "https://image.tmdb.org/t/p/w185/zdbbOZPOb1VeAXh1idj9fKeHE87.jpg",
+          "order": 9
+        },
+        {
+          "id": 1457509,
+          "name": "Charles Allen",
+          "character": "Truck Driver Roy",
+          "profile": "https://image.tmdb.org/t/p/w185/gVPFtWlef1tgT78t03MYMXXkB6J.jpg",
+          "order": 10
+        },
+        {
+          "id": 2926221,
+          "name": "Jack Kenny",
+          "character": "Gas Station Employee Earl",
+          "profile": "https://image.tmdb.org/t/p/w185/v3A8RFnCNVloc7GIptPfSuJkhdp.jpg",
+          "order": 11
+        },
+        {
+          "id": 1562086,
+          "name": "Stella Stocker",
+          "character": "Helene (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/ilRVeYRcQrAeHYLMOPPzLzZMJcC.jpg",
+          "order": 12
+        },
+        {
+          "id": 5823931,
+          "name": "Aisha Aidara",
+          "character": "Officer Sanchez",
+          "profile": "",
+          "order": 13
+        },
+        {
+          "id": 1638062,
+          "name": "Elias Anton",
+          "character": "Officer Costello",
+          "profile": "https://image.tmdb.org/t/p/w185/4hnbwBjxK4lSR5tbNvcgcFSIt4r.jpg",
+          "order": 14
+        },
+        {
+          "id": 217046,
+          "name": "Eddie Baroo",
+          "character": "Veteran Seth",
+          "profile": "https://image.tmdb.org/t/p/w185/pdxur3LhMEg8DNajEhHKE1J7FIx.jpg",
+          "order": 15
+        },
+        {
+          "id": 4924579,
+          "name": "Nicole Chapman",
+          "character": "Angelina",
+          "profile": "https://image.tmdb.org/t/p/w185/nUZUVKNuxbkfJStEizFGekvLnkZ.jpg",
+          "order": 16
+        },
+        {
+          "id": 3863507,
+          "name": "Dor Gvirtsman",
+          "character": "Officer Burke",
+          "profile": "",
+          "order": 17
+        },
+        {
+          "id": 2286670,
+          "name": "Kim Denman",
+          "character": "Tara's Sister",
+          "profile": "https://image.tmdb.org/t/p/w185/yCsYMnXXI6BodZPMgzttH04fSa4.jpg",
+          "order": 18
+        },
+        {
+          "id": 3745598,
+          "name": "Jacob Ehlefeldt",
+          "character": "Tyler Police Officer",
+          "profile": "https://image.tmdb.org/t/p/w185/bLC3emodokgCGYNa1RAqO8EifOd.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Kaybedecek hiçbir şeyi olmayan, haksız yere suçlanan bir savaş kahramanı, eski Özel Kuvvetler taburundaki askerlerin yardımıyla, güvenli bir şekilde kaçmasını destekleyen ve olayları hayranlıkla izleyen halkın yakından takip ettiği, televizyonda yayınlanan, ülke çapında epik bir araba kovalamacasına polisle birlikte girişir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/l80bthReoL08m8oU74R4ZMxgnGZ.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/bySCyjQXNPgsnLTlgJpSMnRazPD.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt13611778",
+      "tmdbRating": "6.3",
+      "tmdbVoteCount": 156
     }
   ],
   "collections": [],
