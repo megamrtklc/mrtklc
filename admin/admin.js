@@ -526,13 +526,20 @@
     let items=state.catalog.filter(item=>posterOf(item));
     if(category==='movies')items=items.filter(item=>!isSeries(item));
     if(category==='series')items=items.filter(item=>isSeries(item));
-    if(category==='top-rated')items.sort((a,b)=>heroRating(b)-heroRating(a)||heroVotes(b)-heroVotes(a));
+    if(category==='random'){
+      // Fisher-Yates: her manşet için katalogdan tekrarsız rastgele yapımlar seç.
+      items=items.slice();
+      for(let i=items.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [items[i],items[j]]=[items[j],items[i]];
+      }
+    }else if(category==='top-rated')items.sort((a,b)=>heroRating(b)-heroRating(a)||heroVotes(b)-heroVotes(a));
     else if(category==='popular')items.sort((a,b)=>{
       const score=x=>Number(x.popularity||x.tmdbPopularity)||heroVotes(x)*Math.max(heroRating(x),1);
       return score(b)-score(a)||heroRating(b)-heroRating(a);
     });
     else if(category==='most-watched')items.sort((a,b)=>heroVotes(b)-heroVotes(a)||heroRating(b)-heroRating(a));
-    else items.sort((a,b)=>heroRating(b)-heroRating(a)||heroVotes(b)-heroVotes(a));
+    else if(category!=='random')items.sort((a,b)=>heroRating(b)-heroRating(a)||heroVotes(b)-heroVotes(a));
     return items.slice(0,Math.max(1,Number(count)||10));
   }
   function homepageLayoutConfig(){
