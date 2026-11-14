@@ -1569,7 +1569,7 @@
                         'turkish':['TR','Türkiye'],'united mexican states':['MX','Meksika']
                     };
                     return [...new Set(String(value || '').split(/[,;|/]+/).map(country => country.trim()).filter(Boolean))].map(country => {
-                        const key = country.toLocaleLowerCase('en-US').replace(/\\s+/g, ' ');
+                        const key = country.toLocaleLowerCase('en-US').replace(/\s+/g, ' ');
                         const match = countries[key];
                         const code = match?.[0] || '';
                         const flag = code ? String.fromCodePoint(...code.split('').map(letter => 127397 + letter.charCodeAt(0))) : '';
