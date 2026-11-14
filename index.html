@@ -29,8 +29,8 @@
           imagesrcset="https://image.tmdb.org/t/p/w342/vyG93jhmPL7tBIhRtCLa5mdBKob.jpg 342w, https://image.tmdb.org/t/p/w500/vyG93jhmPL7tBIhRtCLa5mdBKob.jpg 500w"
           imagesizes="100vw" fetchpriority="high">
     <link rel="preload" as="image" media="(min-width: 768px)"
-          href="https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg"
-          imagesrcset="https://image.tmdb.org/t/p/w780/8sNiAPPYU14PUepFNeSNGUTiHW.jpg 780w, https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg 1280w"
+          href="https://image.tmdb.org/t/p/w780/8sNiAPPYU14PUepFNeSNGUTiHW.jpg"
+          imagesrcset="https://image.tmdb.org/t/p/w780/8sNiAPPYU14PUepFNeSNGUTiHW.jpg 780w"
           imagesizes="100vw" fetchpriority="high">
     <!-- Derlenmiş Tailwind CSS: tarayıcıda JIT/derleme betiği çalıştırılmaz. -->
     <link rel="preload" as="style" href="./tailwind.css">
@@ -1864,7 +1864,7 @@
             </button>
         </div>
         <!-- İlk çizim için statik hero: Alpine ve katalog hazırlanırken aynı ölçülerde görseli gösterir. -->
-        <section id="hero-initial-shell" inert class="pointer-events-none absolute md:hidden inset-x-0 top-0 z-20 overflow-hidden select-none border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><img aria-hidden="true" src="https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg" srcset="https://image.tmdb.org/t/p/w342/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 342w, https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w" sizes="100vw" loading="lazy" fetchpriority="low" decoding="async" class="absolute inset-0 -z-10 h-full w-full scale-110 object-cover opacity-30 blur-3xl"><div class="absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div>
+        <section id="hero-initial-shell" inert class="pointer-events-none absolute md:hidden inset-x-0 top-0 z-20 overflow-hidden select-none border-b border-gray-200 bg-gray-950 dark:border-gray-800/80"><picture class="absolute inset-0 -z-10"><source media="(max-width: 767px)" srcset="https://image.tmdb.org/t/p/w342/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 342w, https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w" sizes="100vw"><img aria-hidden="true" loading="lazy" fetchpriority="low" decoding="async" class="h-full w-full scale-110 object-cover opacity-30 blur-3xl"></picture><div class="absolute inset-0 -z-10 bg-gradient-to-r from-gray-950/95 via-gray-950/80 to-gray-950/55"></div>
             <div class="mx-auto grid min-h-[480px] max-w-[1440px] grid-cols-1 items-center gap-5 px-5 py-5 md:grid-cols-2 md:gap-8 md:px-10 lg:px-14 lg:py-8">
                 <div class="order-2 space-y-4 text-white md:order-1 md:max-w-[590px]">
                     <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.35rem,3vw,3.5rem)] font-black leading-tight tracking-tight text-white">Kıyamet Z: Yeni Dünya</h1>
@@ -1874,13 +1874,13 @@
                 </div>
                 <div class="order-1 relative md:order-2">
                     <div class="absolute -inset-5 rounded-[2rem] bg-rose-600/10 blur-3xl"></div>
-                    <img src="https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg" srcset="https://image.tmdb.org/t/p/w342/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 342w, https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w" sizes="100vw" alt="" loading="lazy" fetchpriority="low" decoding="async" class="relative aspect-[16/9] w-full rounded-2xl object-cover shadow-2xl shadow-black/40 ring-1 ring-white/10 md:rounded-[1.75rem]">
+                    <picture class="relative block w-full"><source media="(max-width: 767px)" srcset="https://image.tmdb.org/t/p/w342/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 342w, https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w" sizes="100vw"><img alt="" loading="lazy" fetchpriority="low" decoding="async" class="relative aspect-[16/9] w-full rounded-2xl object-cover shadow-2xl shadow-black/40 ring-1 ring-white/10 md:rounded-[1.75rem]"></picture>
                 </div>
             </div>
         </section>
         <!-- Masaüstünde Alpine/katalog hazırlanırken LCP'yi bekletmeyen statik manşet. -->
         <section id="hero-initial-shell-desktop" inert class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md:block overflow-hidden select-none bg-[#090a0d] text-white">
-            <img aria-hidden="true" src="https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg" fetchpriority="high" decoding="async" class="absolute inset-0 h-full w-full object-cover object-right opacity-90">
+            <img aria-hidden="true" src="https://image.tmdb.org/t/p/w780/8sNiAPPYU14PUepFNeSNGUTiHW.jpg" fetchpriority="high" decoding="async" class="absolute inset-0 h-full w-full object-cover object-right opacity-90">
             <div class="absolute inset-0 bg-gradient-to-r from-[#090a0d] via-[#090a0d]/95 via-[34%] to-[#090a0d]/5"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
             <div class="relative mx-auto flex min-h-[520px] max-w-[1800px] flex-col justify-between px-8 pb-6 pt-8 lg:min-h-[560px] lg:px-12 xl:px-16">
@@ -1908,7 +1908,7 @@
                 <!-- DESKTOP EDITORIAL HERO: mobil manşetten bağımsız yeni masaüstü kompozisyonu -->
                 <section id="desktopEditorialHero" data-home-section="hero" x-cloak  x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0 overflow-hidden bg-[#090a0d]">
-                        <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780, 1280])" sizes="100vw"><img :src="window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-cover object-right transition-transform duration-[1200ms] ease-out"></picture>
+                        <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780])" sizes="100vw"><img :src="window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-cover object-right transition-transform duration-[1200ms] ease-out"></picture>
                         <div class="absolute inset-0 bg-gradient-to-r from-[#090a0d] via-[#090a0d]/95 via-[34%] to-[#090a0d]/5"></div>
                         <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
                         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_42%,transparent_0%,transparent_42%,rgba(0,0,0,.28)_100%)]"></div>
