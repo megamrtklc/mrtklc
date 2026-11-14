@@ -744,6 +744,60 @@
           #home-personalized-section .home-personalized-poster{width:72px}
         }
 
+        /* İzleme Zevkine Göre: hafifçe genişletilmiş manşet ve aktif temaya uyumlu öneri kartları. */
+        @media(min-width:901px){
+          #home-personalized-section .home-personalized-showcase{
+            grid-template-columns:minmax(280px,.94fr) minmax(0,1.56fr);
+          }
+        }
+        .theme-ivory #home-personalized-section .home-personalized-alternative,
+        .theme-slate #home-personalized-section .home-personalized-alternative{
+          background:var(--theme-surface)!important;
+          border-color:var(--theme-border)!important;
+          box-shadow:0 8px 22px rgba(35,42,54,.08);
+        }
+        .theme-ivory #home-personalized-section .home-personalized-alternative:hover,
+        .theme-slate #home-personalized-section .home-personalized-alternative:hover{
+          background:var(--theme-surface-muted)!important;
+          border-color:rgba(225,29,72,.42)!important;
+          box-shadow:0 12px 26px rgba(35,42,54,.12);
+        }
+        .theme-ivory #home-personalized-section .home-personalized-copy h3,
+        .theme-slate #home-personalized-section .home-personalized-copy h3{
+          color:var(--theme-text-primary)!important;
+          text-shadow:none;
+        }
+        .theme-ivory #home-personalized-section .home-personalized-copy>p:last-of-type,
+        .theme-slate #home-personalized-section .home-personalized-copy>p:last-of-type{
+          color:var(--theme-text-muted)!important;
+          text-shadow:none;
+        }
+        .theme-ivory #home-personalized-section .home-personalized-copy>p:first-child,
+        .theme-slate #home-personalized-section .home-personalized-copy>p:first-child{
+          color:#be123c!important;
+        }
+        .theme-ivory #home-personalized-section .home-personalized-info,
+        .theme-slate #home-personalized-section .home-personalized-info{
+          color:var(--theme-text-secondary);
+          background:var(--theme-surface-muted);
+          border-color:var(--theme-border-strong);
+        }
+        .theme-ivory #home-personalized-section .home-personalized-info:hover,
+        .theme-slate #home-personalized-section .home-personalized-info:hover{
+          color:#be123c;background:var(--theme-surface-soft);
+        }
+        .theme-ivory #home-personalized-section .home-personalized-plot,
+        .theme-slate #home-personalized-section .home-personalized-plot{
+          color:var(--theme-text-primary)!important;
+          background:linear-gradient(145deg,rgba(255,255,255,.99),rgba(244,246,249,.99))!important;
+          border-color:var(--theme-border-strong);
+          box-shadow:0 24px 60px rgba(31,41,55,.20),inset 0 1px 0 rgba(255,255,255,.9);
+        }
+        .theme-ivory #home-personalized-section .home-personalized-plot:before,
+        .theme-slate #home-personalized-section .home-personalized-plot:before{
+          color:#be123c;
+        }
+
         /* Son Eklenenler: küçük portre afişini tüm gölge/gradyan katmanlarının önüne al. */
         #home-new-arrivals-section .home-new-arrival-feature-poster{
           position:absolute!important;
