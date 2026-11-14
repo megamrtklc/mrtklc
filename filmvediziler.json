@@ -19628,6 +19628,151 @@
       "tmdbImdbId": "tt6966692",
       "tmdbRating": "8.2",
       "tmdbVoteCount": 13489
+    },
+    {
+      "id": "cv-1794698129056",
+      "title": "Kefernahum",
+      "type": "movie",
+      "year": "2018",
+      "rating": "8.1",
+      "genre": "Dram",
+      "category": "Dram",
+      "duration": "126 dk",
+      "country": "France, Lebanon, United Kingdom, United States of America",
+      "director": "Nadine Labaki",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 517814,
+      "imdbId": "tt8267604",
+      "image": "https://image.tmdb.org/t/p/w500/y3tPwP9KnU8bOfyMZ92mN2o0wmP.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/sEW8q9al73rtow257dXAusD9yS7.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=_h8SfhPcOqc",
+      "trailerProvider": "auto",
+      "desc": "Film, Zain'in sıradan bir küçük çocuktan, kendisini istismar eden ailesine baş kaldırıp kaçan, zekası ve pratikliği ile sokaklardaki yaşam savaşından galip çıkan ve kendisine yapılan haksızlığın karşısında dimdik duran, 12 yaşındaki genç bir delikanlıya dönüşümünü gözler önüne seriyor. Bu süreçte Zain hayat mücadelesi veriyor, Etiyopyalı mülteci Rahil ve onun bebeği Yonas'a göz kulak oluyor, şiddet suçundan hapse giriyor ve en sonunda mahkemede adalet arıyor.",
+      "cast": [
+        "Zain Al Rafeea",
+        "Yordanos Shifera",
+        "Boluwatife Treasure Bankole",
+        "Kawsar Al Haddad",
+        "Fadi Kamel Yousef",
+        "Cedra Izzam",
+        "Alaa Chouchnieh",
+        "Elias Khoury",
+        "Nadine Labaki",
+        "Nour el Husseini",
+        "Joseph Jimbazian",
+        "Samira Chalhoub",
+        "Farah Hasno"
+      ],
+      "tmdbTitle": "Kefernahum",
+      "tmdbOriginalTitle": "کفرناحوم",
+      "tmdbReleaseDate": "2018-09-20",
+      "tmdbGenres": "Dram",
+      "tmdbRuntime": "126 dk",
+      "tmdbCountries": "France, Lebanon, United Kingdom, United States of America",
+      "tmdbDirector": "Nadine Labaki",
+      "tmdbCast": [
+        {
+          "id": 2084595,
+          "name": "Zain Al Rafeea",
+          "character": "Zain",
+          "profile": "https://image.tmdb.org/t/p/w185/oIy59UFCGwXJcT4SRzn1mOmLaTd.jpg",
+          "order": 0
+        },
+        {
+          "id": 2084596,
+          "name": "Yordanos Shifera",
+          "character": "Rahil",
+          "profile": "https://image.tmdb.org/t/p/w185/kQUcANAYcpg98zyargFHqv17hhr.jpg",
+          "order": 1
+        },
+        {
+          "id": 2084597,
+          "name": "Boluwatife Treasure Bankole",
+          "character": "Yonas",
+          "profile": "https://image.tmdb.org/t/p/w185/790MeyflzEn6DG5wPcsduXbS1Re.jpg",
+          "order": 2
+        },
+        {
+          "id": 2084599,
+          "name": "Kawsar Al Haddad",
+          "character": "Souad",
+          "profile": "https://image.tmdb.org/t/p/w185/zYTxxC7SAeAyqPUcd2vkKGaLkgI.jpg",
+          "order": 3
+        },
+        {
+          "id": 2084600,
+          "name": "Fadi Kamel Yousef",
+          "character": "Selim",
+          "profile": "https://image.tmdb.org/t/p/w185/cCiUNhjIWW1BuE49KtXOwdS0fBG.jpg",
+          "order": 4
+        },
+        {
+          "id": 2084602,
+          "name": "Cedra Izzam",
+          "character": "Sahar",
+          "profile": "https://image.tmdb.org/t/p/w185/traiQT5JY7f4yJxVCUpOHuwDiuU.jpg",
+          "order": 5
+        },
+        {
+          "id": 2226542,
+          "name": "Alaa Chouchnieh",
+          "character": "Aspro",
+          "profile": "https://image.tmdb.org/t/p/w185/7RwbwTLQf7jKzuGML1UFJwO6jbx.jpg",
+          "order": 6
+        },
+        {
+          "id": 1880669,
+          "name": "Elias Khoury",
+          "character": "The Judge",
+          "profile": "",
+          "order": 7
+        },
+        {
+          "id": 53431,
+          "name": "Nadine Labaki",
+          "character": "Nadine",
+          "profile": "https://image.tmdb.org/t/p/w185/mV1JAlM4CAdzosSqZs2ch2TPKLS.jpg",
+          "order": 8
+        },
+        {
+          "id": 2084601,
+          "name": "Nour el Husseini",
+          "character": "Assaad",
+          "profile": "",
+          "order": 9
+        },
+        {
+          "id": 2226543,
+          "name": "Joseph Jimbazian",
+          "character": "Cockroach Man / Harout",
+          "profile": "",
+          "order": 10
+        },
+        {
+          "id": 2226544,
+          "name": "Samira Chalhoub",
+          "character": "Daad",
+          "profile": "",
+          "order": 11
+        },
+        {
+          "id": 2226546,
+          "name": "Farah Hasno",
+          "character": "Maysoun",
+          "profile": "",
+          "order": 12
+        }
+      ],
+      "tmdbOverview": "Film, Zain'in sıradan bir küçük çocuktan, kendisini istismar eden ailesine baş kaldırıp kaçan, zekası ve pratikliği ile sokaklardaki yaşam savaşından galip çıkan ve kendisine yapılan haksızlığın karşısında dimdik duran, 12 yaşındaki genç bir delikanlıya dönüşümünü gözler önüne seriyor. Bu süreçte Zain hayat mücadelesi veriyor, Etiyopyalı mülteci Rahil ve onun bebeği Yonas'a göz kulak oluyor, şiddet suçundan hapse giriyor ve en sonunda mahkemede adalet arıyor.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/y3tPwP9KnU8bOfyMZ92mN2o0wmP.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/sEW8q9al73rtow257dXAusD9yS7.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=_h8SfhPcOqc",
+      "tmdbImdbId": "tt8267604",
+      "tmdbRating": "8.1",
+      "tmdbVoteCount": 2071
     }
   ],
   "collections": [],
