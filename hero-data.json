@@ -1,0 +1,3751 @@
+{
+  "homepageConfig": {
+    "settings": {
+      "desktopCount": 8,
+      "mobileCount": 5,
+      "interval": 6,
+      "autoplay": true,
+      "pauseOnHover": true,
+      "descriptionLength": 220
+    },
+    "desktopHeroSlides": [
+      {
+        "id": "archive-8",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-12",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-16",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-25",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-36",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-37",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-49",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-53",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-67",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-68",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-70",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-71",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-75",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-76",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-84",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-110",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-112",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "perde-mw5w3oth",
+        "active": true,
+        "headline": "",
+        "description": ""
+      }
+    ],
+    "mobileHeroSlides": [
+      {
+        "id": "archive-7",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-14",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-20",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-29",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-37",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-47",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-67",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-70",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-78",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-95",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-114",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-115",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-119",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-120",
+        "active": true,
+        "headline": "",
+        "description": ""
+      }
+    ],
+    "heroSlides": [
+      {
+        "id": "archive-8",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-12",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-16",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-25",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-36",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-37",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-49",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-53",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-67",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-68",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-70",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-71",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-75",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-76",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-84",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-110",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-112",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "perde-mw5w3oth",
+        "active": true,
+        "headline": "",
+        "description": ""
+      }
+    ],
+    "heroStyle": "current"
+  },
+  "catalog": [
+    {
+      "id": "archive-7",
+      "title": "Şark Bülbülü",
+      "type": "movie",
+      "category": "Komedi / Dram",
+      "genre": "Komedi",
+      "rating": "7.1",
+      "ratingCount": "IMDb 7.1",
+      "year": "1979",
+      "duration": "89 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/3lgbtjkL7B6J5E03mgJJtRDpvIU.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/5BiDTZbNGFEDJN6hQUHWpYi1ObH.jpg",
+      "desc": "Başlık Parası için İstanbul'a gelen ve rastlantılar sonucu Şaban Ballıses adıyla ünlü bir türkücü olan Şaban’ın komik öyküsü... Bir gecede şöhret olan ünlüleri tiye alan klasik olmuş bir Kemal Sunal komedisi.",
+      "director": "Kartal Tibet",
+      "cast": [
+        "Kemal Sunal",
+        "Ayşen Cansev",
+        "Ayşen Gruda",
+        "Sırrı Elitaş",
+        "Dinçer Çekmez",
+        "Yadigar Ejder",
+        "Yavuz Karakaş",
+        "İhsan Yüce",
+        "Yaşar Şener",
+        "Niyazi Gökdere",
+        "Abdi Algül",
+        "Bahri Ateş"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=rRDBKB6NHuY",
+      "country": "Türkiye",
+      "tmdbId": 123594,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.1",
+      "tmdbVoteCount": 57,
+      "tmdbTitle": "Şark Bülbülü",
+      "tmdbOriginalTitle": "Şark Bülbülü",
+      "tmdbReleaseDate": "1979-01-01",
+      "tmdbGenres": "Komedi / Dram",
+      "tmdbRuntime": "89 dk",
+      "tmdbCountries": "Türkiye",
+      "tmdbDirector": "Kartal Tibet",
+      "tmdbCast": [
+        {
+          "id": 97272,
+          "name": "Kemal Sunal",
+          "character": "Şaban Ballıses",
+          "profile": "https://image.tmdb.org/t/p/w185/nT6zfupn0Q3oyCWHXCvyKS7CcLE.jpg",
+          "order": 0
+        },
+        {
+          "id": 2171342,
+          "name": "Ayşen Cansev",
+          "character": "Hatice",
+          "profile": "https://image.tmdb.org/t/p/w185/fX4Q9IWTRROJGylB3p9TzKkVmJH.jpg",
+          "order": 1
+        },
+        {
+          "id": 121423,
+          "name": "Ayşen Gruda",
+          "character": "Fethi'nin Kız Kardeşi",
+          "profile": "https://image.tmdb.org/t/p/w185/vG4aQ683W8LkxB5yPylnMThNlnj.jpg",
+          "order": 2
+        },
+        {
+          "id": 1078374,
+          "name": "Sırrı Elitaş",
+          "character": "Zülfo Ağa",
+          "profile": "https://image.tmdb.org/t/p/w185/3csZvsvwFyXsrYp4wSZOWbKZ1qb.jpg",
+          "order": 3
+        },
+        {
+          "id": 571429,
+          "name": "Dinçer Çekmez",
+          "character": "Fethi",
+          "profile": "https://image.tmdb.org/t/p/w185/pKsniJpEvGXw96m1stEFGoBuPzM.jpg",
+          "order": 4
+        },
+        {
+          "id": 1078371,
+          "name": "Yadigar Ejder",
+          "character": "Mazlum",
+          "profile": "https://image.tmdb.org/t/p/w185/f76QfQ6AcYVGfuFKoRzDKfBCqXg.jpg",
+          "order": 5
+        },
+        {
+          "id": 1623544,
+          "name": "Yavuz Karakaş",
+          "character": "Arap Cemal",
+          "profile": "https://image.tmdb.org/t/p/w185/kq1BjI5Eys8cUJLjxaxyMnY5e7g.jpg",
+          "order": 6
+        },
+        {
+          "id": 590781,
+          "name": "İhsan Yüce",
+          "character": "Muhtar",
+          "profile": "https://image.tmdb.org/t/p/w185/aQhGLD107hSd7CQbN6DL0KgST43.jpg",
+          "order": 7
+        },
+        {
+          "id": 1325421,
+          "name": "Yaşar Şener",
+          "character": "Halil Ağa",
+          "profile": "https://image.tmdb.org/t/p/w185/vE6qSmTjm5Ho6Er9tauiC1nVzLf.jpg",
+          "order": 8
+        },
+        {
+          "id": 1799917,
+          "name": "Niyazi Gökdere",
+          "character": "Zülfo Ağa'nın Adamı",
+          "profile": "https://image.tmdb.org/t/p/w185/5B1GsyrqgrcDT4nuovD5DyKb6u2.jpg",
+          "order": 9
+        },
+        {
+          "id": 1799205,
+          "name": "Abdi Algül",
+          "character": "Zülfo Ağa'nın Adamı",
+          "profile": "https://image.tmdb.org/t/p/w185/g9XISKbMNSPjKBfO2fZoytvNHOh.jpg",
+          "order": 10
+        },
+        {
+          "id": 1353469,
+          "name": "Bahri Ateş",
+          "character": "Şıh Hazretleri",
+          "profile": "https://image.tmdb.org/t/p/w185/gjrQ5eGVwD6dSc8cJoMw6prSzNj.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Başlık Parası için İstanbul'a gelen ve rastlantılar sonucu Şaban Ballıses adıyla ünlü bir türkücü olan Şaban’ın komik öyküsü... Bir gecede şöhret olan ünlüleri tiye alan klasik olmuş bir Kemal Sunal komedisi.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/3lgbtjkL7B6J5E03mgJJtRDpvIU.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/5BiDTZbNGFEDJN6hQUHWpYi1ObH.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=rRDBKB6NHuY",
+      "tmdbImdbId": "tt0253637",
+      "tmdbSyncedAt": "2026-11-07T06:45:42.419Z",
+      "originalTitle": "Şark Bülbülü",
+      "imdbId": "tt0253637"
+    },
+    {
+      "id": "archive-8",
+      "title": "Made in Korea",
+      "type": "tv",
+      "category": "Suç / Dram",
+      "genre": "Suç",
+      "rating": "8.2",
+      "ratingCount": "IMDb 8.2",
+      "year": "2025",
+      "duration": "Bilinmiyor",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/lhZCpYVMKZanGTMabOYHTZLD1WY.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/fRR6jHutlHuYxMeZp4cZfjgafzd.jpg",
+      "desc": "1970'lerde geçen hikayede, Baek Gi Tae zenginlik ve güce susamış hırslı bir adamdır. Jang Gun Yeong ise vahşi içgüdüleri ve korkutucu azmiyle tanınan bir savcıdır. Büyük bir olayla karşı karşıya kalan Jang Gun Yeong, Baek Gi Tae'yi durdurmak için her şeyini ortaya koyar. Çevrelerindeki kişiler arasında lobici Choi Yu Ji, müfettiş O Ye Jin, Bae Geum Ji ve baş sekreter Cheon Seok Jeong yer almaktadır.",
+      "director": "Woo Min-ho",
+      "cast": [
+        "Hyun Bin",
+        "Jung Woo-sung",
+        "Cha Hee",
+        "Lee Se-ho"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=GRlEArXazfM",
+      "country": "KR",
+      "tmdbId": 246473,
+      "seasons": 2,
+      "episodes": 12,
+      "tmdbRating": "8.1",
+      "tmdbVoteCount": 41,
+      "tmdbTitle": "Made in Korea",
+      "tmdbOriginalTitle": "메이드 인 코리아",
+      "tmdbReleaseDate": "2025-12-24",
+      "tmdbGenres": "Suç / Dram",
+      "tmdbRuntime": "",
+      "tmdbCountries": "KR",
+      "tmdbDirector": "Woo Min-ho",
+      "tmdbCast": [
+        {
+          "id": 544107,
+          "name": "Hyun Bin",
+          "character": "Baek Kitae",
+          "profile": "https://image.tmdb.org/t/p/w185/JQFzhO9j8HRiyr7leGPj6cqhvM.jpg",
+          "order": 0
+        },
+        {
+          "id": 17120,
+          "name": "Jung Woo-sung",
+          "character": "Jang Geonyoung",
+          "profile": "https://image.tmdb.org/t/p/w185/tI0ANQSwcOBfQUeHgfcwn7VmHRO.jpg",
+          "order": 1
+        },
+        {
+          "id": 3509455,
+          "name": "Cha Hee",
+          "character": "Baek So Yeong",
+          "profile": "https://image.tmdb.org/t/p/w185/bZBjbIBxYj2uiLivLluOk5Lcd5R.jpg",
+          "order": 11
+        },
+        {
+          "id": 2692444,
+          "name": "Lee Se-ho",
+          "character": "Lee Ju Im",
+          "profile": "https://image.tmdb.org/t/p/w185/75a945zgCaCP6Mib6EynICgZO6b.jpg",
+          "order": 13
+        }
+      ],
+      "tmdbOverview": "1970'lerde geçen hikayede, Baek Gi Tae zenginlik ve güce susamış hırslı bir adamdır. Jang Gun Yeong ise vahşi içgüdüleri ve korkutucu azmiyle tanınan bir savcıdır. Büyük bir olayla karşı karşıya kalan Jang Gun Yeong, Baek Gi Tae'yi durdurmak için her şeyini ortaya koyar. Çevrelerindeki kişiler arasında lobici Choi Yu Ji, müfettiş O Ye Jin, Bae Geum Ji ve baş sekreter Cheon Seok Jeong yer almaktadır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/lhZCpYVMKZanGTMabOYHTZLD1WY.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/fRR6jHutlHuYxMeZp4cZfjgafzd.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt33298903",
+      "tmdbSyncedAt": "2026-11-07T06:45:42.512Z",
+      "originalTitle": "메이드 인 코리아",
+      "imdbId": "tt33298903",
+      "tmdbSeasons": 2,
+      "tmdbEpisodes": 12
+    },
+    {
+      "id": "archive-12",
+      "title": "Avatar: Ateş ve Kül",
+      "type": "movie",
+      "category": "Bilim-Kurgu / Macera / Fantastik",
+      "genre": "Bilim-Kurgu",
+      "rating": "7.6",
+      "ratingCount": "IMDb 7.6",
+      "year": "2025",
+      "duration": "198 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/8kknNk7PbOcDUXynUZYZ7EHnKAA.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/u8DU5fkLoM5tTRukzPC31oGPxaQ.jpg",
+      "desc": "Pandora gezegeninde geçen destansı macera devam ediyor. Sully ailesi, Pandora'nın Kül halkı kabilesiyle tanışır ve yeni tehditlerle yüzleşirler. İnsanlar, Pandora'nın kaynaklarını sömürmeye devam ederken, Na'vi halkı doğayla uyum içinde yaşamaya çalışır. Jake ve Neytiri, ailelerini korumak ve Pandora'yı savunmak için büyük bir mücadeleye girişirler.",
+      "director": "James Cameron",
+      "cast": [
+        "Sam Worthington",
+        "Zoe Saldaña",
+        "Sigourney Weaver",
+        "Stephen Lang",
+        "Oona Chaplin",
+        "Jack Champion"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=Ma1x7ikpid8",
+      "country": "United States of America",
+      "tmdbId": 83533,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.6",
+      "tmdbVoteCount": 4658,
+      "tmdbTitle": "Avatar: Ateş ve Kül",
+      "tmdbOriginalTitle": "Avatar: Fire and Ash",
+      "tmdbReleaseDate": "2025-12-17",
+      "tmdbGenres": "Bilim-Kurgu / Macera / Fantastik",
+      "tmdbRuntime": "198 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "James Cameron",
+      "tmdbCast": [
+        {
+          "id": 65731,
+          "name": "Sam Worthington",
+          "character": "Jake",
+          "profile": "https://image.tmdb.org/t/p/w185/mflBcox36s9ZPbsZPVOuhf6axaJ.jpg",
+          "order": 0
+        },
+        {
+          "id": 8691,
+          "name": "Zoe Saldaña",
+          "character": "Neytiri",
+          "profile": "https://image.tmdb.org/t/p/w185/vQBwmsSOAd0JDaEcZ5p43J9xzsY.jpg",
+          "order": 1
+        },
+        {
+          "id": 10205,
+          "name": "Sigourney Weaver",
+          "character": "Kiri",
+          "profile": "https://image.tmdb.org/t/p/w185/wTSnfktNBLd6kwQxgvkqYw6vEon.jpg",
+          "order": 2
+        },
+        {
+          "id": 32747,
+          "name": "Stephen Lang",
+          "character": "Quaritch",
+          "profile": "https://image.tmdb.org/t/p/w185/gnO5VfkDgA2fsHweD0622LUY3Hu.jpg",
+          "order": 3
+        },
+        {
+          "id": 566331,
+          "name": "Oona Chaplin",
+          "character": "Varang",
+          "profile": "https://image.tmdb.org/t/p/w185/uYnBSVKcFgw48Wxts01Dh5Gxlar.jpg",
+          "order": 4
+        },
+        {
+          "id": 1895760,
+          "name": "Jack Champion",
+          "character": "Spider",
+          "profile": "https://image.tmdb.org/t/p/w185/7qgRRgap16cVI85WsBdzFLOzYiP.jpg",
+          "order": 5
+        },
+        {
+          "id": 204,
+          "name": "Kate Winslet",
+          "character": "Ronal",
+          "profile": "https://image.tmdb.org/t/p/w185/6qNnMsKtKz9si5rabpUEG85UfHp.jpg",
+          "order": 6
+        },
+        {
+          "id": 7248,
+          "name": "Cliff Curtis",
+          "character": "Tonowari",
+          "profile": "https://image.tmdb.org/t/p/w185/dfaElGoyJWseFWxXwEMLL9WTi7V.jpg",
+          "order": 7
+        },
+        {
+          "id": 59231,
+          "name": "Joel David Moore",
+          "character": "Norm",
+          "profile": "https://image.tmdb.org/t/p/w185/mMVhVglj6BZFuvqAXnEibce08k7.jpg",
+          "order": 8
+        },
+        {
+          "id": 30485,
+          "name": "CCH Pounder",
+          "character": "Mo'at",
+          "profile": "https://image.tmdb.org/t/p/w185/yLOU0qA5MwJyoKMc0e4HyZz4oFV.jpg",
+          "order": 9
+        },
+        {
+          "id": 36190,
+          "name": "Edie Falco",
+          "character": "General Ardmore",
+          "profile": "https://image.tmdb.org/t/p/w185/jS2Hnr5OmntpX0J7EpH70zAG0mz.jpg",
+          "order": 10
+        },
+        {
+          "id": 129527,
+          "name": "Brendan Cowell",
+          "character": "Scoresby",
+          "profile": "https://image.tmdb.org/t/p/w185/lWnJPT91HptiCufHOoYj3sJYwRR.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Pandora gezegeninde geçen destansı macera devam ediyor. Sully ailesi, Pandora'nın Kül halkı kabilesiyle tanışır ve yeni tehditlerle yüzleşirler. İnsanlar, Pandora'nın kaynaklarını sömürmeye devam ederken, Na'vi halkı doğayla uyum içinde yaşamaya çalışır. Jake ve Neytiri, ailelerini korumak ve Pandora'yı savunmak için büyük bir mücadeleye girişirler.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/8kknNk7PbOcDUXynUZYZ7EHnKAA.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/u8DU5fkLoM5tTRukzPC31oGPxaQ.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=zJxzIjjDkR8",
+      "tmdbImdbId": "tt1757678",
+      "tmdbSyncedAt": "2026-11-07T06:45:43.333Z",
+      "originalTitle": "Avatar: Fire and Ash",
+      "imdbId": "tt1757678"
+    },
+    {
+      "id": "archive-14",
+      "title": "Avatar",
+      "type": "movie",
+      "category": "Bilim-Kurgu / Aksiyon / Macera",
+      "genre": "Bilim-Kurgu",
+      "rating": "7.6",
+      "ratingCount": "IMDb 7.6",
+      "year": "2009",
+      "duration": "162 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/gKY6q7SjCkAU6FqvqWybDYgUKIF.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/vL5LR6WdxWPjLPFRLe133jXWsh5.jpg",
+      "desc": "Bir hırsızlık olayında ağabeyi ölen yarı felçli Jake Sully, Pandora adındaki uzak bir gezegende görevinin başına geçmeye karar verir. Bu yerde Na’vi adında giderek tükenmekte olan bir halk yaşamaktadır. Askeri bir şirket, söz konusu yeri ve oradaki kaynakları mercek altına almak üzere Avatar adında bir program oluşturmuştur. Bu program insanları kısmen insan kısmen de Na’vi haline büründürerek misyon amaçlı Pandora’ya göndermektedir. Bu sisteme gönüllü dahil olan Botanist Dr. Grace Augustine ve Jake Sully için başka bir yaşam var olacaktır. Sully, Pandora’ya geçtiği anda felçli bedeni değişime uğrayarak işlevsel hale gelir. Bu sırada Na’vi halkından Prenses Neytiri ile karşı karşıya gelen Jake, ansızın bir farkındalık yaşar ve bir araştırma misyonu ile gönderildiği bu gezegeni, kendi dünyalısından korumaya karar verir.",
+      "director": "James Cameron",
+      "cast": [
+        "Sam Worthington",
+        "Zoe Saldaña",
+        "Sigourney Weaver",
+        "Stephen Lang",
+        "Michelle Rodriguez",
+        "Giovanni Ribisi"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=E7ft0yk_PBw",
+      "country": "United States of America / United Kingdom",
+      "tmdbId": 19995,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.6",
+      "tmdbVoteCount": 34977,
+      "tmdbTitle": "Avatar",
+      "tmdbOriginalTitle": "Avatar",
+      "tmdbReleaseDate": "2009-12-16",
+      "tmdbGenres": "Bilim-Kurgu / Aksiyon / Macera",
+      "tmdbRuntime": "162 dk",
+      "tmdbCountries": "United States of America, United Kingdom",
+      "tmdbDirector": "James Cameron",
+      "tmdbCast": [
+        {
+          "id": 65731,
+          "name": "Sam Worthington",
+          "character": "Jake Sully",
+          "profile": "https://image.tmdb.org/t/p/w185/mflBcox36s9ZPbsZPVOuhf6axaJ.jpg",
+          "order": 0
+        },
+        {
+          "id": 8691,
+          "name": "Zoe Saldaña",
+          "character": "Neytiri",
+          "profile": "https://image.tmdb.org/t/p/w185/vQBwmsSOAd0JDaEcZ5p43J9xzsY.jpg",
+          "order": 1
+        },
+        {
+          "id": 10205,
+          "name": "Sigourney Weaver",
+          "character": "Dr. Grace Augustine",
+          "profile": "https://image.tmdb.org/t/p/w185/wTSnfktNBLd6kwQxgvkqYw6vEon.jpg",
+          "order": 2
+        },
+        {
+          "id": 32747,
+          "name": "Stephen Lang",
+          "character": "Colonel Miles Quaritch",
+          "profile": "https://image.tmdb.org/t/p/w185/gnO5VfkDgA2fsHweD0622LUY3Hu.jpg",
+          "order": 3
+        },
+        {
+          "id": 17647,
+          "name": "Michelle Rodriguez",
+          "character": "Trudy Chacon",
+          "profile": "https://image.tmdb.org/t/p/w185/wVcbrae4eRqGMFZz8Eh52Dl1biP.jpg",
+          "order": 4
+        },
+        {
+          "id": 1771,
+          "name": "Giovanni Ribisi",
+          "character": "Parker Selfridge",
+          "profile": "https://image.tmdb.org/t/p/w185/8EAiS9D3YtGOrwNM0OrwmDpWK7s.jpg",
+          "order": 5
+        },
+        {
+          "id": 59231,
+          "name": "Joel David Moore",
+          "character": "Norm Spellman",
+          "profile": "https://image.tmdb.org/t/p/w185/mMVhVglj6BZFuvqAXnEibce08k7.jpg",
+          "order": 6
+        },
+        {
+          "id": 30485,
+          "name": "CCH Pounder",
+          "character": "Mo'at",
+          "profile": "https://image.tmdb.org/t/p/w185/yLOU0qA5MwJyoKMc0e4HyZz4oFV.jpg",
+          "order": 7
+        },
+        {
+          "id": 15853,
+          "name": "Wes Studi",
+          "character": "Eytukan",
+          "profile": "https://image.tmdb.org/t/p/w185/28vlZlyIVR4B1p5knjbzj4CtNPE.jpg",
+          "order": 8
+        },
+        {
+          "id": 10964,
+          "name": "Laz Alonso",
+          "character": "Tsu'Tey",
+          "profile": "https://image.tmdb.org/t/p/w185/nmgOd3X2Xn3jIp9OLCRJzLExRWN.jpg",
+          "order": 9
+        },
+        {
+          "id": 95697,
+          "name": "Dileep Rao",
+          "character": "Dr. Max Patel",
+          "profile": "https://image.tmdb.org/t/p/w185/jRNn8SZqFXuI5wOOlHwYsWh0hXs.jpg",
+          "order": 10
+        },
+        {
+          "id": 98215,
+          "name": "Matt Gerald",
+          "character": "Corporal Lyle Wainfleet",
+          "profile": "https://image.tmdb.org/t/p/w185/six7c3aZpiEomHjj4ZYokq8Vgtx.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Bir hırsızlık olayında ağabeyi ölen yarı felçli Jake Sully, Pandora adındaki uzak bir gezegende görevinin başına geçmeye karar verir. Bu yerde Na’vi adında giderek tükenmekte olan bir halk yaşamaktadır. Askeri bir şirket, söz konusu yeri ve oradaki kaynakları mercek altına almak üzere Avatar adında bir program oluşturmuştur. Bu program insanları kısmen insan kısmen de Na’vi haline büründürerek misyon amaçlı Pandora’ya göndermektedir. Bu sisteme gönüllü dahil olan Botanist Dr. Grace Augustine ve Jake Sully için başka bir yaşam var olacaktır. Sully, Pandora’ya geçtiği anda felçli bedeni değişime uğrayarak işlevsel hale gelir. Bu sırada Na’vi halkından Prenses Neytiri ile karşı karşıya gelen Jake, ansızın bir farkındalık yaşar ve bir araştırma misyonu ile gönderildiği bu gezegeni, kendi dünyalısından korumaya karar verir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/gKY6q7SjCkAU6FqvqWybDYgUKIF.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/vL5LR6WdxWPjLPFRLe133jXWsh5.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=E7ft0yk_PBw",
+      "tmdbImdbId": "tt0499549",
+      "tmdbSyncedAt": "2026-11-07T06:45:43.753Z",
+      "originalTitle": "Avatar",
+      "imdbId": "tt0499549"
+    },
+    {
+      "id": "archive-16",
+      "title": "Vizontele",
+      "type": "movie",
+      "category": "Komedi / Dram",
+      "genre": "Komedi",
+      "rating": "7.3",
+      "ratingCount": "IMDb 7.3",
+      "year": "2001",
+      "duration": "110 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/ipHbJ54NuA8tobUDrEV6odOrYhK.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/wRMnG0b5LVS9qZC27xn4azcEh43.jpg",
+      "desc": "En büyük eğlence kaynağı, herkesin büyük ilgi gösterdiği yazlık sineması olan bir kasaba… Kasabanın deli oğlanı Emin, çevresindeki tüm insanlara her türlü işte yardım eden ve herkesin sevdiği bir adamdır. Televizyonun henüz yeni yeni Anadolu’ya yayılmaya başladığı bu dönemde köy halkı dönemin en büyük icadıyla tanışmaya hazırlanmaktadır. Televizyona dair çeşitli beklentiler vardır. Mekanik işlerle uğraşmayı seven Emin de televizyonun nasıl bir buluş olduğunu merak etmektedir. Televizyon kasabaya gelirken, beraberinde birçok şey getirecektir.",
+      "director": "Yılmaz Erdoğan, Ömer Faruk Sorak",
+      "cast": [
+        "Yılmaz Erdoğan",
+        "Demet Akbağ",
+        "Altan Erkekli",
+        "Cem Yılmaz",
+        "Cezmi Baskın",
+        "Bican Günalan",
+        "Şebnem Sönmez",
+        "Salih Kalyon",
+        "Şener Kökkaya",
+        "Erdal Tosun",
+        "İclal Aydın",
+        "Mesut Çakarlı"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=0NrNsvwbOuI",
+      "country": "Türkiye",
+      "tmdbId": 57892,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.3",
+      "tmdbVoteCount": 205,
+      "tmdbTitle": "Vizontele",
+      "tmdbOriginalTitle": "Vizontele",
+      "tmdbReleaseDate": "2001-02-02",
+      "tmdbGenres": "Komedi / Dram",
+      "tmdbRuntime": "110 dk",
+      "tmdbCountries": "Türkiye",
+      "tmdbDirector": "Yılmaz Erdoğan",
+      "tmdbCast": [
+        {
+          "id": 99314,
+          "name": "Yılmaz Erdoğan",
+          "character": "Deli Emin",
+          "profile": "https://image.tmdb.org/t/p/w185/nl7WulHPoP6bw4phMwp0VuuJgyL.jpg",
+          "order": 0
+        },
+        {
+          "id": 59754,
+          "name": "Demet Akbağ",
+          "character": "Siti Ana",
+          "profile": "https://image.tmdb.org/t/p/w185/eGuozRn0wfZlzxVBlLigT0yI8Zh.jpg",
+          "order": 1
+        },
+        {
+          "id": 106620,
+          "name": "Altan Erkekli",
+          "character": "Başkan Nazmi",
+          "profile": "https://image.tmdb.org/t/p/w185/u6Tc6oP3jgkEKBseMIyddXqZWk4.jpg",
+          "order": 2
+        },
+        {
+          "id": 74376,
+          "name": "Cem Yılmaz",
+          "character": "Fikri",
+          "profile": "https://image.tmdb.org/t/p/w185/n8J3f4Ua0FWM29icutaKcg6PxFJ.jpg",
+          "order": 3
+        },
+        {
+          "id": 145331,
+          "name": "Cezmi Baskın",
+          "character": "Latif",
+          "profile": "https://image.tmdb.org/t/p/w185/7eAM8mhkj1qbX8LISmwdIhALiZr.jpg",
+          "order": 4
+        },
+        {
+          "id": 1458862,
+          "name": "Bican Günalan",
+          "character": "Sezgin",
+          "profile": "https://image.tmdb.org/t/p/w185/ehQz1rvDYOSwZbqMqNbbyKP0YN.jpg",
+          "order": 5
+        },
+        {
+          "id": 225187,
+          "name": "Şebnem Sönmez",
+          "character": "Gülizar",
+          "profile": "https://image.tmdb.org/t/p/w185/sM0xuq8xvRGGNnA1FUvNER1yIkZ.jpg",
+          "order": 6
+        },
+        {
+          "id": 145344,
+          "name": "Salih Kalyon",
+          "character": "Casim",
+          "profile": "https://image.tmdb.org/t/p/w185/2yIjjrK8Vnk0Z6moNQnuD242DN8.jpg",
+          "order": 7
+        },
+        {
+          "id": 1195914,
+          "name": "Şener Kökkaya",
+          "character": "Basri",
+          "profile": "https://image.tmdb.org/t/p/w185/8W12xJB3Pq74ZXXlprwZyVudngk.jpg",
+          "order": 8
+        },
+        {
+          "id": 145733,
+          "name": "Erdal Tosun",
+          "character": "Şeyhmus",
+          "profile": "https://image.tmdb.org/t/p/w185/1HGjDkZojj9MPKNIj8Ol8HuwPU7.jpg",
+          "order": 9
+        },
+        {
+          "id": 1953639,
+          "name": "İclal Aydın",
+          "character": "Reyhan",
+          "profile": "https://image.tmdb.org/t/p/w185/uMGVUAcSAOfeKc40EdRZnRUkQSt.jpg",
+          "order": 10
+        },
+        {
+          "id": 1078815,
+          "name": "Mesut Çakarlı",
+          "character": "Rıfat",
+          "profile": "https://image.tmdb.org/t/p/w185/1xS2QY96NgueNLc2CivloDgXZnF.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "En büyük eğlence kaynağı, herkesin büyük ilgi gösterdiği yazlık sineması olan bir kasaba… Kasabanın deli oğlanı Emin, çevresindeki tüm insanlara her türlü işte yardım eden ve herkesin sevdiği bir adamdır. Televizyonun henüz yeni yeni Anadolu’ya yayılmaya başladığı bu dönemde köy halkı dönemin en büyük icadıyla tanışmaya hazırlanmaktadır. Televizyona dair çeşitli beklentiler vardır. Mekanik işlerle uğraşmayı seven Emin de televizyonun nasıl bir buluş olduğunu merak etmektedir. Televizyon kasabaya gelirken, beraberinde birçok şey getirecektir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/ipHbJ54NuA8tobUDrEV6odOrYhK.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/wRMnG0b5LVS9qZC27xn4azcEh43.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=0NrNsvwbOuI",
+      "tmdbImdbId": "tt0270053",
+      "tmdbSyncedAt": "2026-11-07T06:45:43.937Z",
+      "originalTitle": "Vizontele",
+      "imdbId": "tt0270053"
+    },
+    {
+      "id": "archive-20",
+      "title": "Ezel",
+      "type": "tv",
+      "category": "Suç / Dram / Aksiyon & Macera",
+      "genre": "Suç",
+      "rating": "8.4",
+      "ratingCount": "IMDb 8.4",
+      "year": "2009",
+      "duration": "120 dk / bölüm",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/pHSjh4MINU2JnK7qQvjogQaX3wr.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/3IJPtnlFoY8bjllHxnEw21qlK2p.jpg",
+      "desc": "Ömer, babasının atölyesinde çalışarak sade bir hayat içerisinde yaşamını sürdüren bir gençtir. Askerlik dönüşü sevgilisi Eyşan ile evlenmeyi planlamaktadır. Fakat kendisini bir anda cinayetten hapiste bulunca hayatı allak bullak olur. Hapisteyken tanıştığı Ramiz Dayı, ikinci babası olur.  Ömer kimliğini saklayarak, bir dizi estetik operasyon sonrası Ezel'e dönüşür. Hapishaneden çıktıktan sonra kendisine oyun oynandığına inanarak intikam için Eyşan'ın, en iyi arkadaşı Cengiz'in ve abisi bildiği Ali’nin peşine düşer. Aşk, güç, para, mafya entrikaları hayatlarının bir parçasına dönüşürken, her biri intikamdan beslenir.",
+      "director": "Pınar Bulut, Kerem Deren",
+      "cast": [
+        "Kenan İmirzalıoğlu",
+        "Cansu Dere",
+        "Yiğit Özşener",
+        "Barış Falay",
+        "Sarp Akkaya",
+        "Tuncel Kurtiz"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=OOlAOosSiEc",
+      "country": "TR",
+      "tmdbId": 32519,
+      "seasons": 2,
+      "episodes": 71,
+      "tmdbRating": "8.3",
+      "tmdbVoteCount": 107,
+      "tmdbTitle": "Ezel",
+      "tmdbOriginalTitle": "Ezel",
+      "tmdbReleaseDate": "2009-09-28",
+      "tmdbGenres": "Suç / Dram / Aksiyon & Macera",
+      "tmdbRuntime": "120 dk / bölüm",
+      "tmdbCountries": "TR",
+      "tmdbDirector": "Pınar Bulut, Kerem Deren",
+      "tmdbCast": [
+        {
+          "id": 99315,
+          "name": "Kenan İmirzalıoğlu",
+          "character": "Ezel Bayraktar",
+          "profile": "https://image.tmdb.org/t/p/w185/c94CqMj4HxB52K766JkZo0B2x7M.jpg",
+          "order": 0
+        },
+        {
+          "id": 113869,
+          "name": "Cansu Dere",
+          "character": "Eyşan Tezcan Atay",
+          "profile": "https://image.tmdb.org/t/p/w185/erjCquhIaIGkgumxnS4LKMpZChe.jpg",
+          "order": 1
+        },
+        {
+          "id": 46066,
+          "name": "Yiğit Özşener",
+          "character": "Cengiz Atay",
+          "profile": "https://image.tmdb.org/t/p/w185/59Iy4e927evH7O1gb6cFRwQdtng.jpg",
+          "order": 2
+        },
+        {
+          "id": 1251889,
+          "name": "Barış Falay",
+          "character": "Ali Kırgız",
+          "profile": "https://image.tmdb.org/t/p/w185/fh2pvVJJeotuAKpqCTM0665U9CQ.jpg",
+          "order": 3
+        },
+        {
+          "id": 1251887,
+          "name": "Sarp Akkaya",
+          "character": "Tevfik Zaim",
+          "profile": "https://image.tmdb.org/t/p/w185/hCsdUZWtoGXdgRJD40klqDWrY7U.jpg",
+          "order": 5
+        },
+        {
+          "id": 20728,
+          "name": "Tuncel Kurtiz",
+          "character": "Ramiz Karaeski",
+          "profile": "https://image.tmdb.org/t/p/w185/ggJzGwO7JmKzlaVTUMw73DuIcF6.jpg",
+          "order": 6
+        },
+        {
+          "id": 1251892,
+          "name": "Güray Kip",
+          "character": "Kamil Çalıca",
+          "profile": "https://image.tmdb.org/t/p/w185/wogWQk1dWl7m80ZxrJvXCUMhMAu.jpg",
+          "order": 7
+        },
+        {
+          "id": 1251893,
+          "name": "Bade İşçil",
+          "character": "Şebnem Sertuna",
+          "profile": "https://image.tmdb.org/t/p/w185/Q8300kkhneOql1YrNv3WXA7Bvq.jpg",
+          "order": 8
+        },
+        {
+          "id": 1238865,
+          "name": "Burçin Terzioğlu",
+          "character": "Azad Karaeski",
+          "profile": "https://image.tmdb.org/t/p/w185/7Q5cWgBU36mU3SlRKqbaMUSn4HH.jpg",
+          "order": 9
+        },
+        {
+          "id": 120876,
+          "name": "Sedef Avcı",
+          "character": "Bahar Tezcan",
+          "profile": "https://image.tmdb.org/t/p/w185/AraPNlmJF89lCYLlCHS8bpRiYAA.jpg",
+          "order": 10
+        },
+        {
+          "id": 117640,
+          "name": "Haluk Bilginer",
+          "character": "Kenan Birkan",
+          "profile": "https://image.tmdb.org/t/p/w185/krCEBAIGmEUUcA4GpLt3RiTHKLC.jpg",
+          "order": 11
+        },
+        {
+          "id": 1251886,
+          "name": "Nurhan Özenen",
+          "character": "Selma Hüner",
+          "profile": "https://image.tmdb.org/t/p/w185/lYgSrCOP5kOCtMpYM0kjlw8WOJe.jpg",
+          "order": 12
+        }
+      ],
+      "tmdbOverview": "Ömer, babasının atölyesinde çalışarak sade bir hayat içerisinde yaşamını sürdüren bir gençtir. Askerlik dönüşü sevgilisi Eyşan ile evlenmeyi planlamaktadır. Fakat kendisini bir anda cinayetten hapiste bulunca hayatı allak bullak olur. Hapisteyken tanıştığı Ramiz Dayı, ikinci babası olur.  Ömer kimliğini saklayarak, bir dizi estetik operasyon sonrası Ezel'e dönüşür. Hapishaneden çıktıktan sonra kendisine oyun oynandığına inanarak intikam için Eyşan'ın, en iyi arkadaşı Cengiz'in ve abisi bildiği Ali’nin peşine düşer. Aşk, güç, para, mafya entrikaları hayatlarının bir parçasına dönüşürken, her biri intikamdan beslenir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/pHSjh4MINU2JnK7qQvjogQaX3wr.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/3IJPtnlFoY8bjllHxnEw21qlK2p.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=OOlAOosSiEc",
+      "tmdbImdbId": "tt1534360",
+      "tmdbSyncedAt": "2026-11-07T06:45:44.293Z",
+      "originalTitle": "Ezel",
+      "imdbId": "tt1534360",
+      "tmdbSeasons": 2,
+      "tmdbEpisodes": 71
+    },
+    {
+      "id": "archive-25",
+      "title": "The Sopranos",
+      "type": "tv",
+      "category": "Suç / Dram",
+      "genre": "Suç",
+      "rating": "8.7",
+      "ratingCount": "IMDb 8.7",
+      "year": "1999",
+      "duration": "Dizi",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/lNpkvX2s8LGB0mjGODMT4o6Up7j.jpg",
+      "desc": "New Jersey'deki bir Amerikan-İtalyan mafya ailesinin babası olan Tony Soprano'nun ve Soprano Ailesi'nin diğer fertlerinin hayatlarından kesitler sunan dizi, toplamda 86 bölüm yayınlanmış, kazandığı ödüller ve aldığı olumlu eleştirilerle adını \"gelmiş geçmiş en iyi diziler\" arasına yazdırmıştır.",
+      "director": "David Chase",
+      "cast": [
+        "James Gandolfini",
+        "Edie Falco",
+        "Jamie-Lynn Sigler",
+        "Robert Iler",
+        "Lorraine Bracco",
+        "Michael Imperioli",
+        "Steven Van Zandt",
+        "Tony Sirico",
+        "Dominic Chianese",
+        "Aida Turturro",
+        "Steve Schirripa"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=Q8cBFvpqmH0",
+      "country": "United States of America",
+      "tmdbId": 1398,
+      "seasons": 6,
+      "episodes": 86,
+      "tmdbRating": "8.7",
+      "tmdbVoteCount": 3780,
+      "tmdbTitle": "The Sopranos",
+      "tmdbOriginalTitle": "The Sopranos",
+      "tmdbReleaseDate": "1999-01-10",
+      "tmdbGenres": "Suç / Dram",
+      "tmdbRuntime": "",
+      "tmdbCountries": "US",
+      "tmdbDirector": "David Chase",
+      "tmdbCast": [
+        {
+          "id": 4691,
+          "name": "James Gandolfini",
+          "character": "Tony Soprano",
+          "profile": "https://image.tmdb.org/t/p/w185/vhtsFJZcfHdeDkFBoWMDzOS6xrP.jpg",
+          "order": 0
+        },
+        {
+          "id": 36190,
+          "name": "Edie Falco",
+          "character": "Carmela Soprano",
+          "profile": "https://image.tmdb.org/t/p/w185/jS2Hnr5OmntpX0J7EpH70zAG0mz.jpg",
+          "order": 1
+        },
+        {
+          "id": 99241,
+          "name": "Jamie-Lynn Sigler",
+          "character": "Meadow Soprano",
+          "profile": "https://image.tmdb.org/t/p/w185/Aur8H7qOzDUr9cRaqqOsCE5kLJp.jpg",
+          "order": 2
+        },
+        {
+          "id": 1218240,
+          "name": "Robert Iler",
+          "character": "A.J. Soprano",
+          "profile": "https://image.tmdb.org/t/p/w185/vfTbVoV1Bp2fcDVHaGOIiQppk3J.jpg",
+          "order": 3
+        },
+        {
+          "id": 11478,
+          "name": "Lorraine Bracco",
+          "character": "Jennifer Melfi",
+          "profile": "https://image.tmdb.org/t/p/w185/tAtpCzN4sTOy1RHpMpJj52zTO4S.jpg",
+          "order": 4
+        },
+        {
+          "id": 11486,
+          "name": "Michael Imperioli",
+          "character": "Christopher Moltisanti",
+          "profile": "https://image.tmdb.org/t/p/w185/jfoEHR6BRMg8emtujXdM3G4JHIm.jpg",
+          "order": 5
+        },
+        {
+          "id": 107622,
+          "name": "Steven Van Zandt",
+          "character": "Silvio Dante",
+          "profile": "https://image.tmdb.org/t/p/w185/okh4QNQrGG647y5HnGSXAFFoIlp.jpg",
+          "order": 6
+        },
+        {
+          "id": 21385,
+          "name": "Tony Sirico",
+          "character": "Paulie Gualtieri",
+          "profile": "https://image.tmdb.org/t/p/w185/yiTvFhaPlVIWETNObwqB72hgNeI.jpg",
+          "order": 7
+        },
+        {
+          "id": 68186,
+          "name": "Dominic Chianese",
+          "character": "Corrado 'Junior' Soprano",
+          "profile": "https://image.tmdb.org/t/p/w185/9OCAByYHjY6yO0s5ipBH3roaQpy.jpg",
+          "order": 8
+        },
+        {
+          "id": 106791,
+          "name": "Aida Turturro",
+          "character": "Janice Soprano",
+          "profile": "https://image.tmdb.org/t/p/w185/kEPpV3eHXOKXGWGtsxUUV6k1hai.jpg",
+          "order": 9
+        },
+        {
+          "id": 97188,
+          "name": "Steve Schirripa",
+          "character": "Bobby 'Bacala' Baccalieri",
+          "profile": "https://image.tmdb.org/t/p/w185/2Nd2Hd4zIBCv4ZoXFhSkrJCx6wB.jpg",
+          "order": 12
+        }
+      ],
+      "tmdbOverview": "New Jersey'deki bir Amerikan-İtalyan mafya ailesinin babası olan Tony Soprano'nun ve Soprano Ailesi'nin diğer fertlerinin hayatlarından kesitler sunan dizi, toplamda 86 bölüm yayınlanmış, kazandığı ödüller ve aldığı olumlu eleştirilerle adını \"gelmiş geçmiş en iyi diziler\" arasına yazdırmıştır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/lNpkvX2s8LGB0mjGODMT4o6Up7j.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt0141842",
+      "tmdbSyncedAt": "2026-11-07T06:45:44.923Z",
+      "originalTitle": "The Sopranos",
+      "imdbId": "tt0141842",
+      "tmdbSeasons": 6,
+      "tmdbEpisodes": 86
+    },
+    {
+      "id": "archive-29",
+      "title": "Bloodhounds",
+      "type": "tv",
+      "category": "Dram / Aksiyon & Macera / Suç",
+      "genre": "Dram",
+      "rating": "8.5",
+      "ratingCount": "IMDb 8.5",
+      "year": "2023",
+      "duration": "61 dk / bölüm",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/j4BjkbSqY7Cbc4XcdKMyJGyr9iT.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/zhsEnDNCQX5dlI2wbKzV90pV0B9.jpg",
+      "desc": "Zor durumdakilere borç veren hayırsever bir iş insanı adına çalışan iki boksör, mali açıdan çıkmazda olanların sırtından geçinen acımasız bir tefeciyi devirmek için el ele verir.",
+      "director": "Jason Kim",
+      "cast": [
+        "Woo Do-hwan",
+        "Lee Sang-yi",
+        "Rain",
+        "Lee Myeong-ro"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=eyiR8pO50JE",
+      "country": "South Korea",
+      "tmdbId": 127529,
+      "seasons": 2,
+      "episodes": 15,
+      "tmdbRating": "8.5",
+      "tmdbVoteCount": 830,
+      "tmdbTitle": "Bloodhounds",
+      "tmdbOriginalTitle": "사냥개들",
+      "tmdbReleaseDate": "2023-06-09",
+      "tmdbGenres": "Dram / Aksiyon & Macera / Suç",
+      "tmdbRuntime": "61 dk / bölüm",
+      "tmdbCountries": "KR",
+      "tmdbDirector": "Jason Kim",
+      "tmdbCast": [
+        {
+          "id": 1845057,
+          "name": "Woo Do-hwan",
+          "character": "Kim Gun-woo",
+          "profile": "https://image.tmdb.org/t/p/w185/6r1yIpHLmoIqujKv9KQeZPEUhXy.jpg",
+          "order": 0
+        },
+        {
+          "id": 1863428,
+          "name": "Lee Sang-yi",
+          "character": "Hong Woo-jin",
+          "profile": "https://image.tmdb.org/t/p/w185/4OSOux7D8ZIbNsA7eINSwmHM9nb.jpg",
+          "order": 1
+        },
+        {
+          "id": 112013,
+          "name": "Rain",
+          "character": "Im Baek-jeong",
+          "profile": "https://image.tmdb.org/t/p/w185/aXOjIBUxu7fmBOxTJcgYmtTKD1D.jpg",
+          "order": 4
+        },
+        {
+          "id": 3507434,
+          "name": "Lee Myeong-ro",
+          "character": "Allen",
+          "profile": "https://image.tmdb.org/t/p/w185/uZytd3dXQdBpOAiJNOl7S1eIn8u.jpg",
+          "order": 5
+        }
+      ],
+      "tmdbOverview": "Zor durumdakilere borç veren hayırsever bir iş insanı adına çalışan iki boksör, mali açıdan çıkmazda olanların sırtından geçinen acımasız bir tefeciyi devirmek için el ele verir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/j4BjkbSqY7Cbc4XcdKMyJGyr9iT.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/zhsEnDNCQX5dlI2wbKzV90pV0B9.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt26315487",
+      "tmdbSyncedAt": "2026-11-07T06:45:45.576Z",
+      "originalTitle": "사냥개들",
+      "imdbId": "tt26315487",
+      "tmdbSeasons": 2,
+      "tmdbEpisodes": 15
+    },
+    {
+      "id": "archive-36",
+      "title": "Mouse",
+      "type": "tv",
+      "category": "Suç / Gizem",
+      "genre": "Suç",
+      "rating": "8.3",
+      "ratingCount": "IMDb 8.3",
+      "year": "2021",
+      "duration": "76 dk / bölüm",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/lrWHBK1h4rrEnx5Ml8iDR1SwNux.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/ikU9een11dr6UFy0XzQMJv3YJQq.jpg",
+      "desc": "Çılgın bir seri katilin acımasız cinayetleri tüm ulusu korku içinde bırakmış ve kaos hüküm sürmektedir. Adalet arayan çaylak polis memuru Jung Ba Reum, katille yüz yüze gelir. Jung Ba Reum, psikopatla yaşadığı tehlikeli karşılaşmadan sağ kurtulurken, hayatının gözlerinin önünde tamamen değiştiğini fark eder.",
+      "director": "Bilinmiyor",
+      "cast": [
+        "Lee Seung-gi",
+        "Lee Hee-jun",
+        "Park Ju-hyun",
+        "Kwon Hwa-woon",
+        "Gyeong Su-jin",
+        "Woo Ji-hyun",
+        "Jo Jae-yun",
+        "김영재",
+        "황세온"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=IFldpzaHFmw",
+      "country": "South Korea",
+      "tmdbId": 117378,
+      "seasons": 1,
+      "episodes": 20,
+      "tmdbRating": "8.4",
+      "tmdbVoteCount": 344,
+      "tmdbTitle": "Mouse",
+      "tmdbOriginalTitle": "마우스",
+      "tmdbReleaseDate": "2021-03-03",
+      "tmdbGenres": "Suç / Gizem",
+      "tmdbRuntime": "76 dk / bölüm",
+      "tmdbCountries": "KR",
+      "tmdbDirector": "",
+      "tmdbCast": [
+        {
+          "id": 1250842,
+          "name": "Lee Seung-gi",
+          "character": "Jung Ba-reum",
+          "profile": "https://image.tmdb.org/t/p/w185/urz7CEh9rpC9GFqh5ht8R65dY9w.jpg",
+          "order": 0
+        },
+        {
+          "id": 1046863,
+          "name": "Lee Hee-jun",
+          "character": "Go Moo-chi",
+          "profile": "https://image.tmdb.org/t/p/w185/4slyXnHbKgzmeyJNetBSORgDDEF.jpg",
+          "order": 1
+        },
+        {
+          "id": 2633250,
+          "name": "Park Ju-hyun",
+          "character": "Oh Bong-yi",
+          "profile": "https://image.tmdb.org/t/p/w185/2xfmCqWWNE3wLAUg2WlByP9kvMP.jpg",
+          "order": 2
+        },
+        {
+          "id": 3031122,
+          "name": "Kwon Hwa-woon",
+          "character": "Sung Yo-han",
+          "profile": "https://image.tmdb.org/t/p/w185/oLyUb2lIGY9o0IdjarcYIsNRkCu.jpg",
+          "order": 3
+        },
+        {
+          "id": 1206963,
+          "name": "Gyeong Su-jin",
+          "character": "Choi Hong-ju",
+          "profile": "https://image.tmdb.org/t/p/w185/5gdThWkpzuNkNyQ6Cw29oOefvXO.jpg",
+          "order": 4
+        },
+        {
+          "id": 1747746,
+          "name": "Woo Ji-hyun",
+          "character": "Koo Dong-koo",
+          "profile": "https://image.tmdb.org/t/p/w185/7Q5mTHP6VTHkvazJDh44TNtPk9a.jpg",
+          "order": 5
+        },
+        {
+          "id": 566375,
+          "name": "Jo Jae-yun",
+          "character": "Daniel Lee",
+          "profile": "https://image.tmdb.org/t/p/w185/eFAeusBo0tXQ1Ul596YKl5dV4Rv.jpg",
+          "order": 6
+        },
+        {
+          "id": 135850,
+          "name": "김영재",
+          "character": "Go Moo-won",
+          "profile": "https://image.tmdb.org/t/p/w185/wSgDPw6fSGgrwJLO0QaITbS758L.jpg",
+          "order": 7
+        },
+        {
+          "id": 3291459,
+          "name": "황세온",
+          "character": "Kim Da-seul",
+          "profile": "https://image.tmdb.org/t/p/w185/ltTUUtLF6CRd0LmBlt02EwPM2Tq.jpg",
+          "order": 8
+        }
+      ],
+      "tmdbOverview": "Çılgın bir seri katilin acımasız cinayetleri tüm ulusu korku içinde bırakmış ve kaos hüküm sürmektedir. Adalet arayan çaylak polis memuru Jung Ba Reum, katille yüz yüze gelir. Jung Ba Reum, psikopatla yaşadığı tehlikeli karşılaşmadan sağ kurtulurken, hayatının gözlerinin önünde tamamen değiştiğini fark eder.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/lrWHBK1h4rrEnx5Ml8iDR1SwNux.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/ikU9een11dr6UFy0XzQMJv3YJQq.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=IFldpzaHFmw",
+      "tmdbImdbId": "tt13634792",
+      "tmdbSyncedAt": "2026-11-07T06:45:46.340Z",
+      "originalTitle": "마우스",
+      "imdbId": "tt13634792",
+      "tmdbSeasons": 1,
+      "tmdbEpisodes": 20
+    },
+    {
+      "id": "archive-37",
+      "title": "Vagabond",
+      "type": "tv",
+      "category": "Dram / Gizem / Aksiyon & Macera",
+      "genre": "Dram",
+      "rating": "8.3",
+      "ratingCount": "IMDb 8.3",
+      "year": "2019",
+      "duration": "60 dk / bölüm",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/iSB720SU8k53NOsemk55aIqTAKI.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/6BdGjKqud1rFcEa7p2zGfc29z5H.jpg",
+      "desc": "Dizi, gizemli bir uçak kazası soruşturmasına karışan ve daha sonra ülkede yapılan yolsuzluklar hakkında bilgi toplamaya başlayan sıradan bir adamın (Lee Seung-Gi) etrafında dönmektedir.",
+      "director": "Yoo İn-sik, Jang Yeong-cheol",
+      "cast": [
+        "Lee Seung-gi",
+        "Suzy",
+        "Shin Sung-rok",
+        "Moon Jeong-hee",
+        "Baek Yoon-sik",
+        "Moon Song-keun",
+        "Lee Kyung-young",
+        "Lee Ki-young",
+        "Kim Min-jong",
+        "Jeong Man-sik",
+        "Hwang Bo-ra",
+        "Choi Gwang-il"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=tyhnEHCUtv4",
+      "country": "Morocco, Portugal, South Korea",
+      "tmdbId": 92983,
+      "seasons": 1,
+      "episodes": 16,
+      "tmdbRating": "8.3",
+      "tmdbVoteCount": 524,
+      "tmdbTitle": "Vagabond",
+      "tmdbOriginalTitle": "배가본드",
+      "tmdbReleaseDate": "2019-09-20",
+      "tmdbGenres": "Dram / Gizem / Aksiyon & Macera",
+      "tmdbRuntime": "60 dk / bölüm",
+      "tmdbCountries": "KR",
+      "tmdbDirector": "Yoo İn-sik, Jang Yeong-cheol",
+      "tmdbCast": [
+        {
+          "id": 1250842,
+          "name": "Lee Seung-gi",
+          "character": "Cha Dal-gun",
+          "profile": "https://image.tmdb.org/t/p/w185/urz7CEh9rpC9GFqh5ht8R65dY9w.jpg",
+          "order": 0
+        },
+        {
+          "id": 1014784,
+          "name": "Suzy",
+          "character": "Go Hae-ri / Elsa",
+          "profile": "https://image.tmdb.org/t/p/w185/xdmQeM0UuwVGyZucc3eLhynlb7b.jpg",
+          "order": 1
+        },
+        {
+          "id": 1335825,
+          "name": "Shin Sung-rok",
+          "character": "Gi Tae-woong",
+          "profile": "https://image.tmdb.org/t/p/w185/6ajwIMcTc2jVFsjVOx2W0XARxpj.jpg",
+          "order": 2
+        },
+        {
+          "id": 1077269,
+          "name": "Moon Jeong-hee",
+          "character": "Jessica Lee",
+          "profile": "https://image.tmdb.org/t/p/w185/6V48aFHytTUAHG9EJ5JObUEbXOV.jpg",
+          "order": 3
+        },
+        {
+          "id": 229752,
+          "name": "Baek Yoon-sik",
+          "character": "Jung Gook-pyo",
+          "profile": "https://image.tmdb.org/t/p/w185/s6zl6rpTohkvwQK5kunfmsnv5pv.jpg",
+          "order": 4
+        },
+        {
+          "id": 240948,
+          "name": "Moon Song-keun",
+          "character": "Hong Sun-jo",
+          "profile": "https://image.tmdb.org/t/p/w185/wQjOvAFqCItwMw7dxa486KnGgEE.jpg",
+          "order": 5
+        },
+        {
+          "id": 231476,
+          "name": "Lee Kyung-young",
+          "character": "Edward Park",
+          "profile": "https://image.tmdb.org/t/p/w185/aDNcLCWs7KHToiXxfG7ACwvne3l.jpg",
+          "order": 6
+        },
+        {
+          "id": 125734,
+          "name": "Lee Ki-young",
+          "character": "Kang Joo-chul",
+          "profile": "https://image.tmdb.org/t/p/w185/zQlPXY8vusE72nPQwanRACveDdV.jpg",
+          "order": 7
+        },
+        {
+          "id": 1244947,
+          "name": "Kim Min-jong",
+          "character": "Park Man-young",
+          "profile": "https://image.tmdb.org/t/p/w185/theJ5uWHjp8S0Jmf1RwdhqR7PiJ.jpg",
+          "order": 8
+        },
+        {
+          "id": 1044800,
+          "name": "Jeong Man-sik",
+          "character": "Min Jae-shik",
+          "profile": "https://image.tmdb.org/t/p/w185/uW7hAs6t6ucVNpTBE5skFVHCoqx.jpg",
+          "order": 9
+        },
+        {
+          "id": 1239675,
+          "name": "Hwang Bo-ra",
+          "character": "Gong Hwa-sook",
+          "profile": "https://image.tmdb.org/t/p/w185/kYqk3HTZkE5HLvDJC7h1q0usbNl.jpg",
+          "order": 10
+        },
+        {
+          "id": 2485848,
+          "name": "Choi Gwang-il",
+          "character": "Park Man-young",
+          "profile": "https://image.tmdb.org/t/p/w185/6vkA8s4XDPwZBRzNhN9xSLzb3II.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Dizi, gizemli bir uçak kazası soruşturmasına karışan ve daha sonra ülkede yapılan yolsuzluklar hakkında bilgi toplamaya başlayan sıradan bir adamın (Lee Seung-Gi) etrafında dönmektedir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/iSB720SU8k53NOsemk55aIqTAKI.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/6BdGjKqud1rFcEa7p2zGfc29z5H.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt8523042",
+      "tmdbSyncedAt": "2026-11-07T06:45:46.533Z",
+      "originalTitle": "배가본드",
+      "imdbId": "tt8523042",
+      "tmdbSeasons": 1,
+      "tmdbEpisodes": 16
+    },
+    {
+      "id": "archive-47",
+      "title": "The Gangster, the Cop, the Devil",
+      "type": "movie",
+      "category": "Aksiyon / Suç / Gerilim",
+      "genre": "Aksiyon",
+      "rating": "7.9",
+      "ratingCount": "IMDb 7.9",
+      "year": "2019",
+      "duration": "109 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/az4OVqXbFVaHoZlktcm7oCm0LZo.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/jJJQ1PPXUEchqyZ9YyWzgSNU39Z.jpg",
+      "desc": "Bir seri katilin saldırısından zar zor kurtulan suç patronu Jang Dong-su, sadist katili bulmak için dedektif Jung Tae-seok ile alışılmadık bir ortaklık kurar.",
+      "director": "이원태",
+      "cast": [
+        "Don Lee",
+        "Kim Moo-yul",
+        "Kim Sung-kyu",
+        "Heo Dong-woon",
+        "Yoo Jae-myung",
+        "Lee Seo-hwan"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=D1XANQUYSvk",
+      "country": "South Korea",
+      "tmdbId": 581528,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.9",
+      "tmdbVoteCount": 1619,
+      "tmdbTitle": "The Gangster, the Cop, the Devil",
+      "tmdbOriginalTitle": "악인전",
+      "tmdbReleaseDate": "2019-05-15",
+      "tmdbGenres": "Aksiyon / Suç / Gerilim",
+      "tmdbRuntime": "109 dk",
+      "tmdbCountries": "South Korea",
+      "tmdbDirector": "이원태",
+      "tmdbCast": [
+        {
+          "id": 1024395,
+          "name": "Don Lee",
+          "character": "Jang Dong-su",
+          "profile": "https://image.tmdb.org/t/p/w185/xqnARIEzfyr3BalhFBWHmCusLKH.jpg",
+          "order": 0
+        },
+        {
+          "id": 84788,
+          "name": "Kim Moo-yul",
+          "character": "Jung Tae-suk",
+          "profile": "https://image.tmdb.org/t/p/w185/wLuVca9icDLjUkOG84IlEmfP52b.jpg",
+          "order": 1
+        },
+        {
+          "id": 2159394,
+          "name": "Kim Sung-kyu",
+          "character": "Kang Gyeong-ho",
+          "profile": "https://image.tmdb.org/t/p/w185/72FPYyk1Zxzr3L2KZhjMmAVchfK.jpg",
+          "order": 2
+        },
+        {
+          "id": 1332468,
+          "name": "Heo Dong-woon",
+          "character": "Choi Moon-sik",
+          "profile": "https://image.tmdb.org/t/p/w185/eq2C51s3oDjN7bjjblozl7WGDTL.jpg",
+          "order": 3
+        },
+        {
+          "id": 1336804,
+          "name": "Yoo Jae-myung",
+          "character": "Heo Sang-do",
+          "profile": "https://image.tmdb.org/t/p/w185/zuFVYiE4y6DjGqFZCEZqwDyEpPi.jpg",
+          "order": 4
+        },
+        {
+          "id": 2204527,
+          "name": "Lee Seo-hwan",
+          "character": "Choi Jeong-gyu",
+          "profile": "https://image.tmdb.org/t/p/w185/xy6JlnuWWtEgb4I6tPuTpYc7hxp.jpg",
+          "order": 5
+        },
+        {
+          "id": 1338162,
+          "name": "Oh Hee-jun",
+          "character": "Kim Dong-chul",
+          "profile": "https://image.tmdb.org/t/p/w185/wPkHSNSz2SQYt6ksKMbEfScg8wq.jpg",
+          "order": 6
+        },
+        {
+          "id": 1246931,
+          "name": "김규리",
+          "character": "Cha Seo-jin",
+          "profile": "https://image.tmdb.org/t/p/w185/q48drWt7V9pARReR3gRcB3Qf0q9.jpg",
+          "order": 7
+        },
+        {
+          "id": 1128004,
+          "name": "Yoo Seung-mok",
+          "character": "Ahn Ho-bong",
+          "profile": "https://image.tmdb.org/t/p/w185/jbHLHMMSuWYR27znM8ZSA6m2kJw.jpg",
+          "order": 8
+        },
+        {
+          "id": 1136064,
+          "name": "Ryu Tae-ho",
+          "character": "Mr. Ahn",
+          "profile": "https://image.tmdb.org/t/p/w185/3vnSlWZNQJXXS0UMW5LC95lslhh.jpg",
+          "order": 9
+        },
+        {
+          "id": 2101538,
+          "name": "Cha Soon-bae",
+          "character": "Judge",
+          "profile": "https://image.tmdb.org/t/p/w185/7oDDNlBZRUb9M7VxM5X1p1eXw4c.jpg",
+          "order": 10
+        },
+        {
+          "id": 1572347,
+          "name": "Jeon Bae-soo",
+          "character": "Chief of the Criminal Department",
+          "profile": "https://image.tmdb.org/t/p/w185/7EhOO3xFN5FvEJwl0b0Eudab5bI.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Bir seri katilin saldırısından zar zor kurtulan suç patronu Jang Dong-su, sadist katili bulmak için dedektif Jung Tae-seok ile alışılmadık bir ortaklık kurar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/az4OVqXbFVaHoZlktcm7oCm0LZo.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/jJJQ1PPXUEchqyZ9YyWzgSNU39Z.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt10208198",
+      "tmdbSyncedAt": "2026-11-07T06:45:48.071Z",
+      "originalTitle": "악인전",
+      "imdbId": "tt10208198"
+    },
+    {
+      "id": "archive-49",
+      "title": "Parazit",
+      "type": "movie",
+      "category": "Komedi / Gerilim / Dram",
+      "genre": "Komedi",
+      "rating": "8.5",
+      "ratingCount": "IMDb 8.5",
+      "year": "2019",
+      "duration": "133 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/nx7TmJDMkgyBc09DVo5ze52Wt3F.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/TU9NIjwzjoKPwQHoHshkFcQUCG.jpg",
+      "desc": "Yoksul Kim ailesi, hileyle zengin Park ailesinin yanında çalışmaya başlar; ancak konutun altında gizli bir sığınak keşfetmeleriyle parazitçe yürüttükleri bu plan kontrolden çıkar ve şiddetli bir sınıf çatışmasına dönüşür.",
+      "director": "Bong Joon-ho",
+      "cast": [
+        "Song Kang-ho",
+        "Lee Sun-kyun",
+        "Cho Yeo-jeong",
+        "Choi Woo-shik",
+        "Park So-dam",
+        "Lee Jung-eun",
+        "Jang Hye-jin",
+        "Park Myung-hoon",
+        "Jung Zi-so",
+        "Jung Hyeon-jun",
+        "Park Keun-rok",
+        "Jung Yi-seo"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=bM9QabAojCg",
+      "country": "South Korea",
+      "tmdbId": 496243,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "8.5",
+      "tmdbVoteCount": 21648,
+      "tmdbTitle": "Parazit",
+      "tmdbOriginalTitle": "기생충",
+      "tmdbReleaseDate": "2019-05-30",
+      "tmdbGenres": "Komedi / Gerilim / Dram",
+      "tmdbRuntime": "133 dk",
+      "tmdbCountries": "South Korea",
+      "tmdbDirector": "Bong Joon-ho",
+      "tmdbCast": [
+        {
+          "id": 20738,
+          "name": "Song Kang-ho",
+          "character": "Kim Ki-taek",
+          "profile": "https://image.tmdb.org/t/p/w185/kBM9UTPYXUA2RNk210DXhztLFns.jpg",
+          "order": 0
+        },
+        {
+          "id": 115290,
+          "name": "Lee Sun-kyun",
+          "character": "Park Dong-ik",
+          "profile": "https://image.tmdb.org/t/p/w185/nHFBbSFohzOUOvMxPVwe3Es2nJw.jpg",
+          "order": 1
+        },
+        {
+          "id": 556435,
+          "name": "Cho Yeo-jeong",
+          "character": "Yeon-kyo",
+          "profile": "https://image.tmdb.org/t/p/w185/5MgWM8pkUiYkj9MEaEpO0Ir1FD9.jpg",
+          "order": 2
+        },
+        {
+          "id": 1255881,
+          "name": "Choi Woo-shik",
+          "character": "Ki-woo",
+          "profile": "https://image.tmdb.org/t/p/w185/9mZ9DNopxpCLUjXd0rLd42TLamw.jpg",
+          "order": 3
+        },
+        {
+          "id": 1442583,
+          "name": "Park So-dam",
+          "character": "Ki-jung",
+          "profile": "https://image.tmdb.org/t/p/w185/fGVOikpvivopeATDy6ZzLdKYXDu.jpg",
+          "order": 4
+        },
+        {
+          "id": 1572354,
+          "name": "Lee Jung-eun",
+          "character": "Moon-gwang",
+          "profile": "https://image.tmdb.org/t/p/w185/4r3K47UpSmzZ5t9cyTRRqRl9rdz.jpg",
+          "order": 5
+        },
+        {
+          "id": 2158882,
+          "name": "Jang Hye-jin",
+          "character": "Chung-sook",
+          "profile": "https://image.tmdb.org/t/p/w185/pZiQXSWwo9F4gncHfa1yw0CQjxk.jpg",
+          "order": 6
+        },
+        {
+          "id": 1694435,
+          "name": "Park Myung-hoon",
+          "character": "Geun-se",
+          "profile": "https://image.tmdb.org/t/p/w185/5SucrxkigHss7UuJKrkfAZX5MXz.jpg",
+          "order": 7
+        },
+        {
+          "id": 1418762,
+          "name": "Jung Zi-so",
+          "character": "Da-hye",
+          "profile": "https://image.tmdb.org/t/p/w185/jsUPFmY1HlML92ubVtSE8L8ovz6.jpg",
+          "order": 8
+        },
+        {
+          "id": 2306987,
+          "name": "Jung Hyeon-jun",
+          "character": "Da-song",
+          "profile": "https://image.tmdb.org/t/p/w185/vZadA6ip6V2kh0VZW9RwnLcYFgW.jpg",
+          "order": 9
+        },
+        {
+          "id": 1709230,
+          "name": "Park Keun-rok",
+          "character": "Driver Yoon",
+          "profile": "https://image.tmdb.org/t/p/w185/j3AEOJskfSm7nhR8RnDm6njRN3W.jpg",
+          "order": 10
+        },
+        {
+          "id": 2326809,
+          "name": "Jung Yi-seo",
+          "character": "Pizza Manager",
+          "profile": "https://image.tmdb.org/t/p/w185/o6Nfe0BiZs6CCSm8BigPshbu0px.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Yoksul Kim ailesi, hileyle zengin Park ailesinin yanında çalışmaya başlar; ancak konutun altında gizli bir sığınak keşfetmeleriyle parazitçe yürüttükleri bu plan kontrolden çıkar ve şiddetli bir sınıf çatışmasına dönüşür.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/nx7TmJDMkgyBc09DVo5ze52Wt3F.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/TU9NIjwzjoKPwQHoHshkFcQUCG.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=WlRWypBw3kw",
+      "tmdbImdbId": "tt6751668",
+      "tmdbSyncedAt": "2026-11-07T06:45:48.468Z",
+      "originalTitle": "기생충",
+      "imdbId": "tt6751668"
+    },
+    {
+      "id": "archive-53",
+      "title": "Apex",
+      "type": "movie",
+      "category": "Aksiyon / Gerilim",
+      "genre": "Aksiyon",
+      "rating": "6.9",
+      "ratingCount": "IMDb 6.9",
+      "year": "2026",
+      "duration": "96 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/gRtchtSLqA7yVtNVI6gqfBlIHa6.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/9nzfyiYbmTUXWC4B2kwjl4NAlqO.jpg",
+      "desc": "Yas tutan bir kadın, Avustralya'nın vahşi doğasında tek başına maceraya çıkarak sınırlarını zorlar. Ancak kendisini avlamaya niyetli kurnaz bir katilin oyununa sürüklenecektir.",
+      "director": "Baltasar Kormákur",
+      "cast": [
+        "Charlize Theron",
+        "Taron Egerton",
+        "Eric Bana",
+        "Caitlin Stasey",
+        "Bessie Holland",
+        "Zachary Garred"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=bCS_A0CI1kM",
+      "country": "United States of America / Iceland / Australia",
+      "tmdbId": 1318447,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "6.9",
+      "tmdbVoteCount": 2052,
+      "tmdbTitle": "Apex",
+      "tmdbOriginalTitle": "Apex",
+      "tmdbReleaseDate": "2026-04-24",
+      "tmdbGenres": "Aksiyon / Gerilim",
+      "tmdbRuntime": "96 dk",
+      "tmdbCountries": "United States of America, Iceland, Australia",
+      "tmdbDirector": "Baltasar Kormákur",
+      "tmdbCast": [
+        {
+          "id": 6885,
+          "name": "Charlize Theron",
+          "character": "Sasha",
+          "profile": "https://image.tmdb.org/t/p/w185/gd7ShD0yt4bsR2STeQ19KQ6hvXL.jpg",
+          "order": 0
+        },
+        {
+          "id": 1303037,
+          "name": "Taron Egerton",
+          "character": "Ben",
+          "profile": "https://image.tmdb.org/t/p/w185/uCaPhyKAQIfEzAWWCYIrO2004CB.jpg",
+          "order": 1
+        },
+        {
+          "id": 8783,
+          "name": "Eric Bana",
+          "character": "Tommy",
+          "profile": "https://image.tmdb.org/t/p/w185/l9yoDgw3YFC2gMD1HTo5djGOwSY.jpg",
+          "order": 2
+        },
+        {
+          "id": 145245,
+          "name": "Caitlin Stasey",
+          "character": "Leah",
+          "profile": "https://image.tmdb.org/t/p/w185/uJW62qSjIyI0OP30s5U8KLlDw32.jpg",
+          "order": 3
+        },
+        {
+          "id": 2933227,
+          "name": "Bessie Holland",
+          "character": "Cashier",
+          "profile": "https://image.tmdb.org/t/p/w185/pWjjlOAs61Rxy2KbAXACxL2eJ9w.jpg",
+          "order": 4
+        },
+        {
+          "id": 1245420,
+          "name": "Zachary Garred",
+          "character": "Sean",
+          "profile": "https://image.tmdb.org/t/p/w185/zBveIZvcVCkWTcAWEV88MwpynyG.jpg",
+          "order": 5
+        },
+        {
+          "id": 1046893,
+          "name": "Matt Whelan",
+          "character": "Hunter",
+          "profile": "https://image.tmdb.org/t/p/w185/qTIe7SblKwxR9DF6iNuVX0pEWIZ.jpg",
+          "order": 6
+        },
+        {
+          "id": 1240306,
+          "name": "Rob Carlton",
+          "character": "2nd Hunter",
+          "profile": "https://image.tmdb.org/t/p/w185/8K0E0FaNDiCWvx1u6Xe3MAOHEGu.jpg",
+          "order": 7
+        },
+        {
+          "id": 126579,
+          "name": "Aaron Pedersen",
+          "character": "Park Ranger",
+          "profile": "https://image.tmdb.org/t/p/w185/3SoOwjIPULquiuo0yBWAwVamJFj.jpg",
+          "order": 8
+        },
+        {
+          "id": 1928966,
+          "name": "Duncan Fellows",
+          "character": "Dad",
+          "profile": "https://image.tmdb.org/t/p/w185/kG6EGc5dR5A0mGhTpIcxK9lkL1k.jpg",
+          "order": 9
+        },
+        {
+          "id": 3044177,
+          "name": "Julia Ohannessian",
+          "character": "Mom",
+          "profile": "",
+          "order": 10
+        },
+        {
+          "id": 6163716,
+          "name": "Niam Hogan",
+          "character": "Boy",
+          "profile": "",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Yas tutan bir kadın, Avustralya'nın vahşi doğasında tek başına maceraya çıkarak sınırlarını zorlar. Ancak kendisini avlamaya niyetli kurnaz bir katilin oyununa sürüklenecektir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/gRtchtSLqA7yVtNVI6gqfBlIHa6.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/9nzfyiYbmTUXWC4B2kwjl4NAlqO.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=bCS_A0CI1kM",
+      "tmdbImdbId": "tt16431404",
+      "tmdbSyncedAt": "2026-11-07T06:45:48.932Z",
+      "originalTitle": "Apex",
+      "imdbId": "tt16431404"
+    },
+    {
+      "id": "archive-67",
+      "title": "Ceset",
+      "type": "movie",
+      "category": "Gerilim / Gizem",
+      "genre": "Gerilim",
+      "rating": "7.5",
+      "ratingCount": "IMDb 7.5",
+      "year": "2012",
+      "duration": "107 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/z0U7Z5rWvNfSEnSKBZLSbFjz22t.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/z3gZRm7ZnWVyKpZHJ4vho7wRZW3.jpg",
+      "desc": "Ölen bir kadının cesedi, hastane morgundan çalınır. Kadının kocası, hem cesedin kayboluşu, hem de cinayet konusunda baş şüphelidir. Adam, soruşturma için hastaneye çağılır. Soruşturmayı yürüten karanlık bir dedektifin sorgulamaları ve çiftin geçmişinden kesitler eşliğinde, olayın gizemi artarak büyüyecektir.",
+      "director": "Oriol Paulo",
+      "cast": [
+        "Jose Coronado",
+        "Hugo Silva",
+        "Belén Rueda",
+        "Aura Garrido",
+        "Cristina Plazas",
+        "Montse Guallar"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=FaJu21QMLIY",
+      "country": "Spain",
+      "tmdbId": 111083,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.5",
+      "tmdbVoteCount": 1495,
+      "tmdbTitle": "Ceset",
+      "tmdbOriginalTitle": "El cuerpo",
+      "tmdbReleaseDate": "2012-12-21",
+      "tmdbGenres": "Gerilim / Gizem",
+      "tmdbRuntime": "107 dk",
+      "tmdbCountries": "Spain",
+      "tmdbDirector": "Oriol Paulo",
+      "tmdbCast": [
+        {
+          "id": 110129,
+          "name": "Jose Coronado",
+          "character": "Jaime Peña",
+          "profile": "https://image.tmdb.org/t/p/w185/9xo68HzH8n78Xv6gMzKK7XnjtHd.jpg",
+          "order": 0
+        },
+        {
+          "id": 112901,
+          "name": "Hugo Silva",
+          "character": "Álex Ulloa",
+          "profile": "https://image.tmdb.org/t/p/w185/aMhffSrBefGQstniOtsJf3kEfNH.jpg",
+          "order": 1
+        },
+        {
+          "id": 19907,
+          "name": "Belén Rueda",
+          "character": "Mayka Villaverde",
+          "profile": "https://image.tmdb.org/t/p/w185/aDsAbbf492dFKBuZ9Bd7sWo2Hfl.jpg",
+          "order": 2
+        },
+        {
+          "id": 566544,
+          "name": "Aura Garrido",
+          "character": "Carla",
+          "profile": "https://image.tmdb.org/t/p/w185/195NlsR4hNQtvvZi3eZ19EJCOu7.jpg",
+          "order": 3
+        },
+        {
+          "id": 234620,
+          "name": "Cristina Plazas",
+          "character": "Dra. Tapia",
+          "profile": "https://image.tmdb.org/t/p/w185/bAX2sTh4hMJiqiNDZraAqUFtaOu.jpg",
+          "order": 4
+        },
+        {
+          "id": 1462111,
+          "name": "Montse Guallar",
+          "character": "Gloria Villaverde",
+          "profile": "https://image.tmdb.org/t/p/w185/ngsTinFxECBGTgzHY4Z86Ymnw5Y.jpg",
+          "order": 5
+        },
+        {
+          "id": 1062000,
+          "name": "Nausicaa Bonnín",
+          "character": "Patricia",
+          "profile": "https://image.tmdb.org/t/p/w185/fubSrCF12xN9CFuZRoZTSvQeUij.jpg",
+          "order": 6
+        },
+        {
+          "id": 1276266,
+          "name": "Miquel Gelabert",
+          "character": "Vigilante Ángel Torres",
+          "profile": "https://image.tmdb.org/t/p/w185/6IHxfYEmDx5sczYES4CANUJzOlL.jpg",
+          "order": 7
+        },
+        {
+          "id": 19828,
+          "name": "Oriol Vila",
+          "character": "Agente Mateos",
+          "profile": "https://image.tmdb.org/t/p/w185/s3RRjg3GGzAvbffiSxxz7ZD47gx.jpg",
+          "order": 8
+        },
+        {
+          "id": 19822,
+          "name": "Carlota Olcina",
+          "character": "Erica Ulloa",
+          "profile": "https://image.tmdb.org/t/p/w185/fO2I8yxZxtRMw042QLsCccwHSdA.jpg",
+          "order": 9
+        },
+        {
+          "id": 1276979,
+          "name": "Patrícia Bargalló",
+          "character": "Agente Norma",
+          "profile": "https://image.tmdb.org/t/p/w185/fWMtOvAUM1UxdaAKMqcazHJMNyV.jpg",
+          "order": 10
+        },
+        {
+          "id": 2839300,
+          "name": "Ahmed Adel",
+          "character": "César Stevens",
+          "profile": "",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Ölen bir kadının cesedi, hastane morgundan çalınır. Kadının kocası, hem cesedin kayboluşu, hem de cinayet konusunda baş şüphelidir. Adam, soruşturma için hastaneye çağılır. Soruşturmayı yürüten karanlık bir dedektifin sorgulamaları ve çiftin geçmişinden kesitler eşliğinde, olayın gizemi artarak büyüyecektir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/z0U7Z5rWvNfSEnSKBZLSbFjz22t.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/z3gZRm7ZnWVyKpZHJ4vho7wRZW3.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt1937149",
+      "tmdbSyncedAt": "2026-11-07T06:45:51.166Z",
+      "originalTitle": "El cuerpo",
+      "imdbId": "tt1937149"
+    },
+    {
+      "id": "archive-68",
+      "title": "Death's Game",
+      "type": "tv",
+      "category": "Dram / Bilim Kurgu & Fantazi",
+      "genre": "Dram",
+      "rating": "8.4",
+      "ratingCount": "IMDb 8.4",
+      "year": "2023",
+      "duration": "53 dk / bölüm",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/v3HpOEZtckMurMjNquzWddfwwcP.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/icy4p7Nb33UU2S5eHvlBcE0Dvmi.jpg",
+      "desc": "Cehenneme gitmenin eşiğine gelen Yee-jae, bu reenkarnasyon dizisinde on iki ayrı yaşam ve on iki ayrı ölüm arasında gidip gelmek zorunda kalır.",
+      "director": "Ha Byung-hoon",
+      "cast": [
+        "Seo İn-guk",
+        "Park So-dam",
+        "Kim Ji-hoon",
+        "Kim Mi-kyung",
+        "정용주",
+        "Yoo İn-soo"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=RbLbACTHBvM",
+      "country": "KR",
+      "tmdbId": 218230,
+      "seasons": 1,
+      "episodes": 8,
+      "tmdbRating": "8.4",
+      "tmdbVoteCount": 682,
+      "tmdbTitle": "Death's Game",
+      "tmdbOriginalTitle": "이재, 곧 죽습니다",
+      "tmdbReleaseDate": "2023-12-15",
+      "tmdbGenres": "Dram / Bilim Kurgu & Fantazi",
+      "tmdbRuntime": "53 dk / bölüm",
+      "tmdbCountries": "KR",
+      "tmdbDirector": "Ha Byung-hoon",
+      "tmdbCast": [
+        {
+          "id": 1255411,
+          "name": "Seo İn-guk",
+          "character": "Choi Yee-jae",
+          "profile": "https://image.tmdb.org/t/p/w185/gs7RRZt2tWBJ7OR9BD3TFSYteJj.jpg",
+          "order": 0
+        },
+        {
+          "id": 1442583,
+          "name": "Park So-dam",
+          "character": "Death",
+          "profile": "https://image.tmdb.org/t/p/w185/fGVOikpvivopeATDy6ZzLdKYXDu.jpg",
+          "order": 1
+        },
+        {
+          "id": 1257600,
+          "name": "Kim Ji-hoon",
+          "character": "Park Tae-woo",
+          "profile": "https://image.tmdb.org/t/p/w185/8aDGLz92eaTcz6y31IeKmKNSAV8.jpg",
+          "order": 2
+        },
+        {
+          "id": 587632,
+          "name": "Kim Mi-kyung",
+          "character": "Choi Yee-jae's Mother",
+          "profile": "https://image.tmdb.org/t/p/w185/bJLkarteB2O0duu5ABvM5QFRuax.jpg",
+          "order": 3
+        },
+        {
+          "id": 3888949,
+          "name": "정용주",
+          "character": "Kim Ji-Young",
+          "profile": "https://image.tmdb.org/t/p/w185/5bf4CnyhXInQuaKdyv1t05lbsgS.jpg",
+          "order": 4
+        },
+        {
+          "id": 2402531,
+          "name": "Yoo İn-soo",
+          "character": "Lee Jin sang",
+          "profile": "https://image.tmdb.org/t/p/w185/9acPcttWXPT2UwTjlxv5lHVscU3.jpg",
+          "order": 5
+        }
+      ],
+      "tmdbOverview": "Cehenneme gitmenin eşiğine gelen Yee-jae, bu reenkarnasyon dizisinde on iki ayrı yaşam ve on iki ayrı ölüm arasında gidip gelmek zorunda kalır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/v3HpOEZtckMurMjNquzWddfwwcP.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/icy4p7Nb33UU2S5eHvlBcE0Dvmi.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt26225038",
+      "tmdbSyncedAt": "2026-11-07T06:45:51.350Z",
+      "originalTitle": "이재, 곧 죽습니다",
+      "imdbId": "tt26225038",
+      "tmdbSeasons": 1,
+      "tmdbEpisodes": 8
+    },
+    {
+      "id": "archive-70",
+      "title": "The Gentlemen",
+      "type": "movie",
+      "category": "Komedi / Suç",
+      "genre": "Komedi",
+      "rating": "7.7",
+      "ratingCount": "IMDb 7.7",
+      "year": "2020",
+      "duration": "113 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/z217Zf9SjLZEWRolMzRd7IgpYbu.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/tintsaQ0WLzZsTMkTiqtMB3rfc8.jpg",
+      "desc": "Londra’da kurduğu suç imparatorluğunu bırakmak isteyen Mickey Pearson, ailesi ile birlikte Amerika’ya dönmeyi planlar. Kendisine yeni bir hayat kurmayı planlayan Mickey, işlerini devretmek için ünlü bir milyarder olan Matthew ile anlaşır. Bu sırada Mickey, yıllardır gözünden sakındığı arazilerini Coach ve çetesinden korumaya çalışır. Özel dedektif olan Fletcher ise yıllardır peşine düştüğü Mickey’nin işlediği suçları ortaya çıkarmanın derdindedir. Kendisini türlü entrikaların içinde bulan Mickey, planladığı gibi işin içinden sıyrılmayı başarabilecek midir?",
+      "director": "Guy Ritchie",
+      "cast": [
+        "Matthew McConaughey",
+        "Charlie Hunnam",
+        "Michelle Dockery",
+        "Jeremy Strong",
+        "Lyne Renee",
+        "Colin Farrell"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=97BG85Wwe_s",
+      "country": "United Kingdom / United States of America",
+      "tmdbId": 522627,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.7",
+      "tmdbVoteCount": 7034,
+      "tmdbTitle": "The Gentlemen",
+      "tmdbOriginalTitle": "The Gentlemen",
+      "tmdbReleaseDate": "2020-01-01",
+      "tmdbGenres": "Komedi / Suç",
+      "tmdbRuntime": "113 dk",
+      "tmdbCountries": "United Kingdom, United States of America",
+      "tmdbDirector": "Guy Ritchie",
+      "tmdbCast": [
+        {
+          "id": 10297,
+          "name": "Matthew McConaughey",
+          "character": "Michael Pearson",
+          "profile": "https://image.tmdb.org/t/p/w185/lCySuYjhXix3FzQdS4oceDDrXKI.jpg",
+          "order": 0
+        },
+        {
+          "id": 56365,
+          "name": "Charlie Hunnam",
+          "character": "Ray",
+          "profile": "https://image.tmdb.org/t/p/w185/5WIDrnY25Ps2RYu0zIzHSVuSt5n.jpg",
+          "order": 1
+        },
+        {
+          "id": 70904,
+          "name": "Michelle Dockery",
+          "character": "Rosalind Pearson",
+          "profile": "https://image.tmdb.org/t/p/w185/pgPJGf2wAPgoC6Bp5PBJYQV7IVt.jpg",
+          "order": 2
+        },
+        {
+          "id": 239271,
+          "name": "Jeremy Strong",
+          "character": "Matthew",
+          "profile": "https://image.tmdb.org/t/p/w185/jcMhXWICSi4QjQttJVhFSiKVvpF.jpg",
+          "order": 3
+        },
+        {
+          "id": 45753,
+          "name": "Lyne Renee",
+          "character": "Jackie",
+          "profile": "https://image.tmdb.org/t/p/w185/kubS31dmfR4V2eg4nb6a2qAsJS4.jpg",
+          "order": 4
+        },
+        {
+          "id": 72466,
+          "name": "Colin Farrell",
+          "character": "Coach",
+          "profile": "https://image.tmdb.org/t/p/w185/5FdalJbrbZ5UCsED5rFrXpvbqJa.jpg",
+          "order": 5
+        },
+        {
+          "id": 1807132,
+          "name": "Henry Golding",
+          "character": "Dry Eye",
+          "profile": "https://image.tmdb.org/t/p/w185/zWZDvqMInsficgm4o3W2cRJ6tmn.jpg",
+          "order": 6
+        },
+        {
+          "id": 67212,
+          "name": "Tom Wu",
+          "character": "Lord George",
+          "profile": "https://image.tmdb.org/t/p/w185/qBQAerjLCCglXIyMURUj3hPpiCM.jpg",
+          "order": 7
+        },
+        {
+          "id": 1285754,
+          "name": "Chidi Ajufo",
+          "character": "Bunny",
+          "profile": "https://image.tmdb.org/t/p/w185/4JHXQB7xU7nbM9X56jLLDlp61Pa.jpg",
+          "order": 8
+        },
+        {
+          "id": 3291,
+          "name": "Hugh Grant",
+          "character": "Fletcher",
+          "profile": "https://image.tmdb.org/t/p/w185/dvV843fOuzsEPXHtFvdzsHpy1rC.jpg",
+          "order": 9
+        },
+        {
+          "id": 1719801,
+          "name": "Simon Barker",
+          "character": "Frazier",
+          "profile": "",
+          "order": 10
+        },
+        {
+          "id": 1665,
+          "name": "Eddie Marsan",
+          "character": "Big Dave",
+          "profile": "https://image.tmdb.org/t/p/w185/9atfOgIxhfOKvv2be8HEp6SzOct.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Londra’da kurduğu suç imparatorluğunu bırakmak isteyen Mickey Pearson, ailesi ile birlikte Amerika’ya dönmeyi planlar. Kendisine yeni bir hayat kurmayı planlayan Mickey, işlerini devretmek için ünlü bir milyarder olan Matthew ile anlaşır. Bu sırada Mickey, yıllardır gözünden sakındığı arazilerini Coach ve çetesinden korumaya çalışır. Özel dedektif olan Fletcher ise yıllardır peşine düştüğü Mickey’nin işlediği suçları ortaya çıkarmanın derdindedir. Kendisini türlü entrikaların içinde bulan Mickey, planladığı gibi işin içinden sıyrılmayı başarabilecek midir?",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/z217Zf9SjLZEWRolMzRd7IgpYbu.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/tintsaQ0WLzZsTMkTiqtMB3rfc8.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=mdsZWgomsOI",
+      "tmdbImdbId": "tt8367814",
+      "tmdbSyncedAt": "2026-11-07T06:45:51.545Z",
+      "originalTitle": "The Gentlemen",
+      "imdbId": "tt8367814"
+    },
+    {
+      "id": "archive-71",
+      "title": "Gomorra - La serie",
+      "type": "tv",
+      "category": "Suç / Dram",
+      "genre": "Suç",
+      "rating": "8.0",
+      "ratingCount": "IMDb 8.0",
+      "year": "2014",
+      "duration": "Bilinmiyor",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/wWxMYrClgTYlZt4hDPxy5eA9EKd.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/qVyqPzx6wD3Wm3HD4iy3PrJYxGX.jpg",
+      "desc": "Roberto Saviano'nun mafyadan tehditler almasına neden olan kitap uyarlaması dizide; Napolili bir suç örgütü olan Camorra’nın iç yüzü, mafya babası Pietro Savastano’nun 30 yaşlarındaki sağ kolu olan Ciro’nun gözünden anlatılıyor. Uyuşturucu satışı başta olmak üzere her türlü yasa dışı faaliyet tamamen onların kontrolündedir. Fakat Don Pietro’nun yaşlandığı, gücünün artık azaldığı düşünülmekte ve bu da beraberinde Savastanolar için gün geçtikçe daha da büyüyen var olma mücadelesini getirmektedir.",
+      "director": "Roberto Saviano",
+      "cast": [
+        "Salvatore Esposito",
+        "Marco D'Amore",
+        "Ivana Lotito",
+        "Arturo Muselli",
+        "Mimmo Borrelli",
+        "Tania Garribba"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=5wahRkb8Ofk",
+      "country": "IT",
+      "tmdbId": 61068,
+      "seasons": 5,
+      "episodes": 58,
+      "tmdbRating": "8.0",
+      "tmdbVoteCount": 613,
+      "tmdbTitle": "Gomorra - La serie",
+      "tmdbOriginalTitle": "Gomorra - La serie",
+      "tmdbReleaseDate": "2014-05-06",
+      "tmdbGenres": "Suç / Dram",
+      "tmdbRuntime": "",
+      "tmdbCountries": "IT",
+      "tmdbDirector": "Roberto Saviano",
+      "tmdbCast": [
+        {
+          "id": 1343865,
+          "name": "Salvatore Esposito",
+          "character": "Gennaro Savastano",
+          "profile": "https://image.tmdb.org/t/p/w185/lvTeMD1NqYmYbaH0jYek2oXaSvR.jpg",
+          "order": 0
+        },
+        {
+          "id": 556721,
+          "name": "Marco D'Amore",
+          "character": "Ciro Di Marzio",
+          "profile": "https://image.tmdb.org/t/p/w185/xu3PLPhlYFIgcDOhRSoxCVlLO9a.jpg",
+          "order": 2
+        },
+        {
+          "id": 120137,
+          "name": "Ivana Lotito",
+          "character": "Azzurra Avitabile",
+          "profile": "https://image.tmdb.org/t/p/w185/wjo35bFCQchtIT0kDFhgcb4FmBI.jpg",
+          "order": 4
+        },
+        {
+          "id": 1788969,
+          "name": "Arturo Muselli",
+          "character": "Enzo 'Sangue Blu'",
+          "profile": "https://image.tmdb.org/t/p/w185/ifz7ANMgMR8iP1BkZZheGMe1wEx.jpg",
+          "order": 6
+        },
+        {
+          "id": 2069036,
+          "name": "Mimmo Borrelli",
+          "character": "'O Maestrale",
+          "profile": "https://image.tmdb.org/t/p/w185/6AnOvSHsuReDPcesrexcx7cd8oN.jpg",
+          "order": 8
+        },
+        {
+          "id": 1912247,
+          "name": "Tania Garribba",
+          "character": "Donna Luciana",
+          "profile": "https://image.tmdb.org/t/p/w185/qwxyCUbeDL9NDvjnAroDRw06w8j.jpg",
+          "order": 9
+        },
+        {
+          "id": 72783,
+          "name": "Carmine Paternoster",
+          "character": "'O Munaciello",
+          "profile": "https://image.tmdb.org/t/p/w185/jMg3Y5wHLbPQBnC58P1Tjl5aKMW.jpg",
+          "order": 11
+        },
+        {
+          "id": 132849,
+          "name": "Nunzia Schiano",
+          "character": "Nunzia",
+          "profile": "https://image.tmdb.org/t/p/w185/wsy9KD5AKuOIFpepptImeVrs3JY.jpg",
+          "order": 12
+        },
+        {
+          "id": 1409578,
+          "name": "Antonio Ferrante",
+          "character": "'O Galantommo",
+          "profile": "https://image.tmdb.org/t/p/w185/xUIDu762EAyyX57cqtsdZzG9e0Q.jpg",
+          "order": 13
+        }
+      ],
+      "tmdbOverview": "Roberto Saviano'nun mafyadan tehditler almasına neden olan kitap uyarlaması dizide; Napolili bir suç örgütü olan Camorra’nın iç yüzü, mafya babası Pietro Savastano’nun 30 yaşlarındaki sağ kolu olan Ciro’nun gözünden anlatılıyor. Uyuşturucu satışı başta olmak üzere her türlü yasa dışı faaliyet tamamen onların kontrolündedir. Fakat Don Pietro’nun yaşlandığı, gücünün artık azaldığı düşünülmekte ve bu da beraberinde Savastanolar için gün geçtikçe daha da büyüyen var olma mücadelesini getirmektedir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/wWxMYrClgTYlZt4hDPxy5eA9EKd.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/qVyqPzx6wD3Wm3HD4iy3PrJYxGX.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt2049116",
+      "tmdbSyncedAt": "2026-11-07T06:45:51.732Z",
+      "originalTitle": "Gomorra - La serie",
+      "imdbId": "tt2049116",
+      "tmdbSeasons": 5,
+      "tmdbEpisodes": 58
+    },
+    {
+      "id": "archive-75",
+      "title": "Vahşinin Kalbi",
+      "type": "movie",
+      "category": "Macera / Gerilim",
+      "genre": "Macera",
+      "rating": "7.3",
+      "ratingCount": "IMDb 7.3",
+      "year": "2026",
+      "duration": "101 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/v42iCvwivNR45GHOneMyHheCZNm.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/kpqsljPQtWqPKJBTAEtoXtQZ9Ko.jpg",
+      "desc": "Özel Kuvvetler subayı James Belmont, içinde bulunduğu uçağın Alaska'nın zorlu coğrafyasına düşmesi sonucu hayatta kalmayı başarır. Yanında sadece eğitimli savaş köpeği Odin bulunan Belmont; dondurucu soğuklar, vahşi doğa şartları ve sınırlı kaynaklarla karşı karşıya kalır. Medeniyetten tamamen uzakta mahsur kalan ikili, bir yandan bölgenin çetin iklim koşullarına ve yırtıcılara karşı direnirken diğer yandan da aralarındaki bağı ve askeri hayatta kalma becerilerini kullanarak kurtulmanın bir yolunu arar.",
+      "director": "David Ayer",
+      "cast": [
+        "Brad Pitt",
+        "J.K. Simmons",
+        "Anna Lambe",
+        "Justin Melnick",
+        "Shaun DeZern"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=UkMuGKqAux4",
+      "country": "United States of America",
+      "tmdbId": 1263337,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.3",
+      "tmdbVoteCount": 423,
+      "tmdbTitle": "Vahşinin Kalbi",
+      "tmdbOriginalTitle": "Heart of the Beast",
+      "tmdbReleaseDate": "2026-09-19",
+      "tmdbGenres": "Macera / Gerilim",
+      "tmdbRuntime": "101 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "David Ayer",
+      "tmdbCast": [
+        {
+          "id": 287,
+          "name": "Brad Pitt",
+          "character": "James Belmont",
+          "profile": "https://image.tmdb.org/t/p/w185/ajNaPmXVVMJFg9GWmu6MJzTaXdV.jpg",
+          "order": 0
+        },
+        {
+          "id": 18999,
+          "name": "J.K. Simmons",
+          "character": "Watkins",
+          "profile": "https://image.tmdb.org/t/p/w185/ScmKoJ9eiSUOthAt1PDNLi8Fkw.jpg",
+          "order": 1
+        },
+        {
+          "id": 2307481,
+          "name": "Anna Lambe",
+          "character": "Amber",
+          "profile": "https://image.tmdb.org/t/p/w185/cKm5ZnAOVc6nD8KAgSDMJdZclYH.jpg",
+          "order": 2
+        },
+        {
+          "id": 2846013,
+          "name": "Justin Melnick",
+          "character": "Military Soldier",
+          "profile": "https://image.tmdb.org/t/p/w185/sE5W8tononGWHKH2Z6GLeUHXeyP.jpg",
+          "order": 3
+        },
+        {
+          "id": 6504999,
+          "name": "Shaun DeZern",
+          "character": "Military Soldier",
+          "profile": "https://image.tmdb.org/t/p/w185/iORM61n9AM6ldFm7C4t8dm9pRLq.jpg",
+          "order": 4
+        }
+      ],
+      "tmdbOverview": "Özel Kuvvetler subayı James Belmont, içinde bulunduğu uçağın Alaska'nın zorlu coğrafyasına düşmesi sonucu hayatta kalmayı başarır. Yanında sadece eğitimli savaş köpeği Odin bulunan Belmont; dondurucu soğuklar, vahşi doğa şartları ve sınırlı kaynaklarla karşı karşıya kalır. Medeniyetten tamamen uzakta mahsur kalan ikili, bir yandan bölgenin çetin iklim koşullarına ve yırtıcılara karşı direnirken diğer yandan da aralarındaki bağı ve askeri hayatta kalma becerilerini kullanarak kurtulmanın bir yolunu arar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/v42iCvwivNR45GHOneMyHheCZNm.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/kpqsljPQtWqPKJBTAEtoXtQZ9Ko.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt7526136",
+      "tmdbSyncedAt": "2026-11-07T06:45:52.201Z",
+      "originalTitle": "Heart of the Beast",
+      "imdbId": "tt7526136"
+    },
+    {
+      "id": "archive-76",
+      "title": "Düşüş",
+      "type": "movie",
+      "category": "Gerilim",
+      "genre": "Gerilim",
+      "rating": "7.2",
+      "ratingCount": "IMDb 7.2",
+      "year": "2022",
+      "duration": "107 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/b0I8c8XkCMurFrajk7JzKTqMNEt.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/hlxduUs8y9icWGMzYCDLcYHEQ2u.jpg",
+      "desc": "2000 ft. yükseliğindeki radyo kulesinin tepesine çıkmaya hazırlanan Becky ve Hunter için gerilim dolu anlar başlamak üzeredir.",
+      "director": "Scott Mann",
+      "cast": [
+        "Grace Caroline Currey",
+        "Virginia Gardner",
+        "Mason Gooding",
+        "Jeffrey Dean Morgan",
+        "Jasper Cole",
+        "Darrell Dennis"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=RL2D-icI_N0",
+      "country": "United States of America / United Kingdom",
+      "tmdbId": 985939,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.2",
+      "tmdbVoteCount": 5072,
+      "tmdbTitle": "Düşüş",
+      "tmdbOriginalTitle": "Fall",
+      "tmdbReleaseDate": "2022-08-11",
+      "tmdbGenres": "Gerilim",
+      "tmdbRuntime": "107 dk",
+      "tmdbCountries": "United States of America, United Kingdom",
+      "tmdbDirector": "Scott Mann",
+      "tmdbCast": [
+        {
+          "id": 54633,
+          "name": "Grace Caroline Currey",
+          "character": "Becky Connor",
+          "profile": "https://image.tmdb.org/t/p/w185/6chZcnjWEiFfpmB6D5BR9YUeIs9.jpg",
+          "order": 0
+        },
+        {
+          "id": 1279279,
+          "name": "Virginia Gardner",
+          "character": "Shiloh Hunter",
+          "profile": "https://image.tmdb.org/t/p/w185/53BsLl54uesFOa2DBraibwtRdEL.jpg",
+          "order": 1
+        },
+        {
+          "id": 2174509,
+          "name": "Mason Gooding",
+          "character": "Dan Connor",
+          "profile": "https://image.tmdb.org/t/p/w185/bmlry1xqBzNgv8Chm783ss93Cvg.jpg",
+          "order": 2
+        },
+        {
+          "id": 47296,
+          "name": "Jeffrey Dean Morgan",
+          "character": "James Conner",
+          "profile": "https://image.tmdb.org/t/p/w185/m8bdrmh6ExDCGQ64E83mHg002YV.jpg",
+          "order": 3
+        },
+        {
+          "id": 945542,
+          "name": "Jasper Cole",
+          "character": "Steve",
+          "profile": "https://image.tmdb.org/t/p/w185/18mmNj8eKPn9a1n3G0yvy650Bd8.jpg",
+          "order": 4
+        },
+        {
+          "id": 1232204,
+          "name": "Darrell Dennis",
+          "character": "Randy",
+          "profile": "https://image.tmdb.org/t/p/w185/2jOo4B5Nn9oGuzgx1UfoQs0MMCj.jpg",
+          "order": 5
+        },
+        {
+          "id": 3077005,
+          "name": "Bamm Ericsen",
+          "character": "Police Officer",
+          "profile": "",
+          "order": 6
+        },
+        {
+          "id": 82168,
+          "name": "Julia Pace Mitchell",
+          "character": "Diner Server",
+          "profile": "https://image.tmdb.org/t/p/w185/6iavMrm8BhUJiGpZDSKmfGKgpK6.jpg",
+          "order": 7
+        },
+        {
+          "id": 4013683,
+          "name": "Evie Mann",
+          "character": "Flower Girl",
+          "profile": "",
+          "order": 8
+        },
+        {
+          "id": 4013686,
+          "name": "Joseph Mann",
+          "character": "Page Boy",
+          "profile": "",
+          "order": 9
+        },
+        {
+          "id": 4013688,
+          "name": "Nick Lynes",
+          "character": "Confused Truck Driver",
+          "profile": "",
+          "order": 10
+        },
+        {
+          "id": 4013689,
+          "name": "Branden Currey",
+          "character": "Bar Man",
+          "profile": "",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "2000 ft. yükseliğindeki radyo kulesinin tepesine çıkmaya hazırlanan Becky ve Hunter için gerilim dolu anlar başlamak üzeredir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/b0I8c8XkCMurFrajk7JzKTqMNEt.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/hlxduUs8y9icWGMzYCDLcYHEQ2u.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=cCogiEudtPg",
+      "tmdbImdbId": "tt15325794",
+      "tmdbSyncedAt": "2026-11-07T06:45:52.288Z",
+      "originalTitle": "Fall",
+      "imdbId": "tt15325794"
+    },
+    {
+      "id": "archive-78",
+      "title": "Yeryüzü II",
+      "type": "tv",
+      "category": "Belgesel / Aile",
+      "genre": "Belgesel",
+      "rating": "8.6",
+      "ratingCount": "IMDb 8.6",
+      "year": "2016",
+      "duration": "Bilinmiyor",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/pzAQTqwRHnVcpOzqdG3XnzGiGPQ.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/1DYpBOVdb7Mzc9DgMCdIBTN1JEC.jpg",
+      "desc": "David Attenborough ile vahşi yaşam belgeseli dizisi, gezegenin en nadir yaratıklarından bazılarına, insanlara ve hayvanlara ev sahipliği yapan şehirlerin güzelliğini barındıran, uzaklardaki adaları inceleyerek devam ediyor.",
+      "director": "Bilinmiyor",
+      "cast": [
+        "David Attenborough"
+      ],
+      "trailerUrl": "",
+      "country": "Bilinmiyor",
+      "tmdbId": 68595,
+      "seasons": 1,
+      "episodes": 6,
+      "tmdbRating": "8.6",
+      "tmdbVoteCount": 992,
+      "tmdbTitle": "Yeryüzü II",
+      "tmdbOriginalTitle": "Planet Earth II",
+      "tmdbReleaseDate": "2016-11-06",
+      "tmdbGenres": "Belgesel / Aile",
+      "tmdbRuntime": "",
+      "tmdbCountries": "GB",
+      "tmdbDirector": "",
+      "tmdbCast": [
+        {
+          "id": 86543,
+          "name": "David Attenborough",
+          "character": "Self - Narrator",
+          "profile": "https://image.tmdb.org/t/p/w185/xE6aLZ2Ma1VSoZGhOUW8TcbBMN6.jpg",
+          "order": 0
+        }
+      ],
+      "tmdbOverview": "David Attenborough ile vahşi yaşam belgeseli dizisi, gezegenin en nadir yaratıklarından bazılarına, insanlara ve hayvanlara ev sahipliği yapan şehirlerin güzelliğini barındıran, uzaklardaki adaları inceleyerek devam ediyor.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/pzAQTqwRHnVcpOzqdG3XnzGiGPQ.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/1DYpBOVdb7Mzc9DgMCdIBTN1JEC.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt5491994",
+      "tmdbSyncedAt": "2026-11-07T06:45:52.445Z",
+      "originalTitle": "Planet Earth II",
+      "imdbId": "tt5491994",
+      "tmdbSeasons": 1,
+      "tmdbEpisodes": 6
+    },
+    {
+      "id": "archive-84",
+      "title": "Vikingler",
+      "type": "tv",
+      "category": "Aksiyon & Macera / Dram / Savaş & Politik",
+      "genre": "Aksiyon & Macera",
+      "rating": "8.1",
+      "ratingCount": "IMDb 8.1",
+      "year": "2013",
+      "duration": "Bilinmiyor",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/qkCh6cFSHikSIFTWUQyJ2qJzqsy.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/13kblIK8DnxMurcRDkeyy2sGR7v.jpg",
+      "desc": "Viking kahramanı Ragnar Lothbrok’un, ileriyi göremeyen, yetersiz bir lidere meydan okuyarak Norse sınırlarını nasıl genişlettiğini seyrettiğimiz gerçekçi bir dram.",
+      "director": "Michael Hirst",
+      "cast": [
+        "Alex Hogh Andersen",
+        "Jordan Patrick Smith",
+        "Marco Ilsø",
+        "Peter Franzén",
+        "Georgia Hirst",
+        "Данила Козловский"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=45z6m0yBSsc",
+      "country": "CA",
+      "tmdbId": 44217,
+      "seasons": 6,
+      "episodes": 89,
+      "tmdbRating": "8.1",
+      "tmdbVoteCount": 7991,
+      "tmdbTitle": "Vikingler",
+      "tmdbOriginalTitle": "Vikings",
+      "tmdbReleaseDate": "2013-03-03",
+      "tmdbGenres": "Aksiyon & Macera / Dram / Savaş & Politik",
+      "tmdbRuntime": "",
+      "tmdbCountries": "CA",
+      "tmdbDirector": "Michael Hirst",
+      "tmdbCast": [
+        {
+          "id": 1609347,
+          "name": "Alex Hogh Andersen",
+          "character": "Ivar Lothbrok / Ivar the Boneless",
+          "profile": "https://image.tmdb.org/t/p/w185/kDO1gFqMnsV5gCQsMgEL9BZongX.jpg",
+          "order": 1
+        },
+        {
+          "id": 1394429,
+          "name": "Jordan Patrick Smith",
+          "character": "Ubbe Lothbrok",
+          "profile": "https://image.tmdb.org/t/p/w185/v9hY8mCo7Dk5AptzZbLE2F8Tzhu.jpg",
+          "order": 3
+        },
+        {
+          "id": 1372317,
+          "name": "Marco Ilsø",
+          "character": "Hvitserk Lothbrok",
+          "profile": "https://image.tmdb.org/t/p/w185/xfcrAKFHq81VVO9axg1zP8JrYCN.jpg",
+          "order": 5
+        },
+        {
+          "id": 11263,
+          "name": "Peter Franzén",
+          "character": "King Harald Finehair",
+          "profile": "https://image.tmdb.org/t/p/w185/zJ8JV2TefLQIT5DzMinl5eoK5YH.jpg",
+          "order": 9
+        },
+        {
+          "id": 2074237,
+          "name": "Georgia Hirst",
+          "character": "Torvi",
+          "profile": "https://image.tmdb.org/t/p/w185/7xHIjmpI4jWUfB1EFiTMtYzpVXM.jpg",
+          "order": 12
+        },
+        {
+          "id": 562730,
+          "name": "Данила Козловский",
+          "character": "Prince Oleg of Novgorod",
+          "profile": "https://image.tmdb.org/t/p/w185/6uHj234Xiu8DW8x2hFX1uWq4LxV.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Viking kahramanı Ragnar Lothbrok’un, ileriyi göremeyen, yetersiz bir lidere meydan okuyarak Norse sınırlarını nasıl genişlettiğini seyrettiğimiz gerçekçi bir dram.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/qkCh6cFSHikSIFTWUQyJ2qJzqsy.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/13kblIK8DnxMurcRDkeyy2sGR7v.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt2306299",
+      "tmdbSyncedAt": "2026-11-07T06:45:53.294Z",
+      "originalTitle": "Vikings",
+      "imdbId": "tt2306299",
+      "tmdbSeasons": 6,
+      "tmdbEpisodes": 89
+    },
+    {
+      "id": "archive-95",
+      "title": "Narcos",
+      "type": "tv",
+      "category": "Diğer",
+      "genre": "Diğer",
+      "rating": "8.1",
+      "ratingCount": "IMDb 8.1",
+      "year": "2015",
+      "duration": "Bilinmiyor",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/rTmal9fDbwh5F0waol2hq35U4ah.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/y9ekzkPFmWSqUU3Kj0wHmYUM8qu.jpg",
+      "desc": "Uyuşturucu İle Mücadele Dairesi’nde çalışan bir Meksikalı bir ajan olan Javier Pena, ünlü Kolombiyalı uyuşturucu kaçakçısı Pablo Escobar’ı yakalamak için Birleşik Devletler tarafından Kolombiya’ya yollanır. Escobar'ın gerçek hayat hikayesinden uyarlanan dizi, dünya çapına yayılmış bir uyuşturucu şebekesini engellemeye çalışan kolluk kuvvetlerini konu ediniyor.",
+      "director": "Bilinmiyor",
+      "cast": [
+        "Pedro Pascal",
+        "Matias Varela",
+        "Damián Alcázar",
+        "Francisco Denis",
+        "Alberto Ammann",
+        "Pêpê Rapazote",
+        "Arturo Castro",
+        "Michael Stahl-David",
+        "Matt Whelan",
+        "Andrea Londo",
+        "Manolo Cardona",
+        "Natalia Jerez"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=K16riskCYvM",
+      "country": "Bilinmiyor",
+      "tmdbId": 63351,
+      "seasons": 3,
+      "episodes": 30,
+      "tmdbRating": "8.1",
+      "tmdbVoteCount": 3540,
+      "tmdbTitle": "Narcos",
+      "tmdbOriginalTitle": "Narcos",
+      "tmdbReleaseDate": "2015-08-28",
+      "tmdbGenres": "Suç / Dram",
+      "tmdbRuntime": "",
+      "tmdbCountries": "US",
+      "tmdbDirector": "Chris Brancato, Doug Miro, Carlo Bernard",
+      "tmdbCast": [
+        {
+          "id": 1253360,
+          "name": "Pedro Pascal",
+          "character": "Javier Peña",
+          "profile": "https://image.tmdb.org/t/p/w185/oKcMbVn0NJTNzQt0ClKKvVXkm60.jpg",
+          "order": 1
+        },
+        {
+          "id": 125739,
+          "name": "Matias Varela",
+          "character": "Jorge Salcedo",
+          "profile": "https://image.tmdb.org/t/p/w185/byw4O8SiN14FDuPocQa4WDNzt3N.jpg",
+          "order": 2
+        },
+        {
+          "id": 7370,
+          "name": "Damián Alcázar",
+          "character": "Gilberto Rodríguez Orejuela",
+          "profile": "https://image.tmdb.org/t/p/w185/6IAlrZ2yXubmmVaRsF7fdaP3N7C.jpg",
+          "order": 4
+        },
+        {
+          "id": 1004053,
+          "name": "Francisco Denis",
+          "character": "Miguel Rodríguez Orejuela",
+          "profile": "https://image.tmdb.org/t/p/w185/kidgm7ryeUhtgBEfnXeBOVabfvy.jpg",
+          "order": 6
+        },
+        {
+          "id": 110424,
+          "name": "Alberto Ammann",
+          "character": "Pacho Herrera",
+          "profile": "https://image.tmdb.org/t/p/w185/aAKmbGgoE8YLds2sLvpezczeiMY.jpg",
+          "order": 9
+        },
+        {
+          "id": 1150468,
+          "name": "Pêpê Rapazote",
+          "character": "Chepe Santacruz Londoño",
+          "profile": "https://image.tmdb.org/t/p/w185/rJfKE5zEJbMvlWM74fgCNTz75nu.jpg",
+          "order": 11
+        },
+        {
+          "id": 1457999,
+          "name": "Arturo Castro",
+          "character": "David Rodriguez",
+          "profile": "https://image.tmdb.org/t/p/w185/pbLoDCfjm3fLtGHVqQcnbM2d0cu.jpg",
+          "order": 12
+        },
+        {
+          "id": 51991,
+          "name": "Michael Stahl-David",
+          "character": "Chris Feistl",
+          "profile": "https://image.tmdb.org/t/p/w185/97a0cwKFuAHXh8X0NlxSGDvBvxn.jpg",
+          "order": 13
+        },
+        {
+          "id": 1046893,
+          "name": "Matt Whelan",
+          "character": "Daniel Van Ness",
+          "profile": "https://image.tmdb.org/t/p/w185/qTIe7SblKwxR9DF6iNuVX0pEWIZ.jpg",
+          "order": 14
+        },
+        {
+          "id": 1618597,
+          "name": "Andrea Londo",
+          "character": "Maria Salazar",
+          "profile": "https://image.tmdb.org/t/p/w185/34FaPDidevxHrdrUwsHE5pXKw85.jpg",
+          "order": 24
+        },
+        {
+          "id": 66914,
+          "name": "Manolo Cardona",
+          "character": "Eduardo Sandoval",
+          "profile": "https://image.tmdb.org/t/p/w185/9hPHLgO9lINwZynrFywTG9ms8Jl.jpg",
+          "order": 27
+        },
+        {
+          "id": 1251177,
+          "name": "Natalia Jerez",
+          "character": "Aura",
+          "profile": "https://image.tmdb.org/t/p/w185/vq8vSPOTC27JIDxAUhoPgmgYri4.jpg",
+          "order": 28
+        }
+      ],
+      "tmdbOverview": "Uyuşturucu İle Mücadele Dairesi’nde çalışan bir Meksikalı bir ajan olan Javier Pena, ünlü Kolombiyalı uyuşturucu kaçakçısı Pablo Escobar’ı yakalamak için Birleşik Devletler tarafından Kolombiya’ya yollanır. Escobar'ın gerçek hayat hikayesinden uyarlanan dizi, dünya çapına yayılmış bir uyuşturucu şebekesini engellemeye çalışan kolluk kuvvetlerini konu ediniyor.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/rTmal9fDbwh5F0waol2hq35U4ah.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/y9ekzkPFmWSqUU3Kj0wHmYUM8qu.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=K16riskCYvM",
+      "tmdbImdbId": "tt2707408",
+      "tmdbSyncedAt": "2026-11-07T06:45:54.773Z",
+      "originalTitle": "Narcos",
+      "imdbId": "tt2707408",
+      "tmdbSeasons": 3,
+      "tmdbEpisodes": 30
+    },
+    {
+      "id": "archive-110",
+      "title": "Baba",
+      "type": "movie",
+      "category": "Dram / Suç",
+      "genre": "Dram",
+      "rating": "8.7",
+      "ratingCount": "IMDb 8.7",
+      "year": "1972",
+      "duration": "175 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/vseIVRdN4xasYwStQIi6SI7DcEu.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/ejdD20cdHNFAYAN2DlqPToXKyzx.jpg",
+      "desc": "Mario Puzo'nun çok satan kitabından Puzo ve yönetmen Francis Ford Coppola tarafından sinemaya uyarlanan eser, 40'lar ve 50'lerin Amerika'sında, bir İtalyan mafya ailesinin destansı öyküsünü konu alıyor. Corleone ailesi, Don Vito Corleone'nin başında olduğu, suça dayalı bir örgüt kurmuş olan İtalyan asıllı meşhur bir ailedir. Aile, New York'taki diğer dört aileyle birlikte New York'un yeraltı işlerini yönetmektedir. Ancak Corleone ailesini diğerlerinden ayıran özelliği, Don Corleone'nin cebinde bozuk para gibi taşıdığı politikacılar ve yargıçlardır. Politikacılar ve yargıçlarla olan bu yakın ilişkileri diğer ailelerin açamadığı kapıları açabilmesini sağlamaktadır.",
+      "director": "Francis Ford Coppola",
+      "cast": [
+        "Marlon Brando",
+        "Al Pacino",
+        "James Caan",
+        "Robert Duvall",
+        "Richard S. Castellano",
+        "Diane Keaton"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=Ew9ngL1GZvs",
+      "country": "United States of America",
+      "tmdbId": 238,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "8.7",
+      "tmdbVoteCount": 23927,
+      "tmdbTitle": "Baba",
+      "tmdbOriginalTitle": "The Godfather",
+      "tmdbReleaseDate": "1972-03-14",
+      "tmdbGenres": "Dram / Suç",
+      "tmdbRuntime": "175 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Francis Ford Coppola",
+      "tmdbCast": [
+        {
+          "id": 3084,
+          "name": "Marlon Brando",
+          "character": "Don Vito Corleone",
+          "profile": "https://image.tmdb.org/t/p/w185/yIvLpf9U9NfAvC7fuAgOQ8tu51T.jpg",
+          "order": 0
+        },
+        {
+          "id": 1158,
+          "name": "Al Pacino",
+          "character": "Michael Corleone",
+          "profile": "https://image.tmdb.org/t/p/w185/m8HAAjq1T75JypKk0v1FFQn4ysZ.jpg",
+          "order": 1
+        },
+        {
+          "id": 3085,
+          "name": "James Caan",
+          "character": "Sonny Corleone",
+          "profile": "https://image.tmdb.org/t/p/w185/z2Lz3rtxZ7aJjzBUkCnExvo8stn.jpg",
+          "order": 2
+        },
+        {
+          "id": 3087,
+          "name": "Robert Duvall",
+          "character": "Tom Hagen",
+          "profile": "https://image.tmdb.org/t/p/w185/3tcKxC5Sc3DJ6XPDKKC2EAomEWn.jpg",
+          "order": 3
+        },
+        {
+          "id": 3086,
+          "name": "Richard S. Castellano",
+          "character": "Clemenza",
+          "profile": "https://image.tmdb.org/t/p/w185/1vr75BdHWret81vuSJ3ugiCBkxw.jpg",
+          "order": 4
+        },
+        {
+          "id": 3092,
+          "name": "Diane Keaton",
+          "character": "Kay Adams",
+          "profile": "https://image.tmdb.org/t/p/w185/A8B3BsFgbmw2WEmJuQX38qeU9eR.jpg",
+          "order": 5
+        },
+        {
+          "id": 3094,
+          "name": "Talia Shire",
+          "character": "Connie Corleone Rizzi",
+          "profile": "https://image.tmdb.org/t/p/w185/oktJmlLeyYKBCWPNjHskDwAfjct.jpg",
+          "order": 6
+        },
+        {
+          "id": 3095,
+          "name": "Gianni Russo",
+          "character": "Carlo Rizzi",
+          "profile": "https://image.tmdb.org/t/p/w185/jfeGnQfXMzKXsuSPm9oTxm6FOuz.jpg",
+          "order": 7
+        },
+        {
+          "id": 3088,
+          "name": "Sterling Hayden",
+          "character": "Captain McCluskey",
+          "profile": "https://image.tmdb.org/t/p/w185/dCTe6BsGSp9QTcva2Pz4wbxxYMY.jpg",
+          "order": 8
+        },
+        {
+          "id": 3142,
+          "name": "John Marley",
+          "character": "Jack Woltz",
+          "profile": "https://image.tmdb.org/t/p/w185/xyzwd0CiBjXfowH3HcPhvuWcV5B.jpg",
+          "order": 9
+        },
+        {
+          "id": 3090,
+          "name": "Richard Conte",
+          "character": "Barzini",
+          "profile": "https://image.tmdb.org/t/p/w185/bDegodf4dYGXMejdm4T6XgOJwlr.jpg",
+          "order": 10
+        },
+        {
+          "id": 3091,
+          "name": "Al Lettieri",
+          "character": "Sollozzo",
+          "profile": "https://image.tmdb.org/t/p/w185/fE5mEWPkkVJlCji0EoKht8PYw89.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Mario Puzo'nun çok satan kitabından Puzo ve yönetmen Francis Ford Coppola tarafından sinemaya uyarlanan eser, 40'lar ve 50'lerin Amerika'sında, bir İtalyan mafya ailesinin destansı öyküsünü konu alıyor. Corleone ailesi, Don Vito Corleone'nin başında olduğu, suça dayalı bir örgüt kurmuş olan İtalyan asıllı meşhur bir ailedir. Aile, New York'taki diğer dört aileyle birlikte New York'un yeraltı işlerini yönetmektedir. Ancak Corleone ailesini diğerlerinden ayıran özelliği, Don Corleone'nin cebinde bozuk para gibi taşıdığı politikacılar ve yargıçlardır. Politikacılar ve yargıçlarla olan bu yakın ilişkileri diğer ailelerin açamadığı kapıları açabilmesini sağlamaktadır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/vseIVRdN4xasYwStQIi6SI7DcEu.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/ejdD20cdHNFAYAN2DlqPToXKyzx.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=QV8OwaW8YsE",
+      "tmdbImdbId": "tt0068646",
+      "tmdbSyncedAt": "2026-11-07T06:45:57.074Z",
+      "originalTitle": "The Godfather",
+      "imdbId": "tt0068646"
+    },
+    {
+      "id": "archive-112",
+      "title": "Yıldızlararası",
+      "type": "movie",
+      "category": "Macera / Dram / Bilim-Kurgu",
+      "genre": "Macera",
+      "rating": "8.5",
+      "ratingCount": "IMDb 8.5",
+      "year": "2014",
+      "duration": "169 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/xbiycuc84TrieEWwkkuH2hoEa9S.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg",
+      "desc": "Dünya'nın kuraklık ve kıtlıkla yok oluşun eşiğine geldiği bir gelecekte, insanlığın hayatta kalabilmesi için yeni bir yuva bulması şarttır. Keşfedilen gizemli bir solucan deliği, bir grup astronot ve bilim insanına insanlık tarihinin en önemli görevini üstlenme fırsatı verir. Eski bir NASA pilotu olan Cooper, ailesini geride bırakarak yıldızlararası bir yolculuğa çıkar ve bilinmeyen galaksilerde insanlığın kurtuluşunu arar.",
+      "director": "Christopher Nolan",
+      "cast": [
+        "Matthew McConaughey",
+        "Anne Hathaway",
+        "Michael Caine",
+        "Jessica Chastain",
+        "Casey Affleck",
+        "Wes Bentley"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=vVJeYMRam0o",
+      "country": "United Kingdom / United States of America",
+      "tmdbId": 157336,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "8.5",
+      "tmdbVoteCount": 41798,
+      "tmdbTitle": "Yıldızlararası",
+      "tmdbOriginalTitle": "Interstellar",
+      "tmdbReleaseDate": "2014-11-04",
+      "tmdbGenres": "Macera / Dram / Bilim-Kurgu",
+      "tmdbRuntime": "169 dk",
+      "tmdbCountries": "United Kingdom, United States of America",
+      "tmdbDirector": "Christopher Nolan",
+      "tmdbCast": [
+        {
+          "id": 10297,
+          "name": "Matthew McConaughey",
+          "character": "Cooper",
+          "profile": "https://image.tmdb.org/t/p/w185/lCySuYjhXix3FzQdS4oceDDrXKI.jpg",
+          "order": 0
+        },
+        {
+          "id": 1813,
+          "name": "Anne Hathaway",
+          "character": "Brand",
+          "profile": "https://image.tmdb.org/t/p/w185/s6tflSD20MGz04ZR2R1lZvhmC4Y.jpg",
+          "order": 1
+        },
+        {
+          "id": 3895,
+          "name": "Michael Caine",
+          "character": "Professor Brand",
+          "profile": "https://image.tmdb.org/t/p/w185/bVZRMlpjTAO2pJK6v90buFgVbSW.jpg",
+          "order": 2
+        },
+        {
+          "id": 83002,
+          "name": "Jessica Chastain",
+          "character": "Murph",
+          "profile": "https://image.tmdb.org/t/p/w185/mR1ELpP0T2Q1ZRSaADPgtrbPGla.jpg",
+          "order": 3
+        },
+        {
+          "id": 1893,
+          "name": "Casey Affleck",
+          "character": "Tom",
+          "profile": "https://image.tmdb.org/t/p/w185/304ilSygaCRWykoBWAL67TOw8g9.jpg",
+          "order": 4
+        },
+        {
+          "id": 8210,
+          "name": "Wes Bentley",
+          "character": "Doyle",
+          "profile": "https://image.tmdb.org/t/p/w185/voD93lzFZrr9xfAggwFcPRBi84i.jpg",
+          "order": 5
+        },
+        {
+          "id": 17052,
+          "name": "Topher Grace",
+          "character": "Getty",
+          "profile": "https://image.tmdb.org/t/p/w185/89sF57Br5lq8nrepS7HLzJ41QD1.jpg",
+          "order": 6
+        },
+        {
+          "id": 851784,
+          "name": "Mackenzie Foy",
+          "character": "Murph (10 Yrs.)",
+          "profile": "https://image.tmdb.org/t/p/w185/ga2HkX7gBjjXooegTu9cLgXy9nE.jpg",
+          "order": 7
+        },
+        {
+          "id": 9560,
+          "name": "Ellen Burstyn",
+          "character": "Murph (older)",
+          "profile": "https://image.tmdb.org/t/p/w185/zGihSIVRzwmCqilnA4PmNM4C2RT.jpg",
+          "order": 8
+        },
+        {
+          "id": 12074,
+          "name": "John Lithgow",
+          "character": "Donald",
+          "profile": "https://image.tmdb.org/t/p/w185/ajfuBSm1HuVqFJlbTmAlza62Xxr.jpg",
+          "order": 9
+        },
+        {
+          "id": 58549,
+          "name": "Bill Irwin",
+          "character": "TARS (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/bAV5qsljgiHQkn3QluB5clVYC13.jpg",
+          "order": 10
+        },
+        {
+          "id": 55411,
+          "name": "David Gyasi",
+          "character": "Romilly",
+          "profile": "https://image.tmdb.org/t/p/w185/1382u2e4jiGhuDKgeK9UZtXXqfh.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Dünya'nın kuraklık ve kıtlıkla yok oluşun eşiğine geldiği bir gelecekte, insanlığın hayatta kalabilmesi için yeni bir yuva bulması şarttır. Keşfedilen gizemli bir solucan deliği, bir grup astronot ve bilim insanına insanlık tarihinin en önemli görevini üstlenme fırsatı verir. Eski bir NASA pilotu olan Cooper, ailesini geride bırakarak yıldızlararası bir yolculuğa çıkar ve bilinmeyen galaksilerde insanlığın kurtuluşunu arar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/xbiycuc84TrieEWwkkuH2hoEa9S.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=vVJeYMRam0o",
+      "tmdbImdbId": "tt0816692",
+      "tmdbSyncedAt": "2026-11-07T06:45:57.389Z",
+      "originalTitle": "Interstellar",
+      "imdbId": "tt0816692"
+    },
+    {
+      "id": "archive-114",
+      "title": "50M²",
+      "type": "tv",
+      "category": "Drama / Comedy",
+      "genre": "Drama",
+      "rating": "7.4",
+      "ratingCount": "IMDb 7.4",
+      "year": "2021",
+      "duration": "49 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/3m0aiNtGZo6URftj88zGIrsv0V2.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/1aZ7AmKU92ihCzge0eNdNtZ7icg.jpg",
+      "desc": "Getting a second chance is easy, but making use of it is more difficult than one thinks. Gölge is doing the dirty work of Servet Nadir, whom he is raised by. He, who does not remember anything about his childhood, pursues the photograph that ties him to his past. Gölge, escaping with the secrets of Servet Nadir, takes refuge in a 50 square meter tailor shop in a neighbourhood named Güzelce. The inhabitants of the neighbourhood believe that he is Adem, son of Adil, the tailor who has just recently died. No matter how challenging the neighborhood is, Gölge will change the neighborhood and the neighborhood will change Gölge.",
+      "director": "Burak Aksak",
+      "cast": [
+        "Engin Öztürk",
+        "Aybüke Pusat",
+        "Cengiz Bozkurt",
+        "Tolga Tekin",
+        "Tuğçe Karabacak",
+        "Hasan Yalnızoğlu",
+        "Murat Kılıç",
+        "Kürşat Alnıaçık",
+        "Özgür Emre Yıldırım",
+        "Tuncay Beyazıt",
+        "Yiğit Kirazcı"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=P21mhB-Ea9A",
+      "country": "Türkiye",
+      "tmdbId": 115970,
+      "seasons": 1,
+      "episodes": 8,
+      "tmdbRating": "7.3",
+      "tmdbVoteCount": 130,
+      "tmdbTitle": "50M²",
+      "tmdbOriginalTitle": "50M²",
+      "tmdbReleaseDate": "2021-01-27",
+      "tmdbGenres": "Suç / Gizem",
+      "tmdbRuntime": "49 dk / bölüm",
+      "tmdbCountries": "TR",
+      "tmdbDirector": "Burak Aksak",
+      "tmdbCast": [
+        {
+          "id": 1256374,
+          "name": "Engin Öztürk",
+          "character": "Gölge",
+          "profile": "https://image.tmdb.org/t/p/w185/nY0PvgJMtLXDlgrix4xwayqHu5C.jpg",
+          "order": 0
+        },
+        {
+          "id": 1983031,
+          "name": "Aybüke Pusat",
+          "character": "Dilara",
+          "profile": "https://image.tmdb.org/t/p/w185/3NLxN0Y2MW7RVfWfyifKCYCjjLD.jpg",
+          "order": 1
+        },
+        {
+          "id": 59752,
+          "name": "Cengiz Bozkurt",
+          "character": "Muhtar",
+          "profile": "https://image.tmdb.org/t/p/w185/fdxk6BXDPIALDUIpvAjqmBg9M6D.jpg",
+          "order": 2
+        },
+        {
+          "id": 1732613,
+          "name": "Tolga Tekin",
+          "character": "Mesut",
+          "profile": "https://image.tmdb.org/t/p/w185/ogGzsXFtay5XJMAXIMLCux5S8eZ.jpg",
+          "order": 3
+        },
+        {
+          "id": 2026072,
+          "name": "Tuğçe Karabacak",
+          "character": "Özlem",
+          "profile": "https://image.tmdb.org/t/p/w185/4gp1FhouGpkufryzIV4a7SblfIt.jpg",
+          "order": 4
+        },
+        {
+          "id": 2061979,
+          "name": "Hasan Yalnızoğlu",
+          "character": "Leke",
+          "profile": "https://image.tmdb.org/t/p/w185/2HGtFIZbxGqfikbf7vUvuvCcyLw.jpg",
+          "order": 5
+        },
+        {
+          "id": 1001777,
+          "name": "Murat Kılıç",
+          "character": "Imam",
+          "profile": "https://image.tmdb.org/t/p/w185/3XCEZgIYMcIItG12nmriVXqqLNC.jpg",
+          "order": 6
+        },
+        {
+          "id": 233169,
+          "name": "Kürşat Alnıaçık",
+          "character": "Servet",
+          "profile": "https://image.tmdb.org/t/p/w185/nTyWQChMgAK916331jMIbVAPmSv.jpg",
+          "order": 7
+        },
+        {
+          "id": 1603806,
+          "name": "Özgür Emre Yıldırım",
+          "character": "Civan",
+          "profile": "https://image.tmdb.org/t/p/w185/pekejv4I94Hp1UbLq3G3ksf3jkB.jpg",
+          "order": 8
+        },
+        {
+          "id": 1435100,
+          "name": "Tuncay Beyazıt",
+          "character": "Turan",
+          "profile": "https://image.tmdb.org/t/p/w185/jpM4dF6PGBmcmmI2LbtFfExSysb.jpg",
+          "order": 9
+        },
+        {
+          "id": 1533990,
+          "name": "Yiğit Kirazcı",
+          "character": "Yakup",
+          "profile": "https://image.tmdb.org/t/p/w185/nkbWgOrzPNeGh8CnryRr8wZfwJ0.jpg",
+          "order": 10
+        }
+      ],
+      "tmdbOverview": "Karanlık bir adamın kirli işlerini yapan Gölge, geçmişine ait sır perdesini aralamaya çalışırken işler karışır ve kendini bambaşka bir kimlikle küçük bir mahallede bulur.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/3m0aiNtGZo6URftj88zGIrsv0V2.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/1aZ7AmKU92ihCzge0eNdNtZ7icg.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=P21mhB-Ea9A",
+      "tmdbImdbId": "tt11617848",
+      "tmdbSyncedAt": "2026-11-07T06:45:57.584Z",
+      "originalTitle": "50M²",
+      "imdbId": "tt11617848",
+      "tmdbSeasons": 1,
+      "tmdbEpisodes": 8
+    },
+    {
+      "id": "archive-115",
+      "title": "Hırsızlar Şehri",
+      "type": "movie",
+      "category": "Suç / Dram / Gerilim",
+      "genre": "Suç",
+      "rating": "7.2",
+      "ratingCount": "IMDb 7.2",
+      "year": "2010",
+      "duration": "125 dk",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/tiyKaVTJehJPEhIszxBk15o1Asi.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/owAe5rRStnX7ibVAPmza3NCXjCy.jpg",
+      "desc": "Doug ve ekibinin banka soygununda üzerlerine kimse yoktur; hem acımasız hem de dikkatlidirler. Soydukları son bankanın müdiresiyle aynı mahallede oturduklarını öğrendikten sonra kaçınılmaz olan gerçekleşir ve Doug, kadına aşık olur. Claire, onun soyguncu olduğundan şüphelenmezken Doug'ın kardeşi kadar yakın suç ortağı Jem, kuşku içindedir. Doug, iki taraftan birine ihanet etmeden bir seçim yapamayacaktır.",
+      "director": "Ben Affleck",
+      "cast": [
+        "Ben Affleck",
+        "Jeremy Renner",
+        "Rebecca Hall",
+        "Jon Hamm",
+        "Blake Lively",
+        "George Carroll"
+      ],
+      "trailerUrl": "",
+      "country": "United States of America",
+      "tmdbId": 23168,
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "7.2",
+      "tmdbVoteCount": 5938,
+      "tmdbTitle": "Hırsızlar Şehri",
+      "tmdbOriginalTitle": "The Town",
+      "tmdbReleaseDate": "2010-09-15",
+      "tmdbGenres": "Suç / Dram / Gerilim",
+      "tmdbRuntime": "125 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Ben Affleck",
+      "tmdbCast": [
+        {
+          "id": 880,
+          "name": "Ben Affleck",
+          "character": "Doug MacRay",
+          "profile": "https://image.tmdb.org/t/p/w185/aTcqu8cI4wMohU17xTdqmXKTGrw.jpg",
+          "order": 0
+        },
+        {
+          "id": 17604,
+          "name": "Jeremy Renner",
+          "character": "James \"Jem\" Coughlin",
+          "profile": "https://image.tmdb.org/t/p/w185/yB84D1neTYXfWBaV0QOE9RF2VCu.jpg",
+          "order": 1
+        },
+        {
+          "id": 15556,
+          "name": "Rebecca Hall",
+          "character": "Claire Keesey",
+          "profile": "https://image.tmdb.org/t/p/w185/coC58ANiDbqRIyle5zEl9QDektf.jpg",
+          "order": 2
+        },
+        {
+          "id": 65717,
+          "name": "Jon Hamm",
+          "character": "FBI S.A. Adam Frawley",
+          "profile": "https://image.tmdb.org/t/p/w185/mrXE5fZbEDPc7BEE5G21J6qrwzi.jpg",
+          "order": 3
+        },
+        {
+          "id": 59175,
+          "name": "Blake Lively",
+          "character": "Krista Coughlin",
+          "profile": "https://image.tmdb.org/t/p/w185/rkGVjd6wImtgjOCi0IpeffdEWtb.jpg",
+          "order": 4
+        },
+        {
+          "id": 133067,
+          "name": "George Carroll",
+          "character": "Albert \"Gloansy\" Magloan",
+          "profile": "https://image.tmdb.org/t/p/w185/dtPCKR8BWu5Q7CnNRdHWY5dB7Jt.jpg",
+          "order": 5
+        },
+        {
+          "id": 4935,
+          "name": "Pete Postlethwaite",
+          "character": "Fergus \"Fergie\" Colm",
+          "profile": "https://image.tmdb.org/t/p/w185/2gpa75Ci4y2OKmOc8WXnaeGgyKF.jpg",
+          "order": 6
+        },
+        {
+          "id": 133068,
+          "name": "Owen Burke",
+          "character": "Desmond \"Dez\" Elden",
+          "profile": "https://image.tmdb.org/t/p/w185/kgU8OelLJImeisnTkZQ14Mjp9BP.jpg",
+          "order": 7
+        },
+        {
+          "id": 39389,
+          "name": "Titus Welliver",
+          "character": "Dino Ciampa",
+          "profile": "https://image.tmdb.org/t/p/w185/3hTwn7Maktr6ONq1VvfqyRacjiv.jpg",
+          "order": 8
+        },
+        {
+          "id": 2955,
+          "name": "Chris Cooper",
+          "character": "Stephen MacRay",
+          "profile": "https://image.tmdb.org/t/p/w185/sJKghcu9wRDIvKM0cI7kqNXYRfS.jpg",
+          "order": 9
+        },
+        {
+          "id": 133069,
+          "name": "Dennis McLaughlin",
+          "character": "Rusty",
+          "profile": "",
+          "order": 10
+        },
+        {
+          "id": 133070,
+          "name": "Corena Chase",
+          "character": "Agent Quinlan",
+          "profile": "https://image.tmdb.org/t/p/w185/jdET6xuUUs5A5DvpVCCIj3bfNh8.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Doug ve ekibinin banka soygununda üzerlerine kimse yoktur; hem acımasız hem de dikkatlidirler. Soydukları son bankanın müdiresiyle aynı mahallede oturduklarını öğrendikten sonra kaçınılmaz olan gerçekleşir ve Doug, kadına aşık olur. Claire, onun soyguncu olduğundan şüphelenmezken Doug'ın kardeşi kadar yakın suç ortağı Jem, kuşku içindedir. Doug, iki taraftan birine ihanet etmeden bir seçim yapamayacaktır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/tiyKaVTJehJPEhIszxBk15o1Asi.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/owAe5rRStnX7ibVAPmza3NCXjCy.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt0840361",
+      "tmdbSyncedAt": "2026-11-07T06:45:57.747Z",
+      "originalTitle": "The Town",
+      "imdbId": "tt0840361"
+    },
+    {
+      "id": "archive-119",
+      "title": "Alice in Borderland",
+      "type": "tv",
+      "category": "Gizem / Dram / Aksiyon & Macera",
+      "genre": "Gizem",
+      "rating": "8.1",
+      "ratingCount": "IMDb 8.1",
+      "year": "2020",
+      "duration": "Bilinmiyor",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/i0i7kGDrArtM1sCd8niZDC7iboV.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/QZaPkNUvhdcKONuO2fXuqtcQRo.jpg",
+      "desc": "Amaçsız bir bilgisayar oyuncusu ve iki arkadaşı kendilerini paralel evrendeki Tokyo'da bulur. Burada hayatta kalmak için bir dizi acımasız oyuna katılmaları gerekir.",
+      "director": "Bilinmiyor",
+      "cast": [
+        "山﨑賢人",
+        "土屋太鳳"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=EEJ7nUvXUYA",
+      "country": "JP",
+      "tmdbId": 110316,
+      "seasons": 3,
+      "episodes": 22,
+      "tmdbRating": "8.1",
+      "tmdbVoteCount": 2885,
+      "tmdbTitle": "Alice in Borderland",
+      "tmdbOriginalTitle": "今際の国のアリス",
+      "tmdbReleaseDate": "2020-12-10",
+      "tmdbGenres": "Gizem / Dram / Aksiyon & Macera",
+      "tmdbRuntime": "",
+      "tmdbCountries": "JP",
+      "tmdbDirector": "",
+      "tmdbCast": [
+        {
+          "id": 1177942,
+          "name": "山﨑賢人",
+          "character": "Arisu Ryohei / Alice",
+          "profile": "https://image.tmdb.org/t/p/w185/nUWXgjDfRxFJ3P20lyMJr8qDIJ0.jpg",
+          "order": 0
+        },
+        {
+          "id": 1076363,
+          "name": "土屋太鳳",
+          "character": "Usagi Yuzuha / “Rabbit”",
+          "profile": "https://image.tmdb.org/t/p/w185/n2665l3bguzDTm5CnyP99ipU9Z0.jpg",
+          "order": 1
+        }
+      ],
+      "tmdbOverview": "Amaçsız bir bilgisayar oyuncusu ve iki arkadaşı kendilerini paralel evrendeki Tokyo'da bulur. Burada hayatta kalmak için bir dizi acımasız oyuna katılmaları gerekir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/i0i7kGDrArtM1sCd8niZDC7iboV.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/QZaPkNUvhdcKONuO2fXuqtcQRo.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=cOEPgqMNres",
+      "tmdbImdbId": "tt10795658",
+      "tmdbSyncedAt": "2026-11-07T06:45:58.351Z",
+      "originalTitle": "今際の国のアリス",
+      "imdbId": "tt10795658",
+      "tmdbSeasons": 3,
+      "tmdbEpisodes": 22
+    },
+    {
+      "id": "archive-120",
+      "title": "The Day of the Jackal",
+      "type": "tv",
+      "category": "Dram / Aksiyon & Macera / Gizem",
+      "genre": "Dram",
+      "rating": "8.2",
+      "ratingCount": "IMDb 8.2",
+      "year": 2024,
+      "duration": "Bilinmiyor",
+      "themeColor": "#101014",
+      "image": "https://image.tmdb.org/t/p/w500/kSArpvMefJhwwZVATCRst4bgsw5.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/enVrO8TRkdT8dmYXTfI4sEjR5Kp.jpg",
+      "desc": "Rakipsiz ve yakalanması son derece zor bir yalnız suikastçı olan Çakal, en yüksek ücret karşılığında suikastlar gerçekleştirerek hayatını kazanmaktadır. Ancak son cinayetinin ardından, Avrupa’da heyecan dolu bir kedi-fare kovalamacasında Çakal’ın izini sürmeye başlayan ve ardında yıkım bırakan azimli bir İngiliz istihbarat subayı Bianca  ile karşılaşır.",
+      "director": "Ronan Bennett",
+      "cast": [
+        "Eddie Redmayne",
+        "Lashana Lynch",
+        "Eleanor Matsuura",
+        "Chukwudi Iwuji",
+        "Úrsula Corberó",
+        "Adoney Díaz Barajas"
+      ],
+      "trailerUrl": "https://www.youtube.com/watch?v=EUb_04MdnMI",
+      "country": "GB",
+      "tmdbId": 222766,
+      "seasons": 1,
+      "episodes": 10,
+      "tmdbRating": "8.2",
+      "tmdbVoteCount": 1410,
+      "tmdbTitle": "The Day of the Jackal",
+      "tmdbOriginalTitle": "The Day of the Jackal",
+      "tmdbReleaseDate": "2024-11-07",
+      "tmdbGenres": "Dram / Aksiyon & Macera / Gizem",
+      "tmdbRuntime": "",
+      "tmdbCountries": "GB",
+      "tmdbDirector": "Ronan Bennett",
+      "tmdbCast": [
+        {
+          "id": 37632,
+          "name": "Eddie Redmayne",
+          "character": "The Jackal",
+          "profile": "https://image.tmdb.org/t/p/w185/fSvG7qzoBBnJUmgtIuMgrK3EQPN.jpg",
+          "order": 0
+        },
+        {
+          "id": 1360281,
+          "name": "Lashana Lynch",
+          "character": "Bianca Pullman",
+          "profile": "https://image.tmdb.org/t/p/w185/ypNxRag9uJ5nzPAN2um3amQK340.jpg",
+          "order": 1
+        },
+        {
+          "id": 62976,
+          "name": "Eleanor Matsuura",
+          "character": "Zina Jansone",
+          "profile": "https://image.tmdb.org/t/p/w185/8PTKH2LHXVxoxPm4kULlQ0OdwTg.jpg",
+          "order": 2
+        },
+        {
+          "id": 105238,
+          "name": "Chukwudi Iwuji",
+          "character": "Osita Halcrow",
+          "profile": "https://image.tmdb.org/t/p/w185/5JILtFNmAmA8T4gRQrO5sn8krDv.jpg",
+          "order": 3
+        },
+        {
+          "id": 1042728,
+          "name": "Úrsula Corberó",
+          "character": "Nuria",
+          "profile": "https://image.tmdb.org/t/p/w185/cmH8Z459tw9YkR61QfxlCSlZw9P.jpg",
+          "order": 4
+        },
+        {
+          "id": 5246643,
+          "name": "Adoney Díaz Barajas",
+          "character": "Carlitos",
+          "profile": "",
+          "order": 5
+        },
+        {
+          "id": 5556319,
+          "name": "Rajko Radovic",
+          "character": "Bodyguard",
+          "profile": "",
+          "order": 6
+        }
+      ],
+      "tmdbOverview": "Rakipsiz ve yakalanması son derece zor bir yalnız suikastçı olan Çakal, en yüksek ücret karşılığında suikastlar gerçekleştirerek hayatını kazanmaktadır. Ancak son cinayetinin ardından, Avrupa’da heyecan dolu bir kedi-fare kovalamacasında Çakal’ın izini sürmeye başlayan ve ardında yıkım bırakan azimli bir İngiliz istihbarat subayı Bianca  ile karşılaşır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/kSArpvMefJhwwZVATCRst4bgsw5.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/enVrO8TRkdT8dmYXTfI4sEjR5Kp.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt24053860",
+      "tmdbSyncedAt": "2026-11-07T06:45:58.370Z",
+      "originalTitle": "The Day of the Jackal",
+      "imdbId": "tt24053860",
+      "tmdbSeasons": 1,
+      "tmdbEpisodes": 10,
+      "watchUrl": "https://s7.gelsistirire.top/d/zqnggc2osk3rtzj5apwrlh4tjw5hjfl7iyre5lcywlrz2ctdac7zdelkzgp4n7zjsaopdzwy/The%20Day%20of%20the%20Jackal%20S01E01%20WEB%20DL%201080p%20DUAL.mp4",
+      "platform": [],
+      "personalNote": "",
+      "subtitles": [
+        {
+          "language": "tr",
+          "languageLabel": "Türkçe",
+          "fileName": "The.Day.Of.The.Jackal.S01E01.WEB.x264-TORRENTGALAXY",
+          "url": "https://megamrtklc.github.io/filmm/assets/subtitles/archive-120/tr-s1e1-The-Day-Of-The-Jackal-S01E01-WEB-1794096753302.vtt",
+          "default": true,
+          "season": 1,
+          "episode": 1
+        }
+      ]
+    },
+    {
+      "title": "Adalet 2",
+      "originalTitle": "The Equalizer 2",
+      "year": 2018,
+      "category": "Aksiyon / Gerilim / Suç",
+      "genre": "Aksiyon",
+      "rating": "6.8",
+      "duration": "121 dk",
+      "country": "United States of America",
+      "director": "Antoine Fuqua",
+      "tmdbId": 345887,
+      "desc": "Emekli CIA ajanı Robert McCall, kendi bildiği şekilde adaletsizliklere son vermeye, başkalarına haksızlık yapanları cezalandırmaya devam etmektedir. Günün birinde en yakın arkadaşı Susan Plummer öldürülür. McCall, arkadaşının intikamını almak için sonuna kadar gitmeye hazırdır.",
+      "image": "https://image.tmdb.org/t/p/w500/xNcm0kmMOmE5lxRiDaA6bmx4unH.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/z7noaCJ4KtmhwHw7QcNtnMMo4Qy.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=tIHyWhi61mA",
+      "imdbId": "tt3766354",
+      "type": "movie",
+      "cast": [
+        "Denzel Washington",
+        "Pedro Pascal",
+        "Ashton Sanders",
+        "Orson Bean",
+        "Bill Pullman",
+        "Melissa Leo",
+        "Jonathan Scarfe",
+        "Sakina Jaffrey",
+        "Kazy Tauginas",
+        "Garrett Golden",
+        "Adam Karst",
+        "Alican Barlas"
+      ],
+      "themeColor": "#101014",
+      "id": "perde-mw5w3oth",
+      "seasons": null,
+      "episodes": null,
+      "tmdbRating": "6.8",
+      "tmdbVoteCount": 6276,
+      "tmdbTitle": "Adalet 2",
+      "tmdbOriginalTitle": "The Equalizer 2",
+      "tmdbReleaseDate": "2018-07-19",
+      "tmdbGenres": "Aksiyon / Gerilim / Suç",
+      "tmdbRuntime": "121 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Antoine Fuqua",
+      "tmdbCast": [
+        {
+          "id": 5292,
+          "name": "Denzel Washington",
+          "character": "Robert McCall",
+          "profile": "https://image.tmdb.org/t/p/w185/jj2Gcobpopokal0YstuCQW0ldJ4.jpg",
+          "order": 0
+        },
+        {
+          "id": 1253360,
+          "name": "Pedro Pascal",
+          "character": "Dave York",
+          "profile": "https://image.tmdb.org/t/p/w185/oKcMbVn0NJTNzQt0ClKKvVXkm60.jpg",
+          "order": 1
+        },
+        {
+          "id": 1152019,
+          "name": "Ashton Sanders",
+          "character": "Miles Whittaker",
+          "profile": "https://image.tmdb.org/t/p/w185/2hMKOd6TLQWwLAS6ztUcZj8IZAC.jpg",
+          "order": 2
+        },
+        {
+          "id": 863,
+          "name": "Orson Bean",
+          "character": "Sam Rubinstein",
+          "profile": "https://image.tmdb.org/t/p/w185/2iz769YdycczgnGPZyXNsaN3TGR.jpg",
+          "order": 3
+        },
+        {
+          "id": 8984,
+          "name": "Bill Pullman",
+          "character": "Brian Plummer",
+          "profile": "https://image.tmdb.org/t/p/w185/AlLhgmcX5zh3frPT82OSPY9gqXO.jpg",
+          "order": 4
+        },
+        {
+          "id": 6832,
+          "name": "Melissa Leo",
+          "character": "Susan Plummer",
+          "profile": "https://image.tmdb.org/t/p/w185/ueAIX0MH68xCei3N8vFLS0EUEjY.jpg",
+          "order": 5
+        },
+        {
+          "id": 152831,
+          "name": "Jonathan Scarfe",
+          "character": "Resnik",
+          "profile": "https://image.tmdb.org/t/p/w185/vVkvdi33vVCc2nkGbqXqCzQFl34.jpg",
+          "order": 6
+        },
+        {
+          "id": 34200,
+          "name": "Sakina Jaffrey",
+          "character": "Fatima",
+          "profile": "https://image.tmdb.org/t/p/w185/9U6vixMcwkj8aEffy64UqsklHd.jpg",
+          "order": 7
+        },
+        {
+          "id": 1110069,
+          "name": "Kazy Tauginas",
+          "character": "Ari",
+          "profile": "https://image.tmdb.org/t/p/w185/xjyyAgBORgnsBzC4yq4v0hGCdlz.jpg",
+          "order": 8
+        },
+        {
+          "id": 2090144,
+          "name": "Garrett Golden",
+          "character": "Kovac",
+          "profile": "",
+          "order": 9
+        },
+        {
+          "id": 1205136,
+          "name": "Adam Karst",
+          "character": "Turkish Father",
+          "profile": "https://image.tmdb.org/t/p/w185/13M5U3c8l2XbgjPqa9up1KvEaj.jpg",
+          "order": 10
+        },
+        {
+          "id": 2090145,
+          "name": "Alican Barlas",
+          "character": "Dining Car Porter",
+          "profile": "https://image.tmdb.org/t/p/w185/kXQsa8COHrl3I0ZVOvYIDClsGlR.jpg",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Emekli CIA ajanı Robert McCall, kendi bildiği şekilde adaletsizliklere son vermeye, başkalarına haksızlık yapanları cezalandırmaya devam etmektedir. Günün birinde en yakın arkadaşı Susan Plummer öldürülür. McCall, arkadaşının intikamını almak için sonuna kadar gitmeye hazırdır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/xNcm0kmMOmE5lxRiDaA6bmx4unH.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/z7noaCJ4KtmhwHw7QcNtnMMo4Qy.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=tIHyWhi61mA",
+      "tmdbImdbId": "tt3766354",
+      "tmdbSyncedAt": "2026-11-07T06:45:59.177Z",
+      "platform": [
+        "Netflix",
+        "Prime Video",
+        "Disney+",
+        "Apple TV+"
+      ],
+      "personalNote": "Mutlaka izlemelisin. Adalet arayışındaki harika bir film.",
+      "watchUrl": "https://s6.gelsistirire.top/d/zungbhsosk3rtzj5bpwrvt4kkunnjgv5sd65hgbnnwmfzgigze2qqsqzavpnctebdx7yoioc/The%20Equalizer%202%202018%20Bluray%201080p%20DUAL.mp4",
+      "subtitles": []
+    }
+  ]
+}
