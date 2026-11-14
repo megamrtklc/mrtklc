@@ -61,7 +61,11 @@ if (artworkUrl) {
   const html = await readFile('index.html', 'utf8');
   const artworkTag = /(<img id="hero-initial-shell-desktop-artwork" src=")[^"]*(")/;
   if (!artworkTag.test(html)) throw new Error('Desktop hero skeleton artwork marker is missing from index.html.');
-  await writeFile('index.html', html.replace(artworkTag, `$1${optimizedArtworkUrl}$2`));
+  let updatedHtml = html.replace(artworkTag, `$1${optimizedArtworkUrl}$2`);
+  const preloadTag = /(<link id="desktop-hero-image-preload" rel="preload" as="image" href=")[^"]*(")/;
+  if (!preloadTag.test(updatedHtml)) throw new Error('Desktop hero image preload marker is missing from index.html.');
+  updatedHtml = updatedHtml.replace(preloadTag, `$1${optimizedArtworkUrl}$2`);
+  await writeFile('index.html', updatedHtml);
 }
 // İlk HTML çiziminde masaüstü manşetinde de doğru başlık ve bilgiler görünsün.
 if (firstDesktopItem) {
