@@ -728,6 +728,21 @@
           }
           #home-personalized-section .home-personalized-poster{width:72px}
         }
+
+        /* Son Eklenenler: küçük portre afişini tüm gölge/gradyan katmanlarının önüne al. */
+        #home-new-arrivals-section .home-new-arrival-feature-poster{
+          position:absolute!important;
+          z-index:30!important;
+          opacity:1!important;
+          visibility:visible!important;
+          filter:none!important;
+          mix-blend-mode:normal!important;
+          box-shadow:0 10px 28px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.22)!important;
+        }
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-shade{
+          z-index:1!important;
+          pointer-events:none;
+        }
 </style>
 
 </head>
