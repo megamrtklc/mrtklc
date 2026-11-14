@@ -1779,7 +1779,7 @@
         </div>
         <div x-show="headerConfig.showMobileMenu !== false && mobileMenuOpen" x-transition.origin.top.right @click.away="mobileMenuOpen = false" class="xl:hidden absolute top-full right-3 left-3 sm:left-auto sm:w-80 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl p-3 z-50">
             <nav class="grid grid-cols-1 gap-1 text-sm font-bold text-gray-700 dark:text-gray-200">
-                <a href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"><span x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</span></a>
+                <a x-show="headerConfig.showHome !== false" href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"><span x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</span></a>
                 <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"><span x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</span></a>
                 <a x-show="headerConfig.showVideo !== false" href="#" @click.prevent="navigateTo('video-links'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span x-text="headerConfig.videoLabel || 'Video Bağlantıları'">Video Bağlantıları</span><span class="text-xs text-rose-500" x-text="watchableCatalog.length"></span></a>
             </nav>
