@@ -194,3 +194,37 @@
 #add-content:focus-visible,.page-heading #catalog-add:focus-visible{outline:3px solid #fff0b3;outline-offset:3px}
 #add-content:disabled,.page-heading #catalog-add:disabled{opacity:.58;cursor:not-allowed;filter:grayscale(.25);transform:none}
 @media(prefers-reduced-motion:reduce){#add-content,.page-heading #catalog-add,#add-content::after,.page-heading #catalog-add::after{transition:none}}
+
+
+/* Catalog library: clearer hierarchy, larger artwork and readable metadata */
+.catalog-toolbar{grid-template-columns:minmax(240px,1fr) repeat(3,minmax(132px,158px)) auto;gap:11px;padding:14px}
+.catalog-toolbar select{min-height:42px;padding:0 12px;font-size:12px;color:#e2e9ef;background:#1b2835;border:1px solid #3b4b5d;border-radius:9px}
+.catalog-toolbar select:focus-visible{outline:2px solid #c7f36b;outline-offset:2px}
+.result-count{font-size:11px;font-weight:700;color:#b8c5d1}
+.catalog-table th{padding:15px 16px;font-size:10px;letter-spacing:1.15px}
+.catalog-table td{padding:14px 16px;font-size:13px;color:#d0d9e2}
+.catalog-title{gap:14px;min-width:260px}
+.catalog-title img{width:58px;height:78px;border-radius:7px;box-shadow:0 5px 14px #0005}
+.catalog-title b{font-size:13px;line-height:1.4;color:#f1f4f7;font-weight:750}
+.catalog-title small{margin-top:6px;font-size:11px;line-height:1.45;color:#a0afbf}
+.type-chip{padding:6px 10px;font-size:11px}
+.score{font-size:13px;font-weight:750}
+.row-action{padding:8px 11px;font-size:11px}
+.pagination{font-size:12px}
+@media(max-width:900px){.catalog-toolbar{grid-template-columns:minmax(0,1fr) repeat(2,minmax(130px,1fr))}.catalog-toolbar .search-box{grid-column:1/-1}.catalog-toolbar #catalog-sort{grid-column:1/2}.catalog-toolbar .result-count{align-self:center}}
+@media(max-width:700px){
+ .catalog-toolbar{grid-template-columns:1fr 1fr;gap:8px;padding:10px}
+ .catalog-toolbar .search-box{grid-column:1/-1}
+ .catalog-toolbar #catalog-sort{grid-column:1/-1}
+ .catalog-toolbar select{min-height:40px;padding:0 9px;font-size:11px}
+ .catalog-table tr{padding:13px;gap:10px}
+ .catalog-table td{font-size:11px}
+ .catalog-title{gap:12px}
+ .catalog-title img{width:54px;height:72px}
+ .catalog-title b{font-size:12px;line-height:1.4}
+ .catalog-title small{font-size:10px;line-height:1.4}
+ .catalog-table td:nth-child(2):before,.catalog-table td:nth-child(3):before,.catalog-table td:nth-child(4):before{font-size:8px}
+ .type-chip{font-size:10px}
+ .score{font-size:12px}
+ .row-action{padding:8px 11px;font-size:10px}
+}
