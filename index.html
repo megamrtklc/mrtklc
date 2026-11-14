@@ -1893,6 +1893,24 @@
           linear-gradient(115deg, transparent 48%, rgba(245, 158, 11, .055) 74%, transparent 100%);
         mix-blend-mode: screen;
       }
+      /* Kapak görselinin sol kenarındaki renkleri bulanıklaştırarak sola doğal biçimde yay. */
+      #desktopEditorialHero .cv-hero-left-color-spread {
+        position: absolute;
+        z-index: 0;
+        top: -8%;
+        left: 0;
+        width: 62%;
+        height: 116%;
+        object-fit: cover;
+        object-position: left center;
+        filter: blur(54px) saturate(1.28);
+        opacity: .58;
+        transform: scale(1.08);
+        transform-origin: left center;
+        pointer-events: none;
+        -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 42%, rgba(0,0,0,.72) 68%, transparent 100%);
+        mask-image: linear-gradient(90deg, #000 0%, #000 42%, rgba(0,0,0,.72) 68%, transparent 100%);
+      }
       #desktopEditorialHero > div:first-child picture {
         position: absolute;
         top: 0;
@@ -2326,6 +2344,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 <!-- DESKTOP EDITORIAL HERO: mobil manşetten bağımsız yeni masaüstü kompozisyonu -->
                 <section id="desktopEditorialHero" data-home-section="hero" x-cloak  x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0 overflow-hidden bg-[#090a0d]">
+                        <img class="cv-hero-left-color-spread" :src="currentHero.backdrop || currentHero.poster || ''" alt="" aria-hidden="true" @error="handleImageError($event)" decoding="async">
                         <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780])" sizes="100vw"><img :src="window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-contain object-right transition-none"></picture>
                         <div class="absolute inset-0 z-[1]" style="background:linear-gradient(90deg,#090a0d 0%,#090a0d 25%,rgba(9,10,13,.94) 38%,rgba(9,10,13,.72) 49%,rgba(9,10,13,.28) 63%,rgba(9,10,13,.04) 82%,transparent 100%);"></div>
                         <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
