@@ -429,6 +429,9 @@
         #home-new-arrivals-section .home-new-arrival-feature-title-row h3{min-width:0;overflow-wrap:anywhere}
         #home-new-arrivals-section .home-new-arrival-feature-rating{line-height:1.1;white-space:nowrap}
         #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:5px;color:rgba(255,255,255,.82);font-size:10px;line-height:1.45}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{max-width:calc(100% - 70px);min-height:2.9em}
+        #home-new-arrivals-section .home-new-arrival-feature-poster{object-position:center;pointer-events:none}
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 70px)}
         #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{margin-top:8px;color:rgba(255,255,255,.72)}
         #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div span:last-child{color:rgba(255,255,255,.82)}
         #home-new-arrivals-section .home-new-arrival-feature:hover .home-new-arrival-poster img{transform:scale(1.045)}
@@ -949,7 +952,11 @@
                                     <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="index === 0 ? (item.backdrop || item.poster || item.image || item.tmdbPoster) : (item.poster || item.image || item.tmdbPoster || item.backdrop)" :srcset="getTmdbImageSrcSet(index === 0 ? (item.backdrop || item.poster || item.image || item.tmdbPoster) : (item.poster || item.image || item.tmdbPoster || item.backdrop), index === 0 ? [500, 780, 1280] : [154, 185, 342, 500])" :sizes="index === 0 ? '(max-width:639px) min(calc(82vw - 39px), 310px), (max-width:767px) calc(42vw - 40px), (max-width:1023px) calc(31vw - 30px), (max-width:1275px) 29vw, 370px' : '(max-width:639px) calc(44vw - 21px), (max-width:767px) calc(29vw - 28px), (max-width:1023px) calc(23vw - 22px), (max-width:1087px) 174px, (max-width:1312px) 16vw, 210px'" class="w-full h-full object-cover transition-transform duration-700">
                                     <div class="home-new-arrival-shade absolute inset-0"></div>
                                     <span class="absolute top-3 left-3 rounded-md bg-rose-600 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 shadow-lg" x-text="index === 0 ? 'EN YENİ' : 'YENİ EKLENDİ'"></span>
-                                    <span class="absolute top-3 right-3 rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
+                                    <div class="absolute top-3 right-3 flex max-w-[72%] items-center justify-end gap-1.5">
+                                        <span class="rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
+                                        <span class="max-w-[150px] truncate rounded-md bg-black/75 text-white/90 text-[8px] font-bold tracking-wide px-2 py-1.5 backdrop-blur-md" x-text="item.genre || item.category || item.tmdbGenres || 'GENEL'"></span>
+                                    </div>
+                                    <img x-show="index === 0" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster absolute bottom-3 right-3 z-[3] w-[58px] h-[86px] rounded-md object-cover border border-white/50 shadow-xl">
                                     <span x-show="index !== 0" class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || item.tmdbRating || '—'"></span></span>
                                 </div>
                                 <div class="home-new-arrival-copy p-3 space-y-2">
@@ -959,9 +966,8 @@
                                     </div>
                                     <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
                                      <p x-show="index === 0" x-text="item.overview || item.plot || item.description || item.tmdbOverview || &quot;Kataloğa yeni eklenen bu yapımı keşfet.&quot;"></p>
-                                    <div class="flex items-center justify-between gap-2 text-[9px] text-gray-500 dark:text-gray-400">
+                                    <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
                                         <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
-                                        <span class="truncate text-right" x-text="item.genre || item.category || item.tmdbGenres || ''"></span>
                                     </div>
                                 </div>
                             </button>
