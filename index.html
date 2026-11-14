@@ -42,7 +42,7 @@
     <!-- Inter fontları önceden istenir; CSS yerleşimden önce uygulanır. -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <!-- Alpine.js -->
-    <script defer src="./app.min.js?v=20261114-inline-hero-v1"></script>
+    <script defer src="./app.min.js?v=20261114-lazy-home-hydration-v1"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         @keyframes editorialCopyEnter{0%{opacity:0;transform:translateY(18px);filter:blur(5px)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}
@@ -295,7 +295,7 @@
         #home-page section:not(#desktopEditorialHero):not(#mobileHeroBanner)>div:first-child p{line-height:1.55}
         /* Ana sayfa bölüm başlıklarının üzerindeki kırmızı mikro etiketleri kaldır. */
         #home-page section:not(#desktopEditorialHero):not(#mobileHeroBanner)>div:first-child>div:first-child>p:first-child[class*="text-rose-700"],
-        [data-home-section="published-collections"] .home-published-collection-heading>div:first-child>p:first-child[class*="text-rose-700"]{display:none!important}
+        [data-home-section="published-collections" x-ignore] .home-published-collection-heading>div:first-child>p:first-child[class*="text-rose-700"]{display:none!important}
         #home-page .home-card-rail{gap:clamp(12px,1.25vw,20px);padding:6px 3px 18px;scroll-padding-inline:3px}
         #home-page .home-rail-card{border-radius:16px;border-color:rgba(148,163,184,.22);box-shadow:0 8px 24px -20px rgba(0,0,0,.55);transform:translateZ(0)}
         #home-page .home-rail-card:hover{border-color:rgba(225,29,72,.65);box-shadow:0 18px 34px -22px rgba(0,0,0,.72);transform:translateY(-4px)}
@@ -2066,7 +2066,7 @@
 
                 <!-- İzlemeye Devam Et: aktif profilin kaldığı yapımlar -->
                 <div data-home-section="continue" aria-hidden="true" style="height:1px"></div>
-                <section id="home-continue-section" x-cloak x-show="isHomepageSectionVisible('continue') && homeSectionReady.continue && continueWatchingItems.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-continue-section" x-ignore x-cloak x-show="isHomepageSectionVisible('continue') && homeSectionReady.continue && continueWatchingItems.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-continue-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">KALDIĞIN YERDEN</p>
@@ -2109,7 +2109,7 @@
 
                 <!-- Ana sayfa izleme listesi önizlemesi -->
                 <div data-home-section="watchlist" aria-hidden="true" style="height:1px"></div>
-                <section id="home-watchlist-section" x-cloak x-show="isHomepageSectionVisible('watchlist') && homeSectionReady.watchlist && watchlist.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-watchlist-section" x-ignore x-cloak x-show="isHomepageSectionVisible('watchlist') && homeSectionReady.watchlist && watchlist.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-watchlist-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">SONRA İZLE</p>
@@ -2142,7 +2142,7 @@
 
                 <!-- Son eklenen yapımlar: admin kataloğuna eklenme sırası -->
                 <div data-home-section="new-arrivals" aria-hidden="true" style="height:1px"></div>
-                <section id="home-new-arrivals-section" x-cloak x-show="isHomepageSectionVisible('new-arrivals') && homeSectionReady['new-arrivals'] && homeNewArrivals.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-new-arrivals-section" x-ignore x-cloak x-show="isHomepageSectionVisible('new-arrivals') && homeSectionReady['new-arrivals'] && homeNewArrivals.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-new-arrivals-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">CINEVERSE • ARŞİVE YENİ KATILANLAR</p>
@@ -2188,7 +2188,7 @@
                 </section>
 
                 <!-- Aktif profilin bölüm takibi bulunan dizileri -->
-                <section id="home-series-tracking-section" data-home-section="series-tracking" x-cloak x-show="isHomepageSectionVisible('series-tracking') && (!homeSectionReady['series-tracking'] || librarySeriesEntries.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-series-tracking-section" x-ignore data-home-section="series-tracking" x-cloak x-show="isHomepageSectionVisible('series-tracking') && (!homeSectionReady['series-tracking'] || librarySeriesEntries.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-series-tracking-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">BÖLÜM BÖLÜM • KALDIĞIN YERİ UNUTMA</p>
@@ -2231,7 +2231,7 @@
                 </section>
 
                 <!-- Kişisel izleme geçmişine, yoksa katalog dağılımına göre tür keşfi -->
-                <section id="home-genre-discovery-section" data-home-section="genre-discovery" x-cloak x-show="isHomepageSectionVisible('genre-discovery') && (!homeSectionReady['genre-discovery'] || homeDiscoveryGenres.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-genre-discovery-section" x-ignore data-home-section="genre-discovery" x-cloak x-show="isHomepageSectionVisible('genre-discovery') && (!homeSectionReady['genre-discovery'] || homeDiscoveryGenres.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-genre-discovery-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div class="min-w-0">
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1.5">YENİ HİKÂYELER KEŞFET</p>
@@ -2290,7 +2290,7 @@
                 </div>
 
                 <!-- Film & Dizi Katalog -->
-                <section id="home-catalog-section" data-home-section="catalog" x-cloak x-show="!catalogLoading && isHomepageSectionVisible('catalog')" class="w-full px-6 sm:px-12 space-y-6">
+                <section id="home-catalog-section" x-ignore data-home-section="catalog" x-cloak x-show="!catalogLoading && isHomepageSectionVisible('catalog')" class="w-full px-6 sm:px-12 space-y-6">
                     <div class="home-catalog-heading flex flex-col xl:flex-row xl:items-end justify-between gap-4 pb-4">
                         <div>
                             <h2 class="text-xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Tüm Yapımlar & Trendler</h2>
