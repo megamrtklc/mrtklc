@@ -23,18 +23,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Generate compact hero feed
-        run: node scripts/build-hero-data.mjs
-      - name: Commit generated hero feed
+      - name: Generate and commit compact hero feed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add hero-data.json
-          if git diff --cached --quiet; then
-            echo "Hero feed is already current."
-            exit 0
-          fi
-          git commit -m "Generate compact homepage hero data"
-          git fetch origin main
-          git rebase origin/main
-          git push
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            node scripts/build-hero-data.mjs
+            git add hero-data.json
+            if git diff --cached --quiet; then
+              echo "Hero feed is already current."
+              exit 0
+            fi
+            git commit -m "Generate compact homepage hero data"
+            if git push; then
+              exit 0
+            fi
+            echo "Concurrent push detected; retrying from latest main (attempt $attempt)."
+          done
+          echo "Could not publish hero feed after three attempts."
+          exit 1
