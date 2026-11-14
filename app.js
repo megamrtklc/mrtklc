@@ -111,6 +111,7 @@
                 discoveryMood: 'all',
                 discoveryGenre: 'all',
                 discoveryCountry: 'all',
+                discoveryCountryCode: '',
                 discoveryDirector: '',
                 discoveryPlatform: 'all',
                 discoveryRating: '0',
@@ -1216,6 +1217,7 @@
                         this.discoveryMood = 'all';
                         this.discoveryGenre = 'all';
                         this.discoveryCountry = page === 'turkish' ? 'Türkiye' : 'all';
+                        this.discoveryCountryCode = '';
                         this.discoveryDirector = '';
                         this.discoveryPlatform = 'all';
                         this.discoveryRating = '0';
@@ -1577,7 +1579,7 @@
                     });
                 },
 
-                openRelatedDiscoveries(kind, value) {
+                openRelatedDiscoveries(kind, value, countryCode = '') {
                     const selected = String(value || '').trim();
                     if (!selected) return;
                     this.searchQuery = '';
@@ -1585,6 +1587,7 @@
                     this.discoveryMood = 'all';
                     this.discoveryGenre = 'all';
                     this.discoveryCountry = 'all';
+                    this.discoveryCountryCode = '';
                     this.discoveryDirector = '';
                     this.discoveryPlatform = 'all';
                     this.discoveryRating = '0';
@@ -1593,7 +1596,10 @@
                     this.quickFilter = 'all';
                     this.sortBy = 'default';
                     if (kind === 'genre') this.discoveryGenre = selected;
-                    if (kind === 'country') this.discoveryCountry = selected;
+                    if (kind === 'country') {
+                        this.discoveryCountry = selected;
+                        this.discoveryCountryCode = countryCode;
+                    }
                     if (kind === 'director') this.discoveryDirector = selected;
                     this.currentPage = 'explore';
                     this.syncRouteToUrl('explore', null);
@@ -1627,6 +1633,7 @@
                     this.discoveryMood = 'all';
                     this.discoveryGenre = 'all';
                     this.discoveryCountry = 'all';
+                    this.discoveryCountryCode = '';
                     this.discoveryDirector = '';
                     this.discoveryPlatform = 'all';
                     this.discoveryRating = '0';
@@ -2034,6 +2041,7 @@
                     this.searchQuery = '';
                     this.discoveryType = 'all';
                     this.discoveryCountry = 'all';
+                    this.discoveryCountryCode = '';
                     this.discoveryPlatform = 'all';
                     this.discoveryRating = '0';
                     this.discoveryYearFrom = '';
@@ -2078,7 +2086,9 @@
                         const matchesGenre = this.discoveryGenre === 'all' || selectedGenres.some(genre => genres.includes(genre) || this.normalizeSearchText(item.genre) === genre);
                         const countries = String(item.country || '').split(/[,\/;]/).map(value => this.normalizeSearchText(value));
                         const selectedCountries = String(this.discoveryCountry || '').split(/[,\/;]/).map(value => this.normalizeSearchText(value)).filter(Boolean);
-                        const matchesCountry = this.discoveryCountry === 'all' || selectedCountries.some(country => countries.includes(country));
+                        const matchesCountry = this.discoveryCountry === 'all' || (this.discoveryCountryCode
+                            ? this.getCountryEntries(item.country).some(country => country.code === this.discoveryCountryCode)
+                            : selectedCountries.some(country => countries.includes(country)));
                         const matchesDirector = !this.discoveryDirector || this.normalizeSearchText(item.director || '').includes(this.normalizeSearchText(this.discoveryDirector));
                         const platforms = Array.isArray(item.platform) ? item.platform : (item.platform ? [item.platform] : []);
                         const matchesPlatform = this.discoveryPlatform === 'all' || platforms.some(value => this.normalizeSearchText(value) === this.normalizeSearchText(this.discoveryPlatform));
