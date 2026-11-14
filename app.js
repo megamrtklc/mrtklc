@@ -2247,27 +2247,42 @@
 
                 get homeDiscoveryGenres() {
                     const personalized = this.personalizedDiscoveryGenres || [];
-                    if (personalized.length) return personalized.slice(0, 6);
-
-                    const counts = new Map();
-                    const normalize = value => this.normalizeSearchText(value);
-                    this.catalog.forEach(item => {
-                        const genres = [...new Set(String(item.category || item.genre || '')
-                            .split(/[\\/;,]/).map(normalize).filter(Boolean))];
-                        genres.forEach(name => {
-                            const current = counts.get(name) || { name, count: 0 };
-                            current.count += 1;
-                            counts.set(name, current);
+                    let genres;
+                    if (personalized.length) {
+                        genres = personalized.slice(0, 6);
+                    } else {
+                        const counts = new Map();
+                        const normalize = value => this.normalizeSearchText(value);
+                        this.catalog.forEach(item => {
+                            const names = [...new Set(String(item.category || item.genre || '')
+                                .split(/[\\/;,]/).map(normalize).filter(Boolean))];
+                            names.forEach(name => {
+                                const current = counts.get(name) || { name, count: 0 };
+                                current.count += 1;
+                                counts.set(name, current);
+                            });
                         });
+                        genres = [...counts.values()]
+                            .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'tr'))
+                            .slice(0, 6)
+                            .map(entry => ({
+                                ...entry,
+                                label: entry.name.charAt(0).toLocaleUpperCase('tr-TR') + entry.name.slice(1),
+                                score: entry.count
+                            }));
+                    }
+
+                    // Bu üç keşif türü, katalogdaki yoğunluktan bağımsız olarak her zaman görünür.
+                    const requiredGenres = [
+                        { name: 'belgesel', label: 'Belgesel', count: 0, score: 0 },
+                        { name: 'spor', label: 'Spor', count: 0, score: 0 },
+                        { name: 'biyografi', label: 'Biyografi', count: 0, score: 0 }
+                    ];
+                    const seen = new Set(genres.map(item => this.normalizeSearchText(item.name || item.label)));
+                    requiredGenres.forEach(item => {
+                        if (!seen.has(item.name)) genres.push(item);
                     });
-                    return [...counts.values()]
-                        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'tr'))
-                        .slice(0, 6)
-                        .map(entry => ({
-                            ...entry,
-                            label: entry.name.charAt(0).toLocaleUpperCase('tr-TR') + entry.name.slice(1),
-                            score: entry.count
-                        }));
+                    return genres;
                 },
 
                 selectPersonalizedGenre(genre) {
