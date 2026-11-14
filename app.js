@@ -2254,7 +2254,7 @@
                             },
                             comedy: {
                                 include: ['komedi'],
-                                exclude: ['korku', 'savas & politik']
+                                exclude: ['suc', 'korku', 'gerilim', 'savas & politik']
                             },
                             thriller: {
                                 include: ['gerilim', 'gizem', 'suc', 'korku', 'polisiye', 'aksiyon'],
@@ -2269,7 +2269,7 @@
                                 exclude: ['korku', 'suc', 'polisiye', 'savas & politik']
                             },
                             family: {
-                                include: ['aile', 'animasyon'],
+                                include: ['aile', 'cocuk', 'cocuk filmi', 'family'],
                                 exclude: ['suc', 'korku', 'gerilim', 'polisiye', 'erotik', 'yetiskin', 'savas & politik']
                             }
                         };
