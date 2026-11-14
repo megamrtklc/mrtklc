@@ -19773,6 +19773,207 @@
       "tmdbImdbId": "tt8267604",
       "tmdbRating": "8.1",
       "tmdbVoteCount": 2071
+    },
+    {
+      "id": "cv-1794698170280",
+      "title": "Para Avcısı",
+      "type": "movie",
+      "year": "2013",
+      "rating": "8.0",
+      "genre": "Suç",
+      "category": "Suç / Dram / Komedi",
+      "duration": "180 dk",
+      "country": "United States of America",
+      "director": "Martin Scorsese",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 106646,
+      "imdbId": "tt0993846",
+      "image": "https://image.tmdb.org/t/p/w500/ywn2c1sSfdNdJB5O9Hoy3ETfTY2.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/7Nwnmyzrtd0FkcRyPqmdzTPppQa.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=7OQjqQ3DGE4",
+      "trailerProvider": "auto",
+      "desc": "Jordan Belfort 24 yaşında genç ve hırslı bir adamdır. Para kazanma arzusuyla Wall Street borsasında önce komisyoncu ve ardından Stratton Oakmont adında bir yatırımcı firmasında zengin olmak için her şeyi yapmaya hazır bir CEO olur. 90’ların en hızlı günleridir ve New York işlem salonunda her şey olabilmektedir. Önemsiz tahvillerle birçok yatırımcıyı aldatarak Belfort kısa zamanda bir para makinasına ve aynı zamanda bir harcama makinasına dönüşür. Bir günde hesapları milyon dolarlarla doldururken o gece hepsini aynı hızda harcayabilir. Profesyonel hayatının yanı sıra uyuşturucu, fahişeler, son derece pahalı lüks fantezilerle dolu kirli bir oyunun içindedir. Bu karakterin hayatındaki her şey abartılı bir şekilde devam ederken çöküş ise çok uzakta değildir.",
+      "cast": [
+        "Leonardo DiCaprio",
+        "Jonah Hill",
+        "Margot Robbie",
+        "Matthew McConaughey",
+        "Kyle Chandler",
+        "Rob Reiner",
+        "Jon Bernthal",
+        "Jon Favreau",
+        "Jean Dujardin",
+        "Joanna Lumley",
+        "Cristin Milioti",
+        "Christine Ebersole",
+        "Shea Whigham",
+        "Katarina Čas",
+        "P.J. Byrne",
+        "Kenneth Choi",
+        "Brian Sacca",
+        "Henry Zebrowski",
+        "Ethan Suplee",
+        "Barry Rothbart"
+      ],
+      "tmdbTitle": "Para Avcısı",
+      "tmdbOriginalTitle": "The Wolf of Wall Street",
+      "tmdbReleaseDate": "2013-12-25",
+      "tmdbGenres": "Suç / Dram / Komedi",
+      "tmdbRuntime": "180 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Martin Scorsese",
+      "tmdbCast": [
+        {
+          "id": 6193,
+          "name": "Leonardo DiCaprio",
+          "character": "Jordan Belfort",
+          "profile": "https://image.tmdb.org/t/p/w185/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+          "order": 0
+        },
+        {
+          "id": 21007,
+          "name": "Jonah Hill",
+          "character": "Donnie Azoff",
+          "profile": "https://image.tmdb.org/t/p/w185/cymlWttB83MsAGR2EkTgANtjeRH.jpg",
+          "order": 1
+        },
+        {
+          "id": 234352,
+          "name": "Margot Robbie",
+          "character": "Naomi Lapaglia",
+          "profile": "https://image.tmdb.org/t/p/w185/euDPyqLnuwaWMHajcU3oZ9uZezR.jpg",
+          "order": 2
+        },
+        {
+          "id": 10297,
+          "name": "Matthew McConaughey",
+          "character": "Mark Hanna",
+          "profile": "https://image.tmdb.org/t/p/w185/lCySuYjhXix3FzQdS4oceDDrXKI.jpg",
+          "order": 3
+        },
+        {
+          "id": 3497,
+          "name": "Kyle Chandler",
+          "character": "Agent Patrick Denham",
+          "profile": "https://image.tmdb.org/t/p/w185/66n7XNj1dyYkzCBWR3Lq8Vz4PJ1.jpg",
+          "order": 4
+        },
+        {
+          "id": 3026,
+          "name": "Rob Reiner",
+          "character": "Max Belfort",
+          "profile": "https://image.tmdb.org/t/p/w185/2nxxxj3aIU35eCOUEFBD0ireEhZ.jpg",
+          "order": 5
+        },
+        {
+          "id": 19498,
+          "name": "Jon Bernthal",
+          "character": "Brad",
+          "profile": "https://image.tmdb.org/t/p/w185/bjcglF1IpDcZNs1HwFxakGpzBo6.jpg",
+          "order": 6
+        },
+        {
+          "id": 15277,
+          "name": "Jon Favreau",
+          "character": "Manny Riskin",
+          "profile": "https://image.tmdb.org/t/p/w185/8MtRRnEHaBSw8Ztdl8saXiw1egP.jpg",
+          "order": 7
+        },
+        {
+          "id": 56024,
+          "name": "Jean Dujardin",
+          "character": "Jean Jacques Saurel",
+          "profile": "https://image.tmdb.org/t/p/w185/iPtSWWoO8vajj6fIUQLQeuGOCsk.jpg",
+          "order": 8
+        },
+        {
+          "id": 34901,
+          "name": "Joanna Lumley",
+          "character": "Aunt Emma",
+          "profile": "https://image.tmdb.org/t/p/w185/omQvLqkQf9yemMroaj6MJbf37sf.jpg",
+          "order": 9
+        },
+        {
+          "id": 204392,
+          "name": "Cristin Milioti",
+          "character": "Teresa Petrillo",
+          "profile": "https://image.tmdb.org/t/p/w185/aiOOWmej3qYSiR9cUs3lm5x5SkB.jpg",
+          "order": 10
+        },
+        {
+          "id": 4003,
+          "name": "Christine Ebersole",
+          "character": "Leah Belfort",
+          "profile": "https://image.tmdb.org/t/p/w185/bSFrS3JtDwnzbw877Iqwf8tEmF.jpg",
+          "order": 11
+        },
+        {
+          "id": 74242,
+          "name": "Shea Whigham",
+          "character": "Captain Ted Beecham",
+          "profile": "https://image.tmdb.org/t/p/w185/d3caK3l4UfbnzOxv95wLoFLZzMO.jpg",
+          "order": 12
+        },
+        {
+          "id": 549981,
+          "name": "Katarina Čas",
+          "character": "Chantalle",
+          "profile": "https://image.tmdb.org/t/p/w185/F5sG3kWJWm5eayCdIhu8jzJQym.jpg",
+          "order": 13
+        },
+        {
+          "id": 1211946,
+          "name": "P.J. Byrne",
+          "character": "Nicky Koskoff ('Rugrat')",
+          "profile": "https://image.tmdb.org/t/p/w185/1JVBaxRy3OxkHymD3nwBd5kVWWL.jpg",
+          "order": 14
+        },
+        {
+          "id": 41561,
+          "name": "Kenneth Choi",
+          "character": "Chester Ming",
+          "profile": "https://image.tmdb.org/t/p/w185/A2rAUU5PDj1AdMSWQ65SuVoTGS3.jpg",
+          "order": 15
+        },
+        {
+          "id": 1332746,
+          "name": "Brian Sacca",
+          "character": "Robbie Feinberg ('Pinhead')",
+          "profile": "https://image.tmdb.org/t/p/w185/wamZV01oViqYBDXs1vMvitmUD9b.jpg",
+          "order": 16
+        },
+        {
+          "id": 1332747,
+          "name": "Henry Zebrowski",
+          "character": "Alden Kupferberg ('Sea Otter')",
+          "profile": "https://image.tmdb.org/t/p/w185/hcWe0vIbjTqaEKCc3DW41YBWmDX.jpg",
+          "order": 17
+        },
+        {
+          "id": 824,
+          "name": "Ethan Suplee",
+          "character": "Toby Welch",
+          "profile": "https://image.tmdb.org/t/p/w185/gGSb8P9nQdDNu0JC65zyAyMUFhS.jpg",
+          "order": 18
+        },
+        {
+          "id": 1633868,
+          "name": "Barry Rothbart",
+          "character": "Peter DeBlasio",
+          "profile": "https://image.tmdb.org/t/p/w185/qsFoNWNQxQTuRUaMTOyDlexl9vT.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Jordan Belfort 24 yaşında genç ve hırslı bir adamdır. Para kazanma arzusuyla Wall Street borsasında önce komisyoncu ve ardından Stratton Oakmont adında bir yatırımcı firmasında zengin olmak için her şeyi yapmaya hazır bir CEO olur. 90’ların en hızlı günleridir ve New York işlem salonunda her şey olabilmektedir. Önemsiz tahvillerle birçok yatırımcıyı aldatarak Belfort kısa zamanda bir para makinasına ve aynı zamanda bir harcama makinasına dönüşür. Bir günde hesapları milyon dolarlarla doldururken o gece hepsini aynı hızda harcayabilir. Profesyonel hayatının yanı sıra uyuşturucu, fahişeler, son derece pahalı lüks fantezilerle dolu kirli bir oyunun içindedir. Bu karakterin hayatındaki her şey abartılı bir şekilde devam ederken çöküş ise çok uzakta değildir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/ywn2c1sSfdNdJB5O9Hoy3ETfTY2.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/7Nwnmyzrtd0FkcRyPqmdzTPppQa.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=7OQjqQ3DGE4",
+      "tmdbImdbId": "tt0993846",
+      "tmdbRating": "8.0",
+      "tmdbVoteCount": 26935
     }
   ],
   "collections": [],
