@@ -52,28 +52,6 @@
         const recommendationPlotTermsCache = new WeakMap();
         const recommendationStopWords = new Set(['about','after','again','against','among','because','before','being','between','could','every','first','from','have','into','just','more','most','other','over','same','some','such','than','that','their','them','then','there','these','they','this','those','through','under','until','very','were','what','when','where','which','while','with','would','your','ancak','artık','bazen','belki','birçok','bütün','daha','diğer','eden','eder','edilir','etti','gibi','hem','her','hiç','için','ile','kadar','kendi','kez','ki','kim','nasıl','neden','nerede','olan','olarak','oldu','olduğu','olmak','olmuş','önce','sonra','şey','tüm','üzere','veya','yine']);
 
-        // Keep the desktop hero's server-rendered first frame visible while Alpine prepares
-        // the large homepage tree. The homepage itself resumes during an idle period.
-        document.addEventListener('alpine:init', () => {
-            const alpine = window.Alpine;
-            if (!alpine?.interceptInit || !alpine?.deferInit) return;
-            const deferredHomePages = new WeakSet();
-            alpine.interceptInit(element => {
-                if (element.id !== 'home-page' || deferredHomePages.has(element) || !window.matchMedia('(min-width: 768px)').matches) return;
-                deferredHomePages.add(element);
-                alpine.deferInit(element, new Promise(resolve => {
-                    const deferUntilIdle = () => {
-                        if (typeof window.requestIdleCallback === 'function') {
-                            window.requestIdleCallback(resolve, { timeout: 1200 });
-                        } else {
-                            window.setTimeout(resolve, 700);
-                        }
-                    };
-                    window.setTimeout(deferUntilIdle, 250);
-                }));
-            });
-        });
-
         function ultimateProApp() {
             return {
                 getTmdbImageSrcSet(url, widths = [154, 185, 342, 500]) {
@@ -463,7 +441,7 @@
                     this.$watch('currentPage', page => {
                         if (page === 'home') this.$nextTick(() => this.initHomeSectionObserver());
                     });
-                    const catalogRequest = fetch('./filmvediziler.json', { cache: 'default' });
+                    const catalogRequest = fetch('./filmvediziler.json', { cache: 'default', priority: 'low' });
                     try {
                         // Üretim sırasında HTML'e gömülen küçük manşet verisi ağ isteği beklemeden hazırdır.
                         // Yerel geliştirme/önbellek senaryolarında gömülü veri yoksa JSON dosyasına geri dön.
@@ -479,7 +457,8 @@
                             this.currentSlideIndex = 0;
                             this.startHeroAutoplay();
                             this.$nextTick(() => {
-                                if (this.currentPage !== 'home') this.removeHeroInitialShell();
+                                document.getElementById('hero-initial-shell')?.remove();
+                                document.getElementById('hero-initial-shell-desktop')?.remove();
                             });
                         }
                     } catch (heroError) {
@@ -529,7 +508,8 @@
                         this.applyHomepageSectionOrder();
                         this.catalogLoading = false;
                         this.$nextTick(() => {
-                            if (this.currentPage !== 'home') this.removeHeroInitialShell();
+                            document.getElementById('hero-initial-shell')?.remove();
+                            document.getElementById('hero-initial-shell-desktop')?.remove();
                             this.initHomeSectionObserver();
                         });
                     }
@@ -540,15 +520,6 @@
                     // Yapılandırma gelene kadar varsayılan olarak görünür tut;
                     // veri geldikten sonra kapalı bölümler normal şekilde gizlenir.
                     return this.homepageConfig?.layout?.visibility?.[sectionKey] !== false;
-                },
-
-                removeHeroInitialShell() {
-                    document.getElementById('hero-initial-shell')?.remove();
-                    document.getElementById('hero-initial-shell-desktop')?.remove();
-                },
-
-                onHomePageReady() {
-                    this.$nextTick(() => this.removeHeroInitialShell());
                 },
 
                 applyHomepageSectionOrder() {
@@ -658,23 +629,14 @@
                 },
 
                 startHeroAutoplay() {
-                    if (this.heroAutoplayTimer) {
-                        window.clearTimeout(this.heroAutoplayTimer);
-                        window.clearInterval(this.heroAutoplayTimer);
-                    }
+                    if (this.heroAutoplayTimer) window.clearInterval(this.heroAutoplayTimer);
                     const settings = this.homepageConfig?.settings || {};
                     if (settings.autoplay === false || this.heroSlides.length < 2) return;
                     const seconds = Math.max(2, Math.min(60, Number(settings.interval) || 6));
-                    const advance = () => {
+                    this.heroAutoplayTimer = window.setInterval(() => {
                         if (this.heroPaused || document.hidden || this.heroSlides.length < 2) return;
                         this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
-                    };
-                    // İlk manşeti okuyabilmek ve LCP'nin sonraki slayt görseliyle gecikmemesi için
-                    // otomatik geçişi ilk yüklemede 10 saniye beklet; sonraki geçişler ayarlı aralıkta sürer.
-                    this.heroAutoplayTimer = window.setTimeout(() => {
-                        advance();
-                        this.heroAutoplayTimer = window.setInterval(advance, seconds * 1000);
-                    }, Math.max(10000, seconds * 1000));
+                    }, seconds * 1000);
                 },
 
                 setHeroPaused(value) {
