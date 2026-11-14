@@ -3,12 +3,14 @@
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
   const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
-  const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','new-arrivals','series-tracking','genre-discovery','published-collections','catalog'];
+  const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
     personalized:{title:'İzleme Zevkine Göre',description:'Kişiselleştirilmiş film ve dizi önerileri',icon:'✦'},
     continue:{title:'İzlemeye Devam Et',description:'Kaldığın yerden devam ettiğin yapımlar',icon:'▷'},
     watchlist:{title:'İzleme Listem',description:'Daha sonra izlemek için kaydettiklerin',icon:'♡'},
+    watched:{title:'İzlediklerim',description:'İzledim olarak işaretlediğin film ve diziler',icon:'◉'},
+    favorites:{title:'Favorilerim',description:'Favorilerine eklediğin film ve diziler',icon:'♥'},
     'new-arrivals':{title:'Son Eklenenler',description:'Kataloğa en son eklenen yapımlar',icon:'＋'},
     'series-tracking':{title:'Dizi Takibi',description:'Sezon ve bölüm ilerlemen',icon:'▤'},
     'genre-discovery':{title:'Türlere Göre Keşfet',description:'Tür kartları ve keşif filtreleri',icon:'⌕'},
@@ -644,6 +646,7 @@
     let items=state.catalog.filter(item=>posterOf(item));
     if(category==='movies')items=items.filter(item=>!isSeries(item));
     if(category==='series')items=items.filter(item=>isSeries(item));
+    if(['user-watchlist','user-watched','user-favorites'].includes(category))items.sort((a,b)=>heroRating(b)-heroRating(a)||heroVotes(b)-heroVotes(a));
     if(category==='random'){
       // Fisher-Yates: her manşet için katalogdan tekrarsız rastgele yapımlar seç.
       items=items.slice();
@@ -807,7 +810,9 @@
         $$('#hero-'+device+'-slide-list .hero-pick').forEach(row=>{row.hidden=!!q&&!row.dataset.search.includes(q);});
       };
       $('#hero-'+device+'-hint').textContent=mode==='auto'
-        ?(category==='random'?'Katalogdan belirlenen sayı kadar tekrarsız rastgele yapım seçildi.':'Seçilen ölçüte göre katalogdan otomatik '+pool.length+' yapım getirildi.')
+        ?(['user-watchlist','user-watched','user-favorites'].includes(category)
+          ?'Canlı sitede her ziyaretçinin kendi '+({'user-watchlist':'izleme listesi','user-watched':'izledikleri','user-favorites':'favorileri'}[category])+' kayıtları gösterilir. Buradaki önizleme örnek katalog yapımlarını kullanır.'
+          :(category==='random'?'Katalogdan belirlenen sayı kadar tekrarsız rastgele yapım seçildi.':'Seçilen ölçüte göre katalogdan otomatik '+pool.length+' yapım getirildi.'))
         :'Katalogda ara; kutucuğu işaretleyerek manşete ekle, işareti kaldırarak çıkar.';
     });
     $('#homepage-config').textContent=JSON.stringify(config,null,2);
