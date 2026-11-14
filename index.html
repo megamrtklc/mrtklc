@@ -2188,6 +2188,7 @@
                 </section>
 
                 <!-- Aktif profilin bölüm takibi bulunan dizileri -->
+                <div data-home-section-anchor="series-tracking" aria-hidden="true" style="height:1px"></div>
                 <section id="home-series-tracking-section" x-ignore data-home-section="series-tracking" x-cloak x-show="isHomepageSectionVisible('series-tracking') && (!homeSectionReady['series-tracking'] || librarySeriesEntries.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-series-tracking-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
@@ -2231,6 +2232,7 @@
                 </section>
 
                 <!-- Kişisel izleme geçmişine, yoksa katalog dağılımına göre tür keşfi -->
+                <div data-home-section-anchor="genre-discovery" aria-hidden="true" style="height:1px"></div>
                 <section id="home-genre-discovery-section" x-ignore data-home-section="genre-discovery" x-cloak x-show="isHomepageSectionVisible('genre-discovery') && (!homeSectionReady['genre-discovery'] || homeDiscoveryGenres.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-genre-discovery-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div class="min-w-0">
@@ -2259,6 +2261,7 @@
                 </section>
 
                 <!-- Yönetim panelinden yayınlanan koleksiyonlar -->
+                <div data-home-section-anchor="published-collections" aria-hidden="true" style="height:1px"></div>
                 <div id="home-published-collections" data-home-section="published-collections" x-ignore x-cloak x-show="isHomepageSectionVisible('published-collections') && (!homeSectionReady['published-collections'] || publishedCollections.length > 0)" style="min-height:1px" class="space-y-10">
                 <template x-for="collection in (homeSectionReady['published-collections'] ? publishedCollections : [])" :key="'published-' + collection.id">
                     <section class="home-published-collection w-full mx-6 sm:mx-12 space-y-5">
@@ -2290,6 +2293,7 @@
                 </div>
 
                 <!-- Film & Dizi Katalog -->
+                <div data-home-section-anchor="catalog" aria-hidden="true" style="height:1px"></div>
                 <section id="home-catalog-section" x-ignore data-home-section="catalog" x-cloak x-show="!catalogLoading && isHomepageSectionVisible('catalog')" class="w-full px-6 sm:px-12 space-y-6">
                     <div class="home-catalog-heading flex flex-col xl:flex-row xl:items-end justify-between gap-4 pb-4">
                         <div>
