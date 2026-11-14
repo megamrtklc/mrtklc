@@ -694,9 +694,9 @@
     
         /* İzleme Zevkine Göre: sade kart yüzeyleri, daha belirgin afişler ve dengeli toplam genişlik. */
         #home-personalized-section .home-personalized-showcase{
-          width:100%;max-width:1260px;margin-inline:auto;
-          grid-template-columns:minmax(0,.88fr) minmax(0,1.62fr);
-          gap:15px;
+          width:100%;max-width:none;margin-inline:auto;
+          grid-template-columns:minmax(260px,.86fr) minmax(0,1.64fr);
+          gap:16px;
         }
         #home-personalized-section .home-personalized-alternative{
           grid-template-columns:88px minmax(0,1fr);
@@ -714,12 +714,16 @@
         }
         @media(max-width:900px){
           #home-personalized-section .home-personalized-showcase{
-            max-width:760px;grid-template-columns:minmax(0,1fr);
+            max-width:none;grid-template-columns:minmax(0,1fr);
           }
           #home-personalized-section .home-personalized-alternative{
             grid-template-columns:84px minmax(0,1fr);
           }
           #home-personalized-section .home-personalized-poster{width:84px}
+        }
+        @media(min-width:901px){
+          #home-personalized-section .home-personalized-feature{height:330px;min-height:330px}
+          #home-personalized-section .home-personalized-alternatives{height:330px}
         }
         @media(max-width:520px){
           #home-personalized-section .home-personalized-alternative{
