@@ -519,6 +519,47 @@
           #home-personalized-section .home-personalized-plot{width:min(320px,calc(100vw - 28px));max-height: min(200px,calc(100vh - 40px));padding:14px 16px}
         }
 
+    
+        /* Son Eklenenler: make the featured title's poster more prominent and keep the synopsis readable. */
+        #home-new-arrivals-section .home-new-arrival-feature-poster{
+          width:108px;height:162px;right:14px;bottom:12px;
+          border:1px solid rgba(255,255,255,.88);border-radius:11px;
+          box-shadow:0 12px 30px rgba(0,0,0,.58),0 0 0 1px rgba(255,255,255,.12);
+          object-fit:cover;object-position:center;
+        }
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{
+          padding:14px 16px 13px;
+          background:linear-gradient(0deg,rgba(5,8,15,.97) 0%,rgba(5,8,15,.78) 72%,rgba(5,8,15,.08) 100%);
+        }
+        #home-new-arrivals-section .home-new-arrival-feature-title-row,
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p,
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{
+          max-width:calc(100% - 126px);
+        }
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy h3{
+          font-size:clamp(15px,1.25vw,18px);line-height:1.22;
+          display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+        }
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{
+          display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+          min-height:0;margin-top:6px;color:rgba(255,255,255,.9);
+          font-size:10.5px;line-height:1.45;font-weight:500;
+          text-shadow:0 1px 5px rgba(0,0,0,.8);
+        }
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{
+          margin-top:6px;font-size:9px;
+        }
+        @media(max-width:639px){
+          #home-new-arrivals-section .home-new-arrival-feature-poster{width:88px;height:132px;right:10px;bottom:10px}
+          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{padding:11px 12px 11px}
+          #home-new-arrivals-section .home-new-arrival-feature-title-row,
+          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p,
+          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 104px)}
+          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy h3{font-size:14px}
+          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{font-size:9px;line-height:1.4;-webkit-line-clamp:2;margin-top:5px}
+          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{margin-top:5px}
+        }
+
     </style>
 
     <style id="cineverse-home-hero-header">
