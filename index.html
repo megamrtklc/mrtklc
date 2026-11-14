@@ -1893,9 +1893,23 @@
           linear-gradient(115deg, transparent 48%, rgba(245, 158, 11, .055) 74%, transparent 100%);
         mix-blend-mode: screen;
       }
+      #desktopEditorialHero > div:first-child picture {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: auto;
+        height: 100%;
+        width: auto;
+        max-width: 70%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+      }
       #desktopEditorialHero > div:first-child picture img {
-        object-fit: contain;
-        object-position: right center;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
         animation: none;
         transform: none;
         filter: saturate(1.08) contrast(1.035);
@@ -2313,7 +2327,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 <section id="desktopEditorialHero" data-home-section="hero" x-cloak  x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0 overflow-hidden bg-[#090a0d]">
                         <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780])" sizes="100vw"><img :src="window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-contain object-right transition-none"></picture>
-                        <div class="absolute inset-0" style="background:linear-gradient(90deg,#090a0d 0%,rgba(9,10,13,.98) 25%,rgba(9,10,13,.88) 39%,rgba(9,10,13,.48) 57%,rgba(9,10,13,.08) 78%,transparent 100%);"></div>
+                        <div class="absolute inset-0 z-[1]" style="background:linear-gradient(90deg,#090a0d 0%,#090a0d 25%,rgba(9,10,13,.94) 38%,rgba(9,10,13,.72) 49%,rgba(9,10,13,.28) 63%,rgba(9,10,13,.04) 82%,transparent 100%);"></div>
                         <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
                         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_42%,transparent_0%,transparent_42%,rgba(0,0,0,.28)_100%)]"></div>
                     </div>
