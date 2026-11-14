@@ -630,7 +630,7 @@
         host.innerHTML='<div class="hero-preview-art" style="background-image:linear-gradient(90deg,rgba(5,7,12,.96),rgba(5,7,12,.62) 58%,rgba(5,7,12,.12)),url(\''+escapeHtml(item.backdrop||posterOf(item))+'\')"><div class="hero-preview-copy"><span class="hero-preview-kicker">● ÖNE ÇIKAN YAPIM</span><h3>'+escapeHtml(titleOf(item))+'</h3><div class="hero-preview-meta">★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'　·　'+escapeHtml(yearOf(item))+'　·　'+(isSeries(item)?'DİZİ':'FİLM')+'</div><p>'+escapeHtml(excerpt)+'</p></div></div>';
       };
       count();preview();
-      $('#hero-'+device+'-slide-list input').forEach(input=>input.addEventListener('change',()=>{
+      $$('#hero-'+device+'-slide-list input').forEach(input=>input.addEventListener('change',()=>{
         if(device==='desktop'&&input.checked){
           const checked=$$('#hero-desktop-slide-list input:checked');
           const max=Number($('#hero-desktop-count').value)||10;
