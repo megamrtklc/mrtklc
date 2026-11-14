@@ -44,6 +44,39 @@ if (artworkUrl) {
   if (!artworkTag.test(html)) throw new Error('Desktop hero skeleton artwork marker is missing from index.html.');
   await writeFile('index.html', html.replace(artworkTag, `$1${optimizedArtworkUrl}$2`));
 }
+// İlk HTML çiziminde masaüstü manşetinde de doğru başlık ve bilgiler görünsün.
+if (firstDesktopItem) {
+  const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[char]);
+  const title = escapeHtml(firstDesktopItem.title || firstDesktopItem.tmdbTitle || '');
+  const type = String(firstDesktopItem.type || '').toLowerCase() === 'tv' ? 'DİZİ' : 'SİNEMA';
+  const ratingValue = Number(firstDesktopItem.rating);
+  const rating = Number.isFinite(ratingValue) && ratingValue > 0 ? ratingValue.toFixed(1) : '—';
+  const year = escapeHtml(firstDesktopItem.year || '');
+  const genre = escapeHtml(firstDesktopItem.genre || firstDesktopItem.category || '');
+  const descriptionSource = String(firstDesktopItem.desc || firstDesktopItem.tmdbOverview || '');
+  const maxDescriptionLength = Math.max(80, Math.min(500, Number(config.settings?.descriptionLength) || 220));
+  const description = escapeHtml(descriptionSource.length > maxDescriptionLength
+    ? descriptionSource.slice(0, maxDescriptionLength).trimEnd() + '…'
+    : descriptionSource);
+  let html = await readFile('index.html', 'utf8');
+  const replacements = [
+    ['id="hero-initial-desktop-title"></h1>', `id="hero-initial-desktop-title">${title}</h1>`],
+    ['id="hero-initial-desktop-type"></p>', `id="hero-initial-desktop-type">${type}</p>`],
+    ['id="hero-initial-desktop-meta" class="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-200"></div>',
+      `id="hero-initial-desktop-meta" class="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-200"><span class="inline-flex items-center gap-2"><i class="fa-solid fa-star text-amber-400"></i><strong class="text-white">${rating}</strong><span class="text-gray-400">IMDb</span></span><span class="text-white/35">|</span><span>${year}</span><span class="text-white/35">|</span><span>${genre}</span></div>`],
+    ['id="hero-initial-desktop-description" class="max-w-[620px] text-[15px] leading-7 text-gray-200/90 line-clamp-3"></p>',
+      `id="hero-initial-desktop-description" class="max-w-[620px] text-[15px] leading-7 text-gray-200/90 line-clamp-3">${description}</p>`],
+    ['id="hero-initial-desktop-footer-title" class="text-sm font-semibold text-white/65"></span>',
+      `id="hero-initial-desktop-footer-title" class="text-sm font-semibold text-white/65">${title}</span>`]
+  ];
+  for (const [before, after] of replacements) {
+    if (!html.includes(before)) throw new Error(`Desktop initial hero content slot missing: ${before.slice(0, 70)}`);
+    html = html.replace(before, after);
+  }
+  await writeFile('index.html', html);
+}
 // Manşet verisini HTML'e göm: init() ilk boyamada ayrı bir ağ isteği beklemesin.
 const html = await readFile('index.html', 'utf8');
 const bootstrapPrefix = '<script id="cineverse-hero-bootstrap">window.__CV_HERO_BOOTSTRAP__ = ';
