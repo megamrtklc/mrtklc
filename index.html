@@ -2040,17 +2040,6 @@
                                             <span class="mt-1 block text-[10px] text-slate-400" x-text="person.known_for.length + ' yapım Perde kataloğunda'"></span>
                                         </span>
                                     </div>
-                                    <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                                        <template x-for="work in person.known_for" :key="'person-work-' + person.id + '-' + work.id">
-                                            <button type="button" @click="selectSearchResult(work)" class="flex min-w-0 items-center gap-2 rounded-lg bg-white/[0.045] p-2 text-left transition hover:bg-white/[0.09]">
-                                                <img :src="work.poster || work.image || ''" :alt="work.title || 'Yapım afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="h-12 w-8 shrink-0 rounded object-cover bg-white/10">
-                                                <span class="min-w-0">
-                                                    <span class="block line-clamp-2 text-[11px] font-semibold leading-snug text-slate-200" x-text="work.title"></span>
-                                                    <span class="mt-1 block text-[10px] text-slate-500" x-text="(work.type === 'tv' ? 'Dizi' : 'Film') + (work.year ? ' · ' + work.year : '')"></span>
-                                                </span>
-                                            </button>
-                                        </template>
-                                    </div>
                                 </section>
                             </template>
                         </div>
@@ -2889,7 +2878,7 @@
                                 </div>
                                 <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
                                     <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Yönetmen</span>
-                                    <button type="button" @click="openDirectorProfile({ id: selectedItem.directorPersonId, name: selectedItem.director })" :disabled="!selectedItem.directorPersonId" class="font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[160px] text-right underline decoration-dotted underline-offset-4 decoration-rose-500/50 hover:text-rose-500 dark:hover:text-rose-400 hover:font-bold hover:scale-105 transform-gpu origin-right disabled:cursor-default transition-all duration-200" x-text="selectedItem.director" title="Yönetmen biyografisini görüntüle"></button>
+                                    <button type="button" @click="openDirectorProfile({ id: selectedItem.directorPersonId, name: selectedItem.director })" :disabled="!selectedItem.director" class="font-semibold text-gray-800 dark:text-gray-200 truncate max-w-[160px] text-right underline decoration-dotted underline-offset-4 decoration-rose-500/50 hover:text-rose-500 dark:hover:text-rose-400 hover:font-bold hover:scale-105 transform-gpu origin-right disabled:cursor-default transition-all duration-200" x-text="selectedItem.director" title="Yönetmen biyografisini görüntüle"></button>
                                 </div>
                                 <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
                                     <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Kategori</span>
