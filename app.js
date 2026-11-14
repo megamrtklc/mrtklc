@@ -140,8 +140,7 @@
                     return this.catalog.map(item => {
                         const title = this.normalizeSearchText(item.title || '');
                         const original = this.normalizeSearchText(item.originalTitle || '');
-                        const cast = (item.tmdbCast || item.cast || []).map(person => typeof person === 'string' ? person : [person.name, person.character].filter(Boolean).join(' ')).join(' ');
-                        const searchable = this.normalizeSearchText([item.title, item.originalTitle, item.genre, item.category, item.desc, item.director, item.starring, item.country, cast].filter(Boolean).join(' '));
+                        const searchable = this.normalizeSearchText([item.title, item.originalTitle, item.genre, item.category, item.desc, item.director, item.starring, item.country].filter(Boolean).join(' '));
                         const score = title === query ? 100 : title.startsWith(query) ? 85 : original.startsWith(query) ? 75 : title.includes(query) ? 65 : searchable.includes(query) ? 35 : 0;
                         return { item, score };
                     }).filter(entry => entry.score > 0)
@@ -1482,11 +1481,49 @@
                     }
                 },
 
+                async resolveDirectorPerson(actor) {
+                    if (actor?.id) return actor;
+                    const directorName = String(actor?.name || '').trim();
+                    if (!directorName) return actor;
+                    const normalizedName = this.normalizeSearchText(directorName);
+                    const candidates = (this.catalog || []).filter(item =>
+                        this.normalizeSearchText(item.tmdbDirector || item.director || '') === normalizedName &&
+                        item.tmdbId
+                    );
+                    for (const item of candidates) {
+                        try {
+                            const mediaType = item.type === 'tv' || item.type === 'series' ? 'tv' : 'movie';
+                            const credits = await this.fetchTmdb(mediaType + '/' + item.tmdbId + '/credits');
+                            const match = (credits.crew || []).find(person =>
+                                person.job === 'Director' &&
+                                this.normalizeSearchText(person.name || '') === normalizedName
+                            );
+                            if (match?.id) {
+                                return {
+                                    ...actor,
+                                    id: Number(match.id),
+                                    name: match.name || directorName,
+                                    profile: match.profile_path ? 'https://image.tmdb.org/t/p/h632' + match.profile_path : (actor.profile || '')
+                                };
+                            }
+                        } catch (error) {
+                            console.warn('Yönetmen kimliği katalog yapımından çözümlenemedi:', item.title, error);
+                        }
+                    }
+                    return actor;
+                },
+
                 async openDirectorProfile(actor, updateUrl = true) {
-                    if (!actor || !actor.id) return;
-                    this.selectedActor = { ...actor, id: Number(actor.id) };
+                    if (!actor || (!actor.id && !actor.name)) return;
+                    actor = await this.resolveDirectorPerson(actor);
+                    this.selectedActor = { ...actor, id: actor.id ? Number(actor.id) : null };
                     this.currentPage = 'director';
                     this.actorProfileError = '';
+                    if (!actor.id) {
+                        this.actorProfileError = 'Bu yönetmen için Perde kataloğundaki yapımlardan profil bilgisi bulunamadı.';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        return;
+                    }
                     if (updateUrl) this.syncRouteToUrl('director', null);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     const cacheKey = String(actor.id);
