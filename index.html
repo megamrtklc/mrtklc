@@ -798,6 +798,29 @@
           color:#be123c;
         }
 
+        /* Öneri konu penceresi: merkezde, daha büyük metin ve en fazla dört satır. */
+        #home-personalized-section .home-personalized-plot{
+          position:fixed!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+          width:min(420px,calc(100vw - 32px));max-height:min(230px,calc(100vh - 36px));
+          display:-webkit-box!important;-webkit-box-orient:vertical;-webkit-line-clamp:4;
+          overflow:hidden!important;
+          padding:22px 24px 20px!important;
+          font-size:16px!important;line-height:1.65!important;
+          transform:translate(-50%,-46%)!important;
+        }
+        #home-personalized-section .home-personalized-alternative:hover .home-personalized-plot,
+        #home-personalized-section .home-personalized-alternative:focus-within .home-personalized-plot,
+        #home-personalized-section .home-personalized-plot.is-plot-open{
+          transform:translate(-50%,-50%)!important;
+        }
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-plot{
+            width:min(360px,calc(100vw - 28px));max-height:min(210px,calc(100vh - 32px));
+            padding:19px 20px!important;font-size:15px!important;line-height:1.6!important;
+            -webkit-line-clamp:4;
+          }
+        }
+
         /* Son Eklenenler: küçük portre afişini tüm gölge/gradyan katmanlarının önüne al. */
         #home-new-arrivals-section .home-new-arrival-feature-poster{
           position:absolute!important;
