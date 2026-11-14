@@ -166,7 +166,8 @@
       <section class="view" id="view-header-footer">
  <div class="page-heading"><div><div class="eyebrow">SITE CHROME / 07</div><h1>Header &amp; Footer yönetimi</h1><p>Sitenin üst ve alt alanlarını tek merkezden düzenle. Değişiklikler canlı siteye kaydedilir.</p></div></div>
  <form id="header-footer-form" class="panel-card hf-editor">
-  <div class="hf-section-head"><span class="section-index">01 / HEADER</span><h2>Üst alan ayarları</h2><p>Logo, menü bağlantıları, arama, profil ve mobil menü davranışlarını yönet.</p></div>
+  <details class="hf-accordion" open>
+   <summary><span class="hf-accordion-index">01</span><span class="hf-accordion-copy"><b>Header · Üst menü</b><small>Logo, ana menü bağlantıları ve görünürlük ayarları</small></span><span class="hf-accordion-state">Düzenle</span></summary>
   <div class="hf-grid">
    <label class="field"><span>Logo ana metni</span><input id="hf-header-primary" maxlength="24"></label>
    <label class="field"><span>Logo vurgu metni</span><input id="hf-header-accent" maxlength="24"></label>
@@ -185,9 +186,12 @@
   <div class="hf-subhead"><h3>Menü bağlantıları</h3><span>Her bağlantının metnini değiştir veya görünürlüğünü kapat.</span></div>
   <div class="hf-nav-row"><label class="field"><span>Ana sayfa menü adı</span><input id="hf-header-home-label" maxlength="32"></label><label class="toggle-field"><input id="hf-header-home" type="checkbox"><span>Göster</span></label></div>
   <div class="hf-nav-row"><label class="field"><span>Keşfet menü adı</span><input id="hf-header-explore-label" maxlength="32"></label><label class="toggle-field"><input id="hf-header-explore" type="checkbox"><span>Göster</span></label></div>
+  <div class="hf-nav-row"><label class="field"><span>Seri Filmler menü adı</span><input id="hf-header-franchises-label" maxlength="32"></label><label class="toggle-field"><input id="hf-header-franchises" type="checkbox"><span>Göster</span></label></div>
   <div class="hf-nav-row"><label class="field"><span>Video bağlantıları menü adı</span><input id="hf-header-video-label" maxlength="40"></label><label class="toggle-field"><input id="hf-header-video" type="checkbox"><span>Göster</span></label></div>
   <div class="hf-custom-links"><div class="hf-subhead"><h3>Ek menüler</h3><span>İstediğin kadar özel menü ekleyebilirsin.</span></div><div id="hf-header-custom-links" class="hf-custom-link-list"></div><button type="button" class="secondary-button hf-add-link" data-add-custom-link="header">+ Header menüsü ekle</button></div>
-  <div class="hf-section-head hf-footer-head"><span class="section-index">02 / FOOTER</span><h2>Alt alan ayarları</h2><p>Marka metinleri, açıklama, bağlantı sütunları, rozetler ve alt bilgi metnini düzenle.</p></div>
+  </details>
+  <details class="hf-accordion">
+   <summary><span class="hf-accordion-index">02</span><span class="hf-accordion-copy"><b>Footer · Alt alan</b><small>Marka açıklaması, bağlantı sütunları ve telif satırı</small></span><span class="hf-accordion-state">Düzenle</span></summary>
   <div class="hf-grid">
    <label class="field"><span>Logo ana metni</span><input id="hf-footer-primary" maxlength="24"></label>
    <label class="field"><span>Logo vurgu metni</span><input id="hf-footer-accent" maxlength="24"></label>
@@ -222,7 +226,8 @@
    <label class="toggle-field"><input id="hf-footer-backtop" type="checkbox"><span>Yukarı dön bağlantısını göster</span></label>
   </div>
   <div class="hf-custom-links"><div class="hf-subhead"><h3>Ek footer menüleri</h3><span>Footer bağlantılarına özel menüler ekle.</span></div><div id="hf-footer-custom-links" class="hf-custom-link-list"></div><button type="button" class="secondary-button hf-add-link" data-add-custom-link="footer">+ Footer menüsü ekle</button></div>
-  <div class="hf-save-row"><p>Kaydettiğinde ayarlar katalog yapılandırmasına yazılır ve site yenilendiğinde uygulanır.</p><button class="primary-button" type="submit">Header &amp; Footer ayarlarını kaydet</button></div>
+    </details>
+  <div class="hf-save-row"><p>Kaydettiğinde ayarlar katalog yapılandırmasına yazılır ve site yenilendiğinde uygulanır.</p><button class="primary-button" type="submit">Değişiklikleri kaydet</button></div>
  </form>
 </section>
 <section class="view" id="view-analytics"><div class="page-heading"><div><div class="eyebrow">DATA &amp; INSIGHTS / 04</div><h1>İstatistikler</h1><p>Arşivinin tür ve yıl dağılımını incele.</p></div></div><div class="analytics-grid"><article class="panel-card"><h2>Yapım türleri</h2><div id="type-chart" class="bar-chart"></div></article><article class="panel-card"><h2>Yıllara göre dağılım</h2><div id="year-chart" class="bar-chart"></div></article></div></section>
