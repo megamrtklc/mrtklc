@@ -17618,6 +17618,207 @@
       "tmdbImdbId": "tt35538033",
       "tmdbRating": "7.5",
       "tmdbVoteCount": 2150
+    },
+    {
+      "id": "cv-1794697915528",
+      "title": "Matrix",
+      "type": "movie",
+      "year": "1999",
+      "rating": "8.3",
+      "genre": "Aksiyon",
+      "category": "Aksiyon / Bilim-Kurgu",
+      "duration": "136 dk",
+      "country": "United States of America",
+      "director": "Lana Wachowski, Lilly Wachowski",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 603,
+      "imdbId": "tt0133093",
+      "image": "https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/tlm8UkiQsitc8rSuIAscQDCnP8d.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Bir bilgisayar programcısı olan Thomas Anderson aynı zamanda Neo takma isimli çok usta bir bilgisayar korsanıdır. Ancak siyah takım elbiseli ve gözlüklü adamların yakın takibindedir. Bu takibin nedenini ise karşılaşacağı Morpheus'dan öğrenecektir. Neo, birden kendini Morpheus'un anlattıklarına güvenmek zorunda kaldığı büyük bir komplonun içinde bulacaktır. İçinde yaşadığımızı sandığımız bu dünya tamamiyle aldatıcıdır. Tüm insanlık aslında uzaydan gelen yaratıkların köleleridir. Neo, Trinity ve Morpheus'un da yardımıyla kendilerini bu düzeni yıkmaya adayan bir grubun içine katılır.",
+      "cast": [
+        "Keanu Reeves",
+        "Laurence Fishburne",
+        "Carrie-Anne Moss",
+        "Hugo Weaving",
+        "Gloria Foster",
+        "Joe Pantoliano",
+        "Marcus Chong",
+        "Julian Arahanga",
+        "Matt Doran",
+        "Belinda McClory",
+        "Anthony Ray Parker",
+        "Paul Goddard",
+        "Robert Taylor",
+        "David Aston",
+        "Marc Aden Gray",
+        "Ada Nicodemou",
+        "Deni Gordon",
+        "Rowan Witt",
+        "Eleanor Witt",
+        "Tamara Brown"
+      ],
+      "tmdbTitle": "Matrix",
+      "tmdbOriginalTitle": "The Matrix",
+      "tmdbReleaseDate": "1999-03-31",
+      "tmdbGenres": "Aksiyon / Bilim-Kurgu",
+      "tmdbRuntime": "136 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Lana Wachowski, Lilly Wachowski",
+      "tmdbCast": [
+        {
+          "id": 6384,
+          "name": "Keanu Reeves",
+          "character": "Neo",
+          "profile": "https://image.tmdb.org/t/p/w185/8RZLOyYGsoRe9p44q3xin9QkMHv.jpg",
+          "order": 0
+        },
+        {
+          "id": 2975,
+          "name": "Laurence Fishburne",
+          "character": "Morpheus",
+          "profile": "https://image.tmdb.org/t/p/w185/2GbXERENPpl5MmlqOLlPVaVtifD.jpg",
+          "order": 1
+        },
+        {
+          "id": 530,
+          "name": "Carrie-Anne Moss",
+          "character": "Trinity",
+          "profile": "https://image.tmdb.org/t/p/w185/9zya72vRZYBQILfetACsnmCBgdj.jpg",
+          "order": 2
+        },
+        {
+          "id": 1331,
+          "name": "Hugo Weaving",
+          "character": "Agent Smith",
+          "profile": "https://image.tmdb.org/t/p/w185/lSC8Et0PYi5zeQb3IpPkFje7hgR.jpg",
+          "order": 3
+        },
+        {
+          "id": 9364,
+          "name": "Gloria Foster",
+          "character": "Oracle",
+          "profile": "https://image.tmdb.org/t/p/w185/AriGXtC9fjBOia9Zr8CZjn4o3rx.jpg",
+          "order": 4
+        },
+        {
+          "id": 532,
+          "name": "Joe Pantoliano",
+          "character": "Cypher",
+          "profile": "https://image.tmdb.org/t/p/w185/3OHUI3nX4SYGGItDk3xqeIvWtIf.jpg",
+          "order": 5
+        },
+        {
+          "id": 9372,
+          "name": "Marcus Chong",
+          "character": "Tank",
+          "profile": "https://image.tmdb.org/t/p/w185/q9HQttibTj2MoXVtLjq2kKqmPrE.jpg",
+          "order": 6
+        },
+        {
+          "id": 7244,
+          "name": "Julian Arahanga",
+          "character": "Apoc",
+          "profile": "https://image.tmdb.org/t/p/w185/g2YkF3PWSJU1vTKuURBH0DOMblm.jpg",
+          "order": 7
+        },
+        {
+          "id": 9374,
+          "name": "Matt Doran",
+          "character": "Mouse",
+          "profile": "https://image.tmdb.org/t/p/w185/4HtMShAbsZ2AyFtq5z3bOVrvw2s.jpg",
+          "order": 8
+        },
+        {
+          "id": 9376,
+          "name": "Belinda McClory",
+          "character": "Switch",
+          "profile": "https://image.tmdb.org/t/p/w185/wfTCwkIDJjH5k5DtuvcjP52PrLc.jpg",
+          "order": 9
+        },
+        {
+          "id": 9378,
+          "name": "Anthony Ray Parker",
+          "character": "Dozer",
+          "profile": "https://image.tmdb.org/t/p/w185/k03O1ClFvGRSedUnK0sAjTkrogX.jpg",
+          "order": 10
+        },
+        {
+          "id": 9380,
+          "name": "Paul Goddard",
+          "character": "Agent Brown",
+          "profile": "https://image.tmdb.org/t/p/w185/z6XP6Xhkh5ZE88gBOz2FnVQaKuf.jpg",
+          "order": 11
+        },
+        {
+          "id": 39545,
+          "name": "Robert Taylor",
+          "character": "Agent Jones",
+          "profile": "https://image.tmdb.org/t/p/w185/wjeEGFarZNyvrqLL4W52eXnAnXe.jpg",
+          "order": 12
+        },
+        {
+          "id": 9383,
+          "name": "David Aston",
+          "character": "Rhineheart",
+          "profile": "https://image.tmdb.org/t/p/w185/98TG57IaWdMGBG41NHsUIWtecPX.jpg",
+          "order": 13
+        },
+        {
+          "id": 9384,
+          "name": "Marc Aden Gray",
+          "character": "Choi",
+          "profile": "https://image.tmdb.org/t/p/w185/veXu6ByX3OKooI9WBX6dg9U75B5.jpg",
+          "order": 14
+        },
+        {
+          "id": 181214,
+          "name": "Ada Nicodemou",
+          "character": "Dujour",
+          "profile": "https://image.tmdb.org/t/p/w185/n3KziDmCiKdaPfk0A88LN8kyf6Y.jpg",
+          "order": 15
+        },
+        {
+          "id": 1090466,
+          "name": "Deni Gordon",
+          "character": "Priestess",
+          "profile": "",
+          "order": 16
+        },
+        {
+          "id": 218366,
+          "name": "Rowan Witt",
+          "character": "Spoon Boy",
+          "profile": "https://image.tmdb.org/t/p/w185/2DBXtPC8HUL9pvxNhkdPbHA93kj.jpg",
+          "order": 17
+        },
+        {
+          "id": 1209244,
+          "name": "Eleanor Witt",
+          "character": "Potential",
+          "profile": "",
+          "order": 18
+        },
+        {
+          "id": 1209245,
+          "name": "Tamara Brown",
+          "character": "Potential",
+          "profile": "https://image.tmdb.org/t/p/w185/2H6dMpJy2Zw9tC3jt9ztPE9hwVB.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Bir bilgisayar programcısı olan Thomas Anderson aynı zamanda Neo takma isimli çok usta bir bilgisayar korsanıdır. Ancak siyah takım elbiseli ve gözlüklü adamların yakın takibindedir. Bu takibin nedenini ise karşılaşacağı Morpheus'dan öğrenecektir. Neo, birden kendini Morpheus'un anlattıklarına güvenmek zorunda kaldığı büyük bir komplonun içinde bulacaktır. İçinde yaşadığımızı sandığımız bu dünya tamamiyle aldatıcıdır. Tüm insanlık aslında uzaydan gelen yaratıkların köleleridir. Neo, Trinity ve Morpheus'un da yardımıyla kendilerini bu düzeni yıkmaya adayan bir grubun içine katılır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/tlm8UkiQsitc8rSuIAscQDCnP8d.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt0133093",
+      "tmdbRating": "8.3",
+      "tmdbVoteCount": 29243
     }
   ],
   "collections": [],
