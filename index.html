@@ -835,7 +835,47 @@
           z-index:1!important;
           pointer-events:none;
         }
-</style>
+
+        /* Son Eklenenler: afişi metin katmanının üstüne taşı; konu metnini üç satırda okunaklı göster. */
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-poster{
+          z-index:0!important;
+        }
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-shade{
+          z-index:1!important;
+        }
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{
+          z-index:2!important;
+          overflow:visible!important;
+          padding-right:140px!important;
+        }
+        #home-new-arrivals-section .home-new-arrival-feature-poster{
+          display:block!important;position:absolute!important;z-index:30!important;
+          right:14px!important;bottom:12px!important;top:auto!important;left:auto!important;
+          width:108px!important;height:162px!important;max-width:none!important;
+          object-fit:cover!important;object-position:center!important;
+          opacity:1!important;visibility:visible!important;filter:none!important;
+          transform:none!important;mix-blend-mode:normal!important;
+          border:1px solid rgba(255,255,255,.9)!important;border-radius:11px!important;
+          box-shadow:0 12px 30px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.18)!important;
+          pointer-events:none!important;
+        }
+        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{
+          display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:3!important;
+          overflow:hidden!important;max-width:100%!important;min-height:0!important;
+          margin-top:7px!important;font-size:14px!important;line-height:1.5!important;
+          font-weight:500!important;color:rgba(255,255,255,.94)!important;
+          text-shadow:0 1px 5px rgba(0,0,0,.9)!important;
+        }
+        @media(max-width:639px){
+          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{padding-right:112px!important}
+          #home-new-arrivals-section .home-new-arrival-feature-poster{
+            width:88px!important;height:132px!important;right:10px!important;bottom:10px!important;
+          }
+          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{
+            -webkit-line-clamp:3!important;font-size:12px!important;line-height:1.45!important;
+          }
+        }
+    </style>
 
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
@@ -1224,16 +1264,16 @@
                                         <span class="rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
                                         <span class="max-w-[150px] truncate rounded-md bg-black/75 text-white/90 text-[8px] font-bold tracking-wide px-2 py-1.5 backdrop-blur-md" x-text="item.genre || item.category || item.tmdbGenres || 'GENEL'"></span>
                                     </div>
-                                    <img x-show="index === 0" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster absolute bottom-3 right-3 z-[3] w-[88px] h-[132px] rounded-lg object-cover border border-white/70 shadow-2xl">
                                     <span x-show="index !== 0" class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span x-text="item.rating || item.tmdbRating || '—'"></span></span>
                                 </div>
                                 <div class="home-new-arrival-copy p-3 space-y-2">
+                                    <img x-show="index === 0" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster">
                                     <div x-show="index === 0" class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
                                         <h3 class="min-w-0 flex-1 text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" x-text="item.title"></h3>
                                         
                                     </div>
                                     <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
-                                     <p x-show="index === 0" x-text="item.overview || item.plot || item.description || item.tmdbOverview || &quot;Kataloğa yeni eklenen bu yapımı keşfet.&quot;"></p>
+                                     <p x-show="index === 0" x-text="item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || &quot;Bu yapımın konu açıklaması henüz eklenmemiş.&quot;"></p>
                                     <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
                                         <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
                                     </div>
