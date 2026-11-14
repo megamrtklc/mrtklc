@@ -62,14 +62,14 @@ if (firstDesktopItem) {
     : descriptionSource);
   let html = await readFile('index.html', 'utf8');
   const replacements = [
-    [/(<h1\\b[^>]*\\bid="hero-initial-desktop-title"[^>]*>)[\\s\\S]*?(<\\/h1>)/, `$1${title}$2`],
-    [/(<p\\b[^>]*\\bid="hero-initial-desktop-type"[^>]*>)[\\s\\S]*?(<\\/p>)/, `$1${type}$2`],
-    [/(<div\\b[^>]*\\bid="hero-initial-desktop-meta"[^>]*>)[\\s\\S]*?(<\\/div>)/, `$1<span class="inline-flex items-center gap-2"><i class="fa-solid fa-star text-amber-400"></i><strong class="text-white">${rating}</strong><span class="text-gray-400">IMDb</span></span><span class="text-white/35">|</span><span>${year}</span><span class="text-white/35">|</span><span>${genre}</span>$2`],
-    [/(<p\\b[^>]*\\bid="hero-initial-desktop-description"[^>]*>)[\\s\\S]*?(<\\/p>)/, `$1${description}$2`],
-    [/(<span\\b[^>]*\\bid="hero-initial-desktop-footer-title"[^>]*>)[\\s\\S]*?(<\\/span>)/, `$1${title}$2`]
+    [/(<h1\b[^>]*\bid="hero-initial-desktop-title"[^>]*>)[\s\S]*?(<\/h1>)/, \`$1\${title}$2\`],
+    [/(<p\b[^>]*\bid="hero-initial-desktop-type"[^>]*>)[\s\S]*?(<\/p>)/, \`$1\${type}$2\`],
+    [/(<div\b[^>]*\bid="hero-initial-desktop-meta"[^>]*>)[\s\S]*?(<\/div>)/, \`$1<span class="inline-flex items-center gap-2"><i class="fa-solid fa-star text-amber-400"></i><strong class="text-white">\${rating}</strong><span class="text-gray-400">IMDb</span></span><span class="text-white/35">|</span><span>\${year}</span><span class="text-white/35">|</span><span>\${genre}</span>$2\`],
+    [/(<p\b[^>]*\bid="hero-initial-desktop-description"[^>]*>)[\s\S]*?(<\/p>)/, \`$1\${description}$2\`],
+    [/(<span\b[^>]*\bid="hero-initial-desktop-footer-title"[^>]*>)[\s\S]*?(<\/span>)/, \`$1\${title}$2\`]
   ];
   for (const [pattern, replacement] of replacements) {
-    if (!pattern.test(html)) throw new Error(`Desktop initial hero content slot missing: ${String(pattern)}`);
+    if (!pattern.test(html)) throw new Error(\`Desktop initial hero content slot missing: \${String(pattern)}\`);
     html = html.replace(pattern, replacement);
   }
   await writeFile('index.html', html);
