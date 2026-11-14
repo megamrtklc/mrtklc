@@ -2252,6 +2252,14 @@
                                 include: ['komedi', 'aile', 'animasyon', 'romantik', 'muzik'],
                                 exclude: ['suc', 'korku', 'gerilim', 'polisiye', 'savas & politik']
                             },
+                            comedy: {
+                                include: ['komedi'],
+                                exclude: ['korku', 'savas & politik']
+                            },
+                            thriller: {
+                                include: ['gerilim', 'gizem', 'suc', 'korku', 'polisiye', 'aksiyon'],
+                                exclude: []
+                            },
                             emotional: {
                                 include: ['dram', 'drama', 'romantik', 'tarih'],
                                 exclude: ['suc', 'korku', 'gerilim', 'aksiyon', 'aksiyon & macera', 'savas & politik']
