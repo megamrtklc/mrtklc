@@ -410,6 +410,11 @@
       const source=state.tmdbSelected;
       ['tmdbTitle','tmdbOriginalTitle','tmdbReleaseDate','tmdbGenres','tmdbRuntime','tmdbCountries','tmdbDirector','tmdbCast','tmdbOverview','tmdbPoster','tmdbBackdrop','tmdbTrailerUrl','tmdbImdbId','tmdbRating','tmdbVoteCount'].forEach(key=>{if(source[key]!==undefined)record[key]=source[key];});
     }
+    if(state.tmdbSelected&&record.tmdbCast&&Array.isArray(record.tmdbCast)){
+      const selectedNames=record.tmdbCast.map(x=>x?.name||'').filter(Boolean).join(', ');
+      const manualNames=record.cast.join(', ');
+      if(selectedNames.toLocaleLowerCase('tr-TR')!==manualNames.toLocaleLowerCase('tr-TR'))delete record.tmdbCast;
+    }
     if(!record.title){toast('Yapım adı zorunludur.');return;}
     if(type==='tv'){record.seasons=Number($('#field-seasons').value)||1;record.episodes=Number($('#field-episodes').value)||0;}else{delete record.seasons;delete record.episodes;}
     const nextData={...state.data,catalog:[...state.catalog]};
