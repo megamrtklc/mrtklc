@@ -1938,10 +1938,11 @@
         <div class="w-full px-4 sm:px-12 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 lg:space-x-6">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
-                    <div x-show="headerConfig.showLogoIcon !== false" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
+                    <img x-show="headerConfig.logoImage" :src="headerConfig.logoImage" alt="Logo" class="max-h-10 max-w-[180px] object-contain">
+                    <div x-show="!headerConfig.logoImage && headerConfig.showLogoIcon !== false" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-film text-white text-sm"></i>
                     </div>
-                    <span class="text-xl font-black tracking-wider uppercase max-[360px]:hidden"><span x-text="headerConfig.brandPrimary || 'CINE'">CINE</span><span class="text-rose-700 dark:text-rose-400" x-text="headerConfig.brandAccent || 'VERSE'">VERSE</span></span>
+                    <span x-show="!headerConfig.logoImage" class="text-xl font-black tracking-wider uppercase max-[360px]:hidden"><span x-text="headerConfig.brandPrimary || 'CINE'">CINE</span><span class="text-rose-700 dark:text-rose-400" x-text="headerConfig.brandAccent || 'VERSE'">VERSE</span></span>
                 </a>
                 
                 <nav class="hidden xl:flex items-center space-x-4 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
@@ -3634,8 +3635,9 @@
             <div class="grid grid-cols-2 gap-x-6 gap-y-9 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr] lg:gap-12">
                 <div class="col-span-2 max-w-md lg:col-span-1">
                     <a href="#" @click.prevent="navigateTo('home')" aria-label="CineVerse ana sayfa" class="inline-flex items-center gap-2.5 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-500">
-                        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-600 text-white shadow-lg shadow-rose-950/20"><i class="fa-solid fa-clapperboard text-lg"></i></span>
-                        <span class="text-xl font-black uppercase tracking-[0.13em] text-gray-950 dark:text-white"><span x-text="footerConfig.brandPrimary || 'CINE'">CINE</span><span class="text-rose-600 dark:text-rose-400" x-text="footerConfig.brandAccent || 'VERSE'">VERSE</span></span>
+                        <img x-show="footerConfig.logoImage" :src="footerConfig.logoImage" alt="Logo" class="max-h-11 max-w-[220px] object-contain">
+                        <span x-show="!footerConfig.logoImage" class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-600 text-white shadow-lg shadow-rose-950/20"><i class="fa-solid fa-clapperboard text-lg"></i></span>
+                        <span x-show="!footerConfig.logoImage" class="text-xl font-black uppercase tracking-[0.13em] text-gray-950 dark:text-white"><span x-text="footerConfig.brandPrimary || 'CINE'">CINE</span><span class="text-rose-600 dark:text-rose-400" x-text="footerConfig.brandAccent || 'VERSE'">VERSE</span></span>
                     </a>
                     <p class="mt-4 max-w-sm text-xs leading-6 text-gray-500 dark:text-gray-400 sm:text-sm" x-text="footerConfig.description || 'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.'">Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.</p>
                     <div x-show="footerConfig.showBadges !== false" class="mt-5 flex flex-wrap gap-2">
