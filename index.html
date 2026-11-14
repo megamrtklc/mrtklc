@@ -1723,6 +1723,9 @@
                         <span x-text="headerConfig.videoLabel || 'Video Bağlantıları'">Video Bağlantıları</span>
                         <span class="px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px]" x-text="watchableCatalog.length"></span>
                     </a>
+                    <template x-for="(link,index) in (headerConfig.customLinks || [])" :key="'header-custom-'+index">
+                        <a href="#" @click.prevent="navigateTo(link.page)" :class="currentPage === link.page ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors" x-text="link.label"></a>
+                    </template>
                 </nav>
             </div>
             
@@ -1782,6 +1785,9 @@
                 <a x-show="headerConfig.showHome !== false" href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"><span x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</span></a>
                 <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"><span x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</span></a>
                 <a x-show="headerConfig.showVideo !== false" href="#" @click.prevent="navigateTo('video-links'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span x-text="headerConfig.videoLabel || 'Video Bağlantıları'">Video Bağlantıları</span><span class="text-xs text-rose-500" x-text="watchableCatalog.length"></span></a>
+                <template x-for="(link,index) in (headerConfig.customLinks || [])" :key="'mobile-header-custom-'+index">
+                    <a href="#" @click.prevent="navigateTo(link.page); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800" x-text="link.label"></a>
+                </template>
             </nav>
         </div>
     </header>
@@ -3355,6 +3361,9 @@
                     <ul class="space-y-3 text-xs font-semibold">
                         <li><a href="#" @click.prevent="navigateTo('watchlist')" class="cineverse-footer-link" x-text="footerConfig.watchlistLabel || 'İzleme Listem'">İzleme Listem</a></li>
                         <li><a href="#" @click.prevent="navigateTo('stats')" class="cineverse-footer-link" x-text="footerConfig.statsLabel || 'İstatistikler'">İstatistikler</a></li>
+                        <template x-for="(link,index) in (footerConfig.customLinks || [])" :key="'footer-custom-'+index">
+                            <li><a href="#" @click.prevent="navigateTo(link.page)" class="cineverse-footer-link" x-text="link.label"></a></li>
+                        </template>
                     </ul>
                 </nav>
 
