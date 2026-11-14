@@ -724,16 +724,17 @@
                             .filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
                     }
                     const configured = this.homepageConfig?.[mobile ? 'mobileHeroSlides' : 'desktopHeroSlides'] || this.homepageConfig?.heroSlides;
-                    const rawCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']);
-                    const count = mobile
-                        ? Math.max(1, Math.min(12, rawCount || 6))
-                        : Math.max(5, Math.min(15, rawCount || 10));
-                    if (!Array.isArray(configured) || !configured.length) return sourceCatalog.slice(0, count);
+                    if (!Array.isArray(configured) || !configured.length) return sourceCatalog;
                     const byId = new Map(sourceCatalog.map(item => [String(item.id), item]));
                     const selected = configured.filter(entry => entry && entry.active !== false)
                         .map(entry => byId.get(String(entry.id))).filter(Boolean);
-                    if (!selected.length) return sourceCatalog.slice(0, count);
-                    return selected.slice(0, count);
+                    if (!selected.length) return sourceCatalog;
+                    if (!mobile) {
+                        const configuredCount = Number(this.homepageConfig?.settings?.desktopCount);
+                        const count = Math.max(5, Math.min(15, configuredCount || 10));
+                        return selected.slice(0, count);
+                    }
+                    return selected;
                 },
 
                 get publishedCollections() {
