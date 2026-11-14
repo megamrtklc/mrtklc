@@ -40,7 +40,7 @@
     <!-- Inter fontları önceden istenir; CSS yerleşimden önce uygulanır. -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <!-- Alpine.js -->
-    <script defer src="./app.min.js?v=20261114-performance-v1"></script>
+    <script defer src="./app.min.js?v=20261114-performance-v2"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         @keyframes editorialCopyEnter{0%{opacity:0;transform:translateY(18px);filter:blur(5px)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}
@@ -53,7 +53,7 @@
         @media(prefers-reduced-motion:reduce){.hero-slide-next,.hero-slide-prev{animation-duration:.01ms}}
         /* Filmografi afişleri büyürken ekran kenarına çarpmasın; güvenli iç boşluk bırak. */
         .actor-filmography-grid > button { transform-origin: center center; }
-        .has-initial-route #hero-initial-shell { display: none !important; }
+        .has-initial-route #hero-initial-shell, .has-initial-route #hero-initial-shell-desktop { display: none !important; }
         .has-initial-route main { min-height: 0; }
         .cv-back-wrap{width:100%;padding:14px clamp(16px,4vw,48px) 0}
         .cv-back-button{display:inline-flex;align-items:center;gap:9px;min-height:38px;padding:8px 15px;border:1px solid rgba(148,163,184,.28);border-radius:9999px;background:rgba(255,255,255,.82);color:#596273;font-size:13px;font-weight:650;letter-spacing:.01em;box-shadow:0 5px 18px rgba(15,23,42,.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background .2s,border-color .2s,color .2s,transform .2s,box-shadow .2s}
@@ -1876,6 +1876,26 @@
                     <div class="absolute -inset-5 rounded-[2rem] bg-rose-600/10 blur-3xl"></div>
                     <img src="https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg" srcset="https://image.tmdb.org/t/p/w342/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 342w, https://image.tmdb.org/t/p/w500/o3XwuDUj0n8qnK91p6q8LKfr6rj.jpg 500w" sizes="100vw" alt="" loading="lazy" fetchpriority="low" decoding="async" class="relative aspect-[16/9] w-full rounded-2xl object-cover shadow-2xl shadow-black/40 ring-1 ring-white/10 md:rounded-[1.75rem]">
                 </div>
+            </div>
+        </section>
+        <!-- Masaüstünde Alpine/katalog hazırlanırken LCP'yi bekletmeyen statik manşet. -->
+        <section id="hero-initial-shell-desktop" inert class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md:block overflow-hidden select-none bg-[#090a0d] text-white">
+            <img aria-hidden="true" src="https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg" fetchpriority="high" decoding="async" class="absolute inset-0 h-full w-full object-cover object-right opacity-90">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#090a0d] via-[#090a0d]/95 via-[34%] to-[#090a0d]/5"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
+            <div class="relative mx-auto flex min-h-[520px] max-w-[1800px] flex-col justify-between px-8 pb-6 pt-8 lg:min-h-[560px] lg:px-12 xl:px-16">
+                <div class="flex min-h-[360px] items-center">
+                    <div class="max-w-[640px] space-y-4 lg:max-w-[680px]">
+                        <div class="space-y-2">
+                            <h1 class="block w-full max-w-[650px] overflow-hidden text-ellipsis whitespace-nowrap text-3xl font-black leading-[1.05] tracking-[-0.045em] text-white drop-shadow-2xl lg:max-w-[680px] lg:text-4xl xl:text-5xl">Yıldızlararası</h1>
+                            <p class="pl-1 text-sm font-black uppercase tracking-[0.62em] text-amber-400">SİNEMA</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-200"><span class="inline-flex items-center gap-2"><span class="text-amber-400">★</span><strong class="text-white">8.5</strong><span class="text-gray-400">IMDb</span></span><span class="text-white/35">|</span><span>2014</span><span class="text-white/35">|</span><span>Macera</span></div>
+                        <p class="max-w-[620px] text-[15px] leading-7 text-gray-200/90">Dünya'nın kuraklık ve kıtlıkla yok oluşun eşiğine geldiği bir gelecekte, insanlığın hayatta kalabilmesi için yeni bir yuva bulması şarttır. Keşfedilen gizemli bir solucan deliği, bir grup astronot ve bilim insanına galaksinin ötesinde yeni bir yaşam arayışı için umut verir.</p>
+                        <div class="flex flex-wrap items-center gap-3 pt-1"><span class="inline-flex min-h-12 items-center gap-3 rounded-full bg-gradient-to-r from-amber-300 to-amber-500 px-8 text-sm font-black uppercase tracking-wide text-[#17120a]">▶ ŞİMDİ İZLE</span><span class="inline-flex min-h-12 items-center gap-3 rounded-full border border-white/35 bg-black/25 px-7 text-sm font-bold text-white">▣ LİSTEME EKLE</span><span class="inline-flex min-h-12 items-center gap-2 rounded-full border border-amber-300/55 bg-black/25 px-6 text-sm font-bold text-amber-100">◉ FRAGMAN</span></div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-start gap-6 border-t border-white/15 pt-4"><span class="text-sm font-bold tabular-nums text-white">01 <span class="mx-1 text-white/40">/</span><span class="text-white/55">08</span></span><span class="text-[10px] font-bold uppercase tracking-[0.2em] text-white/45">ÖNE ÇIKAN YAPIMLAR</span></div>
             </div>
         </section>
 
