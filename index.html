@@ -295,7 +295,7 @@
         #home-page section:not(#desktopEditorialHero):not(#mobileHeroBanner)>div:first-child p{line-height:1.55}
         /* Ana sayfa bölüm başlıklarının üzerindeki kırmızı mikro etiketleri kaldır. */
         #home-page section:not(#desktopEditorialHero):not(#mobileHeroBanner)>div:first-child>div:first-child>p:first-child[class*="text-rose-700"],
-        [data-home-section="published-collections" x-ignore] .home-published-collection-heading>div:first-child>p:first-child[class*="text-rose-700"]{display:none!important}
+        [data-home-section="published-collections"] .home-published-collection-heading>div:first-child>p:first-child[class*="text-rose-700"]{display:none!important}
         #home-page .home-card-rail{gap:clamp(12px,1.25vw,20px);padding:6px 3px 18px;scroll-padding-inline:3px}
         #home-page .home-rail-card{border-radius:16px;border-color:rgba(148,163,184,.22);box-shadow:0 8px 24px -20px rgba(0,0,0,.55);transform:translateZ(0)}
         #home-page .home-rail-card:hover{border-color:rgba(225,29,72,.65);box-shadow:0 18px 34px -22px rgba(0,0,0,.72);transform:translateY(-4px)}
@@ -2259,7 +2259,7 @@
                 </section>
 
                 <!-- Yönetim panelinden yayınlanan koleksiyonlar -->
-                <div data-home-section="published-collections" x-cloak x-show="isHomepageSectionVisible('published-collections') && (!homeSectionReady['published-collections'] || publishedCollections.length > 0)" style="min-height:1px" class="space-y-10">
+                <div id="home-published-collections" data-home-section="published-collections" x-ignore x-cloak x-show="isHomepageSectionVisible('published-collections') && (!homeSectionReady['published-collections'] || publishedCollections.length > 0)" style="min-height:1px" class="space-y-10">
                 <template x-for="collection in (homeSectionReady['published-collections'] ? publishedCollections : [])" :key="'published-' + collection.id">
                     <section class="home-published-collection w-full mx-6 sm:mx-12 space-y-5">
                         <div class="home-published-collection-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
