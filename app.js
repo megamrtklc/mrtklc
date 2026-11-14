@@ -331,6 +331,8 @@
                     personalized: false,
                     continue: false,
                     watchlist: false,
+                    watched: false,
+                    favorites: false,
                     'new-arrivals': false,
                     'series-tracking': false,
                     'genre-discovery': false,
@@ -632,7 +634,7 @@
                 applyHomepageSectionOrder() {
                     const root = document.getElementById('home-page');
                     if (!root) return;
-                    const defaultOrder = ['hero', 'personalized', 'continue', 'watchlist', 'new-arrivals', 'series-tracking', 'published-collections', 'catalog', 'genre-discovery'];
+                    const defaultOrder = ['hero', 'personalized', 'continue', 'watchlist', 'watched', 'favorites', 'new-arrivals', 'series-tracking', 'published-collections', 'catalog', 'genre-discovery'];
                     const configured = this.homepageConfig?.layout?.order;
                     const order = Array.isArray(configured) ? configured : defaultOrder;
                     const contentIds = {
@@ -706,6 +708,16 @@
                 get heroSlides() {
                     const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
                     const sourceCatalog = this.heroCatalog.length ? this.heroCatalog : this.catalog;
+                    const device = mobile ? 'mobile' : 'desktop';
+                    const personalMode = this.homepageConfig?.[device + 'Mode'] || 'manual';
+                    const personalCategory = this.homepageConfig?.[device + 'Category'] || '';
+                    if (personalMode === 'auto' && ['user-watchlist','user-watched','user-favorites'].includes(personalCategory)) {
+                        const personalItems = this.getPersonalStatusItems(personalCategory).filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
+                        if (personalItems.length) {
+                            const personalCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']) || (mobile ? 6 : 10);
+                            return personalItems.slice(0, Math.max(1, personalCount));
+                        }
+                    }
                     const configured = this.homepageConfig?.[mobile ? 'mobileHeroSlides' : 'desktopHeroSlides'] || this.homepageConfig?.heroSlides;
                     if (!Array.isArray(configured) || !configured.length) return sourceCatalog;
                     const byId = new Map(sourceCatalog.map(item => [String(item.id), item]));
@@ -1203,6 +1215,51 @@
                         this.selectedEpisode = entry.episode;
                         this.currentEpisodePage = Math.floor((entry.episode - 1) / 8) + 1;
                     }
+                },
+
+                userStatusRevision: 0,
+                get watchedItems() {
+                    this.userStatusRevision;
+                    const saved = safeStorageRead('cine_watched_items_v1', []);
+                    if (!Array.isArray(saved)) return [];
+                    return saved.filter(entry => entry && entry.id != null).map(entry => {
+                        const current = this.catalog.find(item => String(item.id) === String(entry.id));
+                        return current ? { ...current, _statusSavedAt: Number(entry._statusSavedAt) || 0 } : entry;
+                    }).sort((a,b) => (b._statusSavedAt || 0) - (a._statusSavedAt || 0));
+                },
+                get favoriteItems() {
+                    this.userStatusRevision;
+                    const saved = safeStorageRead('cine_favorite_items_v1', []);
+                    if (!Array.isArray(saved)) return [];
+                    return saved.filter(entry => entry && entry.id != null).map(entry => {
+                        const current = this.catalog.find(item => String(item.id) === String(entry.id));
+                        return current ? { ...current, _statusSavedAt: Number(entry._statusSavedAt) || 0 } : entry;
+                    }).sort((a,b) => (b._statusSavedAt || 0) - (a._statusSavedAt || 0));
+                },
+                togglePersonalStatus(storageKey, item) {
+                    if (!item || item.id == null) return;
+                    const saved = safeStorageRead(storageKey, []);
+                    const list = Array.isArray(saved) ? saved.filter(entry => entry && entry.id != null) : [];
+                    const index = list.findIndex(entry => String(entry.id) === String(item.id));
+                    if (index >= 0) list.splice(index, 1);
+                    else list.unshift({ ...item, _statusSavedAt: Date.now() });
+                    if (safeStorageWrite(storageKey, list)) this.userStatusRevision += 1;
+                },
+                toggleWatched(item) { this.togglePersonalStatus('cine_watched_items_v1', item); },
+                toggleFavorite(item) { this.togglePersonalStatus('cine_favorite_items_v1', item); },
+                isWatched(item) {
+                    this.userStatusRevision;
+                    return !!item && this.watchedItems.some(entry => String(entry.id) === String(item.id));
+                },
+                isFavorite(item) {
+                    this.userStatusRevision;
+                    return !!item && this.favoriteItems.some(entry => String(entry.id) === String(item.id));
+                },
+                getPersonalStatusItems(category) {
+                    if (category === 'user-watchlist') return this.watchlist;
+                    if (category === 'user-watched') return this.watchedItems;
+                    if (category === 'user-favorites') return this.favoriteItems;
+                    return [];
                 },
 
                 watchlistRevision: 0,
