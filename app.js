@@ -443,20 +443,23 @@
                     });
                     const catalogRequest = fetch('./filmvediziler.json', { cache: 'default' });
                     try {
-                        const heroResponse = await fetch('./hero-data.json', { cache: 'default' });
-                        if (heroResponse.ok) {
-                            const heroData = await heroResponse.json();
-                            const heroSource = Array.isArray(heroData?.catalog) ? heroData.catalog : [];
-                            if (heroSource.length) {
-                                this.homepageConfig = heroData.homepageConfig || this.homepageConfig;
-                                this.heroCatalog = heroSource.map(item => this.normalizeCatalogItem(item));
-                                this.currentSlideIndex = 0;
-                                this.startHeroAutoplay();
-                                this.$nextTick(() => {
-                                    document.getElementById('hero-initial-shell')?.remove();
-                                    document.getElementById('hero-initial-shell-desktop')?.remove();
-                                });
-                            }
+                        // Üretim sırasında HTML'e gömülen küçük manşet verisi ağ isteği beklemeden hazırdır.
+                        // Yerel geliştirme/önbellek senaryolarında gömülü veri yoksa JSON dosyasına geri dön.
+                        let heroData = window.__CV_HERO_BOOTSTRAP__ || null;
+                        if (!heroData) {
+                            const heroResponse = await fetch('./hero-data.json', { cache: 'default' });
+                            if (heroResponse.ok) heroData = await heroResponse.json();
+                        }
+                        const heroSource = Array.isArray(heroData?.catalog) ? heroData.catalog : [];
+                        if (heroSource.length) {
+                            this.homepageConfig = heroData.homepageConfig || this.homepageConfig;
+                            this.heroCatalog = heroSource.map(item => this.normalizeCatalogItem(item));
+                            this.currentSlideIndex = 0;
+                            this.startHeroAutoplay();
+                            this.$nextTick(() => {
+                                document.getElementById('hero-initial-shell')?.remove();
+                                document.getElementById('hero-initial-shell-desktop')?.remove();
+                            });
                         }
                     } catch (heroError) {
                         console.warn('Hızlı manşet verisi yüklenemedi; ana katalog kullanılacak:', heroError);
