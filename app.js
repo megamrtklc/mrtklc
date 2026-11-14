@@ -1053,11 +1053,13 @@
                     }
                 },
 
+                watchlistRevision: 0,
                 get watchlist() {
                     const list = safeStorageRead('cine_watchlist_v1', []);
                     return Array.isArray(list) ? list.filter(item => item && typeof item === 'object' && item.id != null) : [];
                 },
                 get currentWatchlist() {
+                    this.watchlistRevision;
                     return this.watchlist;
                 },
 
@@ -1067,9 +1069,11 @@
                     if (index > -1) list.splice(index, 1);
                     else list.push(item);
                     safeStorageWrite('cine_watchlist_v1', list);
+                    this.watchlistRevision += 1;
                 },
 
                 isInWatchlist(item) {
+                    this.watchlistRevision;
                     return this.watchlist.some(m => m && String(m.id) === String(item.id));
                 },
 
