@@ -1572,8 +1572,8 @@
                         const key = country.toLocaleLowerCase('en-US').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ');
                         const match = countries[key];
                         const code = match?.[0] || '';
-                        const flag = code ? String.fromCodePoint(...code.split('').map(letter => 127397 + letter.charCodeAt(0))) : '';
-                        return { code: code || key, name: match?.[1] || country, flag };
+                        const flagUrl = code ? 'https://flagcdn.com/w40/' + code.toLowerCase() + '.png' : '';
+                        return { code: code || key, name: match?.[1] || country, flagUrl };
                     });
                 },
 
