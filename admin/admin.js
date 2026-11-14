@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
+  const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -73,6 +73,7 @@
     $('#crumb-current').textContent=active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış';
     setMobileSidebar(false);
     if(view==='catalog')renderCatalog();
+    if(view==='trailers-missing')renderMissingTrailers();
     if(view==='collections')renderCollections();
     if(view==='homepage')renderHomepage();
     if(view==='homepage-layout')renderHomepageLayout();
@@ -174,7 +175,23 @@
     $('#page-info').textContent='Sayfa '+state.page+' / '+pages;
     $('#prev-page').disabled=state.page<=1;$('#next-page').disabled=state.page>=pages;
     $$('#catalog-rows [data-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.edit);if(item)openEditor(item);}));
-    $$('#catalog-rows [data-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteContent(btn.dataset.delete)));
+    $('#catalog-rows [data-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteContent(btn.dataset.delete)));
+  }
+  function renderMissingTrailers(){
+    const query=($('#missing-trailer-search')?.value||'').trim().toLocaleLowerCase('tr');
+    const missing=state.catalog.filter(item=>!String(item.trailerUrl||item.tmdbTrailerUrl||'').trim())
+      .filter(item=>!query||titleOf(item).toLocaleLowerCase('tr').includes(query))
+      .reverse();
+    const pages=Math.max(1,Math.ceil(missing.length/state.missingTrailerPageSize));
+    state.missingTrailerPage=Math.min(state.missingTrailerPage,pages);
+    const rows=missing.slice((state.missingTrailerPage-1)*state.missingTrailerPageSize,state.missingTrailerPage*state.missingTrailerPageSize);
+    $('#missing-trailer-rows').innerHTML=rows.length?rows.map(item=>'<tr><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\\'hidden\\'"><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+escapeHtml(item.director||item.tmdbDirector||'Yönetmen bilgisi yok')+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><span class="trailer-missing-status">Fragman eklenmemiş</span></td><td class="row-actions"><button class="row-action" data-missing-trailer-edit="'+escapeHtml(item.id)+'">Düzenle</button></td></tr>').join(''):'<tr><td colspan="5" class="empty-cell">'+(query?'Aramayla eşleşen fragmansız yapım bulunamadı.':'Harika! Tüm yapımlarda fragman bağlantısı mevcut.')+'</td></tr>';
+    $('#missing-trailer-count').textContent=String(state.catalog.filter(item=>!String(item.trailerUrl||item.tmdbTrailerUrl||'').trim()).length);
+    $('#missing-trailer-result-count').textContent=missing.length.toLocaleString('tr-TR')+' yapım';
+    $('#missing-trailer-page-info').textContent='Sayfa '+state.missingTrailerPage+' / '+pages;
+    $('#missing-trailer-prev').disabled=state.missingTrailerPage<=1;
+    $('#missing-trailer-next').disabled=state.missingTrailerPage>=pages;
+    $('#missing-trailer-rows [data-missing-trailer-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.missingTrailerEdit);if(item)openEditor(item);}));
   }
   function renderCollections(){
     const list=collectionList();
@@ -209,7 +226,7 @@
       if(response.status===409)throw new Error('Katalog başka bir işlemde güncellenmiş. Sayfayı yenileyip tekrar deneyin.');
       if(!response.ok)throw new Error(result.error||'Değişiklik kaydedilemedi.');
       state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];
-      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderPersonalizedSection();renderOverviewInsights();
+      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderMissingTrailers();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderPersonalizedSection();renderOverviewInsights();
       $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
       renderWatchLayout();renderAdminProfile();
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.');
@@ -327,7 +344,7 @@
     setField('field-episode-urls',Object.entries(item?.episodeWatchUrls||{}).map(([key,url])=>key.replace(':',':')+' | '+url).join('\n'));
     setField('field-tmdb',item?.tmdbId||'');setField('field-imdb',item?.imdbId||item?.tmdbImdbId||'');
     setField('field-image',item?.image||item?.poster||item?.tmdbPoster||'');setField('field-backdrop',item?.backdrop||item?.tmdbBackdrop||'');
-    setField('field-trailer',item?.trailerUrl||item?.tmdbTrailerUrl||'');setField('field-seasons',item?.seasons||'');
+    setField('field-trailer',item?.trailerUrl||item?.tmdbTrailerUrl||'');setField('field-trailer-provider',item?.trailerProvider||'auto');setField('field-seasons',item?.seasons||'');
     setField('field-episodes',item?.episodes||'');setField('field-desc',item?.desc||item?.tmdbOverview||'');
     $('#editor-status').textContent=!state.apiEnabled?'Önizleme ve manuel düzenleme açık. Kaydetmek için GitHub erişim anahtarı yenilenmeli.':(item?'Mevcut katalog kaydı düzenleniyor.':'Yeni katalog kaydı oluşturuluyor.');
     renderContentPreview();
@@ -450,7 +467,7 @@
       director:$('#field-director').value.trim(),platform:$('#field-platform').value.trim(),watchUrl:$('#field-watch').value.trim(),
       personalNote:$('#field-note').value.trim(),episodeWatchUrls: type==='tv'?episodeWatchUrls:{},tmdbId:$('#field-tmdb').value.trim()?Number($('#field-tmdb').value):null,
       imdbId:$('#field-imdb').value.trim(),image:$('#field-image').value.trim(),
-      backdrop:$('#field-backdrop').value.trim(),trailerUrl:$('#field-trailer').value.trim(),desc:$('#field-desc').value.trim(),cast:$('#field-cast').value.split(',').map(x=>x.trim()).filter(Boolean)};
+      backdrop:$('#field-backdrop').value.trim(),trailerUrl:$('#field-trailer').value.trim(),trailerProvider:$('#field-trailer-provider').value||'auto',desc:$('#field-desc').value.trim(),cast:$('#field-cast').value.split(',').map(x=>x.trim()).filter(Boolean)};
     if(state.tmdbSelected&&String(state.tmdbSelected.tmdbId||'')===String(record.tmdbId||'')){
       const source=state.tmdbSelected;
       ['tmdbTitle','tmdbOriginalTitle','tmdbReleaseDate','tmdbGenres','tmdbRuntime','tmdbCountries','tmdbDirector','tmdbCast','tmdbOverview','tmdbPoster','tmdbBackdrop','tmdbTrailerUrl','tmdbImdbId','tmdbRating','tmdbVoteCount'].forEach(key=>{if(source[key]!==undefined)record[key]=source[key];});
@@ -970,6 +987,9 @@
   $('#type-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#catalog-sort').addEventListener('change',()=>{state.page=1;renderCatalog();});
+  $('#missing-trailer-search').addEventListener('input',()=>{state.missingTrailerPage=1;renderMissingTrailers();});
+  $('#missing-trailer-prev').addEventListener('click',()=>{state.missingTrailerPage=Math.max(1,state.missingTrailerPage-1);renderMissingTrailers();});
+  $('#missing-trailer-next').addEventListener('click',()=>{state.missingTrailerPage++;renderMissingTrailers();});
   $('#prev-page').addEventListener('click',()=>{state.page=Math.max(1,state.page-1);renderCatalog();});
   $('#next-page').addEventListener('click',()=>{state.page++;renderCatalog();});
   // Yeni yapım düğmeleri üstteki delege edilmiş olay dinleyicisiyle yönetilir.
