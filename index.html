@@ -1090,6 +1090,26 @@
           #home-personalized-section .home-personalized-dislike{width:32px!important;height:32px!important;font-size:12px!important}
         }
 
+        /* Büyük öneri kartında etiketleri beğeni butonlarıyla aynı üst hizaya al. */
+        #home-personalized-section .home-personalized-feature-labels{
+          top:16px!important;
+          left:16px!important;
+          min-height:42px;
+        }
+        #home-personalized-section .home-personalized-feature-actions{
+          top:16px!important;
+          right:16px!important;
+          min-height:42px;
+          align-items:center!important;
+        }
+        @media(max-width:639px){
+          #home-personalized-section .home-personalized-feature-labels{top:12px!important;left:12px!important;gap:5px!important}
+          #home-personalized-section .home-personalized-feature-actions{top:8px!important;right:8px!important;gap:4px!important}
+          #home-personalized-section .home-personalized-feature-labels span{font-size:8px!important;padding:5px 7px!important}
+          #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
+          #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{width:34px!important;height:34px!important}
+        }
+
 </style>
 
 </head>
@@ -1347,8 +1367,11 @@
                             <div role="button" tabindex="0" @click="openWatchPage(personalizedRecommendations[0])" @keydown.enter="openWatchPage(personalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(personalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer">
                                 <img @error="handleImageError($event)" :src="personalizedRecommendations[0].backdrop || personalizedRecommendations[0].poster || personalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(personalizedRecommendations[0].backdrop || personalizedRecommendations[0].poster || personalizedRecommendations[0].image, [342, 500, 780])" sizes="(max-width: 900px) 100vw, 40vw" :alt="personalizedRecommendations[0].title" loading="lazy" fetchpriority="low" decoding="async" class="home-personalized-feature-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                                 <div class="home-personalized-feature-shade absolute inset-0"></div>
+                                <div class="home-personalized-feature-labels absolute left-4 top-4 z-[2] flex items-center gap-2">
+                                    <span class="rounded-md bg-rose-600 text-white px-2.5 py-1 text-[9px] font-black tracking-widest uppercase">SANA ÖZEL SEÇİM</span>
+                                    <span class="rounded-md bg-black/55 text-white/90 px-2.5 py-1 text-[9px] font-bold backdrop-blur-sm" x-text="personalizedRecommendations[0].type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
+                                </div>
                                 <div class="relative z-[1] flex h-full min-h-[120px] sm:min-h-[132px] lg:min-h-[150px] flex-col justify-end p-4 sm:p-5 lg:p-6">
-                                    <div class="flex items-center gap-2 mb-3"><span class="rounded-md bg-rose-600 text-white px-2.5 py-1 text-[9px] font-black tracking-widest uppercase">SANA ÖZEL SEÇİM</span><span class="rounded-md bg-black/45 text-white/90 px-2.5 py-1 text-[9px] font-bold" x-text="personalizedRecommendations[0].type === 'tv' ? 'DİZİ' : 'FİLM'"></span></div>
                                     <h3 class="max-w-xl text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-white drop-shadow-lg" x-text="personalizedRecommendations[0].title"></h3>
                                     <div class="flex flex-wrap items-center gap-3 mt-3 text-xs font-semibold text-white/85"><span x-text="personalizedRecommendations[0].year || '—'"></span><span class="text-white/40">•</span><span class="text-amber-300"><i class="fa-solid fa-star mr-1"></i><span x-text="personalizedRecommendations[0].rating || '—'"></span></span><span class="text-white/40">•</span><span class="line-clamp-1" x-text="personalizedRecommendations[0].genre || personalizedRecommendations[0].category || 'Önerilen yapım'"></span></div>
                                     <p class="max-w-lg mt-3 text-xs sm:text-sm leading-relaxed text-white/80 line-clamp-2" x-text="personalizedRecommendations[0].tmdbOverview || personalizedRecommendations[0].desc || personalizedRecommendations[0].recommendationReason"></p>
