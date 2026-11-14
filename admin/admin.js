@@ -47,6 +47,21 @@
   window.addEventListener('unhandledrejection',event=>{
     if(!state.data)showStartupError(event.reason?.message||String(event.reason||'Beklenmeyen bir bağlantı hatası oluştu.'));
   });
+  // Kritik ekleme düğmelerini erken aşamada delege et: panelin başka bir alanındaki
+  // başlangıç hatası bu düğmelerin olaylarını devre dışı bırakmasın.
+  document.addEventListener('click',event=>{
+    const contentButton=event.target.closest?.('#add-content, #catalog-add');
+    if(contentButton){
+      event.preventDefault();
+      try{openEditor();}catch(error){console.error('Yeni yapım formu açılamadı:',error);toast('Yeni yapım formu açılamadı: '+(error.message||'Beklenmeyen hata.'));}
+      return;
+    }
+    const collectionButton=event.target.closest?.('#collection-add');
+    if(collectionButton){
+      event.preventDefault();
+      try{openCollectionEditor(null);}catch(error){console.error('Koleksiyon formu açılamadı:',error);toast('Koleksiyon formu açılamadı: '+(error.message||'Beklenmeyen hata.'));}
+    }
+  });
   function canWrite(){ if(!state.apiEnabled||!state.sha){toast('Katalog şu anda salt okunur. GitHub erişim bağlantısı doğrulanınca düzenleme açılacak.');return false;} return true; }
   function navigate(view){
     state.view=view;
@@ -288,7 +303,8 @@
     setField('field-episodes',item?.episodes||'');setField('field-desc',item?.desc||item?.tmdbOverview||'');
     $('#editor-status').textContent=!state.apiEnabled?'Önizleme ve manuel düzenleme açık. Kaydetmek için GitHub erişim anahtarı yenilenmeli.':(item?'Mevcut katalog kaydı düzenleniyor.':'Yeni katalog kaydı oluşturuluyor.');
     renderContentPreview();
-    $('#content-dialog').showModal();
+    const dialog=$('#content-dialog');
+    if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
   }
   const TMDB_API_KEY='3108265ab3fdbf3af14175edf64a9c7f';
   const TMDB_IMAGE='https://image.tmdb.org/t/p/';
@@ -917,14 +933,14 @@
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#prev-page').addEventListener('click',()=>{state.page=Math.max(1,state.page-1);renderCatalog();});
   $('#next-page').addEventListener('click',()=>{state.page++;renderCatalog();});
-  $('#add-content').addEventListener('click',()=>openEditor());$('#catalog-add').addEventListener('click',()=>openEditor());
+  // Yeni yapım düğmeleri üstteki delege edilmiş olay dinleyicisiyle yönetilir.
   $('#content-form').addEventListener('submit',saveContent);
   $('#tmdb-search-input').addEventListener('input',event=>{clearTimeout(state.tmdbSearchTimer);const query=event.target.value.trim();state.tmdbSearchTimer=setTimeout(()=>searchTmdbTitles(query),320);});
   $('#tmdb-search-results').addEventListener('click',event=>{const result=event.target.closest('[data-tmdb-id]');if(result)selectTmdbTitle(result.dataset.tmdbId,result.dataset.tmdbType);});
   $('#content-form').addEventListener('input',event=>{if(event.target.closest('.editor-grid'))renderContentPreview();});
   $('#content-form').addEventListener('change',event=>{if(event.target.closest('.editor-grid'))renderContentPreview();});
   $('#close-editor').addEventListener('click',()=>$('#content-dialog').close());$('#cancel-editor').addEventListener('click',()=>$('#content-dialog').close());
-  $('#collection-add').addEventListener('click',()=>openCollectionEditor(null));
+  // Koleksiyon ekleme düğmesi de üstteki delege edilmiş olay dinleyicisiyle yönetilir.
   $('#collection-form').addEventListener('submit',saveCollection);
   $('#collection-search').addEventListener('input',filterCollectionItems);
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
