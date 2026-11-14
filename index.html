@@ -1248,6 +1248,95 @@
           }
         }
 
+
+        /* İzleme Zevkine Göre: kapak görselini hover'da daha görünür kıl, temalarda okunurluğu koru. */
+        #home-personalized-section .home-personalized-card-backdrop{
+          opacity:.24!important;
+          filter:none!important;
+          transform:scale(1.035)!important;
+          transition:opacity .28s ease,transform .45s ease!important;
+        }
+        #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-backdrop,
+        #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-backdrop{
+          opacity:.40!important;
+          transform:scale(1.09)!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-card-backdrop,
+        html.theme-slate #home-personalized-section .home-personalized-card-backdrop{
+          opacity:.12!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-backdrop,
+        html.theme-ivory #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-backdrop,
+        html.theme-slate #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-backdrop,
+        html.theme-slate #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-backdrop{
+          opacity:.27!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-shade,
+        html.theme-ivory #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-shade{
+          background:linear-gradient(110deg,rgba(255,255,255,.90),rgba(255,255,255,.79))!important;
+        }
+        html.theme-slate #home-personalized-section .home-personalized-alternative:hover .home-personalized-card-shade,
+        html.theme-slate #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-shade{
+          background:linear-gradient(110deg,rgba(241,245,249,.91),rgba(226,232,240,.81))!important;
+        }
+
+        /* Beğeni tepkileri: düşük doygunluklu, sakin ve tutarlı durumlar. */
+        #home-personalized-section .home-personalized-like,
+        #home-personalized-section .home-personalized-dislike{
+          border:1px solid transparent!important;
+          box-shadow:none!important;
+          transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .2s ease!important;
+        }
+        #home-personalized-section .home-personalized-like{
+          color:#6f9b7e!important;
+          background:rgba(111,155,126,.12)!important;
+        }
+        #home-personalized-section .home-personalized-like:hover,
+        #home-personalized-section .home-personalized-like.is-liked{
+          color:#477456!important;
+          background:rgba(111,155,126,.22)!important;
+          border-color:rgba(111,155,126,.24)!important;
+          transform:translateY(-1px);
+        }
+        #home-personalized-section .home-personalized-dislike{
+          color:#bd7882!important;
+          background:rgba(189,120,130,.11)!important;
+        }
+        #home-personalized-section .home-personalized-dislike:hover{
+          color:#985965!important;
+          background:rgba(189,120,130,.20)!important;
+          border-color:rgba(189,120,130,.22)!important;
+          transform:translateY(-1px);
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-like,
+        html.theme-slate #home-personalized-section .home-personalized-like{
+          color:#548263!important;
+          background:rgba(84,130,99,.10)!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-like:hover,
+        html.theme-ivory #home-personalized-section .home-personalized-like.is-liked,
+        html.theme-slate #home-personalized-section .home-personalized-like:hover,
+        html.theme-slate #home-personalized-section .home-personalized-like.is-liked{
+          color:#3f6e4e!important;
+          background:rgba(84,130,99,.16)!important;
+          border-color:rgba(84,130,99,.20)!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-dislike,
+        html.theme-slate #home-personalized-section .home-personalized-dislike{
+          color:#a96570!important;
+          background:rgba(169,101,112,.09)!important;
+        }
+        html.theme-ivory #home-personalized-section .home-personalized-dislike:hover,
+        html.theme-slate #home-personalized-section .home-personalized-dislike:hover{
+          color:#8f505c!important;
+          background:rgba(169,101,112,.15)!important;
+          border-color:rgba(169,101,112,.18)!important;
+        }
+        @media(prefers-reduced-motion:reduce){
+          #home-personalized-section .home-personalized-card-backdrop,
+          #home-personalized-section .home-personalized-like,
+          #home-personalized-section .home-personalized-dislike{transition:none!important}
+        }
     </style>
 
 </head>
