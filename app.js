@@ -545,9 +545,10 @@
                         root.dataset.homeHydrationScheduled = 'true';
                         const delay = window.matchMedia('(min-width: 1024px)').matches ? 450 : 0;
                         window.setTimeout(() => {
-                            if (document.getElementById('home-page') !== root) return;
-                            root.removeAttribute('x-ignore');
-                            window.Alpine?.initTree?.(root);
+                            const currentRoot = document.getElementById('home-page');
+                            if (!currentRoot || !currentRoot.hasAttribute('x-ignore')) return;
+                            currentRoot.removeAttribute('x-ignore');
+                            window.Alpine?.initTree?.(currentRoot);
                             this.$nextTick(() => this.initHomeSectionObserver());
                         }, delay);
                     });
