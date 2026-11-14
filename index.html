@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
     <link id="desktop-hero-image-preload" rel="preload" as="image" href="https://image.tmdb.org/t/p/w780/6Kn6qW3an3DkPl3MahWemTzrjCt.jpg" fetchpriority="high" media="(min-width: 768px)">
 
-    <link rel="preload" as="script" href="./app.min.js?v=20261114-hero-auto-fix-v1" fetchpriority="high">
+    <link rel="preload" as="script" href="./app.min.js?v=20261114-catalog-nav-newest-v1" fetchpriority="high">
     <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" crossorigin fetchpriority="high">
     <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js">
     <!-- Derlenmiş Tailwind CSS: tarayıcıda JIT/derleme betiği çalıştırılmaz. -->
@@ -2561,6 +2561,7 @@
                             </select>
                             <select x-model="sortBy" aria-label="Katalog sıralaması" :class="getCardClass()" class="border rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 focus:outline-none focus:border-rose-600">
                                 <option value="default">Sıralama: Önerilen</option>
+                                <option value="newest">Yeni eklenenler</option>
                                 <option value="rating">En Yüksek Puan</option>
                                 <option value="year">En Yeni Yıl</option>
                             </select>
