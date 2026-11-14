@@ -18020,6 +18020,207 @@
       "tmdbImdbId": "tt1242422",
       "tmdbRating": "7.4",
       "tmdbVoteCount": 1422
+    },
+    {
+      "id": "cv-1794697966673",
+      "title": "Amerikan Gangsteri",
+      "type": "movie",
+      "year": "2007",
+      "rating": "7.6",
+      "genre": "Dram",
+      "category": "Dram / Suç",
+      "duration": "157 dk",
+      "country": "United States of America",
+      "director": "Ridley Scott",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 4982,
+      "imdbId": "tt0765429",
+      "image": "https://image.tmdb.org/t/p/w500/58J7BLlVsghIodaXey4Y2vAr0sd.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/dLL90vskYFn1S89RZp5TUguK9wl.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "New York’un önde gelen suç patronlarından birisinin şoförlüğünü yapan Frank Lucas’ın varlığından patronu ölene kadar hiç kimsenin haberi yoktur. Ancak patronunun aniden ölümü üzerine kendi imparatorluğunu kurmak ve Amerikan Rüyası’nın kendine özgü versiyonunu yaratmak için gereken açık kapıları keşfeder ve kolları sıvar. Frank Lucas, zekâsı ve katı çalışma ahlâkı sayesinde kısa sürede Harlem bölgesindeki uyuşturucu ticaretinin kontrolünü eline geçirir.",
+      "cast": [
+        "Denzel Washington",
+        "Russell Crowe",
+        "Josh Brolin",
+        "Chiwetel Ejiofor",
+        "Cuba Gooding Jr.",
+        "Lymari Nadal",
+        "Ted Levine",
+        "Armand Assante",
+        "John Ortiz",
+        "John Hawkes",
+        "RZA",
+        "Yul Vazquez",
+        "Ruby Dee",
+        "Idris Elba",
+        "Carla Gugino",
+        "Joe Morton",
+        "Common",
+        "Ritchie Coster",
+        "Jon Polito",
+        "Kevin Corrigan"
+      ],
+      "tmdbTitle": "Amerikan Gangsteri",
+      "tmdbOriginalTitle": "American Gangster",
+      "tmdbReleaseDate": "2007-11-02",
+      "tmdbGenres": "Dram / Suç",
+      "tmdbRuntime": "157 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Ridley Scott",
+      "tmdbCast": [
+        {
+          "id": 5292,
+          "name": "Denzel Washington",
+          "character": "Frank Lucas",
+          "profile": "https://image.tmdb.org/t/p/w185/jj2Gcobpopokal0YstuCQW0ldJ4.jpg",
+          "order": 0
+        },
+        {
+          "id": 934,
+          "name": "Russell Crowe",
+          "character": "Richie Roberts",
+          "profile": "https://image.tmdb.org/t/p/w185/3IBZF0qCZMZ7zJYlgrH0sQzNZV.jpg",
+          "order": 1
+        },
+        {
+          "id": 16851,
+          "name": "Josh Brolin",
+          "character": "Detective Trupo",
+          "profile": "https://image.tmdb.org/t/p/w185/7QpneI3HoZCCDVPyWx3p3t7yeo7.jpg",
+          "order": 2
+        },
+        {
+          "id": 5294,
+          "name": "Chiwetel Ejiofor",
+          "character": "Huey Lucas",
+          "profile": "https://image.tmdb.org/t/p/w185/kq5DDnqqofoRI0t6ddtRlsJnNPT.jpg",
+          "order": 3
+        },
+        {
+          "id": 9777,
+          "name": "Cuba Gooding Jr.",
+          "character": "Nicky Barnes",
+          "profile": "https://image.tmdb.org/t/p/w185/2JguzbpOXoTGzSmLbWFlulKyyAe.jpg",
+          "order": 4
+        },
+        {
+          "id": 40376,
+          "name": "Lymari Nadal",
+          "character": "Eva",
+          "profile": "https://image.tmdb.org/t/p/w185/nVvvFGpnvkkzvKHLtfWbO87YbQ8.jpg",
+          "order": 5
+        },
+        {
+          "id": 15854,
+          "name": "Ted Levine",
+          "character": "Lou Toback",
+          "profile": "https://image.tmdb.org/t/p/w185/451KSkowLW6M2Au0wBKZZcidgGm.jpg",
+          "order": 6
+        },
+        {
+          "id": 23346,
+          "name": "Armand Assante",
+          "character": "Dominic Cattano",
+          "profile": "https://image.tmdb.org/t/p/w185/9HbbWAJacTHguO2InDVHKGnaasm.jpg",
+          "order": 7
+        },
+        {
+          "id": 40543,
+          "name": "John Ortiz",
+          "character": "Javier J. Rivera",
+          "profile": "https://image.tmdb.org/t/p/w185/o2SOFI53N6Gv5S3fDEBNbeimbzY.jpg",
+          "order": 8
+        },
+        {
+          "id": 16861,
+          "name": "John Hawkes",
+          "character": "Freddie Spearman",
+          "profile": "https://image.tmdb.org/t/p/w185/nJZ0womUC7r5vKWGkLclQuo8qIi.jpg",
+          "order": 9
+        },
+        {
+          "id": 150,
+          "name": "RZA",
+          "character": "Moses Jones",
+          "profile": "https://image.tmdb.org/t/p/w185/2PVYCKXb1X3PLawJNoYGLN1x0In.jpg",
+          "order": 10
+        },
+        {
+          "id": 75604,
+          "name": "Yul Vazquez",
+          "character": "Alfonso Abruzzo",
+          "profile": "https://image.tmdb.org/t/p/w185/chAxqgeJVoRoQukw7zRYgtlo4KI.jpg",
+          "order": 11
+        },
+        {
+          "id": 15532,
+          "name": "Ruby Dee",
+          "character": "Mama Lucas",
+          "profile": "https://image.tmdb.org/t/p/w185/eRRRVQTLkH3RU9inzRHJqWdIZkW.jpg",
+          "order": 12
+        },
+        {
+          "id": 17605,
+          "name": "Idris Elba",
+          "character": "Tango",
+          "profile": "https://image.tmdb.org/t/p/w185/be1bVF7qGX91a6c5WeRPs5pKXln.jpg",
+          "order": 13
+        },
+        {
+          "id": 17832,
+          "name": "Carla Gugino",
+          "character": "Laurie Roberts",
+          "profile": "https://image.tmdb.org/t/p/w185/dAqGOsHSzlP6RhaUURX2NrwITaq.jpg",
+          "order": 14
+        },
+        {
+          "id": 3977,
+          "name": "Joe Morton",
+          "character": "Charlie Williams",
+          "profile": "https://image.tmdb.org/t/p/w185/w7rGWWSGKWWukojLbZOQJ5yh9jv.jpg",
+          "order": 15
+        },
+        {
+          "id": 4238,
+          "name": "Common",
+          "character": "Turner Lucas",
+          "profile": "https://image.tmdb.org/t/p/w185/eggJAnJxpn8wYraX7ea5svETB54.jpg",
+          "order": 16
+        },
+        {
+          "id": 13939,
+          "name": "Ritchie Coster",
+          "character": "Joey Sadano",
+          "profile": "https://image.tmdb.org/t/p/w185/s0QLFPGEbZkyKBqpbM4upC2jMgk.jpg",
+          "order": 17
+        },
+        {
+          "id": 4253,
+          "name": "Jon Polito",
+          "character": "Rossi",
+          "profile": "https://image.tmdb.org/t/p/w185/4HjxMy4Ir2dWz7ycX5l3sgxOY4g.jpg",
+          "order": 18
+        },
+        {
+          "id": 18472,
+          "name": "Kevin Corrigan",
+          "character": "Campizi",
+          "profile": "https://image.tmdb.org/t/p/w185/obSUGc68mQDvFONalMg25Xw5GZM.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "New York’un önde gelen suç patronlarından birisinin şoförlüğünü yapan Frank Lucas’ın varlığından patronu ölene kadar hiç kimsenin haberi yoktur. Ancak patronunun aniden ölümü üzerine kendi imparatorluğunu kurmak ve Amerikan Rüyası’nın kendine özgü versiyonunu yaratmak için gereken açık kapıları keşfeder ve kolları sıvar. Frank Lucas, zekâsı ve katı çalışma ahlâkı sayesinde kısa sürede Harlem bölgesindeki uyuşturucu ticaretinin kontrolünü eline geçirir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/58J7BLlVsghIodaXey4Y2vAr0sd.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/dLL90vskYFn1S89RZp5TUguK9wl.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt0765429",
+      "tmdbRating": "7.6",
+      "tmdbVoteCount": 6382
     }
   ],
   "collections": [],
