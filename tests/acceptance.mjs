@@ -800,26 +800,26 @@ try {
     }
   });
 
-  await check('İkon tabanlı tema menüsü üç tema arasında geçiş yapabiliyor', async () => {
+  await check('Profil menüsü kütüphane bağlantılarını ve üç temayı sunuyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
-    const themeButton = page.locator('header .cineverse-theme-trigger');
-    await themeButton.click();
-    const themeMenu = page.locator('header .cineverse-header-dropdown').first();
-    await themeMenu.waitFor({ state: 'visible' });
-    assert.equal(await themeMenu.locator('.cineverse-dropdown-item').count(), 3, 'Tema listesinde üç seçenek görünmeli');
-    const menuTextColor = await themeMenu.locator('.cineverse-dropdown-item').first().evaluate(element => getComputedStyle(element).color);
-    assert.notEqual(menuTextColor, 'rgb(255, 255, 255)', 'Açık tema açılır menüsündeki metin okunabilir olmalı');
-    await page.getByRole('button', { name: 'Fil Dişi (Sıcak Krem)' }).click();
+    const profileButton = page.getByRole('button', { name: 'Hesap menüsünü aç' });
+    await profileButton.click();
+    const profileMenu = page.locator('header .cineverse-profile-dropdown');
+    await profileMenu.waitFor({ state: 'visible' });
+    for (const label of ['Kütüphanem', 'İzleme Listem', 'İstatistikler', 'Fil Dişi (Sıcak Krem)', 'Modern Gri (Slate)', 'Karanlık Mod']) {
+      assert.equal(await profileMenu.getByRole('button', { name: new RegExp(label) }).count(), 1, label + ' profil menüsünde görünmeli');
+    }
+    assert.equal(await page.locator('header nav a').filter({ hasText: 'İzleme Listem' }).count(), 0, 'İzleme Listem üst gezinme çubuğunda kalmamalı');
+    const menuTextColor = await profileMenu.locator('.cineverse-dropdown-item').first().evaluate(element => getComputedStyle(element).color);
+    assert.notEqual(menuTextColor, 'rgb(255, 255, 255)', 'Açık tema profil menüsündeki metin okunabilir olmalı');
+    await profileMenu.getByRole('button', { name: /Fil Dişi \(Sıcak Krem\)/ }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-ivory'));
-    assert.match(await themeButton.locator('i').getAttribute('class'), /fa-sun/, 'Fil Dişi seçiliyken güneş ikonu görünmeli');
-    await themeButton.click();
-    await page.getByRole('button', { name: 'Modern Gri (Slate)' }).click();
+    await profileButton.click();
+    await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name: /Modern Gri \(Slate\)/ }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-slate'));
-    assert.match(await themeButton.locator('i').getAttribute('class'), /fa-circle-half-stroke/, 'Modern Gri seçiliyken ilgili ikon görünmeli');
-    await themeButton.click();
-    await page.getByRole('button', { name: 'Karanlık Mod' }).click();
+    await profileButton.click();
+    await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name: 'Karanlık Mod' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('dark'));
-    assert.match(await themeButton.locator('i').getAttribute('class'), /fa-moon/, 'Karanlık Mod seçiliyken ay ikonu görünmeli');
   });
 
   await check('Eski profil kayıtları tek kütüphaneye taşınıyor ve çocuk profili verileri siliniyor', async () => {
@@ -1056,7 +1056,8 @@ try {
   });
 
   await check('İstatistikler sayfası açılıyor', async () => {
-    await page.locator('header nav a').filter({ hasText: 'İstatistikler' }).first().click();
+    await page.getByRole('button', { name: 'Hesap menüsünü aç' }).click();
+    await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name: 'İstatistikler' }).click();
     await page.waitForURL(/#\/stats$/);
     await page.getByRole('heading', { name: 'İzleme İstatistikleri' }).waitFor({ state: 'visible' });
     assert.ok(await page.getByText('Tamamlanan filmler', { exact: true }).isVisible());
@@ -1215,7 +1216,8 @@ try {
       const list = JSON.parse(localStorage.getItem('cine_watchlist_v1') || '[]');
       return Array.isArray(list) && list.some(item => String(item.id) === String(expectedId));
     }, adaletId);
-    await page.locator('header nav a').filter({ hasText: 'İzleme Listem' }).first().click();
+    await page.getByRole('button', { name: 'Hesap menüsünü aç' }).click();
+    await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name: /İzleme Listem/ }).click();
     await page.waitForURL(/#\/watchlist$/);
     await page.getByRole('heading', { name: 'Ana Profil - İzleme Listem' }).waitFor({ state: 'visible' });
     await page.getByText('Adalet 2', { exact: true }).waitFor({ state: 'visible' });
