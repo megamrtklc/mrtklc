@@ -460,7 +460,7 @@
                             this.currentSlideIndex = 0;
                             this.startHeroAutoplay();
                             this.$nextTick(() => {
-                                if (this.currentPage !== 'home') this.removeHeroInitialShell();
+                                this.removeHeroInitialShell();
                             });
                         }
                     } catch (heroError) {
