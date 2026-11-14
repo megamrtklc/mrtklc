@@ -4834,6 +4834,113 @@ html.perde-tv-wide #home-page #filmm-hero-section.filmm-hero-section{
   #home-page > #filmm-hero-section{display:flex!important}
 }
 </style>
+
+<style id="filmm-hero-balance-fix">
+/* Alternatif manşet: seçili afiş sayısına göre dengeli, aynı hizada poster şeridi */
+@media (min-width: 768px) {
+  #home-page > #filmm-hero-section.filmm-hero-section {
+    width:100%!important;
+    max-width:none!important;
+    min-height:650px!important;
+    height:650px!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+  #home-page #filmm-hero-section #filmm-hero-bg {
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+    object-position:center 32%!important;
+  }
+  #home-page #filmm-hero-section .filmm-hero-layout {
+    width:100%!important;
+    height:100%!important;
+    min-height:650px!important;
+    box-sizing:border-box!important;
+    grid-template-rows:56px minmax(0,1fr) 190px!important;
+    padding:26px clamp(24px,3.2vw,48px) 12px!important;
+  }
+  #home-page #filmm-hero-section .filmm-hero-poster-zone {
+    grid-row:3!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:190px!important;
+    height:190px!important;
+    align-items:flex-end!important;
+    padding:0!important;
+    box-sizing:border-box!important;
+  }
+  #home-page #filmm-hero-section .filmm-hero-poster-zone .filmm-hero-thumbnails {
+    position:relative!important;
+    inset:auto!important;
+    left:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    display:flex!important;
+    flex:1 1 auto!important;
+    width:100%!important;
+    height:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    align-items:flex-end!important;
+    justify-content:flex-start!important;
+    gap:clamp(7px,.8vw,12px)!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:8px 58px 8px 0!important;
+    box-sizing:border-box!important;
+  }
+  #home-page #filmm-hero-section .filmm-hero-poster-zone .filmm-hero-thumb {
+    flex:1 1 0!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:112px!important;
+    height:auto!important;
+    aspect-ratio:2/3!important;
+    align-self:flex-end!important;
+    margin:0!important;
+  }
+  #home-page #filmm-hero-section .filmm-hero-poster-zone .filmm-hero-thumb img {
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+  }
+  #home-page #filmm-hero-section .filmm-hero-poster-zone .filmm-hero-arrows {
+    position:absolute!important;
+    top:50%!important;
+    right:0!important;
+    left:auto!important;
+    bottom:auto!important;
+    transform:translateY(-50%)!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    width:44px!important;
+    z-index:130!important;
+    pointer-events:auto!important;
+  }
+  #home-page #filmm-hero-section .filmm-hero-poster-zone .filmm-hero-arrow {
+    width:40px!important;
+    height:40px!important;
+    min-width:40px!important;
+  }
+}
+@media (max-width: 1200px) and (min-width: 768px) {
+  #home-page #filmm-hero-section .filmm-hero-poster-zone .filmm-hero-thumbnails {
+    justify-content:flex-start!important;
+    overflow-x:auto!important;
+  }
+  #home-page #filmm-hero-section .filmm-hero-poster-zone .filmm-hero-thumb {
+    flex:0 0 84px!important;
+    width:84px!important;
+    min-width:84px!important;
+    height:126px!important;
+  }
+}
+</style>
+
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
