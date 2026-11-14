@@ -1721,6 +1721,78 @@
         [data-watch-card]{transition:none}
       }
     </style>
+
+    <style id="perde-unified-home-card-language">
+      /* Homepage cards: shared visual language based on "İzleme Zevkine Göre". */
+      #home-page #home-personalized-section .home-personalized-card,
+      #home-page #home-personalized-section .home-personalized-alternative,
+      #home-page #home-personalized-section .home-personalized-feature,
+      #home-page #home-continue-section .home-continue-card,
+      #home-page #home-watchlist-section .home-watchlist-card,
+      #home-page #home-new-arrivals-section .home-new-arrival-card,
+      #home-page #home-new-arrivals-section .home-new-arrival-feature,
+      #home-page #home-series-tracking-section .home-series-tracking-card,
+      #home-page #home-catalog-section .home-catalog-card,
+      #home-page #home-genre-discovery-section .home-genre-discovery-card {
+        border: 1px solid rgba(148,163,184,.22);
+        border-radius: 16px;
+        background: linear-gradient(145deg,rgba(127,127,127,.075),rgba(127,127,127,.025));
+        box-shadow: 0 8px 24px -18px rgba(0,0,0,.58);
+        transition: transform .24s ease,border-color .24s ease,box-shadow .24s ease,background-color .24s ease;
+      }
+      #home-page #home-personalized-section .home-personalized-card:hover,
+      #home-page #home-personalized-section .home-personalized-alternative:hover,
+      #home-page #home-personalized-section .home-personalized-feature:hover,
+      #home-page #home-continue-section .home-continue-card:hover,
+      #home-page #home-watchlist-section .home-watchlist-card:hover,
+      #home-page #home-new-arrivals-section .home-new-arrival-card:hover,
+      #home-page #home-new-arrivals-section .home-new-arrival-feature:hover,
+      #home-page #home-series-tracking-section .home-series-tracking-card:hover,
+      #home-page #home-catalog-section .home-catalog-card:hover,
+      #home-page #home-genre-discovery-section .home-genre-discovery-card:hover {
+        border-color: rgba(225,29,72,.68);
+        box-shadow: 0 16px 34px -20px rgba(0,0,0,.72),0 5px 18px -14px rgba(225,29,72,.28);
+        transform: translateY(-4px);
+      }
+      #home-page #home-personalized-section .home-personalized-card:focus-visible,
+      #home-page #home-personalized-section .home-personalized-alternative:focus-visible,
+      #home-page #home-continue-section .home-continue-card:focus-visible,
+      #home-page #home-watchlist-section .home-watchlist-card:focus-visible,
+      #home-page #home-new-arrivals-section .home-new-arrival-card:focus-visible,
+      #home-page #home-series-tracking-section .home-series-tracking-card:focus-visible,
+      #home-page #home-catalog-section .home-catalog-card:focus-visible,
+      #home-page #home-genre-discovery-section .home-genre-discovery-card:focus-visible {
+        outline: 2px solid rgba(244,63,94,.78);
+        outline-offset: 3px;
+      }
+      @media(max-width:639px) {
+        #home-page #home-personalized-section .home-personalized-card,
+        #home-page #home-personalized-section .home-personalized-alternative,
+        #home-page #home-continue-section .home-continue-card,
+        #home-page #home-watchlist-section .home-watchlist-card,
+        #home-page #home-new-arrivals-section .home-new-arrival-card,
+        #home-page #home-series-tracking-section .home-series-tracking-card,
+        #home-page #home-catalog-section .home-catalog-card,
+        #home-page #home-genre-discovery-section .home-genre-discovery-card {
+          border-radius: 14px;
+        }
+      }
+      @media(prefers-reduced-motion:reduce) {
+        #home-page #home-personalized-section .home-personalized-card,
+        #home-page #home-personalized-section .home-personalized-alternative,
+        #home-page #home-personalized-section .home-personalized-feature,
+        #home-page #home-continue-section .home-continue-card,
+        #home-page #home-watchlist-section .home-watchlist-card,
+        #home-page #home-new-arrivals-section .home-new-arrival-card,
+        #home-page #home-new-arrivals-section .home-new-arrival-feature,
+        #home-page #home-series-tracking-section .home-series-tracking-card,
+        #home-page #home-catalog-section .home-catalog-card,
+        #home-page #home-genre-discovery-section .home-genre-discovery-card {
+          transition: none;
+        }
+      }
+    </style>
+
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
