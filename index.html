@@ -691,7 +691,44 @@
             .cineverse-profile-dropdown{width:min(288px,calc(100vw - 20px))}
         }
         @media(prefers-reduced-motion:reduce){.cineverse-theme-trigger,.cineverse-profile-trigger,.cineverse-dropdown-item,.cineverse-profile-option,.cineverse-admin-shortcut{transition:none}}
-    </style>
+    
+        /* İzleme Zevkine Göre: sade kart yüzeyleri, daha belirgin afişler ve dengeli toplam genişlik. */
+        #home-personalized-section .home-personalized-showcase{
+          width:100%;max-width:1260px;margin-inline:auto;
+          grid-template-columns:minmax(0,.88fr) minmax(0,1.62fr);
+          gap:15px;
+        }
+        #home-personalized-section .home-personalized-alternative{
+          grid-template-columns:88px minmax(0,1fr);
+          column-gap:12px;
+          background:#11141c;
+          border-color:rgba(148,163,184,.20);
+        }
+        #home-personalized-section .home-personalized-card-backdrop,
+        #home-personalized-section .home-personalized-card-shade{
+          display:none!important;
+        }
+        #home-personalized-section .home-personalized-poster{width:88px}
+        #home-personalized-section .home-personalized-alternative:hover{
+          background:#171b25;
+        }
+        @media(max-width:900px){
+          #home-personalized-section .home-personalized-showcase{
+            max-width:760px;grid-template-columns:minmax(0,1fr);
+          }
+          #home-personalized-section .home-personalized-alternative{
+            grid-template-columns:84px minmax(0,1fr);
+          }
+          #home-personalized-section .home-personalized-poster{width:84px}
+        }
+        @media(max-width:520px){
+          #home-personalized-section .home-personalized-alternative{
+            grid-template-columns:72px minmax(0,1fr);
+            column-gap:10px;
+          }
+          #home-personalized-section .home-personalized-poster{width:72px}
+        }
+</style>
 
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
