@@ -3325,51 +3325,51 @@
     </div>
 
     <!-- CineVerse Responsive Footer -->
-    <footer id="cineverse-footer" x-show="!catalogLoading" class="relative isolate mt-auto w-full overflow-hidden border-t border-gray-200/80 bg-gray-50 text-gray-600 transition-colors duration-300 dark:border-white/10 dark:bg-[#08090d] dark:text-gray-400">
+    <footer id="cineverse-footer" x-show="!catalogLoading && footerConfig.enabled !== false" class="relative isolate mt-auto w-full overflow-hidden border-t border-gray-200/80 bg-gray-50 text-gray-600 transition-colors duration-300 dark:border-white/10 dark:bg-[#08090d] dark:text-gray-400">
         <div class="cineverse-footer-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
         <div class="relative mx-auto w-full max-w-[1600px] px-5 pb-5 pt-10 sm:px-8 sm:pt-12 lg:px-12">
             <div class="grid grid-cols-2 gap-x-6 gap-y-9 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr] lg:gap-12">
                 <div class="col-span-2 max-w-md lg:col-span-1">
                     <a href="#" @click.prevent="navigateTo('home')" aria-label="CineVerse ana sayfa" class="inline-flex items-center gap-2.5 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-500">
                         <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-600 text-white shadow-lg shadow-rose-950/20"><i class="fa-solid fa-clapperboard text-lg"></i></span>
-                        <span class="text-xl font-black uppercase tracking-[0.13em] text-gray-950 dark:text-white">CINE<span class="text-rose-600 dark:text-rose-400">VERSE</span></span>
+                        <span class="text-xl font-black uppercase tracking-[0.13em] text-gray-950 dark:text-white"><span x-text="footerConfig.brandPrimary || 'CINE'">CINE</span><span class="text-rose-600 dark:text-rose-400" x-text="footerConfig.brandAccent || 'VERSE'">VERSE</span></span>
                     </a>
-                    <p class="mt-4 max-w-sm text-xs leading-6 text-gray-500 dark:text-gray-400 sm:text-sm">Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.</p>
-                    <div class="mt-5 flex flex-wrap gap-2">
-                        <span class="rounded-full border border-gray-200 bg-white/70 px-3 py-1.5 text-[9px] font-bold tracking-wide text-gray-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-gray-400">KİŞİSEL KÜTÜPHANE</span>
-                        <span class="rounded-full border border-gray-200 bg-white/70 px-3 py-1.5 text-[9px] font-bold tracking-wide text-gray-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-gray-400">DİZİ TAKİBİ</span>
+                    <p class="mt-4 max-w-sm text-xs leading-6 text-gray-500 dark:text-gray-400 sm:text-sm" x-text="footerConfig.description || 'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.'">Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.</p>
+                    <div x-show="footerConfig.showBadges !== false" class="mt-5 flex flex-wrap gap-2">
+                        <span class="rounded-full border border-gray-200 bg-white/70 px-3 py-1.5 text-[9px] font-bold tracking-wide text-gray-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-gray-400" x-text="footerConfig.badgeOne || 'KİŞİSEL KÜTÜPHANE'">KİŞİSEL KÜTÜPHANE</span>
+                        <span class="rounded-full border border-gray-200 bg-white/70 px-3 py-1.5 text-[9px] font-bold tracking-wide text-gray-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-gray-400" x-text="footerConfig.badgeTwo || 'DİZİ TAKİBİ'">DİZİ TAKİBİ</span>
                     </div>
                 </div>
 
                 <nav aria-label="Hızlı bağlantılar" class="min-w-0">
-                    <h2 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-950 dark:text-white">CineVerse</h2>
+                    <h2 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-950 dark:text-white" x-text="footerConfig.columnOneTitle || 'CineVerse'">CineVerse</h2>
                     <ul class="space-y-3 text-xs font-semibold">
-                        <li><a href="#" @click.prevent="navigateTo('home')" class="cineverse-footer-link">Ana Sayfa</a></li>
-                        <li><a href="#" @click.prevent="navigateTo('explore')" class="cineverse-footer-link">Keşfet</a></li>
-                        <li><a href="#" @click.prevent="navigateTo('library')" class="cineverse-footer-link">Kütüphanem</a></li>
+                        <li><a href="#" @click.prevent="navigateTo('home')" class="cineverse-footer-link" x-text="footerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</a></li>
+                        <li><a href="#" @click.prevent="navigateTo('explore')" class="cineverse-footer-link" x-text="footerConfig.exploreLabel || 'Keşfet'">Keşfet</a></li>
+                        <li><a href="#" @click.prevent="navigateTo('library')" class="cineverse-footer-link" x-text="footerConfig.libraryLabel || 'Kütüphanem'">Kütüphanem</a></li>
                     </ul>
                 </nav>
 
                 <nav aria-label="İzleme alanları" class="min-w-0">
-                    <h2 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-950 dark:text-white">İzleme Alanım</h2>
+                    <h2 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-950 dark:text-white" x-text="footerConfig.columnTwoTitle || 'İzleme Alanım'">İzleme Alanım</h2>
                     <ul class="space-y-3 text-xs font-semibold">
-                        <li><a href="#" @click.prevent="navigateTo('watchlist')" class="cineverse-footer-link">İzleme Listem</a></li>
-                        <li><a href="#" @click.prevent="navigateTo('stats')" class="cineverse-footer-link">İstatistikler</a></li>
+                        <li><a href="#" @click.prevent="navigateTo('watchlist')" class="cineverse-footer-link" x-text="footerConfig.watchlistLabel || 'İzleme Listem'">İzleme Listem</a></li>
+                        <li><a href="#" @click.prevent="navigateTo('stats')" class="cineverse-footer-link" x-text="footerConfig.statsLabel || 'İstatistikler'">İstatistikler</a></li>
                     </ul>
                 </nav>
 
                 <div class="col-span-2 lg:col-span-1">
-                    <h2 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-950 dark:text-white">İzleme keyfini kişiselleştir</h2>
-                    <p class="max-w-xs text-xs leading-6 text-gray-500 dark:text-gray-400">Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.</p>
-                    <button type="button" @click="navigateTo('library')" class="mt-4 inline-flex min-h-10 items-center gap-2 rounded-lg bg-rose-600 px-4 text-[10px] font-black uppercase tracking-wider text-white shadow-lg shadow-rose-950/15 transition hover:-translate-y-0.5 hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-rose-500">
-                        Kütüphaneme Git <i class="fa-solid fa-arrow-right"></i>
+                    <h2 class="mb-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-950 dark:text-white" x-text="footerConfig.featureTitle || 'İzleme keyfini kişiselleştir'">İzleme keyfini kişiselleştir</h2>
+                    <p class="max-w-xs text-xs leading-6 text-gray-500 dark:text-gray-400" x-text="footerConfig.featureDescription || 'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.'">Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.</p>
+                    <button x-show="footerConfig.showCta !== false" type="button" @click="navigateTo('library')" class="mt-4 inline-flex min-h-10 items-center gap-2 rounded-lg bg-rose-600 px-4 text-[10px] font-black uppercase tracking-wider text-white shadow-lg shadow-rose-950/15 transition hover:-translate-y-0.5 hover:bg-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-rose-500">
+                        <span x-text="footerConfig.ctaLabel || 'Kütüphaneme Git'">Kütüphaneme Git</span> <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
             </div>
 
             <div class="mt-10 flex flex-col gap-3 border-t border-gray-200/80 pt-5 text-center dark:border-white/10 sm:flex-row sm:items-center sm:justify-between sm:text-left">
-                <p class="text-[10px] leading-5 text-gray-500 dark:text-gray-500">&copy; 2026 CineVerse. Tüm hakları saklıdır.</p>
-                <a href="#" @click.prevent="window.scrollTo({top:0,behavior:'smooth'})" class="inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-wider text-gray-500 transition hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400">
+                <p class="text-[10px] leading-5 text-gray-500 dark:text-gray-500" x-text="footerConfig.copyright || '© 2026 CineVerse. Tüm hakları saklıdır.'">© 2026 CineVerse. Tüm hakları saklıdır.</p>
+                <a x-show="footerConfig.showBackToTop !== false" href="#" @click.prevent="window.scrollTo({top:0,behavior:'smooth'})" class="inline-flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-wider text-gray-500 transition hover:text-rose-600 dark:text-gray-400 dark:hover:text-rose-400">
                     Yukarı dön <i class="fa-solid fa-arrow-up"></i>
                 </a>
             </div>
