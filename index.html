@@ -1943,6 +1943,11 @@
       #desktopEditorialHero > div.relative.mx-auto {
         z-index: 2;
       }
+      /* Yapım adıyla birlikte manşet metin grubunu hafifçe aşağı al. */
+      #desktopEditorialHero .editorial-copy-enter {
+        position: relative;
+        top: 8px;
+      }
       #desktopEditorialHero .editorial-copy-enter h1 {
         margin-top: 10px;
         text-shadow: 0 4px 28px rgba(0, 0, 0, .48), 0 0 34px rgba(245, 158, 11, .08);
@@ -2423,7 +2428,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         <button type="button" @click.stop="navigateHeroSlide(-1)" aria-label="Önceki öne çıkan yapım" class="absolute left-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/35 text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 active:scale-95"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         <button type="button" @click.stop="navigateHeroSlide(1)" aria-label="Sonraki öne çıkan yapım" class="absolute right-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/35 text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 active:scale-95"><i class="fa-solid fa-chevron-right text-xs"></i></button>
                     </div>
-                    <div class="px-5 pb-4 pt-1 text-white sm:px-7">
+                    <div class="px-5 pb-4 pt-3 text-white sm:px-7">
                         <div class="space-y-1.5">
                             <h1 class="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.2rem,4.8vw,2rem)] font-black leading-tight tracking-tight text-white" x-text="currentHero.title" :title="currentHero.title"></h1>
                             <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
