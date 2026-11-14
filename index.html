@@ -69,13 +69,13 @@
         /* Personalized editorial showcase — compact, overflow-safe layout. */
         #home-personalized-section{min-width:0;max-width:100%;overflow:hidden}
         #home-personalized-section .home-personalized-showcase{display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1fr);gap:14px;align-items:stretch;width:100%;min-width:0}
-        #home-personalized-section .home-personalized-feature{min-width:0;min-height:150px;background:#171923;isolation:isolate;box-shadow:0 14px 32px -26px rgba(0,0,0,.65)}
+        #home-personalized-section .home-personalized-feature{min-width:0;min-height:116px;background:#171923;isolation:isolate;box-shadow:0 14px 32px -26px rgba(0,0,0,.65)}
         #home-personalized-section .home-personalized-feature-image{z-index:-2}
         #home-personalized-section .home-personalized-feature-shade{z-index:-1;background:linear-gradient(90deg,rgba(7,9,14,.94) 0%,rgba(7,9,14,.72) 48%,rgba(7,9,14,.10) 100%),linear-gradient(0deg,rgba(7,9,14,.62),transparent 65%)}
         #home-personalized-section .home-personalized-feature:hover .home-personalized-feature-image{transform:scale(1.035)}
-        #home-personalized-section .home-personalized-alternatives{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(104px,auto);gap:8px;min-height:0;min-width:0;align-content:start}
-        #home-personalized-section .home-personalized-alternative{display:grid;grid-template-columns:46px minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;align-items:center;column-gap:8px;row-gap:3px;min-width:0;min-height:104px;padding:8px;box-shadow:0 7px 22px -19px rgba(0,0,0,.6)}
-        #home-personalized-section .home-personalized-poster{grid-column:1;grid-row:1 / span 2;width:46px}
+        #home-personalized-section .home-personalized-alternatives{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(88px,auto);gap:8px;min-height:0;min-width:0;align-content:start}
+        #home-personalized-section .home-personalized-alternative{display:grid;grid-template-columns:46px minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;align-items:center;column-gap:7px;row-gap:2px;min-width:0;min-height:88px;padding:7px;box-shadow:0 7px 22px -19px rgba(0,0,0,.6)}
+        #home-personalized-section .home-personalized-poster{grid-column:1;grid-row:1 / span 2;width:40px}
         #home-personalized-section .home-personalized-copy{grid-column:2;grid-row:1;align-self:center;min-width:0}
         #home-personalized-section .home-personalized-copy h3{font-size:11px;overflow-wrap:anywhere}
         #home-personalized-section .home-personalized-copy>p:last-child{font-size:9px}
@@ -90,15 +90,15 @@
         #home-personalized-section .home-personalized-feature-dismiss:hover{opacity:1}
         @media(max-width:900px){
           #home-personalized-section .home-personalized-showcase{grid-template-columns:minmax(0,1fr);gap:12px}
-          #home-personalized-section .home-personalized-feature{min-height:132px}
+          #home-personalized-section .home-personalized-feature{min-height:108px}
           #home-personalized-section .home-personalized-feature-shade{background:linear-gradient(0deg,rgba(7,9,14,.96) 0%,rgba(7,9,14,.62) 48%,rgba(7,9,14,.08) 100%)}
-          #home-personalized-section .home-personalized-alternatives{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(104px,auto);gap:7px;overflow:visible;padding:2px 0;touch-action:pan-y}
-          #home-personalized-section .home-personalized-alternative{width:auto;min-width:0;min-height:104px;scroll-snap-align:none}
+          #home-personalized-section .home-personalized-alternatives{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(88px,auto);gap:7px;overflow:visible;padding:2px 0;touch-action:pan-y}
+          #home-personalized-section .home-personalized-alternative{width:auto;min-width:0;min-height:88px;scroll-snap-align:none}
         }
         @media(max-width:420px){
-          #home-personalized-section .home-personalized-feature{min-height:120px}
-          #home-personalized-section .home-personalized-alternative{grid-template-columns:40px minmax(0,1fr);column-gap:6px;padding:6px;min-height:100px}
-          #home-personalized-section .home-personalized-poster{width:40px}
+          #home-personalized-section .home-personalized-feature{min-height:104px}
+          #home-personalized-section .home-personalized-alternative{grid-template-columns:40px minmax(0,1fr);column-gap:6px;padding:6px;min-height:84px}
+          #home-personalized-section .home-personalized-poster{width:36px}
           #home-personalized-section .home-personalized-like{width:32px;height:32px}
           #home-personalized-section .home-personalized-dislike{width:36px;height:36px}
         }
@@ -715,14 +715,14 @@
 
 
                 <!-- Kişiselleştirilmiş Öneriler -->
-                <section id="home-personalized-section" data-home-section="personalized" x-cloak x-show="isHomepageSectionVisible('personalized')" class="home-personalized-section w-full px-6 sm:px-12 space-y-5">
-                    <div class="home-personalized-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-4">
+                <section id="home-personalized-section" data-home-section="personalized" x-data="{ showAllPersonalized: false }" x-cloak x-show="isHomepageSectionVisible('personalized')" class="home-personalized-section w-full px-6 sm:px-12 space-y-4">
+                    <div class="home-personalized-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3">
                         <div class="min-w-0">
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">SANA ÖZEL • <span x-text="currentProfile.name"></span></p>
                             <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">İzleme Zevkine Göre</h2>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">İzleme alışkanlıklarından ilham alan, sana özel seçkiler</p>
                         </div>
-                        <div class="flex items-center gap-2 shrink-0"><span class="home-personalized-count text-[10px] font-bold text-gray-500 dark:text-gray-400">8 ek öneri</span><button type="button" @click="scrollHomeCards('home-personalized-rail',-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-personalized-rail',1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div>
+                        <div class="flex items-center gap-3 shrink-0"><span class="home-personalized-count text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="Math.min(4, Math.max(0, personalizedRecommendations.length - 1)) + ' / ' + Math.min(8, Math.max(0, personalizedRecommendations.length - 1)) + ' öneri'">4 / 8 öneri</span><button x-show="personalizedRecommendations.length > 5" type="button" @click="showAllPersonalized = !showAllPersonalized" :aria-expanded="showAllPersonalized.toString()" class="inline-flex items-center gap-2 rounded-full border border-gray-300 dark:border-gray-700 px-3 py-2 text-[11px] font-bold text-gray-700 dark:text-gray-200 hover:border-rose-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors"><span x-text="showAllPersonalized ? 'Daha az göster' : 'Tüm önerileri gör'">Tüm önerileri gör</span><i :class="showAllPersonalized ? 'fa-chevron-up' : 'fa-chevron-down'" class="fa-solid text-[10px]"></i></button></div>
                     </div>
                     <div class="home-personalized-showcase" x-show="homeSectionReady.personalized && personalizedRecommendations.length">
                         <template x-if="homeSectionReady.personalized && personalizedRecommendations[0]">
@@ -740,7 +740,7 @@
                             </div>
                         </template>
                         <div id="home-personalized-rail" class="home-personalized-alternatives" aria-label="Sana özel sekiz öneri, iki sütun">
-                            <template x-for="item in (homeSectionReady.personalized ? personalizedRecommendations.slice(1,9) : [])" :key="'personal-' + item.id">
+                            <template x-for="item in (homeSectionReady.personalized ? personalizedRecommendations.slice(1, showAllPersonalized ? 9 : 5) : [])" :key="'personal-' + item.id">
                                 <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :data-recommendation-id="item.id" :class="getCardClass()" class="home-personalized-alternative group min-w-0 rounded-xl sm:rounded-2xl border text-left transition-all duration-300">
                                     <div class="home-personalized-poster relative shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-900"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [92, 154, 185])" sizes="76px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/80 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="item.rating || '—'"></span></span></div>
                                     <div class="home-personalized-copy min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-600 dark:text-rose-400 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3><p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="mt-1 text-[10px] font-bold text-rose-700 dark:text-rose-400 line-clamp-1" x-text="item.recommendationReason || 'İzleme profiline uygun'"></p></div>
