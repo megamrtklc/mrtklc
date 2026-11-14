@@ -79,7 +79,7 @@
                 schedulePersonSearch(value) {
                     if (this.personSearchTimer) clearTimeout(this.personSearchTimer);
                     const query = String(value || '').trim();
-                    const queryTokens = this.normalizeSearchText(query).split(/\\s+/).filter(Boolean);
+                    const queryTokens = this.normalizeSearchText(query).split(/\s+/).filter(Boolean);
                     const requestId = ++this.personSearchRequestId;
                     this.personSearchResults = [];
                     this.personSearchLoading = false;
@@ -87,7 +87,7 @@
 
                     const people = new Map();
                     const matchesName = name => {
-                        const nameTokens = this.normalizeSearchText(name).split(/\\s+/).filter(Boolean);
+                        const nameTokens = this.normalizeSearchText(name).split(/\s+/).filter(Boolean);
                         return queryTokens.every(token => nameTokens.some(nameToken => nameToken.startsWith(token)));
                     };
                     const addPerson = (person, item, department) => {
