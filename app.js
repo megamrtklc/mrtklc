@@ -536,7 +536,7 @@
                     const children = [...root.children];
                     const groups = new Map();
                     children.forEach(element => {
-                        const key = element.dataset.homeSection || element.dataset.homeSectionAnchor;
+                        const key = element.dataset.homeSection;
                         if (!key) return;
                         if (!groups.has(key)) groups.set(key, []);
                         groups.get(key).push(element);
@@ -552,12 +552,6 @@
                     const placed = new Set();
                     order.forEach(key => {
                         const group = groups.get(key) || [];
-                        // Keep the 1px observer anchor before its corresponding lazy section.
-                        group.sort((a, b) => {
-                            const aAnchor = a.getAttribute('aria-hidden') === 'true' ? 0 : 1;
-                            const bAnchor = b.getAttribute('aria-hidden') === 'true' ? 0 : 1;
-                            return aAnchor - bAnchor;
-                        });
                         group.forEach(element => {
                             if (!placed.has(element)) {
                                 ordered.push(element);
@@ -565,7 +559,6 @@
                             }
                         });
                     });
-                    // Retain any future/unconfigured homepage blocks without dropping them.
                     children.forEach(element => {
                         if (!placed.has(element)) ordered.push(element);
                     });
@@ -577,93 +570,30 @@
                     if (!root) return;
                     window.__cineverseHomeSectionObserver?.disconnect();
 
-                    const contentIds = {
-                        continue: 'home-continue-section',
-                        watchlist: 'home-watchlist-section',
-                        'new-arrivals': 'home-new-arrivals-section',
-                        'series-tracking': 'home-series-tracking-section',
-                        'genre-discovery': 'home-genre-discovery-section',
-                        'published-collections': 'home-published-collections',
-                        catalog: 'home-catalog-section'
-                    };
-                    const sections = [...root.children].filter(element => {
-                        const key = element.dataset.homeSectionAnchor || element.dataset.homeSection;
-                        if (!key || key === 'hero' || element.hasAttribute('x-ignore')) return false;
-                        const content = contentIds[key] ? document.getElementById(contentIds[key]) : element;
-                        return !this.homeSectionReady[key] || !!content?.hasAttribute('x-ignore');
-                    });
-
-                    const activateSection = anchor => {
-                        const key = anchor.dataset.homeSectionAnchor || anchor.dataset.homeSection;
-                        if (!key) return;
-                        this.homeSectionReady[key] = true;
-                        const content = contentIds[key]
-                            ? document.getElementById(contentIds[key])
-                            : anchor;
-                        if (content?.hasAttribute('x-ignore')) {
-                            content.removeAttribute('x-ignore');
-                            window.Alpine?.initTree?.(content);
-                        }
-                    };
+                    const sections = [...root.children].filter(element =>
+                        element.hasAttribute('data-home-section') &&
+                        element.dataset.homeSection !== 'hero' &&
+                        !this.homeSectionReady[element.dataset.homeSection]
+                    );
 
                     if (!('IntersectionObserver' in window)) {
-                        sections.forEach(activateSection);
+                        sections.forEach(section => {
+                            this.homeSectionReady[section.dataset.homeSection] = true;
+                        });
                         return;
                     }
 
                     const observer = new IntersectionObserver(entries => {
                         entries.forEach(entry => {
                             if (!entry.isIntersecting) return;
-                            activateSection(entry.target);
+                            const key = entry.target.dataset.homeSection;
+                            if (key) this.homeSectionReady[key] = true;
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: '0px' });
+                    }, { rootMargin: '200px 0px' });
 
                     window.__cineverseHomeSectionObserver = observer;
                     sections.forEach(section => observer.observe(section));
-                },
-
-                get heroSlides() {
-                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
-                    const sourceCatalog = this.heroCatalog.length ? this.heroCatalog : this.catalog;
-                    const configured = this.homepageConfig?.[mobile ? 'mobileHeroSlides' : 'desktopHeroSlides'] || this.homepageConfig?.heroSlides;
-                    if (!Array.isArray(configured) || !configured.length) return sourceCatalog;
-                    const byId = new Map(sourceCatalog.map(item => [String(item.id), item]));
-                    const selected = configured.filter(entry => entry && entry.active !== false)
-                        .map(entry => byId.get(String(entry.id))).filter(Boolean);
-                    return selected.length ? selected : sourceCatalog;
-                },
-
-                get publishedCollections() {
-                    const byId = new Map(this.catalog.map(item => [String(item.id), item]));
-                    return (Array.isArray(this.collections) ? this.collections : [])
-                        .filter(collection => collection && collection.active !== false && String(collection.title || '').trim())
-                        .map(collection => ({
-                            ...collection,
-                            items: (Array.isArray(collection.items) ? collection.items : [])
-                                .map(id => byId.get(String(id)))
-                                .filter(item => item && (item.poster || item.image || item.backdrop))
-                        }))
-                        .filter(collection => collection.items.length > 0);
-                },
-
-                get heroThumbSlides() {
-                    const settings = this.homepageConfig?.settings || {};
-                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
-                    const configuredCount = Number(mobile ? settings.mobileCount : settings.desktopCount);
-                    const count = Math.max(1, Math.min(mobile ? 12 : 20, configuredCount || (mobile ? 6 : 10)));
-                    return this.heroSlides.slice(0, count);
-                },
-
-                startHeroAutoplay() {
-                    if (this.heroAutoplayTimer) window.clearInterval(this.heroAutoplayTimer);
-                    const settings = this.homepageConfig?.settings || {};
-                    if (settings.autoplay === false || this.heroSlides.length < 2) return;
-                    const seconds = Math.max(2, Math.min(60, Number(settings.interval) || 6));
-                    this.heroAutoplayTimer = window.setInterval(() => {
-                        if (this.heroPaused || document.hidden || this.heroSlides.length < 2) return;
-                        this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
-                    }, seconds * 1000);
                 },
 
                 setHeroPaused(value) {
