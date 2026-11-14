@@ -1566,10 +1566,10 @@
                         'indonesia':['ID','Endonezya'],'malaysia':['MY','Malezya'],'philippines':['PH','Filipinler'],'vietnam':['VN','Vietnam'],
                         'pakistan':['PK','Pakistan'],'ukraine':['UA','Ukrayna'],'serbia':['RS','Sırbistan'],'croatia':['HR','Hırvatistan'],
                         'bulgaria':['BG','Bulgaristan'],'egypt':['EG','Mısır'],'morocco':['MA','Fas'],'nigeria':['NG','Nijerya'],'kenya':['KE','Kenya'],
-                        'turkish':['TR','Türkiye'],'united mexican states':['MX','Meksika']
+                        'turkish':['TR','Türkiye'],'united mexican states':['MX','Meksika'],'abd':['US','ABD'],'england':['GB','Birleşik Krallık'],'ingiltere':['GB','Birleşik Krallık'],'gb':['GB','Birleşik Krallık'],'ca':['CA','Kanada'],'canada':['CA','Kanada'],'hk':['HK','Hong Kong'],'ir':['IR','İran'],'it':['IT','İtalya'],'jp':['JP','Japonya'],'kr':['KR','Güney Kore'],'tr':['TR','Türkiye'],'us':['US','ABD'],'kuwait':['KW','Kuveyt'],'lebanon':['LB','Lübnan'],'libyan arab jamahiriya':['LY','Libya'],'libya':['LY','Libya']
                     };
-                    return [...new Set(String(value || '').split(/[,;|/]+/).map(country => country.trim()).filter(Boolean))].map(country => {
-                        const key = country.toLocaleLowerCase('en-US').replace(/\s+/g, ' ');
+                    return [...new Set(String(value || '').split(/[,;|/]+/).map(country => country.trim()).filter(country => country && country.toLocaleLowerCase('tr-TR') !== 'bilinmiyor'))].map(country => {
+                        const key = country.toLocaleLowerCase('en-US').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ');
                         const match = countries[key];
                         const code = match?.[0] || '';
                         const flag = code ? String.fromCodePoint(...code.split('').map(letter => 127397 + letter.charCodeAt(0))) : '';
