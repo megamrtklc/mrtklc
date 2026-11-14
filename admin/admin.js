@@ -285,7 +285,7 @@
   }
   function headerFooterDefaults(){
     return {
-      header:{enabled:true,sticky:true,showLogoIcon:true,brandPrimary:'CINE',brandAccent:'VERSE',logoImage:'',showHome:true,homeLabel:'Ana Sayfa',showExplore:true,exploreLabel:'Keşfet',showVideo:true,videoLabel:'Video Bağlantıları',showSearch:true,showProfile:true,showMobileMenu:true,catalogMenusInitialized:false,customLinks:[]},
+      header:{enabled:true,sticky:true,showLogoIcon:true,brandPrimary:'CINE',brandAccent:'VERSE',logoImage:'',showHome:true,homeLabel:'Ana Sayfa',showExplore:true,exploreLabel:'Keşfet',showFranchises:true,franchisesLabel:'Seri Filmler',showVideo:true,videoLabel:'Video Bağlantıları',showSearch:true,showProfile:true,showMobileMenu:true,catalogMenusInitialized:false,customLinks:[]},
       footer:{enabled:true,customLinks:[],brandPrimary:'CINE',brandAccent:'VERSE',logoImage:'',description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.',showBadges:true,badgeOne:'KİŞİSEL KÜTÜPHANE',badgeTwo:'DİZİ TAKİBİ',columnOneTitle:'CineVerse',homeLabel:'Ana Sayfa',exploreLabel:'Keşfet',libraryLabel:'Kütüphanem',columnTwoTitle:'İzleme Alanım',watchlistLabel:'İzleme Listem',statsLabel:'İstatistikler',featureTitle:'İzleme keyfini kişiselleştir',featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.',ctaLabel:'Kütüphaneme Git',showCta:true,copyright:'© 2026 CineVerse. Tüm hakları saklıdır.',showBackToTop:true}
     };
   }
@@ -302,7 +302,7 @@
     state.data.footerConfig={...defaults.footer,...(state.data.footerConfig||{})};
     return {header:state.data.headerConfig,footer:state.data.footerConfig};
   }
-  const CUSTOM_LINK_PAGES=[['home','Ana Sayfa'],['explore','Keşfet'],['movies','Filmler'],['series','Diziler'],['turkish','Yerli Yapımlar'],['video-links','Video Bağlantıları'],['library','Kütüphanem'],['watchlist','İzleme Listem'],['stats','İstatistikler']];
+  const CUSTOM_LINK_PAGES=[['home','Ana Sayfa'],['explore','Keşfet'],['franchises','Seri Filmler'],['movies','Filmler'],['series','Diziler'],['turkish','Yerli Yapımlar'],['video-links','Video Bağlantıları'],['library','Kütüphanem'],['watchlist','İzleme Listem'],['stats','İstatistikler']];
   function renderCustomLinkRows(kind,links){
     const root=$('#hf-'+kind+'-custom-links');if(!root)return;
     const safe=Array.isArray(links)?links:[];
@@ -332,7 +332,7 @@
     if(!state.data)return;
     const {header:h,footer:f}=headerFooterConfig();
     const fields={
-      'hf-header-primary':h.brandPrimary,'hf-header-accent':h.brandAccent,'hf-header-home-label':h.homeLabel,'hf-header-explore-label':h.exploreLabel,'hf-header-video-label':h.videoLabel,
+      'hf-header-primary':h.brandPrimary,'hf-header-accent':h.brandAccent,'hf-header-home-label':h.homeLabel,'hf-header-explore-label':h.exploreLabel,'hf-header-franchises-label':h.franchisesLabel||'Seri Filmler','hf-header-video-label':h.videoLabel,
       'hf-footer-primary':f.brandPrimary,'hf-footer-accent':f.brandAccent,'hf-footer-description':f.description,'hf-footer-badge-one':f.badgeOne,'hf-footer-badge-two':f.badgeTwo,
       'hf-footer-col-one':f.columnOneTitle,'hf-footer-home-label':f.homeLabel,'hf-footer-explore-label':f.exploreLabel,'hf-footer-library-label':f.libraryLabel,
       'hf-footer-col-two':f.columnTwoTitle,'hf-footer-watchlist-label':f.watchlistLabel,'hf-footer-stats-label':f.statsLabel,'hf-footer-feature-title':f.featureTitle,
@@ -341,7 +341,7 @@
     Object.entries(fields).forEach(([id,value])=>setField(id,value));
     const checks={
       'hf-header-enabled':h.enabled!==false,'hf-header-sticky':h.sticky!==false,'hf-header-logo-icon':h.showLogoIcon!==false,'hf-header-search':h.showSearch!==false,
-      'hf-header-profile':h.showProfile!==false,'hf-header-mobile':h.showMobileMenu!==false,'hf-header-home':h.showHome!==false,'hf-header-explore':h.showExplore!==false,'hf-header-video':h.showVideo!==false,
+      'hf-header-profile':h.showProfile!==false,'hf-header-mobile':h.showMobileMenu!==false,'hf-header-home':h.showHome!==false,'hf-header-explore':h.showExplore!==false,'hf-header-franchises':h.showFranchises!==false,'hf-header-video':h.showVideo!==false,
       'hf-footer-enabled':f.enabled!==false,'hf-footer-badges':f.showBadges!==false,'hf-footer-cta':f.showCta!==false,'hf-footer-backtop':f.showBackToTop!==false
     };
     Object.entries(checks).forEach(([id,value])=>{const el=$('#'+id);if(el)el.checked=value;});
@@ -360,6 +360,7 @@
       logoImage:state.data.headerConfig?.logoImage||'',
       showHome:checked('hf-header-home'),homeLabel:value('hf-header-home-label')||'Ana Sayfa',
       showExplore:checked('hf-header-explore'),exploreLabel:value('hf-header-explore-label')||'Keşfet',
+      showFranchises:checked('hf-header-franchises'),franchisesLabel:value('hf-header-franchises-label')||'Seri Filmler',
       showVideo:checked('hf-header-video'),videoLabel:value('hf-header-video-label')||'Video Bağlantıları',
       showSearch:checked('hf-header-search'),showProfile:checked('hf-header-profile'),showMobileMenu:checked('hf-header-mobile'),catalogMenusInitialized:true,customLinks:readCustomLinkRows('header')
     };
