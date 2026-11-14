@@ -18824,6 +18824,207 @@
       "tmdbImdbId": "tt2265171",
       "tmdbRating": "7.6",
       "tmdbVoteCount": 2745
+    },
+    {
+      "id": "cv-1794698041312",
+      "title": "Yarının Sınırında",
+      "type": "movie",
+      "year": "2014",
+      "rating": "7.6",
+      "genre": "Aksiyon",
+      "category": "Aksiyon / Bilim-Kurgu",
+      "duration": "114 dk",
+      "country": "United States of America",
+      "director": "Doug Liman",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 137113,
+      "imdbId": "tt1631867",
+      "image": "https://image.tmdb.org/t/p/w500/iDazppeUB9ju9RySOJMKUq7HlLK.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/4V1yIoAKPMRQwGBaSses8Bp2nsi.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Yakın gelecekte dünyayı ele geçiren Mimics adlı uzaylı birliği, birçok büyük şehri yok eder ve milyonlarca insanı ölümün eşiğinde bekletir. Dünyada hiçbir ordu, onların hızına, silahlarının gücüne ve de en önemlisi telepati yoluyla emir verme ve uygulama güçlerine ulaşamaz. Artık dünyadaki tüm ordular bu uzaylı sürüsüne karşı güçlerini birleştirmek durumundadır.Subay Bill Cage daha önce bu savaşlardan hiçbirine katılmamış tecrübesiz bir askerdir ve atıldığı yeni görevi onun için bir nevi intihar anlamına gelmektedir. Beklenen olur; Cage dakikalar içerisinde öldürülür... Fakat bu bir sonu değil, yeni bir başlangıcı doğurur. Cage, sıradışı bir şekilde cehennem gibi bir günde uyanır, kendini kırılması zor bir döngünün içerisinde bulur.",
+      "cast": [
+        "Tom Cruise",
+        "Emily Blunt",
+        "Brendan Gleeson",
+        "Bill Paxton",
+        "Jonas Armstrong",
+        "Tony Way",
+        "Kick Gurry",
+        "Franz Drameh",
+        "Dragomir Mrsic",
+        "Charlotte Riley",
+        "Masayoşi Haneda",
+        "Terence Maynard",
+        "Noah Taylor",
+        "Lara Pulver",
+        "Madeleine Mantock",
+        "Assly Zandry",
+        "Sebastian Blunt",
+        "Beth Goddard",
+        "Ronan Summers",
+        "Aaron Romano"
+      ],
+      "tmdbTitle": "Yarının Sınırında",
+      "tmdbOriginalTitle": "Edge of Tomorrow",
+      "tmdbReleaseDate": "2014-05-27",
+      "tmdbGenres": "Aksiyon / Bilim-Kurgu",
+      "tmdbRuntime": "114 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Doug Liman",
+      "tmdbCast": [
+        {
+          "id": 500,
+          "name": "Tom Cruise",
+          "character": "Cage",
+          "profile": "https://image.tmdb.org/t/p/w185/maf8PhSvDCdEwjEMbYfGpojR5RP.jpg",
+          "order": 0
+        },
+        {
+          "id": 5081,
+          "name": "Emily Blunt",
+          "character": "Rita",
+          "profile": "https://image.tmdb.org/t/p/w185/5nCSG5TL1bP1geD8aaBfaLnLLCD.jpg",
+          "order": 1
+        },
+        {
+          "id": 2039,
+          "name": "Brendan Gleeson",
+          "character": "General Brigham",
+          "profile": "https://image.tmdb.org/t/p/w185/ctPPJu5ZYDZr1IPmzoNpezczrm0.jpg",
+          "order": 2
+        },
+        {
+          "id": 2053,
+          "name": "Bill Paxton",
+          "character": "Master Sergeant Farell",
+          "profile": "https://image.tmdb.org/t/p/w185/aLdNe6mt1cSi2zWlUYRregzfis5.jpg",
+          "order": 3
+        },
+        {
+          "id": 119224,
+          "name": "Jonas Armstrong",
+          "character": "Skinner",
+          "profile": "https://image.tmdb.org/t/p/w185/7Ia8Dfhqa2bH43NeKSZiPZ9wHAF.jpg",
+          "order": 4
+        },
+        {
+          "id": 147255,
+          "name": "Tony Way",
+          "character": "Kimmel",
+          "profile": "https://image.tmdb.org/t/p/w185/u48ePSGsP1ww2VmPgNXgog3IM83.jpg",
+          "order": 5
+        },
+        {
+          "id": 93111,
+          "name": "Kick Gurry",
+          "character": "Griff",
+          "profile": "https://image.tmdb.org/t/p/w185/veu7npyAf2hhkKb1KR9SsducGoq.jpg",
+          "order": 6
+        },
+        {
+          "id": 1363086,
+          "name": "Franz Drameh",
+          "character": "Ford",
+          "profile": "https://image.tmdb.org/t/p/w185/xSEv3SN8CSn0bozoOnPd77kEOiD.jpg",
+          "order": 7
+        },
+        {
+          "id": 125740,
+          "name": "Dragomir Mrsic",
+          "character": "Kuntz",
+          "profile": "https://image.tmdb.org/t/p/w185/wREVLKdcNQpkTD9EOgukp2hmZLL.jpg",
+          "order": 8
+        },
+        {
+          "id": 115679,
+          "name": "Charlotte Riley",
+          "character": "Nance",
+          "profile": "https://image.tmdb.org/t/p/w185/cTZ8RhEk67OtOa4yosJLA4l5v5r.jpg",
+          "order": 9
+        },
+        {
+          "id": 1095404,
+          "name": "Masayoşi Haneda",
+          "character": "Takeda",
+          "profile": "https://image.tmdb.org/t/p/w185/mwgIKPjbgxMZ5zhAoBPZtBksE5S.jpg",
+          "order": 10
+        },
+        {
+          "id": 67205,
+          "name": "Terence Maynard",
+          "character": "Cruel Sergeant",
+          "profile": "https://image.tmdb.org/t/p/w185/5KQ4MOCw5fdGaaOQD4VCOfp44ww.jpg",
+          "order": 11
+        },
+        {
+          "id": 1284,
+          "name": "Noah Taylor",
+          "character": "Dr. Carter",
+          "profile": "https://image.tmdb.org/t/p/w185/a9VuohmpqbvcYflOpi0F3ck8L2j.jpg",
+          "order": 12
+        },
+        {
+          "id": 213083,
+          "name": "Lara Pulver",
+          "character": "Karen Lord",
+          "profile": "https://image.tmdb.org/t/p/w185/uacMDTL4YnuJD6frGF35CHLFh43.jpg",
+          "order": 13
+        },
+        {
+          "id": 1258664,
+          "name": "Madeleine Mantock",
+          "character": "Julie",
+          "profile": "https://image.tmdb.org/t/p/w185/mKbeNavI6HFF74mnLATY2SFLrlQ.jpg",
+          "order": 14
+        },
+        {
+          "id": 1504930,
+          "name": "Assly Zandry",
+          "character": "Infirmary Nurse",
+          "profile": "",
+          "order": 15
+        },
+        {
+          "id": 1504931,
+          "name": "Sebastian Blunt",
+          "character": "Young Soldier / Tarmac",
+          "profile": "",
+          "order": 16
+        },
+        {
+          "id": 1211881,
+          "name": "Beth Goddard",
+          "character": "Secretary - Judith",
+          "profile": "https://image.tmdb.org/t/p/w185/6cw1r4qNSBg1LLeP5UeynvZ4Zh.jpg",
+          "order": 17
+        },
+        {
+          "id": 1132153,
+          "name": "Ronan Summers",
+          "character": "Dog Soldier 1",
+          "profile": "https://image.tmdb.org/t/p/w185/ebgKb8zNuadYimdQlARoViYIU9h.jpg",
+          "order": 18
+        },
+        {
+          "id": 1504932,
+          "name": "Aaron Romano",
+          "character": "Dog Soldier 2",
+          "profile": "",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Yakın gelecekte dünyayı ele geçiren Mimics adlı uzaylı birliği, birçok büyük şehri yok eder ve milyonlarca insanı ölümün eşiğinde bekletir. Dünyada hiçbir ordu, onların hızına, silahlarının gücüne ve de en önemlisi telepati yoluyla emir verme ve uygulama güçlerine ulaşamaz. Artık dünyadaki tüm ordular bu uzaylı sürüsüne karşı güçlerini birleştirmek durumundadır.Subay Bill Cage daha önce bu savaşlardan hiçbirine katılmamış tecrübesiz bir askerdir ve atıldığı yeni görevi onun için bir nevi intihar anlamına gelmektedir. Beklenen olur; Cage dakikalar içerisinde öldürülür... Fakat bu bir sonu değil, yeni bir başlangıcı doğurur. Cage, sıradışı bir şekilde cehennem gibi bir günde uyanır, kendini kırılması zor bir döngünün içerisinde bulur.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/iDazppeUB9ju9RySOJMKUq7HlLK.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/4V1yIoAKPMRQwGBaSses8Bp2nsi.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt1631867",
+      "tmdbRating": "7.6",
+      "tmdbVoteCount": 15752
     }
   ],
   "collections": [],
