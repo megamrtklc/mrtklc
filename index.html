@@ -39,7 +39,7 @@
     <!-- Inter fontları önceden istenir; CSS yerleşimden önce uygulanır. -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <!-- Alpine.js -->
-    <script defer src="./app.min.js?v=20261114-apple-hero-v2"></script>
+    <script defer src="./app.min.js?v=20261114-clean-hero-v1"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         @keyframes editorialCopyEnter{0%{opacity:0;transform:translateY(18px);filter:blur(5px)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}
@@ -621,49 +621,7 @@
         }
 
     
-        /* Apple TV reference layout: backdrop-led artwork, left editorial copy and horizontal continuation cards. */
-#appleStyleHero{isolation:isolate;background:#02070d;color:#fff}
-#appleStyleHero .cv-apple-backdrop{position:absolute;inset:0;overflow:hidden;background:#06121a}
-#appleStyleHero .cv-apple-backdrop>img{width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:.96}
-#appleStyleHero .cv-apple-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,12,19,.94) 0%,rgba(2,12,19,.78) 27%,rgba(2,12,19,.34) 52%,rgba(2,12,19,.08) 100%)}
-#appleStyleHero .cv-apple-bottom-shade{position:absolute;inset:28% 0 0;background:linear-gradient(0deg,#02070d 0%,rgba(2,7,13,.94) 8%,rgba(2,7,13,.30) 42%,transparent 100%)}
-#appleStyleHero .cv-apple-inner{min-height:560px}
-#appleStyleHero .cv-apple-home-icon{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:50%;background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(10px)}
-#appleStyleHero .cv-apple-home-label{padding:5px 12px;border-radius:999px;background:rgba(0,0,0,.42);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px)}
-#appleStyleHero .cv-apple-feature{min-height:340px;padding:28px 0 20px}
-#appleStyleHero .cv-apple-copy{width:min(40%,460px);margin-top:-12px}
-#appleStyleHero .cv-apple-title{max-width:100%;margin:0 0 12px;font-family:Impact,Haettenschweiler,'Arial Narrow Bold',sans-serif;font-size:clamp(38px,4.4vw,66px);font-weight:900;line-height:.92;letter-spacing:-.025em;text-transform:uppercase;text-wrap:balance;color:#fff;text-shadow:0 3px 18px rgba(0,0,0,.72)}
-#appleStyleHero .cv-apple-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;color:rgba(255,255,255,.82);font-size:12px;font-weight:650}
-#appleStyleHero .cv-apple-meta-dot{width:4px;height:4px;border-radius:50%;background:#f87171}
-#appleStyleHero .cv-apple-rating{display:inline-flex;align-items:center;gap:5px;color:#fff}
-#appleStyleHero .cv-apple-rating i{color:#fbbf24}
-#appleStyleHero .cv-apple-description{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-width:360px;margin:12px 0 16px;color:rgba(255,255,255,.88);font-size:12px;line-height:1.55;text-shadow:0 2px 10px rgba(0,0,0,.7)}
-#appleStyleHero .cv-apple-cta{display:inline-flex;min-height:38px;align-items:center;gap:9px;padding:0 18px;border-radius:8px;background:#fff;color:#10151b;font-size:13px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.28);transition:transform .2s,background .2s}
-#appleStyleHero .cv-apple-cta:hover{transform:translateY(-2px);background:#e7f8f7}
-#appleStyleHero .cv-apple-slide-count{position:absolute;right:5%;bottom:25%;color:rgba(255,255,255,.62);font-size:10px;letter-spacing:.18em}
-#appleStyleHero .cv-apple-rail-wrap{margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,.12)}
-#appleStyleHero .cv-apple-rail-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:10px}
-#appleStyleHero .cv-apple-rail-heading h2{font-size:14px;font-weight:800;color:rgba(255,255,255,.9)}
-#appleStyleHero .cv-apple-rail-controls{display:flex;align-items:center;gap:7px}
-#appleStyleHero .cv-apple-rail-controls>button{width:27px;height:27px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(255,255,255,.06);color:#fff;font-size:9px}
-#appleStyleHero .cv-apple-dots{display:flex;align-items:center;gap:4px;margin-right:7px}
-#appleStyleHero .cv-apple-dots button{width:5px;height:5px;border-radius:99px;background:rgba(255,255,255,.38);transition:all .2s}
-#appleStyleHero .cv-apple-dots button.is-active{width:17px;background:#fff}
-#appleStyleHero .cv-apple-rail{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;padding:1px 1px 10px;-webkit-overflow-scrolling:touch}
-#appleStyleHero .cv-apple-rail::-webkit-scrollbar{display:none}
-#appleStyleHero .cv-apple-rail-card{flex:0 0 132px;width:132px;min-width:0;text-align:left;scroll-snap-align:start}
-#appleStyleHero .cv-apple-rail-image{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;border-radius:7px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14)}
-#appleStyleHero .cv-apple-rail-image img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
-#appleStyleHero .cv-apple-rail-card:hover .cv-apple-rail-image img{transform:scale(1.06)}
-#appleStyleHero .cv-apple-progress{position:absolute;inset:auto 0 0;height:3px;background:rgba(255,255,255,.24)}
-#appleStyleHero .cv-apple-progress>span{display:block;height:100%;background:#29c8bf}
-#appleStyleHero .cv-apple-rail-title,#appleStyleHero .cv-apple-rail-subtitle{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-#appleStyleHero .cv-apple-rail-title{margin-top:5px;color:#fff;font-size:10px;font-weight:750}
-#appleStyleHero .cv-apple-rail-subtitle{margin-top:1px;color:rgba(255,255,255,.55);font-size:9px}
-#appleStyleHero .cv-apple-rail-empty{display:flex;min-height:75px;align-items:center;padding:0 12px;color:rgba(255,255,255,.58);font-size:11px}
-@media(max-width:767px){#appleStyleHero .cv-apple-inner{min-height:510px;padding:14px 16px}#appleStyleHero .cv-apple-backdrop>img{object-position:60% center}#appleStyleHero .cv-apple-shade{background:linear-gradient(90deg,rgba(2,12,19,.88),rgba(2,12,19,.48) 58%,rgba(2,12,19,.18))}#appleStyleHero .cv-apple-bottom-shade{inset:18% 0 0;background:linear-gradient(0deg,#02070d 0%,rgba(2,7,13,.94) 16%,rgba(2,7,13,.22) 66%,rgba(2,7,13,.08))}#appleStyleHero .cv-apple-feature{min-height:280px;align-items:flex-end;padding:54px 0 18px}#appleStyleHero .cv-apple-copy{width:min(82%,390px);margin:0}#appleStyleHero .cv-apple-title{font-size:clamp(32px,9vw,48px);max-width:90%}#appleStyleHero .cv-apple-description{font-size:11px;max-width:300px;-webkit-line-clamp:3}#appleStyleHero .cv-apple-slide-count{right:2%;bottom:18%;font-size:9px}#appleStyleHero .cv-apple-rail-wrap{padding-top:10px}#appleStyleHero .cv-apple-rail{gap:10px}#appleStyleHero .cv-apple-rail-card{flex-basis:118px;width:118px}}
-@media(min-width:768px) and (max-width:1023px){#appleStyleHero .cv-apple-inner{min-height:520px}#appleStyleHero .cv-apple-copy{width:44%}#appleStyleHero .cv-apple-title{font-size:clamp(40px,5vw,56px)}#appleStyleHero .cv-apple-rail-card{flex-basis:122px;width:122px}}
-@media(prefers-reduced-motion:reduce){#appleStyleHero *{scroll-behavior:auto!important;transition:none!important}}
+
 </style>
 
     <style id="cineverse-home-hero-header">
@@ -1924,29 +1882,10 @@
         <template x-if="currentPage === 'home'">
             <div id="home-page" class="w-full space-y-10 pb-16">
                 
-                <!-- APPLE TV REFERANS KOMPOZİSYONU: ayrı alternatif manşet -->
-                <section id="appleStyleHero" data-home-section="hero" x-cloak x-show="homepageConfig?.heroStyle === 'apple'" @mouseenter="setHeroPaused(true)" @mouseleave="setHeroPaused(false)" class="cv-apple-hero relative isolate w-full overflow-hidden bg-[#02070d] text-white">
-  <div class="cv-apple-backdrop absolute inset-0"><img :src="currentHero.backdrop || currentHero.tmdbBackdrop || currentHero.poster || currentHero.image" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async"><div class="cv-apple-shade"></div><div class="cv-apple-bottom-shade"></div></div>
-  <div class="cv-apple-inner relative mx-auto flex min-h-[560px] max-w-[1680px] flex-col px-5 pb-5 pt-5 sm:px-8 sm:pt-6 lg:px-12 xl:px-16">
-    <div class="relative z-20 flex items-center gap-2 text-[11px] font-semibold text-white/90"><button type="button" @click="currentPage='home'; window.scrollTo({top:0,behavior:'smooth'})" aria-label="Ana sayfaya dön" class="cv-apple-home-icon"><i class="fa-solid fa-house"></i></button><span class="cv-apple-home-label">Ana Sayfa</span></div>
-    <div class="cv-apple-feature relative flex flex-1 items-center">
-      <div class="cv-apple-copy relative z-20">
-        <h1 class="cv-apple-title" x-text="currentHero.title" :title="currentHero.title"></h1>
-        <div class="cv-apple-meta"><span x-text="currentHero.genre || (currentHero.type === 'tv' ? 'Dizi' : 'Film')"></span><span class="cv-apple-meta-dot"></span><span x-text="currentHero.year"></span><template x-if="currentHero.rating"><span class="cv-apple-rating"><i class="fa-solid fa-star"></i><span x-text="Number(currentHero.rating).toFixed(1)"></span></span></template></div>
-        <p class="cv-apple-description" x-text="heroDescription"></p>
-        <button type="button" @click="openWatchPage(currentHero)" class="cv-apple-cta"><i class="fa-solid fa-play"></i><span>Şimdi İzle</span></button>
-      </div>
-      <div class="cv-apple-slide-count" x-text="String(currentSlideIndex + 1).padStart(2,'0') + ' / ' + String(heroSlides.length).padStart(2,'0')"></div>
-    </div>
-    <div class="cv-apple-rail-wrap relative z-30">
-      <div class="cv-apple-rail-heading"><h2>İzlemeye Devam Et</h2><div class="cv-apple-rail-controls"><div class="cv-apple-dots" aria-label="Manşet sayfa göstergesi"><template x-for="(slide,index) in heroSlides" :key="'apple-dot-'+slide.id"><button type="button" @click="selectHeroSlide(index)" :aria-label="'Manşet '+(index+1)" :class="index===currentSlideIndex?'is-active':''"></button></template></div><button type="button" @click="scrollHomeCards('apple-hero-rail',-1)" aria-label="Önceki kartlar"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('apple-hero-rail',1)" aria-label="Sonraki kartlar"><i class="fa-solid fa-chevron-right"></i></button></div></div>
-      <div id="apple-hero-rail" class="cv-apple-rail"><template x-for="entry in heroRailItems.slice(0,8)" :key="'apple-continue-'+entry.kind+'-'+entry.item.id"><button type="button" @click="resumeLibraryItem(entry)" class="cv-apple-rail-card"><span class="cv-apple-rail-image"><img :src="entry.item.backdrop || entry.item.tmdbBackdrop || entry.item.poster || entry.item.image" :alt="entry.item.title" @error="handleImageError($event)" loading="lazy"><span class="cv-apple-progress" x-show="entry.percent > 0"><span :style="'width:'+entry.percent+'%'"></span></span></span><span class="cv-apple-rail-title" x-text="entry.item.title"></span><span class="cv-apple-rail-subtitle" x-text="entry.kind === 'series' && entry.label ? entry.label : (entry.percent > 0 ? 'Kaldığın yerden devam et' : 'Eklenen yapım')"></span></button></template><div x-show="heroRailItems.length === 0" class="cv-apple-rail-empty">İzleme geçmişin ve arşivindeki yapımlar burada görünecek.</div></div>
-    </div>
-  </div>
-</section>
+
 
                 <!-- DESKTOP EDITORIAL HERO: mobil manşetten bağımsız yeni masaüstü kompozisyonu -->
-                <section id="desktopEditorialHero" data-home-section="hero" x-cloak x-show="homepageConfig?.heroStyle !== 'apple'" x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
+                <section id="desktopEditorialHero" data-home-section="hero" x-cloak  x-data="{ trailerOpen: false, trailerItem: null }" @open-mobile-hero-trailer.window="trailerItem = $event.detail; trailerOpen = true" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0 overflow-hidden bg-[#090a0d]">
                         <img aria-hidden="true" :src="currentHero.backdrop || currentHero.poster" @error="handleImageError($event)" fetchpriority="low" decoding="async" class="absolute inset-0 h-full w-full scale-110 object-cover object-center opacity-35 blur-2xl">
                         <picture class="absolute inset-0 block"><source media="(min-width: 768px)" :srcset="getTmdbImageSrcSet(currentHero.backdrop || currentHero.poster, [780, 1280])" sizes="100vw"><img :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="h-full w-full object-cover object-right transition-transform duration-[1200ms] ease-out"></picture>
