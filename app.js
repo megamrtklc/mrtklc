@@ -1744,9 +1744,32 @@
                             const typesNeedingRoom = new Set([...typeTargets.entries()]
                                 .filter(([type, target]) => (typeCounts.get(type) || 0) < target && remainingTypes.has(type))
                                 .map(([type]) => type));
-                            let bestIndex = 0;
+                            // İlk 5 görünür öneride (1 büyük + 4 küçük) en az 3 film ve 2 dizi bulunsun.
+                            // Puan sıralaması korunur; yalnızca film/dizi kotası dolduğunda seçim dengelenir.
+                            let visibleCandidates = remaining;
+                            if (selected.length < 5) {
+                                const selectedMovies = typeCounts.get('movie') || 0;
+                                const selectedTv = typeCounts.get('tv') || 0;
+                                const missingMovies = Math.max(0, 3 - selectedMovies);
+                                const missingTv = Math.max(0, 2 - selectedTv);
+                                const remainingMovies = remaining.filter(entry => entry.item.type === 'movie').length;
+                                const remainingTv = remaining.filter(entry => entry.item.type === 'tv').length;
+                                if (remainingMovies < missingMovies && remainingTv >= missingTv) {
+                                    visibleCandidates = remaining.filter(entry => entry.item.type === 'tv');
+                                } else if (remainingTv < missingTv && remainingMovies >= missingMovies) {
+                                    visibleCandidates = remaining.filter(entry => entry.item.type === 'movie');
+                                } else if (remainingMovies >= missingMovies && remainingTv >= missingTv) {
+                                    if (remainingMovies === missingMovies || selectedTv >= 2) {
+                                        visibleCandidates = remaining.filter(entry => entry.item.type === 'movie');
+                                    } else if (remainingTv === missingTv || selectedMovies >= 3) {
+                                        visibleCandidates = remaining.filter(entry => entry.item.type === 'tv');
+                                    }
+                                }
+                                if (!visibleCandidates.length) visibleCandidates = remaining;
+                            }
+                            let bestEntry = null;
                             let bestAdjusted = -Infinity;
-                            remaining.forEach((entry, index) => {
+                            visibleCandidates.forEach(entry => {
                                 const genre = entry.primaryGenre || 'diger';
                                 const type = entry.item.type || 'unknown';
                                 const genreCount = genreCounts.get(genre) || 0;
@@ -1757,9 +1780,10 @@
                                 const adjusted = entry.score - diversityPenalty;
                                 if (adjusted > bestAdjusted) {
                                     bestAdjusted = adjusted;
-                                    bestIndex = index;
+                                    bestEntry = entry;
                                 }
                             });
+                            const bestIndex = remaining.indexOf(bestEntry);
                             const [chosen] = remaining.splice(bestIndex, 1);
                             selected.push(chosen);
                             const genre = chosen.primaryGenre || 'diger';
