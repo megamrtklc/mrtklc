@@ -395,6 +395,12 @@
                 },
 
                 async init() {
+                    this.routeHistoryReady = false;
+                    window.addEventListener('popstate', event => {
+                        this.routeHistoryIndex = Number(event.state?.cineverseRouteIndex || 0);
+                        this.restoreRouteFromUrl();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
                     this.$watch('currentPage', page => {
                         if (page === 'home') this.$nextTick(() => this.initHomeSectionObserver());
                     });
@@ -459,6 +465,7 @@
                         this.currentSlideIndex = 0;
                         this.startHeroAutoplay();
                         this.restoreRouteFromUrl();
+                        this.routeHistoryReady = true;
                     } catch (error) {
                         this.catalogError = error.message || 'Bilinmeyen katalog hatası';
                         console.error('Perde katalog yükleme hatası:', error);
@@ -1150,7 +1157,16 @@
                 syncRouteToUrl(page = this.currentPage, item = this.selectedItem) {
                     const nextHash = this.getRouteHash(page, item);
                     if (window.location.hash !== nextHash) {
-                        window.history.replaceState(null, '', window.location.pathname + window.location.search + nextHash);
+                        const nextUrl = window.location.pathname + window.location.search + nextHash;
+                        const currentState = window.history.state && typeof window.history.state === 'object' ? window.history.state : {};
+                        if (this.routeHistoryReady) {
+                            const nextIndex = Number(currentState.cineverseRouteIndex || this.routeHistoryIndex || 0) + 1;
+                            window.history.pushState({ ...currentState, cineverseRouteIndex: nextIndex }, '', nextUrl);
+                            this.routeHistoryIndex = nextIndex;
+                        } else {
+                            window.history.replaceState({ ...currentState, cineverseRouteIndex: 0 }, '', nextUrl);
+                            this.routeHistoryIndex = 0;
+                        }
                     }
                 },
 
@@ -1187,6 +1203,15 @@
                     this.currentPage = page;
                     this.syncRouteToUrl(page, null);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+
+                navigateBack() {
+                    const historyIndex = Number(window.history.state?.cineverseRouteIndex ?? this.routeHistoryIndex ?? 0);
+                    if (historyIndex > 0) {
+                        window.history.back();
+                    } else if (this.currentPage !== 'home') {
+                        this.navigateTo('home');
+                    }
                 },
 
                 async fetchActorAwards(wikidataId) {
