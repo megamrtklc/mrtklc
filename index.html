@@ -469,7 +469,7 @@
             .cineverse-theme-trigger{width:38px;height:38px;flex-basis:38px}
             .cineverse-profile-trigger{min-width:52px;height:42px;gap:6px;padding:4px 6px;border-radius:12px}
             .cineverse-profile-avatar{width:30px;height:30px;border-radius:8px}
-            .cineverse-profile-dropdown{width:min(240px,calc(100vw - 20px))}
+            .cineverse-profile-dropdown{width:min(288px,calc(100vw - 20px))}
         }
         @media(prefers-reduced-motion:reduce){.cineverse-theme-trigger,.cineverse-profile-trigger,.cineverse-dropdown-item,.cineverse-profile-option,.cineverse-admin-shortcut{transition:none}}
     </style>
@@ -495,12 +495,6 @@
                         <span>Video Bağlantıları</span>
                         <span class="px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px]" x-text="watchableCatalog.length"></span>
                     </a>
-                    <a href="#" @click.prevent="navigateTo('library')" :class="currentPage === 'library' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center gap-1.5"><i class="fa-solid fa-book-open text-rose-500"></i><span>Kütüphanem</span><span class="px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px]" x-text="continueWatchingItems.length"></span></a>
-                    <a href="#" @click.prevent="navigateTo('watchlist')" :class="currentPage === 'watchlist' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center space-x-1.5">
-                        <span>İzleme Listem</span>
-                        <span class="px-1.5 py-0.2 bg-rose-500/20 text-rose-600 dark:text-rose-400 rounded-full text-[10px]" x-text="watchlist.length"></span>
-                    </a>
-                    <a href="#" @click.prevent="navigateTo('stats')" :class="currentPage === 'stats' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors">İstatistikler</a>
                 </nav>
             </div>
             
@@ -512,36 +506,39 @@
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 </button>
 
-                <!-- İkon tabanlı tema seçici -->
-                <div class="relative" x-data="{ openThemeMenu: false }">
-                    <button type="button" @click="openThemeMenu = !openThemeMenu" :aria-expanded="openThemeMenu.toString()" :aria-label="'Tema: ' + getThemeName()" :title="getThemeName()" :class="getButtonClass()" class="cineverse-theme-trigger">
-                        <i :class="getThemeIcon()" aria-hidden="true"></i>
-                    </button>
-                    <div x-show="openThemeMenu" x-transition.origin.top.right @click.away="openThemeMenu = false" class="cineverse-header-dropdown absolute right-0 mt-2 w-52 rounded-xl border shadow-2xl py-2 z-50">
-                        <p class="px-4 pb-2 text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Görünüm teması</p>
-                        <button @click="setTheme('ivory'); openThemeMenu = false;" class="cineverse-dropdown-item">
-                            <i class="fa-solid fa-sun text-amber-500"></i><span>Fil Dişi (Sıcak Krem)</span><i x-show="theme === 'ivory'" class="fa-solid fa-check ml-auto text-rose-500"></i>
-                        </button>
-                        <button @click="setTheme('slate'); openThemeMenu = false;" class="cineverse-dropdown-item">
-                            <i class="fa-solid fa-circle-half-stroke text-sky-500"></i><span>Modern Gri (Slate)</span><i x-show="theme === 'slate'" class="fa-solid fa-check ml-auto text-rose-500"></i>
-                        </button>
-                        <button @click="setTheme('dark'); openThemeMenu = false;" class="cineverse-dropdown-item">
-                            <i class="fa-solid fa-moon text-indigo-400"></i><span>Karanlık Mod</span><i x-show="theme === 'dark'" class="fa-solid fa-check ml-auto text-rose-500"></i>
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Tek profil menüsü -->
                 <div class="relative" x-data="{ openProfileMenu: false }">
                     <button type="button" @click="openProfileMenu = !openProfileMenu" :aria-expanded="openProfileMenu.toString()" aria-label="Hesap menüsünü aç" class="cineverse-profile-trigger">
                         <img alt="Profil fotoğrafı" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="cineverse-profile-avatar">
                         <i :class="openProfileMenu ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'" class="text-[10px] opacity-70" aria-hidden="true"></i>
                     </button>
-                    <div x-show="openProfileMenu" x-transition.origin.top.right @click.away="openProfileMenu = false" class="cineverse-header-dropdown cineverse-profile-dropdown absolute right-0 mt-2 w-60 rounded-xl border shadow-2xl py-2 z-50">
+                    <div x-show="openProfileMenu" x-transition.origin.top.right @click.away="openProfileMenu = false" class="cineverse-header-dropdown cineverse-profile-dropdown absolute right-0 mt-2 w-72 rounded-xl border shadow-2xl py-2 z-50">
                         <div class="px-4 pt-2 pb-3">
                             <p class="text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Hesap</p>
                             <p class="mt-1 text-sm font-extrabold" x-text="currentProfile.name"></p>
                         </div>
+                        <div class="cineverse-dropdown-divider my-2"></div>
+                        <p class="px-4 pb-1 text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Kişisel alanın</p>
+                        <button type="button" @click="navigateTo('library'); openProfileMenu = false" class="cineverse-dropdown-item">
+                            <i class="fa-solid fa-book-open w-4 text-center text-rose-500"></i><span class="flex-1">Kütüphanem</span><span class="text-[10px] opacity-60" x-text="continueWatchingItems.length"></span>
+                        </button>
+                        <button type="button" @click="navigateTo('watchlist'); openProfileMenu = false" class="cineverse-dropdown-item">
+                            <i class="fa-solid fa-bookmark w-4 text-center text-rose-500"></i><span class="flex-1">İzleme Listem</span><span class="text-[10px] opacity-60" x-text="watchlist.length"></span>
+                        </button>
+                        <button type="button" @click="navigateTo('stats'); openProfileMenu = false" class="cineverse-dropdown-item">
+                            <i class="fa-solid fa-chart-simple w-4 text-center text-rose-500"></i><span class="flex-1">İstatistikler</span>
+                        </button>
+                        <div class="cineverse-dropdown-divider my-2"></div>
+                        <p class="px-4 pb-1 text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Görünüm teması</p>
+                        <button type="button" @click="setTheme('ivory'); openProfileMenu = false;" class="cineverse-dropdown-item">
+                            <i class="fa-solid fa-sun w-4 text-center text-amber-500"></i><span class="flex-1">Fil Dişi (Sıcak Krem)</span><i x-show="theme === 'ivory'" class="fa-solid fa-check ml-auto text-rose-500"></i>
+                        </button>
+                        <button type="button" @click="setTheme('slate'); openProfileMenu = false;" class="cineverse-dropdown-item">
+                            <i class="fa-solid fa-circle-half-stroke w-4 text-center text-sky-500"></i><span class="flex-1">Modern Gri (Slate)</span><i x-show="theme === 'slate'" class="fa-solid fa-check ml-auto text-rose-500"></i>
+                        </button>
+                        <button type="button" @click="setTheme('dark'); openProfileMenu = false;" class="cineverse-dropdown-item">
+                            <i class="fa-solid fa-moon w-4 text-center text-indigo-400"></i><span class="flex-1">Karanlık Mod</span><i x-show="theme === 'dark'" class="fa-solid fa-check ml-auto text-rose-500"></i>
+                        </button>
                         <div class="cineverse-dropdown-divider my-2"></div>
                         <a href="admin/" class="cineverse-admin-shortcut">
                             <span class="cineverse-admin-icon"><i class="fa-solid fa-shield-halved"></i></span>
@@ -557,9 +554,6 @@
                 <a href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Ana Sayfa</a>
                 <a href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">Keşfet</a>
                 <a href="#" @click.prevent="navigateTo('video-links'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span>Video Bağlantıları</span><span class="text-xs text-rose-500" x-text="watchableCatalog.length"></span></a>
-                <a href="#" @click.prevent="navigateTo('library'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span>Kütüphanem</span><span class="text-xs text-rose-500" x-text="continueWatchingItems.length"></span></a>
-                <a href="#" @click.prevent="navigateTo('watchlist'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-between"><span>İzleme Listem</span><span class="text-xs text-rose-500" x-text="watchlist.length"></span></a>
-                <a href="#" @click.prevent="navigateTo('stats'); mobileMenuOpen = false" class="rounded-lg px-3 py-3 hover:bg-gray-100 dark:hover:bg-gray-800">İstatistikler</a>
             </nav>
         </div>
     </header>
