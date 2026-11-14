@@ -2240,18 +2240,26 @@
                         const moodText = this.normalizeSearchText([
                             item.category, item.genre, item.desc, item.title, item.originalTitle
                         ].filter(Boolean).join(' '));
+                        const moodGenreTokens = String([item.category, item.genre].filter(Boolean).join(','))
+                            .split(/[\\/;,]/)
+                            .map(value => this.normalizeSearchText(value).trim())
+                            .filter(Boolean);
+                        const familyGenreAllowlist = ['aile', 'animasyon', 'cocuk', 'cocuk filmi', 'family'];
+                        const familyGenreBlocklist = ['suc', 'korku', 'gerilim', 'polisiye', 'erotik', 'yetiskin', 'savas'];
                         const moodRules = {
                             feelgood: ['komedi','eğlence','aile','animasyon','romantik','macera','müzik','müzikal','feel good','feelgood'],
                             thriller: ['gerilim','gizem','suç','korku','polisiye','aksiyon','dedektif','psikolojik gerilim','suspense'],
                             comedy: ['komedi','eğlence','mizah','stand up','sitcom','absürt'],
                             emotional: ['dram','romantik','aile','biyografi','tarih','melodram','duygusal'],
-                            mind: ['bilim kurgu','gizem','gerilim','fantastik','psikolojik','distopya','zihin','zeka','ters köşe'],
-                            family: ['aile','animasyon','çocuk','macera','fantastik','çocuk filmi']
+                            mind: ['bilim kurgu','gizem','gerilim','fantastik','psikolojik','distopya','zihin','zeka','ters köşe']
                         };
                         const matchesMood = this.discoveryMood === 'all'
                             || (this.discoveryMood === 'top'
                                 ? (Number.parseFloat(item.rating) || 0) >= 7.5
-                                : (moodRules[this.discoveryMood] || []).some(term => moodText.includes(this.normalizeSearchText(term))));
+                                : this.discoveryMood === 'family'
+                                    ? moodGenreTokens.some(genre => familyGenreAllowlist.includes(genre))
+                                        && !moodGenreTokens.some(genre => familyGenreBlocklist.includes(genre))
+                                    : (moodRules[this.discoveryMood] || []).some(term => moodText.includes(this.normalizeSearchText(term))));
                         const genres = String(item.category || item.genre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value));
                         const selectedGenres = String(this.discoveryGenre || '').split(/[\/;,]/).map(value => this.normalizeSearchText(value)).filter(Boolean);
                         const matchesGenre = this.discoveryGenre === 'all' || selectedGenres.some(genre => genres.includes(genre) || this.normalizeSearchText(item.genre) === genre);
