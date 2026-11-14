@@ -617,10 +617,10 @@
       const limit=device==='desktop'?Math.max(5,Math.min(15,rawLimit)):Math.max(1,Math.min(12,rawLimit));
       $('#hero-'+device+'-count').value=limit;
       const saved=Array.isArray(draft[device])?draft[device]:(Array.isArray(config[device+'HeroSlides'])?config[device+'HeroSlides']:config.heroSlides);
-      const selectedIds=(mode==='auto'?autoHeroItems(category,limit).map(x=>String(x.id)):saved.map(x=>String(typeof x==='object'?x.id:x))).slice(0,limit);
+      const pool=mode==='auto'?autoHeroItems(category,limit):state.catalog;
+      const selectedIds=(mode==='auto'?pool.map(x=>String(x.id)):saved.map(x=>String(typeof x==='object'?x.id:x))).slice(0,limit);
       const selected=new Set(selectedIds);
       const list=$('#hero-'+device+'-slide-list');
-      const pool=mode==='auto'?autoHeroItems(category,limit):state.catalog;
       list.innerHTML=pool.map(item=>{
         const checked=selected.has(String(item.id));
         return '<label class="hero-pick" data-search="'+escapeHtml((titleOf(item)+' '+yearOf(item)).toLocaleLowerCase('tr-TR'))+'"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(checked?'checked ':'')+(mode==='auto'?'disabled ':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt=""><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+' · ★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'</small></span></label>';
@@ -651,7 +651,7 @@
         $$('#hero-'+device+'-slide-list .hero-pick').forEach(row=>{row.hidden=!!q&&!row.dataset.search.includes(q);});
       };
       $('#hero-'+device+'-hint').textContent=mode==='auto'
-        ?(category==='most-watched'?'En çok izlenen sıralaması, katalogdaki TMDB oy sayısı üzerinden hesaplanır; platform içi oynatma sayacı henüz bulunmuyor.':'Seçilen ölçüte göre katalogdan otomatik '+pool.length+' yapım getirildi.')
+        ?(category==='random'?'Katalogdan belirlenen sayı kadar tekrarsız rastgele yapım seçildi.':'Seçilen ölçüte göre katalogdan otomatik '+pool.length+' yapım getirildi.')
         :'Katalogda ara; kutucuğu işaretleyerek manşete ekle, işareti kaldırarak çıkar.';
     });
     $('#homepage-config').textContent=JSON.stringify(config,null,2);
