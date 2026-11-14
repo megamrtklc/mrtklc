@@ -469,6 +469,19 @@
             #home-personalized-section .home-personalized-plot.is-plot-open{opacity:1!important;visibility:visible;transform:translateY(0) scale(1)}
         }
         @media(prefers-reduced-motion:reduce){#home-personalized-section .home-personalized-plot{transition:none}}
+
+        /* Recommendation hierarchy: larger featured pick, more compact six-card grid. */
+        @media(min-width:901px){
+          #home-personalized-section .home-personalized-showcase{grid-template-columns:minmax(320px,1.02fr) minmax(0,1.48fr);gap:18px}
+          #home-personalized-section .home-personalized-feature{min-height:420px}
+          #home-personalized-section .home-personalized-alternatives{height:350px;align-self:center;gap:10px}
+          #home-personalized-section .home-personalized-alternative{min-height:0;padding:9px;grid-template-columns:62px minmax(0,1fr);column-gap:9px;row-gap:3px}
+          #home-personalized-section .home-personalized-poster{width:62px}
+          #home-personalized-section .home-personalized-copy h3{font-size:12px}
+          #home-personalized-section .home-personalized-copy>p:last-child{font-size:8px}
+          #home-personalized-section .home-personalized-info{width:28px;height:28px}
+          #home-personalized-section .home-personalized-like,#home-personalized-section .home-personalized-dislike{width:30px;height:30px;font-size:12px}
+        }
     </style>
 
     <style id="cineverse-home-hero-header">
