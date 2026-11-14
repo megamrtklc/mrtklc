@@ -2651,7 +2651,10 @@
                                     <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px] shrink-0">Ülke</span>
                                     <div class="flex flex-wrap justify-end gap-x-3 gap-y-1 text-right">
                                         <template x-for="country in getCountryEntries(selectedItem.country)" :key="country.code + '-' + country.name">
-                                            <button type="button" @click="openRelatedDiscoveries('country', country.name)" class="font-semibold text-gray-800 dark:text-gray-200 hover:text-rose-500 hover:underline underline-offset-4 whitespace-nowrap" x-text="country.flag + ' ' + country.name" :title="country.name + ' yapımlarını keşfet'"></button>
+                                            <button type="button" @click="openRelatedDiscoveries('country', country.name)" class="inline-flex items-center gap-1.5 font-semibold text-gray-800 dark:text-gray-200 hover:text-rose-500 hover:underline underline-offset-4 whitespace-nowrap" :title="country.name + ' yapımlarını keşfet'">
+                                                <img x-show="country.flagUrl" :src="country.flagUrl" :alt="country.name + ' bayrağı'" width="20" height="14" loading="lazy" class="h-3.5 w-5 rounded-[2px] border border-black/10 object-cover">
+                                                <span x-text="country.name"></span>
+                                            </button>
                                         </template>
                                         <span x-show="!getCountryEntries(selectedItem.country).length" class="font-semibold text-gray-500">—</span>
                                     </div>
