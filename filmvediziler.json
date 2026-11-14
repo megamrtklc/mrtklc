@@ -19025,6 +19025,207 @@
       "tmdbImdbId": "tt1631867",
       "tmdbRating": "7.6",
       "tmdbVoteCount": 15752
+    },
+    {
+      "id": "cv-1794698064513",
+      "title": "Cesur Yürek",
+      "type": "movie",
+      "year": "1995",
+      "rating": "7.9",
+      "genre": "Tarih",
+      "category": "Tarih / Dram / Savaş",
+      "duration": "178 dk",
+      "country": "United States of America",
+      "director": "Mel Gibson",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 197,
+      "imdbId": "tt0112573",
+      "image": "https://image.tmdb.org/t/p/w500/h98Ml18umVRDuS9nLoJoLK7qIm8.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/1m1c5gIWWkb1FEC9lzsoXHhhs7b.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "13. yüzyıl İskoçyası. İngiliz Kralı I. Edward, İskoçya'yı da krallığına katmak istemektedir. İngiliz soylularına Prima Nocta, yani topraklarında evlenen her İskoç kadınla ilk geceyi geçirme hakkını vererek İskoç halkının ayaklanmasına sebep olur. Çocukken ailesini ve yakınlarını özgür İskoçya uğruna kaybeden William Wallace, yıllar sonra karısı da öldürülünce halkı organize etmeye ve İngilizleri topraklarından atmaya karar verir.",
+      "cast": [
+        "Mel Gibson",
+        "Catherine McCormack",
+        "Sophie Marceau",
+        "Patrick McGoohan",
+        "Angus Macfadyen",
+        "Brendan Gleeson",
+        "James Robinson",
+        "James Cosmo",
+        "Sean McGinley",
+        "Gerda Stevenson",
+        "Mhairi Calvey",
+        "Jeanne Marine",
+        "Sean Lawlor",
+        "Sandy Nelson",
+        "Alan Tall",
+        "Andrew Weir",
+        "Brian Cox",
+        "Peter Hanly",
+        "Stephen Billington",
+        "Tommy Flanagan"
+      ],
+      "tmdbTitle": "Cesur Yürek",
+      "tmdbOriginalTitle": "Braveheart",
+      "tmdbReleaseDate": "1995-05-24",
+      "tmdbGenres": "Tarih / Dram / Savaş",
+      "tmdbRuntime": "178 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Mel Gibson",
+      "tmdbCast": [
+        {
+          "id": 2461,
+          "name": "Mel Gibson",
+          "character": "William Wallace",
+          "profile": "https://image.tmdb.org/t/p/w185/jnqHMaOslt8cef2atSmOpGRvNla.jpg",
+          "order": 0
+        },
+        {
+          "id": 2462,
+          "name": "Catherine McCormack",
+          "character": "Murron MacClannough",
+          "profile": "https://image.tmdb.org/t/p/w185/vYyMCGKeIUTZMdEgVwQCgX7q1T3.jpg",
+          "order": 1
+        },
+        {
+          "id": 1957,
+          "name": "Sophie Marceau",
+          "character": "Princess Isabelle",
+          "profile": "https://image.tmdb.org/t/p/w185/b56TRCVVMZ2LMZqzXg0FxeGMd0u.jpg",
+          "order": 2
+        },
+        {
+          "id": 2463,
+          "name": "Patrick McGoohan",
+          "character": "King Edward",
+          "profile": "https://image.tmdb.org/t/p/w185/xtUMgFYGF7KmJg1KqiYQuwYTTe3.jpg",
+          "order": 3
+        },
+        {
+          "id": 2464,
+          "name": "Angus Macfadyen",
+          "character": "Robert the Bruce",
+          "profile": "https://image.tmdb.org/t/p/w185/yUuA7U3lw6yM0Eb6mD83qYeevH2.jpg",
+          "order": 4
+        },
+        {
+          "id": 2039,
+          "name": "Brendan Gleeson",
+          "character": "Hamish Campbell",
+          "profile": "https://image.tmdb.org/t/p/w185/ctPPJu5ZYDZr1IPmzoNpezczrm0.jpg",
+          "order": 5
+        },
+        {
+          "id": 2465,
+          "name": "James Robinson",
+          "character": "Young William Wallace",
+          "profile": "https://image.tmdb.org/t/p/w185/zESqY8KKwkTsuEx75n7Jaumn8ho.jpg",
+          "order": 6
+        },
+        {
+          "id": 2467,
+          "name": "James Cosmo",
+          "character": "Campbell",
+          "profile": "https://image.tmdb.org/t/p/w185/4QZnZ3wyGALVuwZ70HdXZk4O14W.jpg",
+          "order": 7
+        },
+        {
+          "id": 2468,
+          "name": "Sean McGinley",
+          "character": "MacClannough",
+          "profile": "https://image.tmdb.org/t/p/w185/6dNAreBr5Egv3vVLEtCqJuyjDG9.jpg",
+          "order": 8
+        },
+        {
+          "id": 2469,
+          "name": "Gerda Stevenson",
+          "character": "Mother MacClannough",
+          "profile": "",
+          "order": 9
+        },
+        {
+          "id": 2470,
+          "name": "Mhairi Calvey",
+          "character": "Young Murron MacClannough",
+          "profile": "",
+          "order": 10
+        },
+        {
+          "id": 2471,
+          "name": "Jeanne Marine",
+          "character": "Nicolette",
+          "profile": "https://image.tmdb.org/t/p/w185/bCf5M7QhDUVaqj9oULpYON583hM.jpg",
+          "order": 11
+        },
+        {
+          "id": 2472,
+          "name": "Sean Lawlor",
+          "character": "Malcolm Wallace",
+          "profile": "https://image.tmdb.org/t/p/w185/y7sWGFyRYObwk6TjZ98YlSBjis7.jpg",
+          "order": 12
+        },
+        {
+          "id": 2473,
+          "name": "Sandy Nelson",
+          "character": "John Wallace",
+          "profile": "",
+          "order": 13
+        },
+        {
+          "id": 2474,
+          "name": "Alan Tall",
+          "character": "Elder Stewart",
+          "profile": "",
+          "order": 14
+        },
+        {
+          "id": 2475,
+          "name": "Andrew Weir",
+          "character": "Young Hamish Campbell",
+          "profile": "",
+          "order": 15
+        },
+        {
+          "id": 1248,
+          "name": "Brian Cox",
+          "character": "Argyle Wallace",
+          "profile": "https://image.tmdb.org/t/p/w185/scSjbFCTRngXlkJRoKptM5kQGw7.jpg",
+          "order": 16
+        },
+        {
+          "id": 2476,
+          "name": "Peter Hanly",
+          "character": "Edward, Prince of Wales",
+          "profile": "",
+          "order": 17
+        },
+        {
+          "id": 2477,
+          "name": "Stephen Billington",
+          "character": "Phillip",
+          "profile": "https://image.tmdb.org/t/p/w185/zDHE0QUqzMeMJEUVKhGD5NlS315.jpg",
+          "order": 18
+        },
+        {
+          "id": 2478,
+          "name": "Tommy Flanagan",
+          "character": "Morrison",
+          "profile": "https://image.tmdb.org/t/p/w185/cwLJNAezwtCPHTq5YnWhtb8htLn.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "13. yüzyıl İskoçyası. İngiliz Kralı I. Edward, İskoçya'yı da krallığına katmak istemektedir. İngiliz soylularına Prima Nocta, yani topraklarında evlenen her İskoç kadınla ilk geceyi geçirme hakkını vererek İskoç halkının ayaklanmasına sebep olur. Çocukken ailesini ve yakınlarını özgür İskoçya uğruna kaybeden William Wallace, yıllar sonra karısı da öldürülünce halkı organize etmeye ve İngilizleri topraklarından atmaya karar verir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/h98Ml18umVRDuS9nLoJoLK7qIm8.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/1m1c5gIWWkb1FEC9lzsoXHhhs7b.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt0112573",
+      "tmdbRating": "7.9",
+      "tmdbVoteCount": 11629
     }
   ],
   "collections": [],
