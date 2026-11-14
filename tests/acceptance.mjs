@@ -450,6 +450,19 @@ try {
       !!card.querySelector('.home-personalized-like') && !!card.querySelector('.home-personalized-dislike')
     ));
     assert.ok(allCardsHaveFeedback, 'Açılan sekiz kartın tamamında Like ve Dislike olmalı');
+    const cardArtwork = await cards.first().evaluate(card => ({
+      backdrop: !!card.querySelector('.home-personalized-card-backdrop'),
+      blurred: getComputedStyle(card.querySelector('.home-personalized-card-backdrop')).filter.includes('blur'),
+      posterWidth: card.querySelector('.home-personalized-poster').getBoundingClientRect().width,
+      plot: !!card.querySelector('.home-personalized-plot'),
+      featureLikes: !!document.querySelector('.home-personalized-feature-actions .home-personalized-like'),
+      featureDislikes: !!document.querySelector('.home-personalized-feature-actions .home-personalized-dislike'),
+      oldDismiss: !!document.querySelector('.home-personalized-feature-dismiss')
+    }));
+    assert.ok(cardArtwork.backdrop && cardArtwork.blurred, 'Kart arka planı bulanık kapak görseli olmalı');
+    assert.ok(cardArtwork.posterWidth >= 60, 'Afiş görseli büyütülmüş olmalı');
+    assert.ok(cardArtwork.plot, 'Konu özeti için sınırlı metin alanı olmalı');
+    assert.ok(cardArtwork.featureLikes && cardArtwork.featureDislikes && !cardArtwork.oldDismiss, 'Büyük görselde X yerine Like/Dislike olmalı');
     const dislikeWidth = await cards.first().locator('.home-personalized-dislike').evaluate(element => element.getBoundingClientRect().width);
     assert.ok(dislikeWidth >= 38, 'Dislike butonu büyütülmüş olmalı');
 
