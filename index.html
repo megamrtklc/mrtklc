@@ -41,7 +41,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <!-- Alpine.js -->
     <script defer src="./app.min.js?v=20261114-performance-v2"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine'i ilk statik ekran boyandıktan sonra başlat; kritik ilk çizimi JS taramasına bağlama. -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let started = false;
+            const startAlpine = () => {
+                if (started) return;
+                started = true;
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js';
+                script.async = true;
+                document.head.appendChild(script);
+            };
+            requestAnimationFrame(() => requestAnimationFrame(startAlpine));
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') startAlpine();
+            }, { once: true });
+        }, { once: true });
+    </script>
     <style>
         @keyframes editorialCopyEnter{0%{opacity:0;transform:translateY(18px);filter:blur(5px)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}
         .editorial-copy-enter{animation:editorialCopyEnter .58s cubic-bezier(.2,.75,.25,1) both}
