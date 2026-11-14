@@ -17795,12 +17795,12 @@
       "order": [
         "hero",
         "personalized",
-        "continue",
-        "watchlist",
         "new-arrivals",
-        "series-tracking",
         "published-collections",
         "catalog",
+        "watchlist",
+        "series-tracking",
+        "continue",
         "genre-discovery",
         "watched",
         "favorites"
