@@ -17865,6 +17865,206 @@
       "tmdbImdbId": "tt33764258",
       "tmdbRating": "8.0",
       "tmdbVoteCount": 4803
+    },
+    {
+      "id": "cv-1794683689165",
+      "title": "Amansız",
+      "type": "movie",
+      "year": "2026",
+      "rating": "8.2",
+      "genre": "Aksiyon",
+      "category": "Aksiyon / Suç / Gerilim",
+      "duration": "113 dk",
+      "country": "Hong Kong, China, United States of America",
+      "director": "Kenji Tanigaki",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1280738,
+      "imdbId": "tt33311069",
+      "image": "https://image.tmdb.org/t/p/w500/sTWqYMxpTBWwFYouzpD27XpVTgq.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/i0eR9O1FnCgBm1cH8WwqxGbAXMS.jpg",
+      "trailerUrl": "",
+      "desc": "Eski bir özel kuvvet askeri, kayıp kızını kurtarmak için kuzey Myanmar'a sızar ve dolandırıcılık çeteleri ile organ kaçakçılarına karşı savaşarak suç patronuyla son bir hesaplaşmaya girer.",
+      "cast": [
+        "Xie Miao",
+        "Joe Teslim",
+        "Yang Enyou",
+        "Yayan Ruhian",
+        "JeeJa Yanin",
+        "Brian Le",
+        "Joey İvanaga",
+        "Sahajak Boonthanakit",
+        "Manatsanun Panlertwongskul",
+        "Vinay Vianyangkung",
+        "Sahatçay Çumrum",
+        "Marut Çaroensub",
+        "Sornchai Chatwiriyachai",
+        "Chayanith Riddhimat",
+        "Tanapol Chuksrida",
+        "Kittiphoom Wongpentak",
+        "Mimi Çu Mai Mai",
+        "Guo Junqing",
+        "Shan Tam",
+        "Jidapa Suwat-Ekkul"
+      ],
+      "tmdbTitle": "Amansız",
+      "tmdbOriginalTitle": "火遮眼",
+      "tmdbReleaseDate": "2026-06-10",
+      "tmdbGenres": "Aksiyon / Suç / Gerilim",
+      "tmdbRuntime": "113 dk",
+      "tmdbCountries": "Hong Kong, China, United States of America",
+      "tmdbDirector": "Kenji Tanigaki",
+      "tmdbCast": [
+        {
+          "id": 83487,
+          "name": "Xie Miao",
+          "character": "Wang Wei",
+          "profile": "https://image.tmdb.org/t/p/w185/fpuwLIVATZzqfnjR749rJkyQTLA.jpg",
+          "order": 0
+        },
+        {
+          "id": 592496,
+          "name": "Joe Teslim",
+          "character": "Navin",
+          "profile": "https://image.tmdb.org/t/p/w185/bk2j6Oa8T02KtvpD4qOXXGJe4Vy.jpg",
+          "order": 1
+        },
+        {
+          "id": 2956442,
+          "name": "Yang Enyou",
+          "character": "Rainy",
+          "profile": "",
+          "order": 2
+        },
+        {
+          "id": 142019,
+          "name": "Yayan Ruhian",
+          "character": "Tak",
+          "profile": "https://image.tmdb.org/t/p/w185/y8ZLh6FZMuLFw8PhqDxcEsyozjJ.jpg",
+          "order": 3
+        },
+        {
+          "id": 135347,
+          "name": "JeeJa Yanin",
+          "character": "Matia",
+          "profile": "https://image.tmdb.org/t/p/w185/73xhAKFbeNSlJTwUCsQCAtryLYS.jpg",
+          "order": 4
+        },
+        {
+          "id": 2410189,
+          "name": "Brian Le",
+          "character": "Ho",
+          "profile": "https://image.tmdb.org/t/p/w185/cdtKmPpmBrnVAiqFQVE4urxu0ko.jpg",
+          "order": 5
+        },
+        {
+          "id": 2115758,
+          "name": "Joey İvanaga",
+          "character": "Pak Lung",
+          "profile": "https://image.tmdb.org/t/p/w185/iwZXKVNZioAZaej7wUbOeYx1uLd.jpg",
+          "order": 6
+        },
+        {
+          "id": 521673,
+          "name": "Sahajak Boonthanakit",
+          "character": "Mr. Song",
+          "profile": "https://image.tmdb.org/t/p/w185/a36MI02S0f11bJZjBoxkZTsUDAK.jpg",
+          "order": 7
+        },
+        {
+          "id": 1338439,
+          "name": "Manatsanun Panlertwongskul",
+          "character": "Yadong",
+          "profile": "https://image.tmdb.org/t/p/w185/zj09X1mHTrRNiyGmKpbTjJyierc.jpg",
+          "order": 8
+        },
+        {
+          "id": 1191266,
+          "name": "Vinay Vianyangkung",
+          "character": "Donkey Head",
+          "profile": "",
+          "order": 9
+        },
+        {
+          "id": 64372,
+          "name": "Sahatçay Çumrum",
+          "character": "Kun Tai Luo",
+          "profile": "https://image.tmdb.org/t/p/w185/z2miLGPhdsZz7gnhpVeOMgMyRNu.jpg",
+          "order": 10
+        },
+        {
+          "id": 5106969,
+          "name": "Marut Çaroensub",
+          "character": "Madi",
+          "profile": "https://image.tmdb.org/t/p/w185/gbe0M3s9z7jadzXftdmcin4Jg4M.jpg",
+          "order": 11
+        },
+        {
+          "id": 2252184,
+          "name": "Sornchai Chatwiriyachai",
+          "character": "Carter",
+          "profile": "https://image.tmdb.org/t/p/w185/fO8HeBRN3ox6tT9vaxbVcWJOpH.jpg",
+          "order": 12
+        },
+        {
+          "id": 4317739,
+          "name": "Chayanith Riddhimat",
+          "character": "Ramu",
+          "profile": "https://image.tmdb.org/t/p/w185/ezMMnvcrVIHyvhOvOvPm04iScUm.jpg",
+          "order": 13
+        },
+        {
+          "id": 94387,
+          "name": "Tanapol Chuksrida",
+          "character": "Basso",
+          "profile": "https://image.tmdb.org/t/p/w185/mQiStBnFgzTyTJcWilqhUs5VoBu.jpg",
+          "order": 14
+        },
+        {
+          "id": 4364717,
+          "name": "Kittiphoom Wongpentak",
+          "character": "Sacha",
+          "profile": "https://image.tmdb.org/t/p/w185/n3lNFTvt1gJAwZyMzPXSzP9KhaQ.jpg",
+          "order": 15
+        },
+        {
+          "id": 1135781,
+          "name": "Mimi Çu Mai Mai",
+          "character": "Hair Salon Owner",
+          "profile": "https://image.tmdb.org/t/p/w185/A1rpCGLmQysVqzqcGhiYtF35Nws.jpg",
+          "order": 16
+        },
+        {
+          "id": 6282104,
+          "name": "Guo Junqing",
+          "character": "Marky",
+          "profile": "",
+          "order": 17
+        },
+        {
+          "id": 6282107,
+          "name": "Shan Tam",
+          "character": "Shelter Director",
+          "profile": "",
+          "order": 18
+        },
+        {
+          "id": 2802367,
+          "name": "Jidapa Suwat-Ekkul",
+          "character": "Shelter Assistant",
+          "profile": "",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Eski bir özel kuvvet askeri, kayıp kızını kurtarmak için kuzey Myanmar'a sızar ve dolandırıcılık çeteleri ile organ kaçakçılarına karşı savaşarak suç patronuyla son bir hesaplaşmaya girer.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/sTWqYMxpTBWwFYouzpD27XpVTgq.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/i0eR9O1FnCgBm1cH8WwqxGbAXMS.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt33311069",
+      "tmdbRating": "8.2",
+      "tmdbVoteCount": 899
     }
   ],
   "collections": [],
