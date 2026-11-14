@@ -184,9 +184,10 @@ try {
     const preloadChecks = await page.evaluate(() => ({
       catalog: !!document.querySelector('link[rel="preload"][as="fetch"][href="./filmvediziler.json"]'),
       alpine: [...document.querySelectorAll('link[rel="preload"][as="script"]')].some(link => link.href.includes('alpinejs')),
-      hero: !!document.querySelector('link[rel="preload"][as="image"]')
+      desktopHero: !!document.querySelector('#desktop-hero-image-preload[rel="preload"][as="image"][media*="768px"]')
     }));
-    assert.ok(preloadChecks.catalog && preloadChecks.alpine && preloadChecks.hero, 'Kritik kaynak ön yüklemeleri eksik');
+    assert.ok(!preloadChecks.catalog && preloadChecks.alpine && preloadChecks.desktopHero,
+      'Manşet görseli önceliklendirilmeli; tam katalog manşet görseliyle yarışmamalı');
     await page.waitForFunction(() => {
       const links = [...document.querySelectorAll('link[rel="stylesheet"]')];
       const iconCss = links.some(link => link.href.includes('font-awesome') && (link.media === 'all' || link.media === ''));
@@ -421,12 +422,12 @@ try {
     assert.ok(result.removedFromRecommendations, 'İlgimi çekmedi denilen yapım önerilerde kaldı');
   });
 
-  await check('Ana sayfada kişisel öneriler dört kartla başlıyor, tümünü açabiliyor ve geri bildirimleri koruyor', async () => {
+  await check('Ana sayfada kişisel öneriler dört kartla gösteriliyor ve geri bildirimleri koruyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     const rail = page.locator('#home-personalized-rail');
     await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 4, { timeout: 10000 });
-    const expand = page.getByRole('button', { name: 'Tüm önerileri gör' });
-    assert.ok(await expand.isVisible(), 'Tüm önerileri gör kontrolü görünmeli');
+    assert.equal(await page.getByRole('button', { name: 'Tüm önerileri gör' }).count(), 0,
+      'Dört kartlık öneri alanında genişletme kontrolü bulunmamalı');
     const initialLayout = await rail.evaluate(element => {
       const cards = [...element.querySelectorAll('.home-personalized-alternative')];
       const first = cards[0].getBoundingClientRect();
@@ -439,17 +440,15 @@ try {
         nextRowBelow: third.top > first.top
       };
     });
-    assert.equal(initialLayout.count, 4, 'İlk görünümde dört küçük öneri gösterilmeli');
+    assert.equal(initialLayout.count, 4, 'Dört küçük öneri gösterilmeli');
     assert.equal(initialLayout.columns, 2, 'Öneri alanı iki sütun olmalı');
     assert.ok(initialLayout.firstTwoShareRow && initialLayout.nextRowBelow, 'Kartlar ikişerli satırlara yerleşmeli');
 
-    await expand.click();
-    await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 8);
     const cards = rail.locator('.home-personalized-alternative');
     const allCardsHaveFeedback = await cards.evaluateAll(items => items.every(card =>
       !!card.querySelector('.home-personalized-like') && !!card.querySelector('.home-personalized-dislike')
     ));
-    assert.ok(allCardsHaveFeedback, 'Açılan sekiz kartın tamamında Like ve Dislike olmalı');
+    assert.ok(allCardsHaveFeedback, 'Dört öneri kartının tamamında Like ve Dislike olmalı');
     const cardArtwork = await cards.first().evaluate(card => ({
       backdrop: !!card.querySelector('.home-personalized-card-backdrop'),
       blurred: getComputedStyle(card.querySelector('.home-personalized-card-backdrop')).filter.includes('blur'),
