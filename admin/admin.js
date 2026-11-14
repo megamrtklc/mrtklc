@@ -290,7 +290,7 @@
     const checked=id=>$('#'+id).checked;
     const header={
       enabled:checked('hf-header-enabled'),sticky:checked('hf-header-sticky'),showLogoIcon:checked('hf-header-logo-icon'),
-      brandPrimary:value('hf-header-primary')||'CINE',brandAccent:value('hf-header-accent')||'VERSE',
+      brandPrimary:value('hf-header-primary'),brandAccent:value('hf-header-accent'),
       logoImage:state.data.headerConfig?.logoImage||'',
       showHome:checked('hf-header-home'),homeLabel:value('hf-header-home-label')||'Ana Sayfa',
       showExplore:checked('hf-header-explore'),exploreLabel:value('hf-header-explore-label')||'Keşfet',
@@ -298,7 +298,7 @@
       showSearch:checked('hf-header-search'),showProfile:checked('hf-header-profile'),showMobileMenu:checked('hf-header-mobile'),catalogMenusInitialized:true,customLinks:readCustomLinkRows('header')
     };
     const footer={
-      enabled:checked('hf-footer-enabled'),brandPrimary:value('hf-footer-primary')||'CINE',brandAccent:value('hf-footer-accent')||'VERSE',
+      enabled:checked('hf-footer-enabled'),brandPrimary:value('hf-footer-primary'),brandAccent:value('hf-footer-accent'),
       logoImage:state.data.footerConfig?.logoImage||'',
       description:value('hf-footer-description'),showBadges:checked('hf-footer-badges'),badgeOne:value('hf-footer-badge-one'),badgeTwo:value('hf-footer-badge-two'),
       columnOneTitle:value('hf-footer-col-one'),homeLabel:value('hf-footer-home-label'),exploreLabel:value('hf-footer-explore-label'),libraryLabel:value('hf-footer-library-label'),
