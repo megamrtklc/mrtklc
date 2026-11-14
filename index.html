@@ -645,6 +645,74 @@
         }
     </style>
 
+    <style id="cineverse-desktop-header-polish">
+        /* Masaüstü header: logo ve menü, manşet başlığıyla aynı içerik eksenine oturur. */
+        @media (min-width: 768px) {
+            header > div:first-of-type { }
+            header .cv-desktop-nav { gap: 1.25rem; }
+            header .cv-desktop-nav a {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                min-height: 42px;
+                padding: 0 2px;
+                color: inherit;
+                text-decoration: none;
+                transition: color .22s ease, transform .22s ease, text-shadow .22s ease;
+                isolation: isolate;
+            }
+            header .cv-desktop-nav a::before {
+                content: "";
+                position: absolute;
+                z-index: -1;
+                inset: 5px -10px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, rgba(225,29,72,.16), rgba(244,63,94,.05));
+                opacity: 0;
+                transform: scale(.92);
+                transition: opacity .22s ease, transform .22s ease;
+            }
+            header .cv-desktop-nav a::after {
+                content: "";
+                position: absolute;
+                left: 2px;
+                right: 2px;
+                bottom: 2px;
+                height: 2px;
+                border-radius: 99px;
+                background: linear-gradient(90deg, #fb7185, #e11d48);
+                box-shadow: 0 0 12px rgba(244,63,94,.48);
+                transform: scaleX(0);
+                transform-origin: center;
+                transition: transform .24s cubic-bezier(.2,.75,.25,1);
+            }
+            header .cv-desktop-nav a:hover {
+                color: #fda4af !important;
+                transform: translateY(-2px);
+                text-shadow: 0 2px 14px rgba(244,63,94,.18);
+            }
+            header .cv-desktop-nav a:hover::before { opacity: 1; transform: scale(1); }
+            header .cv-desktop-nav a:hover::after,
+            header .cv-desktop-nav a.is-active::after { transform: scaleX(1); }
+            header .cv-desktop-nav a.is-active {
+                color: #fb7185 !important;
+                text-shadow: 0 0 16px rgba(244,63,94,.2);
+            }
+            body:has(#home-page) > header.home-hero-overlay .cv-desktop-nav a.is-active {
+                color: #fff !important;
+            }
+            body:has(#home-page) > header.home-hero-overlay .cv-desktop-nav a.is-active::before {
+                opacity: 1;
+                background: linear-gradient(135deg, rgba(244,63,94,.24), rgba(255,255,255,.06));
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            header .cv-desktop-nav a,
+            header .cv-desktop-nav a::before,
+            header .cv-desktop-nav a::after { transition: none !important; }
+        }
+    </style>
+
     <style id="cineverse-dropdown-contrast-fix">
         /* Header açılır panelleri: manşet üzerindeki beyaz header metin renginden etkilenmesin. */
         header [x-show="openThemeMenu"],
@@ -1980,8 +2048,8 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
     <header x-show="headerConfig.enabled !== false" x-data="{ mobileMenuOpen: false, headerScrolled: window.scrollY > 40 }" @scroll.window="headerScrolled = window.scrollY > 40" :class="(headerConfig.sticky === false ? 'relative' : 'sticky') + ' z-50 ' + (currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass())" class="backdrop-blur-md border-b transition-colors duration-300">
-        <div class="w-full px-4 sm:px-12 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3 lg:space-x-6">
+        <div class="w-full px-4 sm:px-12 md:max-w-[1800px] md:mx-auto md:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 lg:space-x-6 xl:space-x-12">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
                     <img x-show="headerConfig.logoImage" :src="headerConfig.logoImage" alt="Logo" class="max-h-10 max-w-[180px] object-contain">
                     <div x-show="!headerConfig.logoImage && headerConfig.showLogoIcon !== false" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
@@ -1990,15 +2058,15 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     <span x-show="(headerConfig.brandPrimary || '').trim() || (headerConfig.brandAccent || '').trim()" class="text-xl font-black tracking-wider uppercase max-[360px]:hidden"><span x-show="(headerConfig.brandPrimary || '').trim()" x-text="headerConfig.brandPrimary"></span><span x-show="(headerConfig.brandAccent || '').trim()" class="text-rose-700 dark:text-rose-400" x-text="headerConfig.brandAccent"></span></span>
                 </a>
                 
-                <nav class="hidden xl:flex items-center space-x-4 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
-                    <a x-show="headerConfig.showHome !== false" href="#" @click.prevent="navigateTo('home')" :class="currentPage === 'home' ? 'text-rose-700 dark:text-rose-400' : 'hover:text-black dark:hover:text-white'" class="transition-colors" x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</a>
-                    <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore')" :class="currentPage === 'explore' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors" x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</a>
-                    <a x-show="headerConfig.showVideo !== false" href="#" @click.prevent="navigateTo('video-links')" :class="currentPage === 'video-links' ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors flex items-center gap-1.5">
+                <nav class="cv-desktop-nav hidden xl:flex items-center space-x-5 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                    <a x-show="headerConfig.showHome !== false" href="#" @click.prevent="navigateTo('home')" :class="currentPage === 'home' ? 'is-active text-rose-700 dark:text-rose-400' : ''" class="transition-colors" x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</a>
+                    <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore')" :class="currentPage === 'explore' ? 'is-active' : ''" class="transition-colors" x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</a>
+                    <a x-show="headerConfig.showVideo !== false" href="#" @click.prevent="navigateTo('video-links')" :class="currentPage === 'video-links' ? 'is-active' : ''" class="transition-colors flex items-center gap-1.5">
                         <span x-text="headerConfig.videoLabel || 'Video Bağlantıları'">Video Bağlantıları</span>
                         <span class="px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 text-[10px]" x-text="watchableCatalog.length"></span>
                     </a>
                     <template x-for="(link,index) in (headerConfig.customLinks || [])" :key="'header-custom-'+index">
-                        <a href="#" @click.prevent="navigateTo(link.page)" :class="currentPage === link.page ? 'text-rose-500' : 'hover:text-black dark:hover:text-white'" class="transition-colors" x-text="link.label"></a>
+                        <a href="#" @click.prevent="navigateTo(link.page)" :class="currentPage === link.page ? 'is-active' : ''" class="transition-colors" x-text="link.label"></a>
                     </template>
                 </nav>
             </div>
