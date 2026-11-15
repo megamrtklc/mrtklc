@@ -2335,7 +2335,33 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
       #home-personalized-section .home-personalized-refresh:active { transform:scale(.96); filter:brightness(1.22); }
       #home-personalized-section .home-personalized-modes button { touch-action:manipulation; -webkit-tap-highlight-color:rgba(235,190,100,.22); }
     </style>
-    </head>
+    
+    <!-- Mobil kaydırma akıcılığı: dekoratif blur/backdrop katmanlarını hafiflet. -->
+    <style id="cv-mobile-scroll-performance">
+      @media (max-width: 767px) {
+        .cv-back-button,
+        body:has(#home-page) > header.home-hero-overlay,
+        #home-continue-section .home-continue-type,
+        #home-personalized-section .home-personalized-mobile-feedback button,
+        #home-personalized-section .personalized-type,
+        #home-personalized-section .personalized-rating {
+          -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important;
+        }
+        .home-rail-arrow {
+          transition: background-color .16s ease, border-color .16s ease, color .16s ease;
+        }
+      }
+      @media (hover: none) and (pointer: coarse) {
+        .home-rail-arrow:hover,
+        #home-continue-section .home-continue-card:hover .home-continue-play,
+        #home-continue-section .home-continue-card:hover .home-continue-image,
+        #home-personalized-section .home-personalized-card:hover .personalized-poster img {
+          transform: none !important;
+        }
+      }
+    </style>
+</head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
