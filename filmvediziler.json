@@ -22564,6 +22564,7 @@
         "hero",
         "personalized",
         "new-arrivals",
+        "favorites",
         "published-collections",
         "catalog",
         "watchlist",
@@ -22571,10 +22572,11 @@
         "continue",
         "franchises",
         "genre-discovery",
-        "watched",
-        "favorites"
+        "watched"
       ],
-      "visibility": {}
+      "visibility": {
+        "watched": true
+      }
     },
     "heroStyle": "perde",
     "personalizedSection": {
