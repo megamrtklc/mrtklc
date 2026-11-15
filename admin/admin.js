@@ -948,7 +948,7 @@
   const PERSONAL_BACKUP_BRIDGE_URL='https://megamrtklc.github.io/mrtklc/backup-bridge.html';
   let selectedBackup=null;
   let remotePersonalStorage=null;
-  let remotePersonalStoragePromise=null;
+  let remoteBackupQueue=Promise.resolve();
   function collectBrowserStorage(storage){
     const values={};
     try{for(let i=0;i<storage.length;i++){const key=storage.key(i);if(key&&BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix)))values[key]=storage.getItem(key);}}catch(error){console.warn('Tarayıcı kayıtları okunamadı.',error);}
@@ -957,20 +957,27 @@
   function backupStorageCount(data){
     return Object.keys(data.localStorage||{}).length+Object.keys(data.sessionStorage||{}).length;
   }
-  function readMainSitePersonalStorage(){
-    if(remotePersonalStoragePromise)return remotePersonalStoragePromise;
-    remotePersonalStoragePromise=new Promise((resolve,reject)=>{
+  function requestMainSiteBackup(action,payload={}){
+    const task=remoteBackupQueue.then(()=>new Promise((resolve,reject)=>{
       const frame=document.createElement('iframe');
       const requestId='perde-backup-'+Date.now()+'-'+Math.random().toString(36).slice(2);
+      const requestType='PERDE_BACKUP_'+action+'_REQUEST';
+      const responseType='PERDE_BACKUP_'+action+'_RESPONSE';
       let settled=false;
-      const cleanup=()=>{window.removeEventListener('message',onMessage);clearTimeout(timeout);frame.remove();remotePersonalStoragePromise=null;};
+      const cleanup=()=>{window.removeEventListener('message',onMessage);clearTimeout(timeout);frame.remove();};
       const finish=(error,value)=>{if(settled)return;settled=true;cleanup();error?reject(error):resolve(value);};
       const onMessage=event=>{
-        if(event.origin!==PERSONAL_BACKUP_SITE_ORIGIN||event.source!==frame.contentWindow||event.data?.type!=='PERDE_BACKUP_EXPORT_RESPONSE'||event.data?.requestId!==requestId)return;
+        if(event.origin!==PERSONAL_BACKUP_SITE_ORIGIN||event.source!==frame.contentWindow||event.data?.type!==responseType||event.data?.requestId!==requestId)return;
         if(event.data.error){finish(new Error(String(event.data.error)));return;}
-        const data=event.data.browserData;
-        if(!data||typeof data.localStorage!=='object'||typeof data.sessionStorage!=='object'){finish(new Error('Ana siteden geçerli kişisel kayıt yanıtı alınamadı.'));return;}
-        finish(null,data);
+        if(action==='EXPORT'){
+          const data=event.data.browserData;
+          if(!data||typeof data.localStorage!=='object'||typeof data.sessionStorage!=='object'){finish(new Error('Ana siteden geçerli kişisel kayıt yanıtı alınamadı.'));return;}
+          finish(null,data);
+        }else{
+          const previous=event.data.previousBrowserData;
+          if(event.data.ok!==true||!previous||typeof previous.localStorage!=='object'||typeof previous.sessionStorage!=='object'){finish(new Error('Ana site kişisel kayıtları geri yükleyemedi.'));return;}
+          finish(null,previous);
+        }
       };
       const timeout=setTimeout(()=>finish(new Error('Ana siteyle bağlantı kurulamadı. Perde ana sitesini aynı tarayıcıda açıp tekrar dene.')),12000);
       window.addEventListener('message',onMessage);
@@ -978,11 +985,18 @@
       frame.setAttribute('aria-hidden','true');
       frame.style.cssText='position:fixed;width:1px;height:1px;left:-10px;top:-10px;border:0;opacity:0;pointer-events:none';
       frame.src=PERSONAL_BACKUP_BRIDGE_URL;
-      frame.onload=()=>frame.contentWindow.postMessage({type:'PERDE_BACKUP_EXPORT_REQUEST',requestId},PERSONAL_BACKUP_SITE_ORIGIN);
+      frame.onload=()=>frame.contentWindow.postMessage({type:requestType,requestId,...payload},PERSONAL_BACKUP_SITE_ORIGIN);
       frame.onerror=()=>finish(new Error('Ana site yedek bağlantısı yüklenemedi.'));
       document.body.appendChild(frame);
-    });
-    return remotePersonalStoragePromise;
+    }));
+    remoteBackupQueue=task.catch(()=>{});
+    return task;
+  }
+  function readMainSitePersonalStorage(){
+    return requestMainSiteBackup('EXPORT');
+  }
+  function restoreMainSitePersonalStorage(browserData){
+    return requestMainSiteBackup('RESTORE',{browserData});
   }
   function refreshBackupSummary(){
     const catalogCount=Array.isArray(state.data?.catalog)?state.data.catalog.length:0;
@@ -1070,22 +1084,6 @@
     reader.onerror=()=>{summary.innerHTML='<span>Dosya durumu</span><b class="state-warning">Dosya okunamadı.</b>';};
     reader.readAsText(file);
   }
-  function replaceStorageFromBackup(storage,incoming){
-    const entries=Object.entries(incoming||{});
-    if(entries.some(([key,value])=>!BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix))||typeof value!=='string'))throw new Error('Yedek dosyasında geçersiz tarayıcı kayıt anahtarı var.');
-    const previous=collectBrowserStorage(storage);
-    try{
-      for(const key of Object.keys(previous))storage.removeItem(key);
-      for(const [key,value] of entries)storage.setItem(key,value);
-      return previous;
-    }catch(error){
-      try{
-        for(const key of Object.keys(collectBrowserStorage(storage)))storage.removeItem(key);
-        for(const [key,value] of Object.entries(previous))storage.setItem(key,value);
-      }catch(rollbackError){console.error('Tarayıcı kayıtları geri alınamadı:',rollbackError);}
-      throw error;
-    }
-  }
   async function restoreFullBackup(){
     const data=selectedBackup;
     if(!data){toast('Önce geçerli bir yedek dosyası seçmelisin.');return;}
@@ -1096,24 +1094,21 @@
     const catalogCount=data.siteData?.catalog?.length||0,personalCount=data.browserData?backupStorageCount(data.browserData):0;
     const description=isSite?catalogCount+' yapım ve site ayarı':isPersonal?personalCount+' kişisel kayıt':catalogCount+' yapım ve '+personalCount+' kişisel kayıt';
     if(!confirm(description+' geri yüklenecek. İlgili mevcut verilerin üzerine yazılacak. Devam edilsin mi?'))return;
-    let oldLocal=null,oldSession=null;
+    let previousBrowserData=null;
     try{
-      if(data.browserData){
-        oldLocal=replaceStorageFromBackup(localStorage,data.browserData.localStorage||{});
-        oldSession=replaceStorageFromBackup(sessionStorage,data.browserData.sessionStorage||{});
-      }
+      if(data.browserData)previousBrowserData=await restoreMainSitePersonalStorage(data.browserData);
       if(data.siteData){
         const ok=await persist(data.siteData,'Site verileri başarıyla geri yüklendi. Sayfa yenileniyor…');
-        if(!ok)throw new Error('Site verileri sunucuya kaydedilemedi; mevcut tarayıcı kayıtları geri alındı.');
+        if(!ok)throw new Error('Site verileri sunucuya kaydedilemedi; ana sitenin kişisel kayıtları eski hâline getiriliyor.');
       }else{
-        toast('Kişisel kayıtlar geri yüklendi. Sayfa yenileniyor…');
+        toast('Kişisel kayıtlar ana Perde sitesine geri yüklendi. Açık ana site sekmesini yenile.');
       }
       setTimeout(()=>window.location.reload(),900);
     }catch(error){
-      try{
-        if(oldLocal){for(const key of Object.keys(collectBrowserStorage(localStorage)))localStorage.removeItem(key);for(const [key,value] of Object.entries(oldLocal))localStorage.setItem(key,value);}
-        if(oldSession){for(const key of Object.keys(collectBrowserStorage(sessionStorage)))sessionStorage.removeItem(key);for(const [key,value] of Object.entries(oldSession))sessionStorage.setItem(key,value);}
-      }catch(rollbackError){console.error('Tarayıcı kayıtları geri alınamadı:',rollbackError);}
+      if(previousBrowserData){
+        try{await restoreMainSitePersonalStorage(previousBrowserData);}
+        catch(rollbackError){console.error('Ana site kişisel kayıtları geri alınamadı:',rollbackError);}
+      }
       toast(error.message||'Geri yükleme tamamlanamadı.');
     }
   }
