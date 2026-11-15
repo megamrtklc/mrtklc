@@ -410,7 +410,7 @@
     return response.json();
   }
   function normalizeContentTitle(value){
-    return String(value||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/ı/g,'i').replace(/[^a-z0-9]+/g,' ').trim().replace(/\\s+/g,' ');
+    return String(value||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
   }
   function findDuplicateContent(candidate,excludeId=''){
     const tmdbId=String(candidate.tmdbId||'').trim();
