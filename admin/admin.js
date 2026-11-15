@@ -948,7 +948,6 @@
   const PERSONAL_BACKUP_BRIDGE_URL='https://megamrtklc.github.io/mrtklc/backup-bridge.html';
   let selectedBackup=null;
   let remotePersonalStorage=null;
-  let remotePersonalStorage=null;
   function collectBrowserStorage(storage){
     const values={};
     try{for(let i=0;i<storage.length;i++){const key=storage.key(i);if(key&&BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix)))values[key]=storage.getItem(key);}}catch(error){console.warn('Tarayıcı kayıtları okunamadı.',error);}
