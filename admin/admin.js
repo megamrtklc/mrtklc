@@ -793,6 +793,7 @@
     config.layout.order=config.layout.order.filter(key=>known.has(key));
     HOMEPAGE_LAYOUT_DEFAULTS.forEach(key=>{if(!config.layout.order.includes(key))config.layout.order.push(key);});
     if(!config.layout.visibility||typeof config.layout.visibility!=='object')config.layout.visibility={};
+    if(!config.layout.labels||typeof config.layout.labels!=='object')config.layout.labels={};
     return config.layout;
   }
   function renderHomepageLayout(){
@@ -808,9 +809,16 @@
       const locked=!!item.locked;
       const active=locked||layout.visibility[key]!==false;
       const position=index+1;
+      const label=layout.labels[key]||{};
+      const title=label.title??item.title;
+      const description=label.description??item.description;
       return '<div class="homepage-layout-row'+(active?'':' is-disabled')+'" data-layout-key="'+escapeHtml(key)+'">'+
         '<span class="homepage-layout-row-icon">'+item.icon+'</span>'+
-        '<div class="homepage-layout-row-copy"><b>'+escapeHtml(item.title)+'</b><small>'+escapeHtml(item.description)+'</small></div>'+
+        '<div class="homepage-layout-row-copy">'+
+          (locked?'<b>'+escapeHtml(title)+'</b><small>'+escapeHtml(description)+'</small>':
+          '<label class="homepage-layout-field"><span>Başlık</span><input type="text" maxlength="70" data-layout-label="title" value="'+escapeHtml(title)+'" aria-label="'+escapeHtml(item.title)+' bölüm başlığı"></label>'+
+          '<label class="homepage-layout-field"><span>Alt metin</span><input type="text" maxlength="180" data-layout-label="description" value="'+escapeHtml(description)+'" aria-label="'+escapeHtml(item.title)+' bölüm alt metni"></label>')+
+        '</div>'+
         '<span class="homepage-layout-state '+(locked?'is-locked':(active?'is-active':'is-hidden'))+'">'+(locked?'SABİT':(active?'AÇIK':'GİZLİ'))+'</span>'+
         '<div class="homepage-layout-actions">'+
           '<span class="homepage-layout-position">'+String(position).padStart(2,'0')+'</span>'+
@@ -837,7 +845,7 @@
   async function saveHomepageLayout(){
     const config=homepageConfig();
     const layout=homepageLayoutConfig();
-    const nextLayout={order:[...layout.order],visibility:{...layout.visibility}};
+    const nextLayout={order:[...layout.order],visibility:{...layout.visibility},labels:{...layout.labels}};
     const ok=await persist({...state.data,homepageConfig:{...config,layout:nextLayout}},'Ana sayfa bölümleri ve sıralaması kaydedildi.');
     if(ok)renderHomepageLayout();
   }
@@ -1267,6 +1275,13 @@
   });
   $('#homepage-layout-save').addEventListener('click',saveHomepageLayout);
   $('#personalized-section-form').addEventListener('submit',savePersonalizedSection);
+  $('#homepage-layout-list').addEventListener('input',event=>{
+    const field=event.target.closest('[data-layout-label]');
+    const row=event.target.closest('[data-layout-key]');
+    if(!field||!row)return;
+    const layout=homepageLayoutConfig();
+    layout.labels[row.dataset.layoutKey]={...(layout.labels[row.dataset.layoutKey]||{}),[field.dataset.layoutLabel]:field.value};
+  });
   $('#homepage-layout-list').addEventListener('click',event=>{
     const button=event.target.closest('[data-layout-action]');
     const row=event.target.closest('[data-layout-key]');
