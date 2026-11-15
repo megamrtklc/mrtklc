@@ -1405,6 +1405,47 @@
                 },
 
                 recommendationFeedbackRevision: 0,
+                recommendationMode: safeStorageRead('cine_recommendation_mode_v1', 'taste'),
+                recommendationRefreshIndex: Math.max(0, Number(safeStorageRead('cine_recommendation_rotation_v1', 0)) || 0),
+                get personalizedRecommendationModeConfig() {
+                    const config = this.homepageConfig?.personalizedSection?.discoveryModes || {};
+                    return { taste: config.taste !== false, surprise: config.surprise !== false, series: config.series !== false, gems: config.gems !== false };
+                },
+                isPersonalizedModeEnabled(mode) { return this.personalizedRecommendationModeConfig[mode] !== false; },
+                setPersonalizedRecommendationMode(mode) {
+                    if (!this.isPersonalizedModeEnabled(mode)) return;
+                    this.recommendationMode = mode;
+                    safeStorageWrite('cine_recommendation_mode_v1', mode);
+                    this.recommendationRefreshIndex += 1;
+                    safeStorageWrite('cine_recommendation_rotation_v1', this.recommendationRefreshIndex);
+                },
+                refreshPersonalizedRecommendations() {
+                    this.recommendationRefreshIndex += 1;
+                    safeStorageWrite('cine_recommendation_rotation_v1', this.recommendationRefreshIndex);
+                    personalizedRecommendationCache.delete(this);
+                    this.recommendationFeedbackRevision += 1;
+                },
+                get displayedPersonalizedRecommendations() {
+                    const base = this.personalizedRecommendations;
+                    if (!base.length) return [];
+                    const enabled = this.personalizedRecommendationModeConfig;
+                    const mode = enabled[this.recommendationMode] ? this.recommendationMode : 'taste';
+                    let pool = [...base];
+                    if (mode === 'series') {
+                        pool = pool.filter(item => item.type === 'tv').sort((a,b) => (Number(b.year)||0)-(Number(a.year)||0) || (Number(b.rating)||0)-(Number(a.rating)||0));
+                    } else if (mode === 'gems') {
+                        pool = pool.filter(item => { const rating=Number(item.rating)||0; return rating>=7 && rating<=8.8; })
+                            .sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0) || (Number(b.year)||0)-(Number(a.year)||0));
+                    } else if (mode === 'surprise') {
+                        const seed=this.recommendationRefreshIndex+1;
+                        const hash=value=>{let result=seed*2654435761;for(const char of String(value))result=Math.imul(result^char.charCodeAt(0),16777619);return result>>>0;};
+                        pool.sort((a,b)=>hash(a.id)-hash(b.id));
+                    }
+                    if (!pool.length) pool=[...base];
+                    const offset=(this.recommendationRefreshIndex*5)%pool.length;
+                    if(mode==='surprise') return pool;
+                    return pool.slice(offset).concat(pool.slice(0,offset));
+                },
 
                 get recommendationFeedback() {
                     const stored = safeStorageRead('cine_recommendation_feedback_v1', []);
@@ -2160,12 +2201,17 @@
                     const progress = this.profileMovieProgress;
                     const episodes = safeRead('cine_episode_tracking_v1');
                     const watchlist = this.watchlist;
+                    const sectionConfig = this.homepageConfig?.personalizedSection || {};
+                    const watchedItems = sectionConfig.excludeWatched === false ? [] : this.watchedItems;
+                    const favoriteItems = sectionConfig.excludeFavorites === false ? [] : this.favoriteItems;
                     const feedbackIds = this.recommendationFeedback;
                     const likedIds = this.recommendationLikes;
                     const cacheKey = JSON.stringify([
                         progress,
                         Object.entries(episodes),
                         watchlist.map(item => String(item.id)),
+                        watchedItems.map(item => String(item.id)),
+                        favoriteItems.map(item => String(item.id)),
                         feedbackIds,
                         likedIds,
                         feedbackRevision
@@ -2220,6 +2266,7 @@
                         const previous = history.get(String(item.id));
                         history.set(String(item.id), { item, weight: Math.max(previous?.weight || 0, weight) });
                     });
+                    const watchedHistoryIds = new Set(history.keys());
                     const watchlistItems = watchlist.map(saved => catalogById.get(String(saved.id))).filter(Boolean);
                     watchlistItems.forEach(item => {
                         const id = String(item.id);
@@ -2227,7 +2274,7 @@
                     });
                     const feedbackItems = feedbackIds.map(id => catalogById.get(id)).filter(Boolean);
                     const likedItems = likedIds.map(id => catalogById.get(id)).filter(Boolean);
-                    const excluded = new Set([...history.keys(), ...watchlist.map(item => String(item.id)), ...feedbackIds]);
+                    const excluded = new Set([...watchedHistoryIds, ...(sectionConfig.excludeWatchlist === false ? [] : watchlist.map(item => String(item.id))), ...watchedItems.map(item => String(item.id)), ...favoriteItems.map(item => String(item.id)), ...feedbackIds]);
                     const prefs = {
                         genres: new Map(), types: new Map(), countries: new Map(),
                         directors: new Map(), actors: new Map(), themes: new Map(),
@@ -2270,9 +2317,9 @@
                             availableByType.set(type, (availableByType.get(type) || 0) + 1);
                         });
                         const typeTargets = new Map([...availableByType.entries()].map(([type, count]) => [
-                            type, Math.max(1, Math.round(15 * count / Math.max(1, ranked.length)))
+                            type, Math.max(1, Math.round(40 * count / Math.max(1, ranked.length)))
                         ]));
-                        while (remaining.length && selected.length < 15) {
+                        while (remaining.length && selected.length < 40) {
                             const remainingTypes = new Set(remaining.map(candidate => candidate.item.type || 'unknown'));
                             const typesNeedingRoom = new Set([...typeTargets.entries()]
                                 .filter(([type, target]) => (typeCounts.get(type) || 0) < target && remainingTypes.has(type))
@@ -2308,7 +2355,7 @@
                                 const genreCount = genreCounts.get(genre) || 0;
                                 const typeCount = typeCounts.get(type) || 0;
                                 const otherTypeNeedsRoom = [...typesNeedingRoom].some(otherType => otherType !== type);
-                                const typeBalancePenalty = typeCount >= (typeTargets.get(type) || 15) && otherTypeNeedsRoom ? 1000 : 0;
+                                const typeBalancePenalty = typeCount >= (typeTargets.get(type) || 40) && otherTypeNeedsRoom ? 1000 : 0;
                                 const diversityPenalty = Math.max(0, genreCount - 1) * 1.7 + typeBalancePenalty;
                                 const adjusted = entry.score - diversityPenalty;
                                 if (adjusted > bestAdjusted) {
