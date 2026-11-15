@@ -3738,18 +3738,21 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     <div x-show="continueWatchingItems.length" class="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
                         <template x-for="entry in continueWatchingItems.filter(entry => continueFilter === 'all' || (continueFilter === 'movies' ? entry.kind !== 'series' : entry.kind === 'series')).slice((continuePage - 1) * continuePageSize, continuePage * continuePageSize)" :key="'library-continue-' + entry.kind + '-' + entry.item.id">
                             <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="group min-w-0 overflow-hidden rounded-xl border text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-rose-500/60 hover:shadow-md">
-                                <div class="relative aspect-video overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                <div class="relative aspect-[2.5/1] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                     <img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.backdrop || entry.item.image || entry.item.poster || entry.item.tmdbPoster" :srcset="getTmdbImageSrcSet(entry.item.backdrop || entry.item.image || entry.item.poster || entry.item.tmdbPoster, [185, 300, 500])" sizes="(max-width: 639px) 46vw, (max-width: 1279px) 46vw, 23vw" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
                                     <span class="absolute left-2 top-2 rounded-md bg-black/75 px-2 py-1 text-[8px] font-black uppercase tracking-wider text-white" x-text="entry.kind === 'series' ? 'DİZİ' : 'FİLM'"></span>
                                     <span class="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-rose-600 text-white shadow-lg"><i class="fa-solid fa-play ml-0.5 text-[10px]"></i></span>
                                 </div>
-                                <div class="space-y-2.5 p-2.5 sm:p-3">
-                                    <h4 class="line-clamp-1 text-[11px] font-extrabold text-gray-900 dark:text-white sm:text-xs" x-text="entry.item.title"></h4>
-                                    <p class="line-clamp-1 text-[9px] text-gray-500 dark:text-gray-400" x-text="entry.label"></p>
-                                    <div class="h-1.5 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800"><div class="h-full rounded-full bg-rose-600 transition-all" :style="'width:' + entry.percent + '%'"></div></div>
-                                    <div class="flex items-center justify-between gap-1 text-[9px] text-gray-500 dark:text-gray-400">
-                                        <span class="min-w-0 truncate" x-text="entry.kind === 'series' ? entry.watchedCount + (entry.total ? ' / ' + entry.total + ' bölüm' : ' bölüm izlendi') : Math.floor(entry.time / 60) + ' dk izlendi'"></span>
-                                        <strong class="shrink-0 text-rose-500" x-text="entry.percent + '%'"></strong>
+                                <div class="flex items-start gap-2.5 px-2.5 pb-2.5 sm:gap-3 sm:px-3 sm:pb-3">
+                                    <img :alt="entry.item.title + ' afişi'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.tmdbPoster || entry.item.image" :srcset="getTmdbImageSrcSet(entry.item.poster || entry.item.tmdbPoster || entry.item.image, [92, 154, 185])" sizes="(max-width: 639px) 44px, 52px" class="relative z-10 -mt-5 h-[62px] w-[42px] shrink-0 rounded-md border-2 border-white object-cover shadow-lg dark:border-gray-900 sm:h-[72px] sm:w-[50px]">
+                                    <div class="min-w-0 flex-1 space-y-2.5 pt-2.5">
+                                        <h4 class="line-clamp-1 text-[11px] font-extrabold text-gray-900 dark:text-white sm:text-xs" x-text="entry.item.title"></h4>
+                                        <p class="line-clamp-1 text-[9px] text-gray-500 dark:text-gray-400" x-text="entry.label"></p>
+                                        <div class="h-1.5 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800"><div class="h-full rounded-full bg-rose-600 transition-all" :style="'width:' + entry.percent + '%'"></div></div>
+                                        <div class="flex items-center justify-between gap-1 text-[9px] text-gray-500 dark:text-gray-400">
+                                            <span class="min-w-0 truncate" x-text="entry.kind === 'series' ? entry.watchedCount + (entry.total ? ' / ' + entry.total + ' bölüm' : ' bölüm izlendi') : Math.floor(entry.time / 60) + ' dk izlendi'"></span>
+                                            <strong class="shrink-0 text-rose-500" x-text="entry.percent + '%'"></strong>
+                                        </div>
                                     </div>
                                 </div>
                             </button>
