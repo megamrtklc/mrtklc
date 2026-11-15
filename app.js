@@ -1467,6 +1467,7 @@
                 },
 
                 recommendationFeedbackRevision: 0,
+                recommendationUiRevision: 0,
                 recommendationFeedbackUpdatePending: false,
                 scheduleRecommendationFeedbackAnalysis() {
                     if (this.recommendationFeedbackUpdatePending) return;
@@ -1526,11 +1527,13 @@
                 },
 
                 get recommendationFeedback() {
+                    this.recommendationUiRevision;
                     const stored = safeStorageRead('cine_recommendation_feedback_v1', []);
                     return Array.isArray(stored) ? [...new Set(stored.map(String))] : [];
                 },
 
                 get recommendationLikes() {
+                    this.recommendationUiRevision;
                     const stored = safeStorageRead('cine_recommendation_likes_v1', []);
                     return Array.isArray(stored) ? [...new Set(stored.map(String))] : [];
                 },
@@ -1543,6 +1546,7 @@
                     safeStorageWrite('cine_recommendation_likes_v1', likes.slice(-200));
                     const dislikes = this.recommendationFeedback.filter(value => value !== id);
                     safeStorageWrite('cine_recommendation_feedback_v1', dislikes);
+                    this.recommendationUiRevision += 1;
                     this.scheduleRecommendationFeedbackAnalysis();
                 },
 
