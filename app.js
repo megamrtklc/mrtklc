@@ -325,6 +325,7 @@
                 selectedFranchiseId: null,
                 homepageConfig: window.__CV_HERO_BOOTSTRAP__?.homepageConfig || null,
                 headerConfig: { enabled:true, sticky:true, showLogoIcon:true, brandPrimary:'CINE', brandAccent:'VERSE', showHome:true, homeLabel:'Ana Sayfa', showExplore:true, exploreLabel:'Keşfet', showVideo:true, videoLabel:'Video Bağlantıları', showSearch:true, showProfile:true, showMobileMenu:true, catalogMenusInitialized:false, customLinks:[] },
+                footerConfigReady: false,
                 footerConfig: { enabled:true, customLinks:[], brandPrimary:'CINE', brandAccent:'VERSE', description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.', showBadges:true, badgeOne:'KİŞİSEL KÜTÜPHANE', badgeTwo:'DİZİ TAKİBİ', columnOneTitle:'CineVerse', homeLabel:'Ana Sayfa', exploreLabel:'Keşfet', libraryLabel:'Kütüphanem', columnTwoTitle:'İzleme Alanım', watchlistLabel:'İzleme Listem', statsLabel:'İstatistikler', featureTitle:'İzleme keyfini kişiselleştir', featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.', ctaLabel:'Kütüphaneme Git', showCta:true, copyright:'© 2026 CineVerse. Tüm hakları saklıdır.', showBackToTop:true },
                 watchPageConfig: null,
                 heroAutoplayTimer: null,
@@ -699,6 +700,8 @@
                         this.applyHomepageSectionOrder();
                         this.homeSectionReady.catalog = true;
                         this.catalogLoading = false;
+                        // Footer ayarı katalogdan doğrulanana ve ilk ana sayfa yerleşimi oturana kadar görünmesin.
+                        window.setTimeout(() => { this.footerConfigReady = true; }, 1200);
                         this.$nextTick(() => {
                             if (this.currentPage !== 'home') this.removeHeroInitialShell();
                             this.initHomeSectionObserver();
