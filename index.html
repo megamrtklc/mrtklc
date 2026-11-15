@@ -2760,7 +2760,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
 
                 <!-- Aktif profilin bölüm takibi bulunan dizileri -->
-                <section id="home-series-tracking-section" data-home-section="series-tracking" x-cloak x-show="isHomepageSectionVisible('series-tracking') && (!homeSectionReady['series-tracking'] || librarySeriesEntries.length > 0)" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-series-tracking-section" data-home-section="series-tracking" x-cloak x-show="!catalogLoading && isHomepageSectionVisible('series-tracking') && librarySeriesEntries.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-series-tracking-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">BÖLÜM BÖLÜM • KALDIĞIN YERİ UNUTMA</p>
