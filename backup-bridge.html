@@ -6,7 +6,8 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Perde güvenli yedek aktarımı</title>
 </head>
-<body>
+<body style="margin:0;min-height:100vh;display:grid;place-items:center;background:#17191f;color:#eee;font:14px system-ui,sans-serif">
+  <p id="status">Perde kişisel kayıtları güvenli şekilde aktarılıyor…</p>
 <script>
 (() => {
   'use strict';
@@ -59,10 +60,13 @@
 
   function respond(target, type, requestId, payload) {
     target.postMessage({ type, requestId, ...payload }, ADMIN_ORIGIN);
+    const status = document.getElementById('status');
+    if (status) status.textContent = payload.error ? 'Aktarım tamamlanamadı.' : 'Aktarım tamamlandı. Bu pencere kapanıyor…';
+    setTimeout(() => { try { window.close(); } catch (_) {} }, 350);
   }
 
   window.addEventListener('message', event => {
-    if (event.origin !== ADMIN_ORIGIN || event.source !== window.parent) return;
+    if (event.origin !== ADMIN_ORIGIN || event.source !== window.opener) return;
     if (!event.data || typeof event.data.requestId !== 'string' || event.data.requestId.length > 160) return;
 
     if (event.data.type === 'PERDE_BACKUP_EXPORT_REQUEST') {
@@ -117,6 +121,13 @@
       }
     }
   });
+
+  if (window.opener && !window.opener.closed) {
+    window.opener.postMessage({ type: 'PERDE_BACKUP_BRIDGE_READY' }, ADMIN_ORIGIN);
+  } else {
+    const status = document.getElementById('status');
+    if (status) status.textContent = 'Bu aktarım penceresi yönetim panelinden açılmalıdır.';
+  }
 })();
 </script>
 </body>
