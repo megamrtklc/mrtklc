@@ -1491,22 +1491,26 @@
                     return { taste: config.taste !== false, surprise: config.surprise !== false, series: config.series !== false, gems: config.gems !== false };
                 },
                 isPersonalizedModeEnabled(mode) { return this.personalizedRecommendationModeConfig[mode] !== false; },
+                recommendationDisplayCache: null,
                 setPersonalizedRecommendationMode(mode) {
-                    if (!this.isPersonalizedModeEnabled(mode)) return;
+                    if (!this.isPersonalizedModeEnabled(mode) || this.recommendationMode === mode) return;
+                    // Görsel seçimi önce güncelle: buton aktif durumu aynı etkileşimde değişir.
                     this.recommendationMode = mode;
-                    safeStorageWrite('cine_recommendation_mode_v1', mode);
                     this.recommendationRefreshIndex += 1;
+                    this.recommendationDisplayCache = null;
+                    safeStorageWrite('cine_recommendation_mode_v1', mode);
                     safeStorageWrite('cine_recommendation_rotation_v1', this.recommendationRefreshIndex);
                 },
                 refreshPersonalizedRecommendations() {
-                    // Yenileme yalnızca hazır öneri havuzunun sırasını değiştirir.
-                    // Kişisel zevk puanlamasını her tıklamada yeniden çalıştırma.
                     this.recommendationRefreshIndex += 1;
+                    this.recommendationDisplayCache = null;
                     safeStorageWrite('cine_recommendation_rotation_v1', this.recommendationRefreshIndex);
                 },
                 get displayedPersonalizedRecommendations() {
                     const base = this.personalizedRecommendations;
                     if (!base.length) return [];
+                    const cached = this.recommendationDisplayCache;
+                    if (cached && cached.base === base && cached.mode === this.recommendationMode && cached.rotation === this.recommendationRefreshIndex) return cached.value;
                     const enabled = this.personalizedRecommendationModeConfig;
                     const mode = enabled[this.recommendationMode] ? this.recommendationMode : 'taste';
                     let pool = [...base];
@@ -1522,8 +1526,9 @@
                     }
                     if (!pool.length) pool=[...base];
                     const offset=(this.recommendationRefreshIndex*5)%pool.length;
-                    if(mode==='surprise') return pool;
-                    return pool.slice(offset).concat(pool.slice(0,offset));
+                    const value = mode==='surprise' ? pool : pool.slice(offset).concat(pool.slice(0,offset));
+                    this.recommendationDisplayCache = { base, mode: this.recommendationMode, rotation: this.recommendationRefreshIndex, value };
+                    return value;
                 },
 
                 get recommendationFeedback() {
