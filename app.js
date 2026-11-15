@@ -1562,8 +1562,8 @@
                     safeStorageWrite('cine_recommendation_feedback_v1', own.slice(-200));
                     const likes = this.recommendationLikes.filter(value => value !== id);
                     safeStorageWrite('cine_recommendation_likes_v1', likes);
-                    personalizedRecommendationCache.delete(this);
-                    this.recommendationFeedbackRevision += 1;
+                    this.recommendationUiRevision += 1;
+                    this.scheduleRecommendationFeedbackAnalysis();
                 },
 
                 reviews: (() => { const value = safeStorageRead('cine_reviews', {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; })(),
