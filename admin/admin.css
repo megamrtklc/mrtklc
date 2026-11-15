@@ -260,3 +260,14 @@
 .hf-accordion .hf-section-head,.hf-accordion .hf-footer-head{display:none}
 .hf-accordion .hf-subhead{margin-top:2px}
 @media(max-width:650px){.hf-accordion>summary{padding:12px;gap:10px}.hf-accordion-state{display:none}}
+
+
+/* Homepage section title and subtitle editor */
+.homepage-layout-row{grid-template-columns:38px minmax(0,1fr) auto auto;align-items:start}
+.homepage-layout-row-copy{display:grid;gap:8px;min-width:0}
+.homepage-layout-field{display:grid;grid-template-columns:72px minmax(0,1fr);align-items:center;gap:8px}
+.homepage-layout-field>span{font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8292a4}
+.homepage-layout-field input{width:100%;min-width:0;min-height:34px;padding:7px 10px;border:1px solid #3b4b5d;border-radius:7px;background:#111b26;color:#e5edf5;font:600 11px 'DM Sans',sans-serif;outline:none}
+.homepage-layout-field input:focus{border-color:#d8b45d;box-shadow:0 0 0 2px #d8b45d22}
+.homepage-layout-row.is-disabled .homepage-layout-field input{opacity:.65}
+@media(max-width:760px){.homepage-layout-row{grid-template-columns:30px minmax(0,1fr);gap:9px}.homepage-layout-row>.homepage-layout-state,.homepage-layout-row>.homepage-layout-actions{grid-column:2}.homepage-layout-field{grid-template-columns:62px minmax(0,1fr)}}
