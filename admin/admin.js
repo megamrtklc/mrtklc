@@ -948,7 +948,7 @@
   const PERSONAL_BACKUP_BRIDGE_URL='https://megamrtklc.github.io/mrtklc/backup-bridge.html';
   let selectedBackup=null;
   let remotePersonalStorage=null;
-  let remoteBackupQueue=Promise.resolve();
+  let remotePersonalStorage=null;
   function collectBrowserStorage(storage){
     const values={};
     try{for(let i=0;i<storage.length;i++){const key=storage.key(i);if(key&&BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix)))values[key]=storage.getItem(key);}}catch(error){console.warn('Tarayıcı kayıtları okunamadı.',error);}
@@ -958,16 +958,23 @@
     return Object.keys(data.localStorage||{}).length+Object.keys(data.sessionStorage||{}).length;
   }
   function requestMainSiteBackup(action,payload={}){
-    const task=remoteBackupQueue.then(()=>new Promise((resolve,reject)=>{
-      const frame=document.createElement('iframe');
+    const popup=window.open(PERSONAL_BACKUP_BRIDGE_URL,'perdePersonalBackup','popup=yes,width=440,height=220,resizable=yes');
+    if(!popup) return Promise.reject(new Error('Yedek aktarım penceresi engellendi. Tarayıcıda bu site için açılır pencerelere izin verip tekrar dene.'));
+    return new Promise((resolve,reject)=>{
       const requestId='perde-backup-'+Date.now()+'-'+Math.random().toString(36).slice(2);
       const requestType='PERDE_BACKUP_'+action+'_REQUEST';
       const responseType='PERDE_BACKUP_'+action+'_RESPONSE';
-      let settled=false;
-      const cleanup=()=>{window.removeEventListener('message',onMessage);clearTimeout(timeout);frame.remove();};
-      const finish=(error,value)=>{if(settled)return;settled=true;cleanup();error?reject(error):resolve(value);};
+      let settled=false,requestSent=false;
+      const cleanup=()=>{window.removeEventListener('message',onMessage);clearTimeout(timeout);};
+      const finish=(error,value)=>{if(settled)return;settled=true;cleanup();try{if(!popup.closed)popup.close();}catch(_){}error?reject(error):resolve(value);};
       const onMessage=event=>{
-        if(event.origin!==PERSONAL_BACKUP_SITE_ORIGIN||event.source!==frame.contentWindow||event.data?.type!==responseType||event.data?.requestId!==requestId)return;
+        if(event.origin!==PERSONAL_BACKUP_SITE_ORIGIN||event.source!==popup)return;
+        if(event.data?.type==='PERDE_BACKUP_BRIDGE_READY'&&!requestSent){
+          requestSent=true;
+          popup.postMessage({type:requestType,requestId,...payload},PERSONAL_BACKUP_SITE_ORIGIN);
+          return;
+        }
+        if(event.data?.type!==responseType||event.data?.requestId!==requestId)return;
         if(event.data.error){finish(new Error(String(event.data.error)));return;}
         if(action==='EXPORT'){
           const data=event.data.browserData;
@@ -979,18 +986,9 @@
           finish(null,previous);
         }
       };
-      const timeout=setTimeout(()=>finish(new Error('Ana siteyle bağlantı kurulamadı. Perde ana sitesini aynı tarayıcıda açıp tekrar dene.')),12000);
+      const timeout=setTimeout(()=>finish(new Error('Ana siteyle bağlantı kurulamadı. Açılır pencerenin yüklenmesine izin verip tekrar dene.')),15000);
       window.addEventListener('message',onMessage);
-      frame.title='Perde kişisel kayıt aktarımı';
-      frame.setAttribute('aria-hidden','true');
-      frame.style.cssText='position:fixed;width:1px;height:1px;left:-10px;top:-10px;border:0;opacity:0;pointer-events:none';
-      frame.src=PERSONAL_BACKUP_BRIDGE_URL;
-      frame.onload=()=>frame.contentWindow.postMessage({type:requestType,requestId,...payload},PERSONAL_BACKUP_SITE_ORIGIN);
-      frame.onerror=()=>finish(new Error('Ana site yedek bağlantısı yüklenemedi.'));
-      document.body.appendChild(frame);
-    }));
-    remoteBackupQueue=task.catch(()=>{});
-    return task;
+    });
   }
   function readMainSitePersonalStorage(){
     return requestMainSiteBackup('EXPORT');
@@ -1000,31 +998,18 @@
   }
   function refreshBackupSummary(){
     const catalogCount=Array.isArray(state.data?.catalog)?state.data.catalog.length:0;
-    const local=collectBrowserStorage(localStorage),session=collectBrowserStorage(sessionStorage);
-    const localCount=Object.keys(local).length+Object.keys(session).length;
     $('#backup-catalog-count').textContent=catalogCount+' yapım';
     const count=$('#backup-storage-count'),diagnostic=$('#backup-origin-status');
-    if(count)count.textContent=localCount+' kayıt';
+    const total=remotePersonalStorage?backupStorageCount(remotePersonalStorage):null;
+    if(count)count.textContent=total===null?'Kontrol edilmedi':total+' kayıt';
     if(diagnostic){
-      diagnostic.textContent='Ana Perde sitesindeki kişisel kayıtlar kontrol ediliyor…';
-      diagnostic.classList.remove('state-warning');
-    }
-    readMainSitePersonalStorage().then(data=>{
-      remotePersonalStorage=data;
-      const total=backupStorageCount(data);
-      if(count)count.textContent=total+' kayıt';
-      if(diagnostic){
-        diagnostic.textContent=total
+      diagnostic.textContent=total===null
+        ? 'Kişisel kayıt sayısı, indirme sırasında ana Perde sitesinden güvenli şekilde okunur.'
+        : total
           ? 'Kaynak: '+PERSONAL_BACKUP_SITE_ORIGIN+' · Ana sitede '+total+' Perde kaydı bulundu.'
-          : 'Ana site bağlantısı kuruldu ancak Perde kişisel kaydı bulunamadı.';
-        diagnostic.classList.toggle('state-warning',total===0);
-      }
-    }).catch(error=>{
-      if(diagnostic){
-        diagnostic.textContent='Ana site kayıtlarına erişilemedi: '+error.message;
-        diagnostic.classList.add('state-warning');
-      }
-    });
+          : 'Ana site kontrol edildi; Perde kişisel kaydı bulunamadı.';
+      diagnostic.classList.toggle('state-warning',total===0);
+    }
   }
   function downloadBackupJson(payload,filename,successMessage){
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
