@@ -3,6 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script id="cv-theme-first-paint">
+        (function () {
+            var theme = 'dark';
+            try {
+                var saved = localStorage.getItem('cine_theme_v3');
+                if (saved !== null) {
+                    try { saved = JSON.parse(saved); } catch (_) {}
+                    if (saved === 'dark' || saved === 'ivory' || saved === 'slate') theme = saved;
+                }
+            } catch (_) {}
+            var root = document.documentElement;
+            root.classList.remove('dark', 'theme-ivory', 'theme-slate');
+            root.classList.add(theme === 'dark' ? 'dark' : (theme === 'ivory' ? 'theme-ivory' : 'theme-slate'));
+            root.dataset.themeReady = 'true';
+        })();
+    </script>
     <meta name="description" content="CineVerse ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23e50914%27/%3E%3Cpath d=%27M24 16v32l26-16z%27 fill=%27white%27/%3E%3C/svg%3E">
     <title>CineVerse Ultimate Pro</title>
@@ -11,7 +27,7 @@
       (function(){try{var b=window.__CV_HERO_BOOTSTRAP__;var slide=(b&&b.homepageConfig&&b.homepageConfig.mobileHeroSlides||[]).find(function(x){return x&&x.active!==false;});var item=slide&&(b.catalog||[]).find(function(x){return String(x.id)===String(slide.id);});var image=item&&(item.backdrop||item.poster);if(!image||!/^https:\/\/image\.tmdb\.org\/t\/p\//.test(image))return;var link=document.createElement("link");link.rel="preload";link.as="image";var match=image.match(/^(https:\/\/image\.tmdb\.org\/t\/p\/)(?:w\d+|original)(\/.*)$/);if(!match)return;var base=match[1],file=match[2];link.href=base+"w500"+file;link.setAttribute("imagesrcset",base+"w342"+file+" 342w, "+base+"w500"+file+" 500w");link.setAttribute("imagesizes","100vw");link.fetchPriority="high";document.head.appendChild(link);}catch(e){}}
       )();
     </script>
-    <style>[x-cloak]{display:none!important}</style>
+    <style id="cv-theme-first-paint-style">[x-cloak]{display:none!important}html.dark,html.dark body{background-color:#0b0d11;color:#f1f5f9}html.theme-ivory,html.theme-ivory body{background-color:#fffdf9;color:#29261f}html.theme-slate,html.theme-slate body{background-color:#f4f5f7;color:#20242b}</style>
     <script>
         (() => {
             const hash = window.location.hash || '';
@@ -2246,7 +2262,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
-    <header x-cloak x-show="headerConfig.enabled !== false" x-data="{ mobileMenuOpen: false, headerScrolled: window.scrollY > 40 }" @scroll.window="headerScrolled = window.scrollY > 40" :class="'sticky top-0 z-50 ' + (currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass())" class="backdrop-blur-md border-b transition-colors duration-300">
+    <header x-cloak x-show="headerConfigReady && headerConfig.enabled !== false" x-data="{ mobileMenuOpen: false, headerScrolled: window.scrollY > 40 }" @scroll.window="headerScrolled = window.scrollY > 40" :class="'sticky top-0 z-50 ' + (currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass())" class="backdrop-blur-md border-b transition-colors duration-300">
         <div class="w-full px-4 sm:px-12 md:max-w-[1800px] md:mx-auto md:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 lg:space-x-6 xl:space-x-12">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
