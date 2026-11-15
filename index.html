@@ -2621,35 +2621,42 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
                 <section id="home-favorites-section" data-home-section="favorites" x-data="{ favoriteFilter: 'all', favoriteSort: 'new', get filteredFavorites() { const items = this.favoriteItems.slice(); const isSeries = item => ['tv','series'].includes(String(item.type || '').toLowerCase()); const filtered = items.filter(item => this.favoriteFilter === 'all' || (this.favoriteFilter === 'series' ? isSeries(item) : !isSeries(item))); const sorters = { new: (a,b) => (Number(b._statusSavedAt)||0) - (Number(a._statusSavedAt)||0), old: (a,b) => (Number(a._statusSavedAt)||0) - (Number(b._statusSavedAt)||0), rating: (a,b) => (Number(b.rating || b.tmdbRating)||0) - (Number(a.rating || a.tmdbRating)||0), az: (a,b) => String(a.title||'').localeCompare(String(b.title||''),'tr'), year: (a,b) => String(b.year || b.tmdbReleaseDate || '').localeCompare(String(a.year || a.tmdbReleaseDate || '')) }; return filtered.sort(sorters[this.favoriteSort] || sorters.new); } }" x-cloak x-show="isHomepageSectionVisible('favorites') && favoriteItems.length > 0" class="w-full px-6 sm:px-12 space-y-5 !mt-8">
                     <div class="home-new-arrivals-heading flex flex-col gap-3 pb-4">
-                        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-                            <div>
-                                <p class="text-[10px] font-black uppercase tracking-[0.22em] text-amber-600 dark:text-amber-400 mb-1">CINEVERSE • KİŞİSEL SEÇKİN</p>
-                                <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Favorilerim</h2>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sevdiğin yapımları kendi düzenine göre keşfet</p>
+                        <div>
+                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Favorilerim</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sevdiğin yapımları kendi düzenine göre keşfet</p>
+                        </div>
+                        <div class="flex items-center justify-between gap-3 min-w-0">
+                            <div class="flex items-center gap-1 shrink-0" role="group" aria-label="Favori türü filtresi">
+                                <button type="button" @click="favoriteFilter='all'" :aria-pressed="favoriteFilter==='all'" :class="favoriteFilter==='all' ? 'bg-amber-400 text-gray-950 border-amber-400' : 'bg-transparent text-gray-500 border-gray-300 dark:border-gray-700 dark:text-gray-300'" class="rounded-full border px-2.5 sm:px-3 py-1.5 text-[10px] font-extrabold transition-colors">Tümü</button>
+                                <button type="button" @click="favoriteFilter='film'" :aria-pressed="favoriteFilter==='film'" :class="favoriteFilter==='film' ? 'bg-amber-400 text-gray-950 border-amber-400' : 'bg-transparent text-gray-500 border-gray-300 dark:border-gray-700 dark:text-gray-300'" class="rounded-full border px-2.5 sm:px-3 py-1.5 text-[10px] font-extrabold transition-colors">Filmler</button>
+                                <button type="button" @click="favoriteFilter='series'" :aria-pressed="favoriteFilter==='series'" :class="favoriteFilter==='series' ? 'bg-amber-400 text-gray-950 border-amber-400' : 'bg-transparent text-gray-500 border-gray-300 dark:border-gray-700 dark:text-gray-300'" class="rounded-full border px-2.5 sm:px-3 py-1.5 text-[10px] font-extrabold transition-colors">Diziler</button>
                             </div>
-                            <div class="flex items-center gap-2 shrink-0">
-                                <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="filteredFavorites.length + ' favori yapım'"></span>
-                                <button type="button" @click="scrollHomeCards('home-favorites-rail',-1)" aria-label="Önceki favori yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
-                                <button type="button" @click="scrollHomeCards('home-favorites-rail',1)" aria-label="Sonraki favori yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
-                                <button type="button" @click="navigateTo('library')" class="text-[10px] font-black text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 ml-1">Tümünü gör <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                                <div class="flex items-center gap-1 whitespace-nowrap text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-300">
+                                    <span class="tabular-nums" x-text="filteredFavorites.length + ' favori yapım'"></span>
+                                    <span class="text-gray-400">·</span>
+                                    <button type="button" @click="navigateTo('library')" class="font-extrabold text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300">Tümünü gör <i class="fa-solid fa-arrow-right ml-0.5"></i></button>
+                                </div>
+                                <label class="flex items-center gap-1.5 shrink-0 text-[10px] font-bold text-gray-600 dark:text-gray-300">
+                                    <span>Sırala</span>
+                                    <span class="relative inline-flex">
+                                        <select x-model="favoriteSort" aria-label="Favorileri sırala" class="min-h-[38px] appearance-none rounded-xl border border-gray-300 bg-white px-3 pr-8 text-[11px] sm:text-xs font-bold text-gray-800 shadow-sm outline-none transition hover:border-amber-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100">
+                                            <option value="new">Son eklenenler</option>
+                                            <option value="old">İlk eklenenler</option>
+                                            <option value="rating">IMDb puanı</option>
+                                            <option value="az">İsim (A–Z)</option>
+                                            <option value="year">Yapım yılı</option>
+                                        </select>
+                                        <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[9px] text-gray-500 dark:text-gray-300"></i>
+                                    </span>
+                                </label>
                             </div>
                         </div>
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                            <div class="flex items-center gap-1.5" role="group" aria-label="Favori türü filtresi">
-                                <button type="button" @click="favoriteFilter='all'" :aria-pressed="favoriteFilter==='all'" :class="favoriteFilter==='all' ? 'bg-amber-400 text-gray-950 border-amber-400' : 'bg-transparent text-gray-500 border-gray-300 dark:border-gray-700 dark:text-gray-300'" class="rounded-full border px-3 py-1.5 text-[10px] font-extrabold transition-colors">Tümü</button>
-                                <button type="button" @click="favoriteFilter='film'" :aria-pressed="favoriteFilter==='film'" :class="favoriteFilter==='film' ? 'bg-amber-400 text-gray-950 border-amber-400' : 'bg-transparent text-gray-500 border-gray-300 dark:border-gray-700 dark:text-gray-300'" class="rounded-full border px-3 py-1.5 text-[10px] font-extrabold transition-colors">Filmler</button>
-                                <button type="button" @click="favoriteFilter='series'" :aria-pressed="favoriteFilter==='series'" :class="favoriteFilter==='series' ? 'bg-amber-400 text-gray-950 border-amber-400' : 'bg-transparent text-gray-500 border-gray-300 dark:border-gray-700 dark:text-gray-300'" class="rounded-full border px-3 py-1.5 text-[10px] font-extrabold transition-colors">Diziler</button>
+                        <div class="flex justify-end">
+                            <div class="flex items-center gap-2">
+                                <button type="button" @click="scrollHomeCards('home-favorites-rail',-1)" aria-label="Önceki favori yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button type="button" @click="scrollHomeCards('home-favorites-rail',1)" aria-label="Sonraki favori yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
                             </div>
-                            <label class="flex items-center gap-2 text-[10px] font-bold text-gray-500 dark:text-gray-400">
-                                <span>Sırala</span>
-                                <select x-model="favoriteSort" class="min-h-[34px] rounded-lg border border-gray-300 bg-white/80 px-3 text-[10px] font-bold text-gray-700 outline-none transition focus:border-amber-400 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100">
-                                    <option value="new">Son eklenenler</option>
-                                    <option value="old">İlk eklenenler</option>
-                                    <option value="rating">IMDb puanı</option>
-                                    <option value="az">İsim (A–Z)</option>
-                                    <option value="year">Yapım yılı</option>
-                                </select>
-                            </label>
                         </div>
                     </div>
                     <div id="home-favorites-rail" class="home-card-rail home-new-arrivals-rail">
