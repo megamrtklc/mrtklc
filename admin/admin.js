@@ -967,6 +967,7 @@
       const finish=(error,value)=>{if(settled)return;settled=true;cleanup();error?reject(error):resolve(value);};
       const onMessage=event=>{
         if(event.origin!==PERSONAL_BACKUP_SITE_ORIGIN||event.source!==frame.contentWindow||event.data?.type!=='PERDE_BACKUP_EXPORT_RESPONSE'||event.data?.requestId!==requestId)return;
+        if(event.data.error){finish(new Error(String(event.data.error)));return;}
         const data=event.data.browserData;
         if(!data||typeof data.localStorage!=='object'||typeof data.sessionStorage!=='object'){finish(new Error('Ana siteden geçerli kişisel kayıt yanıtı alınamadı.'));return;}
         finish(null,data);
