@@ -62,15 +62,15 @@
         @media(min-width:768px){.home-rail-card{flex-basis:22%;width:22%}}
         @media(min-width:1024px){.home-rail-card{flex-basis:18%;width:18%}}
         @media(min-width:1280px){.home-rail-card{flex-basis:15.5%;width:15.5%}}
-        .home-personalized-toolbar{display:grid;justify-items:end;gap:9px;max-width:100%}
-        .home-personalized-modes{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:5px}
+        .home-personalized-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:14px;max-width:100%;min-width:0}
+        .home-personalized-modes{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:5px}
         .home-personalized-modes button{padding:7px 10px;border:1px solid rgba(148,163,184,.24);border-radius:7px;background:rgba(148,163,184,.07);color:#7c8797;font-size:9px;font-weight:800;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
         .home-personalized-modes button:hover{border-color:rgba(212,165,74,.55);color:#c99b42}
         .home-personalized-modes button.is-active{border-color:rgba(212,165,74,.55);background:rgba(212,165,74,.13);color:#c99b42}
-        .home-personalized-toolbar-foot{display:flex;align-items:center;gap:12px}
+        
         .home-personalized-refresh{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border:1px solid rgba(148,163,184,.25);border-radius:7px;color:#9aa5b4;font-size:10px;font-weight:800;transition:all .18s}
         .home-personalized-refresh:hover{border-color:rgba(212,165,74,.55);color:#c99b42;background:rgba(212,165,74,.08)}
-        @media(max-width:760px){#home-personalized-section .home-personalized-heading{align-items:stretch}.home-personalized-toolbar{justify-items:start;width:100%}.home-personalized-modes{justify-content:flex-start}.home-personalized-modes button{font-size:9px;padding:7px 8px}}
+        @media(max-width:760px){#home-personalized-section .home-personalized-heading{align-items:stretch}.home-personalized-toolbar{justify-content:flex-start;flex-wrap:wrap;gap:10px 14px;width:100%}.home-personalized-modes{justify-content:flex-start}.home-personalized-modes button{font-size:9px;padding:7px 8px}}
         @media(prefers-reduced-motion:reduce){.home-personalized-modes button,.home-personalized-refresh{transition:none}}
         /* Personalized editorial showcase — compact, overflow-safe layout. */
         #home-personalized-section{min-width:0;max-width:100%;overflow:hidden}
@@ -2534,7 +2534,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 <button type="button" @click="setPersonalizedRecommendationMode('surprise')" :class="recommendationMode === 'surprise' ? 'is-active' : ''" x-show="isPersonalizedModeEnabled('surprise')">Beni Şaşırt</button>
 <button type="button" @click="setPersonalizedRecommendationMode('series')" :class="recommendationMode === 'series' ? 'is-active' : ''" x-show="isPersonalizedModeEnabled('series')">Yeni Diziler</button>
 <button type="button" @click="setPersonalizedRecommendationMode('gems')" :class="recommendationMode === 'gems' ? 'is-active' : ''" x-show="isPersonalizedModeEnabled('gems')">Gizli Hazineler</button>
-</div><div class="home-personalized-toolbar-foot"><span class="home-personalized-count text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="Math.min(4, Math.max(0, displayedPersonalizedRecommendations.length - 1)) + ' / 4 öneri'">4 öneri</span><button type="button" class="home-personalized-refresh" @click="refreshPersonalizedRecommendations()" title="Yeni öneriler getir"><i class="fa-solid fa-arrows-rotate"></i><span>Yenile</span></button></div></div>
+</div><span class="home-personalized-count text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="Math.min(4, Math.max(0, displayedPersonalizedRecommendations.length - 1)) + ' / 4 öneri'">4 öneri</span><button type="button" class="home-personalized-refresh" @click="refreshPersonalizedRecommendations()" title="Yeni öneriler getir"><i class="fa-solid fa-arrows-rotate"></i><span>Yenile</span></button></div>
                     </div>
                     <div class="home-personalized-showcase" x-show="homeSectionReady.personalized && displayedPersonalizedRecommendations.length">
                         <template x-if="homeSectionReady.personalized && displayedPersonalizedRecommendations[0]">
