@@ -616,6 +616,8 @@
                     });
                     this.$watch('currentPage', page => {
                         if (page === 'home') this.$nextTick(() => {
+                            // x-if anasayfayı her dönüşte yeniden oluşturur; yönetici sırasını yeni DOM'a tekrar uygula.
+                            this.applyHomepageSectionOrder();
                             this.scheduleHomePageHydration();
                             this.initHomeSectionObserver();
                         });
