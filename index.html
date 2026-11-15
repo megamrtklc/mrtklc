@@ -3702,22 +3702,22 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         <!-- ==================== PERSONAL WATCH CENTER ==================== -->
         <template x-if="currentPage === 'library'">
             <div class="w-full px-6 sm:px-12 pt-8 space-y-8 pb-16">
-                <section class="relative overflow-hidden rounded-3xl border border-rose-500/20 bg-gradient-to-br from-gray-950 via-[#191923] to-[#2a1420] p-6 sm:p-9 text-white shadow-xl">
-                    <div class="absolute -right-10 -top-16 h-64 w-64 rounded-full bg-rose-600/15 blur-3xl pointer-events-none"></div>
-                    <div class="relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+                <section class="relative overflow-hidden rounded-2xl border border-rose-500/20 bg-gradient-to-br from-gray-950 via-[#191923] to-[#2a1420] p-4 sm:p-5 text-white shadow-lg">
+                    <div class="absolute -right-8 -top-12 h-40 w-40 rounded-full bg-rose-600/15 blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
                         <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.25em] text-rose-400 mb-2">CINEVERSE • KİŞİSEL ALAN</p>
-                            <h2 class="text-2xl sm:text-4xl font-black uppercase tracking-tight">Kütüphanem</h2>
-                            <p class="mt-2 text-xs sm:text-sm text-gray-300"><span x-text="currentProfile.name"></span> profili için izleme geçmişin, kaldığın yapımlar ve kişisel listen.</p>
+                            <p class="text-[9px] font-black uppercase tracking-[0.2em] text-rose-400 mb-1">CINEVERSE • KİŞİSEL ALAN</p>
+                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-tight">Kütüphanem</h2>
+                            <p class="mt-1 text-[11px] sm:text-xs text-gray-300"><span x-text="currentProfile.name"></span> profili için izleme geçmişin, kaldığın yapımlar ve kişisel listen.</p>
                         </div>
-                        <button type="button" @click="navigateTo('stats')" class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-xs font-bold text-white hover:bg-white/15 transition-colors"><i class="fa-solid fa-chart-simple text-rose-300"></i> İzleme istatistikleri <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
+                        <button type="button" @click="navigateTo('stats')" class="inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-[10px] font-bold text-white hover:bg-white/15 transition-colors"><i class="fa-solid fa-chart-simple text-rose-300"></i> İzleme istatistikleri <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
                     </div>
-                    <div class="relative z-10 mt-7 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
-                        <div class="rounded-xl border border-white/10 bg-white/5 p-3 sm:p-4"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">Devam eden</p><p class="mt-1 text-2xl sm:text-3xl font-black" x-text="continueWatchingItems.length"></p></div>
-                        <div class="rounded-xl border border-white/10 bg-white/5 p-3 sm:p-4"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">Geçmiş kaydı</p><p class="mt-1 text-2xl sm:text-3xl font-black" x-text="libraryHistoryItems.length"></p></div>
-                        <div class="rounded-xl border border-white/10 bg-white/5 p-3 sm:p-4"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">İzleme listem</p><p class="mt-1 text-2xl sm:text-3xl font-black" x-text="watchlist.length"></p></div>
-                        <div class="rounded-xl border border-white/10 bg-white/5 p-3 sm:p-4"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">İzlediklerim</p><p class="mt-1 text-2xl sm:text-3xl font-black" x-text="watchedItems.length"></p></div>
-                        <div class="rounded-xl border border-white/10 bg-white/5 p-3 sm:p-4"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">Favorilerim</p><p class="mt-1 text-2xl sm:text-3xl font-black" x-text="favoriteItems.length"></p></div>
+                    <div class="relative z-10 mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                        <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 sm:p-3"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">Devam eden</p><p class="mt-0.5 text-xl sm:text-2xl font-black" x-text="continueWatchingItems.length"></p></div>
+                        <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 sm:p-3"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">Geçmiş kaydı</p><p class="mt-0.5 text-xl sm:text-2xl font-black" x-text="libraryHistoryItems.length"></p></div>
+                        <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 sm:p-3"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">İzleme listem</p><p class="mt-0.5 text-xl sm:text-2xl font-black" x-text="watchlist.length"></p></div>
+                        <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 sm:p-3"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">İzlediklerim</p><p class="mt-0.5 text-xl sm:text-2xl font-black" x-text="watchedItems.length"></p></div>
+                        <div class="rounded-lg border border-white/10 bg-white/5 p-2.5 sm:p-3"><p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400">Favorilerim</p><p class="mt-0.5 text-xl sm:text-2xl font-black" x-text="favoriteItems.length"></p></div>
                     </div>
                 </section>
 
