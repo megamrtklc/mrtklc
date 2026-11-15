@@ -3443,7 +3443,18 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
 
 
-                <section :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm">
+                <section x-data="{ filtersExpanded: false }" :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-sm font-black text-gray-900 dark:text-white">Arama ve filtreler</h3>
+                            <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400">Yapımları başlık, tür, ülke, platform ve puana göre daralt.</p>
+                        </div>
+                        <button type="button" @click="filtersExpanded = !filtersExpanded" :aria-expanded="filtersExpanded.toString()" class="inline-flex shrink-0 items-center gap-2 rounded-lg border border-rose-500/25 bg-rose-500/5 px-3 py-2 text-[11px] font-bold text-rose-600 transition hover:bg-rose-500/10 dark:text-rose-400">
+                            <span x-text="filtersExpanded ? 'Gizle' : 'Göster'"></span>
+                            <i class="fa-solid" :class="filtersExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        </button>
+                    </div>
+                    <div x-show="filtersExpanded" x-cloak x-transition.opacity class="space-y-4">
                     <div class="flex flex-col sm:flex-row gap-3">
                         <div class="relative flex-1">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
@@ -3502,6 +3513,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         <input type="number" min="1900" max="2100" x-model.number="discoveryYearTo" placeholder="Bitiş" :class="getSearchClass()" class="w-28 border rounded-lg px-3 py-2 text-xs text-gray-800 dark:text-gray-200">
                         <span :class="getMutedTextClass()" class="text-[10px]">Aralıkta olmayan yapımlar gösterilmez.</span>
                     </div>
+                    </div>
                 </section>
 
                 <div x-show="discoveryDirector || discoveryGenre !== 'all' || discoveryCountry !== 'all'" class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-500/20 bg-rose-500/[.045] px-4 py-3">
@@ -3518,7 +3530,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 <div x-show="sortedFilteredCatalog.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 gap-4">
                     <template x-for="item in sortedFilteredCatalog" :key="item.id">
                         <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
-                            <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                            <div class="relative aspect-[20/21] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                 <img @error="handleImageError($event)" decoding="async" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 15vw, 14.5vw" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400">
                                     <i class="fa-solid fa-star text-[8px]"></i><span x-text="item.rating ? Number(item.rating).toFixed(1) : '—'"></span>
