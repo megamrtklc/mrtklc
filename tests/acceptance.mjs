@@ -411,20 +411,20 @@ try {
     });
     const ids = result.ids;
     console.log('RECOMMENDATION DIAGNOSTIC:', JSON.stringify(result.diagnostic));
-    assert.ok(ids.length > 0 && ids.length <= 15, 'Öneri sayısı 1–15 aralığında olmalı');
+    assert.ok(ids.length > 0 && ids.length <= 40, 'Öneri havuzu 1–40 aralığında olmalı');
     assert.equal(new Set(ids).size, ids.length, 'Önerilerde yinelenen yapımlar var');
     assert.ok(!ids.includes(result.movieId), 'İzleme ilerlemesi olan film önerilmemeli');
     assert.ok(!ids.includes(result.seriesId), 'Bölüm takibi olan dizi önerilmemeli');
     assert.ok(!ids.includes(result.savedId), 'İzleme listesindeki yapım tekrar önerilmemeli');
     assert.ok(result.reasons.every(Boolean), 'Her önerinin kişisel gerekçesi olmalı');
-    if (ids.length === 15) {
+    if (ids.length >= 5) {
       const types = await page.evaluate(ids => {
         const catalog = window.Alpine.$data(document.documentElement).catalog;
-        return ids.map(id => catalog.find(item => String(item.id) === id)?.type);
+        return ids.slice(0, 5).map(id => catalog.find(item => String(item.id) === id)?.type);
       }, ids);
       const movieCount = types.filter(type => type === 'movie').length;
       const seriesCount = types.filter(type => type === 'tv').length;
-      assert.ok(movieCount <= 10 && seriesCount <= 5, '15 öneride film/dizi dengesi 10/5 hedefini aşmamalı');
+      assert.ok(movieCount >= 3 && seriesCount >= 2, 'İlk 5 öneride en az 3 film ve 2 dizi bulunmalı');
     }
   });
 
