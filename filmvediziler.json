@@ -22587,6 +22587,207 @@
       "tmdbImdbId": "tt7286456",
       "tmdbRating": "8.1",
       "tmdbVoteCount": 28697
+    },
+    {
+      "id": "cv-1794714842137",
+      "title": "Vurguncular",
+      "type": "movie",
+      "year": "2016",
+      "rating": "7.0",
+      "genre": "Komedi",
+      "category": "Komedi / Suç / Dram",
+      "duration": "114 dk",
+      "country": "United States of America",
+      "director": "Todd Phillips",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 308266,
+      "imdbId": "tt2005151",
+      "image": "https://image.tmdb.org/t/p/w500/xDSKdJ2cmh9tDX5B3w0dQ3RYqVo.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/oNoprEND25zXR6Fns8cIZUkuoMc.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=HGSidNn3CoM",
+      "trailerProvider": "auto",
+      "desc": "Miami'de yaşayan iki yakın arkadaş Efraim Diveroli ve David Packouz, genç yaşlarına rağmen küçük girişimlerin Amerikan Ordu ihalelerine girmelerine imkan tanıyan bir fırsatı kullanarak kendileri için önemli miktarda para kazanmış, günlerini gün etmektedirler. Ancak Afganistan Ordusu'nu silahlandırmak için girdikleri 300 milyon dolarlık ihaleyi kazanmaları, bütün gözlerin üzerlerine dönmesine neden olur. Bu süreçte oldukça karanlık insanlarla iş yapmaları ve tehlikeli maceraları atılmaları gerekecektir.",
+      "cast": [
+        "Miles Teller",
+        "Jonah Hill",
+        "Ana de Armas",
+        "Bradley Cooper",
+        "Kevin Pollak",
+        "Patrick St. Esprit",
+        "Shaun Toub",
+        "JB Blanc",
+        "Gabriel Spahiu",
+        "Julian Sergi",
+        "Andrei Finti",
+        "Jeremy Tardy",
+        "Barry Livingston",
+        "Jeff Pierre",
+        "Said Faraj",
+        "Ashley Rae Spillers",
+        "Mehdi Merali",
+        "Aaron Lustig",
+        "Ashli Haynes",
+        "Max Daniels"
+      ],
+      "tmdbTitle": "Vurguncular",
+      "tmdbOriginalTitle": "War Dogs",
+      "tmdbReleaseDate": "2016-08-18",
+      "tmdbGenres": "Komedi / Suç / Dram",
+      "tmdbRuntime": "114 dk",
+      "tmdbCountries": "United States of America",
+      "tmdbDirector": "Todd Phillips",
+      "tmdbCast": [
+        {
+          "id": 996701,
+          "name": "Miles Teller",
+          "character": "David Packouz",
+          "profile": "https://image.tmdb.org/t/p/w185/kDf3sW3USjEBDQ3Ua7lbwOfwty6.jpg",
+          "order": 0
+        },
+        {
+          "id": 21007,
+          "name": "Jonah Hill",
+          "character": "Efraim Diveroli",
+          "profile": "https://image.tmdb.org/t/p/w185/cymlWttB83MsAGR2EkTgANtjeRH.jpg",
+          "order": 1
+        },
+        {
+          "id": 224513,
+          "name": "Ana de Armas",
+          "character": "Iz",
+          "profile": "https://image.tmdb.org/t/p/w185/ngHnBOofQzCO3AvMyuW3UMRWg1B.jpg",
+          "order": 2
+        },
+        {
+          "id": 51329,
+          "name": "Bradley Cooper",
+          "character": "Henry Girard",
+          "profile": "https://image.tmdb.org/t/p/w185/5Dhy50qOMOHfR1NZifKIfffjV9X.jpg",
+          "order": 3
+        },
+        {
+          "id": 7166,
+          "name": "Kevin Pollak",
+          "character": "Ralph Slutzky",
+          "profile": "https://image.tmdb.org/t/p/w185/ss4vL5itVF1I2AEC64k1vb79GEq.jpg",
+          "order": 4
+        },
+        {
+          "id": 117437,
+          "name": "Patrick St. Esprit",
+          "character": "Captain Phillip Santos",
+          "profile": "https://image.tmdb.org/t/p/w185/1yrW51oGJEElYqG3BzX0N1Ky7Rd.jpg",
+          "order": 5
+        },
+        {
+          "id": 17857,
+          "name": "Shaun Toub",
+          "character": "Marlboro",
+          "profile": "https://image.tmdb.org/t/p/w185/6fuJ9D50bYuMAhrlEgVqzgqF0LU.jpg",
+          "order": 6
+        },
+        {
+          "id": 136152,
+          "name": "JB Blanc",
+          "character": "Bashkim",
+          "profile": "https://image.tmdb.org/t/p/w185/fHLyXboPlBDo1aoAl085YqaPjO8.jpg",
+          "order": 7
+        },
+        {
+          "id": 60422,
+          "name": "Gabriel Spahiu",
+          "character": "Enver",
+          "profile": "https://image.tmdb.org/t/p/w185/nHrRS4bVpVJX18lNR40ntL1kgKg.jpg",
+          "order": 8
+        },
+        {
+          "id": 1720564,
+          "name": "Julian Sergi",
+          "character": "Rosen",
+          "profile": "",
+          "order": 9
+        },
+        {
+          "id": 1022032,
+          "name": "Andrei Finti",
+          "character": "Yili Pinari",
+          "profile": "https://image.tmdb.org/t/p/w185/tycnutcdGKzRlmjtD8aUMInfnMX.jpg",
+          "order": 10
+        },
+        {
+          "id": 1720565,
+          "name": "Jeremy Tardy",
+          "character": "Kip",
+          "profile": "https://image.tmdb.org/t/p/w185/irETW24RDmA2EPsCz6XTYgsP2Yh.jpg",
+          "order": 11
+        },
+        {
+          "id": 75344,
+          "name": "Barry Livingston",
+          "character": "Army Bureaucrat",
+          "profile": "https://image.tmdb.org/t/p/w185/3zcKDmYcOv18c4VxIoPqLuQbmen.jpg",
+          "order": 12
+        },
+        {
+          "id": 1583044,
+          "name": "Jeff Pierre",
+          "character": "Money Room Soldier",
+          "profile": "https://image.tmdb.org/t/p/w185/mKaKc7dviX6q0d7EJpzyHgtdBC7.jpg",
+          "order": 13
+        },
+        {
+          "id": 109670,
+          "name": "Said Faraj",
+          "character": "Vegas X Supplier",
+          "profile": "https://image.tmdb.org/t/p/w185/svC8PC5NRXeBcKogGiKXsUCvrd8.jpg",
+          "order": 14
+        },
+        {
+          "id": 1155510,
+          "name": "Ashley Rae Spillers",
+          "character": "Rosens Wife",
+          "profile": "https://image.tmdb.org/t/p/w185/4pzDGqpu7aIMxPQFYEQmQrbZ6mI.jpg",
+          "order": 15
+        },
+        {
+          "id": 1583045,
+          "name": "Mehdi Merali",
+          "character": "Iraqi Soldier #1",
+          "profile": "https://image.tmdb.org/t/p/w185/l0yA5Vv9AkUhxRYSEFwm5EOSKoS.jpg",
+          "order": 16
+        },
+        {
+          "id": 140237,
+          "name": "Aaron Lustig",
+          "character": "Rock Island Bureaucrat",
+          "profile": "https://image.tmdb.org/t/p/w185/1MoV1alXiNWep56G597kiBm1gj7.jpg",
+          "order": 17
+        },
+        {
+          "id": 1446853,
+          "name": "Ashli Haynes",
+          "character": "Receptionist",
+          "profile": "",
+          "order": 18
+        },
+        {
+          "id": 175600,
+          "name": "Max Daniels",
+          "character": "Iraqi Insurgent",
+          "profile": "",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Miami'de yaşayan iki yakın arkadaş Efraim Diveroli ve David Packouz, genç yaşlarına rağmen küçük girişimlerin Amerikan Ordu ihalelerine girmelerine imkan tanıyan bir fırsatı kullanarak kendileri için önemli miktarda para kazanmış, günlerini gün etmektedirler. Ancak Afganistan Ordusu'nu silahlandırmak için girdikleri 300 milyon dolarlık ihaleyi kazanmaları, bütün gözlerin üzerlerine dönmesine neden olur. Bu süreçte oldukça karanlık insanlarla iş yapmaları ve tehlikeli maceraları atılmaları gerekecektir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/xDSKdJ2cmh9tDX5B3w0dQ3RYqVo.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/oNoprEND25zXR6Fns8cIZUkuoMc.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt2005151",
+      "tmdbRating": "7.0",
+      "tmdbVoteCount": 5816
     }
   ],
   "collections": [],
