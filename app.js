@@ -355,6 +355,36 @@
                 tmdbSeasonRequests: {},
                 tmdbDetailsError: '',
 
+                heroEnglishTitleRequests: {},
+                getHeroEnglishTitle(item = this.currentHero) {
+                    if (!item) return '';
+                    const english = String(item.englishTitle || item.tmdbEnglishTitle || '').trim();
+                    const title = String(item.title || '').trim();
+                    if (!english) return '';
+                    const normalize = value => value.toLocaleLowerCase('en-US').replace(/[’‘]/g, "'").replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();
+                    return normalize(english) && normalize(english) !== normalize(title) ? english : '';
+                },
+                async loadHeroEnglishTitles() {
+                    const slides = (this.heroSlides || []).slice(0, 20);
+                    const pending = slides.filter(item => item?.tmdbId && !item.englishTitle && !this.heroEnglishTitleRequests[item.id]);
+                    let cursor = 0;
+                    const worker = async () => {
+                        while (cursor < pending.length) {
+                            const item = pending[cursor++];
+                            this.heroEnglishTitleRequests[item.id] = true;
+                            try {
+                                const mediaType = item.type === 'tv' ? 'tv' : 'movie';
+                                const details = await this.fetchTmdb(mediaType + '/' + item.tmdbId, 'en-US');
+                                const english = String(details?.title || details?.name || '').trim();
+                                if (english) item.englishTitle = english;
+                            } catch (error) {
+                                console.warn('İngilizce manşet adı alınamadı:', item.title, error);
+                            }
+                        }
+                    };
+                    await Promise.all(Array.from({ length: Math.min(3, pending.length) }, worker));
+                },
+
                 async fetchTmdb(path, language = this.tmdbLanguage) {
                     const separator = path.includes('?') ? '&' : '?';
                     const response = await fetch('https://api.themoviedb.org/3/' + path + separator + 'api_key=' + this.tmdbApiKey + '&language=' + language);
@@ -578,6 +608,7 @@
                         if (validCatalog.length !== sourceCatalog.length) console.warn('Geçersiz katalog kayıtları atlandı:', sourceCatalog.length - validCatalog.length);
                         this.catalog = validCatalog.map(item => this.normalizeCatalogItem(item));
                         this.heroCatalog = this.catalog;
+                        this.loadHeroEnglishTitles();
 
                         this.currentSlideIndex = 0;
                         this.startHeroAutoplay();
