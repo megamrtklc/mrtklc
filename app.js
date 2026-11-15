@@ -69,6 +69,7 @@
                     image.src = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(placeholder);
                 },
                 currentPage: 'home',
+                activeHeaderMenu: 'home',
                 searchQuery: '',
                 searchOverlayOpen: false,
                 searchPreviousOverflow: '',
@@ -1536,12 +1537,19 @@
                     if (catalogPages.includes(page)) { this.navigateTo(page); return; }
                     const allowedPages = ['home', 'explore', 'video-links', 'library', 'watchlist', 'stats', 'franchises'];
                     this.currentPage = allowedPages.includes(page) ? page : 'home';
+                    this.activeHeaderMenu = this.currentPage;
                     if (this.currentPage === 'franchises') this.selectedFranchiseId = null;
                     this.syncRouteToUrl(this.currentPage, null);
                 },
 
+                isHeaderMenuActive(page) {
+                    if (this.currentPage === 'explore') return this.activeHeaderMenu === page;
+                    return this.currentPage === page;
+                },
+
                 navigateTo(page) {
                     if (page === 'new-arrivals') {
+                        this.activeHeaderMenu = 'explore';
                         this.searchQuery = '';
                         this.discoveryType = 'all';
                         this.discoveryMood = 'all';
@@ -1561,6 +1569,7 @@
                         return;
                     }
                     const catalogViews = { movies: 'movies', series: 'series', turkish: 'turkish' };
+                    this.activeHeaderMenu = catalogViews[page] ? page : page;
                     if (catalogViews[page]) {
                         this.searchQuery = '';
                         this.discoveryType = 'all';
@@ -1576,7 +1585,7 @@
                         this.quickFilter = page === 'movies' ? 'movies' : (page === 'series' ? 'series' : 'all');
                         this.sortBy = 'newest';
                         this.currentPage = 'explore';
-                        this.syncRouteToUrl('explore', null);
+                        this.syncRouteToUrl(page, null);
                     } else {
                         if (page === 'franchises') this.selectedFranchiseId = null;
                         this.currentPage = page;
