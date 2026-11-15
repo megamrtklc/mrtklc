@@ -22989,6 +22989,143 @@
       "tmdbImdbId": "tt8080204",
       "tmdbRating": "6.2",
       "tmdbVoteCount": 1594
+    },
+    {
+      "id": "cv-1794715229672",
+      "title": "Çıkış Yok",
+      "type": "movie",
+      "year": "2024",
+      "rating": "6.2",
+      "genre": "Gerilim",
+      "category": "Gerilim / Korku / Aksiyon",
+      "duration": "95 dk",
+      "country": "United Kingdom",
+      "director": "Claudio Fäh",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1096197,
+      "imdbId": "tt16253418",
+      "image": "https://image.tmdb.org/t/p/w500/xEWikk4bTkcDOzvxFEqkJiGL7Cy.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/4woSOUD0equAYzvwhWBHIJDCM88.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Farklı geçmişlerden gelen karakterler, seyahat ettikleri uçak Büyük Okyanus'a düştüğünde kendilerini bir arada bulurlar. Hava kaynağının tükenmeye başladığı ve tehlikelerin her taraftan yaklaştığı, kâbus gibi bir hayatta kalma mücadelesi başlar.",
+      "cast": [
+        "Colm Meaney",
+        "Phyllis Logan",
+        "Sophie McIntosh",
+        "Will Attenborough",
+        "Jeremias Amoore",
+        "Manuel Pacific",
+        "Grace Nettle",
+        "James Carroll Jordan",
+        "David J Biscoe",
+        "David Samartin",
+        "Scott Coker",
+        "Lee Byford"
+      ],
+      "tmdbTitle": "Çıkış Yok",
+      "tmdbOriginalTitle": "No Way Up",
+      "tmdbReleaseDate": "2024-01-18",
+      "tmdbGenres": "Gerilim / Korku / Aksiyon",
+      "tmdbRuntime": "95 dk",
+      "tmdbCountries": "United Kingdom",
+      "tmdbDirector": "Claudio Fäh",
+      "tmdbCast": [
+        {
+          "id": 17782,
+          "name": "Colm Meaney",
+          "character": "Brandon",
+          "profile": "https://image.tmdb.org/t/p/w185/guL6RJdlRMtOJN3LoaY3G8hG4Rd.jpg",
+          "order": 0
+        },
+        {
+          "id": 127164,
+          "name": "Phyllis Logan",
+          "character": "Mardy",
+          "profile": "https://image.tmdb.org/t/p/w185/jRNfzD3bA5fyPxXRTiDbfNsTcOV.jpg",
+          "order": 1
+        },
+        {
+          "id": 2613589,
+          "name": "Sophie McIntosh",
+          "character": "Ava",
+          "profile": "https://image.tmdb.org/t/p/w185/A1yhe60nSCzLS0wuy7MwgcL4uIl.jpg",
+          "order": 2
+        },
+        {
+          "id": 1461462,
+          "name": "Will Attenborough",
+          "character": "Kyle",
+          "profile": "https://image.tmdb.org/t/p/w185/tdpyPcvWgb2CHkIzaWiFJEochQw.jpg",
+          "order": 3
+        },
+        {
+          "id": 3031970,
+          "name": "Jeremias Amoore",
+          "character": "Jed",
+          "profile": "https://image.tmdb.org/t/p/w185/9oVruNlAldrfOXKJR6ln34sy534.jpg",
+          "order": 4
+        },
+        {
+          "id": 2573915,
+          "name": "Manuel Pacific",
+          "character": "Danilo",
+          "profile": "https://image.tmdb.org/t/p/w185/jkVERjEbXPleUMvLTRc25NGTLnC.jpg",
+          "order": 5
+        },
+        {
+          "id": 3952003,
+          "name": "Grace Nettle",
+          "character": "Rosa",
+          "profile": "https://image.tmdb.org/t/p/w185/zwhVWomRfAXyC7GQRyakBoCwnby.jpg",
+          "order": 6
+        },
+        {
+          "id": 152707,
+          "name": "James Carroll Jordan",
+          "character": "Hank",
+          "profile": "https://image.tmdb.org/t/p/w185/97DxZkO99EgqS70fqG6f9wMPfdw.jpg",
+          "order": 7
+        },
+        {
+          "id": 1809488,
+          "name": "David J Biscoe",
+          "character": "Plane Passenger",
+          "profile": "",
+          "order": 8
+        },
+        {
+          "id": 2743000,
+          "name": "David Samartin",
+          "character": "Eli (Pilot)",
+          "profile": "https://image.tmdb.org/t/p/w185/dJr7T3tqA2l0P68prYQahiOrRPR.jpg",
+          "order": 9
+        },
+        {
+          "id": 3024089,
+          "name": "Scott Coker",
+          "character": "Liam (Pilot)",
+          "profile": "",
+          "order": 10
+        },
+        {
+          "id": 1956505,
+          "name": "Lee Byford",
+          "character": "Airline Passenger",
+          "profile": "",
+          "order": 11
+        }
+      ],
+      "tmdbOverview": "Farklı geçmişlerden gelen karakterler, seyahat ettikleri uçak Büyük Okyanus'a düştüğünde kendilerini bir arada bulurlar. Hava kaynağının tükenmeye başladığı ve tehlikelerin her taraftan yaklaştığı, kâbus gibi bir hayatta kalma mücadelesi başlar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/xEWikk4bTkcDOzvxFEqkJiGL7Cy.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/4woSOUD0equAYzvwhWBHIJDCM88.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt16253418",
+      "tmdbRating": "6.2",
+      "tmdbVoteCount": 1154
     }
   ],
   "collections": [],
