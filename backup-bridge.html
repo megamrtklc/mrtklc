@@ -28,30 +28,94 @@
     return values;
   }
 
+  function replaceMatchingStorage(storage, incoming) {
+    if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) {
+      throw new Error('Yedek tarayıcı verisi geçersiz.');
+    }
+    const entries = Object.entries(incoming);
+    if (entries.some(([key, value]) =>
+      typeof key !== 'string' ||
+      !PREFIXES.some(prefix => key.startsWith(prefix)) ||
+      typeof value !== 'string'
+    )) {
+      throw new Error('Yedekte izin verilmeyen kayıt anahtarı veya veri biçimi var.');
+    }
+    const previous = readMatchingStorage(storage);
+    if (previous.error) throw new Error(previous.error);
+    try {
+      Object.keys(previous).forEach(key => storage.removeItem(key));
+      entries.forEach(([key, value]) => storage.setItem(key, value));
+      return previous;
+    } catch (error) {
+      try {
+        Object.keys(readMatchingStorage(storage)).forEach(key => storage.removeItem(key));
+        Object.entries(previous).forEach(([key, value]) => storage.setItem(key, value));
+      } catch (rollbackError) {
+        throw new Error('Kayıt aktarımı başarısız oldu ve otomatik geri alma tamamlanamadı: ' + String(rollbackError && rollbackError.message || rollbackError));
+      }
+      throw error;
+    }
+  }
+
+  function respond(target, type, requestId, payload) {
+    target.postMessage({ type, requestId, ...payload }, ADMIN_ORIGIN);
+  }
+
   window.addEventListener('message', event => {
     if (event.origin !== ADMIN_ORIGIN || event.source !== window.parent) return;
-    if (!event.data || event.data.type !== 'PERDE_BACKUP_EXPORT_REQUEST' ||
-        typeof event.data.requestId !== 'string' || event.data.requestId.length > 160) return;
+    if (!event.data || typeof event.data.requestId !== 'string' || event.data.requestId.length > 160) return;
 
-    const localStorageData = readMatchingStorage(window.localStorage);
-    const sessionStorageData = readMatchingStorage(window.sessionStorage);
-    if (localStorageData.error || sessionStorageData.error) {
-      event.source.postMessage({
-        type: 'PERDE_BACKUP_EXPORT_RESPONSE',
-        requestId: event.data.requestId,
-        error: localStorageData.error || sessionStorageData.error
-      }, ADMIN_ORIGIN);
+    if (event.data.type === 'PERDE_BACKUP_EXPORT_REQUEST') {
+      const localStorageData = readMatchingStorage(window.localStorage);
+      const sessionStorageData = readMatchingStorage(window.sessionStorage);
+      if (localStorageData.error || sessionStorageData.error) {
+        respond(event.source, 'PERDE_BACKUP_EXPORT_RESPONSE', event.data.requestId, {
+          error: localStorageData.error || sessionStorageData.error
+        });
+        return;
+      }
+      respond(event.source, 'PERDE_BACKUP_EXPORT_RESPONSE', event.data.requestId, {
+        browserData: { localStorage: localStorageData, sessionStorage: sessionStorageData }
+      });
       return;
     }
 
-    event.source.postMessage({
-      type: 'PERDE_BACKUP_EXPORT_RESPONSE',
-      requestId: event.data.requestId,
-      browserData: {
-        localStorage: localStorageData,
-        sessionStorage: sessionStorageData
+    if (event.data.type === 'PERDE_BACKUP_RESTORE_REQUEST') {
+      const data = event.data.browserData;
+      let previousLocal = null;
+      let previousSession = null;
+      try {
+        if (!data || typeof data !== 'object') throw new Error('Yedek tarayıcı verisi bulunamadı.');
+        previousLocal = readMatchingStorage(window.localStorage);
+        previousSession = readMatchingStorage(window.sessionStorage);
+        if (previousLocal.error || previousSession.error) throw new Error(previousLocal.error || previousSession.error);
+        replaceMatchingStorage(window.localStorage, data.localStorage || {});
+        replaceMatchingStorage(window.sessionStorage, data.sessionStorage || {});
+        respond(event.source, 'PERDE_BACKUP_RESTORE_RESPONSE', event.data.requestId, {
+          ok: true,
+          previousBrowserData: { localStorage: previousLocal, sessionStorage: previousSession }
+        });
+      } catch (error) {
+        try {
+          if (previousLocal && !previousLocal.error) {
+            Object.keys(readMatchingStorage(window.localStorage)).forEach(key => window.localStorage.removeItem(key));
+            Object.entries(previousLocal).forEach(([key, value]) => window.localStorage.setItem(key, value));
+          }
+          if (previousSession && !previousSession.error) {
+            Object.keys(readMatchingStorage(window.sessionStorage)).forEach(key => window.sessionStorage.removeItem(key));
+            Object.entries(previousSession).forEach(([key, value]) => window.sessionStorage.setItem(key, value));
+          }
+        } catch (rollbackError) {
+          respond(event.source, 'PERDE_BACKUP_RESTORE_RESPONSE', event.data.requestId, {
+            error: 'Geri yükleme başarısız; otomatik geri alma da tamamlanamadı: ' + String(rollbackError && rollbackError.message || rollbackError)
+          });
+          return;
+        }
+        respond(event.source, 'PERDE_BACKUP_RESTORE_RESPONSE', event.data.requestId, {
+          error: String(error && error.message || error)
+        });
       }
-    }, ADMIN_ORIGIN);
+    }
   });
 })();
 </script>
