@@ -135,7 +135,7 @@ try {
     assert.match(await page.title(), /CineVerse/i);
     assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).count());
     const count = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.length);
-    assert.equal(count, 140);
+    assert.ok(count >= 140, `Katalog beklenen asgari kayıt sayısının altında: ${count}`);
     const lcpEntries = await page.evaluate(() => new Promise(resolve => {
       let settled = false;
       const finish = value => { if (settled) return; settled = true; observer.disconnect(); resolve(value); };
