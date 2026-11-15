@@ -1467,6 +1467,22 @@
                 },
 
                 recommendationFeedbackRevision: 0,
+                recommendationFeedbackUpdatePending: false,
+                scheduleRecommendationFeedbackAnalysis() {
+                    if (this.recommendationFeedbackUpdatePending) return;
+                    this.recommendationFeedbackUpdatePending = true;
+                    const runAnalysis = () => {
+                        this.recommendationFeedbackUpdatePending = false;
+                        personalizedRecommendationCache.delete(this);
+                        this.recommendationFeedbackRevision += 1;
+                    };
+                    // Geri bildirimi önce anında kaydet; ağır puanlamayı tarayıcı boş kaldığında başlat.
+                    if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
+                        window.requestIdleCallback(runAnalysis, { timeout: 1400 });
+                    } else {
+                        setTimeout(runAnalysis, 180);
+                    }
+                },
                 recommendationMode: safeStorageRead('cine_recommendation_mode_v1', 'taste'),
                 recommendationRefreshIndex: Math.max(0, Number(safeStorageRead('cine_recommendation_rotation_v1', 0)) || 0),
                 get personalizedRecommendationModeConfig() {
@@ -1527,8 +1543,7 @@
                     safeStorageWrite('cine_recommendation_likes_v1', likes.slice(-200));
                     const dislikes = this.recommendationFeedback.filter(value => value !== id);
                     safeStorageWrite('cine_recommendation_feedback_v1', dislikes);
-                    personalizedRecommendationCache.delete(this);
-                    this.recommendationFeedbackRevision += 1;
+                    this.scheduleRecommendationFeedbackAnalysis();
                 },
 
                 isRecommendationLiked(item) {
@@ -2274,8 +2289,8 @@
                         watchlist.map(item => String(item.id)),
                         watchedItems.map(item => String(item.id)),
                         favoriteItems.map(item => String(item.id)),
-                        feedbackIds,
-                        likedIds,
+                        // Geri bildirim listeleri cache anahtarına girmez: anlık kayıttan sonra
+                        // önbellek, boşta çalışan analiz tamamlanana kadar korunur.
                         feedbackRevision
                     ]);
                     const cached = personalizedRecommendationCache.get(this);
