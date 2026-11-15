@@ -202,7 +202,7 @@
                 selectedEpisode: 1,
                 currentEpisodePage: 1,
                 
-                theme: ['ivory','slate','dark'].includes(safeStorageRead('cine_theme_v3','ivory')) ? safeStorageRead('cine_theme_v3','ivory') : 'ivory',
+                theme: ['ivory','slate','dark'].includes(safeStorageRead('cine_theme_v3','dark')) ? safeStorageRead('cine_theme_v3','dark') : 'dark',
                 
                 get isDarkMode() {
                     return this.theme === 'dark';
