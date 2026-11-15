@@ -590,6 +590,7 @@
                         // Bölüm sırasını katalog verileri DOM'a işlenmeden belirle;
                         // Alpine'ın bekleyen x-for güncellemeleri doğru sıraya yerleşsin ve CLS oluşmasın.
                         this.applyHomepageSectionOrder();
+                        this.homeSectionReady.catalog = true;
                         this.catalogLoading = false;
                         this.$nextTick(() => {
                             if (this.currentPage !== 'home') this.removeHeroInitialShell();
