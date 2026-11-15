@@ -2302,13 +2302,13 @@
                         });
                     });
                     return [...counts.values()]
-                        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'tr'))
-                        .slice(0, 20)
+                        .filter(entry => entry.name !== 'diger' && this.getGenreDisplayName(entry.name).toLocaleLowerCase('tr-TR') !== 'diğer')
                         .map(entry => ({
                             ...entry,
                             label: this.getGenreDisplayName(entry.name),
                             score: entry.count
-                        }));
+                        }))
+                        .sort((a, b) => a.label.localeCompare(b.label, 'tr'));
                 },
 
                 selectPersonalizedGenre(genre) {
