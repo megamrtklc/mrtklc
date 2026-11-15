@@ -453,6 +453,7 @@
         #home-genre-discovery-section .home-genre-discovery-card:hover .home-genre-discovery-name{color:#a16207}
         .dark #home-genre-discovery-section .home-genre-discovery-card:hover .home-genre-discovery-name{color:#fcd34d}
         #home-genre-discovery-section .home-genre-discovery-card:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
+        #home-genre-discovery-section .home-genre-discovery-grid.is-collapsed .home-genre-discovery-card:nth-child(n+17){display:none}
         @media(max-width:639px){
             #home-genre-discovery-section .home-genre-discovery-heading{align-items:flex-start;padding-bottom:10px}
             #home-genre-discovery-section .home-genre-discovery-heading h2{font-size:19px}
@@ -2717,7 +2718,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         </div>
                     </div>
                     <div class="home-genre-discovery-grid" :class="{ 'is-collapsed': !showAllGenres }">
-                        <template x-for="genre in (homeSectionReady['genre-discovery'] ? homeDiscoveryGenres.slice(0, showAllGenres ? homeDiscoveryGenres.length : 16) : [])" :key="'home-genre-' + genre.name">
+                        <template x-for="genre in (homeSectionReady['genre-discovery'] ? homeDiscoveryGenres : [])" :key="'home-genre-' + genre.name">
                             <button type="button" @click="selectPersonalizedGenre(genre.name); navigateTo('explore')" class="home-genre-discovery-card group" :aria-label="genre.label + ' yapımlarını keşfet'">
                                 <span class="home-genre-discovery-icon">
                                     <i :class="({'aksiyon':'fa-solid fa-bolt','macera':'fa-solid fa-compass','komedi':'fa-solid fa-face-laugh','dram':'fa-solid fa-masks-theater','korku':'fa-solid fa-ghost','gerilim':'fa-solid fa-eye','bilim kurgu':'fa-solid fa-rocket','romantik':'fa-solid fa-heart','animasyon':'fa-solid fa-wand-magic-sparkles','suc':'fa-solid fa-fingerprint','belgesel':'fa-solid fa-earth-europe','spor':'fa-solid fa-trophy','biyografi':'fa-solid fa-user-tie','aile':'fa-solid fa-people-roof','gizem':'fa-solid fa-magnifying-glass','tarih':'fa-solid fa-landmark','fantastik':'fa-solid fa-dragon','fantazi':'fa-solid fa-wand-sparkles','savas':'fa-solid fa-shield-halved','vahsi bati':'fa-solid fa-hat-cowboy','muzik':'fa-solid fa-music','politik':'fa-solid fa-scale-balanced'})[genre.name] || 'fa-solid fa-clapperboard'"></i>
