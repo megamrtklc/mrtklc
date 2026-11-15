@@ -991,13 +991,20 @@
     reader.readAsText(file);
   }
   function replaceStorageFromBackup(storage,incoming){
+    const entries=Object.entries(incoming||{});
+    if(entries.some(([key,value])=>!BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix))||typeof value!=='string'))throw new Error('Yedek dosyasında geçersiz tarayıcı kayıt anahtarı var.');
     const previous=collectBrowserStorage(storage);
-    for(const key of Object.keys(previous))storage.removeItem(key);
-    for(const [key,value] of Object.entries(incoming||{})){
-      if(!BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix))||typeof value!=='string')throw new Error('Yedek dosyasında geçersiz tarayıcı kayıt anahtarı var.');
-      storage.setItem(key,value);
+    try{
+      for(const key of Object.keys(previous))storage.removeItem(key);
+      for(const [key,value] of entries)storage.setItem(key,value);
+      return previous;
+    }catch(error){
+      try{
+        for(const key of Object.keys(collectBrowserStorage(storage)))storage.removeItem(key);
+        for(const [key,value] of Object.entries(previous))storage.setItem(key,value);
+      }catch(rollbackError){console.error('Tarayıcı kayıtları geri alınamadı:',rollbackError);}
+      throw error;
     }
-    return previous;
   }
   async function restoreFullBackup(){
     const data=selectedBackup;
