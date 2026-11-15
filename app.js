@@ -907,14 +907,24 @@
                 },
 
                 startHeroAutoplay() {
-                    if (this.heroAutoplayTimer) window.clearInterval(this.heroAutoplayTimer);
+                    if (this.heroAutoplayTimer) {
+                        window.clearTimeout(this.heroAutoplayTimer);
+                        window.clearInterval(this.heroAutoplayTimer);
+                    }
                     const settings = this.homepageConfig?.settings || {};
                     if (settings.autoplay === false || this.heroSlides.length < 2) return;
                     const seconds = Math.max(2, Math.min(60, Number(settings.interval) || 6));
-                    this.heroAutoplayTimer = window.setInterval(() => {
+                    const isMobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+                    const advance = () => {
                         if (this.heroPaused || document.hidden || this.heroSlides.length < 2) return;
                         this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
-                    }, seconds * 1000);
+                    };
+                    // Mobilde ilk manşet görseli tam yüklenip LCP ölçümü tamamlanmadan değişmesin.
+                    const initialDelay = isMobile ? Math.max(seconds * 1000, 15000) : seconds * 1000;
+                    this.heroAutoplayTimer = window.setTimeout(() => {
+                        advance();
+                        this.heroAutoplayTimer = window.setInterval(advance, seconds * 1000);
+                    }, initialDelay);
                 },
 
                 setHeroPaused(value) {
