@@ -409,15 +409,36 @@
     if(!response.ok)throw new Error('TMDB yanıt vermedi (HTTP '+response.status+').');
     return response.json();
   }
+  function normalizeContentTitle(value){
+    return String(value||'').toLocaleLowerCase('tr-TR').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/ı/g,'i').replace(/[^a-z0-9]+/g,' ').trim().replace(/\\s+/g,' ');
+  }
+  function findDuplicateContent(candidate,excludeId=''){
+    const tmdbId=String(candidate.tmdbId||'').trim();
+    const imdbId=String(candidate.imdbId||candidate.tmdbImdbId||'').trim().toLowerCase();
+    const title=normalizeContentTitle(candidate.title||candidate.name);
+    const type=candidate.type==='tv'||candidate.media_type==='tv'?'tv':'movie';
+    const year=String(candidate.year||(candidate.release_date||candidate.first_air_date||'').slice(0,4)||'').trim();
+    return state.catalog.find(item=>{
+      if(excludeId&&String(item.id)===String(excludeId))return false;
+      if(tmdbId&&String(item.tmdbId||'')===tmdbId)return true;
+      const itemImdb=String(item.imdbId||item.tmdbImdbId||'').trim().toLowerCase();
+      if(imdbId&&itemImdb&&itemImdb===imdbId)return true;
+      if((isSeries(item)?'tv':'movie')!==type||normalizeContentTitle(titleOf(item))!==title)return false;
+      const itemYear=String(item.year||item.tmdbReleaseDate?.slice(0,4)||'').trim();
+      return !year||!itemYear||year===itemYear;
+    })||null;
+  }
   function renderTmdbResults(results){
     const host=$('#tmdb-search-results');
+    const editingId=$('#edit-id').value;
     host.innerHTML=results.map(item=>{
       const name=item.title||item.name||item.original_title||item.original_name||'İsimsiz yapım';
       const date=item.release_date||item.first_air_date||'';
       const year=date.slice(0,4)||'Yıl bilinmiyor';
       const kind=item.media_type==='tv'?'Dizi':'Film';
-      const poster=item.poster_path?TMDB_IMAGE+'w92'+item.poster_path:'';
-      return '<button type="button" class="tmdb-result" data-tmdb-id="'+Number(item.id)+'" data-tmdb-type="'+item.media_type+'"><span class="tmdb-result-poster">'+(poster?'<img src="'+escapeHtml(poster)+'" alt="">':'<i>▣</i>')+'</span><span class="tmdb-result-copy"><b>'+escapeHtml(name)+'</b><small>'+kind+' · '+escapeHtml(year)+' · '+escapeHtml(item.original_title||item.original_name||'')+'</small><em>'+escapeHtml((item.overview||'Açıklama bulunmuyor.').slice(0,145))+'</em></span><span class="tmdb-result-arrow">↗</span></button>';
+      const poster=item.poster_path?TMDB_IMAGE+'w185'+item.poster_path:'';
+      const duplicate=findDuplicateContent({tmdbId:item.id,title:name,type:item.media_type,year},editingId);
+      return '<button type="button" class="tmdb-result'+(duplicate?' is-added':'')+'" data-tmdb-id="'+Number(item.id)+'" data-tmdb-type="'+item.media_type+'" '+(duplicate?'disabled aria-disabled="true"':'')+'><span class="tmdb-result-poster">'+(poster?'<img src="'+escapeHtml(poster)+'" alt="">':'<i>▣</i>')+'</span><span class="tmdb-result-copy"><b>'+escapeHtml(name)+'</b><small>'+kind+' · '+escapeHtml(year)+' · '+escapeHtml(item.original_title||item.original_name||'')+'</small></span><span class="tmdb-result-state">'+(duplicate?'✓ Yapım eklenmiş':'＋ Ekle')+'</span></button>';
     }).join('');
     host.hidden=!results.length;
   }
@@ -529,6 +550,12 @@
       if(selectedNames.toLocaleLowerCase('tr-TR')!==manualNames.toLocaleLowerCase('tr-TR'))delete record.tmdbCast;
     }
     if(!record.title){toast('Yapım adı zorunludur.');return;}
+    const duplicate=findDuplicateContent(record,existing?.id||'');
+    if(duplicate){
+      toast('Bu yapım katalogda zaten ekli: '+titleOf(duplicate));
+      $('#tmdb-search-status').textContent='Bu yapım zaten katalogda kayıtlı. Mevcut kaydı Film & Diziler bölümünden düzenleyebilirsin.';
+      return;
+    }
     if(type==='tv'){record.seasons=Number($('#field-seasons').value)||1;record.episodes=Number($('#field-episodes').value)||0;}else{delete record.seasons;delete record.episodes;}
     const nextData={...state.data,catalog:[...state.catalog]};
     const index=nextData.catalog.findIndex(x=>String(x.id)===String(record.id));
