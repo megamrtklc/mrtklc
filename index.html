@@ -2261,131 +2261,81 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     
     
 
-    <style id="cv-personalized-mobile-cinema">
-      /* Mobil: tek önerili sinematik kart. Masaüstü düzeni bu kuralların dışında kalır. */
-      @media (max-width: 639px) {
-        #home-personalized-section { padding-left: 14px!important; padding-right: 14px!important; }
-        #home-personalized-section .home-personalized-heading { gap: 12px!important; padding-bottom: 12px!important; }
-        #home-personalized-section .home-personalized-heading h2 { font-size: 17px!important; letter-spacing:.07em!important; }
-        #home-personalized-section .home-personalized-heading > div:first-child > p:last-child { font-size:10px!important; }
-        #home-personalized-section .home-personalized-toolbar {
-          display:flex!important; flex-wrap:wrap!important; justify-content:flex-start!important; align-items:center!important;
-          gap:8px!important; width:100%; min-width:0;
-        }
-        #home-personalized-section .home-personalized-modes {
-          display:flex!important; flex:1 0 100%; flex-wrap:nowrap!important; justify-content:flex-start!important;
-          gap:7px!important; max-width:100%; overflow-x:auto; overflow-y:hidden; padding:2px 1px 6px;
-          scrollbar-width:none; -webkit-overflow-scrolling:touch; touch-action:pan-x; overscroll-behavior-x:contain;
-        }
-        #home-personalized-section .home-personalized-modes::-webkit-scrollbar { display:none; }
-        #home-personalized-section .home-personalized-modes button {
-          flex:0 0 auto; min-height:34px; padding:7px 10px!important; border-radius:9px;
-          font-size:9px!important; white-space:nowrap;
-        }
-        #home-personalized-section .home-personalized-count { margin-right:auto; font-size:9px!important; }
-        #home-personalized-section .home-personalized-refresh { min-height:32px; padding:6px 10px!important; font-size:9px!important; }
-        #home-personalized-section .home-personalized-showcase { display:block!important; width:100%; min-width:0; }
-        #home-personalized-section .home-personalized-feature {
-          position:relative!important; display:block!important; width:100%!important; min-width:0!important;
-          min-height:286px!important; height:auto!important; border-radius:16px!important;
-          background:#10151e!important; border:1px solid rgba(218,180,102,.38)!important;
-          box-shadow:0 10px 28px rgba(0,0,0,.28),0 0 22px rgba(218,180,102,.07)!important;
-          isolation:isolate; overflow:hidden!important;
-        }
-        #home-personalized-section .home-personalized-feature-image {
-          opacity:.32!important; filter:blur(1px)!important; transform:scale(1.035)!important;
-        }
-        #home-personalized-section .home-personalized-feature-shade {
-          background:linear-gradient(90deg,rgba(7,10,16,.97) 0%,rgba(7,10,16,.88) 60%,rgba(7,10,16,.66) 100%),
-                     linear-gradient(0deg,rgba(7,10,16,.72),transparent 75%)!important;
-        }
-        #home-personalized-section .home-personalized-feature-poster {
-          position:absolute!important; z-index:2!important; left:13px!important; right:auto!important;
-          top:50%!important; bottom:auto!important; width:92px!important; height:138px!important;
-          transform:translateY(-50%)!important; border-radius:9px!important; overflow:hidden!important;
-          box-shadow:0 7px 22px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.16)!important;
-        }
-        #home-personalized-section .home-personalized-feature-poster img { width:100%; height:100%; object-fit:cover; }
-        #home-personalized-section .home-personalized-feature-labels {
-          left:118px!important; right:8px!important; top:13px!important; gap:5px!important; flex-wrap:wrap!important;
-        }
-        #home-personalized-section .home-personalized-feature-labels span { font-size:7px!important; padding:4px 6px!important; }
-        #home-personalized-section .home-personalized-feature-actions {
-          top:10px!important; right:9px!important; gap:3px!important;
-        }
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike {
-          width:28px!important; height:28px!important; min-width:28px!important; min-height:28px!important; font-size:11px!important;
-        }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full {
-          display:flex!important; width:100%!important; max-width:100%!important; min-height:286px!important;
-          height:auto!important; padding:51px 12px 14px 118px!important; justify-content:center!important;
-          gap:0!important; box-sizing:border-box!important;
-        }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full h3 {
-          font-size:20px!important; line-height:1.15!important; overflow-wrap:anywhere;
-          display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
-        }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full > div:not(.home-personalized-feature-ctas) {
-          gap:6px!important; margin-top:9px!important; font-size:9px!important; line-height:1.35!important;
-        }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full > p {
-          display:-webkit-box!important; -webkit-line-clamp:3; -webkit-box-orient:vertical;
-          overflow:hidden!important; margin-top:9px!important; font-size:10px!important; line-height:1.45!important;
-        }
-        #home-personalized-section .home-personalized-feature-ctas {
-          flex-wrap:wrap!important; gap:7px!important; margin-top:12px!important;
-        }
-        #home-personalized-section .home-personalized-feature-ctas > span:first-child {
-          padding:8px 12px!important; font-size:10px!important; white-space:nowrap;
-        }
-        #home-personalized-section .home-personalized-feature-reason { display:none!important; }
-        #home-personalized-section .home-personalized-mobile-next {
-          display:inline-flex!important; align-items:center; justify-content:center; gap:6px;
-          min-height:34px; padding:7px 10px; border:1px solid rgba(255,255,255,.22);
-          border-radius:999px; background:rgba(255,255,255,.09); color:#f4f4f5;
-          font-size:9px; font-weight:800; white-space:nowrap; backdrop-filter:blur(8px);
-        }
-        #home-personalized-section .home-personalized-mobile-wrap { display:none!important; }
-        #home-personalized-section .home-personalized-alternatives { display:none!important; }
+    
+
+    <style id="cv-personalized-mobile-layout-v2">
+      .home-personalized-mobile-card{display:none}
+      @media(max-width:639px){
+        #home-personalized-section{padding-left:14px!important;padding-right:14px!important}
+        #home-personalized-section .home-personalized-heading{gap:10px!important;padding-bottom:12px!important}
+        #home-personalized-section .home-personalized-heading h2{font-size:17px!important;letter-spacing:.06em!important}
+        #home-personalized-section .home-personalized-heading>div:first-child>p:last-child{font-size:10px!important}
+        #home-personalized-section .home-personalized-toolbar{display:flex!important;flex-wrap:wrap!important;justify-content:flex-start!important;gap:8px!important;width:100%;min-width:0}
+        #home-personalized-section .home-personalized-modes{display:flex!important;flex:1 0 100%;flex-wrap:nowrap!important;justify-content:flex-start!important;gap:6px!important;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:2px 1px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain}
+        #home-personalized-section .home-personalized-modes::-webkit-scrollbar{display:none}
+        #home-personalized-section .home-personalized-modes button{flex:0 0 auto;min-height:34px;padding:7px 10px!important;border-radius:8px;font-size:9px!important;white-space:nowrap}
+        #home-personalized-section .home-personalized-count{margin-right:auto;font-size:9px!important}
+        #home-personalized-section .home-personalized-refresh{min-height:33px;padding:6px 10px!important;font-size:9px!important}
+        #home-personalized-section .home-personalized-showcase{display:block!important;width:100%;min-width:0}
+        #home-personalized-section .home-personalized-feature,#home-personalized-section .home-personalized-alternatives{display:none!important}
+        #home-personalized-section .home-personalized-mobile-card{display:block;position:relative;isolation:isolate;overflow:hidden;width:100%;min-width:0;border:1px solid rgba(221,181,104,.48);border-radius:17px;background:#10141c;box-shadow:0 14px 34px rgba(0,0,0,.28),0 0 22px rgba(221,181,104,.08)}
+        #home-personalized-section .home-personalized-mobile-backdrop{position:relative;height:112px;overflow:hidden}
+        #home-personalized-section .home-personalized-mobile-backdrop img{width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:.72;filter:saturate(.82)}
+        #home-personalized-section .home-personalized-mobile-backdrop>div{position:absolute;inset:0;background:linear-gradient(0deg,#10141c 0%,rgba(16,20,28,.28) 72%,rgba(8,10,14,.08) 100%)}
+        #home-personalized-section .home-personalized-mobile-content{position:relative;display:grid;grid-template-columns:104px minmax(0,1fr);gap:13px;align-items:start;padding:0 13px 13px;margin-top:-47px}
+        #home-personalized-section .home-personalized-mobile-poster{position:relative;z-index:1;width:104px;aspect-ratio:2/3;overflow:hidden;border-radius:9px;border:1px solid rgba(255,255,255,.22);box-shadow:0 8px 24px rgba(0,0,0,.55)}
+        #home-personalized-section .home-personalized-mobile-poster img{display:block;width:100%;height:100%;object-fit:cover}
+        #home-personalized-section .home-personalized-mobile-details{min-width:0;padding-top:48px;color:#f8fafc}
+        #home-personalized-section .home-personalized-mobile-kicker{display:flex;flex-wrap:wrap;gap:5px 8px;color:#e9c47c;font-size:8px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+        #home-personalized-section .home-personalized-mobile-details h3{margin-top:5px;font-size:21px;line-height:1.12;font-weight:900;overflow-wrap:anywhere}
+        #home-personalized-section .home-personalized-mobile-meta{display:flex;align-items:center;gap:9px;margin-top:8px;color:#d0d4dc;font-size:10px;font-weight:700}
+        #home-personalized-section .home-personalized-mobile-imdb{display:inline-flex;align-items:center;gap:4px;padding:3px 6px;border-radius:4px;background:#f5c518;color:#111;font-size:9px;font-weight:900}
+        #home-personalized-section .home-personalized-mobile-details p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-top:9px;color:rgba(235,238,243,.82);font-size:10px;line-height:1.5}
+        #home-personalized-section .home-personalized-mobile-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+        #home-personalized-section .home-personalized-mobile-actions button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:37px;padding:8px 12px;border-radius:999px;font-size:10px;font-weight:900;white-space:nowrap;transition:filter .12s,transform .12s,background .12s}
+        #home-personalized-section .home-personalized-mobile-watch{background:linear-gradient(135deg,#f4cc75,#d99a2b);color:#17130b;box-shadow:0 4px 14px rgba(218,166,62,.18)}
+        #home-personalized-section .home-personalized-mobile-shuffle{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#f5f5f5}
+        #home-personalized-section .home-personalized-mobile-feedback{position:absolute;top:9px;right:9px;display:flex;gap:6px;z-index:3}
+        #home-personalized-section .home-personalized-mobile-feedback button{display:inline-flex;align-items:center;justify-content:center;width:31px;height:31px;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(8,10,14,.58);color:#fff;backdrop-filter:blur(8px)}
+        #home-personalized-section .home-personalized-mobile-feedback button.is-liked{background:#16834a;border-color:#16834a}
+        #home-personalized-section .home-personalized-mobile-card button:active{transform:scale(.96);filter:brightness(1.15)}
+        #home-personalized-section .home-personalized-mobile-card button:focus-visible,#home-personalized-section .home-personalized-modes button:focus-visible,#home-personalized-section .home-personalized-refresh:focus-visible{outline:2px solid #e9bd65;outline-offset:2px}
+        #home-personalized-section .home-personalized-mobile-card button,#home-personalized-section .home-personalized-modes button,#home-personalized-section .home-personalized-refresh{touch-action:manipulation;-webkit-tap-highlight-color:rgba(235,190,100,.2)}
+        #home-personalized-section .home-personalized-mobile-wrap{display:none!important}
       }
-      /* Yatay telefon: aynı içerik iki sütunlu, kısa ve dengeli kompozisyona dönüşür. */
-      @media (max-width: 900px) and (orientation:landscape) and (max-height: 520px) {
-        #home-personalized-section { padding-left:clamp(12px,3vw,26px)!important; padding-right:clamp(12px,3vw,26px)!important; }
-        #home-personalized-section .home-personalized-heading { flex-direction:row!important; align-items:center!important; justify-content:space-between!important; gap:12px!important; }
-        #home-personalized-section .home-personalized-heading h2 { font-size:16px!important; }
-        #home-personalized-section .home-personalized-heading > div:first-child > p:last-child { display:none!important; }
-        #home-personalized-section .home-personalized-toolbar { flex:0 1 auto!important; width:auto!important; justify-content:flex-end!important; gap:6px!important; }
-        #home-personalized-section .home-personalized-modes { flex:0 1 auto!important; max-width:min(48vw,420px)!important; padding-bottom:2px!important; }
-        #home-personalized-section .home-personalized-modes button { min-height:30px!important; padding:5px 8px!important; font-size:8px!important; }
-        #home-personalized-section .home-personalized-count { display:none!important; }
-        #home-personalized-section .home-personalized-feature { min-height:190px!important; border-radius:13px!important; }
-        #home-personalized-section .home-personalized-feature-poster { left:14px!important; width:82px!important; height:123px!important; }
-        #home-personalized-section .home-personalized-feature-labels { left:110px!important; top:10px!important; }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full {
-          min-height:190px!important; padding:39px 12px 10px 110px!important;
-        }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full h3 { font-size:17px!important; }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full > div:not(.home-personalized-feature-ctas) { margin-top:6px!important; }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full > p { -webkit-line-clamp:2!important; margin-top:6px!important; font-size:9px!important; }
-        #home-personalized-section .home-personalized-feature-ctas { margin-top:7px!important; }
-        #home-personalized-section .home-personalized-feature-ctas > span:first-child { min-height:30px!important; padding:6px 10px!important; }
-        #home-personalized-section .home-personalized-mobile-next { min-height:30px!important; padding:5px 9px!important; }
+      @media(max-width:900px) and (orientation:landscape) and (max-height:520px){
+        #home-personalized-section .home-personalized-heading{flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}
+        #home-personalized-section .home-personalized-heading h2{font-size:15px!important}
+        #home-personalized-section .home-personalized-heading>div:first-child>p:last-child{display:none!important}
+        #home-personalized-section .home-personalized-toolbar{flex:0 1 auto!important;width:auto!important;justify-content:flex-end!important;gap:6px!important}
+        #home-personalized-section .home-personalized-modes{flex:0 1 auto!important;max-width:min(52vw,430px)!important;padding-bottom:2px!important}
+        #home-personalized-section .home-personalized-modes button{min-height:29px!important;padding:5px 7px!important;font-size:8px!important}
+        #home-personalized-section .home-personalized-count{display:none!important}
+        #home-personalized-section .home-personalized-mobile-card{min-height:192px;border-radius:13px}
+        #home-personalized-section .home-personalized-mobile-backdrop{position:absolute;inset:0;height:auto;z-index:-1}
+        #home-personalized-section .home-personalized-mobile-backdrop img{opacity:.38;filter:blur(1px);transform:scale(1.04)}
+        #home-personalized-section .home-personalized-mobile-backdrop>div{background:linear-gradient(90deg,rgba(8,11,17,.97),rgba(8,11,17,.83) 56%,rgba(8,11,17,.56))}
+        #home-personalized-section .home-personalized-mobile-content{grid-template-columns:82px minmax(0,1fr);gap:13px;align-items:center;min-height:192px;margin:0;padding:12px 48px 12px 13px}
+        #home-personalized-section .home-personalized-mobile-poster{width:82px}
+        #home-personalized-section .home-personalized-mobile-details{padding-top:0}
+        #home-personalized-section .home-personalized-mobile-details h3{font-size:18px}
+        #home-personalized-section .home-personalized-mobile-details p{-webkit-line-clamp:2;margin-top:6px}
+        #home-personalized-section .home-personalized-mobile-actions{margin-top:8px}
+        #home-personalized-section .home-personalized-mobile-actions button{min-height:32px;padding:6px 10px}
       }
-      @media (max-width: 360px) and (orientation:portrait) {
-        #home-personalized-section .home-personalized-feature { min-height:300px!important; }
-        #home-personalized-section .home-personalized-feature-poster { left:10px!important; width:76px!important; height:114px!important; }
-        #home-personalized-section .home-personalized-feature-labels { left:98px!important; }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full { min-height:300px!important; padding-left:98px!important; }
-        #home-personalized-section .home-personalized-feature > div.flex.h-full h3 { font-size:18px!important; }
+      @media(max-width:360px) and (orientation:portrait){
+        #home-personalized-section .home-personalized-mobile-content{grid-template-columns:86px minmax(0,1fr);gap:10px;padding-left:10px;padding-right:10px}
+        #home-personalized-section .home-personalized-mobile-poster{width:86px}
+        #home-personalized-section .home-personalized-mobile-details h3{font-size:18px}
       }
-      @media(prefers-reduced-motion:reduce) {
-        #home-personalized-section .home-personalized-feature-image,
-        #home-personalized-section .home-personalized-mobile-next { transition:none!important; }
-      }
-      @media(min-width:640px) { #home-personalized-section .home-personalized-mobile-next { display:none!important; } }
+      @media(prefers-reduced-motion:reduce){#home-personalized-section .home-personalized-mobile-card button{transition:none!important}}
     </style>
-</head>
+<style id="cv-personalized-instant-feedback">
+      #home-personalized-section .home-personalized-modes button:active,
+      #home-personalized-section .home-personalized-refresh:active { transform:scale(.96); filter:brightness(1.22); }
+      #home-personalized-section .home-personalized-modes button { touch-action:manipulation; -webkit-tap-highlight-color:rgba(235,190,100,.22); }
+    </style>
+    </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
@@ -2749,20 +2699,36 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 <div class="home-personalized-feature-actions absolute right-4 top-4 z-[2] flex items-center gap-2"><button type="button" @click.stop="likeRecommendation(displayedPersonalizedRecommendations[0])" :aria-label="'Beğendim: ' + displayedPersonalizedRecommendations[0].title" :aria-pressed="isRecommendationLiked(displayedPersonalizedRecommendations[0]).toString()" :class="isRecommendationLiked(displayedPersonalizedRecommendations[0]) ? 'is-liked' : ''" class="home-personalized-like" title="Beğendim"><i :class="isRecommendationLiked(displayedPersonalizedRecommendations[0]) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button><button type="button" @click.stop="dismissRecommendation(displayedPersonalizedRecommendations[0])" :aria-label="'İlgimi çekmedi: ' + displayedPersonalizedRecommendations[0].title" class="home-personalized-dislike" title="İlgimi çekmedi"><i class="fa-regular fa-thumbs-down"></i></button></div>
                             </div>
                         </template>
-                        <div class="home-personalized-mobile-wrap" x-data="{ activeSlide: 0, moveSlide(direction) { const rail = this.$refs.rail; const card = rail && rail.querySelector('.home-personalized-alternative'); if (!card) return; const gap = parseFloat(getComputedStyle(rail).columnGap) || 12; rail.scrollBy({ left: direction * (card.getBoundingClientRect().width + gap), behavior: 'smooth' }); }, updateSlide() { const rail = this.$refs.rail; const card = rail && rail.querySelector('.home-personalized-alternative'); if (!card) return; const gap = parseFloat(getComputedStyle(rail).columnGap) || 12; this.activeSlide = Math.max(0, Math.min(3, Math.round(rail.scrollLeft / (card.getBoundingClientRect().width + gap)))); } }">
-                            <div class="home-personalized-mobile-controls" aria-label="Öneriler arasında gezin">
-                                <span class="text-[10px] font-black uppercase tracking-wider text-gray-500 dark:text-gray-400">Diğer öneriler</span>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="(activeSlide + 1) + ' / ' + Math.max(1, Math.min(4, displayedPersonalizedRecommendations.length - 1))"></span>
-                                    <button type="button" @click="moveSlide(-1)" :disabled="activeSlide === 0" aria-label="Önceki öneri" class="home-personalized-mobile-arrow"><i class="fa-solid fa-chevron-left"></i></button>
-                                    <button type="button" @click="moveSlide(1)" :disabled="activeSlide >= Math.min(4, displayedPersonalizedRecommendations.length - 1) - 1" aria-label="Sonraki öneri" class="home-personalized-mobile-arrow"><i class="fa-solid fa-chevron-right"></i></button>
+                        
+                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" x-show="homeSectionReady.personalized && displayedPersonalizedRecommendations.length">
+                            <div class="home-personalized-mobile-backdrop">
+                                <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500, 780])" sizes="100vw" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                                <div></div>
+                            </div>
+                            <div class="home-personalized-mobile-content">
+                                <div class="home-personalized-mobile-poster">
+                                    <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [185, 342, 500])" sizes="(orientation:landscape) 82px, 104px" :alt="displayedPersonalizedRecommendations[0].title + ' afişi'" loading="lazy" decoding="async">
+                                </div>
+                                <div class="home-personalized-mobile-details">
+                                    <div class="home-personalized-mobile-kicker"><span x-text="displayedPersonalizedRecommendations[0].type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></span><span x-text="displayedPersonalizedRecommendations[0].genre || displayedPersonalizedRecommendations[0].category || 'Özel seçki'"></span></div>
+                                    <h3 x-text="displayedPersonalizedRecommendations[0].title"></h3>
+                                    <div class="home-personalized-mobile-meta">
+                                        <span x-text="displayedPersonalizedRecommendations[0].year || '—'"></span>
+                                        <span class="home-personalized-mobile-imdb">IMDb <b x-text="displayedPersonalizedRecommendations[0].rating ? Number(displayedPersonalizedRecommendations[0].rating).toFixed(1) : '—'"></b></span>
+                                    </div>
+                                    <p x-text="displayedPersonalizedRecommendations[0].tmdbOverview || displayedPersonalizedRecommendations[0].desc || displayedPersonalizedRecommendations[0].recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p>
+                                    <div class="home-personalized-mobile-actions">
+                                        <button type="button" class="home-personalized-mobile-watch" @click.stop="openWatchPage(displayedPersonalizedRecommendations[0])"><i class="fa-solid fa-play"></i> <span x-text="displayedPersonalizedRecommendations[0].type === 'tv' ? 'Diziyi İzle' : 'Filmi İzle'"></span></button>
+                                        <button type="button" class="home-personalized-mobile-shuffle" @click.stop="refreshPersonalizedRecommendations()"><i class="fa-solid fa-shuffle"></i> Başka Öner</button>
+                                    </div>
                                 </div>
                             </div>
-                        <div id="home-personalized-rail" role="region" aria-label="Sana özel öneriler" class="home-personalized-alternatives" x-ref="rail" @scroll.passive="updateSlide()" aria-label="Sana özel öneriler, yatay kaydırılabilir">
-                            <template x-for="item in (homeSectionReady.personalized ? displayedPersonalizedRecommendations.slice(1, 5) : [])" :key="'personal-' + item.id">
-                                <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :data-recommendation-id="item.id" :class="getCardClass()" class="home-personalized-alternative group relative isolate overflow-hidden min-w-0 rounded-xl sm:rounded-2xl border text-left transition-all duration-300">
-                                    <img class="home-personalized-card-backdrop absolute inset-0 w-full h-full object-cover" @error="handleImageError($event)" :src="item.backdrop || item.poster || item.image" :srcset="getTmdbImageSrcSet(item.backdrop || item.poster || item.image, [342, 500])" sizes="(max-width: 767px) 320px, 420px" :alt="''" aria-hidden="true" loading="lazy" decoding="async">
-                                    <div class="home-personalized-card-shade absolute inset-0"></div>
+                            <div class="home-personalized-mobile-feedback">
+                                <button type="button" @click.stop="likeRecommendation(displayedPersonalizedRecommendations[0])" :aria-label="'Beğendim: ' + displayedPersonalizedRecommendations[0].title" :aria-pressed="isRecommendationLiked(displayedPersonalizedRecommendations[0]).toString()" :class="isRecommendationLiked(displayedPersonalizedRecommendations[0]) ? 'is-liked' : ''"><i :class="isRecommendationLiked(displayedPersonalizedRecommendations[0]) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button>
+                                <button type="button" @click.stop="dismissRecommendation(displayedPersonalizedRecommendations[0])" :aria-label="'İlgimi çekmedi: ' + displayedPersonalizedRecommendations[0].title"><i class="fa-regular fa-thumbs-down"></i></button>
+                            </div>
+                        </article>
+                        </div>
                                     <div class="home-personalized-poster relative z-[1] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-900 shadow-xl"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [154, 185, 342])" sizes="96px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/85 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="(item.rating ? Number(item.rating).toFixed(1) : '—')"></span></span></div>
                                     <div class="home-personalized-copy relative z-[1] min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-300 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="item.title"></h3><p class="mt-1 text-[10px] text-white/75 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="home-personalized-plot" x-text="item.tmdbOverview || item.desc || item.recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p></div>
                                     <div class="home-personalized-actions relative z-[1] flex items-center justify-end gap-1.5"><button type="button" @click.stop="likeRecommendation(item)" :aria-label="'Beğendim: ' + item.title" :aria-pressed="isRecommendationLiked(item).toString()" :class="isRecommendationLiked(item) ? 'is-liked' : ''" class="home-personalized-like" title="Beğendim"><i :class="isRecommendationLiked(item) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button>
