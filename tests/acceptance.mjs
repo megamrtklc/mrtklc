@@ -458,6 +458,7 @@ try {
   await check('Ana sayfada kişisel öneriler dört kartla gösteriliyor ve geri bildirimleri koruyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     const rail = page.locator('#home-personalized-rail');
+    console.log('PERSONALIZED UI DIAGNOSTIC:', JSON.stringify(await page.evaluate(() => { const app = window.Alpine.$data(document.documentElement); const section = document.querySelector('#home-personalized-section'); const rail = document.querySelector('#home-personalized-rail'); return { currentPage: app.currentPage, catalogLoading: app.catalogLoading, homeSectionReady: app.homeSectionReady, baseCount: app.personalizedRecommendations.length, displayedCount: app.displayedPersonalizedRecommendations.length, sectionExists: !!section, sectionDisplay: section ? getComputedStyle(section).display : null, sectionVisibility: section ? getComputedStyle(section).visibility : null, sectionIgnored: section?.hasAttribute('x-ignore') || false, sectionReady: app.homeSectionReady?.personalized, railExists: !!rail, cardCount: rail?.querySelectorAll('.home-personalized-alternative').length || 0 }; })));
     await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 4, { timeout: 10000 });
     assert.equal(await page.getByRole('button', { name: 'Tüm önerileri gör' }).count(), 0,
       'Dört kartlık öneri alanında genişletme kontrolü bulunmamalı');
