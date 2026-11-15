@@ -369,7 +369,7 @@
                     let cursor = 0;
                     const normalize = value => String(value || '').toLocaleLowerCase('en-US')
                         .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
-                        .replace(/[’‘]/g, "'").replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();
+                        .replace(/[’‘]/g, "'").replace(/ı/g, 'i').replace(/[^a-z0-9]+/g, ' ').trim();
                     const requestWithRetry = async (path, language = 'en-US') => {
                         let lastError;
                         for (let attempt = 0; attempt < 3; attempt++) {
