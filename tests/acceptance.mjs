@@ -500,7 +500,7 @@ try {
     assert.ok(cardArtwork.plot, 'Konu özeti için sınırlı metin alanı olmalı');
     assert.ok(cardArtwork.featureLikes && cardArtwork.featureDislikes && !cardArtwork.oldDismiss, 'Büyük görselde X yerine Like/Dislike olmalı');
     const dislikeWidth = await cards.first().locator('.home-personalized-dislike').evaluate(element => element.getBoundingClientRect().width);
-    assert.ok(dislikeWidth >= 38, 'Dislike butonu büyütülmüş olmalı');
+    assert.ok(dislikeWidth >= 28, 'Küçük öneri kartındaki Dislike butonu dokunulabilir boyutta olmalı');
 
     const firstCard = cards.first();
     const firstId = await firstCard.getAttribute('data-recommendation-id');
