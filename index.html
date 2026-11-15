@@ -2258,7 +2258,116 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         #home-favorites-section .home-new-arrival-feature .home-new-arrival-copy>p{color:rgba(255,255,255,.94)!important}
         @media(prefers-reduced-motion:reduce){#home-favorites-section .home-new-arrival-card,#home-favorites-section .home-new-arrival-poster img{transition:none!important}}
     </style>
-    </head>
+    
+    <style id="cv-personalized-mobile-redesign">
+      @media (max-width: 639px) {
+        #home-personalized-section { padding-left: 16px!important; padding-right: 16px!important; }
+        #home-personalized-section .home-personalized-heading { gap: 12px!important; }
+        #home-personalized-section .home-personalized-toolbar {
+          display:grid!important; grid-template-columns:minmax(0,1fr) auto; gap:9px 10px!important;
+          width:100%; min-width:0; align-items:center; justify-content:stretch;
+        }
+        #home-personalized-section .home-personalized-modes {
+          grid-column:1 / -1; display:flex!important; flex-wrap:nowrap!important; justify-content:flex-start!important;
+          gap:7px!important; max-width:100%; overflow-x:auto; overflow-y:hidden; padding:2px 1px 7px;
+          scrollbar-width:none; -webkit-overflow-scrolling:touch; touch-action:pan-x; overscroll-behavior-x:contain;
+        }
+        #home-personalized-section .home-personalized-modes::-webkit-scrollbar { display:none; }
+        #home-personalized-section .home-personalized-modes button {
+          flex:0 0 auto; min-height:36px; padding:8px 11px!important; border-radius:8px;
+          font-size:10px!important; letter-spacing:.01em;
+        }
+        #home-personalized-section .home-personalized-count { grid-column:1; grid-row:2; font-size:10px!important; }
+        #home-personalized-section .home-personalized-refresh {
+          grid-column:2; grid-row:2; min-height:34px; padding:7px 11px!important; font-size:10px!important;
+        }
+        #home-personalized-section .home-personalized-showcase { display:flex!important; flex-direction:column; gap:12px!important; }
+        #home-personalized-section .home-personalized-feature {
+          min-height:154px!important; height:auto!important; border-radius:14px!important;
+          background:#10151e!important; box-shadow:0 8px 22px rgba(0,0,0,.18)!important;
+        }
+        #home-personalized-section .home-personalized-feature-image {
+          opacity:.22; filter:blur(2px); transform:scale(1.04);
+        }
+        #home-personalized-section .home-personalized-feature-shade {
+          background:linear-gradient(90deg,rgba(8,11,18,.97),rgba(8,11,18,.88) 58%,rgba(8,11,18,.78))!important;
+        }
+        #home-personalized-section .home-personalized-feature-poster {
+          position:absolute!important; left:12px!important; right:auto!important; top:50%!important; bottom:auto!important;
+          width:68px!important; height:102px!important; transform:translateY(-50%)!important;
+          border-radius:8px!important; box-shadow:0 5px 16px rgba(0,0,0,.42)!important;
+        }
+        #home-personalized-section .home-personalized-feature > div.flex.h-full {
+          width:100%!important; max-width:100%!important; min-height:154px!important;
+          padding:48px 12px 12px 92px!important; justify-content:center!important;
+        }
+        #home-personalized-section .home-personalized-feature-labels {
+          top:10px!important; left:92px!important; right:8px; gap:5px!important;
+        }
+        #home-personalized-section .home-personalized-feature-labels span { font-size:7px!important; padding:4px 6px!important; }
+        #home-personalized-section .home-personalized-feature-actions {
+          top:8px!important; right:8px!important; gap:3px!important;
+        }
+        #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
+        #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike {
+          width:28px!important; height:28px!important; min-width:28px!important; min-height:28px!important;
+          font-size:11px!important;
+        }
+        #home-personalized-section .home-personalized-feature h3 {
+          font-size:15px!important; line-height:1.2!important; display:-webkit-box;
+          -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+        }
+        #home-personalized-section .home-personalized-feature > div.flex.h-full > p { display:none!important; }
+        #home-personalized-section .home-personalized-feature > div.flex.h-full > div { margin-top:7px!important; gap:7px!important; font-size:10px!important; }
+        #home-personalized-section .home-personalized-mobile-controls {
+          display:flex!important; align-items:center; justify-content:space-between; padding:2px 1px 0;
+        }
+        #home-personalized-section .home-personalized-mobile-controls > div { display:none!important; }
+        #home-personalized-section .home-personalized-alternatives {
+          display:flex!important; flex-direction:column!important; flex-wrap:nowrap!important;
+          gap:9px!important; overflow:visible!important; padding:0!important; margin:0!important;
+          touch-action:pan-y!important; scroll-snap-type:none!important;
+        }
+        #home-personalized-section .home-personalized-alternative {
+          display:grid!important; grid-template-columns:70px minmax(0,1fr)!important;
+          grid-template-rows:minmax(0,1fr) auto!important; column-gap:11px!important; row-gap:5px!important;
+          flex:0 0 auto!important; width:100%!important; min-height:132px!important; height:auto!important;
+          padding:10px!important; border-radius:12px!important; background:#111720!important;
+          border:1px solid rgba(148,163,184,.18)!important; box-shadow:0 5px 16px rgba(0,0,0,.12)!important;
+          transform:none!important;
+        }
+        #home-personalized-section .home-personalized-card-backdrop { display:none!important; }
+        #home-personalized-section .home-personalized-card-shade {
+          background:linear-gradient(110deg,rgba(17,23,32,.98),rgba(17,23,32,.94))!important;
+        }
+        #home-personalized-section .home-personalized-poster {
+          grid-column:1!important; grid-row:1 / span 2!important; width:70px!important;
+          align-self:center!important; border-radius:7px!important;
+        }
+        #home-personalized-section .home-personalized-copy { grid-column:2!important; grid-row:1!important; align-self:center!important; }
+        #home-personalized-section .home-personalized-copy h3 { font-size:13px!important; line-height:1.25!important; }
+        #home-personalized-section .home-personalized-copy > p:first-child { font-size:8px!important; margin-bottom:3px!important; }
+        #home-personalized-section .home-personalized-copy > p:nth-child(3) { font-size:9px!important; margin-top:3px!important; }
+        #home-personalized-section .home-personalized-plot {
+          display:-webkit-box!important; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+          overflow:hidden; font-size:10px!important; line-height:1.35!important; margin-top:4px!important;
+        }
+        #home-personalized-section .home-personalized-actions {
+          grid-column:2!important; grid-row:2!important; align-self:end!important; justify-content:flex-end!important; gap:7px!important;
+        }
+        #home-personalized-section .home-personalized-actions .home-personalized-like,
+        #home-personalized-section .home-personalized-actions .home-personalized-dislike {
+          width:34px!important; height:34px!important; min-width:34px!important; min-height:34px!important;
+          font-size:13px!important;
+        }
+        #home-personalized-section .home-personalized-alternative:hover { transform:none!important; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #home-personalized-section .home-personalized-feature-image,
+        #home-personalized-section .home-personalized-alternative { transition:none!important; }
+      }
+    </style>
+</head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
