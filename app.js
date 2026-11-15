@@ -824,6 +824,9 @@
                         this.homeSectionReady[key] = true;
                         if (section.hasAttribute('x-ignore')) {
                             section.removeAttribute('x-ignore');
+                            // Alpine x-ignore ilk taramada _x_ignore bayrağı bırakır;
+                            // niteliği DOM'dan silmek tek başına initTree çağrısını açmaz.
+                            section._x_ignore = false;
                             window.Alpine?.initTree?.(section);
                         }
                         window.requestAnimationFrame(() => {
