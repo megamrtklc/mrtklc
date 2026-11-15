@@ -819,7 +819,7 @@
                             if (key) this.homeSectionReady[key] = true;
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: '200px 0px' });
+                    }, { rootMargin: window.matchMedia('(max-width: 767px)').matches ? '90px 0px' : '200px 0px' });
 
                     window.__cineverseHomeSectionObserver = observer;
                     sections.forEach(section => observer.observe(section));
