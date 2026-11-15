@@ -968,16 +968,23 @@
       diagnostic.classList.toggle('state-warning',personalCount===0);
     }
   }
-  function downloadFullBackup(){
-    if(!state.data||!Array.isArray(state.data.catalog)){toast('Katalog yüklenmeden yedek oluşturulamaz.');return;}
-    const local=collectBrowserStorage(localStorage),session=collectBrowserStorage(sessionStorage);
-    if(!Object.keys(local).length&&!Object.keys(session).length){toast('Kişisel kayıt bulunamadı. Eksik yedek oluşturmamak için indirme durduruldu.');return;}
-    const payload={format:'perde-full-backup',version:1,exportedAt:new Date().toISOString(),siteData:state.data,browserData:{localStorage:local,sessionStorage:session}};
+  function downloadBackupJson(payload,filename,successMessage){
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
     const url=URL.createObjectURL(blob),anchor=document.createElement('a');
-    anchor.href=url;anchor.download='perde-tam-yedek-'+new Date().toISOString().slice(0,10)+'.json';
+    anchor.href=url;anchor.download=filename;
     document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-    toast('Tam yedek dosyası indirildi.');
+    toast(successMessage);
+  }
+  function downloadSiteBackup(){
+    if(!state.data||!Array.isArray(state.data.catalog)){toast('Katalog yüklenmeden yedek oluşturulamaz.');return;}
+    const date=new Date().toISOString().slice(0,10);
+    downloadBackupJson({format:'perde-site-backup',version:1,exportedAt:new Date().toISOString(),siteData:state.data},'perde-yapimlar-ve-site-verileri-'+date+'.json','Yapımlar ve site verileri yedeklendi.');
+  }
+  function downloadPersonalBackup(){
+    const local=collectBrowserStorage(localStorage),session=collectBrowserStorage(sessionStorage);
+    if(!Object.keys(local).length&&!Object.keys(session).length){toast('Kişisel kayıt bulunamadı. Eksik yedek oluşturmamak için indirme durduruldu.');return;}
+    const date=new Date().toISOString().slice(0,10);
+    downloadBackupJson({format:'perde-personal-backup',version:1,exportedAt:new Date().toISOString(),origin:location.origin,browserData:{localStorage:local,sessionStorage:session}},'perde-kisisel-tarayici-verileri-'+date+'.json','Kişisel tarayıcı verileri yedeklendi.');
   }
   function inspectBackupFile(file){
     selectedBackup=null;
@@ -1038,7 +1045,8 @@
     }
   }
   function initBackupTools(){
-    $('#download-full-backup')?.addEventListener('click',downloadFullBackup);
+    $('#download-site-backup')?.addEventListener('click',downloadSiteBackup);
+    $('#download-personal-backup')?.addEventListener('click',downloadPersonalBackup);
     $('#restore-backup-file')?.addEventListener('change',event=>inspectBackupFile(event.target.files?.[0]));
     $('#restore-full-backup')?.addEventListener('click',restoreFullBackup);
     refreshBackupSummary();
