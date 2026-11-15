@@ -361,14 +361,14 @@
                     const english = String(item.englishTitle || item.tmdbEnglishTitle || '').trim();
                     const title = String(item.title || '').trim();
                     if (!english) return '';
-                    const normalize = value => value.toLocaleLowerCase('en-US').replace(/[’‘]/g, "'").replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();
+                    const normalize = value => value.toLocaleLowerCase('en-US').replace(/[’‘]/g, "'").replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
                     return normalize(english) && normalize(english) !== normalize(title) ? english : '';
                 },
                 async loadHeroEnglishTitles() {
                     const slides = [...new Map((this.heroSlides || []).filter(Boolean).map(item => [String(item.id), item])).values()];
                     let cursor = 0;
                     const normalize = value => String(value || '').toLocaleLowerCase('en-US')
-                        .normalize('NFKD').replace(/[\\u0300-\\u036f]/g, '')
+                        .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
                         .replace(/[’‘]/g, "'").replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();
                     const requestWithRetry = async (path, language = 'en-US') => {
                         let lastError;
@@ -414,7 +414,7 @@
                                     if (title) {
                                         const year = String(item.year || '').slice(0, 4);
                                         const searchPath = 'search/' + mediaType + '?query=' + encodeURIComponent(title) +
-                                            (year && /^\\d{4}$/.test(year) ? (mediaType === 'tv' ? '&first_air_date_year=' : '&year=') + year : '');
+                                            (year && /^\d{4}$/.test(year) ? (mediaType === 'tv' ? '&first_air_date_year=' : '&year=') + year : '');
                                         const found = await requestWithRetry(searchPath);
                                         const match = (found?.results || [])[0];
                                         if (match?.id) {
