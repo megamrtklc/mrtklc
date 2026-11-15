@@ -483,16 +483,19 @@ try {
       !!card.querySelector('.home-personalized-like') && !!card.querySelector('.home-personalized-dislike')
     ));
     assert.ok(allCardsHaveFeedback, 'Dört öneri kartının tamamında Like ve Dislike olmalı');
-    const cardArtwork = await cards.first().evaluate(card => ({
-      backdrop: !!card.querySelector('.home-personalized-card-backdrop'),
-      blurred: getComputedStyle(card.querySelector('.home-personalized-card-backdrop')).filter.includes('blur'),
-      posterWidth: card.querySelector('.home-personalized-poster').getBoundingClientRect().width,
-      plot: !!card.querySelector('.home-personalized-plot'),
-      featureLikes: !!document.querySelector('.home-personalized-feature-actions .home-personalized-like'),
-      featureDislikes: !!document.querySelector('.home-personalized-feature-actions .home-personalized-dislike'),
-      oldDismiss: !!document.querySelector('.home-personalized-feature-dismiss')
-    }));
-    assert.ok(cardArtwork.backdrop && cardArtwork.blurred, 'Kart arka planı bulanık kapak görseli olmalı');
+    const cardArtwork = await cards.first().evaluate(card => {
+      const backdrop = card.querySelector('.home-personalized-card-backdrop');
+      const style = backdrop ? getComputedStyle(backdrop) : null;
+      return {
+        backdrop: !!backdrop && style.display !== 'none' && Number(style.opacity) > 0,
+        posterWidth: card.querySelector('.home-personalized-poster').getBoundingClientRect().width,
+        plot: !!card.querySelector('.home-personalized-plot'),
+        featureLikes: !!document.querySelector('.home-personalized-feature-actions .home-personalized-like'),
+        featureDislikes: !!document.querySelector('.home-personalized-feature-actions .home-personalized-dislike'),
+        oldDismiss: !!document.querySelector('.home-personalized-feature-dismiss')
+      };
+    });
+    assert.ok(cardArtwork.backdrop, 'Kartta hafif kapak arka planı görünmeli');
     assert.ok(cardArtwork.posterWidth >= 60, 'Afiş görseli büyütülmüş olmalı');
     assert.ok(cardArtwork.plot, 'Konu özeti için sınırlı metin alanı olmalı');
     assert.ok(cardArtwork.featureLikes && cardArtwork.featureDislikes && !cardArtwork.oldDismiss, 'Büyük görselde X yerine Like/Dislike olmalı');
