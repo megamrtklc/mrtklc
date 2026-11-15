@@ -323,7 +323,7 @@
                 collections: [],
                 franchises: [],
                 selectedFranchiseId: null,
-                homepageConfig: null,
+                homepageConfig: window.__CV_HERO_BOOTSTRAP__?.homepageConfig || null,
                 headerConfig: { enabled:true, sticky:true, showLogoIcon:true, brandPrimary:'CINE', brandAccent:'VERSE', showHome:true, homeLabel:'Ana Sayfa', showExplore:true, exploreLabel:'Keşfet', showVideo:true, videoLabel:'Video Bağlantıları', showSearch:true, showProfile:true, showMobileMenu:true, catalogMenusInitialized:false, customLinks:[] },
                 footerConfig: { enabled:true, customLinks:[], brandPrimary:'CINE', brandAccent:'VERSE', description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.', showBadges:true, badgeOne:'KİŞİSEL KÜTÜPHANE', badgeTwo:'DİZİ TAKİBİ', columnOneTitle:'CineVerse', homeLabel:'Ana Sayfa', exploreLabel:'Keşfet', libraryLabel:'Kütüphanem', columnTwoTitle:'İzleme Alanım', watchlistLabel:'İzleme Listem', statsLabel:'İstatistikler', featureTitle:'İzleme keyfini kişiselleştir', featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.', ctaLabel:'Kütüphaneme Git', showCta:true, copyright:'© 2026 CineVerse. Tüm hakları saklıdır.', showBackToTop:true },
                 watchPageConfig: null,
@@ -340,6 +340,7 @@
                     'new-arrivals': false,
                     'series-tracking': false,
                     'genre-discovery': false,
+                    franchises: false,
                     'published-collections': false,
                     catalog: false
                 },
@@ -616,7 +617,8 @@
                     });
                     this.$watch('currentPage', page => {
                         if (page === 'home') this.$nextTick(() => {
-                            // x-if anasayfayı her dönüşte yeniden oluşturur; yönetici sırasını yeni DOM'a tekrar uygula.
+                            // x-if anasayfayı yeniden oluşturur; rafları yeniden sırala ve görünürlüklerini tembel yüklemeye hazırla.
+                            Object.keys(this.homeSectionReady).forEach(key => { this.homeSectionReady[key] = false; });
                             this.applyHomepageSectionOrder();
                             this.scheduleHomePageHydration();
                             this.initHomeSectionObserver();
@@ -796,33 +798,60 @@
 
                 initHomeSectionObserver() {
                     const root = document.getElementById('home-page');
-                    if (!root) return;
+                    if (!root || this.catalogLoading) return;
                     window.__cineverseHomeSectionObserver?.disconnect();
 
                     const sections = [...root.children].filter(element =>
                         element.hasAttribute('data-home-section') &&
                         element.dataset.homeSection !== 'hero' &&
-                        !this.homeSectionReady[element.dataset.homeSection]
+                        element.hasAttribute('x-ignore')
                     );
 
-                    if (!('IntersectionObserver' in window)) {
-                        sections.forEach(section => {
-                            this.homeSectionReady[section.dataset.homeSection] = true;
+                    const hydrateSection = section => {
+                        const key = section.dataset.homeSection;
+                        if (!key) return;
+                        this.homeSectionReady[key] = true;
+                        if (section.hasAttribute('x-ignore')) {
+                            section.removeAttribute('x-ignore');
+                            window.Alpine?.initTree?.(section);
+                        }
+                        window.requestAnimationFrame(() => {
+                            section.style.removeProperty('visibility');
                         });
+                    };
+
+                    // Yönetici tarafından kapatılan rafları hemen işle; görünür rafları ekrana yaklaşınca başlat.
+                    sections.forEach(section => {
+                        const key = section.dataset.homeSection;
+                        section.removeAttribute('x-cloak');
+                        if (!this.isHomepageSectionVisible(key)) {
+                            hydrateSection(section);
+                            return;
+                        }
+                        section.style.visibility = 'hidden';
+                    });
+
+                    const pending = sections.filter(section =>
+                        section.hasAttribute('x-ignore') &&
+                        this.isHomepageSectionVisible(section.dataset.homeSection)
+                    );
+
+                    if (!pending.length) return;
+                    if (!('IntersectionObserver' in window)) {
+                        pending.forEach(hydrateSection);
                         return;
                     }
 
                     const observer = new IntersectionObserver(entries => {
                         entries.forEach(entry => {
                             if (!entry.isIntersecting) return;
-                            const key = entry.target.dataset.homeSection;
-                            if (key) this.homeSectionReady[key] = true;
+                            hydrateSection(entry.target);
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: window.matchMedia('(max-width: 767px)').matches ? '90px 0px' : '200px 0px' });
+                    }, { rootMargin: window.matchMedia('(max-width: 767px)').matches ? '300px 0px' : '500px 0px' });
 
+                    pending.forEach(section => observer.observe(section));
                     window.__cineverseHomeSectionObserver = observer;
-                    sections.forEach(section => observer.observe(section));
                 },
 
                 get heroSlides() {
