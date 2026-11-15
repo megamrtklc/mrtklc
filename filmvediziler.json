@@ -22386,6 +22386,207 @@
       "tmdbImdbId": "tt3042408",
       "tmdbRating": "7.6",
       "tmdbVoteCount": 1805
+    },
+    {
+      "id": "cv-1794713971210",
+      "title": "Diriliş",
+      "type": "movie",
+      "year": "2015",
+      "rating": "7.5",
+      "genre": "Vahşi Batı",
+      "category": "Vahşi Batı / Dram / Macera",
+      "duration": "157 dk",
+      "country": "Canada, Hong Kong, Taiwan, United States of America",
+      "director": "Alejandro G. Iñárritu",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 281957,
+      "imdbId": "tt1663202",
+      "image": "https://image.tmdb.org/t/p/w500/vpNOjiOZ9dSmj8COISLCQhWENnL.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/hEQYZq2CDB2LSJVxxlazdBOKeyW.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=Cf0Col6Y7qY",
+      "trailerProvider": "auto",
+      "desc": "Hugh Glass kürkleri için hayvanları avlayan bir kuruluş için çalışan deneyimli bir tuzakçıdır. Fakat avlandıkları bölgelerde kendilerinden başka hem yerli Kızılderililer hem de Fransız birlikleri kol gezmektedir. Bir av ertesinde bir boz ayı tarafından ölümcül bir biçimde yaralanan Glass'ı, yavaşlamamak adına ekibi ölüme terk eder. Fakat bölgeyi herkesten iyi bilen avcı Glass hayata tutunur ve yavaş da olsa yaraları iyileşir. Zira yaşama tutunması için oldukça geçerli bir sebebi vardır.",
+      "cast": [
+        "Leonardo DiCaprio",
+        "Tom Hardy",
+        "Domhnall Gleeson",
+        "Will Poulter",
+        "Forrest Goodluck",
+        "Duane Howard",
+        "Arthur Redcloud",
+        "Melaw Nakehk'o",
+        "Grace Dove",
+        "Lukas Haas",
+        "Paul Anderson",
+        "Kristoffer Joner",
+        "Joshua Burge",
+        "Fabrice Adde",
+        "Christopher Rosamond",
+        "Robert Moloney",
+        "Brendan Fletcher",
+        "Tyson Wood",
+        "McCaleb Burnett",
+        "Vincent Leclerc"
+      ],
+      "tmdbTitle": "Diriliş",
+      "tmdbOriginalTitle": "The Revenant",
+      "tmdbReleaseDate": "2015-12-25",
+      "tmdbGenres": "Vahşi Batı / Dram / Macera",
+      "tmdbRuntime": "157 dk",
+      "tmdbCountries": "Canada, Hong Kong, Taiwan, United States of America",
+      "tmdbDirector": "Alejandro G. Iñárritu",
+      "tmdbCast": [
+        {
+          "id": 6193,
+          "name": "Leonardo DiCaprio",
+          "character": "Hugh Glass",
+          "profile": "https://image.tmdb.org/t/p/w185/wo2hJpn04vbtmh0B9utCFdsQhxM.jpg",
+          "order": 0
+        },
+        {
+          "id": 2524,
+          "name": "Tom Hardy",
+          "character": "John Fitzgerald",
+          "profile": "https://image.tmdb.org/t/p/w185/d81K0RH8UX7tZj49tZaQhZ9ewH.jpg",
+          "order": 1
+        },
+        {
+          "id": 93210,
+          "name": "Domhnall Gleeson",
+          "character": "Captain Andrew Henry",
+          "profile": "https://image.tmdb.org/t/p/w185/a63BgOBKzJ9XPaLFyu7u5Ge3REG.jpg",
+          "order": 2
+        },
+        {
+          "id": 93491,
+          "name": "Will Poulter",
+          "character": "Jim Bridger",
+          "profile": "https://image.tmdb.org/t/p/w185/9blYMaj79VGC6BHTLmJp3V5S8r3.jpg",
+          "order": 3
+        },
+        {
+          "id": 1560185,
+          "name": "Forrest Goodluck",
+          "character": "Hawk",
+          "profile": "https://image.tmdb.org/t/p/w185/4xjRFmyJqYZRtLODw22baOla2Ub.jpg",
+          "order": 4
+        },
+        {
+          "id": 117428,
+          "name": "Duane Howard",
+          "character": "Elk Dog",
+          "profile": "https://image.tmdb.org/t/p/w185/cjtGNOnvid0baPAYY6RUKIWI753.jpg",
+          "order": 5
+        },
+        {
+          "id": 1839463,
+          "name": "Arthur Redcloud",
+          "character": "Hikuc",
+          "profile": "https://image.tmdb.org/t/p/w185/9JSRGafBvCJ9QMCxE9ohUxh8jE6.jpg",
+          "order": 6
+        },
+        {
+          "id": 2498673,
+          "name": "Melaw Nakehk'o",
+          "character": "Powaqa",
+          "profile": "https://image.tmdb.org/t/p/w185/m52aGnTKiiJm2wlzLQE6G3yVlWw.jpg",
+          "order": 7
+        },
+        {
+          "id": 1554188,
+          "name": "Grace Dove",
+          "character": "Hugh Glass' Wife",
+          "profile": "https://image.tmdb.org/t/p/w185/s2Bnkna2WqGFzmI4NHOIOaNKHLa.jpg",
+          "order": 8
+        },
+        {
+          "id": 526,
+          "name": "Lukas Haas",
+          "character": "Jones",
+          "profile": "https://image.tmdb.org/t/p/w185/vabZQXlAhyW2GxQfDM1PhKURA8.jpg",
+          "order": 9
+        },
+        {
+          "id": 220448,
+          "name": "Paul Anderson",
+          "character": "Anderson",
+          "profile": "https://image.tmdb.org/t/p/w185/nds5rTBZvJ4rEsP4N6OaoEgQDkW.jpg",
+          "order": 10
+        },
+        {
+          "id": 7742,
+          "name": "Kristoffer Joner",
+          "character": "Murphy",
+          "profile": "https://image.tmdb.org/t/p/w185/vufeSWAdY9653t5Vxu3HysCnIkY.jpg",
+          "order": 11
+        },
+        {
+          "id": 1099848,
+          "name": "Joshua Burge",
+          "character": "Stubby Bill",
+          "profile": "https://image.tmdb.org/t/p/w185/4FnQJn6EbjipYxlIAGsu0v6VJtX.jpg",
+          "order": 12
+        },
+        {
+          "id": 77908,
+          "name": "Fabrice Adde",
+          "character": "Toussaint",
+          "profile": "https://image.tmdb.org/t/p/w185/9iUy89EhBH8mdWK3rCO6NPZUeIG.jpg",
+          "order": 13
+        },
+        {
+          "id": 1742866,
+          "name": "Christopher Rosamond",
+          "character": "Boone",
+          "profile": "https://image.tmdb.org/t/p/w185/rvPZ3Y08mRKro2JnAKu2ZBEaGeq.jpg",
+          "order": 14
+        },
+        {
+          "id": 77315,
+          "name": "Robert Moloney",
+          "character": "Dave Chapman",
+          "profile": "https://image.tmdb.org/t/p/w185/gbmYYq0R6xvuKZQ1kwUBwkN9iso.jpg",
+          "order": 15
+        },
+        {
+          "id": 32205,
+          "name": "Brendan Fletcher",
+          "character": "Fryman",
+          "profile": "https://image.tmdb.org/t/p/w185/azeMOxQdCw18ABRwwOMIo3lV1If.jpg",
+          "order": 16
+        },
+        {
+          "id": 2498719,
+          "name": "Tyson Wood",
+          "character": "Weston",
+          "profile": "",
+          "order": 17
+        },
+        {
+          "id": 204509,
+          "name": "McCaleb Burnett",
+          "character": "Beckett",
+          "profile": "https://image.tmdb.org/t/p/w185/2azKqTfuWvCUezgo8JRQsciDZBd.jpg",
+          "order": 18
+        },
+        {
+          "id": 982065,
+          "name": "Vincent Leclerc",
+          "character": "French Trapper",
+          "profile": "https://image.tmdb.org/t/p/w185/sCNPUiSUQs1kfurlDXm8qgjQ8Mj.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Hugh Glass kürkleri için hayvanları avlayan bir kuruluş için çalışan deneyimli bir tuzakçıdır. Fakat avlandıkları bölgelerde kendilerinden başka hem yerli Kızılderililer hem de Fransız birlikleri kol gezmektedir. Bir av ertesinde bir boz ayı tarafından ölümcül bir biçimde yaralanan Glass'ı, yavaşlamamak adına ekibi ölüme terk eder. Fakat bölgeyi herkesten iyi bilen avcı Glass hayata tutunur ve yavaş da olsa yaraları iyileşir. Zira yaşama tutunması için oldukça geçerli bir sebebi vardır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/vpNOjiOZ9dSmj8COISLCQhWENnL.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/hEQYZq2CDB2LSJVxxlazdBOKeyW.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=Cf0Col6Y7qY",
+      "tmdbImdbId": "tt1663202",
+      "tmdbRating": "7.5",
+      "tmdbVoteCount": 19940
     }
   ],
   "collections": [],
