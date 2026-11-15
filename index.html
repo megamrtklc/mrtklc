@@ -2385,6 +2385,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             <div class="editorial-copy-enter max-w-[900px] space-y-4 lg:max-w-[900px]">
                                 <div class="space-y-2">
                                     <h1 class="block w-full max-w-[650px] text-2xl font-black leading-[1.12] tracking-[-0.035em] text-white drop-shadow-2xl break-words lg:max-w-[680px] lg:text-3xl xl:text-4xl" x-text="currentHero.title" :title="currentHero.title"></h1>
+                                    <p x-show="getHeroEnglishTitle(currentHero)" x-text="getHeroEnglishTitle(currentHero)" class="pl-0.5 text-sm font-medium tracking-wide text-white/60 lg:text-[15px]"></p>
                                     <p class="pl-1 text-sm font-black uppercase tracking-[0.62em] text-amber-400" x-text="currentHero.type === 'tv' ? 'DİZİ' : 'SİNEMA'"></p>
                                 </div>
                                 <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-gray-200">
@@ -2449,6 +2450,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     <div class="px-5 pb-4 pt-3 text-white sm:px-7">
                         <div class="space-y-1.5">
                             <h1 class="block w-full text-[clamp(1rem,4vw,1.65rem)] font-black leading-tight tracking-tight text-white break-words" x-text="currentHero.title" :title="currentHero.title"></h1>
+                            <p x-show="getHeroEnglishTitle(currentHero)" x-text="getHeroEnglishTitle(currentHero)" class="pl-0.5 text-xs font-medium tracking-wide text-white/60"></p>
                             <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
                                 <span class="inline-flex items-center gap-1.5 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-md"><i class="fa-solid fa-star text-[10px]"></i><span class="text-sm" x-text="(currentHero.rating ? Number(currentHero.rating).toFixed(1) : '—')"></span></span>
                                 <span class="text-gray-600">•</span><span class="text-gray-300" x-text="currentHero.year"></span>
