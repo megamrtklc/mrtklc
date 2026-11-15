@@ -1042,6 +1042,8 @@
       const payload=await apiResponse.json();state.data=payload.data;state.sha=payload.sha||null;state.apiEnabled=!!state.sha&&payload.writable!==false;
       if(!Array.isArray(state.data?.catalog))throw new Error('Katalog listesi bulunamadı.');
       state.catalog=state.data.catalog.filter(x=>x&&typeof x==='object');
+      refreshBackupSummary();
+      if(selectedBackup)$('#restore-full-backup').disabled=!state.apiEnabled;
       renderWelcomePosters();
       $('.environment').innerHTML='<i></i> KORUMALI YÖNETİM';
       // Render the catalog immediately after the data API succeeds. A secondary
