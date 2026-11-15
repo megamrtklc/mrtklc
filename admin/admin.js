@@ -852,12 +852,14 @@
   function renderPersonalizedSection(){
     if(!state.data)return;
     const config=homepageConfig();
-    const section={eyebrow:'SANA ÖZEL',title:'İzleme Zevkine Göre',description:'İzleme alışkanlıklarından ilham alan, sana özel seçkiler',...(config.personalizedSection||{})};
+    const section={eyebrow:'SANA ÖZEL',title:'İzleme Zevkine Göre',description:'İzleme alışkanlıklarından ilham alan, sana özel seçkiler',discoveryModes:{taste:true,surprise:true,series:true,gems:true},excludeWatched:true,excludeWatchlist:true,excludeFavorites:true,...(config.personalizedSection||{})};
     const layout=homepageLayoutConfig();
     $('#personalized-enabled').checked=layout.visibility.personalized!==false;
     $('#personalized-eyebrow').value=section.eyebrow;
     $('#personalized-title').value=section.title;
     $('#personalized-description').value=section.description;
+    ['taste','surprise','series','gems'].forEach(mode=>{const input=$('#personalized-mode-'+mode);if(input)input.checked=section.discoveryModes?.[mode]!==false;});
+    ['excludeWatched','excludeWatchlist','excludeFavorites'].forEach(key=>{const input=$('#personalized-'+key);if(input)input.checked=section[key]!==false;});
   }
   async function savePersonalizedSection(event){
     event.preventDefault();
@@ -867,10 +869,19 @@
     const visibility={...layout.visibility};
     if($('#personalized-enabled').checked)delete visibility.personalized;
     else visibility.personalized=false;
+    const existing={discoveryModes:{taste:true,surprise:true,series:true,gems:true},excludeWatched:true,excludeWatchlist:true,excludeFavorites:true,...(config.personalizedSection||{})};
+    const discoveryModes={};
+    ['taste','surprise','series','gems'].forEach(mode=>{discoveryModes[mode]=$('#personalized-mode-'+mode)?.checked!==false;});
+    if(!Object.values(discoveryModes).some(Boolean))discoveryModes.taste=true;
     const personalizedSection={
+      ...existing,
       eyebrow:$('#personalized-eyebrow').value.trim()||'SANA ÖZEL',
       title:$('#personalized-title').value.trim()||'İzleme Zevkine Göre',
-      description:$('#personalized-description').value.trim()
+      description:$('#personalized-description').value.trim(),
+      discoveryModes,
+      excludeWatched:$('#personalized-excludeWatched')?.checked!==false,
+      excludeWatchlist:$('#personalized-excludeWatchlist')?.checked!==false,
+      excludeFavorites:$('#personalized-excludeFavorites')?.checked!==false
     };
     const nextConfig={...config,personalizedSection,layout:{order:[...layout.order],visibility}};
     const ok=await persist({...state.data,homepageConfig:nextConfig},'İzleme Zevkine Göre ayarları kaydedildi.');
