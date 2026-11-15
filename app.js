@@ -676,7 +676,13 @@
                         if (validCatalog.length !== sourceCatalog.length) console.warn('Geçersiz katalog kayıtları atlandı:', sourceCatalog.length - validCatalog.length);
                         this.catalog = validCatalog.map(item => this.normalizeCatalogItem(item));
                         this.heroCatalog = this.catalog;
-                        this.loadHeroEnglishTitles();
+                        // İngilizce alternatif başlık sorguları ilk çizimi ve mobil ağ önceliklerini bölmesin.
+                        const loadEnglishTitlesWhenIdle = () => this.loadHeroEnglishTitles();
+                        if ('requestIdleCallback' in window) {
+                            window.requestIdleCallback(loadEnglishTitlesWhenIdle, { timeout: 1800 });
+                        } else {
+                            window.setTimeout(loadEnglishTitlesWhenIdle, 900);
+                        }
 
                         this.currentSlideIndex = 0;
                         this.startHeroAutoplay();
