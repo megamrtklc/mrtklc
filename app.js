@@ -365,54 +365,89 @@
                     return normalize(english) && normalize(english) !== normalize(title) ? english : '';
                 },
                 async loadHeroEnglishTitles() {
-                    const slides = (this.heroSlides || []).slice(0, 20);
-                    const pending = slides.filter(item => item && (item.tmdbId || item.imdbId) && !item.englishTitle && !this.heroEnglishTitleRequests[item.id]);
+                    const slides = [...new Map((this.heroSlides || []).filter(Boolean).map(item => [String(item.id), item])).values()];
                     let cursor = 0;
-                    const normalize = value => String(value || '').toLocaleLowerCase('en-US').replace(/[’‘]/g, "'").replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();
+                    const normalize = value => String(value || '').toLocaleLowerCase('en-US')
+                        .normalize('NFKD').replace(/[\\u0300-\\u036f]/g, '')
+                        .replace(/[’‘]/g, "'").replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();
+                    const requestWithRetry = async (path, language = 'en-US') => {
+                        let lastError;
+                        for (let attempt = 0; attempt < 3; attempt++) {
+                            try {
+                                return await this.fetchTmdb(path, language);
+                            } catch (error) {
+                                lastError = error;
+                                if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 350 * (attempt + 1)));
+                            }
+                        }
+                        throw lastError;
+                    };
                     const worker = async () => {
-                        while (cursor < pending.length) {
-                            const item = pending[cursor++];
+                        while (cursor < slides.length) {
+                            const item = slides[cursor++];
+                            if (!item || item.englishTitle || item.tmdbEnglishTitle || this.heroEnglishTitleRequests[item.id]) continue;
                             this.heroEnglishTitleRequests[item.id] = true;
                             try {
-                                const mediaType = item.type === 'tv' ? 'tv' : 'movie';
-                                let tmdbId = item.tmdbId;
-                                let details = tmdbId
-                                    ? await this.fetchTmdb(mediaType + '/' + tmdbId + '?append_to_response=external_ids,alternative_titles&country=US', 'en-US')
-                                    : null;
-
-                                // Katalogdaki TMDB eşleşmesi farklı bir IMDb kaydına aitse doğru yapımı IMDb üzerinden bul.
+                                const mediaType = item.type === 'tv' || item.type === 'series' ? 'tv' : 'movie';
                                 const expectedImdb = String(item.imdbId || item.tmdbImdbId || '').trim();
+                                let tmdbId = item.tmdbId || null;
+                                let details = null;
+
+                                if (tmdbId) {
+                                    details = await requestWithRetry(mediaType + '/' + tmdbId + '?append_to_response=external_ids,alternative_titles&country=US');
+                                }
+
+                                // TMDB kimliği eksikse veya IMDb eşleşmesi farklıysa IMDb üzerinden doğru kaydı bul.
                                 const actualImdb = String(details?.external_ids?.imdb_id || details?.imdb_id || '').trim();
-                                if (expectedImdb && actualImdb && expectedImdb !== actualImdb) {
-                                    const found = await this.fetchTmdb('find/' + encodeURIComponent(expectedImdb) + '?external_source=imdb_id', 'en-US');
+                                if (expectedImdb && (!tmdbId || (actualImdb && expectedImdb !== actualImdb))) {
+                                    const found = await requestWithRetry('find/' + encodeURIComponent(expectedImdb) + '?external_source=imdb_id');
                                     const matches = mediaType === 'tv' ? (found?.tv_results || []) : (found?.movie_results || []);
                                     if (matches.length) {
                                         tmdbId = matches[0].id;
-                                        details = await this.fetchTmdb(mediaType + '/' + tmdbId + '?append_to_response=external_ids,alternative_titles&country=US', 'en-US');
+                                        details = await requestWithRetry(mediaType + '/' + tmdbId + '?append_to_response=external_ids,alternative_titles&country=US');
                                     }
                                 }
 
-                                const localizedEnglish = String(details?.title || details?.name || '').trim();
-                                const originalEnglish = details?.original_language === 'en'
-                                    ? String(details?.original_title || details?.original_name || '').trim()
+                                // Kimlik yoksa başlık ve yıl ile İngilizce TMDB kaydını ara.
+                                if (!details && !expectedImdb) {
+                                    const title = String(item.title || item.originalTitle || '').trim();
+                                    if (title) {
+                                        const year = String(item.year || '').slice(0, 4);
+                                        const searchPath = 'search/' + mediaType + '?query=' + encodeURIComponent(title) +
+                                            (year && /^\\d{4}$/.test(year) ? (mediaType === 'tv' ? '&first_air_date_year=' : '&year=') + year : '');
+                                        const found = await requestWithRetry(searchPath);
+                                        const match = (found?.results || [])[0];
+                                        if (match?.id) {
+                                            tmdbId = match.id;
+                                            details = await requestWithRetry(mediaType + '/' + tmdbId + '?append_to_response=external_ids,alternative_titles&country=US');
+                                        }
+                                    }
+                                }
+
+                                if (!details) continue;
+                                const localizedEnglish = String(details.title || details.name || '').trim();
+                                const originalEnglish = details.original_language === 'en'
+                                    ? String(details.original_title || details.original_name || '').trim()
                                     : '';
-                                const alternatives = details?.alternative_titles?.titles || details?.alternative_titles?.results || [];
+                                const alternatives = details.alternative_titles?.titles || details.alternative_titles?.results || [];
                                 const englishAlternative = alternatives.find(entry =>
                                     ['US', 'GB', 'CA', 'AU'].includes(String(entry?.iso_3166_1 || '').toUpperCase()) &&
                                     String(entry?.title || entry?.name || '').trim()
                                 );
-                                const candidates = [localizedEnglish, originalEnglish, englishAlternative?.title || englishAlternative?.name];
+                                const candidates = [localizedEnglish, englishAlternative?.title || englishAlternative?.name, originalEnglish];
                                 const english = candidates.find(value => value && normalize(value) && normalize(value) !== normalize(item.title));
                                 if (english) {
                                     item.englishTitle = String(english).trim();
                                     item.tmdbEnglishTitle = item.englishTitle;
+                                    if (tmdbId && !item.tmdbId) item.tmdbId = tmdbId;
                                 }
                             } catch (error) {
-                                console.warn('İngilizce manşet adı alınamadı:', item.title, error);
+                                delete this.heroEnglishTitleRequests[item.id];
+                                console.warn('İngilizce manşet adı alınamadı; sonraki yüklemede yeniden denenecek:', item.title, error);
                             }
                         }
                     };
-                    await Promise.all(Array.from({ length: Math.min(3, pending.length) }, worker));
+                    await Promise.all(Array.from({ length: Math.min(3, slides.length) }, worker));
                 },
 
                 async fetchTmdb(path, language = this.tmdbLanguage) {
