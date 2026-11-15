@@ -366,17 +366,47 @@
                 },
                 async loadHeroEnglishTitles() {
                     const slides = (this.heroSlides || []).slice(0, 20);
-                    const pending = slides.filter(item => item?.tmdbId && !item.englishTitle && !this.heroEnglishTitleRequests[item.id]);
+                    const pending = slides.filter(item => item && (item.tmdbId || item.imdbId) && !item.englishTitle && !this.heroEnglishTitleRequests[item.id]);
                     let cursor = 0;
+                    const normalize = value => String(value || '').toLocaleLowerCase('en-US').replace(/[’‘]/g, "'").replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();
                     const worker = async () => {
                         while (cursor < pending.length) {
                             const item = pending[cursor++];
                             this.heroEnglishTitleRequests[item.id] = true;
                             try {
                                 const mediaType = item.type === 'tv' ? 'tv' : 'movie';
-                                const details = await this.fetchTmdb(mediaType + '/' + item.tmdbId, 'en-US');
-                                const english = String(details?.title || details?.name || '').trim();
-                                if (english) item.englishTitle = english;
+                                let tmdbId = item.tmdbId;
+                                let details = tmdbId
+                                    ? await this.fetchTmdb(mediaType + '/' + tmdbId + '?append_to_response=external_ids,alternative_titles&country=US', 'en-US')
+                                    : null;
+
+                                // Katalogdaki TMDB eşleşmesi farklı bir IMDb kaydına aitse doğru yapımı IMDb üzerinden bul.
+                                const expectedImdb = String(item.imdbId || item.tmdbImdbId || '').trim();
+                                const actualImdb = String(details?.external_ids?.imdb_id || details?.imdb_id || '').trim();
+                                if (expectedImdb && actualImdb && expectedImdb !== actualImdb) {
+                                    const found = await this.fetchTmdb('find/' + encodeURIComponent(expectedImdb) + '?external_source=imdb_id', 'en-US');
+                                    const matches = mediaType === 'tv' ? (found?.tv_results || []) : (found?.movie_results || []);
+                                    if (matches.length) {
+                                        tmdbId = matches[0].id;
+                                        details = await this.fetchTmdb(mediaType + '/' + tmdbId + '?append_to_response=external_ids,alternative_titles&country=US', 'en-US');
+                                    }
+                                }
+
+                                const localizedEnglish = String(details?.title || details?.name || '').trim();
+                                const originalEnglish = details?.original_language === 'en'
+                                    ? String(details?.original_title || details?.original_name || '').trim()
+                                    : '';
+                                const alternatives = details?.alternative_titles?.titles || details?.alternative_titles?.results || [];
+                                const englishAlternative = alternatives.find(entry =>
+                                    ['US', 'GB', 'CA', 'AU'].includes(String(entry?.iso_3166_1 || '').toUpperCase()) &&
+                                    String(entry?.title || entry?.name || '').trim()
+                                );
+                                const candidates = [localizedEnglish, originalEnglish, englishAlternative?.title || englishAlternative?.name];
+                                const english = candidates.find(value => value && normalize(value) && normalize(value) !== normalize(item.title));
+                                if (english) {
+                                    item.englishTitle = String(english).trim();
+                                    item.tmdbEnglishTitle = item.englishTitle;
+                                }
                             } catch (error) {
                                 console.warn('İngilizce manşet adı alınamadı:', item.title, error);
                             }
