@@ -2371,7 +2371,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
         <!-- ==================== HOME PAGE ==================== -->
         <template x-if="currentPage === 'home'">
-            <div id="home-page" class="w-full space-y-7 pb-16">
+            <div id="home-page" class="w-full space-y-8 pb-16">
                 
 
 
@@ -2543,8 +2543,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
 
                 <!-- İzlemeye Devam Et: aktif profilin kaldığı yapımlar -->
-                <div data-home-section="continue" aria-hidden="true" style="height:1px"></div>
-                <section id="home-continue-section" x-cloak x-show="isHomepageSectionVisible('continue') && homeSectionReady.continue && continueWatchingItems.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-continue-section" data-home-section="continue" x-cloak x-show="isHomepageSectionVisible('continue') && homeSectionReady.continue && continueWatchingItems.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-continue-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">KALDIĞIN YERDEN</p>
@@ -2586,8 +2585,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
 
                 <!-- Ana sayfa izleme listesi önizlemesi -->
-                <div data-home-section="watchlist" aria-hidden="true" style="height:1px"></div>
-                <section id="home-watchlist-section" x-cloak x-show="isHomepageSectionVisible('watchlist') && homeSectionReady.watchlist && watchlist.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-watchlist-section" data-home-section="watchlist" x-cloak x-show="isHomepageSectionVisible('watchlist') && homeSectionReady.watchlist && watchlist.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-watchlist-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">SONRA İZLE</p>
@@ -2667,8 +2665,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
 
                 <!-- Son eklenen yapımlar: admin kataloğuna eklenme sırası -->
-                <div data-home-section="new-arrivals" aria-hidden="true" style="height:1px"></div>
-                <section id="home-new-arrivals-section" x-cloak x-show="isHomepageSectionVisible('new-arrivals') && homeSectionReady['new-arrivals'] && homeNewArrivals.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                <section id="home-new-arrivals-section" data-home-section="new-arrivals" x-cloak x-show="isHomepageSectionVisible('new-arrivals') && homeSectionReady['new-arrivals'] && homeNewArrivals.length > 0" class="w-full px-6 sm:px-12 space-y-5">
                     <div class="home-new-arrivals-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">CINEVERSE • ARŞİVE YENİ KATILANLAR</p>
