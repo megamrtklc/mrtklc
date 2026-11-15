@@ -32,6 +32,7 @@
   <nav class="primary-nav">
    <button class="nav-link" data-view="analytics"><span class="nav-icon">⌁</span><span>Veri Analizi</span><kbd>09</kbd></button>
    <button class="nav-link" data-view="users"><span class="nav-icon">♙</span><span>Hesap &amp; Erişim</span><kbd>10</kbd></button>
+   <button class="nav-link" data-view="backup"><span class="nav-icon">⇅</span><span>Veri Yedekleme</span><kbd>12</kbd></button>
    <button class="nav-link" data-view="system"><span class="nav-icon">⚙</span><span>Sistem Ayarları</span><kbd>11</kbd></button>
   </nav>
   <div class="sidebar-bottom">
@@ -281,6 +282,34 @@
             <div class="watch-demo-foot"><span class="watch-demo-live-dot"></span> Katalogdan gerçek afiş ve bilgiler kullanılır; kart sırası, sütun ve gizleme ayarları anında yansıtılır.</div>
           </article>
         </div>
+      </section>
+      <section class="view" id="view-backup">
+       <div class="page-heading"><div><div class="eyebrow">DATA / PORTABILITY</div><h1>Veri Yedekleme &amp; Geri Yükleme</h1><p>Kataloğunu, site ayarlarını ve bu tarayıcıdaki kişisel izleme kayıtlarını tek dosyada taşı.</p></div></div>
+       <div class="settings-grid">
+        <article class="panel-card">
+         <div class="panel-card-heading"><div><span class="eyebrow">FULL BACKUP</span><h2>Yedek dosyası oluştur</h2></div><span class="state-ready">İndirmeye hazır</span></div>
+         <p class="helper-text">Tüm yapımlar, koleksiyonlar, ana sayfa ve site yapılandırmaları ile tarayıcıdaki kişisel kayıtların JSON dosyasına eklenir.</p>
+         <div class="setting-row"><span>Yapım kataloğu</span><b id="backup-catalog-count">—</b></div>
+         <div class="setting-row"><span>Kişisel tarayıcı kayıtları</span><b id="backup-storage-count">—</b></div>
+         <button class="primary-button" id="download-full-backup" type="button">↓　Tam yedeği indir (.json)</button>
+         <p class="helper-text">Dosya yalnızca bu işlemle oluşturulur ve cihazına indirilir. Kişisel kayıtların otomatik olarak sunucuya gönderilmez.</p>
+        </article>
+        <article class="panel-card">
+         <div class="panel-card-heading"><div><span class="eyebrow">RESTORE</span><h2>Yedekten geri yükle</h2></div><span class="state-warning">Mevcut verileri değiştirir</span></div>
+         <p class="helper-text">Daha önce indirdiğin Perde yedek dosyasını seç. Dosya kontrol edildikten sonra içeriği ve kayıt sayıları burada gösterilir.</p>
+         <label class="field"><span>Yedek JSON dosyası</span><input id="restore-backup-file" type="file" accept=".json,application/json"></label>
+         <div id="restore-backup-summary" class="setting-row"><span>Dosya durumu</span><b>Henüz dosya seçilmedi</b></div>
+         <button class="primary-button" id="restore-full-backup" type="button" disabled>↻　Yedeği geri yükle</button>
+         <p class="helper-text">Geri yükleme katalog ve site ayarlarını yayınlar; kişisel kayıtları bu tarayıcıya aktarır. İşlem tamamlandığında sayfa yenilenir.</p>
+        </article>
+       </div>
+       <article class="panel-card" style="margin-top:20px">
+        <h2>Yedek kapsamı</h2>
+        <div class="settings-grid">
+         <div><b>Yapımlar ve site verileri</b><p class="helper-text">Film/dizi kataloğu, koleksiyonlar, seri film bağlantıları, ana sayfa düzeni, vitrin ve izleme deneyimi ayarları.</p></div>
+         <div><b>Kişisel kullanım verileri</b><p class="helper-text">İzlemeye Devam Et, İzleme Listem, İzlediklerim, Favorilerim, bölüm ilerlemesi, öneri geri bildirimleri, beğeniler, yorumlar ve diğer Perde tarayıcı tercihleri.</p></div>
+        </div>
+       </article>
       </section>
       <section class="view" id="view-system"><div class="page-heading"><div><div class="eyebrow">PREFERENCES / 06</div><h1>Sistem &amp; Ayarlar</h1><p>Bağlantılar, veri kaynağı ve güvenlik kurulumu.</p></div></div><div class="settings-grid"><article class="panel-card"><h2>Veri kaynağı</h2><div class="setting-row"><span>Katalog dosyası</span><b>filmvediziler.json</b></div><div class="setting-row"><span>Okuma yolu</span><b>../filmvediziler.json</b></div><div class="setting-row"><span>Yapı</span><b id="data-version">—</b></div></article><article class="panel-card"><h2>Güvenlik kurulumu</h2><div class="setting-row"><span>Giriş doğrulama</span><b class="state-ready">Aktif</b></div><div class="setting-row"><span>GitHub token</span><b class="state-ready">Worker secret</b></div><div class="setting-row"><span>Yayınlama</span><b class="state-ready">Aktif</b></div><p class="helper-text">Gizli anahtarlar hiçbir zaman bu sayfanın JavaScript koduna eklenmeyecek.</p></article></div></section>
       <footer class="footer-note"><span>CINEVERSE STUDIO</span><span>CONTENT OPERATIONS · 2026</span></footer>
