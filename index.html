@@ -2415,6 +2415,21 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </div>
             </div>
         </section>
+        <script id="cv-mobile-hero-shell-artwork">
+          (function(){try{
+            var b=window.__CV_HERO_BOOTSTRAP__;
+            var slide=(b&&b.homepageConfig&&b.homepageConfig.mobileHeroSlides||[]).find(function(x){return x&&x.active!==false;});
+            var item=slide&&(b.catalog||[]).find(function(x){return String(x.id)===String(slide.id);});
+            var image=item&&(item.backdrop||item.poster);
+            var frame=document.querySelector("#hero-initial-shell .order-1 > div");
+            if(!image||!frame)return;
+            var marker="/t/p/",pos=image.indexOf(marker);if(pos<0)return;
+            var base=image.slice(0,pos+marker.length),rest=image.slice(pos+marker.length),file=rest.slice(rest.indexOf("/")+1);
+            var artwork=document.createElement("img");
+            artwork.src=base+"w500/"+file;artwork.alt="";artwork.loading="eager";artwork.fetchPriority="high";artwork.decoding="async";
+            artwork.className="h-full w-full rounded-2xl object-cover";frame.replaceChildren(artwork);
+          }catch(e){} })();
+        </script>
         <!-- Masaüstü ilk boyamada gerçek manşet içeriğini gösterir; Alpine hazır olunca dinamik manşet devralır. -->
         <section id="hero-initial-shell-desktop" role="region" aria-label="Öne çıkan yapım" class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden min-h-[520px] overflow-hidden select-none bg-[#090a0d] text-white md:block">
             <!-- HERO_DESKTOP_SKELETON_ARTWORK: build script keeps this image in sync with the first active desktop slide. -->
