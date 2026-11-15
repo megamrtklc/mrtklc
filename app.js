@@ -1482,10 +1482,10 @@
                     safeStorageWrite('cine_recommendation_rotation_v1', this.recommendationRefreshIndex);
                 },
                 refreshPersonalizedRecommendations() {
+                    // Yenileme yalnızca hazır öneri havuzunun sırasını değiştirir.
+                    // Kişisel zevk puanlamasını her tıklamada yeniden çalıştırma.
                     this.recommendationRefreshIndex += 1;
                     safeStorageWrite('cine_recommendation_rotation_v1', this.recommendationRefreshIndex);
-                    personalizedRecommendationCache.delete(this);
-                    this.recommendationFeedbackRevision += 1;
                 },
                 get displayedPersonalizedRecommendations() {
                     const base = this.personalizedRecommendations;
