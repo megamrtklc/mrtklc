@@ -393,7 +393,10 @@ try {
           favoriteIds: app.favoriteItems.map(item => String(item.id)),
           feedbackIds: app.recommendationFeedback,
           likedIds: app.recommendationLikes,
-          sectionConfig: app.homepageConfig?.personalizedSection || {}
+          sectionConfig: app.homepageConfig?.personalizedSection || {},
+          eligibleCount: app.catalog.filter(item => !new Set([...Object.keys(app.profileMovieProgress), ...Object.keys(JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}')), ...app.watchlist.map(item => String(item.id))]).has(String(item.id))).length,
+          typeCounts: app.catalog.reduce((counts, item) => { counts[item.type] = (counts[item.type] || 0) + 1; return counts; }, {}),
+          recommendationCount: recommendations.length
         }
       };
       for (const [key, value] of Object.entries({
