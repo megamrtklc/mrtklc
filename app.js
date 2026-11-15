@@ -1569,7 +1569,7 @@
                         return;
                     }
                     const catalogViews = { movies: 'movies', series: 'series', turkish: 'turkish' };
-                    this.activeHeaderMenu = catalogViews[page] ? page : page;
+                    this.activeHeaderMenu = page;
                     if (catalogViews[page]) {
                         this.searchQuery = '';
                         this.discoveryType = 'all';
