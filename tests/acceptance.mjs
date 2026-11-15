@@ -366,7 +366,18 @@ try {
         reasons: recommendations.map(item => item.recommendationReason),
         movieId: String(movie.id),
         seriesId: String(series.id),
-        savedId: String(saved.id)
+        savedId: String(saved.id),
+        diagnostic: {
+          catalogCount: app.catalog.length,
+          progressIds: Object.keys(app.profileMovieProgress),
+          episodeIds: Object.keys(episodes),
+          watchlistIds: app.watchlist.map(item => String(item.id)),
+          watchedIds: app.watchedItems.map(item => String(item.id)),
+          favoriteIds: app.favoriteItems.map(item => String(item.id)),
+          feedbackIds: app.recommendationFeedback,
+          likedIds: app.recommendationLikes,
+          sectionConfig: app.homepageConfig?.personalizedSection || {}
+        }
       };
       for (const [key, value] of Object.entries({
         cine_movie_progress_v1: original.progress,
@@ -379,6 +390,7 @@ try {
       return profile;
     });
     const ids = result.ids;
+    console.log('RECOMMENDATION DIAGNOSTIC:', JSON.stringify(result.diagnostic));
     assert.ok(ids.length > 0 && ids.length <= 15, 'Öneri sayısı 1–15 aralığında olmalı');
     assert.equal(new Set(ids).size, ids.length, 'Önerilerde yinelenen yapımlar var');
     assert.ok(!ids.includes(result.movieId), 'İzleme ilerlemesi olan film önerilmemeli');
