@@ -387,7 +387,7 @@ try {
         diagnostic: {
           catalogCount: app.catalog.length,
           progressIds: Object.keys(app.profileMovieProgress),
-          episodeIds: Object.keys(episodes),
+          episodeIds: Object.keys(JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}')),
           watchlistIds: app.watchlist.map(item => String(item.id)),
           watchedIds: app.watchedItems.map(item => String(item.id)),
           favoriteIds: app.favoriteItems.map(item => String(item.id)),
