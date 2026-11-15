@@ -625,7 +625,15 @@
                             this.initHomeSectionObserver();
                         });
                     });
-                    const catalogRequest = fetch('./filmvediziler.json', { cache: 'default', priority: 'low' });
+                    // Önce manşetin ilk çizimi tamamlanabilsin; büyük katalog isteğini boşta kalan ana iş parçacığına bırak.
+                    const catalogRequest = new Promise((resolve, reject) => {
+                        const startCatalogRequest = () => {
+                            try { resolve(fetch('./filmvediziler.json', { cache: 'default', priority: 'low' })); }
+                            catch (error) { reject(error); }
+                        };
+                        if ('requestIdleCallback' in window) window.requestIdleCallback(startCatalogRequest, { timeout: 1200 });
+                        else window.setTimeout(startCatalogRequest, 500);
+                    });
                     try {
                         // Üretim sırasında HTML'e gömülen küçük manşet verisi ağ isteği beklemeden hazırdır.
                         // Yerel geliştirme/önbellek senaryolarında gömülü veri yoksa JSON dosyasına geri dön.
