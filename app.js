@@ -1531,6 +1531,25 @@
                 },
 
                 navigateTo(page) {
+                    if (page === 'new-arrivals') {
+                        this.searchQuery = '';
+                        this.discoveryType = 'all';
+                        this.discoveryMood = 'all';
+                        this.discoveryGenre = 'all';
+                        this.discoveryCountry = 'all';
+                        this.discoveryCountryCode = '';
+                        this.discoveryDirector = '';
+                        this.discoveryPlatform = 'all';
+                        this.discoveryRating = '0';
+                        this.discoveryYearFrom = '';
+                        this.discoveryYearTo = '';
+                        this.quickFilter = 'all';
+                        this.sortBy = 'newest';
+                        this.currentPage = 'explore';
+                        this.syncRouteToUrl('explore', null);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        return;
+                    }
                     const catalogViews = { movies: 'movies', series: 'series', turkish: 'turkish' };
                     if (catalogViews[page]) {
                         this.searchQuery = '';
