@@ -773,6 +773,16 @@
                         if (!placed.has(element)) ordered.push(element);
                     });
                     ordered.forEach(element => root.appendChild(element));
+                    const labels = this.homepageConfig?.layout?.labels || {};
+                    Object.entries(labels).forEach(([key, values]) => {
+                        if (!values || typeof values !== 'object') return;
+                        const section = root.querySelector('[data-home-section="'+key+'"]');
+                        if (!section) return;
+                        const heading = section.querySelector('h2');
+                        if (heading && typeof values.title === 'string' && values.title.trim()) heading.textContent = values.title.trim();
+                        const subtitle = heading?.nextElementSibling;
+                        if (subtitle?.tagName === 'P' && typeof values.description === 'string') subtitle.textContent = values.description.trim();
+                    });
                 },
 
                 initHomeSectionObserver() {
