@@ -22788,6 +22788,207 @@
       "tmdbImdbId": "tt2005151",
       "tmdbRating": "7.0",
       "tmdbVoteCount": 5816
+    },
+    {
+      "id": "cv-1794715209608",
+      "title": "Hypnotic: Zihin Avı",
+      "type": "movie",
+      "year": "2023",
+      "rating": "6.2",
+      "genre": "Gizem",
+      "category": "Gizem / Bilim-Kurgu / Gerilim",
+      "duration": "93 dk",
+      "country": "United Kingdom, United States of America",
+      "director": "Robert Rodriguez",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 536437,
+      "imdbId": "tt8080204",
+      "image": "https://image.tmdb.org/t/p/w500/tvUTevf7FuQINK8ZZSnnlaLQcFp.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/d1Vu0DRCeJ43YX98UKMi9xJNwrR.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=kU-WYkyNXCo",
+      "trailerProvider": "auto",
+      "desc": "Dedektif Danny Rourke, küçük kızı Minnie kaybolduktan sonra onu bir daha bulamamış ve eşiyle de ayrılmışlardır. Öfkesini ve kızını bulma umudunu hiç kaybetmeyen Danny, görev başındayken bir banka soygunu haberini alır. Bankaya hırsızdan önce ulaşmayı başaran Danny, kasada kızı Minnie'nin fotoğrafını bulur ve kızını bulmak için elindeki tek ipucunun peşinden gider. Ancak karşısına insanların zihinlerine yön verip tüm algısını yönetebilen hipnotikler çıkar. Onlara karşı bir savaş başlatan Danny, kızını kurtarmak için hipnotikleri yenebilecek midir?",
+      "cast": [
+        "Ben Affleck",
+        "Alice Braga",
+        "William Fichtner",
+        "J. D. Pardo",
+        "Hala Finley",
+        "Ionie Olivia Nieves",
+        "Dayo Okeniyi",
+        "Kelly Frye",
+        "Corina Calderon",
+        "Jeff Fahey",
+        "Sandy Avila",
+        "Jackie Earle Haley",
+        "Zane Holtz",
+        "Ruben Javier Caballero",
+        "Ryan Ryusaki",
+        "Nikki Dixon",
+        "Evan Vines",
+        "Bonnie Discepolo",
+        "Kelly Phelan",
+        "Patrick A. Grover"
+      ],
+      "tmdbTitle": "Hypnotic: Zihin Avı",
+      "tmdbOriginalTitle": "Hypnotic",
+      "tmdbReleaseDate": "2023-05-11",
+      "tmdbGenres": "Gizem / Bilim-Kurgu / Gerilim",
+      "tmdbRuntime": "93 dk",
+      "tmdbCountries": "United Kingdom, United States of America",
+      "tmdbDirector": "Robert Rodriguez",
+      "tmdbCast": [
+        {
+          "id": 880,
+          "name": "Ben Affleck",
+          "character": "Danny Rourke",
+          "profile": "https://image.tmdb.org/t/p/w185/aTcqu8cI4wMohU17xTdqmXKTGrw.jpg",
+          "order": 0
+        },
+        {
+          "id": 8602,
+          "name": "Alice Braga",
+          "character": "Diana Cruz",
+          "profile": "https://image.tmdb.org/t/p/w185/d9JdgvUiqyWuGQLmozNfGZOpIBz.jpg",
+          "order": 1
+        },
+        {
+          "id": 886,
+          "name": "William Fichtner",
+          "character": "Dellrayne",
+          "profile": "https://image.tmdb.org/t/p/w185/wWtJOoaNAwPparpzMNuRBjvxwEf.jpg",
+          "order": 2
+        },
+        {
+          "id": 81391,
+          "name": "J. D. Pardo",
+          "character": "Nicks",
+          "profile": "https://image.tmdb.org/t/p/w185/uS616imhPsa4kt8veloLGQffx6f.jpg",
+          "order": 3
+        },
+        {
+          "id": 1368479,
+          "name": "Hala Finley",
+          "character": "Minnie (10 yo)",
+          "profile": "https://image.tmdb.org/t/p/w185/9tU0kFjCGNiEe55KAxXkExBVMPC.jpg",
+          "order": 4
+        },
+        {
+          "id": 4068138,
+          "name": "Ionie Olivia Nieves",
+          "character": "Minnie (7 yo)",
+          "profile": "https://image.tmdb.org/t/p/w185/f9PRo7XFtolaD5lAZzKcetLQVrn.jpg",
+          "order": 5
+        },
+        {
+          "id": 1030512,
+          "name": "Dayo Okeniyi",
+          "character": "River",
+          "profile": "https://image.tmdb.org/t/p/w185/8m4ZIuzVBDjFbJFLXebc4iwv27o.jpg",
+          "order": 6
+        },
+        {
+          "id": 115222,
+          "name": "Kelly Frye",
+          "character": "Viv",
+          "profile": "https://image.tmdb.org/t/p/w185/k0l4aPBGTV5knP4SMJcxo79bMLv.jpg",
+          "order": 7
+        },
+        {
+          "id": 932158,
+          "name": "Corina Calderon",
+          "character": "Maria",
+          "profile": "https://image.tmdb.org/t/p/w185/rhHgKbchWfjo6zwwGodgW8mHDv4.jpg",
+          "order": 8
+        },
+        {
+          "id": 20495,
+          "name": "Jeff Fahey",
+          "character": "Carl",
+          "profile": "https://image.tmdb.org/t/p/w185/zRu1ZmM7ekKwKbmXn3U0VjD8Wyd.jpg",
+          "order": 9
+        },
+        {
+          "id": 2809972,
+          "name": "Sandy Avila",
+          "character": "Thelma",
+          "profile": "https://image.tmdb.org/t/p/w185/2vDgyH5sH6F8fI7NxoHTETwA85G.jpg",
+          "order": 10
+        },
+        {
+          "id": 17183,
+          "name": "Jackie Earle Haley",
+          "character": "Jeremiah",
+          "profile": "https://image.tmdb.org/t/p/w185/xDPeiyklN8f9Ilowsti4lGVbioj.jpg",
+          "order": 11
+        },
+        {
+          "id": 987572,
+          "name": "Zane Holtz",
+          "character": "Trout",
+          "profile": "https://image.tmdb.org/t/p/w185/z5sXU2zOR59A3kfJTgwPObgrPhf.jpg",
+          "order": 12
+        },
+        {
+          "id": 3238977,
+          "name": "Ruben Javier Caballero",
+          "character": "Watkins",
+          "profile": "https://image.tmdb.org/t/p/w185/cyZFEQB0qq4vlbJhkq1u1OokM1a.jpg",
+          "order": 13
+        },
+        {
+          "id": 1885803,
+          "name": "Ryan Ryusaki",
+          "character": "Bong",
+          "profile": "https://image.tmdb.org/t/p/w185/uaz7P5un08SncHPE6buSxEwHyGQ.jpg",
+          "order": 14
+        },
+        {
+          "id": 1319802,
+          "name": "Nikki Dixon",
+          "character": "Therapist",
+          "profile": "https://image.tmdb.org/t/p/w185/2AoZ0DqX50pWQRZqObMwP8R2xHe.jpg",
+          "order": 15
+        },
+        {
+          "id": 4087874,
+          "name": "Evan Vines",
+          "character": "Lyle Terry",
+          "profile": "",
+          "order": 16
+        },
+        {
+          "id": 1504236,
+          "name": "Bonnie Discepolo",
+          "character": "Business Woman #1",
+          "profile": "https://image.tmdb.org/t/p/w185/vGIlPXkuqLhe8kVmQigbEv7dTAE.jpg",
+          "order": 17
+        },
+        {
+          "id": 2057498,
+          "name": "Kelly Phelan",
+          "character": "Business Woman #2",
+          "profile": "https://image.tmdb.org/t/p/w185/hAEmElRV33zHpp7Zm98zLiQg1wl.jpg",
+          "order": 18
+        },
+        {
+          "id": 2531068,
+          "name": "Patrick A. Grover",
+          "character": "TV Reporter #1",
+          "profile": "https://image.tmdb.org/t/p/w185/uxvDWSkZO63PxXqpdVgI1LRwIk.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Dedektif Danny Rourke, küçük kızı Minnie kaybolduktan sonra onu bir daha bulamamış ve eşiyle de ayrılmışlardır. Öfkesini ve kızını bulma umudunu hiç kaybetmeyen Danny, görev başındayken bir banka soygunu haberini alır. Bankaya hırsızdan önce ulaşmayı başaran Danny, kasada kızı Minnie'nin fotoğrafını bulur ve kızını bulmak için elindeki tek ipucunun peşinden gider. Ancak karşısına insanların zihinlerine yön verip tüm algısını yönetebilen hipnotikler çıkar. Onlara karşı bir savaş başlatan Danny, kızını kurtarmak için hipnotikleri yenebilecek midir?",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/tvUTevf7FuQINK8ZZSnnlaLQcFp.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/d1Vu0DRCeJ43YX98UKMi9xJNwrR.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=kU-WYkyNXCo",
+      "tmdbImdbId": "tt8080204",
+      "tmdbRating": "6.2",
+      "tmdbVoteCount": 1594
     }
   ],
   "collections": [],
