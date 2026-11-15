@@ -353,31 +353,31 @@
         @media(min-width:768px) and (max-width:1023px){#home-watchlist-section .home-watchlist-card{flex-basis:31%;width:31%}}
         @media(prefers-reduced-motion:reduce){#home-watchlist-section .home-watchlist-card,#home-watchlist-section .home-watchlist-poster img{transition:none!important}}
         /* Tighten the vertical transition into Son Eklenenler without changing card layout. */
-        #home-new-arrivals-section{margin-top:-22px!important}
-        @media(max-width:639px){#home-new-arrivals-section{margin-top:-16px!important}}
+        :is(#home-new-arrivals-section,#home-favorites-section){margin-top:-22px!important}
+        @media(max-width:639px){:is(#home-new-arrivals-section,#home-favorites-section){margin-top:-16px!important}}
         /* New arrivals: one editorial lead tile followed by compact archive cards. */
-        #home-new-arrivals-section .home-new-arrivals-heading{border-bottom:1px solid rgba(148,163,184,.24)}
-        #home-new-arrivals-section .home-new-arrivals-rail{gap:14px;padding:5px 3px 18px;align-items:stretch}
-        #home-new-arrivals-section .home-new-arrival-card{flex:0 0 clamp(174px,16vw,210px);width:clamp(174px,16vw,210px);border-color:rgba(148,163,184,.22);background:rgba(127,127,127,.035);box-shadow:0 8px 24px -20px rgba(0,0,0,.6);scroll-snap-align:start}
-        #home-new-arrivals-section .home-new-arrival-card:hover{border-color:rgba(225,29,72,.68);box-shadow:0 17px 36px -22px rgba(0,0,0,.72);transform:translateY(-4px)}
-        #home-new-arrivals-section .home-new-arrival-poster img{display:block;backface-visibility:hidden}
-        #home-new-arrivals-section .home-new-arrival-card:hover .home-new-arrival-poster img{transform:scale(1.055)}
-        #home-new-arrivals-section .home-new-arrival-shade{background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 42%,rgba(0,0,0,.48));pointer-events:none}
-        #home-new-arrivals-section .home-new-arrival-copy{min-height:76px}
-        #home-new-arrivals-section .home-new-arrival-feature{flex-basis:clamp(280px,29vw,370px);width:clamp(280px,29vw,370px);border-color:rgba(225,29,72,.35);background:linear-gradient(145deg,rgba(225,29,72,.09),rgba(127,127,127,.035))}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-poster{aspect-ratio:16/9!important}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{min-height:78px;padding:12px 14px}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy h3{font-size:14px}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy:before{content:"ARŞİVE EN SON EKLENEN";display:block;margin-bottom:5px;color:#e11d48;font-size:8px;font-weight:900;letter-spacing:.16em}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrivals-heading{border-bottom:1px solid rgba(148,163,184,.24)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrivals-rail{gap:14px;padding:5px 3px 18px;align-items:stretch}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card{flex:0 0 clamp(174px,16vw,210px);width:clamp(174px,16vw,210px);border-color:rgba(148,163,184,.22);background:rgba(127,127,127,.035);box-shadow:0 8px 24px -20px rgba(0,0,0,.6);scroll-snap-align:start}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card:hover{border-color:rgba(225,29,72,.68);box-shadow:0 17px 36px -22px rgba(0,0,0,.72);transform:translateY(-4px)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-poster img{display:block;backface-visibility:hidden}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card:hover .home-new-arrival-poster img{transform:scale(1.055)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-shade{background:linear-gradient(180deg,rgba(0,0,0,.08),transparent 42%,rgba(0,0,0,.48));pointer-events:none}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-copy{min-height:76px}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature{flex-basis:clamp(280px,29vw,370px);width:clamp(280px,29vw,370px);border-color:rgba(225,29,72,.35);background:linear-gradient(145deg,rgba(225,29,72,.09),rgba(127,127,127,.035))}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-poster{aspect-ratio:16/9!important}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy{min-height:78px;padding:12px 14px}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy h3{font-size:14px}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy:before{content:"ARŞİVE EN SON EKLENEN";display:block;margin-bottom:5px;color:#e11d48;font-size:8px;font-weight:900;letter-spacing:.16em}
         @media(max-width:639px){
-            #home-new-arrivals-section .home-new-arrivals-rail{gap:11px;padding-bottom:14px}
-            #home-new-arrivals-section .home-new-arrival-card{flex-basis:44%;width:44%;border-radius:14px}
-            #home-new-arrivals-section .home-new-arrival-feature{flex-basis:min(82%,310px);width:min(82%,310px)}
-            #home-new-arrivals-section .home-new-arrival-copy{padding:10px;min-height:78px}
+            :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrivals-rail{gap:11px;padding-bottom:14px}
+            :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card{flex-basis:44%;width:44%;border-radius:14px}
+            :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature{flex-basis:min(82%,310px);width:min(82%,310px)}
+            :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-copy{padding:10px;min-height:78px}
         }
-        @media(min-width:640px) and (max-width:767px){#home-new-arrivals-section .home-new-arrival-card{flex-basis:29%;width:29%}#home-new-arrivals-section .home-new-arrival-feature{flex-basis:42%;width:42%}}
-        @media(min-width:768px) and (max-width:1023px){#home-new-arrivals-section .home-new-arrival-card{flex-basis:23%;width:23%}#home-new-arrivals-section .home-new-arrival-feature{flex-basis:31%;width:31%}}
-        @media(prefers-reduced-motion:reduce){#home-new-arrivals-section .home-new-arrival-card,#home-new-arrivals-section .home-new-arrival-poster img{transition:none!important}}
+        @media(min-width:640px) and (max-width:767px){:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card{flex-basis:29%;width:29%}:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature{flex-basis:42%;width:42%}}
+        @media(min-width:768px) and (max-width:1023px){:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card{flex-basis:23%;width:23%}:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature{flex-basis:31%;width:31%}}
+        @media(prefers-reduced-motion:reduce){:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card,:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-poster img{transition:none!important}}
 
         /* Series tracking: compact episode-ledger cards, distinct from poster shelves and resume cards. */
         #home-series-tracking-section .home-series-tracking-heading{border-bottom:1px solid rgba(148,163,184,.24)}
@@ -525,30 +525,30 @@
 
     
         /* Featured newest arrival: cinematic landscape card with readable overlay. */
-        #home-new-arrivals-section .home-new-arrival-feature{position:relative;flex-basis:clamp(300px,31vw,400px);width:clamp(300px,31vw,400px);aspect-ratio:16/9;border-color:rgba(244,63,94,.42);background:#090d16;isolation:isolate;box-shadow:0 16px 38px -24px rgba(0,0,0,.82)}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-poster{position:absolute;inset:0;z-index:-1;aspect-ratio:auto!important;height:100%;width:100%}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-poster img{object-position:center 35%;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-shade{background:linear-gradient(90deg,rgba(5,8,15,.82) 0%,rgba(5,8,15,.42) 54%,rgba(5,8,15,.08) 100%),linear-gradient(0deg,rgba(5,8,15,.96) 0%,rgba(5,8,15,.56) 38%,transparent 78%)}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{position:absolute;inset:auto 0 0;z-index:2;min-height:0;padding:15px 17px 16px;background:linear-gradient(0deg,rgba(5,8,15,.92),rgba(5,8,15,.54) 78%,transparent);text-shadow:0 1px 8px rgba(0,0,0,.55)}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy:before{content:"ARŞİVE EN SON EKLENEN";display:block;margin-bottom:6px;color:#fda4af;font-size:8px;font-weight:900;letter-spacing:.16em}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy h3{font-size:clamp(14px,1.2vw,18px);line-height:1.2;font-weight:900;letter-spacing:-.02em;color:#fff}
-        #home-new-arrivals-section .home-new-arrival-feature-title-row{width:100%;margin:0 0 5px}
-        #home-new-arrivals-section .home-new-arrival-feature-title-row h3{min-width:0;overflow-wrap:anywhere}
-        #home-new-arrivals-section .home-new-arrival-feature-rating{line-height:1.1;white-space:nowrap}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:5px;color:rgba(255,255,255,.82);font-size:10px;line-height:1.45}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{max-width:calc(100% - 70px);min-height:2.9em}
-        #home-new-arrivals-section .home-new-arrival-feature-poster{object-position:center;pointer-events:none}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature{position:relative;flex-basis:clamp(300px,31vw,400px);width:clamp(300px,31vw,400px);aspect-ratio:16/9;border-color:rgba(244,63,94,.42);background:#090d16;isolation:isolate;box-shadow:0 16px 38px -24px rgba(0,0,0,.82)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-poster{position:absolute;inset:0;z-index:-1;aspect-ratio:auto!important;height:100%;width:100%}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-poster img{object-position:center 35%;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-shade{background:linear-gradient(90deg,rgba(5,8,15,.82) 0%,rgba(5,8,15,.42) 54%,rgba(5,8,15,.08) 100%),linear-gradient(0deg,rgba(5,8,15,.96) 0%,rgba(5,8,15,.56) 38%,transparent 78%)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy{position:absolute;inset:auto 0 0;z-index:2;min-height:0;padding:15px 17px 16px;background:linear-gradient(0deg,rgba(5,8,15,.92),rgba(5,8,15,.54) 78%,transparent);text-shadow:0 1px 8px rgba(0,0,0,.55)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy:before{content:"ARŞİVE EN SON EKLENEN";display:block;margin-bottom:6px;color:#fda4af;font-size:8px;font-weight:900;letter-spacing:.16em}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy h3{font-size:clamp(14px,1.2vw,18px);line-height:1.2;font-weight:900;letter-spacing:-.02em;color:#fff}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-title-row{width:100%;margin:0 0 5px}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-title-row h3{min-width:0;overflow-wrap:anywhere}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-rating{line-height:1.1;white-space:nowrap}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:5px;color:rgba(255,255,255,.82);font-size:10px;line-height:1.45}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p{max-width:calc(100% - 70px);min-height:2.9em}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-poster{object-position:center;pointer-events:none}
         /* Featured card: make the real poster prominent and keep it crisp. */
-        #home-new-arrivals-section .home-new-arrival-feature-poster{width:88px;height:132px;object-fit:cover;object-position:center;filter:none!important;backdrop-filter:none!important;transform:none!important;image-rendering:auto;border-radius:10px}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy:before{content:none!important;display:none!important}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{max-width:calc(100% - 104px);min-height:2.9em}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 104px)}
-        @media(max-width:639px){#home-new-arrivals-section .home-new-arrival-feature-poster{width:76px;height:114px}#home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{max-width:calc(100% - 88px)}#home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 88px)}}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 70px)}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{margin-top:8px;color:rgba(255,255,255,.72)}
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div span:last-child{color:rgba(255,255,255,.82)}
-        #home-new-arrivals-section .home-new-arrival-feature:hover .home-new-arrival-poster img{transform:scale(1.045)}
-        @media(max-width:639px){#home-new-arrivals-section .home-new-arrival-feature{flex-basis:min(84%,340px);width:min(84%,340px);aspect-ratio:16/9}#home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{padding:11px 12px 12px}#home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{font-size:9px;-webkit-line-clamp:2}}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-poster{width:88px;height:132px;object-fit:cover;object-position:center;filter:none!important;backdrop-filter:none!important;transform:none!important;image-rendering:auto;border-radius:10px}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy:before{content:none!important;display:none!important}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p{max-width:calc(100% - 104px);min-height:2.9em}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 104px)}
+        @media(max-width:639px){:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-poster{width:76px;height:114px}:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p{max-width:calc(100% - 88px)}:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 88px)}}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 70px)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>div{margin-top:8px;color:rgba(255,255,255,.72)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>div span:last-child{color:rgba(255,255,255,.82)}
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature:hover .home-new-arrival-poster img{transform:scale(1.045)}
+        @media(max-width:639px){:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature{flex-basis:min(84%,340px);width:min(84%,340px);aspect-ratio:16/9}:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy{padding:11px 12px 12px}:is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p{font-size:9px;-webkit-line-clamp:2}}
         @media(max-width:639px){
         }
         @media(prefers-reduced-motion:reduce){}
@@ -587,43 +587,43 @@
 
     
         /* Son Eklenenler: make the featured title's poster more prominent and keep the synopsis readable. */
-        #home-new-arrivals-section .home-new-arrival-feature-poster{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-poster{
           width:108px;height:162px;right:14px;bottom:12px;
           border:1px solid rgba(255,255,255,.88);border-radius:11px;
           box-shadow:0 12px 30px rgba(0,0,0,.58),0 0 0 1px rgba(255,255,255,.12);
           object-fit:cover;object-position:center;
         }
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy{
           padding:14px 16px 13px;
           background:linear-gradient(0deg,rgba(5,8,15,.97) 0%,rgba(5,8,15,.78) 72%,rgba(5,8,15,.08) 100%);
         }
-        #home-new-arrivals-section .home-new-arrival-feature-title-row,
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p,
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-title-row,
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p,
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>div{
           max-width:calc(100% - 126px);
         }
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy h3{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy h3{
           font-size:clamp(15px,1.25vw,18px);line-height:1.22;
           display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
         }
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p{
           display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
           min-height:0;margin-top:6px;color:rgba(255,255,255,.9);
           font-size:10.5px;line-height:1.45;font-weight:500;
           text-shadow:0 1px 5px rgba(0,0,0,.8);
         }
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>div{
           margin-top:6px;font-size:9px;
         }
         @media(max-width:639px){
-          #home-new-arrivals-section .home-new-arrival-feature-poster{width:88px;height:132px;right:10px;bottom:10px}
-          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{padding:11px 12px 11px}
-          #home-new-arrivals-section .home-new-arrival-feature-title-row,
-          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p,
-          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 104px)}
-          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy h3{font-size:14px}
-          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{font-size:9px;line-height:1.4;-webkit-line-clamp:2;margin-top:5px}
-          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>div{margin-top:5px}
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-poster{width:88px;height:132px;right:10px;bottom:10px}
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy{padding:11px 12px 11px}
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-title-row,
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p,
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>div{max-width:calc(100% - 104px)}
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy h3{font-size:14px}
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p{font-size:9px;line-height:1.4;-webkit-line-clamp:2;margin-top:5px}
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>div{margin-top:5px}
         }
 
     
@@ -902,18 +902,18 @@
           color:#be123c!important;
         }
         /* Son Eklenenler: afişi metin katmanının üstüne taşı; konu metnini üç satırda okunaklı göster. */
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-poster{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-poster{
           z-index:0!important;
         }
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-shade{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-shade{
           z-index:1!important;
         }
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy{
           z-index:2!important;
           overflow:visible!important;
           padding-right:140px!important;
         }
-        #home-new-arrivals-section .home-new-arrival-feature-poster{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-poster{
           /* x-show kontrolünü koru: yalnızca büyük kartta görünür. */
           position:absolute!important;z-index:30!important;
           right:14px!important;bottom:12px!important;top:auto!important;left:auto!important;
@@ -925,7 +925,7 @@
           box-shadow:0 12px 30px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.18)!important;
           pointer-events:none!important;
         }
-        #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{
+        :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p{
           display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:3!important;
           overflow:hidden!important;max-width:100%!important;min-height:0!important;
           margin-top:7px!important;font-size:14px!important;line-height:1.5!important;
@@ -933,11 +933,11 @@
           text-shadow:0 1px 5px rgba(0,0,0,.9)!important;
         }
         @media(max-width:639px){
-          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy{padding-right:112px!important}
-          #home-new-arrivals-section .home-new-arrival-feature-poster{
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy{padding-right:112px!important}
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature-poster{
             width:88px!important;height:132px!important;right:10px!important;bottom:10px!important;
           }
-          #home-new-arrivals-section .home-new-arrival-feature .home-new-arrival-copy>p{
+          :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature .home-new-arrival-copy>p{
             -webkit-line-clamp:3!important;font-size:12px!important;line-height:1.45!important;
           }
         }
@@ -1807,8 +1807,8 @@
       #home-page #home-personalized-section .home-personalized-feature,
       #home-page #home-continue-section .home-continue-card,
       #home-page #home-watchlist-section .home-watchlist-card,
-      #home-page #home-new-arrivals-section .home-new-arrival-card,
-      #home-page #home-new-arrivals-section .home-new-arrival-feature,
+      #home-page :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card,
+      #home-page :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature,
       #home-page #home-series-tracking-section .home-series-tracking-card,
       #home-page #home-catalog-section .home-catalog-card,
       #home-page #home-genre-discovery-section .home-genre-discovery-card {
@@ -1823,8 +1823,8 @@
       #home-page #home-personalized-section .home-personalized-feature:hover,
       #home-page #home-continue-section .home-continue-card:hover,
       #home-page #home-watchlist-section .home-watchlist-card:hover,
-      #home-page #home-new-arrivals-section .home-new-arrival-card:hover,
-      #home-page #home-new-arrivals-section .home-new-arrival-feature:hover,
+      #home-page :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card:hover,
+      #home-page :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature:hover,
       #home-page #home-series-tracking-section .home-series-tracking-card:hover,
       #home-page #home-catalog-section .home-catalog-card:hover,
       #home-page #home-genre-discovery-section .home-genre-discovery-card:hover {
@@ -1836,7 +1836,7 @@
       #home-page #home-personalized-section .home-personalized-alternative:focus-visible,
       #home-page #home-continue-section .home-continue-card:focus-visible,
       #home-page #home-watchlist-section .home-watchlist-card:focus-visible,
-      #home-page #home-new-arrivals-section .home-new-arrival-card:focus-visible,
+      #home-page :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card:focus-visible,
       #home-page #home-series-tracking-section .home-series-tracking-card:focus-visible,
       #home-page #home-catalog-section .home-catalog-card:focus-visible,
       #home-page #home-genre-discovery-section .home-genre-discovery-card:focus-visible {
@@ -1848,7 +1848,7 @@
         #home-page #home-personalized-section .home-personalized-alternative,
         #home-page #home-continue-section .home-continue-card,
         #home-page #home-watchlist-section .home-watchlist-card,
-        #home-page #home-new-arrivals-section .home-new-arrival-card,
+        #home-page :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card,
         #home-page #home-series-tracking-section .home-series-tracking-card,
         #home-page #home-catalog-section .home-catalog-card,
         #home-page #home-genre-discovery-section .home-genre-discovery-card {
@@ -1861,8 +1861,8 @@
         #home-page #home-personalized-section .home-personalized-feature,
         #home-page #home-continue-section .home-continue-card,
         #home-page #home-watchlist-section .home-watchlist-card,
-        #home-page #home-new-arrivals-section .home-new-arrival-card,
-        #home-page #home-new-arrivals-section .home-new-arrival-feature,
+        #home-page :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-card,
+        #home-page :is(#home-new-arrivals-section,#home-favorites-section) .home-new-arrival-feature,
         #home-page #home-series-tracking-section .home-series-tracking-card,
         #home-page #home-catalog-section .home-catalog-card,
         #home-page #home-genre-discovery-section .home-genre-discovery-card {
@@ -2164,7 +2164,14 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
 
 
-</head>
+<style id="home-favorites-feature-label">
+        #home-favorites-section .home-new-arrival-feature .home-new-arrival-copy:before{content:"ÖNE ÇIKAN FAVORİ"!important}
+        #home-favorites-section .home-new-arrival-feature{border-color:rgba(245,158,11,.42)!important;background:linear-gradient(145deg,rgba(245,158,11,.10),rgba(127,127,127,.035))!important}
+        #home-favorites-section .home-new-arrival-card:hover{border-color:rgba(245,158,11,.72)!important}
+        #home-favorites-section .home-new-arrival-feature .home-new-arrival-copy>p{color:rgba(255,255,255,.94)!important}
+        @media(prefers-reduced-motion:reduce){#home-favorites-section .home-new-arrival-card,#home-favorites-section .home-new-arrival-poster img{transition:none!important}}
+    </style>
+    </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
@@ -2615,9 +2622,48 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     <div class="flex items-end justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3"><div><p class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">İZLEME GEÇMİŞİ</p><h2 class="mt-1 text-xl sm:text-2xl font-black text-gray-900 dark:text-white">İzlediklerim</h2><p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Tamamladığın film ve diziler</p></div><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="watchedItems.length + ' yapım'"></span></div>
                     <div class="home-card-rail"><template x-for="item in watchedItems.slice(0,10)" :key="'home-watched-' + item.id"><button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card group min-w-0 overflow-hidden rounded-xl border text-left transition-all"><div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900"><img :alt="item.title" @error="handleImageError($event)" loading="lazy" decoding="async" :src="item.poster || item.image || item.tmdbPoster" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute left-2 top-2 rounded bg-emerald-600/95 px-2 py-1 text-[8px] font-black text-white">İZLENDİ</span></div><div class="p-2.5"><p class="line-clamp-2 text-xs font-bold text-gray-900 dark:text-white" x-text="item.title"></p></div></button></template></div>
                 </section>
-                <section id="home-favorites-section" data-home-section="favorites" x-cloak x-show="isHomepageSectionVisible('favorites') && favoriteItems.length > 0" class="w-full px-6 sm:px-12 space-y-4">
-                    <div class="flex items-end justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3"><div><p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500">ÖZEL SEÇKİN</p><h2 class="mt-1 text-xl sm:text-2xl font-black text-gray-900 dark:text-white">Favorilerim</h2><p class="mt-1 text-xs text-gray-500 dark:text-gray-400">En sevdiğin yapımlar bir arada</p></div><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="favoriteItems.length + ' yapım'"></span></div>
-                    <div class="home-card-rail"><template x-for="item in favoriteItems.slice(0,10)" :key="'home-favorite-' + item.id"><button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card group min-w-0 overflow-hidden rounded-xl border text-left transition-all"><div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900"><img :alt="item.title" @error="handleImageError($event)" loading="lazy" decoding="async" :src="item.poster || item.image || item.tmdbPoster" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute left-2 top-2 rounded bg-amber-400 px-2 py-1 text-[8px] font-black text-gray-950">FAVORİ</span></div><div class="p-2.5"><p class="line-clamp-2 text-xs font-bold text-gray-900 dark:text-white" x-text="item.title"></p></div></button></template></div>
+                <section id="home-favorites-section" data-home-section="favorites" x-cloak x-show="isHomepageSectionVisible('favorites') && favoriteItems.length > 0" class="w-full px-6 sm:px-12 space-y-5">
+                    <div class="home-new-arrivals-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-amber-600 dark:text-amber-400 mb-1">CINEVERSE • KİŞİSEL SEÇKİN</p>
+                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Favorilerim</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">En sevdiğin film ve diziler, tek bir seçkide</p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="favoriteItems.length + ' favori yapım'"></span>
+                            <button type="button" @click="scrollHomeCards('home-favorites-rail',-1)" aria-label="Önceki favori yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button type="button" @click="scrollHomeCards('home-favorites-rail',1)" aria-label="Sonraki favori yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
+                            <button type="button" @click="navigateTo('library')" class="text-[10px] font-black text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 ml-1">Kütüphanem <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                    <div id="home-favorites-rail" class="home-card-rail home-new-arrivals-rail">
+                        <template x-for="(item,index) in favoriteItems" :key="'home-favorite-' + item.id">
+                            <button type="button" @click="openWatchPage(item)" :class="getCardClass() + (index === 0 ? ' home-new-arrival-feature' : '')" class="home-rail-card home-new-arrival-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
+                                <div class="home-new-arrival-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="index === 0 ? (item.backdrop || item.poster || item.image || item.tmdbPoster) : (item.poster || item.image || item.tmdbPoster || item.backdrop)" :srcset="getTmdbImageSrcSet(index === 0 ? (item.backdrop || item.poster || item.image || item.tmdbPoster) : (item.poster || item.image || item.tmdbPoster || item.backdrop), index === 0 ? [500, 780, 1280] : [154, 185, 342, 500])" :sizes="index === 0 ? '(max-width:639px) min(calc(82vw - 39px), 310px), (max-width:767px) calc(42vw - 40px), (max-width:1023px) calc(31vw - 30px), (max-width:1275px) 29vw, 370px' : '(max-width:639px) calc(44vw - 21px), (max-width:767px) calc(29vw - 28px), (max-width:1023px) calc(23vw - 22px), (max-width:1087px) 174px, (max-width:1312px) 16vw, 210px'" class="w-full h-full object-cover transition-transform duration-700">
+                                    <div class="home-new-arrival-shade absolute inset-0"></div>
+                                    <span x-show="index === 0" class="absolute top-3 left-3 z-[4] inline-flex items-center gap-1.5 rounded-md border border-amber-300/40 bg-black/80 px-2.5 py-1.5 text-[11px] font-black text-amber-300 shadow-lg"><i class="fa-solid fa-star"></i><span x-text="((item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—')"></span></span>
+                                    <span x-show="index !== 0" class="absolute top-3 left-3 rounded-md bg-amber-400 text-gray-950 text-[8px] font-black uppercase tracking-wider px-2 py-1.5 shadow-lg">FAVORİ</span>
+                                    <div class="absolute top-3 right-3 flex max-w-[72%] items-center justify-end gap-1.5">
+                                        <span class="rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
+                                        <span class="max-w-[150px] truncate rounded-md bg-black/75 text-white/90 text-[8px] font-bold tracking-wide px-2 py-1.5 backdrop-blur-md" x-text="item.genre || item.category || item.tmdbGenres || 'GENEL'"></span>
+                                    </div>
+                                    <span x-show="index !== 0" class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span x-text="((item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—')"></span></span>
+                                </div>
+                                <div class="home-new-arrival-copy p-3 space-y-2">
+                                    <img x-show="index === 0" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [92, 154, 185, 342])" sizes="(max-width: 639px) 88px, 108px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster">
+                                    <div x-show="index === 0" class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
+                                        <h3 class="min-w-0 flex-1 text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" x-text="item.title"></h3>
+                                    </div>
+                                    <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
+                                    <p x-show="index === 0" x-text="item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || 'Bu yapımın konu açıklaması henüz eklenmemiş.'"></p>
+                                    <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
+                                        <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
+                                    </div>
+                                </div>
+                            </button>
+                        </template>
+                    </div>
                 </section>
 
                 <!-- Son eklenen yapımlar: admin kataloğuna eklenme sırası -->
