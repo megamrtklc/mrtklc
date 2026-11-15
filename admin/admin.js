@@ -956,12 +956,23 @@
   function refreshBackupSummary(){
     const catalogCount=Array.isArray(state.data?.catalog)?state.data.catalog.length:0;
     const local=collectBrowserStorage(localStorage),session=collectBrowserStorage(sessionStorage);
+    const personalCount=Object.keys(local).length+Object.keys(session).length;
     $('#backup-catalog-count').textContent=catalogCount+' yapım';
-    $('#backup-storage-count').textContent=(Object.keys(local).length+Object.keys(session).length)+' kayıt';
+    $('#backup-storage-count').textContent=personalCount+' kayıt';
+    const diagnostic=$('#backup-origin-status');
+    if(diagnostic){
+      let total=0;try{total=localStorage.length+sessionStorage.length;}catch(_){}
+      diagnostic.textContent=personalCount
+        ? 'Kaynak: '+location.origin+' · '+personalCount+' Perde kaydı bulundu.'
+        : 'Kişisel kayıt bulunamadı. Bu adresin kaynağı: '+location.origin+' · Tarayıcıda toplam '+total+' kayıt var. Kişisel verilerin göründüğü ana site adresiyle aynı kaynakta olduğundan emin ol.';
+      diagnostic.classList.toggle('state-warning',personalCount===0);
+    }
   }
   function downloadFullBackup(){
     if(!state.data||!Array.isArray(state.data.catalog)){toast('Katalog yüklenmeden yedek oluşturulamaz.');return;}
-    const payload={format:'perde-full-backup',version:1,exportedAt:new Date().toISOString(),siteData:state.data,browserData:{localStorage:collectBrowserStorage(localStorage),sessionStorage:collectBrowserStorage(sessionStorage)}};
+    const local=collectBrowserStorage(localStorage),session=collectBrowserStorage(sessionStorage);
+    if(!Object.keys(local).length&&!Object.keys(session).length){toast('Kişisel kayıt bulunamadı. Eksik yedek oluşturmamak için indirme durduruldu.');return;}
+    const payload={format:'perde-full-backup',version:1,exportedAt:new Date().toISOString(),siteData:state.data,browserData:{localStorage:local,sessionStorage:session}};
     const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
     const url=URL.createObjectURL(blob),anchor=document.createElement('a');
     anchor.href=url;anchor.download='perde-tam-yedek-'+new Date().toISOString().slice(0,10)+'.json';
