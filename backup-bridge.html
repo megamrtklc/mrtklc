@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Perde güvenli yedek aktarımı</title>
+</head>
+<body>
+<script>
+(() => {
+  'use strict';
+  const ADMIN_ORIGIN = 'https://cineverse-admin.megamrtklc.workers.dev';
+  const PREFIXES = ['cine_', 'perde_'];
+
+  function readMatchingStorage(storage) {
+    const values = {};
+    try {
+      for (let index = 0; index < storage.length; index += 1) {
+        const key = storage.key(index);
+        if (key && PREFIXES.some(prefix => key.startsWith(prefix))) {
+          values[key] = storage.getItem(key);
+        }
+      }
+    } catch (error) {
+      return { error: 'Tarayıcı kayıtları okunamadı: ' + String(error && error.message || error) };
+    }
+    return values;
+  }
+
+  window.addEventListener('message', event => {
+    if (event.origin !== ADMIN_ORIGIN || event.source !== window.parent) return;
+    if (!event.data || event.data.type !== 'PERDE_BACKUP_EXPORT_REQUEST' ||
+        typeof event.data.requestId !== 'string' || event.data.requestId.length > 160) return;
+
+    const localStorageData = readMatchingStorage(window.localStorage);
+    const sessionStorageData = readMatchingStorage(window.sessionStorage);
+    if (localStorageData.error || sessionStorageData.error) {
+      event.source.postMessage({
+        type: 'PERDE_BACKUP_EXPORT_RESPONSE',
+        requestId: event.data.requestId,
+        error: localStorageData.error || sessionStorageData.error
+      }, ADMIN_ORIGIN);
+      return;
+    }
+
+    event.source.postMessage({
+      type: 'PERDE_BACKUP_EXPORT_RESPONSE',
+      requestId: event.data.requestId,
+      browserData: {
+        localStorage: localStorageData,
+        sessionStorage: sessionStorageData
+      }
+    }, ADMIN_ORIGIN);
+  });
+})();
+</script>
+</body>
+</html>
