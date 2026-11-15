@@ -82,6 +82,7 @@
     if(view==='personalized-section')renderPersonalizedSection();
     if(view==='watch-layout')renderWatchLayout();
     if(view==='header-footer')renderHeaderFooter();
+    if(view==='backup')refreshBackupSummary();
   }
   function applyProfilePhoto(url){
     const targets=[$('#avatar-photo'),$('#profile-photo-preview'),$('#profile-dialog-preview')];
@@ -942,6 +943,88 @@
     const ok=await persist({...state.data,homepageConfig:config},'Manşet ayarları kaydedildi.');
     if(ok){state.heroDraft=null;renderHomepage();}
   }
+  const BACKUP_STORAGE_PREFIXES=['cine_','perde_'];
+  let selectedBackup=null;
+  function collectBrowserStorage(storage){
+    const values={};
+    try{for(let i=0;i<storage.length;i++){const key=storage.key(i);if(key&&BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix)))values[key]=storage.getItem(key);}}catch(error){console.warn('Tarayıcı kayıtları okunamadı.',error);}
+    return values;
+  }
+  function backupStorageCount(data){
+    return Object.keys(data.localStorage||{}).length+Object.keys(data.sessionStorage||{}).length;
+  }
+  function refreshBackupSummary(){
+    const catalogCount=Array.isArray(state.data?.catalog)?state.data.catalog.length:0;
+    const local=collectBrowserStorage(localStorage),session=collectBrowserStorage(sessionStorage);
+    $('#backup-catalog-count').textContent=catalogCount+' yapım';
+    $('#backup-storage-count').textContent=(Object.keys(local).length+Object.keys(session).length)+' kayıt';
+  }
+  function downloadFullBackup(){
+    if(!state.data||!Array.isArray(state.data.catalog)){toast('Katalog yüklenmeden yedek oluşturulamaz.');return;}
+    const payload={format:'perde-full-backup',version:1,exportedAt:new Date().toISOString(),siteData:state.data,browserData:{localStorage:collectBrowserStorage(localStorage),sessionStorage:collectBrowserStorage(sessionStorage)}};
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
+    const url=URL.createObjectURL(blob),anchor=document.createElement('a');
+    anchor.href=url;anchor.download='perde-tam-yedek-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    toast('Tam yedek dosyası indirildi.');
+  }
+  function inspectBackupFile(file){
+    selectedBackup=null;
+    const button=$('#restore-full-backup'),summary=$('#restore-backup-summary');
+    button.disabled=true;
+    if(!file){summary.innerHTML='<span>Dosya durumu</span><b>Henüz dosya seçilmedi</b>';return;}
+    const reader=new FileReader();
+    reader.onload=()=>{
+      try{
+        const data=JSON.parse(String(reader.result||''));
+        if(data.format!=='perde-full-backup'||data.version!==1||!data.siteData||!Array.isArray(data.siteData.catalog)||!data.browserData||typeof data.browserData.localStorage!=='object')throw new Error('Bu dosya geçerli bir Perde tam yedeği değil.');
+        selectedBackup=data;
+        const count=Array.isArray(data.siteData.catalog)?data.siteData.catalog.length:0;
+        const personal=backupStorageCount(data.browserData);
+        const date=data.exportedAt?new Date(data.exportedAt).toLocaleString('tr-TR'):'Tarih bilgisi yok';
+        summary.innerHTML='<span>Dosya doğrulandı</span><b>'+count+' yapım · '+personal+' kişisel kayıt · '+escapeHtml(date)+'</b>';
+        button.disabled=!state.apiEnabled;
+        if(!state.apiEnabled)summary.innerHTML+='<small class="helper-text">Sunucu yazma bağlantısı hazır değil; geri yükleme şu an kullanılamıyor.</small>';
+      }catch(error){summary.innerHTML='<span>Dosya durumu</span><b class="state-warning">'+escapeHtml(error.message)+'</b>';selectedBackup=null;}
+    };
+    reader.onerror=()=>{summary.innerHTML='<span>Dosya durumu</span><b class="state-warning">Dosya okunamadı.</b>';};
+    reader.readAsText(file);
+  }
+  function replaceStorageFromBackup(storage,incoming){
+    const previous=collectBrowserStorage(storage);
+    for(const key of Object.keys(previous))storage.removeItem(key);
+    for(const [key,value] of Object.entries(incoming||{})){
+      if(!BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix))||typeof value!=='string')throw new Error('Yedek dosyasında geçersiz tarayıcı kayıt anahtarı var.');
+      storage.setItem(key,value);
+    }
+    return previous;
+  }
+  async function restoreFullBackup(){
+    const data=selectedBackup;
+    if(!data||!state.apiEnabled){toast('Önce geçerli bir yedek dosyası seçmelisin.');return;}
+    const catalogCount=data.siteData.catalog.length,personalCount=backupStorageCount(data.browserData);
+    if(!confirm(catalogCount+' yapım ve '+personalCount+' kişisel kayıt geri yüklenecek. Mevcut katalog ve tarayıcı verilerinin üzerine yazılacak. Devam edilsin mi?'))return;
+    let oldLocal=null,oldSession=null;
+    try{
+      oldLocal=replaceStorageFromBackup(localStorage,data.browserData.localStorage||{});
+      oldSession=replaceStorageFromBackup(sessionStorage,data.browserData.sessionStorage||{});
+      const ok=await persist(data.siteData,'Yedek başarıyla geri yüklendi. Sayfa yenileniyor…');
+      if(!ok)throw new Error('Katalog sunucuya kaydedilemedi; mevcut tarayıcı kayıtları geri alındı.');
+      setTimeout(()=>window.location.reload(),900);
+    }catch(error){
+      try{
+        if(oldLocal){for(const key of Object.keys(collectBrowserStorage(localStorage)))localStorage.removeItem(key);for(const [key,value] of Object.entries(oldLocal))localStorage.setItem(key,value);}
+        if(oldSession){for(const key of Object.keys(collectBrowserStorage(sessionStorage)))sessionStorage.removeItem(key);for(const [key,value] of Object.entries(oldSession))sessionStorage.setItem(key,value);}
+      }catch(rollbackError){console.error('Tarayıcı kayıtları geri alınamadı:',rollbackError);}
+      toast(error.message||'Geri yükleme tamamlanamadı.');
+    }
+  }
+  function initBackupTools(){
+    $('#download-full-backup')?.addEventListener('click',downloadFullBackup);
+    $('#restore-backup-file')?.addEventListener('change',event=>inspectBackupFile(event.target.files?.[0]));
+    $('#restore-full-backup')?.addEventListener('click',restoreFullBackup);
+    refreshBackupSummary();
+  }
   async function init(){
     applyAdminTheme();
     const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;
@@ -1178,5 +1261,6 @@
     watchDemoViewport=button.dataset.demoDevice;
     renderWatchLayout();
   }));
+  initBackupTools();
   init();
 })();
