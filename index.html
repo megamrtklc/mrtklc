@@ -452,9 +452,6 @@
         #home-genre-discovery-section .home-genre-discovery-card:hover .home-genre-discovery-name{color:#a16207}
         .dark #home-genre-discovery-section .home-genre-discovery-card:hover .home-genre-discovery-name{color:#fcd34d}
         #home-genre-discovery-section .home-genre-discovery-card:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
-        @media(min-width:640px){
-            #home-genre-discovery-section .home-genre-discovery-more-wrap{display:none}
-        }
         @media(max-width:639px){
             #home-genre-discovery-section .home-genre-discovery-heading{align-items:flex-start;padding-bottom:10px}
             #home-genre-discovery-section .home-genre-discovery-heading h2{font-size:19px}
@@ -2728,7 +2725,13 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </button>
                         </template>
                     </div>
-                    <div class="home-genre-discovery-more-wrap flex justify-center pt-1" x-show="homeSectionReady['genre-discovery'] && homeDiscoveryGenres.length > 6">
+                    <div class="flex justify-center pt-1 sm:hidden" x-show="homeSectionReady['genre-discovery'] && homeDiscoveryGenres.length > 6">
+                        <button type="button" @click="showAllGenres = !showAllGenres" class="home-genre-discovery-more" :aria-expanded="showAllGenres">
+                            <span x-text="showAllGenres ? 'Daha az göster' : 'Tümünü göster'"></span>
+                            <i class="fa-solid" :class="showAllGenres ? 'fa-chevron-up' : 'fa-chevron-down'" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="hidden justify-center pt-1 sm:flex" x-show="homeSectionReady['genre-discovery'] && homeDiscoveryGenres.length > 16">
                         <button type="button" @click="showAllGenres = !showAllGenres" class="home-genre-discovery-more" :aria-expanded="showAllGenres">
                             <span x-text="showAllGenres ? 'Daha az göster' : 'Tümünü göster'"></span>
                             <i class="fa-solid" :class="showAllGenres ? 'fa-chevron-up' : 'fa-chevron-down'" aria-hidden="true"></i>
