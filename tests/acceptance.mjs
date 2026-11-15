@@ -124,6 +124,23 @@ try {
   const desktopCls = desktopDiagnostics.shifts.reduce((total, entry) => total + entry.value, 0);
   assert.ok(desktopCls < 0.05, 'Masaüstü CLS hedefi aşıldı: ' + desktopCls.toFixed(3));
 
+  await check('Mobil açılış performansı tanılanıyor', async () => {
+    const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+    const mobilePage = await mobileContext.newPage();
+    await mobilePage.addInitScript(() => {
+      window.__mobileLcpEntries = []; window.__mobileShifts = [];
+      try { new PerformanceObserver(list => { for (const entry of list.getEntries()) { const el = entry.element; window.__mobileLcpEntries.push({ startTime: Math.round(entry.startTime), size: entry.size, tag: el?.tagName || null, id: el?.id || null, className: typeof el?.className === 'string' ? el.className.slice(0, 140) : '', src: el?.currentSrc || el?.src || '', text: el?.textContent?.trim().slice(0, 80) || '' }); } }).observe({ type: 'largest-contentful-paint', buffered: true });
+        new PerformanceObserver(list => { for (const entry of list.getEntries()) { if (!entry.hadRecentInput) window.__mobileShifts.push({ value: entry.value, startTime: Math.round(entry.startTime), sources: (entry.sources || []).slice(0, 5).map(source => ({ tag: source.node?.tagName || null, id: source.node?.id || null, className: typeof source.node?.className === 'string' ? source.node.className.slice(0, 120) : '', previousRect: source.previousRect, currentRect: source.currentRect })) }); } }).observe({ type: 'layout-shift', buffered: true });
+      } catch {}
+    });
+    await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await mobilePage.waitForFunction(() => window.Alpine && Array.isArray(window.Alpine.$data(document.documentElement)?.catalog) && window.Alpine.$data(document.documentElement).catalog.length >= 130, { timeout: 60000 });
+    await mobilePage.waitForTimeout(6000);
+    const diagnostic = await mobilePage.evaluate(() => { const app = window.Alpine.$data(document.documentElement); const footer = document.querySelector('#cineverse-footer'); return { lcp: window.__mobileLcpEntries, shifts: window.__mobileShifts, catalogLoading: app.catalogLoading, footerEnabled: app.footerConfig?.enabled, footerReady: app.footerConfigReady, footerDisplay: footer ? getComputedStyle(footer).display : null, footerRect: footer?.getBoundingClientRect().toJSON() || null, heroTitle: app.currentHero?.title || '', mobileHeroVisible: !!document.querySelector('#mobileHeroBanner') && getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none' }; });
+    console.log('MOBILE PERFORMANCE DIAGNOSTIC:', JSON.stringify(diagnostic));
+    await mobileContext.close();
+  });
+
   await check('Ana sayfa rafları ekrana yaklaşınca yükleniyor', async () => {
     await page.locator('#home-catalog-section').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => window.Alpine.$data(document.documentElement).homeSectionReady?.catalog === true, { timeout: 10000 });
