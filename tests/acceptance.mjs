@@ -532,7 +532,7 @@ try {
     await mobileMenu.waitFor({ state: 'visible' });
     await mobileMenu.getByRole('link', { name: 'Keşfet', exact: true }).click();
     await page.waitForFunction(() => window.location.hash === '#/explore');
-    assert.ok(await page.getByText('Keşfet & Arşiv Kataloğu', { exact: true }).isVisible());
+    assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).isVisible());
   });
 
   await check('Mobil, tablet ve masaüstünde yatay taşma kontrolü', async () => {
