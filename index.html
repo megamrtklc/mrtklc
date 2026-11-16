@@ -4185,7 +4185,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     </style>
     <script id="cv-image-loading-indicator-script">
         (() => {
-            const pending = new WeakMap();
             const eligible = (img) => {
                 if (!(img instanceof HTMLImageElement) || !img.getAttribute('src') && !img.getAttribute('srcset')) return false;
                 if (img.getAttribute('aria-hidden') === 'true' || !img.getAttribute('alt')?.trim()) return false;
@@ -4218,10 +4217,11 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     }
                 }
             };
+            const surfaceFor = (img) => img.parentElement?.tagName === 'PICTURE' ? img.parentElement.parentElement : img.parentElement;
             const finish = (img) => {
                 if (!(img instanceof HTMLImageElement)) return;
                 img.removeAttribute('data-cv-image-loading');
-                updateSurface(img.parentElement);
+                updateSurface(surfaceFor(img));
             };
             const inspect = (img) => {
                 if (!eligible(img)) { finish(img); return; }
@@ -4230,7 +4230,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     return;
                 }
                 img.setAttribute('data-cv-image-loading', 'true');
-                updateSurface(img.parentElement);
+                updateSurface(surfaceFor(img));
             };
             document.addEventListener('load', (event) => finish(event.target), true);
             document.addEventListener('error', (event) => finish(event.target), true);
