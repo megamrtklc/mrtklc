@@ -880,6 +880,7 @@
                             const currentRoot = document.getElementById('home-page');
                             if (!currentRoot || !currentRoot.hasAttribute('x-ignore')) return;
                             currentRoot.removeAttribute('x-ignore');
+                            currentRoot._x_ignore = false;
                             window.Alpine?.initTree?.(currentRoot);
                             const mobile = window.matchMedia('(max-width: 767px)').matches;
                             const activeHero = currentRoot.querySelector(mobile ? '#mobileHeroBanner' : '#desktopEditorialHero');
