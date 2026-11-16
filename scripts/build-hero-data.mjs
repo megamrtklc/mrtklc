@@ -79,6 +79,8 @@ const compactCatalog = catalog.map(item => {
 });
 await writeFile('catalog-lite.json', JSON.stringify({
   homepageConfig: source?.homepageConfig || {},
+  headerConfig: source?.headerConfig || {},
+  footerConfig: source?.footerConfig || {},
   catalog: compactCatalog
 }) + '\n');
 await writeFile('catalog-cast.json', JSON.stringify(castData) + '\n');
