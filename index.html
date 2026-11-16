@@ -2514,7 +2514,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         
                         <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" x-show="homeSectionReady.personalized && displayedPersonalizedRecommendations.length" x-ignore>
                             <div class="home-personalized-mobile-backdrop">
-                                <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500, 780])" sizes="100vw" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                                <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500])" sizes="100vw" alt="" aria-hidden="true" loading="lazy" decoding="async">
                                 <div></div>
                             </div>
                             <div class="home-personalized-mobile-content">
@@ -4137,7 +4137,8 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     
 
     <style id="cv-image-loading-indicator">
-        .cv-image-loading-surface { position: relative; }
+        /* Konumlandırmayı JS yalnızca statik yüzeylerde ayarlar; absolute/fixed kartları bozmamalı. */
+        .cv-image-loading-surface { }
         .cv-image-loading-surface::before {
             content: "";
             position: absolute;
