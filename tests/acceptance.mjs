@@ -482,8 +482,17 @@ try {
       '#home-personalized-section .home-personalized-dislike'
     ).count(), 0, 'Büyük öneri kartında da geri bildirim butonları bulunmamalı');
     await page.setViewportSize({ width: 360, height: 800 });
-    const mobileColumns = await rail.evaluate(element => getComputedStyle(element).gridTemplateColumns.split(' ').length);
-    assert.equal(mobileColumns, 2, 'Mobilde de iki sütun korunmalı');
+    const mobileLayout = await page.evaluate(() => {
+      const card = document.querySelector('#home-personalized-section .home-personalized-mobile-card');
+      const desktopRail = document.querySelector('#home-personalized-rail');
+      return {
+        mobileCardVisible: !!card && getComputedStyle(card).display !== 'none' &&
+          card.getBoundingClientRect().width > 0,
+        desktopRailHidden: !!desktopRail && getComputedStyle(desktopRail).display === 'none'
+      };
+    });
+    assert.ok(mobileLayout.mobileCardVisible, 'Mobilde özel öneri kartı görünür olmalı');
+    assert.ok(mobileLayout.desktopRailHidden, 'Mobilde masaüstü öneri rafı gizlenmeli');
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
