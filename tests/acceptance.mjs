@@ -542,7 +542,7 @@ try {
         return !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().width > 0;
       });
       const state = await brand.evaluate(el => ({
-        text: (el.innerText || '').replace(/\\s+/g, ''),
+        text: (el.textContent || '').replace(/\\s+/g, ''),
         visible: getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().width > 0,
         overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
       }));
