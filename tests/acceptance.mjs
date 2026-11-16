@@ -341,7 +341,15 @@ try {
       await mobileSearchDialog.getByRole('searchbox').fill('Adalet 2');
       await mobilePage.waitForFunction(() => document.querySelectorAll('.cineverse-search-result').length > 0, { timeout: 10000 });
       const mobileSearchRect = await mobileSearchDialog.evaluate(element => element.getBoundingClientRect().toJSON());
-      assert.ok(mobileSearchRect.width <= 412 && mobileSearchRect.height <= 823, 'Mobil arama paneli ekran sınırlarını aşıyor');
+      const mobileViewport = await mobilePage.evaluate(() => ({ width: window.innerWidth, height: window.innerHeight }));
+      assert.ok(
+        mobileSearchRect.width <= mobileViewport.width + 1 &&
+        mobileSearchRect.height <= mobileViewport.height + 1 &&
+        mobileSearchRect.left >= -1 && mobileSearchRect.top >= -1 &&
+        mobileSearchRect.right <= mobileViewport.width + 1 &&
+        mobileSearchRect.bottom <= mobileViewport.height + 1,
+        'Mobil arama paneli ekran sınırlarını aşıyor: ' + JSON.stringify({ mobileSearchRect, mobileViewport })
+      );
       assert.ok(await mobileSearchDialog.locator('.cineverse-search-result img').first().getAttribute('src'), 'Mobil arama afişi yüklenmedi');
       await mobileSearchDialog.getByRole('button', { name: 'Aramayı kapat' }).click();
       assert.ok(mobileState.mobileVisible, 'Mobil manşet telefonda görünmüyor');
