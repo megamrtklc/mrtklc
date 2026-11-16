@@ -902,7 +902,7 @@
                             hydrateSection(entry.target);
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: window.matchMedia('(max-width: 767px)').matches ? '300px 0px' : '500px 0px' });
+                    }, { rootMargin: window.matchMedia('(max-width: 767px)').matches ? '100px 0px' : '180px 0px' });
 
                     pending.forEach(section => observer.observe(section));
                     window.__cineverseHomeSectionObserver = observer;
