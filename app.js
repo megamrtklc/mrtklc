@@ -472,9 +472,7 @@
                             }
                         }
                     };
-                    // Mobilde arka plan TMDB isteklerini tekilleştir; masaüstünde mevcut paralellik korunsun.
-                    const workerCount = window.matchMedia('(max-width: 767px)').matches ? 1 : 3;
-                    await Promise.all(Array.from({ length: Math.min(workerCount, slides.length) }, worker));
+                    await Promise.all(Array.from({ length: Math.min(3, slides.length) }, worker));
                 },
 
                 async fetchTmdb(path, language = this.tmdbLanguage) {
