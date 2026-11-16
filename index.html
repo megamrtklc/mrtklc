@@ -54,7 +54,7 @@
     <!-- Inter fontları önceden istenir; CSS yerleşimden önce uygulanır. -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <!-- Alpine.js -->
-    <script defer fetchpriority="high" src="./app.js?v=20261116-home-load-v10"></script>
+    <script defer fetchpriority="high" src="./app.js?v=20261116-home-load-v11"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         /* Manşet metni sabit kalır; görsel geçişi yalnızca hafif opacity/scale ile yapılır. */
@@ -2364,7 +2364,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
-    <header x-cloak x-show="headerConfigReady && headerConfig.enabled !== false" x-data="{ mobileMenuOpen: false, headerScrolled: window.scrollY > 40 }" @scroll.window="headerScrolled = window.scrollY > 40" :class="'sticky top-0 z-50 ' + (currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass())" class="backdrop-blur-md border-b transition-colors duration-300">
+    <header x-ignore x-cloak x-show="headerConfigReady && headerConfig.enabled !== false" x-data="{ mobileMenuOpen: false, headerScrolled: window.scrollY > 40 }" @scroll.window="headerScrolled = window.scrollY > 40" :class="'sticky top-0 z-50 ' + (currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass())" class="backdrop-blur-md border-b transition-colors duration-300">
         <div class="w-full px-4 sm:px-12 md:max-w-[1800px] md:mx-auto md:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 lg:space-x-6 xl:space-x-12">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-2.5 group">
@@ -4296,7 +4296,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     </div>
 
     <!-- CineVerse Responsive Footer -->
-    <footer id="cineverse-footer" style="display:none" x-cloak x-show="footerConfigReady && footerConfig.enabled !== false" class="relative isolate mt-auto w-full overflow-hidden border-t border-gray-200/80 bg-gray-50 text-gray-600 transition-colors duration-300 dark:border-white/10 dark:bg-[#08090d] dark:text-gray-400">
+    <footer id="cineverse-footer" style="display:none" x-ignore x-cloak x-show="footerConfigReady && footerConfig.enabled !== false" class="relative isolate mt-auto w-full overflow-hidden border-t border-gray-200/80 bg-gray-50 text-gray-600 transition-colors duration-300 dark:border-white/10 dark:bg-[#08090d] dark:text-gray-400">
         <div class="cineverse-footer-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
         <div class="relative mx-auto w-full max-w-[1600px] px-5 pb-5 pt-10 sm:px-8 sm:pt-12 lg:px-12">
             <div class="grid grid-cols-2 gap-x-6 gap-y-9 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr] lg:gap-12">
