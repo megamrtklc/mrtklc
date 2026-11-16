@@ -52,6 +52,18 @@
         const recommendationPlotTermsCache = new WeakMap();
         const recommendationStopWords = new Set(['about','after','again','against','among','because','before','being','between','could','every','first','from','have','into','just','more','most','other','over','same','some','such','than','that','their','them','then','there','these','they','this','those','through','under','until','very','were','what','when','where','which','while','with','would','your','ancak','artık','bazen','belki','birçok','bütün','daha','diğer','eden','eder','edilir','etti','gibi','hem','her','hiç','için','ile','kadar','kendi','kez','ki','kim','nasıl','neden','nerede','olan','olarak','oldu','olduğu','olmak','olmuş','önce','sonra','şey','tüm','üzere','veya','yine']);
 
+        // Katalog kayıtları ana sitede salt-okunur; Vue/Alpine derin proxy maliyetini önle.
+        // __v_skip, Alpine'in kullandığı Vue reactivity katmanının standart raw işaretidir.
+        function markStaticCatalog(value) {
+            if (!value || typeof value !== 'object') return value;
+            try {
+                Object.defineProperty(value, '__v_skip', { value: true, configurable: true });
+            } catch (error) {
+                console.warn('Katalog salt-okunur optimizasyonu uygulanamadı:', error);
+            }
+            return value;
+        }
+
         function ultimateProApp() {
             return {
                 getTmdbImageSrcSet(url, widths = [154, 185, 342, 500]) {
@@ -633,6 +645,12 @@
                                     else window.setTimeout(() => applyBatch(null), 40);
                                     return;
                                 }
+                                const selectedId = this.selectedItem?.id;
+                                const selectedCatalogItem = selectedId != null ? byId.get(String(selectedId)) : null;
+                                if (selectedCatalogItem) {
+                                    // Salt-okunur katalogdaki oyuncu verisi seçili detay ekranına da yansısın.
+                                    this.selectedItem = { ...this.selectedItem, tmdbCast: selectedCatalogItem.tmdbCast };
+                                }
                                 personalizedRecommendationCache.delete(this);
                                 this.recommendationFeedbackRevision += 1;
                                 this.recommendationUiRevision += 1;
@@ -720,7 +738,7 @@
                         const validCatalog = sourceCatalog.filter(item => item && typeof item === 'object' && !Array.isArray(item) && (item.id != null || item.tmdbId != null || item.title || item.tmdbTitle || item.originalTitle));
                         if (!validCatalog.length) throw new Error('Katalogda kullanılabilir bir film veya dizi kaydı bulunamadı.');
                         if (validCatalog.length !== sourceCatalog.length) console.warn('Geçersiz katalog kayıtları atlandı:', sourceCatalog.length - validCatalog.length);
-                        this.catalog = validCatalog.map(item => this.normalizeCatalogItem(item));
+                        this.catalog = markStaticCatalog(validCatalog.map(item => this.normalizeCatalogItem(item)));
                         this.heroCatalog = this.catalog;
                         // İngilizce alternatif başlık sorguları ilk çizimi ve mobil ağ önceliklerini bölmesin.
                         const loadEnglishTitlesWhenIdle = () => this.loadHeroEnglishTitles();
