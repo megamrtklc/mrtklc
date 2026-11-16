@@ -191,7 +191,7 @@ updatedHtml = updatedHtml.replace(/\s*<link id="(?:mobile|desktop)-hero-image-pr
 const viewportTag = /(<meta name="viewport"[^>]*>)/;
 if (!viewportTag.test(updatedHtml)) throw new Error('Viewport meta tag is missing; cannot position hero preloads.');
 if (heroPreloadTags.length) {
-  updatedHtml = updatedHtml.replace(viewportTag, '$1\\n    ' + heroPreloadTags.join('\\n    '));
+  updatedHtml = updatedHtml.replace(viewportTag, '$1\n    ' + heroPreloadTags.join('\n    '));
 }
 await writeFile('index.html', updatedHtml);
 await writeFile('hero-data.json', JSON.stringify(output, null, 2) + '\n');
