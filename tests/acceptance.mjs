@@ -590,7 +590,7 @@ try {
       'TV geniş ekranında mobil menü düğmesi görünmemeli');
     await desktopNav.getByRole('link', { name: 'Keşfet', exact: true }).press('Enter');
     await page.waitForFunction(() => window.location.hash === '#/explore');
-    assert.ok(await page.getByText('Keşfet & Arşiv Kataloğu', { exact: true }).isVisible(),
+    assert.ok(await page.getByText('İlgi alanlarına göre keşfet', { exact: true }).isVisible(),
       'TV klavyesiyle Keşfet sayfasına geçiş yapılamadı');
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
