@@ -669,6 +669,13 @@
 
                 async init() {
                     this.routeHistoryReady = false;
+                    const heroViewportQuery = window.matchMedia('(max-width: 767px)');
+                    const hydrateActiveHeroOnResize = () => {
+                        const root = document.getElementById('home-page');
+                        if (root && !root.hasAttribute('x-ignore')) this.prepareHomeHeroVariant(root);
+                    };
+                    if (heroViewportQuery.addEventListener) heroViewportQuery.addEventListener('change', hydrateActiveHeroOnResize);
+                    else if (heroViewportQuery.addListener) heroViewportQuery.addListener(hydrateActiveHeroOnResize);
                     window.addEventListener('popstate', event => {
                         this.routeHistoryIndex = Number(event.state?.cineverseRouteIndex || 0);
                         this.restoreRouteFromUrl();
@@ -791,6 +798,22 @@
                     this.$nextTick(() => this.removeHeroInitialShell());
                 },
 
+                prepareHomeHeroVariant(root) {
+                    if (!root) return;
+                    const mobile = window.matchMedia('(max-width: 767px)').matches;
+                    const activeHero = root.querySelector(mobile ? '#mobileHeroBanner' : '#desktopEditorialHero');
+                    const inactiveHero = root.querySelector(mobile ? '#desktopEditorialHero' : '#mobileHeroBanner');
+                    // Görünmeyen cihaz varyantını ilk Alpine taramasının dışında tut.
+                    if (inactiveHero && !inactiveHero._x_marker && !inactiveHero.hasAttribute('x-ignore')) {
+                        inactiveHero.setAttribute('x-ignore', '');
+                    }
+                    if (activeHero?.hasAttribute('x-ignore')) {
+                        activeHero.removeAttribute('x-ignore');
+                        activeHero._x_ignore = false;
+                        if (!root.hasAttribute('x-ignore')) window.Alpine?.initTree?.(activeHero);
+                    }
+                },
+
                 scheduleHomePageHydration() {
                     if (this.currentPage !== 'home') return;
                     this.$nextTick(() => {
@@ -799,6 +822,7 @@
                             window.setTimeout(() => this.scheduleHomePageHydration(), 50);
                             return;
                         }
+                        this.prepareHomeHeroVariant(root);
                         if (!root.hasAttribute('x-ignore') || root.dataset.homeHydrationScheduled === 'true') return;
                         root.dataset.homeHydrationScheduled = 'true';
                         const delay = window.matchMedia('(min-width: 1024px)').matches ? 450 : 0;
