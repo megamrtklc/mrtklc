@@ -514,11 +514,14 @@ try {
     await page.setViewportSize({ width: 360, height: 800 });
     await page.waitForFunction(() => window.innerWidth === 360);
     await page.waitForFunction(() => {
-      const card = document.querySelector('#home-personalized-rail .home-personalized-alternative');
-      return !!card && card.getBoundingClientRect().width > 0 && card.getBoundingClientRect().width <= 260;
+      const card = document.querySelector('#home-personalized-section .home-personalized-mobile-card');
+      const rail = document.querySelector('#home-personalized-rail');
+      return !!card && card.getBoundingClientRect().width > 0 &&
+        card.getBoundingClientRect().width <= window.innerWidth &&
+        !!rail && getComputedStyle(rail).display === 'none';
     }, { timeout: 5000 });
-    const railCardWidth = await page.locator('#home-personalized-rail .home-personalized-alternative').first().evaluate(card => card.getBoundingClientRect().width);
-    assert.ok(railCardWidth > 0 && railCardWidth <= 260, 'Dar ekranda öneri kartı güvenli genişlikte olmalı');
+    const mobileCardWidth = await page.locator('#home-personalized-section .home-personalized-mobile-card').first().evaluate(card => card.getBoundingClientRect().width);
+    assert.ok(mobileCardWidth > 0 && mobileCardWidth <= 360, 'Dar ekranda mobil öneri kartı ekran genişliğini aşmamalı');
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
