@@ -1108,13 +1108,9 @@ try {
   });
 
   await check('İstatistikler sayfası açılıyor', async () => {
-    await page.getByRole('button', { name: 'Hesap menüsünü aç' }).click();
-    const profileDropdown = page.locator('header .cineverse-profile-dropdown:visible').first();
-    await profileDropdown.waitFor({ state: 'visible' });
-    const statsMenuButton = profileDropdown.getByRole('button', { name: 'İstatistikler' });
-    await statsMenuButton.waitFor({ state: 'visible' });
-    await page.waitForTimeout(350);
-    await statsMenuButton.click({ timeout: 10000 });
+    const statsFooterLink = page.locator('footer a').filter({ hasText: 'İstatistikler' }).first();
+    await statsFooterLink.scrollIntoViewIfNeeded();
+    await statsFooterLink.click();
     await page.waitForURL(/#\/stats$/);
     await page.getByRole('heading', { name: 'İzleme İstatistikleri' }).waitFor({ state: 'visible' });
     assert.ok(await page.getByText('Tamamlanan filmler', { exact: true }).isVisible());
