@@ -116,6 +116,28 @@ if (artworkUrl) {
   }
   await writeFile('index.html', updatedHtml);
 }
+
+// Mobil manşet görselini büyük bootstrap JSON'u ayrıştırılmadan önce keşfedilebilir kıl.
+const firstMobileSlide = mobileSlides.find(slide => slide && slide.active !== false && slide.id != null);
+const firstMobileItem = firstMobileSlide
+  ? catalog.find(item => String(item.id ?? item.tmdbId ?? item.title) === String(firstMobileSlide.id))
+  : null;
+const mobileArtworkUrl = firstMobileItem?.backdrop || firstMobileItem?.tmdbBackdrop || firstMobileItem?.poster || firstMobileItem?.tmdbPoster || '';
+let mobileHtml = await readFile('index.html', 'utf8');
+const mobilePreloadTag = /<link id="mobile-hero-image-preload"[^>]*>/;
+if (mobileArtworkUrl) {
+  const mobileMatch = mobileArtworkUrl.match(/^(https:\/\/image\\.tmdb\\.org\/t\/p\/)(?:w\\d+|original)(\/.*)$/);
+  if (!mobileMatch) throw new Error('Mobile hero artwork must use a supported TMDB image URL.');
+  const base = mobileMatch[1];
+  const file = mobileMatch[2];
+  const mobileLink = `<link id="mobile-hero-image-preload" rel="preload" as="image" href="${base}w500${file}" imagesrcset="${base}w342${file} 342w, ${base}w500${file} 500w" imagesizes="100vw" fetchpriority="high" media="(max-width: 767px)">`;
+  if (mobilePreloadTag.test(mobileHtml)) mobileHtml = mobileHtml.replace(mobilePreloadTag, mobileLink);
+  else mobileHtml = mobileHtml.replace('</head>', `    ${mobileLink}\\n</head>`);
+} else if (mobilePreloadTag.test(mobileHtml)) {
+  mobileHtml = mobileHtml.replace(mobilePreloadTag, '');
+}
+await writeFile('index.html', mobileHtml);
+
 // İlk HTML çiziminde masaüstü manşetinde de doğru başlık ve bilgiler görünsün.
 if (firstDesktopItem) {
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({
