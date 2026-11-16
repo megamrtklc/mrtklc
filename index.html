@@ -2139,6 +2139,14 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         }
       }
     </style>
+    <style id="cv-personalized-no-feedback-layout">
+      #home-personalized-section .home-personalized-alternative {
+        grid-template-rows: minmax(0, 1fr) !important;
+      }
+      #home-personalized-section .home-personalized-poster {
+        grid-row: 1 !important;
+      }
+    </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
