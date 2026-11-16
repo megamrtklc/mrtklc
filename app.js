@@ -972,13 +972,25 @@
                     const hydrateSection = section => {
                         const key = section.dataset.homeSection;
                         if (!key) return;
-                        this.homeSectionReady[key] = true;
+                        if (key !== 'personalized') this.homeSectionReady[key] = true;
                         if (section.hasAttribute('x-ignore')) {
                             section.removeAttribute('x-ignore');
                             // Alpine x-ignore ilk taramada _x_ignore bayrağı bırakır;
                             // niteliği DOM'dan silmek tek başına initTree çağrısını açmaz.
                             section._x_ignore = false;
                             window.Alpine?.initTree?.(section);
+                        }
+                        if (key === 'personalized') {
+                            // Kişisel öneri puanlaması ilk ekrandaki etkileşimi bloke etmesin.
+                            window.setTimeout(() => {
+                                const activate = () => {
+                                    if (section.isConnected && this.currentPage === 'home') {
+                                        this.homeSectionReady.personalized = true;
+                                    }
+                                };
+                                if ('requestIdleCallback' in window) window.requestIdleCallback(activate, { timeout: 2200 });
+                                else window.setTimeout(activate, 0);
+                            }, 900);
                         }
                         window.requestAnimationFrame(() => {
                             section.style.removeProperty('visibility');
@@ -2424,6 +2436,8 @@
                 },
 
                 get personalizedRecommendations() {
+                    const recommendationStartedAt = performance.now();
+                    cvBootMark('personalized-recommendations-start');
                     const feedbackRevision = this.recommendationFeedbackRevision;
                     const catalog = Array.isArray(this.catalog) ? this.catalog : [];
                     if (!catalog.length) return [];
@@ -2623,7 +2637,9 @@
                                 reason: 'Arşivden yüksek puanlı'
                             };
                         }).sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0) || a.item.title.localeCompare(b.item.title, 'tr'));
-                        return cacheResult(selectDiverse(coldStart).map(entry => ({ ...entry.item, recommendationReason: entry.reason })));
+                        const result = cacheResult(selectDiverse(coldStart).map(entry => ({ ...entry.item, recommendationReason: entry.reason })));
+                        cvBootMark('personalized-recommendations-ready-' + Math.round(performance.now() - recommendationStartedAt) + 'ms');
+                        return result;
                     }
                     const ranked = catalog.filter(item => item && item.id != null && !excluded.has(String(item.id))).map(item => {
                         const reasons = [];
@@ -2659,7 +2675,9 @@
                             reason
                         };
                     }).sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0) || a.item.title.localeCompare(b.item.title, 'tr'));
-                    return cacheResult(selectDiverse(ranked).map(entry => ({ ...entry.item, recommendationReason: entry.reason })));
+                    const result = cacheResult(selectDiverse(ranked).map(entry => ({ ...entry.item, recommendationReason: entry.reason })));
+                    cvBootMark('personalized-recommendations-ready-' + Math.round(performance.now() - recommendationStartedAt) + 'ms');
+                    return result;
                 },
 
 
