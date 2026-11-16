@@ -948,7 +948,9 @@ try {
   });
 
   await check('Tek profil menüsü Admin Paneli kısayolunu sunuyor ve çocuk profilini içermiyor', async () => {
-    const profileButton = page.locator('header .cineverse-profile-trigger');
+    const profileButton = page.locator('header .cineverse-profile-trigger:visible').first();
+    await profileButton.waitFor({ state: 'visible' });
+    await profileButton.locator('img.cineverse-profile-avatar').waitFor({ state: 'visible' });
     assert.ok(await profileButton.locator('img.cineverse-profile-avatar').isVisible(), 'Kare profil görseli görünmeli');
     const avatarRadius = await profileButton.locator('img').evaluate(element => getComputedStyle(element).borderRadius);
     assert.notEqual(avatarRadius, '50%', 'Profil görseli daire değil, hafif yuvarlatılmış kare olmalı');
