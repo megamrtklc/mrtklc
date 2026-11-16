@@ -1258,7 +1258,7 @@ try {
   });
 
   await check('İzleme listesine ekleme ve tek liste kalıcılığı çalışıyor', async () => {
-    const saveButton = page.locator('button').filter({ has: page.locator('span[x-text*="isInWatchlist"]') }).first();
+    const saveButton = page.locator('main button[aria-label="Listeme ekle"]').first();
     await saveButton.waitFor({ state: 'visible' });
     await saveButton.click();
     await page.waitForFunction(() => window.Alpine.$data(document.documentElement).isInWatchlist(window.Alpine.$data(document.documentElement).selectedItem));
