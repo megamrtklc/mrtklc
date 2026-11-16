@@ -533,6 +533,26 @@ try {
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
+  await check('Mobil başlıkta MRTKLC marka yazısı görünür ve taşma yapmaz', async () => {
+    for (const width of [320, 360, 390, 430]) {
+      await page.setViewportSize({ width, height: 844 });
+      const brand = page.locator('header > div:first-child > div:first-child > a > span').first();
+      await page.waitForFunction(() => {
+        const el = document.querySelector('header > div:first-child > div:first-child > a > span');
+        return !!el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().width > 0;
+      });
+      const state = await brand.evaluate(el => ({
+        text: (el.innerText || '').replace(/\\s+/g, ''),
+        visible: getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().width > 0,
+        overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
+      }));
+      assert.ok(state.visible, `MRTKLC marka yazısı ${width}px ekranda görünmeli`);
+      assert.match(state.text, /MRTKLC/i, `MRTKLC yazısı ${width}px ekranda okunmalı`);
+      assert.equal(state.overflow, false, `${width}px ekranda yatay taşma olmamalı`);
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
+  });
+
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole('button', { name: 'Menüyü aç veya kapat' }).click();
