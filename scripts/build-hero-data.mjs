@@ -126,13 +126,13 @@ const mobileArtworkUrl = firstMobileItem?.backdrop || firstMobileItem?.tmdbBackd
 let mobileHtml = await readFile('index.html', 'utf8');
 const mobilePreloadTag = /<link id="mobile-hero-image-preload"[^>]*>/;
 if (mobileArtworkUrl) {
-  const mobileMatch = mobileArtworkUrl.match(/^(https:\/\/image\\.tmdb\\.org\/t\/p\/)(?:w\\d+|original)(\/.*)$/);
+  const mobileMatch = mobileArtworkUrl.match(/^(https:\/\/image\.tmdb\.org\/t\/p\/)(?:w\d+|original)(\/.*)$/);
   if (!mobileMatch) throw new Error('Mobile hero artwork must use a supported TMDB image URL.');
   const base = mobileMatch[1];
   const file = mobileMatch[2];
   const mobileLink = `<link id="mobile-hero-image-preload" rel="preload" as="image" href="${base}w500${file}" imagesrcset="${base}w342${file} 342w, ${base}w500${file} 500w" imagesizes="100vw" fetchpriority="high" media="(max-width: 767px)">`;
   if (mobilePreloadTag.test(mobileHtml)) mobileHtml = mobileHtml.replace(mobilePreloadTag, mobileLink);
-  else mobileHtml = mobileHtml.replace('</head>', `    ${mobileLink}\\n</head>`);
+  else mobileHtml = mobileHtml.replace('</head>', `    ${mobileLink}\n</head>`);
 } else if (mobilePreloadTag.test(mobileHtml)) {
   mobileHtml = mobileHtml.replace(mobilePreloadTag, '');
 }
