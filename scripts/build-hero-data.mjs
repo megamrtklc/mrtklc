@@ -40,6 +40,21 @@ const heroCatalog = catalog
   }));
 if (!heroCatalog.length) throw new Error('Manşet listeleriyle eşleşen katalog kaydı bulunamadı.');
 
+
+const castData = {};
+const compactCatalog = catalog.map(item => {
+  const key = String(item.id ?? item.tmdbId ?? item.title);
+  if (Array.isArray(item.tmdbCast) && item.tmdbCast.length) castData[key] = item.tmdbCast;
+  const compact = { ...item };
+  delete compact.tmdbCast;
+  return compact;
+});
+await writeFile('catalog-lite.json', JSON.stringify({
+  homepageConfig: source?.homepageConfig || {},
+  catalog: compactCatalog
+}) + '\n');
+await writeFile('catalog-cast.json', JSON.stringify(castData) + '\n');
+
 const output = {
   homepageConfig: {
     settings: config.settings || {},
