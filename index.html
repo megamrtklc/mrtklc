@@ -4136,6 +4136,125 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     <!-- Script Application Logic -->
     
 
+    <style id="cv-image-loading-indicator">
+        .cv-image-loading-surface { position: relative; }
+        .cv-image-loading-surface::before {
+            content: "";
+            position: absolute;
+            z-index: 40;
+            inset: 0;
+            display: block;
+            background: rgba(8, 10, 15, .48);
+            pointer-events: none;
+        }
+        .cv-image-loading-surface::after {
+            content: "Yükleniyor...";
+            position: absolute;
+            z-index: 41;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            color: rgba(255,255,255,.94);
+            font: 600 11px/1.2 system-ui, sans-serif;
+            letter-spacing: .025em;
+            text-shadow: 0 1px 5px rgba(0,0,0,.7);
+            pointer-events: none;
+            background:
+                radial-gradient(circle at center, transparent 0 17px, rgba(8,10,15,.12) 18px, transparent 19px);
+        }
+        .cv-image-loading-surface > .cv-image-loading-spinner {
+            position: absolute;
+            z-index: 42;
+            top: 50%;
+            left: 50%;
+            width: 18px;
+            height: 18px;
+            margin: -17px 0 0 -9px;
+            border: 2px solid rgba(255,255,255,.28);
+            border-top-color: #fbbf24;
+            border-radius: 50%;
+            animation: cv-image-loading-spin .8s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes cv-image-loading-spin { to { transform: rotate(360deg); } }
+        @media (prefers-reduced-motion: reduce) {
+            .cv-image-loading-surface > .cv-image-loading-spinner { animation: none; border-top-color: rgba(255,255,255,.9); }
+        }
+    </style>
+    <script id="cv-image-loading-indicator-script">
+        (() => {
+            const pending = new WeakMap();
+            const eligible = (img) => {
+                if (!(img instanceof HTMLImageElement) || !img.getAttribute('src') && !img.getAttribute('srcset')) return false;
+                if (img.getAttribute('aria-hidden') === 'true' || !img.getAttribute('alt')?.trim()) return false;
+                if (/^(logo|icon)$/i.test(img.getAttribute('alt').trim())) return false;
+                return true;
+            };
+            const updateSurface = (surface) => {
+                if (!surface) return;
+                const hasPending = surface.querySelector(':scope > img[data-cv-image-loading="true"], :scope > picture > img[data-cv-image-loading="true"]');
+                if (hasPending) {
+                    if (!surface.classList.contains('cv-image-loading-surface')) {
+                        if (getComputedStyle(surface).position === 'static') {
+                            surface.dataset.cvImageOriginalPosition = 'static';
+                            surface.style.position = 'relative';
+                        }
+                        surface.classList.add('cv-image-loading-surface');
+                    }
+                    if (!surface.querySelector(':scope > .cv-image-loading-spinner')) {
+                        const spinner = document.createElement('span');
+                        spinner.className = 'cv-image-loading-spinner';
+                        spinner.setAttribute('aria-hidden', 'true');
+                        surface.appendChild(spinner);
+                    }
+                } else {
+                    surface.classList.remove('cv-image-loading-surface');
+                    surface.querySelector(':scope > .cv-image-loading-spinner')?.remove();
+                    if (surface.dataset.cvImageOriginalPosition === 'static') {
+                        surface.style.position = '';
+                        delete surface.dataset.cvImageOriginalPosition;
+                    }
+                }
+            };
+            const finish = (img) => {
+                if (!(img instanceof HTMLImageElement)) return;
+                img.removeAttribute('data-cv-image-loading');
+                updateSurface(img.parentElement);
+            };
+            const inspect = (img) => {
+                if (!eligible(img)) { finish(img); return; }
+                if (img.complete) {
+                    finish(img);
+                    return;
+                }
+                img.setAttribute('data-cv-image-loading', 'true');
+                updateSurface(img.parentElement);
+            };
+            document.addEventListener('load', (event) => finish(event.target), true);
+            document.addEventListener('error', (event) => finish(event.target), true);
+            const scan = (node) => {
+                if (!(node instanceof Element)) return;
+                if (node.matches('img')) inspect(node);
+                node.querySelectorAll?.('img').forEach(inspect);
+            };
+            scan(document.documentElement);
+            const observer = new MutationObserver((records) => {
+                for (const record of records) {
+                    if (record.type === 'attributes') scan(record.target);
+                    else record.addedNodes.forEach(scan);
+                }
+            });
+            observer.observe(document.documentElement, {
+                subtree: true,
+                childList: true,
+                attributes: true,
+                attributeFilter: ['src', 'srcset']
+            });
+        })();
+    </script>
+
     <!-- Görsel kopyalamayı zorlaştırır; görsel yükleme ve etkileşim akışına müdahale etmez. -->
     <style id="cv-image-copy-guard">
         img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
