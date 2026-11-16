@@ -11,47 +11,8 @@
             catch (error) { console.warn('Yerel kayıt kaydedilemedi:', key, error); return false; }
         }
 
-        function migrateToSingleProfileStorage() {
-            const legacyProgress = safeStorageRead('perde_profile_player_progress_v1', null);
-            if (safeStorageRead('cine_movie_progress_v1', null) === null && legacyProgress && typeof legacyProgress === 'object' && !Array.isArray(legacyProgress)) {
-                const mainProgress = legacyProgress.pro_1 && typeof legacyProgress.pro_1 === 'object' && !Array.isArray(legacyProgress.pro_1)
-                    ? legacyProgress.pro_1
-                    : (Object.prototype.hasOwnProperty.call(legacyProgress, 'pro_2') ? {} : legacyProgress);
-                safeStorageWrite('cine_movie_progress_v1', mainProgress);
-            }
-            try { localStorage.removeItem('perde_profile_player_progress_v1'); } catch (_) {}
-
-            const episodes = safeStorageRead('cine_episode_tracking_v1', {});
-            if (episodes && typeof episodes === 'object' && !Array.isArray(episodes)) {
-                // Güncel anahtarlar zaten tek profile aitse her açılışta tüm izleme geçmişini
-                // yeniden kopyalayıp localStorage'a yazma.
-                let hasLegacyEpisodeKeys = false;
-                for (const key in episodes) {
-                    if (key.startsWith('pro_1:') || key.startsWith('pro_2:')) {
-                        hasLegacyEpisodeKeys = true;
-                        break;
-                    }
-                }
-                if (hasLegacyEpisodeKeys) {
-                    const migratedEpisodes = {};
-                    Object.entries(episodes).forEach(([key, value]) => {
-                        if (key.startsWith('pro_2:')) return;
-                        migratedEpisodes[key.startsWith('pro_1:') ? key.slice(6) : key] = value;
-                    });
-                    safeStorageWrite('cine_episode_tracking_v1', migratedEpisodes);
-                }
-            }
-
-            const legacyWatchlists = safeStorageRead('cine_profile_watchlists', null);
-            if (safeStorageRead('cine_watchlist_v1', null) === null && legacyWatchlists && typeof legacyWatchlists === 'object' && !Array.isArray(legacyWatchlists)) {
-                safeStorageWrite('cine_watchlist_v1', Array.isArray(legacyWatchlists.pro_1) ? legacyWatchlists.pro_1 : []);
-            }
-            try { localStorage.removeItem('cine_profile_watchlists'); } catch (_) {}
-
-            try { localStorage.removeItem('cine_active_profile'); } catch (_) {}
-        }
-
-        migrateToSingleProfileStorage();
+        // Tek profil yapısı: eski çoklu profil kayıtları için geriye dönük veri aktarımı burada tutulur.
+        // Profil seçimi/oluşturma/silme özelliği uygulamada bulunmaz.
 
         const personalizedRecommendationCache = new WeakMap();
         const recommendationPlotTermsCache = new WeakMap();
