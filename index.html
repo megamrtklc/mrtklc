@@ -789,12 +789,16 @@
 
  
     <style id="cineverse-mobile-header-fit">
-        @media(max-width:360px){
-            header > div:first-child{padding-left:10px!important;padding-right:10px!important}
-            header > div:first-child > div:first-child{min-width:0;gap:8px!important}
-            header > div:first-child > div:first-child > a{min-width:0;flex-shrink:1}
+        @media(max-width:420px){
+            header > div:first-child{box-sizing:border-box;width:100%;padding-left:10px!important;padding-right:10px!important;gap:8px}
+            header > div:first-child > div:first-child{min-width:0;flex:1 1 auto;gap:8px!important}
+            header > div:first-child > div:first-child > a{min-width:0;flex:0 1 auto}
+            header > div:first-child > div:first-child > a > img{max-width:clamp(88px,30vw,120px);height:auto}
             header > div:first-child > div:first-child > a > span{display:none!important}
-            header > div:first-child > div:last-child{flex-shrink:0;gap:4px!important}
+            header > div:first-child > div:last-child{flex:0 0 auto;gap:4px!important}
+        }
+        @media(max-width:360px){
+            header > div:first-child{padding-left:8px!important;padding-right:8px!important}
         }
     </style>
     <style id="cineverse-header-controls">
