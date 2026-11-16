@@ -63,8 +63,32 @@
     <!-- Derlenmiş Tailwind CSS: tarayıcıda JIT/derleme betiği çalıştırılmaz. -->
     <link rel="preload" as="style" href="./tailwind.css">
     <link rel="stylesheet" href="./tailwind.css">
-    <!-- İkonlar: ön yükle ama ilk çizimi bekletme. -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <!-- Mobilde ikon fontları ilk manşet yüklemesi tamamlanana kadar ertelenir. -->
+    <script id="cv-fontawesome-loader">
+      (function () {
+        var href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+        function loadIcons() {
+          if (document.getElementById('cv-fontawesome-css')) return;
+          var stylesheet = document.createElement('link');
+          stylesheet.id = 'cv-fontawesome-css';
+          stylesheet.rel = 'stylesheet';
+          stylesheet.href = href;
+          stylesheet.media = 'print';
+          stylesheet.onload = function () { this.media = 'all'; };
+          document.head.appendChild(stylesheet);
+        }
+        if (window.matchMedia('(max-width: 767px)').matches) {
+          function scheduleIcons() {
+            if (window.requestIdleCallback) window.requestIdleCallback(loadIcons, { timeout: 1800 });
+            else window.setTimeout(loadIcons, 900);
+          }
+          if (document.readyState === 'complete') scheduleIcons();
+          else window.addEventListener('load', scheduleIcons, { once: true });
+        } else {
+          loadIcons();
+        }
+      })();
+    </script>
     <!-- Mobilde sistem fontu kullanıldığı için Inter yalnızca masaüstünde yüklenir. -->
     <!-- Alpine.js -->
     <script id="cv-early-catalog-request">
