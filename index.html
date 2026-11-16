@@ -788,6 +788,15 @@
     </style>
 
  
+    <style id="cineverse-mobile-header-fit">
+        @media(max-width:360px){
+            header > div:first-child{padding-left:10px!important;padding-right:10px!important}
+            header > div:first-child > div:first-child{min-width:0;gap:8px!important}
+            header > div:first-child > div:first-child > a{min-width:0;flex-shrink:1}
+            header > div:first-child > div:first-child > a > span{display:none!important}
+            header > div:first-child > div:last-child{flex-shrink:0;gap:4px!important}
+        }
+    </style>
     <style id="cineverse-header-controls">
         .cineverse-theme-trigger{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px;border:1px solid rgba(148,163,184,.32);border-radius:12px;background:rgba(127,127,127,.07);color:inherit;font-size:16px;transition:background .2s,border-color .2s,transform .2s}
         .cineverse-theme-trigger:hover,.cineverse-profile-trigger:hover{border-color:rgba(244,63,94,.55);background:rgba(244,63,94,.1)}
