@@ -45,8 +45,36 @@ const castData = {};
 const compactCatalog = catalog.map(item => {
   const key = String(item.id ?? item.tmdbId ?? item.title);
   if (Array.isArray(item.tmdbCast) && item.tmdbCast.length) castData[key] = item.tmdbCast;
-  const compact = { ...item };
-  delete compact.tmdbCast;
+  const cast = Array.isArray(item.tmdbCast) && item.tmdbCast.length
+    ? item.tmdbCast
+    : (Array.isArray(item.cast) ? item.cast : []);
+  const compact = {
+    ...item,
+    id: item.id ?? item.tmdbId ?? item.title,
+    title: item.title || item.tmdbTitle || item.originalTitle || 'İsimsiz yapım',
+    type: item.type === 'tv' || item.type === 'series' ? 'tv' : 'movie',
+    category: item.category || item.tmdbGenres || item.genre || '',
+    genre: item.genre || item.tmdbGenres || item.category || '',
+    rating: String(item.rating ?? item.tmdbRating ?? '0'),
+    year: String(item.year || item.tmdbReleaseDate || '').slice(0, 4),
+    duration: item.duration || item.tmdbRuntime || '',
+    country: item.country || item.tmdbCountries || '',
+    poster: item.poster || item.tmdbPoster || item.image || '',
+    backdrop: item.backdrop || item.tmdbBackdrop || item.tmdbPoster || item.image || '',
+    desc: item.desc || item.tmdbOverview || '',
+    director: item.director || item.tmdbDirector || '',
+    originalTitle: item.originalTitle || item.tmdbOriginalTitle || item.title || '',
+    starring: item.starring || cast.slice(0, 3).map(person => typeof person === 'string' ? person : (person?.name || '')).filter(Boolean).join(' / '),
+    trailerUrl: item.trailerUrl || item.tmdbTrailerUrl || '',
+    seasons: item.seasons ?? item.tmdbSeasons ?? null,
+    episodes: item.episodes ?? item.tmdbEpisodes ?? null
+  };
+  // Normalleştirilmiş alanlar yukarıda korunuyor; tekrar eden TMDB eş alanlarını ilk yükten çıkar.
+  for (const field of [
+    'tmdbCast', 'tmdbOverview', 'tmdbPoster', 'tmdbBackdrop', 'tmdbTrailerUrl',
+    'tmdbRuntime', 'tmdbSeasons', 'tmdbEpisodes', 'tmdbTitle', 'tmdbOriginalTitle',
+    'tmdbReleaseDate', 'tmdbGenres', 'tmdbCountries', 'tmdbDirector', 'image'
+  ]) delete compact[field];
   return compact;
 });
 await writeFile('catalog-lite.json', JSON.stringify({
