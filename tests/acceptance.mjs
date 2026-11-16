@@ -1107,7 +1107,9 @@ try {
 
   await check('İstatistikler sayfası açılıyor', async () => {
     await page.getByRole('button', { name: 'Hesap menüsünü aç' }).click();
-    await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name: 'İstatistikler' }).click();
+    const profileDropdown = page.locator('header .cineverse-profile-dropdown:visible').first();
+    await profileDropdown.waitFor({ state: 'visible' });
+    await profileDropdown.getByRole('button', { name: 'İstatistikler' }).click();
     await page.waitForURL(/#\/stats$/);
     await page.getByRole('heading', { name: 'İzleme İstatistikleri' }).waitFor({ state: 'visible' });
     assert.ok(await page.getByText('Tamamlanan filmler', { exact: true }).isVisible());
