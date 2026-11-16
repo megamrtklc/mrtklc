@@ -701,6 +701,8 @@
                     const hydrateActiveHeroOnResize = () => {
                         const root = document.getElementById('home-page');
                         if (root && !root.hasAttribute('x-ignore')) this.prepareHomeHeroVariant(root);
+                        const personalized = document.getElementById('home-personalized-section');
+                        if (personalized && !personalized.hasAttribute('x-ignore')) this.prepareHomePersonalizedVariant(personalized);
                     };
                     if (heroViewportQuery.addEventListener) heroViewportQuery.addEventListener('change', hydrateActiveHeroOnResize);
                     else if (heroViewportQuery.addListener) heroViewportQuery.addListener(hydrateActiveHeroOnResize);
@@ -860,6 +862,24 @@
                     }
                 },
 
+                prepareHomePersonalizedVariant(section) {
+                    if (!section) return;
+                    const mobile = window.matchMedia('(max-width: 767px)').matches;
+                    const targets = [
+                        { element: section.querySelector('.home-personalized-feature'), active: !mobile },
+                        { element: section.querySelector('#home-personalized-rail'), active: !mobile },
+                        { element: section.querySelector('.home-personalized-mobile-card'), active: mobile }
+                    ];
+                    targets.forEach(({ element, active }) => {
+                        if (!element) return;
+                        if (active && element.hasAttribute('x-ignore')) {
+                            element.removeAttribute('x-ignore');
+                            element._x_ignore = false;
+                            window.Alpine?.initTree?.(element);
+                        }
+                    });
+                },
+
                 prepareHomeHeroVariant(root) {
                     if (!root) return;
                     const mobile = window.matchMedia('(max-width: 767px)').matches;
@@ -982,9 +1002,9 @@
                         }
                         if (key === 'personalized') {
                             const activate = () => {
-                                if (section.isConnected && this.currentPage === 'home') {
-                                    this.homeSectionReady.personalized = true;
-                                }
+                                if (!section.isConnected || this.currentPage !== 'home') return;
+                                this.homeSectionReady.personalized = true;
+                                this.$nextTick(() => this.prepareHomePersonalizedVariant(section));
                             };
                             if (window.matchMedia('(max-width: 767px)').matches) {
                                 // Mobilde öneri puanlamasını ilk çizimden sonraya al.
@@ -1023,13 +1043,16 @@
                         return;
                     }
 
+                    const mobileObserver = window.matchMedia('(max-width: 767px)').matches;
                     const observer = new IntersectionObserver(entries => {
                         entries.forEach(entry => {
                             if (!entry.isIntersecting) return;
+                            // Mobilde Son Eklenenler rafı ekrana biraz daha girdikten sonra oluşturulsun.
+                            if (mobileObserver && entry.target.dataset.homeSection === 'new-arrivals' && entry.intersectionRatio < 0.5) return;
                             hydrateSection(entry.target);
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: window.matchMedia('(max-width: 767px)').matches ? '100px 0px' : '180px 0px' });
+                    }, { rootMargin: mobileObserver ? '100px 0px' : '180px 0px', threshold: [0, 0.5] });
 
                     pending.forEach(section => observer.observe(section));
                     window.__cineverseHomeSectionObserver = observer;
@@ -2440,8 +2463,6 @@
                 },
 
                 get personalizedRecommendations() {
-                    const recommendationStartedAt = performance.now();
-                    cvBootMark('personalized-recommendations-start');
                     const feedbackRevision = this.recommendationFeedbackRevision;
                     const catalog = Array.isArray(this.catalog) ? this.catalog : [];
                     if (!catalog.length) return [];
@@ -2642,7 +2663,6 @@
                             };
                         }).sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0) || a.item.title.localeCompare(b.item.title, 'tr'));
                         const result = cacheResult(selectDiverse(coldStart).map(entry => ({ ...entry.item, recommendationReason: entry.reason })));
-                        cvBootMark('personalized-recommendations-ready-' + Math.round(performance.now() - recommendationStartedAt) + 'ms');
                         return result;
                     }
                     const ranked = catalog.filter(item => item && item.id != null && !excluded.has(String(item.id))).map(item => {
@@ -2680,7 +2700,6 @@
                         };
                     }).sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0) || a.item.title.localeCompare(b.item.title, 'tr'));
                     const result = cacheResult(selectDiverse(ranked).map(entry => ({ ...entry.item, recommendationReason: entry.reason })));
-                    cvBootMark('personalized-recommendations-ready-' + Math.round(performance.now() - recommendationStartedAt) + 'ms');
                     return result;
                 },
 
