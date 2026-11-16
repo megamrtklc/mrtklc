@@ -616,12 +616,12 @@ try {
       }, null, { timeout: 15000 });
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-      const railSelectors = viewport.width <= 639
+      const railSelectors = viewport.width <= 900
         ? ['#home-catalog-rail']
         : ['#home-personalized-rail', '#home-catalog-rail'];
-      if (viewport.width <= 639) {
+      if (viewport.width <= 900) {
         assert.ok(await page.locator('#home-personalized-section .home-personalized-mobile-card').isVisible(),
-          'Dar mobil ekranda kişisel öneri kartı görünür değil');
+          `${viewport.width}px ekranda kişisel öneri kartı görünür değil`);
       }
       for (const selector of railSelectors) {
         const state = await page.locator(selector).evaluate(element => {
