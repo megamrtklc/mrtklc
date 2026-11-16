@@ -36,7 +36,7 @@
                     const migratedEpisodes = {};
                     Object.entries(episodes).forEach(([key, value]) => {
                         if (key.startsWith('pro_2:')) return;
-                        migratedEpisodes[key.startsWith('pro_1:') ? key.slice(5) : key] = value;
+                        migratedEpisodes[key.startsWith('pro_1:') ? key.slice(6) : key] = value;
                     });
                     safeStorageWrite('cine_episode_tracking_v1', migratedEpisodes);
                 }
