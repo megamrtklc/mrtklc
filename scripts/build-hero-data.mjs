@@ -184,6 +184,15 @@ if (bootstrapStart < 0 || bootstrapEnd < 0) throw new Error('Inline hero bootstr
 const inlineJson = JSON.stringify(output).replace(/</g, '\\u003c');
 let updatedHtml = html.slice(0, bootstrapStart) + bootstrapPrefix + inlineJson + bootstrapSuffix + html.slice(bootstrapEnd + bootstrapSuffix.length);
 updatedHtml = updatedHtml.split('    <link rel="preload" as="fetch" href="./hero-data.json" crossorigin="anonymous" fetchpriority="high">').join('');
+// Kritik manşet görselleri, büyük bootstrap JSON ayrıştırılmadan önce keşfedilsin.
+const heroPreloadTags = [...updatedHtml.matchAll(/<link id="(?:mobile|desktop)-hero-image-preload"[^>]*>/g)]
+  .map(match => match[0]);
+updatedHtml = updatedHtml.replace(/\s*<link id="(?:mobile|desktop)-hero-image-preload"[^>]*>/g, '');
+const viewportTag = /(<meta name="viewport"[^>]*>)/;
+if (!viewportTag.test(updatedHtml)) throw new Error('Viewport meta tag is missing; cannot position hero preloads.');
+if (heroPreloadTags.length) {
+  updatedHtml = updatedHtml.replace(viewportTag, '$1\\n    ' + heroPreloadTags.join('\\n    '));
+}
 await writeFile('index.html', updatedHtml);
 await writeFile('hero-data.json', JSON.stringify(output, null, 2) + '\n');
 console.log(`hero-data.json üretildi: ${heroCatalog.length} yapım / ${Buffer.byteLength(JSON.stringify(output))} byte`);
