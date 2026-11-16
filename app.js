@@ -98,6 +98,13 @@
                     this.personSearchLoading = false;
                     if (query.length < 2 || !queryTokens.length) return;
 
+                    // Oyuncu araması gerçek kullanıcı niyetidir; gerekiyorsa geniş kadro verisini şimdi getir.
+                    if (!window.__cvCatalogCastPromise) {
+                        this.loadCatalogCastData().then(() => {
+                            if (requestId === this.personSearchRequestId) this.schedulePersonSearch(query);
+                        });
+                    }
+
                     const people = new Map();
                     const matchesName = name => {
                         const normalizedName = this.normalizeSearchText(name).trim();
@@ -775,10 +782,14 @@
                             if (this.currentPage !== 'home') this.removeHeroInitialShell();
                             this.initHomeSectionObserver();
                         });
-                        // Oyuncu profilleri ve roller ilk ekranı bloke etmesin; boşta kalan zamanda yüklenir.
-                        const scheduleCastLoad = () => this.loadCatalogCastData();
-                        if ('requestIdleCallback' in window) window.requestIdleCallback(scheduleCastLoad);
-                        else window.setTimeout(scheduleCastLoad, 1800);
+                        // 300 KB'lık kadro verisini ilk açılışın kritik yolundan çıkar.
+                        // Oyuncu araması daha erken yapılırsa schedulePersonSearch yüklemeyi hemen başlatır.
+                        const castDelay = window.matchMedia('(max-width: 767px)').matches ? 12000 : 6000;
+                        window.setTimeout(() => {
+                            const scheduleCastLoad = () => this.loadCatalogCastData();
+                            if ('requestIdleCallback' in window) window.requestIdleCallback(scheduleCastLoad, { timeout: 5000 });
+                            else window.setTimeout(scheduleCastLoad, 500);
+                        }, castDelay);
                     }
                 },
 
