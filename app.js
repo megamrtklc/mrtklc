@@ -23,12 +23,23 @@
 
             const episodes = safeStorageRead('cine_episode_tracking_v1', {});
             if (episodes && typeof episodes === 'object' && !Array.isArray(episodes)) {
-                const migratedEpisodes = {};
-                Object.entries(episodes).forEach(([key, value]) => {
-                    if (key.startsWith('pro_2:')) return;
-                    migratedEpisodes[key.startsWith('pro_1:') ? key.slice(5) : key] = value;
-                });
-                safeStorageWrite('cine_episode_tracking_v1', migratedEpisodes);
+                // Güncel anahtarlar zaten tek profile aitse her açılışta tüm izleme geçmişini
+                // yeniden kopyalayıp localStorage'a yazma.
+                let hasLegacyEpisodeKeys = false;
+                for (const key in episodes) {
+                    if (key.startsWith('pro_1:') || key.startsWith('pro_2:')) {
+                        hasLegacyEpisodeKeys = true;
+                        break;
+                    }
+                }
+                if (hasLegacyEpisodeKeys) {
+                    const migratedEpisodes = {};
+                    Object.entries(episodes).forEach(([key, value]) => {
+                        if (key.startsWith('pro_2:')) return;
+                        migratedEpisodes[key.startsWith('pro_1:') ? key.slice(5) : key] = value;
+                    });
+                    safeStorageWrite('cine_episode_tracking_v1', migratedEpisodes);
+                }
             }
 
             const legacyWatchlists = safeStorageRead('cine_profile_watchlists', null);
