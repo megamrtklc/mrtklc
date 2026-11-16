@@ -619,9 +619,17 @@ try {
       const railSelectors = viewport.width <= 900
         ? ['#home-catalog-rail']
         : ['#home-personalized-rail', '#home-catalog-rail'];
-      if (viewport.width <= 900) {
+      if (viewport.width <= 639) {
         assert.ok(await page.locator('#home-personalized-section .home-personalized-mobile-card').isVisible(),
-          `${viewport.width}px ekranda kişisel öneri kartı görünür değil`);
+          'Dar mobil ekranda kişisel öneri kartı görünür değil');
+      } else if (viewport.width <= 900) {
+        const tabletLayout = await page.locator('#home-personalized-rail').evaluate(element => ({
+          display: getComputedStyle(element).display,
+          overflowX: getComputedStyle(element).overflowX,
+          visible: element.getBoundingClientRect().width > 0
+        }));
+        assert.ok(tabletLayout.visible && tabletLayout.display === 'grid',
+          'Tablet genişliğinde kişisel öneri kart ızgarası görünür değil');
       }
       for (const selector of railSelectors) {
         const state = await page.locator(selector).evaluate(element => {
