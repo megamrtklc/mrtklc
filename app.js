@@ -687,6 +687,7 @@
 
                 async init() {
                     this.routeHistoryReady = false;
+                    this.initDeferredChrome();
                     const heroViewportQuery = window.matchMedia('(max-width: 767px)');
                     const hydrateActiveHeroOnResize = () => {
                         const root = document.getElementById('home-page');
@@ -818,6 +819,30 @@
 
                 onHomePageReady() {
                     this.$nextTick(() => this.removeHeroInitialShell());
+                },
+
+                hydrateDeferredElement(element) {
+                    if (!element || !element.hasAttribute('x-ignore')) return;
+                    element.removeAttribute('x-ignore');
+                    element._x_ignore = false;
+                    window.Alpine?.initTree?.(element);
+                },
+
+                initDeferredChrome() {
+                    const header = document.querySelector('body > header');
+                    if (header?.hasAttribute('x-ignore')) {
+                        const hydrateHeader = () => this.hydrateDeferredElement(header);
+                        if ('requestAnimationFrame' in window) {
+                            window.requestAnimationFrame(() => window.requestAnimationFrame(hydrateHeader));
+                        } else {
+                            window.setTimeout(hydrateHeader, 50);
+                        }
+                    }
+                    const footer = document.getElementById('cineverse-footer');
+                    if (footer?.hasAttribute('x-ignore')) {
+                        // Footer zaten ilk 1,2 saniye kapalı; Alpine taramasını da bu sürenin dışına al.
+                        window.setTimeout(() => this.hydrateDeferredElement(footer), 1300);
+                    }
                 },
 
                 prepareHomeHeroVariant(root) {
