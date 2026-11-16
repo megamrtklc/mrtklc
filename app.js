@@ -981,16 +981,20 @@
                             window.Alpine?.initTree?.(section);
                         }
                         if (key === 'personalized') {
-                            // Kişisel öneri puanlaması ilk ekrandaki etkileşimi bloke etmesin.
-                            window.setTimeout(() => {
-                                const activate = () => {
-                                    if (section.isConnected && this.currentPage === 'home') {
-                                        this.homeSectionReady.personalized = true;
-                                    }
-                                };
-                                if ('requestIdleCallback' in window) window.requestIdleCallback(activate, { timeout: 2200 });
-                                else window.setTimeout(activate, 0);
-                            }, 900);
+                            const activate = () => {
+                                if (section.isConnected && this.currentPage === 'home') {
+                                    this.homeSectionReady.personalized = true;
+                                }
+                            };
+                            if (window.matchMedia('(max-width: 767px)').matches) {
+                                // Mobilde öneri puanlamasını ilk çizimden sonraya al.
+                                window.setTimeout(() => {
+                                    if ('requestIdleCallback' in window) window.requestIdleCallback(activate, { timeout: 2200 });
+                                    else window.setTimeout(activate, 0);
+                                }, 900);
+                            } else {
+                                activate();
+                            }
                         }
                         window.requestAnimationFrame(() => {
                             section.style.removeProperty('visibility');
