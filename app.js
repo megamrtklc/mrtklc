@@ -804,13 +804,16 @@
                     const activeHero = root.querySelector(mobile ? '#mobileHeroBanner' : '#desktopEditorialHero');
                     const inactiveHero = root.querySelector(mobile ? '#desktopEditorialHero' : '#mobileHeroBanner');
                     // Görünmeyen cihaz varyantını ilk Alpine taramasının dışında tut.
-                    if (inactiveHero && !inactiveHero._x_marker && !inactiveHero.hasAttribute('x-ignore')) {
+                    if (inactiveHero && inactiveHero.dataset.cvHeroHydrated !== 'true' && !inactiveHero.hasAttribute('x-ignore')) {
                         inactiveHero.setAttribute('x-ignore', '');
                     }
                     if (activeHero?.hasAttribute('x-ignore')) {
                         activeHero.removeAttribute('x-ignore');
                         activeHero._x_ignore = false;
-                        if (!root.hasAttribute('x-ignore')) window.Alpine?.initTree?.(activeHero);
+                        if (!root.hasAttribute('x-ignore')) {
+                            window.Alpine?.initTree?.(activeHero);
+                            activeHero.dataset.cvHeroHydrated = 'true';
+                        }
                     }
                 },
 
@@ -831,6 +834,9 @@
                             if (!currentRoot || !currentRoot.hasAttribute('x-ignore')) return;
                             currentRoot.removeAttribute('x-ignore');
                             window.Alpine?.initTree?.(currentRoot);
+                            const mobile = window.matchMedia('(max-width: 767px)').matches;
+                            const activeHero = currentRoot.querySelector(mobile ? '#mobileHeroBanner' : '#desktopEditorialHero');
+                            if (activeHero) activeHero.dataset.cvHeroHydrated = 'true';
                             this.$nextTick(() => this.initHomeSectionObserver());
                         }, delay);
                     });
