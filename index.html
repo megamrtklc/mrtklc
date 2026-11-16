@@ -112,12 +112,6 @@
         #home-personalized-section .home-personalized-copy{grid-column:2;grid-row:1;align-self:center;min-width:0}
         #home-personalized-section .home-personalized-copy h3{font-size:11px;overflow-wrap:anywhere}
         #home-personalized-section .home-personalized-copy>p:last-child{font-size:9px}
-        #home-personalized-section .home-personalized-actions{grid-column:2;grid-row:2;align-self:end}
-        #home-personalized-section .home-personalized-like,#home-personalized-section .home-personalized-dislike{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;font-size:14px;transition:background-color .18s,color .18s,transform .18s}
-        #home-personalized-section .home-personalized-like{color:#16a34a;background:rgba(22,163,74,.10)}
-        #home-personalized-section .home-personalized-like:hover,#home-personalized-section .home-personalized-like.is-liked{color:#fff;background:#16a34a}
-        #home-personalized-section .home-personalized-dislike{width:40px;height:40px;color:#e11d48;background:rgba(225,29,72,.10);font-size:15px}
-        #home-personalized-section .home-personalized-dislike:hover{color:#fff;background:#e11d48}
         #home-personalized-section .home-personalized-alternative:hover{border-color:rgba(225,29,72,.55);transform:translateY(-2px);box-shadow:0 12px 25px -20px rgba(0,0,0,.65)}
         #home-personalized-section .home-personalized-feature-dismiss{opacity:.8}
         #home-personalized-section .home-personalized-feature-dismiss:hover{opacity:1}
@@ -138,8 +132,6 @@
           #home-personalized-section .home-personalized-feature{min-height:104px}
           #home-personalized-section .home-personalized-alternative{grid-template-columns:40px minmax(0,1fr);column-gap:6px;padding:6px;min-height:84px}
           #home-personalized-section .home-personalized-poster{width:36px}
-          #home-personalized-section .home-personalized-like{width:32px;height:32px}
-          #home-personalized-section .home-personalized-dislike{width:36px;height:36px}
         }
         /* Personalized cards: cinematic blurred artwork, readable copy and larger posters. */
         #home-personalized-section .home-personalized-alternatives{gap:12px}
@@ -149,12 +141,8 @@
         #home-personalized-section .home-personalized-poster{grid-column:1;grid-row:1 / span 2;width:76px;align-self:center}
         #home-personalized-section .home-personalized-copy{grid-column:2;grid-row:1;align-self:center}
         #home-personalized-section .home-personalized-copy h3{font-size:13px;overflow-wrap:anywhere}
-        #home-personalized-section .home-personalized-actions{grid-column:2;grid-row:2;align-self:end}
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-like,#home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{width:42px;height:42px;background:rgba(5,8,14,.76);color:#fff;border:1px solid rgba(255,255,255,.24);backdrop-filter:blur(12px)}
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-like.is-liked{background:#16a34a;border-color:#16a34a}
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike:hover{background:#e11d48;border-color:#e11d48}
         @media(max-width:900px){#home-personalized-section .home-personalized-alternative{min-height:150px}}
-        @media(max-width:520px){#home-personalized-section .home-personalized-alternative{grid-template-columns:62px minmax(0,1fr);column-gap:9px;min-height:174px;padding:9px}#home-personalized-section .home-personalized-poster{width:62px}#home-personalized-section .home-personalized-copy h3{font-size:12px}#home-personalized-section .home-personalized-like{width:32px;height:32px}#home-personalized-section .home-personalized-dislike{width:36px;height:36px}#home-personalized-section .home-personalized-feature-actions .home-personalized-like,#home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{width:38px;height:38px}}
+        @media(max-width:520px){#home-personalized-section .home-personalized-alternative{grid-template-columns:62px minmax(0,1fr);column-gap:9px;min-height:174px;padding:9px}#home-personalized-section .home-personalized-poster{width:62px}#home-personalized-section .home-personalized-copy h3{font-size:12px}}
         @media(prefers-reduced-motion:reduce){#home-personalized-section .home-personalized-feature-image,#home-personalized-section .home-personalized-alternative{transition:none}}
         /* Cinematic recommendation rail: isolated from both desktop and mobile hero. */
         #home-personalized-section .home-personalized-rail{gap:18px;padding:4px 3px 14px;scroll-padding-inline:3px}
@@ -511,53 +499,7 @@
         #cineverse-footer a:focus-visible,#cineverse-footer button:focus-visible{outline:2px solid #fb7185;outline-offset:4px}
         @media(max-width:639px){#cineverse-footer .cineverse-footer-link{min-height:30px}#cineverse-footer .cineverse-footer-glow{background:radial-gradient(ellipse at 10% 0%,rgba(225,29,72,.07),transparent 55%)}}
         @media(prefers-reduced-motion:reduce){#cineverse-footer .cineverse-footer-link{transition:none}#cineverse-footer .cineverse-footer-link:hover{transform:none}}
-    
-        /* Personalized recommendation feedback — compact, refined icon controls. */
-        #home-personalized-section .home-personalized-like,
-        #home-personalized-section .home-personalized-dislike{
-            width:30px;height:30px;min-width:30px;min-height:30px;
-            display:inline-flex;align-items:center;justify-content:center;
-            border:1px solid rgba(255,255,255,.16);
-            border-radius:999px;
-            background:rgba(8,11,18,.42);
-            color:rgba(255,255,255,.82);
-            font-size:12px;line-height:1;
-            box-shadow:0 2px 8px rgba(0,0,0,.12);
-            transition:background-color .18s ease,border-color .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease;
-            -webkit-tap-highlight-color:transparent;
-        }
-        #home-personalized-section .home-personalized-like:hover{
-            color:#86efac;background:rgba(22,163,74,.18);border-color:rgba(134,239,172,.42);
-            transform:translateY(-1px);box-shadow:0 4px 12px rgba(22,163,74,.12);
-        }
-        #home-personalized-section .home-personalized-like.is-liked{
-            color:#bbf7d0;background:rgba(22,163,74,.22);border-color:rgba(134,239,172,.52);
-        }
-        #home-personalized-section .home-personalized-dislike:hover{
-            color:#fda4af;background:rgba(225,29,72,.18);border-color:rgba(253,164,175,.42);
-            transform:translateY(-1px);box-shadow:0 4px 12px rgba(225,29,72,.12);
-        }
-        #home-personalized-section .home-personalized-like:focus-visible,
-        #home-personalized-section .home-personalized-dislike:focus-visible{
-            outline:2px solid rgba(251,113,133,.9);outline-offset:2px;
-        }
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{
-            width:34px;height:34px;min-width:34px;min-height:34px;
-            background:rgba(8,11,18,.48);border-color:rgba(255,255,255,.2);
-            color:rgba(255,255,255,.9);backdrop-filter:blur(8px);
-        }
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-like.is-liked{
-            color:#bbf7d0;background:rgba(22,163,74,.24);border-color:rgba(134,239,172,.5);
-        }
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike:hover{
-            color:#fda4af;background:rgba(225,29,72,.22);border-color:rgba(253,164,175,.48);
-        }
         @media(max-width:520px){
-            #home-personalized-section .home-personalized-like,
-            #home-personalized-section .home-personalized-dislike{width:32px;height:32px;min-width:32px;min-height:32px}
-            #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
-            #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{width:34px;height:34px;min-width:34px;min-height:34px}
         }
 
     
@@ -599,8 +541,6 @@
           #home-personalized-section .home-personalized-poster{width:62px}
           #home-personalized-section .home-personalized-copy h3{font-size:12px}
           #home-personalized-section .home-personalized-copy>p:last-child{font-size:8px}
-
-          #home-personalized-section .home-personalized-like,#home-personalized-section .home-personalized-dislike{width:30px;height:30px;font-size:12px}
         }
     
         /* Recommendation cards: align the featured card and the six-card grid exactly. */
@@ -612,8 +552,6 @@
           #home-personalized-section .home-personalized-poster{width:58px}
           #home-personalized-section .home-personalized-copy h3{font-size:12px}
           #home-personalized-section .home-personalized-copy>p:last-child{font-size:8px}
-
-          #home-personalized-section .home-personalized-like,#home-personalized-section .home-personalized-dislike{width:29px;height:29px;font-size:12px}
         }
         
         #home-personalized-section .home-personalized-alternative{overflow:visible;isolation:auto}
@@ -1062,11 +1000,6 @@
           font-size:10px!important;
           line-height:1.45!important;
         }
-        #home-personalized-section .home-personalized-actions{
-          grid-column:2!important;
-          grid-row:2!important;
-          align-self:end!important;
-        }
         #home-personalized-section .home-personalized-plot{
           position:static!important;
           inset:auto!important;
@@ -1112,8 +1045,6 @@
             line-height:1.4!important;
             -webkit-line-clamp:3!important;
           }
-          #home-personalized-section .home-personalized-like{width:30px!important;height:30px!important;font-size:12px!important}
-          #home-personalized-section .home-personalized-dislike{width:32px!important;height:32px!important;font-size:12px!important}
         }
 
         /* Büyük öneri kartında etiketleri beğeni butonlarıyla aynı üst hizaya al. */
@@ -1122,18 +1053,9 @@
           left:16px!important;
           min-height:42px;
         }
-        #home-personalized-section .home-personalized-feature-actions{
-          top:16px!important;
-          right:16px!important;
-          min-height:42px;
-          align-items:center!important;
-        }
         @media(max-width:639px){
           #home-personalized-section .home-personalized-feature-labels{top:12px!important;left:12px!important;gap:5px!important}
-          #home-personalized-section .home-personalized-feature-actions{top:8px!important;right:8px!important;gap:4px!important}
           #home-personalized-section .home-personalized-feature-labels span{font-size:8px!important;padding:5px 7px!important}
-          #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
-          #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{width:34px!important;height:34px!important}
         }
 
 </style>
@@ -1275,7 +1197,6 @@
           #home-personalized-section .home-personalized-feature .mt-3{margin-top:6px!important}
           #home-personalized-section .home-personalized-feature .mt-5{margin-top:8px!important}
           #home-personalized-section .home-personalized-feature .home-personalized-feature-labels{top:10px!important;left:10px!important}
-          #home-personalized-section .home-personalized-feature .home-personalized-feature-actions{top:8px!important;right:8px!important}
           #home-personalized-section .home-personalized-mobile-wrap{display:block!important;min-width:0;width:100%}
           #home-personalized-section .home-personalized-mobile-controls{display:flex!important;align-items:center;justify-content:space-between;gap:10px;margin:1px 1px 9px}
           #home-personalized-section .home-personalized-mobile-arrow{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:999px;border:1px solid rgba(148,163,184,.28);background:rgba(127,127,127,.10);color:inherit;transition:background .2s ease,opacity .2s ease}
@@ -1287,8 +1208,6 @@
           #home-personalized-section .home-personalized-copy{grid-column:2!important;grid-row:1!important;align-self:center!important;min-width:0!important}
           #home-personalized-section .home-personalized-copy h3{font-size:12px!important}
           #home-personalized-section .home-personalized-copy>p:last-child{font-size:9px!important;-webkit-line-clamp:2!important}
-          #home-personalized-section .home-personalized-actions{grid-column:2!important;grid-row:2!important;align-self:end!important}
-          #home-personalized-section .home-personalized-like,#home-personalized-section .home-personalized-dislike{width:28px!important;height:28px!important;min-width:28px!important;min-height:28px!important;font-size:11px!important}
         }
         @media(max-width:360px){
           #home-personalized-section .home-personalized-alternative{flex-basis:88%!important;width:88%!important;grid-template-columns:58px minmax(0,1fr)!important}
@@ -1441,63 +1360,7 @@
         html.theme-slate #home-personalized-section .home-personalized-alternative:focus-visible .home-personalized-card-shade{
           background:linear-gradient(110deg,rgba(241,245,249,.91),rgba(226,232,240,.81))!important;
         }
-
-        /* Beğeni tepkileri: düşük doygunluklu, sakin ve tutarlı durumlar. */
-        #home-personalized-section .home-personalized-like,
-        #home-personalized-section .home-personalized-dislike{
-          border:1px solid transparent!important;
-          box-shadow:none!important;
-          transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .2s ease!important;
-        }
-        #home-personalized-section .home-personalized-like{
-          color:#6f9b7e!important;
-          background:rgba(111,155,126,.12)!important;
-        }
-        #home-personalized-section .home-personalized-like:hover,
-        #home-personalized-section .home-personalized-like.is-liked{
-          color:#477456!important;
-          background:rgba(111,155,126,.22)!important;
-          border-color:rgba(111,155,126,.24)!important;
-          transform:translateY(-1px);
-        }
-        #home-personalized-section .home-personalized-dislike{
-          color:#bd7882!important;
-          background:rgba(189,120,130,.11)!important;
-        }
-        #home-personalized-section .home-personalized-dislike:hover{
-          color:#985965!important;
-          background:rgba(189,120,130,.20)!important;
-          border-color:rgba(189,120,130,.22)!important;
-          transform:translateY(-1px);
-        }
-        html.theme-ivory #home-personalized-section .home-personalized-like,
-        html.theme-slate #home-personalized-section .home-personalized-like{
-          color:#548263!important;
-          background:rgba(84,130,99,.10)!important;
-        }
-        html.theme-ivory #home-personalized-section .home-personalized-like:hover,
-        html.theme-ivory #home-personalized-section .home-personalized-like.is-liked,
-        html.theme-slate #home-personalized-section .home-personalized-like:hover,
-        html.theme-slate #home-personalized-section .home-personalized-like.is-liked{
-          color:#3f6e4e!important;
-          background:rgba(84,130,99,.16)!important;
-          border-color:rgba(84,130,99,.20)!important;
-        }
-        html.theme-ivory #home-personalized-section .home-personalized-dislike,
-        html.theme-slate #home-personalized-section .home-personalized-dislike{
-          color:#a96570!important;
-          background:rgba(169,101,112,.09)!important;
-        }
-        html.theme-ivory #home-personalized-section .home-personalized-dislike:hover,
-        html.theme-slate #home-personalized-section .home-personalized-dislike:hover{
-          color:#8f505c!important;
-          background:rgba(169,101,112,.15)!important;
-          border-color:rgba(169,101,112,.18)!important;
-        }
         @media(prefers-reduced-motion:reduce){
-          #home-personalized-section .home-personalized-card-backdrop,
-          #home-personalized-section .home-personalized-like,
-          #home-personalized-section .home-personalized-dislike{transition:none!important}
         }
 
         /* Personalized feature poster: independent, crisp artwork on the right. */
@@ -1546,92 +1409,12 @@
           }
           #home-personalized-section .home-personalized-feature-labels{right:104px!important}
         }
-        /* Minimal reaction icons shared by the featured and compact cards. */
-        #home-personalized-section .home-personalized-like,
-        #home-personalized-section .home-personalized-dislike{
-          width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;
-          padding:0!important;border:0!important;border-radius:9px!important;
-          background:transparent!important;backdrop-filter:none!important;
-          box-shadow:none!important;font-size:15px!important;
-          transition:color .18s ease,background-color .18s ease,transform .18s ease!important;
-        }
-        #home-personalized-section .home-personalized-like{color:rgba(209,220,214,.78)!important}
-        #home-personalized-section .home-personalized-dislike{color:rgba(222,205,208,.76)!important}
-        #home-personalized-section .home-personalized-like:hover,
-        #home-personalized-section .home-personalized-like.is-liked{
-          color:#a8d2b4!important;background:rgba(112,157,126,.15)!important;
-          transform:translateY(-1px);
-        }
-        #home-personalized-section .home-personalized-dislike:hover{
-          color:#d8a0a8!important;background:rgba(177,111,122,.14)!important;
-          transform:translateY(-1px);
-        }
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{
-          background:rgba(8,11,18,.24)!important;
-          color:rgba(255,255,255,.82)!important;
-          border:0!important;backdrop-filter:none!important;
-        }
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-like:hover,
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-like.is-liked{
-          color:#b8dfc1!important;background:rgba(8,11,18,.38)!important;
-        }
-        #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike:hover{
-          color:#e2b0b6!important;background:rgba(8,11,18,.38)!important;
-        }
-        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-like,
-        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-like{
-          color:#789b81!important;
-        }
-        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-dislike,
-        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-dislike{
-          color:#b7868d!important;
-        }
-        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-like:hover,
-        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-like.is-liked,
-        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-like:hover,
-        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-like.is-liked{
-          color:#4f805d!important;background:rgba(84,130,99,.12)!important;
-        }
-        html.theme-ivory #home-personalized-section .home-personalized-alternative .home-personalized-dislike:hover,
-        html.theme-slate #home-personalized-section .home-personalized-alternative .home-personalized-dislike:hover{
-          color:#9b5d68!important;background:rgba(169,101,112,.11)!important;
-        }
         @media(max-width:420px){
           #home-personalized-section .home-personalized-feature-poster{width:78px;height:117px;right:10px;bottom:12px}
           #home-personalized-section .home-personalized-feature > div.flex.h-full{
             width:calc(100% - 91px);max-width:calc(100% - 91px)
           }
         }
-    </style>
-
-
-    <style id="cineverse-feature-feedback-light-contrast">
-      /* Büyük kart: açık temalarda posterden bağımsız, net ama yumuşak beğeni kontrolleri. */
-      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
-      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike,
-      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-like,
-      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{
-        width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
-        background:rgba(250,250,248,.96)!important;color:#456b50!important;
-        border:1px solid rgba(51,65,85,.20)!important;border-radius:11px!important;
-        box-shadow:0 3px 12px rgba(15,23,42,.20)!important;
-        backdrop-filter:blur(8px)!important;
-      }
-      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike,
-      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike{
-        color:#985d68!important;
-      }
-      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-like:hover,
-      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-like.is-liked,
-      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-like:hover,
-      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-like.is-liked{
-        background:#e7f0e8!important;border-color:#a8c3ad!important;color:#365f42!important;
-      }
-      html.theme-ivory #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike:hover,
-      html.theme-slate #home-personalized-section .home-personalized-feature-actions .home-personalized-dislike:hover{
-        background:#f5e9eb!important;border-color:#d8b5bb!important;color:#8d4f5b!important;
-      }
 
     <style id="cineverse-personalized-final-visual-tune">
       /* Yalnızca İzleme Zevkine Göre: büyük kart metin grubunu masaüstünde hafifçe yükselt. */
@@ -2302,9 +2085,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         #home-personalized-section .home-personalized-mobile-actions button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:37px;padding:8px 12px;border-radius:999px;font-size:10px;font-weight:900;white-space:nowrap;transition:filter .12s,transform .12s,background .12s}
         #home-personalized-section .home-personalized-mobile-watch{background:linear-gradient(135deg,#f4cc75,#d99a2b);color:#17130b;box-shadow:0 4px 14px rgba(218,166,62,.18)}
         #home-personalized-section .home-personalized-mobile-shuffle{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#f5f5f5}
-        #home-personalized-section .home-personalized-mobile-feedback{position:absolute;top:9px;right:9px;display:flex;gap:6px;z-index:3}
-        #home-personalized-section .home-personalized-mobile-feedback button{display:inline-flex;align-items:center;justify-content:center;width:31px;height:31px;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(8,10,14,.58);color:#fff;backdrop-filter:blur(8px)}
-        #home-personalized-section .home-personalized-mobile-feedback button.is-liked{background:#16834a;border-color:#16834a}
         #home-personalized-section .home-personalized-mobile-card button:active{transform:scale(.96);filter:brightness(1.15)}
         #home-personalized-section .home-personalized-mobile-card button:focus-visible,#home-personalized-section .home-personalized-modes button:focus-visible,#home-personalized-section .home-personalized-refresh:focus-visible{outline:2px solid #e9bd65;outline-offset:2px}
         #home-personalized-section .home-personalized-mobile-card button,#home-personalized-section .home-personalized-modes button,#home-personalized-section .home-personalized-refresh{touch-action:manipulation;-webkit-tap-highlight-color:rgba(235,190,100,.2)}
@@ -2346,15 +2126,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     <!-- Mobil kaydırma akıcılığı: dekoratif blur/backdrop katmanlarını hafiflet. -->
     <style id="cv-mobile-scroll-performance">
       @media (max-width: 767px) {
-        .cv-back-button,
-        body:has(#home-page) > header.home-hero-overlay,
-        #home-continue-section .home-continue-type,
-        #home-personalized-section .home-personalized-mobile-feedback button,
-        #home-personalized-section .personalized-type,
-        #home-personalized-section .personalized-rating {
-          -webkit-backdrop-filter: none !important;
-          backdrop-filter: none !important;
-        }
         .home-rail-arrow {
           transition: background-color .16s ease, border-color .16s ease, color .16s ease;
         }
@@ -2729,7 +2500,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <p class="max-w-lg mt-3 text-xs sm:text-sm leading-relaxed text-white/80 line-clamp-2" x-text="displayedPersonalizedRecommendations[0].tmdbOverview || displayedPersonalizedRecommendations[0].desc || displayedPersonalizedRecommendations[0].recommendationReason"></p>
                                     <div class="home-personalized-feature-ctas flex items-center gap-3 mt-5"><span class="inline-flex items-center gap-2 rounded-full bg-white text-gray-950 px-5 py-2.5 text-xs font-black group-hover:bg-rose-500 group-hover:text-white transition-colors"><i class="fa-solid fa-play"></i> Hemen keşfet</span><span class="text-[10px] font-bold text-white/75 home-personalized-feature-reason" x-text="displayedPersonalizedRecommendations[0].recommendationReason || 'İzleme profiline uygun'"></span><button type="button" @click.stop="refreshPersonalizedRecommendations()" class="home-personalized-mobile-next" aria-label="Başka öneri getir"><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div>
                                 </div>
-                                <div class="home-personalized-feature-actions absolute right-4 top-4 z-[2] flex items-center gap-2"><button type="button" @click.stop="likeRecommendation(displayedPersonalizedRecommendations[0])" :aria-label="'Beğendim: ' + displayedPersonalizedRecommendations[0].title" :aria-pressed="isRecommendationLiked(displayedPersonalizedRecommendations[0]).toString()" :class="isRecommendationLiked(displayedPersonalizedRecommendations[0]) ? 'is-liked' : ''" class="home-personalized-like" title="Beğendim"><i :class="isRecommendationLiked(displayedPersonalizedRecommendations[0]) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button><button type="button" @click.stop="dismissRecommendation(displayedPersonalizedRecommendations[0])" :aria-label="'İlgimi çekmedi: ' + displayedPersonalizedRecommendations[0].title" class="home-personalized-dislike" title="İlgimi çekmedi"><i class="fa-regular fa-thumbs-down"></i></button></div>
+                                
                             </div>
                         </template>
                         
@@ -2756,10 +2527,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="home-personalized-mobile-feedback">
-                                <button type="button" @click.stop="likeRecommendation(displayedPersonalizedRecommendations[0])" :aria-label="'Beğendim: ' + displayedPersonalizedRecommendations[0].title" :aria-pressed="isRecommendationLiked(displayedPersonalizedRecommendations[0]).toString()" :class="isRecommendationLiked(displayedPersonalizedRecommendations[0]) ? 'is-liked' : ''"><i :class="isRecommendationLiked(displayedPersonalizedRecommendations[0]) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button>
-                                <button type="button" @click.stop="dismissRecommendation(displayedPersonalizedRecommendations[0])" :aria-label="'İlgimi çekmedi: ' + displayedPersonalizedRecommendations[0].title"><i class="fa-regular fa-thumbs-down"></i></button>
-                            </div>
+                            
                         </article>
                         <div id="home-personalized-rail" role="region" aria-label="Sana özel öneriler" class="home-personalized-alternatives" x-ref="rail" @scroll.passive="updateSlide()" aria-label="Sana özel öneriler, yatay kaydırılabilir" x-ignore>
                             <template x-for="item in (homeSectionReady.personalized ? displayedPersonalizedRecommendations.slice(1, 5) : [])" :key="'personal-' + item.id">
@@ -2768,9 +2536,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <div class="home-personalized-card-shade absolute inset-0"></div>
                                     <div class="home-personalized-poster relative z-[1] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-900 shadow-xl"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [154, 185, 342])" sizes="96px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/85 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="(item.rating ? Number(item.rating).toFixed(1) : '—')"></span></span></div>
                                     <div class="home-personalized-copy relative z-[1] min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-300 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="item.title"></h3><p class="mt-1 text-[10px] text-white/75 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="home-personalized-plot" x-text="item.tmdbOverview || item.desc || item.recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p></div>
-                                    <div class="home-personalized-actions relative z-[1] flex items-center justify-end gap-1.5"><button type="button" @click.stop="likeRecommendation(item)" :aria-label="'Beğendim: ' + item.title" :aria-pressed="isRecommendationLiked(item).toString()" :class="isRecommendationLiked(item) ? 'is-liked' : ''" class="home-personalized-like" title="Beğendim"><i :class="isRecommendationLiked(item) ? 'fa-solid' : 'fa-regular'" class="fa-thumbs-up"></i></button>
-                                        <button type="button" @click.stop="dismissRecommendation(item)" :aria-label="'İlgimi çekmedi: ' + item.title" class="home-personalized-dislike" title="İlgimi çekmedi"><i class="fa-regular fa-thumbs-down"></i></button>
-                                    </div>
+                                    
                                 </div>
                             </template>
                         </div>
