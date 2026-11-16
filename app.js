@@ -1032,8 +1032,9 @@
                     const observer = new IntersectionObserver(entries => {
                         entries.forEach(entry => {
                             if (!entry.isIntersecting) return;
-                            // Mobilde Son Eklenenler rafı ekrana biraz daha girdikten sonra oluşturulsun.
-                            if (mobileObserver && entry.target.dataset.homeSection === 'new-arrivals' && entry.intersectionRatio < 0.5) return;
+                            // Mobilde ağır öneri rafı ve Son Eklenenler, görünür alanın anlamlı kısmına gelmeden başlatılmasın.
+                            const sectionKey = entry.target.dataset.homeSection;
+                            if (mobileObserver && ['personalized', 'new-arrivals'].includes(sectionKey) && entry.intersectionRatio < 0.5) return;
                             hydrateSection(entry.target);
                             observer.unobserve(entry.target);
                         });
