@@ -133,8 +133,14 @@ if (mobileArtworkUrl) {
   const mobileLink = `<link id="mobile-hero-image-preload" rel="preload" as="image" href="${base}w500${file}" imagesrcset="${base}w342${file} 342w, ${base}w500${file} 500w" imagesizes="100vw" fetchpriority="high" media="(max-width: 767px)">`;
   if (mobilePreloadTag.test(mobileHtml)) mobileHtml = mobileHtml.replace(mobilePreloadTag, mobileLink);
   else mobileHtml = mobileHtml.replace('</head>', `    ${mobileLink}\n</head>`);
-} else if (mobilePreloadTag.test(mobileHtml)) {
-  mobileHtml = mobileHtml.replace(mobilePreloadTag, '');
+  const mobileShellFrame = /(<div class="aspect-\\[16\\/9\\] w-full rounded-2xl border border-white\\/10 bg-white\\/\\[0\\.045\\] shadow-2xl shadow-black\\/30">)[\\s\\S]*?(<\\/div>)/;
+  if (!mobileShellFrame.test(mobileHtml)) throw new Error('Mobile hero shell artwork slot is missing from index.html.');
+  const mobileShellImage = `<img src="${base}w500${file}" srcset="${base}w342${file} 342w, ${base}w500${file} 500w" sizes="100vw" alt="" fetchpriority="high" decoding="async" class="h-full w-full rounded-2xl object-cover">`;
+  mobileHtml = mobileHtml.replace(mobileShellFrame, `$1${mobileShellImage}$2`);
+} else {
+  if (mobilePreloadTag.test(mobileHtml)) mobileHtml = mobileHtml.replace(mobilePreloadTag, '');
+  const mobileShellFrame = /(<div class="aspect-\\[16\\/9\\] w-full rounded-2xl border border-white\\/10 bg-white\\/\\[0\\.045\\] shadow-2xl shadow-black\\/30">)[\\s\\S]*?(<\\/div>)/;
+  if (mobileShellFrame.test(mobileHtml)) mobileHtml = mobileHtml.replace(mobileShellFrame, '$1$2');
 }
 await writeFile('index.html', mobileHtml);
 
