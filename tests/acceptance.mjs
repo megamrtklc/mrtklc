@@ -862,18 +862,18 @@ try {
     const profileMenu = page.locator('header .cineverse-profile-dropdown');
     await profileMenu.waitFor({ state: 'visible' });
     for (const label of ['Kütüphanem', 'İzleme Listem', 'İstatistikler', 'Fil Dişi (Sıcak Krem)', 'Modern Gri (Slate)', 'Karanlık Mod']) {
-      assert.equal(await profileMenu.getByRole('button', { name: new RegExp(label) }).count(), 1, label + ' profil menüsünde görünmeli');
+      assert.equal(await profileMenu.locator('.cineverse-dropdown-item').filter({ hasText: label }).count(), 1, label + ' profil menüsünde görünmeli');
     }
     assert.equal(await page.locator('header nav a').filter({ hasText: 'İzleme Listem' }).count(), 0, 'İzleme Listem üst gezinme çubuğunda kalmamalı');
     const menuTextColor = await profileMenu.locator('.cineverse-dropdown-item').first().evaluate(element => getComputedStyle(element).color);
     assert.notEqual(menuTextColor, 'rgb(255, 255, 255)', 'Açık tema profil menüsündeki metin okunabilir olmalı');
-    await profileMenu.getByRole('button', { name: /Fil Dişi \(Sıcak Krem\)/ }).click();
+    await profileMenu.locator('.cineverse-dropdown-item').filter({ hasText: 'Fil Dişi (Sıcak Krem)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-ivory'));
     await profileButton.click();
-    await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name: /Modern Gri \(Slate\)/ }).click();
+    await page.locator('header .cineverse-profile-dropdown .cineverse-dropdown-item').filter({ hasText: 'Modern Gri (Slate)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-slate'));
     await profileButton.click();
-    await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name: 'Karanlık Mod' }).click();
+    await page.locator('header .cineverse-profile-dropdown .cineverse-dropdown-item').filter({ hasText: 'Karanlık Mod' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('dark'));
   });
 
