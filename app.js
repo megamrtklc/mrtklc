@@ -1,4 +1,10 @@
 
+        window.__CV_BOOT_TIMELINE__ = window.__CV_BOOT_TIMELINE__ || [];
+        const cvBootMark = name => {
+            try { window.__CV_BOOT_TIMELINE__.push({ name, at: Math.round(performance.now() * 10) / 10 }); } catch (_) {}
+        };
+        cvBootMark('app-script-start');
+
         function safeStorageRead(key, fallback = null) {
             try {
                 const raw = localStorage.getItem(key);
@@ -58,6 +64,7 @@
         }
 
         migrateToSingleProfileStorage();
+        cvBootMark('storage-migration-finished');
 
         const personalizedRecommendationCache = new WeakMap();
         const recommendationPlotTermsCache = new WeakMap();
@@ -687,7 +694,9 @@
 
                 async init() {
                     this.routeHistoryReady = false;
+                    cvBootMark('alpine-app-init-start');
                     this.initDeferredChrome();
+                    cvBootMark('deferred-chrome-scheduled');
                     const heroViewportQuery = window.matchMedia('(max-width: 767px)');
                     const hydrateActiveHeroOnResize = () => {
                         const root = document.getElementById('home-page');
@@ -720,6 +729,7 @@
                             const heroResponse = await fetch('./hero-data.json', { cache: 'default' });
                             if (heroResponse.ok) heroData = await heroResponse.json();
                         }
+                        cvBootMark('hero-bootstrap-ready');
                         const heroSource = Array.isArray(heroData?.catalog) ? heroData.catalog : [];
                         if (heroSource.length) {
                             this.homepageConfig = heroData.homepageConfig || this.homepageConfig;
@@ -736,11 +746,13 @@
                     if (this.currentPage === 'home') this.scheduleHomePageHydration();
                     try {
                         const response = await catalogRequest;
+                        cvBootMark('catalog-response-received');
                         if (!response.ok) {
                             throw new Error('Katalog dosyası yüklenemedi (HTTP ' + response.status + ')');
                         }
 
                         const data = await response.json();
+                        cvBootMark('catalog-json-parsed');
                         this.homepageConfig = data && typeof data === 'object' ? (data.homepageConfig || null) : null;
                         this.headerConfig = { ...this.headerConfig, ...(data?.headerConfig || {}) };
                         this.headerConfigReady = true;
@@ -765,6 +777,7 @@
                         if (!validCatalog.length) throw new Error('Katalogda kullanılabilir bir film veya dizi kaydı bulunamadı.');
                         if (validCatalog.length !== sourceCatalog.length) console.warn('Geçersiz katalog kayıtları atlandı:', sourceCatalog.length - validCatalog.length);
                         this.catalog = markStaticCatalog(validCatalog.map(item => this.normalizeCatalogItem(item)));
+                        cvBootMark('catalog-normalized');
                         this.heroCatalog = this.catalog;
                         // İngilizce alternatif başlık sorguları ilk çizimi ve mobil ağ önceliklerini bölmesin.
                         const loadEnglishTitlesWhenIdle = () => this.loadHeroEnglishTitles();
@@ -778,11 +791,13 @@
                         this.startHeroAutoplay();
                         this.restoreRouteFromUrl();
                         this.routeHistoryReady = true;
+                        cvBootMark('catalog-route-restored');
                     } catch (error) {
                         this.catalogError = error.message || 'Bilinmeyen katalog hatası';
                         this.headerConfigReady = true;
                         console.error('Perde katalog yükleme hatası:', error);
                     } finally {
+                        cvBootMark('catalog-init-finally');
                         // Bölüm sırasını katalog verileri DOM'a işlenmeden belirle;
                         // Alpine'ın bekleyen x-for güncellemeleri doğru sıraya yerleşsin ve CLS oluşmasın.
                         this.applyHomepageSectionOrder();
