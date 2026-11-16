@@ -766,19 +766,12 @@
                         if (validCatalog.length !== sourceCatalog.length) console.warn('Geçersiz katalog kayıtları atlandı:', sourceCatalog.length - validCatalog.length);
                         this.catalog = markStaticCatalog(validCatalog.map(item => this.normalizeCatalogItem(item)));
                         this.heroCatalog = this.catalog;
-                        // İngilizce alternatif başlıklar ilk mobil etkileşim tamamlanana kadar beklesin.
+                        // İngilizce alternatif başlık sorguları ilk çizimi ve mobil ağ önceliklerini bölmesin.
                         const loadEnglishTitlesWhenIdle = () => this.loadHeroEnglishTitles();
-                        const scheduleEnglishTitles = () => {
-                            if ('requestIdleCallback' in window) {
-                                window.requestIdleCallback(loadEnglishTitlesWhenIdle, { timeout: 1800 });
-                            } else {
-                                window.setTimeout(loadEnglishTitlesWhenIdle, 900);
-                            }
-                        };
-                        if (window.matchMedia('(max-width: 767px)').matches) {
-                            window.setTimeout(scheduleEnglishTitles, 8500);
+                        if ('requestIdleCallback' in window) {
+                            window.requestIdleCallback(loadEnglishTitlesWhenIdle, { timeout: 1800 });
                         } else {
-                            scheduleEnglishTitles();
+                            window.setTimeout(loadEnglishTitlesWhenIdle, 900);
                         }
 
                         this.currentSlideIndex = 0;
