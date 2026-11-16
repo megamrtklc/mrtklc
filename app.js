@@ -670,8 +670,6 @@
                                     this.selectedItem = { ...this.selectedItem, tmdbCast: selectedCatalogItem.tmdbCast };
                                 }
                                 personalizedRecommendationCache.delete(this);
-                                this.recommendationFeedbackRevision += 1;
-                                this.recommendationUiRevision += 1;
                                 resolve(entries.length);
                             };
                             if ('requestIdleCallback' in window) window.requestIdleCallback(applyBatch, { timeout: 1200 });
@@ -1639,24 +1637,6 @@
                     return this.watchlist.some(m => m && String(m.id) === String(item.id));
                 },
 
-                recommendationFeedbackRevision: 0,
-                recommendationUiRevision: 0,
-                recommendationFeedbackUpdatePending: false,
-                scheduleRecommendationFeedbackAnalysis() {
-                    if (this.recommendationFeedbackUpdatePending) return;
-                    this.recommendationFeedbackUpdatePending = true;
-                    const runAnalysis = () => {
-                        this.recommendationFeedbackUpdatePending = false;
-                        personalizedRecommendationCache.delete(this);
-                        this.recommendationFeedbackRevision += 1;
-                    };
-                    // Geri bildirimi önce anında kaydet; ağır puanlamayı tarayıcı boş kaldığında başlat.
-                    if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
-                        window.requestIdleCallback(runAnalysis, { timeout: 1400 });
-                    } else {
-                        setTimeout(runAnalysis, 180);
-                    }
-                },
                 recommendationMode: safeStorageRead('cine_recommendation_mode_v1', 'taste'),
                 recommendationRefreshIndex: Math.max(0, Number(safeStorageRead('cine_recommendation_rotation_v1', 0)) || 0),
                 get personalizedRecommendationModeConfig() {
@@ -1702,46 +1682,6 @@
                     const value = mode==='surprise' ? pool : pool.slice(offset).concat(pool.slice(0,offset));
                     this.recommendationDisplayCache = { base, mode: this.recommendationMode, rotation: this.recommendationRefreshIndex, value };
                     return value;
-                },
-
-                get recommendationFeedback() {
-                    this.recommendationUiRevision;
-                    const stored = safeStorageRead('cine_recommendation_feedback_v1', []);
-                    return Array.isArray(stored) ? [...new Set(stored.map(String))] : [];
-                },
-
-                get recommendationLikes() {
-                    this.recommendationUiRevision;
-                    const stored = safeStorageRead('cine_recommendation_likes_v1', []);
-                    return Array.isArray(stored) ? [...new Set(stored.map(String))] : [];
-                },
-
-                likeRecommendation(item) {
-                    if (!item || item.id == null) return;
-                    const id = String(item.id);
-                    const likes = this.recommendationLikes;
-                    if (!likes.includes(id)) likes.push(id);
-                    safeStorageWrite('cine_recommendation_likes_v1', likes.slice(-200));
-                    const dislikes = this.recommendationFeedback.filter(value => value !== id);
-                    safeStorageWrite('cine_recommendation_feedback_v1', dislikes);
-                    this.recommendationUiRevision += 1;
-                    this.scheduleRecommendationFeedbackAnalysis();
-                },
-
-                isRecommendationLiked(item) {
-                    return !!item && this.recommendationLikes.includes(String(item.id));
-                },
-
-                dismissRecommendation(item) {
-                    if (!item || item.id == null) return;
-                    const id = String(item.id);
-                    const own = this.recommendationFeedback;
-                    if (!own.includes(id)) own.push(id);
-                    safeStorageWrite('cine_recommendation_feedback_v1', own.slice(-200));
-                    const likes = this.recommendationLikes.filter(value => value !== id);
-                    safeStorageWrite('cine_recommendation_likes_v1', likes);
-                    this.recommendationUiRevision += 1;
-                    this.scheduleRecommendationFeedbackAnalysis();
                 },
 
                 reviews: (() => { const value = safeStorageRead('cine_reviews', {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; })(),
@@ -2449,7 +2389,6 @@
                 },
 
                 get personalizedRecommendations() {
-                    const feedbackRevision = this.recommendationFeedbackRevision;
                     const catalog = Array.isArray(this.catalog) ? this.catalog : [];
                     if (!catalog.length) return [];
 
@@ -2463,17 +2402,12 @@
                     const sectionConfig = this.homepageConfig?.personalizedSection || {};
                     const watchedItems = sectionConfig.excludeWatched === false ? [] : this.watchedItems;
                     const favoriteItems = sectionConfig.excludeFavorites === false ? [] : this.favoriteItems;
-                    const feedbackIds = this.recommendationFeedback;
-                    const likedIds = this.recommendationLikes;
                     const cacheKey = JSON.stringify([
                         progress,
                         Object.entries(episodes),
                         watchlist.map(item => String(item.id)),
                         watchedItems.map(item => String(item.id)),
                         favoriteItems.map(item => String(item.id)),
-                        // Geri bildirim listeleri cache anahtarına girmez: anlık kayıttan sonra
-                        // önbellek, boşta çalışan analiz tamamlanana kadar korunur.
-                        feedbackRevision
                     ]);
                     const cached = personalizedRecommendationCache.get(this);
                     if (cached && cached.catalog === catalog && cached.key === cacheKey) return cached.value;
@@ -2531,13 +2465,10 @@
                         const id = String(item.id);
                         if (!history.has(id)) history.set(id, { item, weight: 0.85 });
                     });
-                    const feedbackItems = feedbackIds.map(id => catalogById.get(id)).filter(Boolean);
-                    const likedItems = likedIds.map(id => catalogById.get(id)).filter(Boolean);
-                    const excluded = new Set([...watchedHistoryIds, ...(sectionConfig.excludeWatchlist === false ? [] : watchlist.map(item => String(item.id))), ...watchedItems.map(item => String(item.id)), ...favoriteItems.map(item => String(item.id)), ...feedbackIds]);
+                    const excluded = new Set([...watchedHistoryIds, ...(sectionConfig.excludeWatchlist === false ? [] : watchlist.map(item => String(item.id))), ...watchedItems.map(item => String(item.id)), ...favoriteItems.map(item => String(item.id))]);
                     const prefs = {
                         genres: new Map(), types: new Map(), countries: new Map(),
                         directors: new Map(), actors: new Map(), themes: new Map(),
-                        negativeGenres: new Map(), negativeDirectors: new Map(), negativeActors: new Map(), negativeThemes: new Map()
                     };
                     const add = (map, key, value) => {
                         if (key) map.set(key, (map.get(key) || 0) + value);
@@ -2549,20 +2480,6 @@
                         tokens(item.director).forEach(value => add(prefs.directors, value, weight));
                         people(item).forEach(actor => add(prefs.actors, actor, weight * 0.8));
                         plotTerms(item).forEach(value => add(prefs.themes, value, weight * 0.25));
-                    });
-                    feedbackItems.forEach(item => {
-                        tokens(item.category || item.genre).forEach(value => add(prefs.negativeGenres, value, 1));
-                        tokens(item.director).forEach(value => add(prefs.negativeDirectors, value, 1));
-                        people(item).forEach(actor => add(prefs.negativeActors, actor, 1));
-                        plotTerms(item).forEach(value => add(prefs.negativeThemes, value, 0.35));
-                    });
-                    likedItems.forEach(item => {
-                        tokens(item.category || item.genre).forEach(value => add(prefs.genres, value, 2.2));
-                        if (item.type) add(prefs.types, item.type, 1.2);
-                        tokens(item.country).forEach(value => add(prefs.countries, value, 0.6));
-                        tokens(item.director).forEach(value => add(prefs.directors, value, 1.8));
-                        people(item).forEach(actor => add(prefs.actors, actor, 1.4));
-                        plotTerms(item).forEach(value => add(prefs.themes, value, 0.55));
                     });
                     const currentYear = new Date().getFullYear();
                     const selectDiverse = ranked => {
@@ -2636,14 +2553,9 @@
                         const coldStart = catalog.filter(item => item && item.id != null && !excluded.has(String(item.id))).map(item => {
                             const rating = Math.max(0, Number.parseFloat(item.rating) || 0);
                             const year = Number.parseInt(item.year, 10) || 0;
-                            const negativeGenre = tokens(item.category || item.genre).reduce((sum, value) => sum + (prefs.negativeGenres.get(value) || 0), 0);
-                            const negativeDirector = tokens(item.director).reduce((sum, value) => sum + (prefs.negativeDirectors.get(value) || 0), 0);
-                            const negativeActor = people(item).reduce((sum, value) => sum + (prefs.negativeActors.get(value) || 0), 0);
-                            const negativeTheme = prefs.negativeThemes.size ? plotTerms(item).reduce((sum, value) => sum + (prefs.negativeThemes.get(value) || 0), 0) : 0;
-                            const feedbackPenalty = negativeGenre * 0.85 + negativeDirector * 1.1 + Math.min(negativeActor, 3) * 0.3 + Math.min(negativeTheme, 4) * 0.12;
                             return {
                                 item,
-                                score: Math.max(0, rating * 0.35 + (year >= currentYear - 4 ? 0.25 : 0) - feedbackPenalty),
+                                score: Math.max(0, rating * 0.35 + (year >= currentYear - 4 ? 0.25 : 0)),
                                 primaryGenre: tokens(item.category || item.genre)[0] || 'diger',
                                 reason: 'Arşivden yüksek puanlı'
                             };
@@ -2668,11 +2580,6 @@
                         const countryMatches = tokens(item.country).map(value => prefs.countries.get(value) || 0).sort((a, b) => b - a);
                         if (countryMatches[0]) push(countryMatches[0] * 0.9, 'Tercih ettiğin ülke sineması');
                         push((prefs.types.get(item.type) || 0) * 0.45, item.type === 'tv' ? 'Dizi tercihine uygun' : 'Film tercihine uygun');
-                        const negativeGenre = candidateGenres.reduce((sum, value) => sum + (prefs.negativeGenres.get(value) || 0), 0);
-                        const negativeDirector = tokens(item.director).reduce((sum, value) => sum + (prefs.negativeDirectors.get(value) || 0), 0);
-                        const negativeActor = people(item).reduce((sum, value) => sum + (prefs.negativeActors.get(value) || 0), 0);
-                        const negativeTheme = prefs.negativeThemes.size ? plotTerms(item).reduce((sum, value) => sum + (prefs.negativeThemes.get(value) || 0), 0) : 0;
-                        const feedbackPenalty = negativeGenre * 0.85 + negativeDirector * 1.1 + Math.min(negativeActor, 3) * 0.3 + Math.min(negativeTheme, 4) * 0.12;
                         const rating = Math.max(0, Number.parseFloat(item.rating) || 0);
                         if (rating > 6) push((rating - 6) * 0.42, 'Yüksek puanlı yapım');
                         const year = Number.parseInt(item.year, 10) || 0;
@@ -2680,7 +2587,7 @@
                         const reason = reasons.sort((a, b) => b.score - a.score)[0]?.label || 'İzleme profiline uygun';
                         return {
                             item,
-                            score: Math.max(0, reasons.reduce((sum, entry) => sum + entry.score, 0) + freshness - feedbackPenalty),
+                            score: Math.max(0, reasons.reduce((sum, entry) => sum + entry.score, 0) + freshness),
                             primaryGenre: candidateGenres[0] || 'diger',
                             reason
                         };
