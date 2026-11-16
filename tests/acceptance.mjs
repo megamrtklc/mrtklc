@@ -676,6 +676,16 @@ try {
     ]) {
       await page.setViewportSize(viewport);
       await page.waitForTimeout(180);
+      const sectionCount = await page.locator('#home-page > [data-home-section]').count();
+      for (let i = 0; i < sectionCount; i++) {
+        const section = page.locator('#home-page > [data-home-section]').nth(i);
+        if (await section.isVisible().catch(() => false)) {
+          await section.scrollIntoViewIfNeeded().catch(() => {});
+          await page.waitForTimeout(45);
+        }
+      }
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(120);
       const layout = await page.evaluate(() => {
         const width = document.documentElement.clientWidth;
         const nodes = [...document.querySelectorAll('#home-page > [data-home-section]')]
