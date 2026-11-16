@@ -956,7 +956,8 @@ try {
     const profileMenu = page.locator('header .cineverse-profile-dropdown');
     await profileMenu.waitFor({ state: 'visible' });
     assert.ok(await profileMenu.getByText('Ana Profil').isVisible(), 'Ana profil adı görünmeli');
-    assert.equal(await profileMenu.getByRole('button').count(), 0, 'Profil değiştirme seçeneği kalmamalı');
+    assert.equal(await profileMenu.locator('.cineverse-profile-option').count(), 0, 'Profil değiştirme seçeneği kalmamalı');
+    assert.equal(await profileMenu.getByText(/Profil değiştir|Profil seç/i).count(), 0, 'Profil değiştirme bağlantısı kalmamalı');
     assert.ok(!(await profileMenu.innerText()).includes('Çocuk Profili'), 'Çocuk profili menüde kalmış');
     const adminLink = profileMenu.getByRole('link', { name: /Admin Paneli/ });
     assert.ok(await adminLink.isVisible(), 'Admin Paneli kısayolu görünmeli');
