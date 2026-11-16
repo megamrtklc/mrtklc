@@ -770,7 +770,7 @@
         @media(max-width:639px){
             .cineverse-search-trigger{width:40px;height:40px;flex-basis:40px;border-radius:12px}
             .cineverse-search-backdrop{align-items:flex-start;padding:calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 10px)}
-            .cineverse-search-dialog{width:100%;max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px);border-radius:19px}
+            .cineverse-search-dialog{box-sizing:border-box;width:100%;min-height:0;max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px);border-radius:19px}
             .cineverse-search-top{gap:9px;padding:13px 12px}
             .cineverse-search-field{height:52px;gap:10px;padding:0 12px;border-radius:13px}
             .cineverse-search-field input{font-size:15px}
