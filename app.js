@@ -610,6 +610,45 @@
                     };
                 },
 
+                async loadCatalogCastData() {
+                    if (window.__cvCatalogCastPromise) return window.__cvCatalogCastPromise;
+                    window.__cvCatalogCastPromise = (async () => {
+                        const response = await fetch('./catalog-cast.json', { cache: 'default' });
+                        if (!response.ok) throw new Error('Oyuncu verileri yüklenemedi: HTTP ' + response.status);
+                        const castById = await response.json();
+                        const entries = Object.entries(castById || {});
+                        const byId = new Map((this.catalog || []).map(item => [String(item.id), item]));
+                        let cursor = 0;
+                        return await new Promise(resolve => {
+                            const applyBatch = deadline => {
+                                let processed = 0;
+                                while (cursor < entries.length && (processed < 8 || (deadline && deadline.timeRemaining() > 3))) {
+                                    const [id, cast] = entries[cursor++];
+                                    const item = byId.get(String(id));
+                                    if (item && Array.isArray(cast)) item.tmdbCast = cast;
+                                    processed++;
+                                }
+                                if (cursor < entries.length) {
+                                    if ('requestIdleCallback' in window) window.requestIdleCallback(applyBatch, { timeout: 1200 });
+                                    else window.setTimeout(() => applyBatch(null), 40);
+                                    return;
+                                }
+                                personalizedRecommendationCache.delete(this);
+                                this.recommendationFeedbackRevision += 1;
+                                this.recommendationUiRevision += 1;
+                                resolve(entries.length);
+                            };
+                            if ('requestIdleCallback' in window) window.requestIdleCallback(applyBatch, { timeout: 1200 });
+                            else window.setTimeout(() => applyBatch(null), 0);
+                        });
+                    })().catch(error => {
+                        window.__cvCatalogCastPromise = null;
+                        console.warn('Oyuncu verileri arka planda yüklenemedi:', error);
+                        return 0;
+                    });
+                    return window.__cvCatalogCastPromise;
+                },
+
                 async init() {
                     this.routeHistoryReady = false;
                     window.addEventListener('popstate', event => {
@@ -628,7 +667,7 @@
                     });
                     // Manşet ayrı bootstrap verisiyle çizilir; ana katalog isteğini bekletmeden başlat.
                     // Düşük öncelik, ilk manşet görsellerinin ağ önceliğini korurken indirmeyi erkenden başlatır.
-                    const catalogRequest = fetch('./filmvediziler.json', { cache: 'default' });
+                    const catalogRequest = fetch('./catalog-lite.json', { cache: 'default' });
                     try {
                         // Üretim sırasında HTML'e gömülen küçük manşet verisi ağ isteği beklemeden hazırdır.
                         // Yerel geliştirme/önbellek senaryolarında gömülü veri yoksa JSON dosyasına geri dön.
@@ -711,6 +750,10 @@
                             if (this.currentPage !== 'home') this.removeHeroInitialShell();
                             this.initHomeSectionObserver();
                         });
+                        // Oyuncu profilleri ve roller ilk ekranı bloke etmesin; boşta kalan zamanda yüklenir.
+                        const scheduleCastLoad = () => this.loadCatalogCastData();
+                        if ('requestIdleCallback' in window) window.requestIdleCallback(scheduleCastLoad);
+                        else window.setTimeout(scheduleCastLoad, 1800);
                     }
                 },
 
