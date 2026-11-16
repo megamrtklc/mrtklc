@@ -61,7 +61,7 @@
         window.__CV_CATALOG_PROMISE__ = null;
       }
     </script>
-    <script defer fetchpriority="high" src="./app.js?v=20261116-home-load-v18"></script>
+    <script defer fetchpriority="high" src="./app.js?v=20261116-home-load-v19"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         /* Manşet metni sabit kalır; görsel geçişi yalnızca hafif opacity/scale ile yapılır. */
@@ -2711,7 +2711,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     </div>
                     <div class="home-personalized-showcase" x-show="homeSectionReady.personalized && displayedPersonalizedRecommendations.length">
                         <template x-if="homeSectionReady.personalized && displayedPersonalizedRecommendations[0]">
-                            <div role="button" tabindex="0" @click="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.enter="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(displayedPersonalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer">
+                            <div role="button" tabindex="0" @click="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.enter="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(displayedPersonalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer" x-ignore>
                                 <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500, 780])" sizes="(max-width: 900px) 100vw, 40vw" :alt="displayedPersonalizedRecommendations[0].title" loading="lazy" fetchpriority="low" decoding="async" class="home-personalized-feature-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                                 <div class="home-personalized-feature-shade absolute inset-0"></div>
                                 <div class="home-personalized-feature-poster absolute z-[1] right-4 bottom-4 sm:right-5 sm:bottom-5 pointer-events-none">
@@ -2732,7 +2732,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </div>
                         </template>
                         
-                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" x-show="homeSectionReady.personalized && displayedPersonalizedRecommendations.length">
+                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" x-show="homeSectionReady.personalized && displayedPersonalizedRecommendations.length" x-ignore>
                             <div class="home-personalized-mobile-backdrop">
                                 <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500, 780])" sizes="100vw" alt="" aria-hidden="true" loading="lazy" decoding="async">
                                 <div></div>
@@ -2760,7 +2760,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 <button type="button" @click.stop="dismissRecommendation(displayedPersonalizedRecommendations[0])" :aria-label="'İlgimi çekmedi: ' + displayedPersonalizedRecommendations[0].title"><i class="fa-regular fa-thumbs-down"></i></button>
                             </div>
                         </article>
-                        <div id="home-personalized-rail" role="region" aria-label="Sana özel öneriler" class="home-personalized-alternatives" x-ref="rail" @scroll.passive="updateSlide()" aria-label="Sana özel öneriler, yatay kaydırılabilir">
+                        <div id="home-personalized-rail" role="region" aria-label="Sana özel öneriler" class="home-personalized-alternatives" x-ref="rail" @scroll.passive="updateSlide()" aria-label="Sana özel öneriler, yatay kaydırılabilir" x-ignore>
                             <template x-for="item in (homeSectionReady.personalized ? displayedPersonalizedRecommendations.slice(1, 5) : [])" :key="'personal-' + item.id">
                                 <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :data-recommendation-id="item.id" :class="getCardClass()" class="home-personalized-alternative group relative isolate overflow-hidden min-w-0 rounded-xl sm:rounded-2xl border text-left transition-all duration-300">
                                     <img class="home-personalized-card-backdrop absolute inset-0 w-full h-full object-cover" @error="handleImageError($event)" :src="item.backdrop || item.poster || item.image" :srcset="getTmdbImageSrcSet(item.backdrop || item.poster || item.image, [342, 500])" sizes="(max-width: 767px) 320px, 420px" :alt="''" aria-hidden="true" loading="lazy" decoding="async">
