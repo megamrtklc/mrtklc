@@ -2772,7 +2772,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
 
                 <!-- İzlemeye Devam Et: aktif profilin kaldığı yapımlar -->
-                <section id="home-continue-section" data-home-section="continue" x-cloak x-show="isHomepageSectionVisible('continue') && continueWatchingItems.length > 0" class="w-full px-6 sm:px-12 space-y-5" x-ignore>
+                <section id="home-continue-section" data-home-section="continue" x-cloak x-show="isHomepageSectionVisible('continue') && continueWatchingItems.length  x-ignore> 0" class="w-full px-6 sm:px-12 space-y-5" x-ignore>
                     <div class="home-continue-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">KALDIĞIN YERDEN</p>
@@ -2814,7 +2814,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
 
                 <!-- Ana sayfa izleme listesi önizlemesi -->
-                <section id="home-watchlist-section" data-home-section="watchlist" x-cloak x-show="isHomepageSectionVisible('watchlist') && watchlist.length > 0" class="w-full px-6 sm:px-12 space-y-5" x-ignore>
+                <section id="home-watchlist-section" data-home-section="watchlist" x-cloak x-show="isHomepageSectionVisible('watchlist') && watchlist.length  x-ignore> 0" class="w-full px-6 sm:px-12 space-y-5" x-ignore>
                     <div class="home-watchlist-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">SONRA İZLE</p>
@@ -2845,11 +2845,11 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     </div>
                 </section>
 
-                <section id="home-watched-section" data-home-section="watched" x-cloak x-show="isHomepageSectionVisible('watched') && homeSectionReady.watched && watchedItems.length > 0" class="w-full px-6 sm:px-12 space-y-4" x-ignore>
+                <section id="home-watched-section" data-home-section="watched" x-cloak x-show="isHomepageSectionVisible('watched') && homeSectionReady.watched && watchedItems.length  x-ignore> 0" class="w-full px-6 sm:px-12 space-y-4" x-ignore>
                     <div class="flex items-end justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3"><div><p class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">İZLEME GEÇMİŞİ</p><h2 class="mt-1 text-xl sm:text-2xl font-black text-gray-900 dark:text-white">İzlediklerim</h2><p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Tamamladığın film ve diziler</p></div><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="watchedItems.length + ' yapım'"></span></div>
                     <div class="home-card-rail"><template x-for="item in watchedItems.slice(0,10)" :key="'home-watched-' + item.id"><button type="button" @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card group min-w-0 overflow-hidden rounded-xl border text-left transition-all"><div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900"><img :alt="item.title" @error="handleImageError($event)" loading="lazy" decoding="async" :src="item.poster || item.image || item.tmdbPoster" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute left-2 top-2 rounded bg-emerald-600/95 px-2 py-1 text-[8px] font-black text-white">İZLENDİ</span></div><div class="p-2.5"><p class="line-clamp-2 text-xs font-bold text-gray-900 dark:text-white" x-text="item.title"></p></div></button></template></div>
                 </section>
-                <section id="home-favorites-section" data-home-section="favorites" x-data="{ favoriteFilter: 'all', favoriteSort: 'new', get filteredFavorites() { const items = this.favoriteItems.slice(); const isSeries = item => ['tv','series'].includes(String(item.type || '').toLowerCase()); const filtered = items.filter(item => this.favoriteFilter === 'all' || (this.favoriteFilter === 'series' ? isSeries(item) : !isSeries(item))); const sorters = { new: (a,b) => (Number(b._statusSavedAt)||0) - (Number(a._statusSavedAt)||0), old: (a,b) => (Number(a._statusSavedAt)||0) - (Number(b._statusSavedAt)||0), rating: (a,b) => (Number(b.rating || b.tmdbRating)||0) - (Number(a.rating || a.tmdbRating)||0), az: (a,b) => String(a.title||'').localeCompare(String(b.title||''),'tr'), year: (a,b) => String(b.year || b.tmdbReleaseDate || '').localeCompare(String(a.year || a.tmdbReleaseDate || '')) }; const sorted = filtered.sort(sorters[this.favoriteSort] || sorters.new); if (this.favoriteFilter !== 'all') return sorted; const films = sorted.filter(item => !isSeries(item)); const series = sorted.filter(isSeries); const mixed = []; while (films.length || series.length) { if (films.length) mixed.push(films.shift()); if (films.length) mixed.push(films.shift()); if (series.length) mixed.push(series.shift()); } return mixed; } }" x-cloak x-show="isHomepageSectionVisible('favorites') && favoriteItems.length > 0" class="w-full px-6 sm:px-12 space-y-5 !mt-8" x-ignore>
+                <section id="home-favorites-section" data-home-section="favorites" x-data="{ favoriteFilter: 'all', favoriteSort: 'new', get filteredFavorites() { const items = this.favoriteItems.slice(); const isSeries = item = x-ignore> ['tv','series'].includes(String(item.type || '').toLowerCase()); const filtered = items.filter(item => this.favoriteFilter === 'all' || (this.favoriteFilter === 'series' ? isSeries(item) : !isSeries(item))); const sorters = { new: (a,b) => (Number(b._statusSavedAt)||0) - (Number(a._statusSavedAt)||0), old: (a,b) => (Number(a._statusSavedAt)||0) - (Number(b._statusSavedAt)||0), rating: (a,b) => (Number(b.rating || b.tmdbRating)||0) - (Number(a.rating || a.tmdbRating)||0), az: (a,b) => String(a.title||'').localeCompare(String(b.title||''),'tr'), year: (a,b) => String(b.year || b.tmdbReleaseDate || '').localeCompare(String(a.year || a.tmdbReleaseDate || '')) }; const sorted = filtered.sort(sorters[this.favoriteSort] || sorters.new); if (this.favoriteFilter !== 'all') return sorted; const films = sorted.filter(item => !isSeries(item)); const series = sorted.filter(isSeries); const mixed = []; while (films.length || series.length) { if (films.length) mixed.push(films.shift()); if (films.length) mixed.push(films.shift()); if (series.length) mixed.push(series.shift()); } return mixed; } }" x-cloak x-show="isHomepageSectionVisible('favorites') && favoriteItems.length > 0" class="w-full px-6 sm:px-12 space-y-5 !mt-8" x-ignore>
                     <div class="home-new-arrivals-heading flex flex-col xl:flex-row xl:items-center gap-3 pb-4">
                         <div class="min-w-0 shrink-0">
                             <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Favorilerim</h2>
@@ -2915,7 +2915,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
 
                 <!-- Son eklenen yapımlar: admin kataloğuna eklenme sırası -->
-                <section id="home-new-arrivals-section" data-home-section="new-arrivals" x-cloak x-show="isHomepageSectionVisible('new-arrivals') && homeNewArrivals.length > 0" class="w-full px-6 sm:px-12 space-y-5 !mt-8" x-ignore>
+                <section id="home-new-arrivals-section" data-home-section="new-arrivals" x-cloak x-show="isHomepageSectionVisible('new-arrivals') && homeNewArrivals.length  x-ignore> 0" class="w-full px-6 sm:px-12 space-y-5 !mt-8" x-ignore>
                     <div class="home-new-arrivals-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">CINEVERSE • ARŞİVE YENİ KATILANLAR</p>
@@ -2961,7 +2961,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
 
                 <!-- Aktif profilin bölüm takibi bulunan dizileri -->
-                <section id="home-series-tracking-section" data-home-section="series-tracking" x-cloak x-show="!catalogLoading && isHomepageSectionVisible('series-tracking') && librarySeriesEntries.length > 0" class="w-full px-6 sm:px-12 space-y-5" x-ignore>
+                <section id="home-series-tracking-section" data-home-section="series-tracking" x-cloak x-show="!catalogLoading && isHomepageSectionVisible('series-tracking') && librarySeriesEntries.length  x-ignore> 0" class="w-full px-6 sm:px-12 space-y-5" x-ignore>
                     <div class="home-series-tracking-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div>
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">BÖLÜM BÖLÜM • KALDIĞIN YERİ UNUTMA</p>
@@ -3004,7 +3004,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </section>
 
                 <!-- Kişisel izleme geçmişine, yoksa katalog dağılımına göre tür keşfi -->
-                <section id="home-genre-discovery-section" data-home-section="genre-discovery" x-data="{ showAllGenres: false }" x-cloak x-show="isHomepageSectionVisible('genre-discovery') && (!homeSectionReady['genre-discovery'] || homeDiscoveryGenres.length > 0)" class="w-full px-6 sm:px-12 space-y-4" x-ignore>
+                <section id="home-genre-discovery-section" data-home-section="genre-discovery" x-data="{ showAllGenres: false }" x-cloak x-show="isHomepageSectionVisible('genre-discovery') && (!homeSectionReady['genre-discovery'] || homeDiscoveryGenres.length  x-ignore> 0)" class="w-full px-6 sm:px-12 space-y-4" x-ignore>
                     <div class="home-genre-discovery-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
                         <div class="min-w-0">
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1.5">YENİ HİKÂYELER KEŞFET</p>
@@ -3120,7 +3120,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         </template>
                     </div>
                 </section>
-                <section id="home-franchises-section" data-home-section="franchises" x-cloak x-show="currentPage === 'home' && isHomepageSectionVisible('franchises') && franchiseEntries.length > 0" class="w-full px-6 sm:px-12 space-y-4" x-ignore>
+                <section id="home-franchises-section" data-home-section="franchises" x-cloak x-show="currentPage === 'home' && isHomepageSectionVisible('franchises') && franchiseEntries.length  x-ignore> 0" class="w-full px-6 sm:px-12 space-y-4" x-ignore>
                     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200/70 dark:border-white/10 pb-4">
                         <div><p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-600 dark:text-rose-400 mb-1.5">BİRLİKTE İZLE, SERİYİ TAMAMLA</p><h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Seri Filmler</h2><p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Favori film serilerini tek yerde keşfet.</p></div>
                         <button type="button" @click="navigateTo('franchises')" class="inline-flex items-center gap-2 self-start sm:self-auto text-xs font-bold text-rose-600 dark:text-rose-400 hover:gap-3 transition-all">Tüm serileri gör <i class="fa-solid fa-arrow-right"></i></button>
