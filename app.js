@@ -626,15 +626,9 @@
                             this.initHomeSectionObserver();
                         });
                     });
-                    // Önce manşetin ilk çizimi tamamlanabilsin; büyük katalog isteğini boşta kalan ana iş parçacığına bırak.
-                    const catalogRequest = new Promise((resolve, reject) => {
-                        const startCatalogRequest = () => {
-                            try { resolve(fetch('./filmvediziler.json', { cache: 'default', priority: 'low' })); }
-                            catch (error) { reject(error); }
-                        };
-                        if ('requestIdleCallback' in window) window.requestIdleCallback(startCatalogRequest, { timeout: 1200 });
-                        else window.setTimeout(startCatalogRequest, 500);
-                    });
+                    // Manşet ayrı bootstrap verisiyle çizilir; ana katalog isteğini bekletmeden başlat.
+                    // Düşük öncelik, ilk manşet görsellerinin ağ önceliğini korurken indirmeyi erkenden başlatır.
+                    const catalogRequest = fetch('./filmvediziler.json', { cache: 'default', priority: 'low' });
                     try {
                         // Üretim sırasında HTML'e gömülen küçük manşet verisi ağ isteği beklemeden hazırdır.
                         // Yerel geliştirme/önbellek senaryolarında gömülü veri yoksa JSON dosyasına geri dön.
