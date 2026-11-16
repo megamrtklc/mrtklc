@@ -2681,7 +2681,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
          
 
-<div id="filmm-hero-trailer-modal" x-data="{open:false,item:null}" @open-filmm-hero-trailer.window="item=$event.detail;open=true" @keydown.escape.window="open=false;item=null" x-show="open" x-cloak class="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 p-4" @click.self="open=false;item=null">
+<div id="filmm-hero-trailer-modal" x-data="{open:false,item:null}" @open-filmm-hero-trailer.window="item=$event.detail;open=true" @open-mobile-hero-trailer.window="item=$event.detail;open=true" @keydown.escape.window="open=false;item=null" x-show="open" x-cloak class="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 p-4" @click.self="open=false;item=null">
   <div class="w-full max-w-4xl overflow-hidden rounded-xl border border-white/15 bg-[#090a0d] shadow-2xl">
     <div class="flex items-center justify-between gap-4 border-b border-white/10 p-4"><strong class="text-white" x-text="item?.title || 'Fragman'"></strong><button type="button" class="rounded-full p-2 text-white hover:bg-white/10" @click="open=false;item=null" aria-label="Kapat"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="aspect-video bg-black"><iframe x-show="item?.trailerUrl" :src="item?.trailerUrl ? window.cineTrailerEmbedUrl(item.trailerUrl) : 'about:blank'" class="h-full w-full" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="Fragman"></iframe><div x-show="!item?.trailerUrl" class="grid h-full place-items-center p-8 text-center text-sm text-white/70">Bu yapım için fragman bağlantısı eklenmemiş.</div></div>
