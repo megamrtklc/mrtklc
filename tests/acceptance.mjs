@@ -392,8 +392,6 @@ try {
           watchlistIds: app.watchlist.map(item => String(item.id)),
           watchedIds: app.watchedItems.map(item => String(item.id)),
           favoriteIds: app.favoriteItems.map(item => String(item.id)),
-          feedbackIds: app.recommendationFeedback,
-          likedIds: app.recommendationLikes,
           sectionConfig: app.homepageConfig?.personalizedSection || {},
           eligibleCount: app.catalog.filter(item => !new Set([...Object.keys(app.profileMovieProgress), ...Object.keys(JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}')), ...app.watchlist.map(item => String(item.id))]).has(String(item.id))).length,
           typeCounts: app.catalog.reduce((counts, item) => { counts[item.type] = (counts[item.type] || 0) + 1; return counts; }, {}),
@@ -429,34 +427,17 @@ try {
     }
   });
 
-  await check('Öneri geri bildirimi tek kütüphaneye kaydediliyor ve benzer yapımları aşağı sıralıyor', async () => {
-    const result = await page.evaluate(() => {
-      const app = window.Alpine.$data(document.documentElement);
-      const key = 'cine_recommendation_feedback_v1';
-      const original = localStorage.getItem(key);
-      try {
-        localStorage.removeItem(key);
-        const first = app.personalizedRecommendations;
-        const target = first[0];
-        if (!target) throw new Error('Geri bildirim testi için öneri bulunamadı');
-        app.dismissRecommendation(target);
-        const saved = JSON.parse(localStorage.getItem(key) || '[]');
-        const after = app.personalizedRecommendations;
-        return {
-          targetId: String(target.id),
-          savedAsSingleList: Array.isArray(saved) && saved.includes(String(target.id)),
-          removedFromRecommendations: !after.some(item => String(item.id) === String(target.id))
-        };
-      } finally {
-        if (original === null) localStorage.removeItem(key);
-        else localStorage.setItem(key, original);
-      }
-    });
-    assert.ok(result.savedAsSingleList, 'Geri bildirim tek listeye kaydedilmedi');
-    assert.ok(result.removedFromRecommendations, 'İlgimi çekmedi denilen yapım önerilerde kaldı');
+  await check('Öneri alanında kaldırılan geri bildirim kontrolleri bulunmuyor', async () => {
+    const controls = await page.locator(
+      '#home-personalized-section .home-personalized-like, ' +
+      '#home-personalized-section .home-personalized-dislike, ' +
+      '#home-personalized-section .home-personalized-feature-actions, ' +
+      '#home-personalized-section .home-personalized-mobile-feedback'
+    ).count();
+    assert.equal(controls, 0, 'Kişisel önerilerde beğeni/beğenmeme kontrolleri bulunmamalı');
   });
 
-  await check('Ana sayfada kişisel öneriler dört kartla gösteriliyor ve geri bildirimleri koruyor', async () => {
+  await check('Ana sayfada kişisel öneriler dört kartla gösteriliyor ve sade arayüz korunuyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
     const rail = page.locator('#home-personalized-rail');
     console.log('PERSONALIZED UI DIAGNOSTIC:', JSON.stringify(await page.evaluate(() => { const app = window.Alpine.$data(document.documentElement); const section = document.querySelector('#home-personalized-section'); const rail = document.querySelector('#home-personalized-rail'); return { currentPage: app.currentPage, catalogLoading: app.catalogLoading, homeSectionReady: app.homeSectionReady, baseCount: app.personalizedRecommendations.length, displayedCount: app.displayedPersonalizedRecommendations.length, sectionExists: !!section, sectionDisplay: section ? getComputedStyle(section).display : null, sectionVisibility: section ? getComputedStyle(section).visibility : null, sectionIgnored: section?.hasAttribute('x-ignore') || false, sectionReady: app.homeSectionReady?.personalized, railExists: !!rail, cardCount: rail?.querySelectorAll('.home-personalized-alternative').length || 0 }; })));
@@ -480,10 +461,6 @@ try {
     assert.ok(initialLayout.firstTwoShareRow && initialLayout.nextRowBelow, 'Kartlar ikişerli satırlara yerleşmeli');
 
     const cards = rail.locator('.home-personalized-alternative');
-    const allCardsHaveFeedback = await cards.evaluateAll(items => items.every(card =>
-      !!card.querySelector('.home-personalized-like') && !!card.querySelector('.home-personalized-dislike')
-    ));
-    assert.ok(allCardsHaveFeedback, 'Dört öneri kartının tamamında Like ve Dislike olmalı');
     const cardArtwork = await cards.first().evaluate(card => {
       const backdrop = card.querySelector('.home-personalized-card-backdrop');
       const style = backdrop ? getComputedStyle(backdrop) : null;
@@ -491,35 +468,19 @@ try {
         backdrop: !!backdrop && style.display !== 'none' && Number(style.opacity) > 0,
         posterWidth: card.querySelector('.home-personalized-poster').getBoundingClientRect().width,
         plot: !!card.querySelector('.home-personalized-plot'),
-        featureLikes: !!document.querySelector('.home-personalized-feature-actions .home-personalized-like'),
-        featureDislikes: !!document.querySelector('.home-personalized-feature-actions .home-personalized-dislike'),
-        oldDismiss: !!document.querySelector('.home-personalized-feature-dismiss')
+        feedbackControls: card.querySelectorAll(
+          '.home-personalized-like, .home-personalized-dislike'
+        ).length
       };
     });
     assert.ok(cardArtwork.backdrop, 'Kartta hafif kapak arka planı görünmeli');
     assert.ok(cardArtwork.posterWidth >= 60, 'Afiş görseli büyütülmüş olmalı');
     assert.ok(cardArtwork.plot, 'Konu özeti için sınırlı metin alanı olmalı');
-    assert.ok(cardArtwork.featureLikes && cardArtwork.featureDislikes && !cardArtwork.oldDismiss, 'Büyük görselde X yerine Like/Dislike olmalı');
-    const dislikeWidth = await cards.first().locator('.home-personalized-dislike').evaluate(element => element.getBoundingClientRect().width);
-    assert.ok(dislikeWidth >= 28, 'Küçük öneri kartındaki Dislike butonu dokunulabilir boyutta olmalı');
-
-    const firstCard = cards.first();
-    const firstId = await firstCard.getAttribute('data-recommendation-id');
-    await firstCard.getByRole('button', { name: /Beğendim:/ }).click();
-    await page.waitForFunction(id => {
-      const likes = JSON.parse(localStorage.getItem('cine_recommendation_likes_v1') || '[]');
-      return likes.includes(String(id));
-    }, firstId);
-    assert.equal(await firstCard.getByRole('button', { name: /Beğendim:/ }).getAttribute('aria-pressed'), 'true',
-      'Beğeni durumu kartta aktif görünmeli');
-
-    const secondCard = cards.nth(1);
-    const secondId = await secondCard.getAttribute('data-recommendation-id');
-    await secondCard.getByRole('button', { name: /İlgimi çekmedi:/ }).click();
-    await page.waitForFunction(id => {
-      return ![...document.querySelectorAll('#home-personalized-rail .home-personalized-alternative')]
-        .some(card => card.getAttribute('data-recommendation-id') === String(id));
-    }, secondId);
+    assert.equal(cardArtwork.feedbackControls, 0, 'Kartlarda geri bildirim butonları bulunmamalı');
+    assert.equal(await page.locator(
+      '#home-personalized-section .home-personalized-like, ' +
+      '#home-personalized-section .home-personalized-dislike'
+    ).count(), 0, 'Büyük öneri kartında da geri bildirim butonları bulunmamalı');
     await page.setViewportSize({ width: 360, height: 800 });
     const mobileColumns = await rail.evaluate(element => getComputedStyle(element).gridTemplateColumns.split(' ').length);
     assert.equal(mobileColumns, 2, 'Mobilde de iki sütun korunmalı');
@@ -883,7 +844,7 @@ try {
     const keys = [
       'perde_profile_player_progress_v1', 'cine_movie_progress_v1',
       'cine_episode_tracking_v1', 'cine_profile_watchlists', 'cine_watchlist_v1',
-      'cine_recommendation_feedback_v1', 'cine_active_profile'
+      'cine_active_profile'
     ];
     const original = await page.evaluate(keys => Object.fromEntries(keys.map(key => [key, localStorage.getItem(key)])), keys);
     await page.evaluate(() => {
@@ -904,9 +865,6 @@ try {
         pro_1: [{ id: movie.id, title: movie.title }],
         pro_2: [{ id: series.id, title: series.title }]
       }));
-      localStorage.setItem('cine_recommendation_feedback_v1', JSON.stringify({
-        pro_1: ['main-feedback'], pro_2: ['child-feedback']
-      }));
       localStorage.setItem('cine_active_profile', 'pro_2');
     });
     await page.reload({ waitUntil: 'domcontentloaded' });
@@ -920,14 +878,12 @@ try {
       const progress = JSON.parse(localStorage.getItem('cine_movie_progress_v1') || '{}');
       const episodes = JSON.parse(localStorage.getItem('cine_episode_tracking_v1') || '{}');
       const watchlist = JSON.parse(localStorage.getItem('cine_watchlist_v1') || '[]');
-      const feedback = JSON.parse(localStorage.getItem('cine_recommendation_feedback_v1') || '[]');
       return {
         movieTime: progress[movie.id]?.time,
         hasChildProgress: Object.values(progress).some(value => value?.time === 456),
         mainEpisode: !!episodes[series.id]?.watched?.['1']?.includes(1),
         childEpisode: Object.values(episodes).some(value => value?.watched?.['1']?.includes(2)),
         watchlistIds: watchlist.map(item => String(item.id)),
-        feedback,
         oldProgressKey: localStorage.getItem('perde_profile_player_progress_v1'),
         oldWatchlistKey: localStorage.getItem('cine_profile_watchlists'),
         activeProfileKey: localStorage.getItem('cine_active_profile')
@@ -938,7 +894,6 @@ try {
     assert.ok(migrated.mainEpisode, 'Ana profilin bölüm takibi korunmalı');
     assert.equal(migrated.childEpisode, false, 'Çocuk profilinin bölüm takibi silinmeli');
     assert.equal(migrated.watchlistIds.length, 1, 'Yalnızca ana profilin izleme listesi korunmalı');
-    assert.deepEqual(migrated.feedback, ['main-feedback'], 'Yalnızca ana profil geri bildirimi korunmalı');
     assert.equal(migrated.oldProgressKey, null, 'Eski profil bazlı ilerleme anahtarı silinmeli');
     assert.equal(migrated.oldWatchlistKey, null, 'Eski profil bazlı liste anahtarı silinmeli');
     assert.equal(migrated.activeProfileKey, null, 'Aktif profil anahtarı silinmeli');
