@@ -48,12 +48,6 @@
             }
             try { localStorage.removeItem('cine_profile_watchlists'); } catch (_) {}
 
-            const feedback = safeStorageRead('cine_recommendation_feedback_v1', []);
-            if (feedback && typeof feedback === 'object' && !Array.isArray(feedback)) {
-                const mainFeedback = Array.isArray(feedback.pro_1) ? feedback.pro_1.map(String) : [];
-                safeStorageWrite('cine_recommendation_feedback_v1', mainFeedback);
-            }
-
             try { localStorage.removeItem('cine_active_profile'); } catch (_) {}
         }
 
