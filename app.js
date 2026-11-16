@@ -615,8 +615,9 @@
                             order: index
                         })) : []);
                     const genreText = item.genre || item.tmdbGenres || item.category || '';
-                    return {
-                        ...item,
+                    // JSON kayıtlarını yerinde normalleştir; 167 kayıt için ikinci bir nesne
+                    // kopyası üretmek yerine yalnızca gerekli alanları güncelle.
+                    Object.assign(item, {
                         id: item.id || item.tmdbId || item.title,
                         title: item.title || item.tmdbTitle || item.originalTitle || 'İsimsiz yapım',
                         type: item.type === 'tv' || item.type === 'series' ? 'tv' : 'movie',
@@ -637,7 +638,8 @@
                         trailerUrl: item.trailerUrl || item.tmdbTrailerUrl || '',
                         seasons: item.seasons ?? item.tmdbSeasons ?? null,
                         episodes: item.episodes ?? item.tmdbEpisodes ?? null
-                    };
+                    });
+                    return item;
                 },
 
                 async loadCatalogCastData() {
