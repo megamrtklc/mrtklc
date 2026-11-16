@@ -528,7 +528,7 @@ try {
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.getByRole('button', { name: 'Menüyü aç veya kapat' }).click();
-    const mobileMenu = page.locator('header div[x-show="mobileMenuOpen"]');
+    const mobileMenu = page.locator('header div[x-show*="mobileMenuOpen"]');
     await mobileMenu.waitFor({ state: 'visible' });
     await mobileMenu.getByRole('link', { name: 'Keşfet', exact: true }).click();
     await page.waitForFunction(() => window.location.hash === '#/explore');
