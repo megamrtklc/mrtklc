@@ -1111,7 +1111,10 @@ try {
     await page.getByRole('button', { name: 'Hesap menüsünü aç' }).click();
     const profileDropdown = page.locator('header .cineverse-profile-dropdown:visible').first();
     await profileDropdown.waitFor({ state: 'visible' });
-    await profileDropdown.getByRole('button', { name: 'İstatistikler' }).click();
+    const statsMenuButton = profileDropdown.getByRole('button', { name: 'İstatistikler' });
+    await statsMenuButton.waitFor({ state: 'visible' });
+    await page.waitForTimeout(350);
+    await statsMenuButton.click({ timeout: 10000 });
     await page.waitForURL(/#\/stats$/);
     await page.getByRole('heading', { name: 'İzleme İstatistikleri' }).waitFor({ state: 'visible' });
     assert.ok(await page.getByText('Tamamlanan filmler', { exact: true }).isVisible());
