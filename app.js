@@ -1366,6 +1366,8 @@
                 tapSeekSide: '',
                 tapSeekAmount: 0,
                 tapSeekTimer: null,
+                lastSeekTap: null,
+                lastSeekTapTimer: null,
                 cinemaMode: false,
                 cinemaNoticeVisible: false,
                 cinemaNoticeTimer: null,
@@ -1556,6 +1558,27 @@
                     if (!video || !Number.isFinite(video.duration)) return;
                     video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
                     this.showPlaybackFeedback(seconds < 0 ? 'backward' : 'forward', 850);
+                    this.showPlayerControls();
+                },
+
+                handleSeekTap(direction, event) {
+                    const now = Date.now();
+                    const point = event ? { x: event.clientX, y: event.clientY } : { x: 0, y: 0 };
+                    const previous = this.lastSeekTap;
+                    if (previous && previous.direction === direction && now - previous.time <= 360 &&
+                        Math.hypot(point.x - previous.x, point.y - previous.y) <= 64) {
+                        if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
+                        this.lastSeekTapTimer = null;
+                        this.lastSeekTap = null;
+                        this.handleDoubleTapSeek(direction);
+                        return;
+                    }
+                    this.lastSeekTap = { direction, time: now, x: point.x, y: point.y };
+                    if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
+                    this.lastSeekTapTimer = setTimeout(() => {
+                        this.lastSeekTap = null;
+                        this.lastSeekTapTimer = null;
+                    }, 380);
                     this.showPlayerControls();
                 },
 
