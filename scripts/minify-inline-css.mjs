@@ -7,7 +7,7 @@ const minifier = new CleanCSS({ level: 1, format: false });
 let processed = 0;
 let savedBytes = 0;
 
-const optimized = html.replace(/(<style\\b[^>]*>)([\\s\\S]*?)(<\\/style>)/gi, (match, opening, css, closing) => {
+const optimized = html.replace(/(<style\b[^>]*>)([\s\S]*?)(<\/style>)/gi, (match, opening, css, closing) => {
   const result = minifier.minify(css);
   if (result.errors.length) {
     throw new Error('Inline CSS minification failed: ' + result.errors.join('; '));
@@ -18,9 +18,9 @@ const optimized = html.replace(/(<style\\b[^>]*>)([\\s\\S]*?)(<\\/style>)/gi, (m
   return opening + result.styles + closing;
 });
 
-if (processed !== (html.match(/<style\\b/gi) || []).length) {
+if (processed !== (html.match(/<style\b/gi) || []).length) {
   throw new Error('Not all inline style blocks were processed.');
 }
 if (savedBytes < 0) throw new Error('Unexpected negative CSS size reduction.');
 await writeFile(path, optimized);
-console.log(`Inline CSS minified: ${processed} style blocks, ${savedBytes} bytes saved.`);
+console.log(\`Inline CSS minified: \${processed} style blocks, \${savedBytes} bytes saved.\`);
