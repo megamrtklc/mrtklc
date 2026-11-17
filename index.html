@@ -9,7 +9,7 @@
         var platform = navigator.platform || '';
         var android = /Android/i.test(ua);
         var mobile = /Mobile|Mobi|iPhone|iPod/i.test(ua);
-        var tvToken = /Android\\s?TV|GoogleTV|AFT[A-Z0-9]*|BRAVIA|TCL|Hisense|Philips.*TV|MiTV|BrowseHere/i.test(ua + ' ' + platform);
+        var tvToken = /Android\s?TV|GoogleTV|AFT[A-Z0-9]*|BRAVIA|TCL|Hisense|Philips.*TV|MiTV|BrowseHere/i.test(ua + ' ' + platform);
         var largeAndroidDisplay = android && !mobile && Math.max(screen.width || 0, screen.height || 0) >= 1200;
         if (!tvToken && !largeAndroidDisplay) return;
         document.documentElement.classList.add('cv-tv-mode');
