@@ -9,6 +9,7 @@ on:
       - 'src/tailwind.css'
       - 'index.html'
       - 'app.js'
+      - 'scripts/minify-inline-css.mjs'
   workflow_dispatch:
 
 permissions:
