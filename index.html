@@ -1007,11 +1007,11 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                    @timeupdate="updateVideoProgress"
                                    @play="isPlaying = true; hasPlaybackStarted = true; schedulePlayerControlsHide()"
                                    @pause="isPlaying = false; showPlayerControls()"
-                                   @ended="videoEnded = true"
+                                   @ended="videoEnded = true; isPlaying = false; showPlayerControls()"
                                    @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
-                            <div x-show="isDirectVideoUrl(selectedItem.watchUrl) && !hasPlaybackStarted" class="absolute inset-0 z-10 flex items-center justify-center bg-black cursor-pointer" @click.stop="startPlayback()">
+                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && !hasPlaybackStarted" class="absolute inset-0 z-10 flex items-center justify-center bg-black cursor-pointer" @click.stop="startPlayback()">
                                 <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 w-full h-full object-cover object-center">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/20"></div>
                                 <button type="button" @click.stop="trailerOpen = true" aria-label="Fragmanı izle" class="absolute right-3 bottom-3 sm:right-5 sm:bottom-5 z-30 inline-flex min-h-10 sm:min-h-11 items-center justify-center gap-2 sm:gap-2.5 whitespace-nowrap rounded-lg border border-rose-200/45 bg-gradient-to-r from-[#7f1d3d]/95 via-[#a34b35]/95 to-[#7c3f24]/95 px-3.5 sm:px-5 lg:px-6 py-2 sm:py-2.5 text-[11px] sm:text-sm font-semibold tracking-wide text-white shadow-xl shadow-black/35 backdrop-blur-md transition-all duration-200 hover:border-amber-200/80 hover:from-[#98264b] hover:via-[#b65b3d] hover:to-[#92502d] hover:text-amber-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300">
@@ -1029,7 +1029,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     </div>
                                 </div>
                             </div>
-                            <div x-show="!isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-0 overflow-hidden bg-gray-950 text-white">
+                            <div x-show="!isDirectVideoUrl(getPlaybackUrl())" class="absolute inset-0 overflow-hidden bg-gray-950 text-white">
                                 <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="absolute inset-0 h-full w-full object-contain opacity-55 blur-[1px]">
                                 <button x-show="!selectedItem.watchUrl" type="button" @click="trailerOpen = true" aria-label="Fragmanı izle" class="absolute right-3 bottom-3 sm:right-5 sm:bottom-5 z-30 inline-flex min-h-10 sm:min-h-11 items-center justify-center gap-2 sm:gap-2.5 whitespace-nowrap rounded-lg border border-rose-200/45 bg-gradient-to-r from-[#7f1d3d]/95 via-[#a34b35]/95 to-[#7c3f24]/95 px-3.5 sm:px-5 lg:px-6 py-2 sm:py-2.5 text-[11px] sm:text-sm font-semibold tracking-wide text-white shadow-xl shadow-black/35 backdrop-blur-md transition-all duration-200 hover:border-amber-200/80 hover:from-[#98264b] hover:via-[#b65b3d] hover:to-[#92502d] hover:text-amber-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300">
                                     <i class="fa-solid fa-film shrink-0 text-[11px] sm:text-xs"></i>
@@ -1050,7 +1050,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 </div>
                             </div>
 
-                            <div x-show="playbackError && isDirectVideoUrl(selectedItem.watchUrl)" class="absolute inset-x-0 top-4 left-1/2 z-30 flex w-[min(92%,420px)] -translate-x-1/2 items-center justify-between gap-3 rounded-xl border border-red-400/25 bg-red-950/95 px-4 py-3 text-xs font-semibold text-white shadow-2xl">
+                            <div x-show="playbackError && isDirectVideoUrl(getPlaybackUrl())" class="absolute inset-x-0 top-4 left-1/2 z-30 flex w-[min(92%,420px)] -translate-x-1/2 items-center justify-between gap-3 rounded-xl border border-red-400/25 bg-red-950/95 px-4 py-3 text-xs font-semibold text-white shadow-2xl">
                                 <span>Video yüklenemedi. Bağlantıyı kontrol edip yeniden deneyebilirsin.</span>
                                 <button type="button" @click="startPlayback()" class="shrink-0 rounded-lg bg-white/15 px-3 py-2 font-black hover:bg-white/25">Yeniden Dene</button>
                             </div>
@@ -1061,7 +1061,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </div>
 
                             <!-- Centered Netflix-style transport controls -->
-                            <div x-show="isDirectVideoUrl(selectedItem.watchUrl) && hasPlaybackStarted && playerControlsVisible" x-transition.opacity @click.stop class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center gap-8 sm:gap-14">
+                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted && playerControlsVisible" x-transition.opacity @click.stop class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center gap-8 sm:gap-14">
                                 <button type="button" @click="skipTime(-10); showPlayerControls()" aria-label="10 saniye geri sar" title="10 saniye geri" class="pointer-events-auto flex h-12 w-12 sm:h-16 sm:w-16 flex-col items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-md transition hover:scale-105 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
                                     <i class="fa-solid fa-rotate-left text-lg sm:text-xl"></i><span class="mt-0.5 text-[9px] font-black">10 SN</span>
                                 </button>
@@ -1074,12 +1074,12 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </div>
 
                             <!-- Overlay Controls -->
-                            <div x-show="isDirectVideoUrl(selectedItem.watchUrl) && hasPlaybackStarted && playerControlsVisible" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 translate-y-2" @click.stop class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
+                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted && playerControlsVisible" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 translate-y-2" @click.stop class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/80 to-transparent p-4 flex flex-col justify-end space-y-2">
                                 <div class="flex items-center justify-between mb-1">
                                     <div class="flex items-center space-x-2">
                                         <span class="px-2.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase" x-text="selectedItem.title"></span>
                                         <span class="text-xs text-gray-300 font-semibold" x-show="selectedItem.type === 'tv'" x-text="'Sezon ' + selectedSeason + ' • Bölüm ' + selectedEpisode"></span>
-                                        <button type="button" @click="toggleCinemaMode()" class="inline-flex items-center gap-1.5 rounded bg-white/15 hover:bg-white/25 border border-white/30 px-2.5 py-1 text-[10px] font-bold text-white transition-colors" :title="cinemaMode ? 'Sinema modundan çık' : 'Sinema modunu aç'"><i :class="cinemaMode ? 'fa-solid fa-compress' : 'fa-solid fa-expand'"></i><span x-text="cinemaMode ? 'SİNEMA MODUNDAN ÇIK' : 'SİNEMA MODU'"></span></button>
+                                        
                                     </div>
                                     <button @click="skipIntro()" class="px-3 py-1 rounded bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold border border-white/30 transition-all flex items-center space-x-1.5">
                                         <i class="fa-solid fa-forward text-[10px]"></i>
