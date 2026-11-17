@@ -1084,24 +1084,33 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 </button>
                             </div>
 
-                            <div x-show="playbackFeedbackVisible" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
-                                <div class="flex min-w-[104px] flex-col items-center justify-center gap-2 rounded-2xl border border-white/15 bg-black/65 px-6 py-5 text-white shadow-2xl backdrop-blur-md">
-                                    <i :class="playbackFeedback === 'play' ? 'fa-solid fa-play text-4xl ml-1' : playbackFeedback === 'pause' ? 'fa-solid fa-pause text-4xl' : playbackFeedback === 'backward' ? 'fa-solid fa-rotate-left text-3xl' : 'fa-solid fa-rotate-right text-3xl'"></i>
-                                    <span x-show="playbackFeedback === 'forward' || playbackFeedback === 'backward'" class="text-[10px] font-black tracking-widest" x-text="playbackFeedback === 'forward' ? '10 SN İLERİ' : '10 SN GERİ'"></span>
-                                </div>
-                            </div>
-
-                            <!-- Centered Netflix-style transport controls -->
+                            <!-- Centered transport controls with feedback anchored below each button -->
                             <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted && (playerControlsVisible || !isPlaying)" x-transition.opacity @click.stop class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center gap-8 sm:gap-14">
-                                <button type="button" @click="skipTime(-10); showPlayerControls()" aria-label="10 saniye geri sar" title="10 saniye geri" class="pointer-events-auto flex h-12 w-12 sm:h-16 sm:w-16 flex-col items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-md transition hover:scale-105 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
-                                    <i class="fa-solid fa-rotate-left text-lg sm:text-xl"></i><span class="mt-0.5 text-[9px] font-black">10 SN</span>
-                                </button>
-                                <button type="button" @click="togglePlay(); showPlayerControls()" :aria-label="isPlaying ? 'Duraklat' : 'Oynat'" class="pointer-events-auto flex h-14 w-14 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/25 bg-black/60 text-white shadow-2xl backdrop-blur-md transition hover:scale-105 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
-                                    <i :class="isPlaying ? 'fa-solid fa-pause text-xl sm:text-2xl' : 'fa-solid fa-play text-xl sm:text-2xl ml-1'"></i>
-                                </button>
-                                <button type="button" @click="skipTime(10); showPlayerControls()" aria-label="10 saniye ileri sar" title="10 saniye ileri" class="pointer-events-auto flex h-12 w-12 sm:h-16 sm:w-16 flex-col items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-md transition hover:scale-105 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
-                                    <i class="fa-solid fa-rotate-right text-lg sm:text-xl"></i><span class="mt-0.5 text-[9px] font-black">10 SN</span>
-                                </button>
+                                <div class="relative flex flex-col items-center">
+                                    <button type="button" @click="skipTime(-10); showPlayerControls()" aria-label="10 saniye geri sar" title="10 saniye geri" class="pointer-events-auto flex h-12 w-12 sm:h-16 sm:w-16 flex-col items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-md transition hover:scale-105 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
+                                        <i class="fa-solid fa-rotate-left text-lg sm:text-xl"></i><span class="mt-0.5 text-[9px] font-black">10 SN</span>
+                                    </button>
+                                    <div x-cloak x-show="playbackFeedbackVisible && playbackFeedback === 'backward'" x-transition.opacity.duration.150ms class="absolute left-1/2 top-full mt-3 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-black/75 px-3 py-1.5 text-[10px] font-black tracking-wider text-white shadow-lg backdrop-blur-md">
+                                        <i class="fa-solid fa-rotate-left mr-1 text-amber-300"></i>10 SN GERİ
+                                    </div>
+                                </div>
+                                <div class="relative flex flex-col items-center">
+                                    <button type="button" @click="togglePlay(); showPlayerControls()" :aria-label="isPlaying ? 'Duraklat' : 'Oynat'" class="pointer-events-auto flex h-14 w-14 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/25 bg-black/60 text-white shadow-2xl backdrop-blur-md transition hover:scale-105 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
+                                        <i :class="isPlaying ? 'fa-solid fa-pause text-xl sm:text-2xl' : 'fa-solid fa-play text-xl sm:text-2xl ml-1'"></i>
+                                    </button>
+                                    <div x-cloak x-show="playbackFeedbackVisible && (playbackFeedback === 'play' || playbackFeedback === 'pause')" x-transition.opacity.duration.150ms class="absolute left-1/2 top-full mt-3 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-black/75 px-3 py-1.5 text-[10px] font-black tracking-wider text-white shadow-lg backdrop-blur-md">
+                                        <i :class="playbackFeedback === 'play' ? 'fa-solid fa-play' : 'fa-solid fa-pause'" class="mr-1 text-amber-300"></i>
+                                        <span x-text="playbackFeedback === 'play' ? 'OYNATILIYOR' : 'DURAKLATILDI'"></span>
+                                    </div>
+                                </div>
+                                <div class="relative flex flex-col items-center">
+                                    <button type="button" @click="skipTime(10); showPlayerControls()" aria-label="10 saniye ileri sar" title="10 saniye ileri" class="pointer-events-auto flex h-12 w-12 sm:h-16 sm:w-16 flex-col items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-md transition hover:scale-105 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
+                                        <i class="fa-solid fa-rotate-right text-lg sm:text-xl"></i><span class="mt-0.5 text-[9px] font-black">10 SN</span>
+                                    </button>
+                                    <div x-cloak x-show="playbackFeedbackVisible && playbackFeedback === 'forward'" x-transition.opacity.duration.150ms class="absolute left-1/2 top-full mt-3 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-black/75 px-3 py-1.5 text-[10px] font-black tracking-wider text-white shadow-lg backdrop-blur-md">
+                                        <i class="fa-solid fa-rotate-right mr-1 text-amber-300"></i>10 SN İLERİ
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Overlay Controls -->
