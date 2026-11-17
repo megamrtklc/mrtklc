@@ -1349,8 +1349,8 @@
                 
                 isPlaying: false,
                 isMuted: false,
-                volumeLevel: 1,
-                previousVolumeLevel: 1,
+                volumeLevel: 0.6,
+                previousVolumeLevel: 0.6,
                 videoProgress: 0,
                 currentTimeFormatted: '00:00',
                 durationFormatted: '00:00',
