@@ -1007,8 +1007,8 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                    @click="if ($event.detail >= 2) { toggleFullscreen(); showPlayerControls() } else { showPlayerControls() }"
                                    @loadedmetadata="updateVideoProgress(); applyPlaybackRate(); $event.target.volume = isMuted ? 0 : volumeLevel; $event.target.muted = isMuted"
                                    @timeupdate="updateVideoProgress"
-                                   @play="isPlaying = true; hasPlaybackStarted = true; schedulePlayerControlsHide()"
-                                   @pause="isPlaying = false; showPlayerControls()"
+                                   @play="isPlaying = true; hasPlaybackStarted = true; showPlaybackFeedback('play', 5000); schedulePlayerControlsHide()"
+                                   @pause="isPlaying = false; showPlaybackFeedback('pause', 5000); showPlayerControls()"
                                    @ended="videoEnded = true; isPlaying = false; showPlayerControls()"
                                    @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
