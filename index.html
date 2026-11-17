@@ -1014,19 +1014,35 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
                             <div x-cloak x-show="pauseNoticeVisible && isDirectVideoUrl(getPlaybackUrl())" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-10 bg-black/35" aria-hidden="true"></div>
+                            <style id="cv-youtube-tap-seek">
+.cv-tap-seek-feedback{width:116px;min-height:116px;display:flex;flex-direction:column;align-items:center;justify-content:center;isolation:isolate;filter:drop-shadow(0 2px 9px rgba(0,0,0,.75))}
+.cv-tap-seek-core{position:relative;z-index:2;width:76px;height:76px;border:1px solid rgba(255,255,255,.32);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(18,20,24,.34);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);box-shadow:0 0 0 7px rgba(255,255,255,.045),0 0 28px rgba(255,255,255,.17),inset 0 0 18px rgba(255,255,255,.07)}
+.cv-tap-seek-core i{font-size:31px;color:#fff}
+.cv-tap-seek-label{position:relative;z-index:2;margin-top:7px;display:flex;gap:4px;align-items:baseline;justify-content:center;white-space:nowrap;font-size:12px;font-weight:600;letter-spacing:.02em;color:rgba(255,255,255,.96);text-shadow:0 2px 5px #000}
+.cv-tap-seek-label strong{font-size:16px;font-weight:800}
+.cv-tap-seek-orbit{position:absolute;z-index:1;top:4px;left:20px;width:76px;height:76px;border:2px solid rgba(255,255,255,.0);border-top-color:rgba(255,255,255,.65);border-radius:50%;opacity:0}
+.cv-tap-seek-pop .cv-tap-seek-core{animation:cv-seek-core .62s cubic-bezier(.18,.78,.25,1) both}
+.cv-tap-seek-pop .cv-tap-seek-orbit{animation:cv-seek-orbit .62s ease-out both}
+.cv-tap-seek-pop .cv-tap-seek-core i{animation:cv-seek-arrow .62s cubic-bezier(.2,.7,.25,1) both}
+@keyframes cv-seek-core{0%{transform:scale(.68);opacity:0;background:rgba(255,255,255,.02)}35%{transform:scale(1.08);opacity:1;background:rgba(255,255,255,.17)}65%{transform:scale(1);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes cv-seek-orbit{0%{transform:scale(.72) rotate(-35deg);opacity:0}35%{opacity:.9}100%{transform:scale(1.22) rotate(35deg);opacity:0}}
+@keyframes cv-seek-arrow{0%{transform:rotate(-28deg) scale(.7);opacity:.3}45%{transform:rotate(12deg) scale(1.12);opacity:1}100%{transform:rotate(0) scale(1);opacity:1}}
+</style>
                             <!-- YouTube-style double-tap seek zones -->
                             <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted" class="absolute inset-x-0 top-0 bottom-[76px] z-[11] grid grid-cols-3" style="touch-action:manipulation" aria-label="Çift dokunarak videoyu sar">
                                 <div class="relative flex items-center justify-center" @click="showPlayerControls()" @pointerup.stop="handleSeekTap('backward', $event)">
-                                    <div x-cloak x-show="tapSeekSide === 'left'" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 scale-95" :style="{ left: tapSeekX + 'px', top: tapSeekY + 'px' }" class="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 text-center text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-                                        <span class="mx-auto mb-1 flex h-14 w-14 items-center justify-center rounded-full border border-white/25 bg-white/[0.07] shadow-[0_0_22px_rgba(255,255,255,0.16)] backdrop-blur-sm"><i class="fa-solid fa-rotate-left text-2xl"></i></span>
-                                        <span class="whitespace-nowrap text-xs font-semibold tracking-wide" x-text="tapSeekAmount + ' SN GERİ'"></span>
+                                    <div x-cloak x-show="tapSeekSide === 'left'" :class="tapSeekPulse ? 'cv-tap-seek-pop' : ''" :style="{ left: tapSeekX + 'px', top: tapSeekY + 'px' }" class="cv-tap-seek-feedback pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 text-center text-white">
+                                        <span class="cv-tap-seek-orbit"></span>
+                                        <span class="cv-tap-seek-core"><i class="fa-solid fa-rotate-left"></i></span>
+                                        <span class="cv-tap-seek-label"><strong x-text="tapSeekAmount"></strong><span> saniye geri</span></span>
                                     </div>
                                 </div>
                                 <div @click="showPlayerControls()"></div>
                                 <div class="relative flex items-center justify-center" @click="showPlayerControls()" @pointerup.stop="handleSeekTap('forward', $event)">
-                                    <div x-cloak x-show="tapSeekSide === 'right'" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 scale-95" :style="{ left: tapSeekX + 'px', top: tapSeekY + 'px' }" class="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 text-center text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
-                                        <span class="mx-auto mb-1 flex h-14 w-14 items-center justify-center rounded-full border border-white/25 bg-white/[0.07] shadow-[0_0_22px_rgba(255,255,255,0.16)] backdrop-blur-sm"><i class="fa-solid fa-rotate-right text-2xl"></i></span>
-                                        <span class="whitespace-nowrap text-xs font-semibold tracking-wide" x-text="tapSeekAmount + ' SN İLERİ'"></span>
+                                    <div x-cloak x-show="tapSeekSide === 'right'" :class="tapSeekPulse ? 'cv-tap-seek-pop' : ''" :style="{ left: tapSeekX + 'px', top: tapSeekY + 'px' }" class="cv-tap-seek-feedback pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 text-center text-white">
+                                        <span class="cv-tap-seek-orbit"></span>
+                                        <span class="cv-tap-seek-core"><i class="fa-solid fa-rotate-right"></i></span>
+                                        <span class="cv-tap-seek-label"><strong x-text="tapSeekAmount"></strong><span> saniye ileri</span></span>
                                     </div>
                                 </div>
                             </div>
