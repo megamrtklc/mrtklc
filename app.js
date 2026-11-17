@@ -1366,6 +1366,7 @@
                 cinemaNoticeTimer: null,
                 playbackFeedback: '',
                 playbackFeedbackVisible: false,
+                pauseNoticeVisible: false,
                 playbackFeedbackTimer: null,
 
                 toggleCinemaMode() {
@@ -1500,7 +1501,6 @@
                         this.showPlaybackFeedback('play', 5000);
                         this.startPlayback();
                     } else {
-                        this.showPlaybackFeedback('pause', 5000);
                         video.pause();
                     }
                 },
