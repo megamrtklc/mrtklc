@@ -1351,6 +1351,7 @@
                 isMuted: false,
                 volumeLevel: 0.6,
                 previousVolumeLevel: 0.6,
+                videoBrightness: 1,
                 videoProgress: 0,
                 currentTimeFormatted: '00:00',
                 durationFormatted: '00:00',
@@ -1518,6 +1519,10 @@
                     const video = document.getElementById('customVideoPlayer');
                     if (!video) return;
                     video.currentTime += 85;
+                },
+
+                setVideoBrightness(value) {
+                    this.videoBrightness = Math.max(0.5, Math.min(1.5, Number(value) || 1));
                 },
 
                 setVideoVolume(value) {
