@@ -758,10 +758,19 @@
                             throw new Error('JSON dosyasında geçerli bir catalog listesi bulunamadı.');
                         }
 
-                        const validCatalog = sourceCatalog.filter(item => item && typeof item === 'object' && !Array.isArray(item) && (item.id != null || item.tmdbId != null || item.title || item.tmdbTitle || item.originalTitle));
-                        if (!validCatalog.length) throw new Error('Katalogda kullanılabilir bir film veya dizi kaydı bulunamadı.');
-                        if (validCatalog.length !== sourceCatalog.length) console.warn('Geçersiz katalog kayıtları atlandı:', sourceCatalog.length - validCatalog.length);
-                        this.catalog = markStaticCatalog(validCatalog.map(item => this.normalizeCatalogItem(item)));
+                        // Kayıtları tek geçişte doğrula ve dönüştür; ara filtre dizisi oluşturma.
+                        const normalizedCatalog = [];
+                        let invalidCatalogCount = 0;
+                        for (const item of sourceCatalog) {
+                            if (!item || typeof item !== 'object' || Array.isArray(item) || !(item.id != null || item.tmdbId != null || item.title || item.tmdbTitle || item.originalTitle)) {
+                                invalidCatalogCount++;
+                                continue;
+                            }
+                            normalizedCatalog.push(this.normalizeCatalogItem(item));
+                        }
+                        if (!normalizedCatalog.length) throw new Error('Katalogda kullanılabilir bir film veya dizi kaydı bulunamadı.');
+                        if (invalidCatalogCount) console.warn('Geçersiz katalog kayıtları atlandı:', invalidCatalogCount);
+                        this.catalog = markStaticCatalog(normalizedCatalog);
                         this.heroCatalog = this.catalog;
                         // İngilizce alternatif başlıklar kritik değil; mobilde manşet açılışından sonra yükle.
                         const loadEnglishTitlesWhenIdle = () => this.loadHeroEnglishTitles();
