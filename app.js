@@ -708,7 +708,7 @@
                     });
                     // Manşet ayrı bootstrap verisiyle çizilir; ana katalog isteğini bekletmeden başlat.
                     // Düşük öncelik, ilk manşet görsellerinin ağ önceliğini korurken indirmeyi erkenden başlatır.
-                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json', { cache: 'default' });
+                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261117-franchise-data-v1', { cache: 'default' });
                     try {
                         // Üretim sırasında HTML'e gömülen küçük manşet verisi ağ isteği beklemeden hazırdır.
                         // Yerel geliştirme/önbellek senaryolarında gömülü veri yoksa JSON dosyasına geri dön.
