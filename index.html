@@ -998,12 +998,12 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             <div class="pointer-events-none absolute left-3 top-3 z-30 rounded-lg border px-3 py-1.5 text-[11px] font-extrabold tracking-wide shadow-lg backdrop-blur-md" :class="cinemaMode ? 'border-amber-300/50 bg-black/75 text-amber-200' : 'border-white/15 bg-black/60 text-white/85'" x-text="cinemaMode ? 'Sinema modu : Açık' : 'Sinema modu : Kapalı'" role="status" aria-live="polite"></div>
                             <video id="customVideoPlayer"
                                    x-show="isDirectVideoUrl(getPlaybackUrl())"
-                                   class="w-full h-full object-contain"
+                                   class="w-full h-full object-contain [touch-action:manipulation]"
                                    :src="getPlaybackUrl()"
                                    :poster="selectedItem.backdrop"
                                    preload="metadata"
                                    playsinline
-                                   @click="togglePlay(); showPlayerControls()"
+                                   @click="if ($event.detail >= 2) { toggleFullscreen(); showPlayerControls() } else { showPlayerControls() }"
                                    @loadedmetadata="updateVideoProgress(); applyPlaybackRate(); $event.target.volume = isMuted ? 0 : volumeLevel; $event.target.muted = isMuted"
                                    @timeupdate="updateVideoProgress"
                                    @play="isPlaying = true; hasPlaybackStarted = true; schedulePlayerControlsHide()"
