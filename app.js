@@ -1368,6 +1368,7 @@
                 tapSeekX: 0,
                 tapSeekY: 0,
                 tapSeekTimer: null,
+                tapSeekPulse: false,
                 lastSeekTap: null,
                 lastSeekTapTimer: null,
                 cinemaMode: false,
@@ -1597,6 +1598,8 @@
                     this.updateVideoProgress();
                     this.tapSeekAmount = this.tapSeekSide === direction ? this.tapSeekAmount + 10 : 10;
                     this.tapSeekSide = direction;
+                    this.tapSeekPulse = false;
+                    setTimeout(() => { this.tapSeekPulse = true; }, 20);
                     if (this.tapSeekTimer) clearTimeout(this.tapSeekTimer);
                     this.tapSeekTimer = setTimeout(() => {
                         this.tapSeekSide = '';
