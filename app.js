@@ -79,6 +79,10 @@
                     const image = event && event.target;
                     if (!image || image.dataset.perdeFallbackApplied) return;
                     image.dataset.perdeFallbackApplied = 'true';
+                    // Eski srcset/picture kaynakları, src değişse bile tarayıcı tarafından seçilmeye devam edebilir.
+                    image.removeAttribute('srcset');
+                    image.removeAttribute('sizes');
+                    image.parentElement?.querySelectorAll?.('source').forEach(source => source.removeAttribute('srcset'));
                     const placeholder = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 480"><rect width="320" height="480" fill="#171923"/><g fill="none" stroke="#555b6b" stroke-width="8"><rect x="104" y="176" width="112" height="84" rx="10"/><path d="m116 244 34-35 24 22 18-18 20 24"/></g><text x="160" y="310" fill="#9ca3af" font-size="18" text-anchor="middle" font-family="Arial,sans-serif">Görsel yok</text></svg>';
                     image.src = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(placeholder);
                 },
