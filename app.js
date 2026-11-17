@@ -1389,19 +1389,19 @@
                     const tracks = document.getElementById('customVideoPlayer')?.textTracks;
                     if (!tracks?.length) return;
                     const showing = Array.from(tracks).findIndex(track => track.mode === 'showing');
-                    tracks.forEach((track, index) => { track.mode = index === (showing < 0 ? 0 : -1) ? 'showing' : 'disabled'; });
+                    Array.from(tracks).forEach((track, index) => { track.mode = index === (showing < 0 ? 0 : -1) ? 'showing' : 'disabled'; });
                 },
 
                 cycleAudioTrack() {
                     const tracks = document.getElementById('customVideoPlayer')?.audioTracks;
                     if (!tracks?.length) return;
                     let active = Array.from(tracks).findIndex(track => track.enabled);
-                    tracks.forEach((track, index) => { track.enabled = index === ((active + 1) % tracks.length); });
+                    Array.from(tracks).forEach((track, index) => { track.enabled = index === ((active + 1) % tracks.length); });
                 },
 
                 handlePlayerKeydown(event) {
                     if (this.currentPage !== 'watch' || !this.hasPlaybackStarted) return;
-                    if (event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT/.test(event.target?.tagName || '') || event.target?.isContentEditable) return;
+                    if (event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT/.test(event.target?.tagName || '') || event.target?.isContentEditable || event.target?.closest?.('button,a,[role="button"]')) return;
                     const key = event.key.toLowerCase();
                     if (key === 'arrowleft' || key === 'arrowright' || key === ' ' || key === 'm' || key === 'f' || key === 'c') {
                         event.preventDefault();
