@@ -807,7 +807,7 @@
                         });
                         // 300 KB'lık kadro verisini ilk açılışın kritik yolundan çıkar.
                         // Oyuncu araması daha erken yapılırsa schedulePersonSearch yüklemeyi hemen başlatır.
-                        const castDelay = window.matchMedia('(max-width: 767px)').matches ? 12000 : 6000;
+                        const castDelay = document.documentElement.classList.contains('cv-tv-mode') ? 25000 : (window.matchMedia('(max-width: 767px)').matches ? 12000 : 6000);
                         window.setTimeout(() => {
                             const scheduleCastLoad = () => this.loadCatalogCastData();
                             if ('requestIdleCallback' in window) window.requestIdleCallback(scheduleCastLoad, { timeout: 5000 });
@@ -1127,7 +1127,7 @@
                         window.clearInterval(this.heroAutoplayTimer);
                     }
                     const settings = this.homepageConfig?.settings || {};
-                    if (settings.autoplay === false || this.heroSlides.length < 2) return;
+                    if (document.documentElement.classList.contains('cv-tv-mode') || settings.autoplay === false || this.heroSlides.length < 2) return;
                     const seconds = Math.max(2, Math.min(60, Number(settings.interval) || 6));
                     const isMobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
                     const advance = () => {
