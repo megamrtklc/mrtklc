@@ -1017,7 +1017,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             <div x-cloak x-show="pauseNoticeVisible && isDirectVideoUrl(getPlaybackUrl())" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-10 bg-black/35" aria-hidden="true"></div>
                             
                             <!-- YouTube-style double-tap seek zones -->
-                            <div id="cvTapSeekZones" x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted" class="absolute inset-x-0 top-0 bottom-[76px] z-[11] grid grid-cols-3 relative" style="touch-action:manipulation" aria-label="Çift dokunarak videoyu sar">
+                            <div id="cvTapSeekZones" x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted" class="absolute inset-x-0 top-0 bottom-[76px] z-[11] grid grid-cols-3" style="touch-action:manipulation" aria-label="Çift dokunarak videoyu sar">
                                 <div @click="showPlayerControls()" @pointerup.stop="handleSeekTap('backward', $event)"></div>
                                 <div @click="showPlayerControls()"></div>
                                 <div @click="showPlayerControls()" @pointerup.stop="handleSeekTap('forward', $event)"></div>
