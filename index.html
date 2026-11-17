@@ -1000,6 +1000,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                    x-show="isDirectVideoUrl(getPlaybackUrl())"
                                    class="w-full h-full object-contain [touch-action:manipulation]"
                                    :src="getPlaybackUrl()"
+                                   :style="'filter: brightness(' + videoBrightness + ')'"
                                    :poster="selectedItem.backdrop"
                                    preload="metadata"
                                    playsinline
@@ -1012,6 +1013,16 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                    @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
+                            <div x-show="playerControlsVisible" x-transition.opacity x-data="{ brightnessOpen: false }" @mouseenter="brightnessOpen = true" @mouseleave="brightnessOpen = false" @click.stop class="absolute top-3 right-16 z-40">
+                                <button type="button" @click="brightnessOpen = !brightnessOpen; showPlayerControls()" @focus="showPlayerControls()" aria-label="Video parlaklığını ayarla" title="Video parlaklığı" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300">
+                                    <i class="fa-solid fa-sun"></i>
+                                </button>
+                                <div x-show="brightnessOpen" x-transition.opacity @click.stop class="absolute right-0 top-12 flex min-w-[54px] flex-col items-center gap-2 rounded-xl border border-white/15 bg-[#10141d]/95 px-3 py-3 text-white shadow-2xl backdrop-blur-xl">
+                                    <span class="font-mono text-[10px] font-bold text-amber-200" x-text="Math.round(videoBrightness * 100) + '%'"></span>
+                                    <input type="range" min="0.5" max="1.5" step="0.05" :value="videoBrightness" @input="setVideoBrightness($event.target.value); showPlayerControls()" aria-label="Dikey video parlaklığı" title="Video parlaklığı" style="writing-mode:vertical-lr;direction:rtl; width:8px;height:96px; accent-color:#e7c477; touch-action:pan-y;" class="cursor-pointer">
+                                    <button type="button" @click="setVideoBrightness(1); showPlayerControls()" class="mt-1 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold hover:bg-white/20" aria-label="Parlaklığı sıfırla">Sıfırla</button>
+                                </div>
+                            </div>
                             <div x-show="playerControlsVisible" x-transition.opacity x-data="{ volumeOpen: false }" @mouseenter="volumeOpen = true" @mouseleave="volumeOpen = false" @click.stop class="absolute top-3 right-3 z-40">
                                 <button type="button" @click="volumeOpen = !volumeOpen; showPlayerControls()" @focus="showPlayerControls()" :aria-label="isMuted ? 'Sesi aç' : 'Ses seviyesini ayarla'" :title="isMuted ? 'Sesi Aç' : 'Ses Seviyesi'" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300">
                                     <i :class="isMuted || volumeLevel === 0 ? 'fa-solid fa-volume-xmark' : volumeLevel < 0.5 ? 'fa-solid fa-volume-low' : 'fa-solid fa-volume-high'"></i>
@@ -1074,7 +1085,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </div>
 
                             <!-- Centered Netflix-style transport controls -->
-                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted && playerControlsVisible" x-transition.opacity @click.stop class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center gap-8 sm:gap-14">
+                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted && (playerControlsVisible || !isPlaying)" x-transition.opacity @click.stop class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center gap-8 sm:gap-14">
                                 <button type="button" @click="skipTime(-10); showPlayerControls()" aria-label="10 saniye geri sar" title="10 saniye geri" class="pointer-events-auto flex h-12 w-12 sm:h-16 sm:w-16 flex-col items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-md transition hover:scale-105 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
                                     <i class="fa-solid fa-rotate-left text-lg sm:text-xl"></i><span class="mt-0.5 text-[9px] font-black">10 SN</span>
                                 </button>
@@ -1087,7 +1098,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </div>
 
                             <!-- Overlay Controls -->
-                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted && playerControlsVisible" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 translate-y-2" @click.stop class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 via-black/20 to-transparent px-4 pt-2 pb-1 flex flex-col justify-end space-y-1">
+                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted && (playerControlsVisible || !isPlaying)" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 translate-y-2" @click.stop style="background:linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.38) 62%, rgba(0,0,0,0) 100%)" class="absolute inset-x-0 bottom-0 px-4 pt-2 pb-1 flex flex-col justify-end space-y-1">
                                 <div class="flex items-center justify-between mb-1">
                                     <div class="flex items-center space-x-2">
                                         <span class="px-2.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase" x-text="selectedItem.title"></span>
