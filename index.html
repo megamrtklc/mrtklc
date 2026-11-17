@@ -7,11 +7,15 @@
       (function () {
         var ua = navigator.userAgent || '';
         var platform = navigator.platform || '';
-        var android = /Android/i.test(ua);
-        var mobile = /Mobile|Mobi|iPhone|iPod/i.test(ua);
-        var tvToken = /Android\s?TV|GoogleTV|AFT[A-Z0-9]*|BRAVIA|TCL|Hisense|Philips.*TV|MiTV|BrowseHere/i.test(ua + ' ' + platform);
-        var largeAndroidDisplay = android && !mobile && Math.max(screen.width || 0, screen.height || 0) >= 1200;
-        if (!tvToken && !largeAndroidDisplay) return;
+        var deviceInfo = ua + ' ' + platform;
+        var android = /Android/i.test(deviceInfo);
+        var mobile = /Mobile|Mobi|iPhone|iPod|iPad/i.test(deviceInfo);
+        var tvToken = /Android\s?TV|Google\s?TV|Smart[- ]?TV|BRAVIA|MiTV|AFT[A-Z0-9]*|SHIELD\s+Android\s+TV|Tizen|Web0S|HbbTV|TV;|\bTV\s+Build/i.test(deviceInfo);
+        var width = Math.max(screen.width || 0, screen.height || 0);
+        var height = Math.min(screen.width || 0, screen.height || 0);
+        var landscapeDisplay = height > 0 && width / height >= 1.45;
+        var remoteFirstAndroid = android && !mobile && (navigator.maxTouchPoints || 0) <= 1 && width >= 960 && landscapeDisplay;
+        if (!tvToken && !remoteFirstAndroid) return;
         document.documentElement.classList.add('cv-tv-mode');
         document.documentElement.dataset.cvDeviceMode = 'tv';
       })();
