@@ -71,6 +71,7 @@
       })();
     </script>
     <!-- Kritik harici kaynaklara erken bağlantı -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
 
@@ -93,7 +94,7 @@
         function loadIcons() {
           if (document.getElementById('cv-icons-css')) return;
           var stylesheet = document.createElement('link');
-          stylesheet.id = 'cv-fontawesome-css';
+          stylesheet.id = 'cv-icons-css';
           stylesheet.rel = 'stylesheet';
           stylesheet.href = href;
           stylesheet.media = 'print';
