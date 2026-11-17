@@ -1390,15 +1390,35 @@
                 },
 
                 startPlayback() {
+                    const video = document.getElementById('customVideoPlayer');
+                    const source = this.getPlaybackUrl();
                     this.playerControlsVisible = true;
-                    this.togglePlay();
+                    if (!video || !source || !this.isDirectVideoUrl(source)) {
+                        this.playbackError = true;
+                        return;
+                    }
+                    this.playbackError = false;
+                    // Alpine x-if/x-show geçişlerinde src henüz video elementine
+                    // uygulanmamış olabilir; oynatmadan önce kaynağı kesinleştir.
+                    if (video.getAttribute('src') !== source) {
+                        video.setAttribute('src', source);
+                        video.load();
+                    }
+                    const playRequest = video.play();
+                    if (playRequest && typeof playRequest.catch === 'function') {
+                        playRequest.catch(error => {
+                            this.playbackError = true;
+                            this.isPlaying = false;
+                            console.warn('Video oynatma başlatılamadı:', error);
+                        });
+                    }
                 },
 
                 togglePlay() {
                     const video = document.getElementById('customVideoPlayer');
-                    if (!video || !this.isDirectVideoUrl(this.getPlaybackUrl())) return;
+                    if (!video) return;
                     if (video.paused) {
-                        video.play().catch(() => { this.playbackError = true; });
+                        this.startPlayback();
                     } else {
                         video.pause();
                     }
