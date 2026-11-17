@@ -230,6 +230,21 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
       html.cv-tv-mode .cv-player-seek-wrap{height:34px}html.cv-tv-mode .cv-player-seek{height:34px}html.cv-tv-mode .cv-player-seek::-webkit-slider-thumb{opacity:1;transform:none}html.cv-tv-mode .cv-player-seek::-moz-range-thumb{opacity:1;transform:none}
       @media(prefers-reduced-motion:reduce){.cv-player-seek::-webkit-slider-runnable-track,.cv-player-seek::-webkit-slider-thumb,.cv-player-seek::-moz-range-thumb{transition:none}}
     </style>
+    <style id="cv-premium-player-finish">
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t{padding:clamp(12px,2.2vw,22px);padding-top:34px;background:linear-gradient(180deg,transparent 0%,rgba(3,5,9,.72) 24%,rgba(3,5,9,.96) 100%)!important;backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t>div:first-child{gap:10px}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t button{min-height:36px;transition:background-color .18s ease,border-color .18s ease,transform .18s ease,color .18s ease}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t button:focus-visible{outline:2px solid #f0d18b;outline-offset:3px}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t button.bg-rose-600{background:linear-gradient(135deg,#e7c477,#b98b38)!important;color:#17130b!important;box-shadow:0 4px 16px rgba(185,139,56,.22)}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t button.bg-rose-600:hover{background:linear-gradient(135deg,#f0d18b,#c99a45)!important}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t span.bg-rose-600{background:rgba(214,173,85,.2)!important;color:#f0d18b!important;border:1px solid rgba(214,173,85,.25)}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t .bg-gray-800\/80{background:rgba(255,255,255,.09)!important;border:1px solid rgba(255,255,255,.09)}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t .bg-gray-800\/80:hover{background:rgba(255,255,255,.17)!important}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t input[type=range]:not(.cv-player-seek){accent-color:#d6ad55}
+      [data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t .font-mono{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+      @media(max-width:520px){[data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t{padding:10px;padding-top:28px;gap:7px}[data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t>div:first-child{flex-wrap:wrap}[data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t>div:last-child{gap:7px}[data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t .w-16{width:48px}}
+      @media(prefers-reduced-motion:reduce){[data-watch-card="player"] .absolute.inset-x-0.bottom-0.bg-gradient-to-t button{transition:none}}
+    </style>
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
