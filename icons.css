@@ -85,12 +85,12 @@
 .fa-solid.fa-xmark:before{content:"\f00d"}
 .fa-regular.fa-bookmark:before{content:"\f02e"}
 .fa-regular.fa-circle:before{content:"\f111"}
-.fa-solid.fa-bookmark-slash:before{content:"\\f02e"}
+.fa-solid.fa-bookmark-slash:before{content:"\f02e"}
 .fa-solid.fa-bookmark-slash{position:relative}
 .fa-solid.fa-bookmark-slash:after{content:"";position:absolute;left:48%;top:8%;height:88%;border-left:1.7px solid currentColor;transform:rotate(-38deg);pointer-events:none}
 .fa-spin{animation:fa-spin 2s infinite linear}
 @keyframes fa-spin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.fa-spin{animation-duration:8s;animation-iteration-count:1}}
 
-.fa-solid.fa-bookmark:before{content:"\\f02e"}
-.fa-solid.fa-circle:before{content:"\\f111"}
+.fa-solid.fa-bookmark:before{content:"\f02e"}
+.fa-solid.fa-circle:before{content:"\f111"}
