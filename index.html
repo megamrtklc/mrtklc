@@ -2201,11 +2201,16 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     <style id="cv-image-loading-indicator">.cv-image-loading-surface::before{content:"";position:absolute;z-index:40;inset:0;display:block;background:rgba(8,10,15,.48);pointer-events:none}.cv-image-loading-surface::after{content:"Yükleniyor...";position:absolute;z-index:41;inset:0;display:flex;align-items:center;justify-content:center;padding:8px;color:rgba(255,255,255,.94);font:600 11px/1.2 system-ui,sans-serif;letter-spacing:.025em;text-shadow:0 1px 5px rgba(0,0,0,.7);pointer-events:none;background:radial-gradient(circle at center,transparent 0 17px,rgba(8,10,15,.12) 18px,transparent 19px)}.cv-image-loading-surface>.cv-image-loading-spinner{position:absolute;z-index:42;top:50%;left:50%;width:18px;height:18px;margin:-17px 0 0 -9px;border:2px solid rgba(255,255,255,.28);border-top-color:#fbbf24;border-radius:50%;animation:cv-image-loading-spin .8s linear infinite;pointer-events:none}@keyframes cv-image-loading-spin{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){.cv-image-loading-surface>.cv-image-loading-spinner{animation:none;border-top-color:rgba(255,255,255,.9)}}</style>
     <script id="cv-image-loading-indicator-script">
         (() => {
+            const timers = new WeakMap();
             const eligible = (img) => {
-                if (!(img instanceof HTMLImageElement) || !img.getAttribute('src') && !img.getAttribute('srcset')) return false;
+                if (!(img instanceof HTMLImageElement) || (!img.getAttribute('src') && !img.getAttribute('srcset'))) return false;
                 if (img.getAttribute('aria-hidden') === 'true' || !img.getAttribute('alt')?.trim()) return false;
                 if (/^(logo|icon)$/i.test(img.getAttribute('alt').trim())) return false;
                 return true;
+            };
+            const surfaceFor = (img) => {
+                const parent = img.parentElement;
+                return parent?.tagName === 'PICTURE' ? parent.parentElement : parent;
             };
             const updateSurface = (surface) => {
                 if (!surface) return;
@@ -2233,34 +2238,76 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     }
                 }
             };
-            const surfaceFor = (img) => img.parentElement?.tagName === 'PICTURE' ? img.parentElement.parentElement : img.parentElement;
             const finish = (img) => {
                 if (!(img instanceof HTMLImageElement)) return;
+                const timer = timers.get(img);
+                if (timer) clearTimeout(timer);
+                timers.delete(img);
+                img.removeAttribute('data-cv-image-loading');
+                img.removeAttribute('data-cv-image-waiting');
+                updateSurface(surfaceFor(img));
+                lazyObserver?.unobserve(img);
+            };
+            const begin = (img) => {
+                if (!eligible(img) || img.complete) {
+                    finish(img);
+                    return;
+                }
+                img.removeAttribute('data-cv-image-waiting');
+                img.setAttribute('data-cv-image-loading', 'true');
+                updateSurface(surfaceFor(img));
+                const timer = setTimeout(() => finish(img), 15000);
+                timers.set(img, timer);
+            };
+            const lazyObserver = 'IntersectionObserver' in window
+                ? new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) return;
+                        begin(entry.target);
+                        lazyObserver.unobserve(entry.target);
+                    });
+                }, { rootMargin: '120px 0px', threshold: 0.01 })
+                : null;
+            const inspect = (img) => {
+                if (!eligible(img)) {
+                    finish(img);
+                    return;
+                }
+                const oldTimer = timers.get(img);
+                if (oldTimer) clearTimeout(oldTimer);
+                timers.delete(img);
                 img.removeAttribute('data-cv-image-loading');
                 updateSurface(surfaceFor(img));
-            };
-            const inspect = (img) => {
-                if (!eligible(img)) { finish(img); return; }
                 if (img.complete) {
                     finish(img);
                     return;
                 }
-                img.setAttribute('data-cv-image-loading', 'true');
-                updateSurface(surfaceFor(img));
+                if (img.loading === 'lazy') {
+                    if (lazyObserver) {
+                        img.setAttribute('data-cv-image-waiting', 'true');
+                        lazyObserver.observe(img);
+                    }
+                    return;
+                }
+                begin(img);
             };
-            document.addEventListener('load', (event) => finish(event.target), true);
-            document.addEventListener('error', (event) => finish(event.target), true);
+            document.addEventListener('load', event => finish(event.target), true);
+            document.addEventListener('error', event => finish(event.target), true);
             const scan = (node) => {
                 if (!(node instanceof Element)) return;
                 if (node.matches('img')) inspect(node);
+                else if (node.matches('picture,source')) {
+                    const picture = node.tagName === 'PICTURE' ? node : node.parentElement;
+                    picture?.querySelectorAll('img').forEach(inspect);
+                }
                 node.querySelectorAll?.('img').forEach(inspect);
             };
             scan(document.documentElement);
-            const observer = new MutationObserver((records) => {
-                for (const record of records) {
+            const observer = new MutationObserver(records => {
+                records.forEach(record => {
                     if (record.type === 'attributes') scan(record.target);
                     else record.addedNodes.forEach(scan);
-                }
+                });
             });
             observer.observe(document.documentElement, {
                 subtree: true,
