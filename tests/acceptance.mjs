@@ -271,7 +271,7 @@ try {
     await page.waitForFunction(() => {
       const links = [...document.querySelectorAll('link[rel="stylesheet"]')];
       const iconCss = links.some(link => link.href.includes('icons.css') && (link.media === 'all' || link.media === ''));
-      const fontCss = links.some(link => link.href.includes('fonts.googleapis.com') && (link.media === 'all' || link.media === ''));
+      const fontCss = links.some(link => link.href.includes('fonts.css') && (link.media === 'all' || link.media === ''));
       return iconCss && fontCss;
     }, { timeout: 15000 });
     const heroThumbnailCount = await page.locator('#heroThumbContainer img').count();
