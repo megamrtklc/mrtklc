@@ -81,6 +81,11 @@ await writeFile('catalog-lite.json', JSON.stringify({
   homepageConfig: source?.homepageConfig || {},
   headerConfig: source?.headerConfig || {},
   footerConfig: source?.footerConfig || {},
+  // Uygulama başlangıçta bu kompakt dosyayı ana veri kaynağı olarak kullanır.
+  // Bu nedenle ana katalog dışındaki çalışma zamanı verileri de burada korunmalı.
+  collections: Array.isArray(source?.collections) ? source.collections : [],
+  franchises: Array.isArray(source?.franchises) ? source.franchises : [],
+  watchPageConfig: source?.watchPageConfig || null,
   catalog: compactCatalog
 }) + '\n');
 await writeFile('catalog-cast.json', JSON.stringify(castData) + '\n');
