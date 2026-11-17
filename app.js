@@ -2616,6 +2616,12 @@
                     };
                     const normalize = value => this.normalizeSearchText(value);
                     const counts = new Map();
+                    const catalogById = new Map(this.catalog.map(item => [String(item.id), item]));
+                    const catalogGenreCounts = new Map();
+                    this.catalog.forEach(item => {
+                        const genres = new Set(String(item.category || item.genre || '').split(/[\\/;,]/).map(normalize).filter(Boolean));
+                        genres.forEach(genre => catalogGenreCounts.set(genre, (catalogGenreCounts.get(genre) || 0) + 1));
+                    });
                     const addItem = (item, weight) => {
                         if (!item) return;
                         const genres = [...new Set(String(item.category || item.genre || '').split(/[\\/;,]/).map(normalize).filter(Boolean))];
@@ -2627,18 +2633,18 @@
                     };
                     const progress = this.profileMovieProgress;
                     Object.entries(progress).forEach(([id, saved]) => {
-                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        const item = catalogById.get(String(id));
                         const seconds = Math.max(0, Number(saved?.time) || 0);
                         if (item && seconds >= 300) addItem(item, 1 + Math.min(seconds / 3600, 2));
                     });
                     const episodeMap = read('cine_episode_tracking_v1');
                     Object.entries(episodeMap).forEach(([id, tracking]) => {
-                        const item = this.catalog.find(entry => String(entry.id) === String(id));
+                        const item = catalogById.get(String(id));
                         const count = Object.values(tracking?.watched || {}).reduce((sum, list) => sum + (Array.isArray(list) ? new Set(list.map(Number)).size : 0), 0);
                         if (item && count > 0) addItem(item, 1 + Math.min(count / 5, 3));
                     });
                     this.watchlist.forEach(saved => {
-                        const item = this.catalog.find(entry => String(entry.id) === String(saved.id));
+                        const item = catalogById.get(String(saved.id));
                         if (item) addItem(item, 1.5);
                     });
                     return [...counts.values()]
@@ -2647,7 +2653,7 @@
                         .map(entry => ({
                             ...entry,
                             label: entry.name.charAt(0).toLocaleUpperCase('tr-TR') + entry.name.slice(1),
-                            count: this.catalog.filter(item => String(item.category || item.genre || '').split(/[\\/;,]/).some(value => normalize(value) === entry.name)).length
+                            count: catalogGenreCounts.get(entry.name) || 0
                         }));
                 },
 
