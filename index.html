@@ -1007,8 +1007,8 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                    @click="if ($event.detail >= 2) { toggleFullscreen(); showPlayerControls() } else { showPlayerControls() }"
                                    @loadedmetadata="updateVideoProgress(); applyPlaybackRate(); $event.target.volume = isMuted ? 0 : volumeLevel; $event.target.muted = isMuted"
                                    @timeupdate="updateVideoProgress"
-                                   @play="isPlaying = true; hasPlaybackStarted = true; showPlaybackFeedback('play', 5000); schedulePlayerControlsHide()"
-                                   @pause="isPlaying = false; showPlaybackFeedback('pause', 5000); showPlayerControls()"
+                                   @play="pauseNoticeVisible = false; isPlaying = true; hasPlaybackStarted = true; showPlaybackFeedback('play', 5000); schedulePlayerControlsHide()"
+                                   @pause="pauseNoticeVisible = true; isPlaying = false; showPlayerControls()"
                                    @ended="videoEnded = true; isPlaying = false; showPlayerControls()"
                                    @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
@@ -1098,9 +1098,12 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <button type="button" @click="togglePlay(); showPlayerControls()" :aria-label="isPlaying ? 'Duraklat' : 'Oynat'" class="pointer-events-auto flex h-14 w-14 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/25 bg-black/60 text-white shadow-2xl backdrop-blur-md transition hover:scale-105 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
                                         <i :class="isPlaying ? 'fa-solid fa-pause text-xl sm:text-2xl' : 'fa-solid fa-play text-xl sm:text-2xl ml-1'"></i>
                                     </button>
-                                    <div x-cloak x-show="playbackFeedbackVisible && (playbackFeedback === 'play' || playbackFeedback === 'pause')" x-transition.opacity.duration.150ms class="absolute left-1/2 top-full mt-3 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-black/75 px-3 py-1.5 text-[10px] font-black tracking-wider text-white shadow-lg backdrop-blur-md">
-                                        <i :class="playbackFeedback === 'play' ? 'fa-solid fa-play' : 'fa-solid fa-pause'" class="mr-1 text-amber-300"></i>
-                                        <span x-text="playbackFeedback === 'play' ? 'OYNATILIYOR' : 'DURAKLATILDI'"></span>
+                                    <div x-cloak x-show="pauseNoticeVisible || (playbackFeedbackVisible && playbackFeedback === 'play')" x-transition.opacity.duration.150ms class="absolute left-1/2 top-full mt-3 flex -translate-x-1/2 flex-col items-center gap-1.5 whitespace-nowrap rounded-xl border border-white/15 bg-black/80 px-3 py-2 text-white shadow-lg backdrop-blur-md">
+                                        <div class="text-[10px] font-black tracking-wider">
+                                            <i :class="pauseNoticeVisible ? 'fa-solid fa-pause' : 'fa-solid fa-play'" class="mr-1 text-amber-300"></i>
+                                            <span x-text="pauseNoticeVisible ? 'DURAKLATILDI' : 'OYNATILIYOR'"></span>
+                                        </div>
+                                        <span x-show="pauseNoticeVisible" class="text-[9px] font-medium tracking-normal text-white/75">Devam etmek için "Oynat" butonuna tıkla.</span>
                                     </div>
                                 </div>
                                 <div class="relative flex flex-col items-center">
