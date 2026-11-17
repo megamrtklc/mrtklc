@@ -2314,7 +2314,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
             document.documentElement.dataset.cvDeviceMode = 'tv';
 
             const isEditable = (element) => !!element?.closest(
-                'input, textarea, select, [contenteditable="true"], [role="textbox"], [role="combobox]'
+                'input, textarea, select, [contenteditable="true"], [role="textbox"], [role="combobox"]'
             );
             const isOverlayControl = (element) => !!element?.closest(
                 '[role="dialog"], [aria-modal="true"], .modal, .dropdown-menu, [data-tv-keep-focus]'
