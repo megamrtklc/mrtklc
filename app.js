@@ -1586,10 +1586,11 @@
                 },
 
                 handleDoubleTapSeek(direction, event) {
-                    if (event && event.currentTarget) {
-                        const rect = event.currentTarget.getBoundingClientRect();
-                        this.tapSeekX = event.clientX - rect.left;
-                        this.tapSeekY = event.clientY - rect.top;
+                    const zones = document.getElementById('cvTapSeekZones');
+                    if (zones && event) {
+                        const rect = zones.getBoundingClientRect();
+                        this.tapSeekX = Math.max(62, Math.min(rect.width - 62, event.clientX - rect.left));
+                        this.tapSeekY = Math.max(68, Math.min(rect.height - 68, event.clientY - rect.top));
                     }
                     const seconds = direction === 'backward' ? -10 : 10;
                     const video = document.getElementById('customVideoPlayer');
@@ -1599,13 +1600,13 @@
                     this.tapSeekAmount = this.tapSeekSide === direction ? this.tapSeekAmount + 10 : 10;
                     this.tapSeekSide = direction;
                     this.tapSeekPulse = false;
-                    setTimeout(() => { this.tapSeekPulse = true; }, 20);
+                    setTimeout(() => { this.tapSeekPulse = true; }, 30);
                     if (this.tapSeekTimer) clearTimeout(this.tapSeekTimer);
                     this.tapSeekTimer = setTimeout(() => {
                         this.tapSeekSide = '';
                         this.tapSeekAmount = 0;
                         this.tapSeekTimer = null;
-                    }, 750);
+                    }, 950);
                     this.showPlayerControls();
                 },
 
