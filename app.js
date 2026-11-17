@@ -1011,14 +1011,9 @@
                                 this.$nextTick(() => {
                                     this.prepareHomePersonalizedVariant(section);
                                     this.homeSectionLoading.personalized = false;
-                                    // Vitrin ve aktif cihaz varyantı DOM'a yerleşsin; bölümü ancak iki çizim karesi sonra göster.
-                                    window.requestAnimationFrame(() => {
-                                        window.requestAnimationFrame(() => {
-                                            if (section.isConnected && this.currentPage === 'home') {
-                                                section.style.removeProperty('visibility');
-                                            }
-                                        });
-                                    });
+                                    if (section.isConnected && this.currentPage === 'home') {
+                                        section.style.removeProperty('visibility');
+                                    }
                                 });
                             };
                             if (window.matchMedia('(max-width: 767px)').matches) {
@@ -1031,11 +1026,9 @@
                                 activate();
                             }
                         }
-                        if (key !== 'personalized') {
-                            window.requestAnimationFrame(() => {
-                                section.style.removeProperty('visibility');
-                            });
-                        }
+                        window.requestAnimationFrame(() => {
+                            section.style.removeProperty('visibility');
+                        });
                     };
 
                     // Yönetici tarafından kapatılan rafları hemen işle; görünür rafları ekrana yaklaşınca başlat.
