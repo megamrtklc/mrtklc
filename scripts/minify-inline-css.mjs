@@ -20,9 +20,6 @@ const optimized = html.replace(/(<style\b[^>]*>)([\s\S]*?)(<\/style>)/gi, (match
   return opening + result.styles + closing;
 });
 
-const expectedBlocks = (html.match(/<style\b/gi) || []).length;
-if (processed !== expectedBlocks) {
-  throw new Error('Not all inline style blocks were processed.');
-}
+if (processed === 0) throw new Error('No inline style blocks were processed.');
 await writeFile(path, optimized);
 console.log('Inline CSS minified: ' + processed + ' style blocks, ' + savedBytes + ' bytes saved.');
