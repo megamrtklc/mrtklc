@@ -2475,5 +2475,116 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         }, true);
       })();
     </script>
+
+    <style id="cv-seek-hover-preview-style">
+      [data-watch-card="player"] .cv-player-seek-wrap{overflow:visible}
+      [data-watch-card="player"] .cv-seek-hover-preview{position:absolute;z-index:30;bottom:calc(100% + 9px);width:132px;transform:translateX(-50%);pointer-events:none;opacity:0;visibility:hidden;transition:opacity .12s ease,visibility .12s ease}
+      [data-watch-card="player"] .cv-seek-hover-preview.is-visible{opacity:1;visibility:visible}
+      [data-watch-card="player"] .cv-seek-hover-preview-frame{width:132px;height:74px;overflow:hidden;border:1px solid rgba(255,255,255,.3);border-radius:8px;background:linear-gradient(135deg,#20242b,#090b0f);box-shadow:0 8px 24px rgba(0,0,0,.55)}
+      [data-watch-card="player"] .cv-seek-hover-preview-frame canvas{display:block;width:100%;height:100%;object-fit:cover}
+      [data-watch-card="player"] .cv-seek-hover-preview-time{display:block;margin:5px auto 0;width:max-content;max-width:100%;padding:2px 7px;border-radius:5px;background:rgba(0,0,0,.9);color:#fff;font:700 10px/1.4 ui-monospace,SFMono-Regular,monospace;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+      @media(hover:none),(pointer:coarse){[data-watch-card="player"] .cv-seek-hover-preview{display:none}}
+      @media(prefers-reduced-motion:reduce){[data-watch-card="player"] .cv-seek-hover-preview{transition:none}}
+    </style>
+
+    <script id="cv-seek-hover-preview">
+      (() => {
+        if (window.__CV_SEEK_PREVIEW_BOUND__) return;
+        window.__CV_SEEK_PREVIEW_BOUND__ = true;
+        let previewVideo = null, activeWrap = null, activeCanvas = null, activeTime = null;
+        let pendingTime = 0, seekTimer = 0, lastSeekAt = 0, sourceUrl = '';
+        const format = seconds => {
+          const n = Math.max(0, Math.floor(Number(seconds) || 0));
+          const h = Math.floor(n / 3600), m = Math.floor((n % 3600) / 60), s = n % 60;
+          return h ? [h,m,s].map(v => String(v).padStart(2,'0')).join(':') : [m,s].map(v => String(v).padStart(2,'0')).join(':');
+        };
+        const getPreviewVideo = () => {
+          if (previewVideo) return previewVideo;
+          previewVideo = document.createElement('video');
+          previewVideo.muted = true;
+          previewVideo.playsInline = true;
+          previewVideo.preload = 'metadata';
+          previewVideo.crossOrigin = 'anonymous';
+          previewVideo.setAttribute('aria-hidden','true');
+          previewVideo.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:2px;height:2px;opacity:0;pointer-events:none';
+          previewVideo.addEventListener('seeked', drawFrame);
+          document.body.appendChild(previewVideo);
+          return previewVideo;
+        };
+        const drawFrame = () => {
+          if (!activeCanvas || !previewVideo || previewVideo.readyState < 2) return;
+          try {
+            const ctx = activeCanvas.getContext('2d');
+            ctx.drawImage(previewVideo,0,0,activeCanvas.width,activeCanvas.height);
+            activeCanvas.dataset.hasFrame = '1';
+          } catch (_) {
+            activeCanvas.dataset.hasFrame = '0';
+          }
+        };
+        const ensurePreview = wrap => {
+          let panel = wrap.querySelector('.cv-seek-hover-preview');
+          if (!panel) {
+            panel = document.createElement('div');
+            panel.className = 'cv-seek-hover-preview';
+            panel.innerHTML = '<div class="cv-seek-hover-preview-frame"><canvas width="264" height="148"></canvas></div><span class="cv-seek-hover-preview-time">00:00</span>';
+            wrap.appendChild(panel);
+          }
+          return panel;
+        };
+        const requestFrame = (url, seconds) => {
+          const v = getPreviewVideo();
+          if (sourceUrl !== url) {
+            sourceUrl = url;
+            try { v.pause(); } catch (_) {}
+            v.removeAttribute('src');
+            v.load();
+            v.src = url;
+            v.load();
+          }
+          pendingTime = seconds;
+          if (seekTimer) clearTimeout(seekTimer);
+          const wait = Math.max(0, 260 - (Date.now() - lastSeekAt));
+          seekTimer = setTimeout(() => {
+            seekTimer = 0;
+            if (!v.duration || !Number.isFinite(v.duration)) return;
+            const target = Math.max(0, Math.min(v.duration - 0.08, pendingTime));
+            if (Math.abs(v.currentTime - target) < 0.18 && v.readyState >= 2) { drawFrame(); return; }
+            lastSeekAt = Date.now();
+            try { v.currentTime = target; } catch (_) {}
+          }, wait);
+        };
+        document.addEventListener('pointermove', event => {
+          const input = event.target.closest?.('.cv-player-seek');
+          if (!input || !window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+          const wrap = input.closest('.cv-player-seek-wrap');
+          const mainVideo = document.getElementById('customVideoPlayer');
+          if (!wrap || !mainVideo || !Number.isFinite(mainVideo.duration) || !mainVideo.duration) return;
+          const rect = input.getBoundingClientRect();
+          if (!rect.width) return;
+          const ratio = Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width));
+          const seconds = ratio * mainVideo.duration;
+          const panel = ensurePreview(wrap);
+          const canvas = panel.querySelector('canvas');
+          const time = panel.querySelector('.cv-seek-hover-preview-time');
+          activeWrap = wrap; activeCanvas = canvas; activeTime = time;
+          panel.style.left = Math.max(66,Math.min(rect.width-66,event.clientX-rect.left)) + 'px';
+          time.textContent = format(seconds);
+          panel.classList.add('is-visible');
+          const url = mainVideo.currentSrc || mainVideo.src;
+          if (url) requestFrame(url,seconds);
+        }, {passive:true});
+        const hide = event => {
+          const wrap = event.target.closest?.('.cv-player-seek-wrap');
+          if (!wrap || wrap.contains(event.relatedTarget)) return;
+          wrap.querySelector('.cv-seek-hover-preview')?.classList.remove('is-visible');
+          if (activeWrap === wrap) { activeWrap = null; activeCanvas = null; activeTime = null; }
+        };
+        document.addEventListener('pointerout',hide,{passive:true});
+        document.addEventListener('focusout',event => {
+          const wrap = event.target.closest?.('.cv-player-seek-wrap');
+          if (wrap) wrap.querySelector('.cv-seek-hover-preview')?.classList.remove('is-visible');
+        },true);
+      })();
+    </script>
 </body>
 </html>
