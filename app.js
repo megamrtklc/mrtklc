@@ -782,8 +782,9 @@
                                 window.setTimeout(loadEnglishTitlesWhenIdle, mobileDevice ? 500 : 900);
                             }
                         };
+                        const tvDevice = document.documentElement.classList.contains('cv-tv-mode');
                         if (mobileDevice) window.setTimeout(scheduleEnglishTitles, 5000);
-                        else scheduleEnglishTitles();
+                        else if (!tvDevice) scheduleEnglishTitles();
 
                         this.currentSlideIndex = 0;
                         this.startHeroAutoplay();
@@ -1054,6 +1055,7 @@
                     }
 
                     const mobileObserver = window.matchMedia('(max-width: 767px)').matches;
+                    const tvObserver = document.documentElement.classList.contains('cv-tv-mode');
                     const observer = new IntersectionObserver(entries => {
                         entries.forEach(entry => {
                             if (!entry.isIntersecting) return;
@@ -1063,7 +1065,7 @@
                             hydrateSection(entry.target);
                             observer.unobserve(entry.target);
                         });
-                    }, { rootMargin: mobileObserver ? '100px 0px' : '180px 0px', threshold: [0, 0.5] });
+                    }, { rootMargin: tvObserver ? '72px 0px' : (mobileObserver ? '100px 0px' : '180px 0px'), threshold: [0, 0.5] });
 
                     pending.forEach(section => observer.observe(section));
                     window.__cineverseHomeSectionObserver = observer;
