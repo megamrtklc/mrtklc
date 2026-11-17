@@ -1365,6 +1365,8 @@
                 playerSideControlsTimer: null,
                 tapSeekSide: '',
                 tapSeekAmount: 0,
+                tapSeekX: 0,
+                tapSeekY: 0,
                 tapSeekTimer: null,
                 lastSeekTap: null,
                 lastSeekTapTimer: null,
@@ -1570,7 +1572,7 @@
                         if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
                         this.lastSeekTapTimer = null;
                         this.lastSeekTap = null;
-                        this.handleDoubleTapSeek(direction);
+                        this.handleDoubleTapSeek(direction, event);
                         return;
                     }
                     this.lastSeekTap = { direction, time: now, x: point.x, y: point.y };
@@ -1582,7 +1584,12 @@
                     this.showPlayerControls();
                 },
 
-                handleDoubleTapSeek(direction) {
+                handleDoubleTapSeek(direction, event) {
+                    if (event && event.currentTarget) {
+                        const rect = event.currentTarget.getBoundingClientRect();
+                        this.tapSeekX = event.clientX - rect.left;
+                        this.tapSeekY = event.clientY - rect.top;
+                    }
                     const seconds = direction === 'backward' ? -10 : 10;
                     const video = document.getElementById('customVideoPlayer');
                     if (!video || !Number.isFinite(video.duration)) return;
