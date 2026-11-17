@@ -75,6 +75,23 @@ try {
 
   await page.waitForTimeout(8500);
 
+  await check('Tüm içerik görsellerinde yükleme iskeleti ve öneri yükleme ekranı çalışıyor', async () => {
+    const loadingStatus = page.locator('#home-personalized-section [role="status"]');
+    await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      app.homeSectionLoading.personalized = true;
+    });
+    await loadingStatus.waitFor({ state: 'visible' });
+    assert.match(await loadingStatus.innerText(), /Öneriler hazırlanıyor/i);
+    const imagePlaceholder = await page.locator('main img').first().evaluate(img => getComputedStyle(img).backgroundImage);
+    assert.match(imagePlaceholder, /linear-gradient/i, 'İçerik görsellerinde yükleme zemini bulunmalı');
+    await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      app.homeSectionLoading.personalized = false;
+    });
+    await loadingStatus.waitFor({ state: 'hidden' });
+  });
+
   await check('Global arama canlı katalog sonuçlarını afiş ve bilgilerle gösteriyor', async () => {
     await page.getByRole('button', { name: 'Film ve dizi ara' }).click();
     const dialog = page.getByRole('dialog', { name: 'Film ve dizi ara' });
