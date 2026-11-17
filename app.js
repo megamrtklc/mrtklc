@@ -700,6 +700,7 @@
                         if (page === 'home') this.$nextTick(() => {
                             // x-if anasayfayı yeniden oluşturur; rafları yeniden sırala ve görünürlüklerini tembel yüklemeye hazırla.
                             Object.keys(this.homeSectionReady).forEach(key => { this.homeSectionReady[key] = false; });
+                            this.homeSectionLoading.personalized = true;
                             this.applyHomepageSectionOrder();
                             this.scheduleHomePageHydration();
                             this.initHomeSectionObserver();
@@ -988,7 +989,7 @@
                             const activate = () => {
                                 if (!section.isConnected || this.currentPage !== 'home') return;
                                 // Öneri puanlaması tamamlanınca tüm alanı tek seferde aç.
-                                const preparedRecommendations = this.displayedPersonalizedRecommendations;
+                                this.displayedPersonalizedRecommendations;
                                 this.homeSectionReady.personalized = true;
                                 this.$nextTick(() => {
                                     this.prepareHomePersonalizedVariant(section);
