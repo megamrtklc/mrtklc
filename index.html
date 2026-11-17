@@ -1013,11 +1013,11 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                    @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
-                            <div x-show="playerControlsVisible" x-transition.opacity x-data="{ brightnessOpen: false }" @mouseenter="brightnessOpen = true" @mouseleave="brightnessOpen = false" @click.stop class="absolute top-3 right-16 z-40">
+                            <div x-show="playerControlsVisible" x-transition.opacity x-data="{ brightnessOpen: false }" @mouseenter="brightnessOpen = true" @mouseleave="brightnessOpen = false" @click.stop class="absolute top-3 left-3 z-40">
                                 <button type="button" @click="brightnessOpen = !brightnessOpen; showPlayerControls()" @focus="showPlayerControls()" aria-label="Video parlaklığını ayarla" title="Video parlaklığı" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300">
                                     <i class="fa-solid fa-sun"></i>
                                 </button>
-                                <div x-show="brightnessOpen" x-transition.opacity @click.stop class="absolute right-0 top-12 flex min-w-[54px] flex-col items-center gap-2 rounded-xl border border-white/15 bg-[#10141d]/95 px-3 py-3 text-white shadow-2xl backdrop-blur-xl">
+                                <div x-show="brightnessOpen" x-transition.opacity @click.stop class="absolute left-0 top-12 flex min-w-[54px] flex-col items-center gap-2 rounded-xl border border-white/15 bg-[#10141d]/95 px-3 py-3 text-white shadow-2xl backdrop-blur-xl">
                                     <span class="font-mono text-[10px] font-bold text-amber-200" x-text="Math.round(videoBrightness * 100) + '%'"></span>
                                     <input type="range" min="0.5" max="1.5" step="0.05" :value="videoBrightness" @input="setVideoBrightness($event.target.value); showPlayerControls()" aria-label="Dikey video parlaklığı" title="Video parlaklığı" style="writing-mode:vertical-lr;direction:rtl; width:8px;height:96px; accent-color:#e7c477; touch-action:pan-y;" class="cursor-pointer">
                                     <button type="button" @click="setVideoBrightness(1); showPlayerControls()" class="mt-1 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold hover:bg-white/20" aria-label="Parlaklığı sıfırla">Sıfırla</button>
