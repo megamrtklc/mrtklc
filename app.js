@@ -367,6 +367,9 @@
                     'published-collections': false,
                     catalog: false
                 },
+                homeSectionLoading: {
+                    personalized: true
+                },
                 tmdbApiKey: '3108265ab3fdbf3af14175edf64a9c7f',
                 tmdbLanguage: 'tr-TR',
                 tmdbDetailsCache: {},
@@ -984,8 +987,13 @@
                         if (key === 'personalized') {
                             const activate = () => {
                                 if (!section.isConnected || this.currentPage !== 'home') return;
+                                // Öneri puanlaması tamamlanınca tüm alanı tek seferde aç.
+                                const preparedRecommendations = this.displayedPersonalizedRecommendations;
                                 this.homeSectionReady.personalized = true;
-                                this.$nextTick(() => this.prepareHomePersonalizedVariant(section));
+                                this.$nextTick(() => {
+                                    this.prepareHomePersonalizedVariant(section);
+                                    this.homeSectionLoading.personalized = false;
+                                });
                             };
                             if (window.matchMedia('(max-width: 767px)').matches) {
                                 // Mobilde öneri puanlamasını ilk çizimden sonraya al.
