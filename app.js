@@ -1361,6 +1361,8 @@
                 hasPlaybackStarted: false,
                 playerControlsVisible: true,
                 playerControlsTimer: null,
+                playerSideControlsVisible: true,
+                playerSideControlsTimer: null,
                 cinemaMode: false,
                 cinemaNoticeVisible: false,
                 cinemaNoticeTimer: null,
@@ -1426,6 +1428,21 @@
                         else if (key === 'c') this.toggleCinemaMode();
                         this.showPlayerControls();
                     }
+                },
+
+                schedulePlayerSideControls() {
+                    this.playerSideControlsVisible = false;
+                    if (this.playerSideControlsTimer) clearTimeout(this.playerSideControlsTimer);
+                    this.playerSideControlsTimer = setTimeout(() => {
+                        this.playerSideControlsVisible = true;
+                        this.playerSideControlsTimer = null;
+                    }, 3000);
+                },
+
+                revealPlayerSideControls() {
+                    if (this.playerSideControlsTimer) clearTimeout(this.playerSideControlsTimer);
+                    this.playerSideControlsTimer = null;
+                    this.playerSideControlsVisible = true;
                 },
 
                 showPlayerControls() {
