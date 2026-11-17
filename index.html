@@ -1016,7 +1016,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             <div x-cloak x-show="pauseNoticeVisible && isDirectVideoUrl(getPlaybackUrl())" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-10 bg-black/35" aria-hidden="true"></div>
                             <!-- YouTube-style double-tap seek zones -->
                             <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted" class="absolute inset-x-0 top-0 bottom-[76px] z-[11] grid grid-cols-3" style="touch-action:manipulation" aria-label="Çift dokunarak videoyu sar">
-                                <div class="relative flex items-center justify-center" @click="showPlayerControls()" @dblclick.prevent.stop="handleDoubleTapSeek('backward')">
+                                <div class="relative flex items-center justify-center" @click="showPlayerControls()" @pointerup.stop="handleSeekTap('backward', $event)">
                                     <div x-cloak x-show="tapSeekSide === 'left'" x-transition.opacity.duration.150ms class="pointer-events-none flex h-20 w-20 flex-col items-center justify-center rounded-full bg-black/55 text-white shadow-xl backdrop-blur-sm">
                                         <i class="fa-solid fa-rotate-left text-2xl text-amber-300"></i>
                                         <span class="mt-1 text-xs font-black" x-text="tapSeekAmount + ' SN'"></span>
@@ -1024,7 +1024,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     </div>
                                 </div>
                                 <div @click="showPlayerControls()"></div>
-                                <div class="relative flex items-center justify-center" @click="showPlayerControls()" @dblclick.prevent.stop="handleDoubleTapSeek('forward')">
+                                <div class="relative flex items-center justify-center" @click="showPlayerControls()" @pointerup.stop="handleSeekTap('forward', $event)">
                                     <div x-cloak x-show="tapSeekSide === 'right'" x-transition.opacity.duration.150ms class="pointer-events-none flex h-20 w-20 flex-col items-center justify-center rounded-full bg-black/55 text-white shadow-xl backdrop-blur-sm">
                                         <i class="fa-solid fa-rotate-right text-2xl text-amber-300"></i>
                                         <span class="mt-1 text-xs font-black" x-text="tapSeekAmount + ' SN'"></span>
