@@ -2190,6 +2190,37 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         }
       }
     </style>
+    <style id="cv-home-image-loading">
+      /* Hafif afiş iskeleti: gerçek görsel geldiğinde görsel arka planı tamamen örter. */
+      #home-page img:not([src^="data:"]) {
+        background-color: #171923;
+        background-image: linear-gradient(105deg, rgba(255,255,255,.025) 25%, rgba(255,255,255,.095) 42%, rgba(255,255,255,.025) 62%);
+        background-size: 220% 100%;
+        background-position: 100% 0;
+        animation: cv-image-skeleton 1.5s ease-in-out infinite;
+      }
+      @keyframes cv-image-skeleton { to { background-position: -120% 0; } }
+      .cv-section-loading-overlay {
+        position:absolute; inset:0; z-index:30; display:grid; place-items:center;
+        min-height:100%; padding:24px; border:1px solid rgba(148,163,184,.18);
+        border-radius:20px;
+        background:radial-gradient(ellipse at 50% 35%,rgba(225,29,72,.10),transparent 58%),rgba(9,11,16,.97);
+        color:#f8fafc; text-align:center;
+      }
+      #home-personalized-section { position:relative; min-height:280px; }
+      .cv-section-loading-content { display:flex; flex-direction:column; align-items:center; gap:10px; max-width:340px; }
+      .cv-section-loading-mark { display:grid; place-items:center; width:48px; height:48px; border:1px solid rgba(245,197,24,.38); border-radius:50%; background:rgba(245,197,24,.08); color:#f5c518; font-size:19px; }
+      .cv-section-loading-content strong { font-size:15px; font-weight:900; letter-spacing:.04em; }
+      .cv-section-loading-content > span:not(.cv-section-loading-mark):not(.cv-section-loading-track) { color:rgba(226,232,240,.72); font-size:12px; line-height:1.6; }
+      .cv-section-loading-track { display:block; width:min(220px,65vw); height:3px; overflow:hidden; border-radius:99px; background:rgba(255,255,255,.12); }
+      .cv-section-loading-track > span { display:block; width:38%; height:100%; border-radius:inherit; background:linear-gradient(90deg,#e11d48,#f5c518); animation:cv-loading-progress 1.35s ease-in-out infinite; }
+      .cv-section-loading-content small { color:rgba(148,163,184,.65); font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+      @keyframes cv-loading-progress { 0%{transform:translateX(-110%)} 100%{transform:translateX(290%)} }
+      @media(prefers-reduced-motion:reduce) {
+        #home-page img:not([src^="data:"]), .cv-section-loading-track > span { animation:none!important; }
+      }
+      @media(max-width:639px) { #home-personalized-section { min-height:250px; } .cv-section-loading-overlay { border-radius:16px; padding:18px; } }
+    </style>
     <style id="cv-personalized-no-feedback-layout">
       #home-personalized-section .home-personalized-alternative {
         grid-template-rows: minmax(0, 1fr) !important;
@@ -2519,6 +2550,15 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 </div>
        <!-- Kişiselleştirilmiş Öneriler -->
                 <section id="home-personalized-section" data-home-section="personalized" x-data="{ showAllPersonalized: false }" x-cloak x-show="isHomepageSectionVisible('personalized')" class="home-personalized-section w-full px-6 sm:px-12 space-y-4" x-ignore>
+                    <div x-cloak x-show="homeSectionLoading.personalized" x-transition.opacity.duration.200ms class="cv-section-loading-overlay" role="status" aria-live="polite">
+                        <div class="cv-section-loading-content">
+                            <span class="cv-section-loading-mark" aria-hidden="true"><i class="fa-solid fa-clapperboard"></i></span>
+                            <strong>Öneriler hazırlanıyor</strong>
+                            <span>Sana uygun yapımları seçiyoruz. Biraz bekle…</span>
+                            <span class="cv-section-loading-track" aria-hidden="true"><span></span></span>
+                            <small>Görseller ve öneriler yükleniyor</small>
+                        </div>
+                    </div>
                     <div class="home-personalized-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3">
                         <div class="min-w-0">
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1"><span x-text="homepageConfig?.personalizedSection?.eyebrow || 'SANA ÖZEL'">SANA ÖZEL</span> • <span x-text="currentProfile.name"></span></p>
