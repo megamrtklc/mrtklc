@@ -950,16 +950,24 @@
                     children.forEach(element => {
                         if (!placed.has(element)) ordered.push(element);
                     });
-                    ordered.forEach(element => root.appendChild(element));
+                    // Sıra zaten doğruysa DOM'a dokunma; değişiklik gerekiyorsa tek fragment eklemesiyle uygula.
+                    const orderChanged = ordered.length !== children.length || ordered.some((element, index) => element !== children[index]);
+                    if (orderChanged) {
+                        const fragment = document.createDocumentFragment();
+                        ordered.forEach(element => fragment.appendChild(element));
+                        root.appendChild(fragment);
+                    }
                     const labels = this.homepageConfig?.layout?.labels || {};
                     Object.entries(labels).forEach(([key, values]) => {
                         if (!values || typeof values !== 'object') return;
                         const section = root.querySelector('[data-home-section="'+key+'"]');
                         if (!section) return;
                         const heading = section.querySelector('h2');
-                        if (heading && typeof values.title === 'string' && values.title.trim()) heading.textContent = values.title.trim();
+                        const title = typeof values.title === 'string' ? values.title.trim() : '';
+                        if (heading && title && heading.textContent !== title) heading.textContent = title;
                         const subtitle = heading?.nextElementSibling;
-                        if (subtitle?.tagName === 'P' && typeof values.description === 'string') subtitle.textContent = values.description.trim();
+                        const description = typeof values.description === 'string' ? values.description.trim() : '';
+                        if (subtitle?.tagName === 'P' && subtitle.textContent !== description && typeof values.description === 'string') subtitle.textContent = description;
                     });
                 },
 
