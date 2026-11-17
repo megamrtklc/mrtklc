@@ -2507,7 +2507,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
           previewVideo.crossOrigin = 'anonymous';
           previewVideo.setAttribute('aria-hidden','true');
           previewVideo.style.cssText = 'position:fixed;left:-10000px;top:-10000px;width:2px;height:2px;opacity:0;pointer-events:none';
-          previewVideo.addEventListener('seeked', drawFrame);
+          previewVideo.addEventListener('seeked', drawFrame);\n          previewVideo.addEventListener('loadedmetadata', () => { if (Number.isFinite(previewVideo.duration) && previewVideo.duration > 0) { try { previewVideo.currentTime = Math.max(0, Math.min(previewVideo.duration - 0.08, pendingTime)); } catch (_) {} } });
           document.body.appendChild(previewVideo);
           return previewVideo;
         };
