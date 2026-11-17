@@ -1,0 +1,15 @@
+/* Perde icon subset: Font Awesome Free 6.4.0. Only icons used by the site are included. */
+@font-face{font-family:"Font Awesome 6 Free";font-style:normal;font-weight:900;font-display:swap;src:url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2") format("woff2")}
+@font-face{font-family:"Font Awesome 6 Free";font-style:normal;font-weight:400;font-display:swap;src:url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2") format("woff2")}
+.fa-solid,.fas{font-family:"Font Awesome 6 Free";font-weight:900}
+.fa-regular,.far{font-family:"Font Awesome 6 Free";font-weight:400}
+.fa-solid,.fa-regular,.fas,.far{display:inline-block;font-style:normal;font-variant:normal;line-height:1;text-rendering:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+.fa-regular.fa-bookmark:before{content:"undefined"}
+.fa-regular.fa-circle:before{content:"undefined"}
+.fa-solid.fa-bookmark-slash:before{content:"\\f02e"}
+.fa-solid.fa-bookmark-slash{position:relative}
+.fa-solid.fa-bookmark-slash:after{content:"";position:absolute;left:48%;top:8%;height:88%;border-left:1.7px solid currentColor;transform:rotate(-38deg);pointer-events:none}
+.fa-spin{animation:fa-spin 2s infinite linear}
+@keyframes fa-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.fa-spin{animation-duration:8s;animation-iteration-count:1}}
