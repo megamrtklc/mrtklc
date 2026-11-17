@@ -1363,6 +1363,9 @@
                 playerControlsTimer: null,
                 playerSideControlsVisible: true,
                 playerSideControlsTimer: null,
+                tapSeekSide: '',
+                tapSeekAmount: 0,
+                tapSeekTimer: null,
                 cinemaMode: false,
                 cinemaNoticeVisible: false,
                 cinemaNoticeTimer: null,
@@ -1553,6 +1556,23 @@
                     if (!video || !Number.isFinite(video.duration)) return;
                     video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
                     this.showPlaybackFeedback(seconds < 0 ? 'backward' : 'forward', 850);
+                    this.showPlayerControls();
+                },
+
+                handleDoubleTapSeek(direction) {
+                    const seconds = direction === 'backward' ? -10 : 10;
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video || !Number.isFinite(video.duration)) return;
+                    video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
+                    this.updateVideoProgress();
+                    this.tapSeekAmount = this.tapSeekSide === direction ? this.tapSeekAmount + 10 : 10;
+                    this.tapSeekSide = direction;
+                    if (this.tapSeekTimer) clearTimeout(this.tapSeekTimer);
+                    this.tapSeekTimer = setTimeout(() => {
+                        this.tapSeekSide = '';
+                        this.tapSeekAmount = 0;
+                        this.tapSeekTimer = null;
+                    }, 750);
                     this.showPlayerControls();
                 },
 
