@@ -91,3 +91,6 @@
 .fa-spin{animation:fa-spin 2s infinite linear}
 @keyframes fa-spin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.fa-spin{animation-duration:8s;animation-iteration-count:1}}
+
+.fa-solid.fa-bookmark:before{content:"\\f02e"}
+.fa-solid.fa-circle:before{content:"\\f111"}
