@@ -2275,30 +2275,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     </script>
 
 
-    <style id="cv-tv-performance-mode">
-        html.cv-tv-mode {
-            scroll-behavior: auto !important;
-            -webkit-text-size-adjust: 100%;
-        }
-        html.cv-tv-mode *,
-        html.cv-tv-mode *::before,
-        html.cv-tv-mode *::after {
-            scroll-behavior: auto !important;
-            animation-duration: .01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: .01ms !important;
-            caret-color: transparent !important;
-        }
-        html.cv-tv-mode [class*="backdrop-blur"],
-        html.cv-tv-mode [style*="backdrop-filter"] {
-            -webkit-backdrop-filter: none !important;
-            backdrop-filter: none !important;
-        }
-        html.cv-tv-mode .cv-image-loading-surface > .cv-image-loading-spinner {
-            animation: none !important;
-            border-top-color: rgba(255,255,255,.9);
-        }
-    </style>
+    <style id="cv-tv-performance-mode">html.cv-tv-mode{scroll-behavior:auto!important;-webkit-text-size-adjust:100%}html.cv-tv-mode *,html.cv-tv-mode ::after,html.cv-tv-mode ::before{scroll-behavior:auto!important;animation-duration:NaNs!important;animation-iteration-count:1!important;transition-duration:NaNs!important;caret-color:transparent!important}html.cv-tv-mode [class*=backdrop-blur],html.cv-tv-mode [style*=backdrop-filter]{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}html.cv-tv-mode .cv-image-loading-surface>.cv-image-loading-spinner{animation:none!important;border-top-color:rgba(255,255,255,.9)}</style>
     <script id="cv-tv-remote-vertical-scroll">
         (() => {
             const ua = navigator.userAgent || '';
