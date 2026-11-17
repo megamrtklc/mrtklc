@@ -2278,20 +2278,37 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     <script id="cv-tv-remote-vertical-scroll">
         (() => {
             const isEditable = (element) => !!element?.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]');
+            const getVerticalDirection = (event) => {
+                const key = event.key || event.code || '';
+                if (key === 'ArrowDown' || key === 'Down' || key === 'DPAD_DOWN' || event.keyCode === 40 || event.which === 40) return 1;
+                if (key === 'ArrowUp' || key === 'Up' || key === 'DPAD_UP' || event.keyCode === 38 || event.which === 38) return -1;
+                return 0;
+            };
             document.addEventListener('keydown', (event) => {
-                if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
-                if (event.altKey || event.ctrlKey || event.metaKey || isEditable(event.target)) return;
+                const direction = getVerticalDirection(event);
+                if (!direction || event.altKey || event.ctrlKey || event.metaKey || isEditable(event.target)) return;
+                if (!document.querySelector('#home-page')) return;
+
                 const focused = document.activeElement;
-                const focusedRail = focused?.closest?.('.home-card-rail');
-                if (!focusedRail || !document.querySelector('#home-page')) return;
-                const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-                if (!maxScroll) return;
-                const direction = event.key === 'ArrowDown' ? 1 : -1;
-                const current = window.scrollY || document.documentElement.scrollTop || 0;
-                const next = Math.min(maxScroll, Math.max(0, current + direction * Math.max(220, Math.round(window.innerHeight * 0.68))));
-                if (next === current) return;
+                const insideRail = !!focused?.closest?.('.home-card-rail');
+                const pageReleased = focused === document.body || focused === document.documentElement;
+                if (!insideRail && !pageReleased) return;
+
+                // Dikey tuşlar yatay kart şeridinde odağı kilitlemesin.
                 event.preventDefault();
-                window.scrollTo({ top: next, behavior: 'smooth' });
+                event.stopPropagation();
+                if (insideRail) {
+                    focused.blur?.();
+                    if (!document.body.hasAttribute('tabindex')) document.body.setAttribute('tabindex', '-1');
+                    document.body.focus({ preventScroll: true });
+                }
+
+                const root = document.scrollingElement || document.documentElement;
+                const maxScroll = Math.max(0, root.scrollHeight - window.innerHeight);
+                const current = Math.max(0, window.scrollY || root.scrollTop || 0);
+                const step = Math.max(180, Math.round(window.innerHeight * 0.62));
+                const next = Math.min(maxScroll, Math.max(0, current + direction * step));
+                if (next !== current) window.scrollTo({ top: next, left: 0, behavior: 'auto' });
             }, true);
         })();
     </script>
