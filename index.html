@@ -71,7 +71,6 @@
       })();
     </script>
     <!-- Kritik harici kaynaklara erken bağlantı -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
 
@@ -84,7 +83,7 @@
     <!-- Mobilde ikon fontları ilk manşet yüklemesi tamamlanana kadar ertelenir. -->
     <script id="cv-fontawesome-loader">
       (function () {
-        var href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+        var href = './icons.css?v=20261117-used-icons-v1';
         if (document.documentElement.dataset.cvDeviceMode === 'tv') {
           window.addEventListener('load', function () {
             window.setTimeout(function () { if (window.requestIdleCallback) window.requestIdleCallback(loadIcons, { timeout: 2500 }); else loadIcons(); }, 2500);
@@ -92,7 +91,7 @@
           return;
         }
         function loadIcons() {
-          if (document.getElementById('cv-fontawesome-css')) return;
+          if (document.getElementById('cv-icons-css')) return;
           var stylesheet = document.createElement('link');
           stylesheet.id = 'cv-fontawesome-css';
           stylesheet.rel = 'stylesheet';
