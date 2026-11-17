@@ -22170,7 +22170,7 @@
     "desktopMode": "auto",
     "desktopCategory": "random",
     "mobileMode": "auto",
-    "mobileCategory": "new-arrivals",
+    "mobileCategory": "random",
     "desktopHeroSlides": [
       {
         "id": "archive-29",
@@ -22235,31 +22235,31 @@
     ],
     "mobileHeroSlides": [
       {
-        "id": "cv-1794715229672",
+        "id": "archive-45",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794715209608",
+        "id": "cv-1794683689165",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794714842137",
+        "id": "cv-1794698111552",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794714577385",
+        "id": "archive-112",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794698470655",
+        "id": "archive-15",
         "active": true,
         "headline": "",
         "description": ""
