@@ -55,16 +55,28 @@
     <script id="cv-desktop-font-loader">
       (function () {
         if (!window.matchMedia('(min-width: 768px)').matches || document.documentElement.dataset.cvDeviceMode === 'tv') return;
-        ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].forEach(function (origin) {
-          var connection = document.createElement('link');
-          connection.rel = 'preconnect';
-          connection.href = origin;
-          if (origin.indexOf('fonts.gstatic.com') !== -1) connection.crossOrigin = 'anonymous';
-          document.head.appendChild(connection);
+        var fontOrigin = document.createElement('link');
+        fontOrigin.rel = 'preconnect';
+        fontOrigin.href = 'https://fonts.gstatic.com';
+        fontOrigin.crossOrigin = 'anonymous';
+        document.head.appendChild(fontOrigin);
+        [
+          'https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0Q5n-wU.woff2',
+          'https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2'
+        ].forEach(function (url) {
+          var preload = document.createElement('link');
+          preload.rel = 'preload';
+          preload.as = 'font';
+          preload.type = 'font/woff2';
+          preload.href = url;
+          preload.crossOrigin = 'anonymous';
+          preload.setAttribute('fetchpriority', 'low');
+          document.head.appendChild(preload);
         });
         var stylesheet = document.createElement('link');
+        stylesheet.id = 'cv-inter-font-css';
         stylesheet.rel = 'stylesheet';
-        stylesheet.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap';
+        stylesheet.href = './fonts.css?v=20261117-inter-subset-v1';
         stylesheet.media = 'print';
         stylesheet.onload = function () { this.media = 'all'; };
         document.head.appendChild(stylesheet);
@@ -76,7 +88,6 @@
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
 
     <!-- Ana uygulama: Terser ile küçültülmüş üretim dosyası. -->
-    <link rel="preload" as="font" type="font/woff2" href="https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" crossorigin fetchpriority="low" media="(min-width: 768px)">
     <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js">
     <!-- Derlenmiş Tailwind CSS: tarayıcıda JIT/derleme betiği çalıştırılmaz. -->
     <link rel="preload" as="style" href="./tailwind.css">
