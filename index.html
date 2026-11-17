@@ -1015,7 +1015,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </video>
                             <div x-cloak x-show="pauseNoticeVisible && isDirectVideoUrl(getPlaybackUrl())" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-10 bg-black/35" aria-hidden="true"></div>
                             <!-- YouTube-style double-tap seek zones -->
-                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted" class="absolute inset-0 z-[11] grid grid-cols-3" aria-label="Çift dokunarak videoyu sar">
+                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted" class="absolute inset-x-0 top-0 bottom-[76px] z-[11] grid grid-cols-3" style="touch-action:manipulation" aria-label="Çift dokunarak videoyu sar">
                                 <div class="relative flex items-center justify-center" @click="showPlayerControls()" @dblclick.prevent.stop="handleDoubleTapSeek('backward')">
                                     <div x-cloak x-show="tapSeekSide === 'left'" x-transition.opacity.duration.150ms class="pointer-events-none flex h-20 w-20 flex-col items-center justify-center rounded-full bg-black/55 text-white shadow-xl backdrop-blur-sm">
                                         <i class="fa-solid fa-rotate-left text-2xl text-amber-300"></i>
