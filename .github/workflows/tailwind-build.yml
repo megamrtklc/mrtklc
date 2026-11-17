@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: 22
       - name: Install Tailwind CLI
-        run: npm install --no-save tailwindcss@3.4.17 terser
+        run: npm install --no-save tailwindcss@3.4.17 terser clean-css@5.3.3
       - name: Build and commit production assets
         run: |
           git config user.name "github-actions[bot]"
@@ -34,10 +34,11 @@ jobs:
           for attempt in 1 2 3; do
             git fetch origin main
             git reset --hard origin/main
+            node scripts/minify-inline-css.mjs
             npx tailwindcss -c tailwind.config.js -i ./src/tailwind.css -o ./tailwind.css --minify
             npx terser app.js --compress --mangle --output app.min.js
             wc -c tailwind.css app.js app.min.js
-            git add tailwind.css app.min.js
+            git add index.html tailwind.css app.min.js
             if git diff --cached --quiet; then
               echo "Compiled assets are already current."
               exit 0
