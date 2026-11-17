@@ -1482,7 +1482,7 @@
 
                 currentProfile: {
                     name: 'Ana Profil',
-                    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop'
+                    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=96&auto=format&fit=crop'
                 },
 
                 get profileMovieProgress() {
