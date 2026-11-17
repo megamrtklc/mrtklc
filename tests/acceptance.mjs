@@ -146,6 +146,50 @@ try {
     const mobilePage = await mobileContext.newPage();
     await mobilePage.addInitScript(() => {
       window.__mobileLcpEntries = []; window.__mobileShifts = []; window.__mobileLongTasks = [];
+      window.__personalizedHeadingTimeline = []; window.__personalizedHeadingMutations = [];
+      const capturePersonalizedHeading = () => {
+        const section = document.querySelector('#home-personalized-section');
+        const heading = section?.querySelector('.home-personalized-heading');
+        if (!heading) {
+          window.__personalizedHeadingTimeline.push({ time: Math.round(performance.now()), found: false, sectionDisplay: section ? getComputedStyle(section).display : null, sectionVisibility: section ? getComputedStyle(section).visibility : null });
+          return;
+        }
+        const rect = heading.getBoundingClientRect();
+        const style = getComputedStyle(heading);
+        window.__personalizedHeadingTimeline.push({
+          time: Math.round(performance.now()), found: true, nodeId: heading.dataset.cvDiagnosticId || null,
+          inlineStyle: heading.getAttribute('style'), className: heading.className,
+          height: Math.round(rect.height * 100) / 100, cssHeight: style.height, minHeight: style.minHeight,
+          display: style.display, visibility: style.visibility, connected: heading.isConnected,
+          sectionDisplay: getComputedStyle(section).display, sectionVisibility: getComputedStyle(section).visibility,
+          xCloak: section.hasAttribute('x-cloak'), xShow: section.getAttribute('x-show')
+        });
+      };
+      let headingIdentity = 0;
+      const markHeading = node => {
+        if (node?.nodeType === 1 && node.matches?.('.home-personalized-heading')) {
+          node.dataset.cvDiagnosticId = String(++headingIdentity);
+          window.__personalizedHeadingMutations.push({ time: Math.round(performance.now()), type: 'heading-added', id: node.dataset.cvDiagnosticId });
+        }
+        node?.querySelectorAll?.('.home-personalized-heading').forEach(markHeading);
+      };
+      new MutationObserver(records => {
+        for (const record of records) {
+          if (record.type === 'childList') {
+            record.addedNodes.forEach(markHeading);
+            record.removedNodes.forEach(node => {
+              if (node.nodeType === 1 && (node.matches?.('.home-personalized-heading') || node.querySelector?.('.home-personalized-heading'))) {
+                window.__personalizedHeadingMutations.push({ time: Math.round(performance.now()), type: 'heading-removed' });
+              }
+            });
+          }
+          if (record.type === 'attributes' && record.target.matches?.('.home-personalized-heading')) {
+            window.__personalizedHeadingMutations.push({ time: Math.round(performance.now()), type: 'heading-attribute', attribute: record.attributeName, value: record.target.getAttribute(record.attributeName) });
+          }
+        }
+      }).observe(document, { subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'style'] });
+      const headingCaptureTimer = setInterval(capturePersonalizedHeading, 50);
+      setTimeout(() => clearInterval(headingCaptureTimer), 7000);
       try { new PerformanceObserver(list => { for (const entry of list.getEntries()) { const el = entry.element; window.__mobileLcpEntries.push({ startTime: Math.round(entry.startTime), size: entry.size, tag: el?.tagName || null, id: el?.id || null, className: typeof el?.className === 'string' ? el.className.slice(0, 140) : '', src: el?.currentSrc || el?.src || '', text: el?.textContent?.trim().slice(0, 80) || '' }); } }).observe({ type: 'largest-contentful-paint', buffered: true });
         new PerformanceObserver(list => { for (const entry of list.getEntries()) { if (!entry.hadRecentInput) window.__mobileShifts.push({ value: entry.value, startTime: Math.round(entry.startTime), sources: (entry.sources || []).slice(0, 5).map(source => ({ tag: source.node?.tagName || null, id: source.node?.id || null, className: typeof source.node?.className === 'string' ? source.node.className.slice(0, 120) : '', previousRect: source.previousRect, currentRect: source.currentRect })) }); } }).observe({ type: 'layout-shift', buffered: true });
         new PerformanceObserver(list => { for (const entry of list.getEntries()) window.__mobileLongTasks.push({ startTime: Math.round(entry.startTime), duration: Math.round(entry.duration), name: entry.name, attribution: (entry.attribution || []).map(item => ({ name: item.name, entryType: item.entryType, containerType: item.containerType, containerName: item.containerName, containerSrc: item.containerSrc, containerId: item.containerId })) }); }).observe({ type: 'longtask', buffered: true });
@@ -154,7 +198,7 @@ try {
     await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await mobilePage.waitForFunction(() => window.Alpine && Array.isArray(window.Alpine.$data(document.documentElement)?.catalog) && window.Alpine.$data(document.documentElement).catalog.length >= 130, { timeout: 60000 });
     await mobilePage.waitForTimeout(6000);
-    const diagnostic = await mobilePage.evaluate(() => { const app = window.Alpine.$data(document.documentElement); const footer = document.querySelector('#cineverse-footer'); return { lcp: window.__mobileLcpEntries, shifts: window.__mobileShifts, longTasks: window.__mobileLongTasks, resources: performance.getEntriesByType('resource').filter(entry => /app\\.js|alpinejs|catalog-lite|hero-data|font-awesome|fonts\\.gstatic|fonts\\.googleapis/.test(entry.name)).map(entry => ({ name: entry.name.split('/').pop(), type: entry.initiatorType, startTime: Math.round(entry.startTime), duration: Math.round(entry.duration), transferSize: entry.transferSize || 0, responseStatus: entry.responseStatus || 0 })), longTaskSummary: { count: window.__mobileLongTasks.length, totalDuration: window.__mobileLongTasks.reduce((sum, task) => sum + task.duration, 0), longest: Math.max(0, ...window.__mobileLongTasks.map(task => task.duration)) }, homeSections: [...(document.querySelector('#home-page')?.children || [])].map(element => ({ id: element.id || '', section: element.dataset.homeSection || '', ignoreAttr: element.hasAttribute('x-ignore'), ignoreState: !!element._x_ignore, initialized: !!element._x_marker, descendants: element.querySelectorAll('*').length })), totalDomElements: document.querySelectorAll('*').length, catalogLoading: app.catalogLoading, footerEnabled: app.footerConfig?.enabled, footerReady: app.footerConfigReady, footerDisplay: footer ? getComputedStyle(footer).display : null, footerRect: footer?.getBoundingClientRect().toJSON() || null, heroTitle: app.currentHero?.title || '', mobileHeroVisible: !!document.querySelector('#mobileHeroBanner') && getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none' }; });
+    const diagnostic = await mobilePage.evaluate(() => { const app = window.Alpine.$data(document.documentElement); const footer = document.querySelector('#cineverse-footer'); return { lcp: window.__mobileLcpEntries, shifts: window.__mobileShifts, longTasks: window.__mobileLongTasks, personalizedHeadingTimeline: window.__personalizedHeadingTimeline, personalizedHeadingMutations: window.__personalizedHeadingMutations, resources: performance.getEntriesByType('resource').filter(entry => /app\\.js|alpinejs|catalog-lite|hero-data|font-awesome|fonts\\.gstatic|fonts\\.googleapis/.test(entry.name)).map(entry => ({ name: entry.name.split('/').pop(), type: entry.initiatorType, startTime: Math.round(entry.startTime), duration: Math.round(entry.duration), transferSize: entry.transferSize || 0, responseStatus: entry.responseStatus || 0 })), longTaskSummary: { count: window.__mobileLongTasks.length, totalDuration: window.__mobileLongTasks.reduce((sum, task) => sum + task.duration, 0), longest: Math.max(0, ...window.__mobileLongTasks.map(task => task.duration)) }, homeSections: [...(document.querySelector('#home-page')?.children || [])].map(element => ({ id: element.id || '', section: element.dataset.homeSection || '', ignoreAttr: element.hasAttribute('x-ignore'), ignoreState: !!element._x_ignore, initialized: !!element._x_marker, descendants: element.querySelectorAll('*').length })), totalDomElements: document.querySelectorAll('*').length, catalogLoading: app.catalogLoading, footerEnabled: app.footerConfig?.enabled, footerReady: app.footerConfigReady, footerDisplay: footer ? getComputedStyle(footer).display : null, footerRect: footer?.getBoundingClientRect().toJSON() || null, heroTitle: app.currentHero?.title || '', mobileHeroVisible: !!document.querySelector('#mobileHeroBanner') && getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none' }; });
     console.log('MOBILE PERFORMANCE DIAGNOSTIC:', JSON.stringify(diagnostic));
     await mobileContext.close();
   });
