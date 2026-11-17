@@ -808,17 +808,21 @@
                         });
                         // 300 KB'lık kadro verisini ilk açılışın kritik yolundan çıkar.
                         // Oyuncu araması daha erken yapılırsa schedulePersonSearch yüklemeyi hemen başlatır.
-                        const castDelay = document.documentElement.classList.contains('cv-tv-mode') ? 25000 : (window.matchMedia('(max-width: 767px)').matches ? 12000 : 6000);
-                        window.setTimeout(() => {
-                            const scheduleCastLoad = () => this.loadCatalogCastData();
-                            if ('requestIdleCallback' in window) window.requestIdleCallback(scheduleCastLoad, { timeout: 5000 });
-                            else window.setTimeout(scheduleCastLoad, 500);
-                        }, castDelay);
+                        // TV arayüzünde kadro/kişi keşfi kullanılmadığından 290 KB'lık ek veriyi hiç indirme.
+                        if (!document.documentElement.classList.contains('cv-tv-mode')) {
+                            const castDelay = window.matchMedia('(max-width: 767px)').matches ? 12000 : 6000;
+                            window.setTimeout(() => {
+                                const scheduleCastLoad = () => this.loadCatalogCastData();
+                                if ('requestIdleCallback' in window) window.requestIdleCallback(scheduleCastLoad, { timeout: 5000 });
+                                else window.setTimeout(scheduleCastLoad, 500);
+                            }, castDelay);
+                        }
                     }
                 },
 
                 isHomepageSectionVisible(sectionKey) {
                     if (sectionKey === 'hero') return true;
+                    if (document.documentElement.classList.contains('cv-tv-mode') && sectionKey === 'personalized') return false;
                     // Yapılandırma gelene kadar varsayılan olarak görünür tut;
                     // veri geldikten sonra kapalı bölümler normal şekilde gizlenir.
                     return this.homepageConfig?.layout?.visibility?.[sectionKey] !== false;
@@ -989,6 +993,7 @@
                     const sections = [...root.children].filter(element =>
                         element.hasAttribute('data-home-section') &&
                         element.dataset.homeSection !== 'hero' &&
+                        !(document.documentElement.classList.contains('cv-tv-mode') && element.dataset.homeSection === 'personalized') &&
                         element.hasAttribute('x-ignore')
                     );
 
