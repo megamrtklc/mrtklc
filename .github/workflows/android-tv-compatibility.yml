@@ -1,0 +1,31 @@
+name: Android TV Compatibility Tests
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android-tv-compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: npm install --no-save playwright
+      - name: Install Chromium
+        run: npx playwright install chromium
+      - name: Wait for Pages deployment
+        run: sleep 90
+      - name: Run Android TV and device-isolation tests
+        env:
+          BASE_URL: https://megamrtklc.github.io/mrtklc/
+        run: node tests/android-tv-compatibility.mjs
