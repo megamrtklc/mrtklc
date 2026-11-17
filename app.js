@@ -1362,13 +1362,21 @@
                 playerControlsVisible: true,
                 playerControlsTimer: null,
                 cinemaMode: false,
+                cinemaNoticeVisible: false,
+                cinemaNoticeTimer: null,
 
                 toggleCinemaMode() {
                     this.cinemaMode = !this.cinemaMode;
                     document.body.style.overflow = this.cinemaMode ? 'hidden' : '';
+                    if (this.cinemaNoticeTimer) clearTimeout(this.cinemaNoticeTimer);
+                    this.cinemaNoticeVisible = this.cinemaMode;
                     if (this.cinemaMode) {
                         this.playerControlsVisible = true;
                         this.showPlayerControls();
+                        this.cinemaNoticeTimer = setTimeout(() => {
+                            this.cinemaNoticeVisible = false;
+                            this.cinemaNoticeTimer = null;
+                        }, 5000);
                     }
                 },
 
