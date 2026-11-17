@@ -12,15 +12,17 @@ const optimized = html.replace(/(<style\b[^>]*>)([\s\S]*?)(<\/style>)/gi, (match
   if (result.errors.length) {
     throw new Error('Inline CSS minification failed: ' + result.errors.join('; '));
   }
-  if (!result.styles || result.styles.length > css.length) return match;
+  if (typeof result.styles !== 'string') throw new Error('Inline CSS minifier returned no stylesheet.');
   processed += 1;
-  savedBytes += Buffer.byteLength(css) - Buffer.byteLength(result.styles);
+  if (result.styles.length <= css.length) {
+    savedBytes += Buffer.byteLength(css) - Buffer.byteLength(result.styles);
+  }
   return opening + result.styles + closing;
 });
 
-if (processed !== (html.match(/<style\b/gi) || []).length) {
+const expectedBlocks = (html.match(/<style\b/gi) || []).length;
+if (processed !== expectedBlocks) {
   throw new Error('Not all inline style blocks were processed.');
 }
-if (savedBytes < 0) throw new Error('Unexpected negative CSS size reduction.');
 await writeFile(path, optimized);
-console.log(\`Inline CSS minified: \${processed} style blocks, \${savedBytes} bytes saved.\`);
+console.log('Inline CSS minified: ' + processed + ' style blocks, ' + savedBytes + ' bytes saved.');
