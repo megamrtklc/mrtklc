@@ -914,12 +914,17 @@ try {
     assert.notEqual(menuTextColor, 'rgb(255, 255, 255)', 'Açık tema profil menüsündeki metin okunabilir olmalı');
     await profileMenu.locator('.cineverse-dropdown-item').filter({ hasText: 'Fil Dişi (Sıcak Krem)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-ivory'));
+    await profileMenu.waitFor({ state: 'hidden' });
     await profileButton.click();
-    await page.locator('header .cineverse-profile-dropdown .cineverse-dropdown-item').filter({ hasText: 'Modern Gri (Slate)' }).click();
+    await profileMenu.waitFor({ state: 'visible' });
+    await profileMenu.locator('.cineverse-dropdown-item').filter({ hasText: 'Modern Gri (Slate)' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('theme-slate'));
+    await profileMenu.waitFor({ state: 'hidden' });
     await profileButton.click();
-    await page.locator('header .cineverse-profile-dropdown .cineverse-dropdown-item').filter({ hasText: 'Karanlık Mod' }).click();
+    await profileMenu.waitFor({ state: 'visible' });
+    await profileMenu.locator('.cineverse-dropdown-item').filter({ hasText: 'Karanlık Mod' }).click();
     await page.waitForFunction(() => document.documentElement.classList.contains('dark'));
+    await profileMenu.waitFor({ state: 'hidden' });
   });
 
   await check('Eski profil kayıtları tek kütüphaneye taşınıyor ve çocuk profili verileri siliniyor', async () => {
