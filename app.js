@@ -1364,6 +1364,9 @@
                 cinemaMode: false,
                 cinemaNoticeVisible: false,
                 cinemaNoticeTimer: null,
+                playbackFeedback: '',
+                playbackFeedbackVisible: false,
+                playbackFeedbackTimer: null,
 
                 toggleCinemaMode() {
                     this.cinemaMode = !this.cinemaMode;
@@ -1480,12 +1483,24 @@
                     }
                 },
 
+                showPlaybackFeedback(type, duration = 5000) {
+                    this.playbackFeedback = type;
+                    this.playbackFeedbackVisible = true;
+                    if (this.playbackFeedbackTimer) clearTimeout(this.playbackFeedbackTimer);
+                    this.playbackFeedbackTimer = setTimeout(() => {
+                        this.playbackFeedbackVisible = false;
+                        this.playbackFeedbackTimer = null;
+                    }, duration);
+                },
+
                 togglePlay() {
                     const video = document.getElementById('customVideoPlayer');
                     if (!video) return;
                     if (video.paused) {
+                        this.showPlaybackFeedback('play', 5000);
                         this.startPlayback();
                     } else {
+                        this.showPlaybackFeedback('pause', 5000);
                         video.pause();
                     }
                 },
@@ -1520,6 +1535,7 @@
                     const video = document.getElementById('customVideoPlayer');
                     if (!video || !Number.isFinite(video.duration)) return;
                     video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
+                    this.showPlaybackFeedback(seconds < 0 ? 'backward' : 'forward', 850);
                     this.showPlayerControls();
                 },
 
