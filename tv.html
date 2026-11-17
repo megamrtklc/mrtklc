@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080a0f">
+<title>CineVerse TV • Ana Sayfa</title>
+<style>
+:root{color-scheme:dark;--bg:#080a0f;--panel:#11151e;--muted:#a7afbd;--white:#f7f8fb;--red:#e50918;--gold:#f5c451;--focus:#f7c94b}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:auto}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,Helvetica,sans-serif;min-height:100vh;overflow-x:hidden}
+button{font:inherit;color:inherit}
+.topbar{height:82px;display:flex;align-items:center;gap:44px;padding:0 5.2vw;background:linear-gradient(180deg,rgba(5,7,11,.98),rgba(5,7,11,.78));position:relative;z-index:5}
+.brand{font-size:30px;font-weight:900;letter-spacing:-1.5px;color:#fff;white-space:nowrap}.brand span{color:var(--red)}
+.nav{display:flex;align-items:center;gap:12px;flex:1}
+.nav button,.top-action{border:0;background:transparent;color:#b9c0cb;padding:12px 17px;border-radius:10px;font-size:17px;font-weight:700;white-space:nowrap}
+.nav button.active{color:#fff;background:rgba(255,255,255,.09)}
+.top-action{border:1px solid rgba(255,255,255,.16);padding:10px 18px}
+.hero{height:min(65vh,590px);min-height:440px;position:relative;display:flex;align-items:center;padding:0 7vw;overflow:hidden;background:#121720}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 28%;opacity:.72;transition:opacity .25s}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#080a0f 0%,rgba(8,10,15,.94) 22%,rgba(8,10,15,.52) 55%,rgba(8,10,15,.12) 100%),linear-gradient(0deg,#080a0f 0%,transparent 42%,rgba(8,10,15,.2) 100%);z-index:1}
+.hero-content{position:relative;z-index:2;max-width:690px;padding-top:20px}
+.eyebrow{font-size:14px;letter-spacing:3px;color:var(--gold);font-weight:800;margin-bottom:18px}
+.hero h1{font-size:clamp(38px,5vw,66px);line-height:1.04;margin:0 0 17px;font-weight:900;letter-spacing:-1.6px;text-shadow:0 4px 20px #000}
+.meta{display:flex;gap:15px;align-items:center;color:#e0e4eb;font-size:17px;margin-bottom:18px;font-weight:600}
+.rating{color:#101216;background:var(--gold);padding:4px 8px;border-radius:5px;font-weight:900}
+.hero p{font-size:19px;line-height:1.55;color:#d4d9e1;margin:0 0 27px;max-width:630px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hero-actions{display:flex;gap:14px}
+.action{min-height:54px;padding:0 25px;border:1px solid rgba(255,255,255,.25);border-radius:9px;background:rgba(255,255,255,.1);font-size:17px;font-weight:800}
+.action.primary{background:var(--red);border-color:var(--red);color:white}
+.hero-dots{display:flex;gap:9px;margin-top:27px}
+.hero-dots button{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:#727986}
+.hero-dots button.active{width:28px;border-radius:10px;background:#fff}
+main{padding:0 5.2vw 70px;position:relative;z-index:2}
+.rail{margin:26px 0 35px;scroll-margin-top:18px}
+.rail-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}
+.rail h2{font-size:25px;letter-spacing:-.4px;margin:0;font-weight:850}
+.rail-hint{font-size:13px;color:#8993a2;letter-spacing:.4px}
+.cards{display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;padding:9px 8px 17px 7px;scrollbar-width:none;scroll-snap-type:x proximity}
+.cards::-webkit-scrollbar{display:none}
+.movie-card{flex:0 0 164px;width:164px;border:0;background:transparent;padding:0;text-align:left;border-radius:11px;scroll-snap-align:start;position:relative}
+.poster-wrap{height:238px;border-radius:10px;overflow:hidden;background:#1b202b;position:relative;border:2px solid transparent}
+.movie-card img{width:100%;height:100%;display:block;object-fit:cover}
+.movie-card .card-rating{position:absolute;left:9px;top:9px;padding:4px 7px;border-radius:5px;background:rgba(4,6,10,.88);color:var(--gold);font-size:13px;font-weight:900}
+.movie-card .card-type{position:absolute;right:8px;bottom:8px;background:rgba(4,6,10,.86);padding:4px 7px;border-radius:4px;font-size:11px;font-weight:800}
+.movie-card .card-title{display:block;font-size:15px;line-height:1.35;font-weight:750;color:#e9edf3;margin:10px 2px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.movie-card:focus{outline:none;transform:scale(1.045);z-index:3}
+.movie-card:focus .poster-wrap{border:3px solid var(--focus);box-shadow:0 0 0 4px rgba(247,201,75,.18),0 12px 28px rgba(0,0,0,.45)}
+.movie-card:focus .card-title{color:#fff}
+button:focus-visible,.nav button:focus{outline:3px solid var(--focus);outline-offset:4px;box-shadow:0 0 0 7px rgba(247,201,75,.16)}
+.footer-note{color:#667080;font-size:13px;padding:18px 0 10px}
+.loading{padding:90px 7vw;color:#aab2bf;font-size:20px}
+.modal{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;padding:5vw}
+.modal.open{display:flex}
+.modal-panel{width:min(920px,90vw);min-height:400px;background:#111722;border:1px solid rgba(255,255,255,.14);border-radius:18px;overflow:hidden;display:grid;grid-template-columns:270px 1fr;box-shadow:0 30px 100px #000}
+.modal-poster{width:100%;height:100%;min-height:400px;object-fit:cover}
+.modal-info{padding:40px;align-self:center}
+.modal-info h2{font-size:34px;margin:0 0 12px}
+.modal-info p{color:#c5ccd7;font-size:18px;line-height:1.55}
+.modal-info .meta{font-size:15px}
+.modal-close{margin-top:15px}
+@media(max-width:900px){.topbar{gap:18px;padding:0 22px}.nav{gap:0}.nav button{padding:10px;font-size:14px}.hero{padding:0 28px}.hero-content{max-width:75%}main{padding:0 22px 45px}.movie-card{flex-basis:130px;width:130px}.poster-wrap{height:190px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">CINE<span>VERSE</span></div>
+  <nav class="nav" aria-label="TV menüsü">
+    <button class="active" data-nav="1" data-scroll="top">Ana Sayfa</button>
+    <button data-nav="1" data-scroll="new">Filmler</button>
+    <button data-nav="1" data-scroll="series">Diziler</button>
+    <button data-nav="1" data-scroll="popular">Popüler</button>
+  </nav>
+  <button class="top-action" data-nav="1" id="searchBtn">⌕　Keşfet</button>
+</header>
+<section class="hero" id="top">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-content">
+    <div class="eyebrow">CINEVERSE • ÖNE ÇIKAN</div>
+    <h1 id="heroTitle">CineVerse'e Hoş Geldin</h1>
+    <div class="meta" id="heroMeta"></div>
+    <p id="heroDesc">Film ve diziler dünyasını keşfet.</p>
+    <div class="hero-actions">
+      <button class="action primary" id="heroDetail" data-nav="1">▶　İçeriği İncele</button>
+      <button class="action" id="heroNext" data-nav="1">Sonraki　›</button>
+    </div>
+    <div class="hero-dots" id="heroDots"></div>
+  </div>
+</section>
+<main id="rails"><div class="loading">CineVerse TV hazırlanıyor…</div></main>
+<div class="modal" id="detailModal" aria-hidden="true">
+  <div class="modal-panel">
+    <img class="modal-poster" id="modalPoster" alt="">
+    <div class="modal-info">
+      <div class="eyebrow">CINEVERSE KÜTÜPHANESİ</div>
+      <h2 id="modalTitle"></h2>
+      <div class="meta" id="modalMeta"></div>
+      <p id="modalDesc"></p>
+      <button class="action primary modal-close" id="modalClose" data-nav="1">Tamam　↵</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+'use strict';
+var catalog=[],heroItems=[],heroIndex=0,modalOpen=false,lastFocus=null;
+var $=function(id){return document.getElementById(id)};
+function esc(value){return String(value==null?'':value).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function imgUrl(item){return item&&(item.backdrop||item.poster)||''}
+function rating(item){var n=Number(item&&item.rating);return Number.isFinite(n)&&n>0?n.toFixed(1):'—'}
+function meta(item){return [item.year,item.type==='tv'?'Dizi':'Film',item.category].filter(Boolean).join('　•　')}
+function card(item){return '<button class="movie-card" data-nav="1" data-item="'+esc(item.id)+'" aria-label="'+esc(item.title)+' detayını aç"><span class="poster-wrap"><img loading="lazy" decoding="async" src="'+esc(item.poster||item.backdrop||'')+'" alt="'+esc(item.title)+'"><span class="card-rating">★ '+rating(item)+'</span><span class="card-type">'+(item.type==='tv'?'DİZİ':'FİLM')+'</span></span><span class="card-title">'+esc(item.title)+'</span></button>'}
+function renderRail(title,items,id,hint){
+ if(!items.length)return '';
+ return '<section class="rail" id="'+id+'"><div class="rail-head"><h2>'+title+'</h2><span class="rail-hint">'+(hint||'←　Kumandayla gezin　→')+'</span></div><div class="cards">'+items.map(card).join('')+'</div></section>'
+}
+function showHero(){
+ var item=heroItems[heroIndex];if(!item)return;
+ $('heroBg').style.backgroundImage='url("'+imgUrl(item).replace(/"/g,'%22')+'")';
+ $('heroTitle').textContent=item.title||'Öne Çıkan Yapım';
+ $('heroMeta').innerHTML='<span class="rating">★ '+rating(item)+'</span><span>'+esc(meta(item))+'</span>';
+ $('heroDesc').textContent=item.desc||'CineVerse kütüphanesinde keşfetmeye hazır.';
+ $('heroDots').innerHTML=heroItems.map(function(_,i){return '<button data-nav="1" data-slide="'+i+'" class="'+(i===heroIndex?'active':'')+'" aria-label="Öne çıkan '+(i+1)+'"></button>'}).join('');
+ $('heroDetail').dataset.item=item.id;
+}
+function openDetail(item){
+ if(!item)return;lastFocus=document.activeElement;modalOpen=true;
+ $('modalPoster').src=item.poster||item.backdrop||'';$('modalPoster').alt=item.title||'';
+ $('modalTitle').textContent=item.title||'';$('modalMeta').innerHTML='<span class="rating">★ '+rating(item)+'</span><span>'+esc(meta(item))+'</span>';
+ $('modalDesc').textContent=item.desc||'Bu yapım CineVerse kataloğunda yer alıyor.';
+ $('detailModal').classList.add('open');$('detailModal').setAttribute('aria-hidden','false');$('modalClose').focus();
+}
+function closeModal(){modalOpen=false;$('detailModal').classList.remove('open');$('detailModal').setAttribute('aria-hidden','true');if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+function render(data){
+ catalog=Array.isArray(data.catalog)?data.catalog:[];
+ var cfg=data.homepageConfig||{},slides=cfg.desktopHeroSlides||cfg.heroSlides||[];
+ heroItems=slides.filter(function(s){return s.active!==false}).map(function(s){return catalog.find(function(x){return String(x.id)===String(s.id)})}).filter(Boolean);
+ if(!heroItems.length)heroItems=catalog.slice(0,8);
+ showHero();
+ var newest=catalog.slice().sort(function(a,b){
+   var ta=(String(a.id||'').match(/^(?:cv-|perde-)(\d+)/)||[])[1],tb=(String(b.id||'').match(/^(?:cv-|perde-)(\d+)/)||[])[1];
+   if(ta&&tb)return Number(tb)-Number(ta);if(ta)return -1;if(tb)return 1;return catalog.indexOf(b)-catalog.indexOf(a);
+ });
+ var movies=catalog.filter(function(x){return x.type==='movie'}),series=catalog.filter(function(x){return x.type==='tv'});
+ var popular=catalog.slice().sort(function(a,b){return Number(b.rating||0)-Number(a.rating||0)});
+ $('rails').innerHTML=
+  renderRail('Yeni Eklenenler',newest.slice(0,18),'new','EN YENİ YAPIMLAR')+
+  renderRail('Popüler Yapımlar',popular.slice(0,18),'popular','PUANINA GÖRE')+
+  renderRail('Filmler',movies.slice(0,18),'movies','FİLM ARŞİVİ')+
+  renderRail('Diziler',series.slice(0,18),'series','DİZİ ARŞİVİ')+
+  '<div class="footer-note">CineVerse TV Önizleme　•　Kumanda: yön tuşlarıyla gezin, OK ile seçin, geri ile pencereyi kapatın.</div>';
+}
+function moveFocus(key){
+ var current=document.activeElement;
+ var nodes=Array.prototype.slice.call(document.querySelectorAll('[data-nav="1"]:not([disabled])')).filter(function(el){return el.getClientRects().length>0});
+ if(!nodes.length)return;
+ if(!current||nodes.indexOf(current)<0){nodes[0].focus();return}
+ var a=current.getBoundingClientRect(),ax=a.left+a.width/2,ay=a.top+a.height/2;
+ var best=null,bestScore=Infinity;
+ nodes.forEach(function(el){
+  if(el===current)return;var r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,dx=x-ax,dy=y-ay;
+  var primary=key==='ArrowRight'?dx:key==='ArrowLeft'?-dx:key==='ArrowDown'?dy:-dy;
+  if(primary<=5)return;
+  var secondary=(key==='ArrowLeft'||key==='ArrowRight')?Math.abs(dy):Math.abs(dx);
+  var score=primary+secondary*1.7;
+  if(score<bestScore){bestScore=score;best=el}
+ });
+ if(best){best.focus({preventScroll:true});best.scrollIntoView({block:'nearest',inline:'nearest'})}
+ else if(key==='ArrowDown'||key==='ArrowUp'){window.scrollBy(0,key==='ArrowDown'?Math.round(innerHeight*.55):-Math.round(innerHeight*.55))}
+}
+document.addEventListener('keydown',function(e){
+ var k=e.key;
+ if(modalOpen&&(k==='Escape'||k==='Backspace'||k==='BrowserBack'||e.keyCode===461)){e.preventDefault();closeModal();return}
+ if(k==='ArrowLeft'||k==='ArrowRight'||k==='ArrowUp'||k==='ArrowDown'){e.preventDefault();moveFocus(k);return}
+ if(k==='Escape'||k==='Backspace'||k==='BrowserBack'||e.keyCode===461){if(modalOpen){e.preventDefault();closeModal()}return}
+});
+document.addEventListener('click',function(e){
+ var slide=e.target.closest('[data-slide]');if(slide){heroIndex=Number(slide.dataset.slide)||0;showHero();return}
+ var itemButton=e.target.closest('[data-item]');if(itemButton){openDetail(catalog.find(function(x){return String(x.id)===String(itemButton.dataset.item)}));return}
+ var scroll=e.target.closest('[data-scroll]');if(scroll){var target=scroll.dataset.scroll==='top'?'top':scroll.dataset.scroll;$(target)&&$(target).scrollIntoView({behavior:'auto',block:'start'})}
+});
+$('heroNext').addEventListener('click',function(){heroIndex=(heroIndex+1)%heroItems.length;showHero()});
+$('heroDetail').addEventListener('click',function(){openDetail(catalog.find(function(x){return String(x.id)===String(this.dataset.item)}.bind(this)))});
+$('modalClose').addEventListener('click',closeModal);
+$('detailModal').addEventListener('click',function(e){if(e.target===$('detailModal'))closeModal()});
+$('searchBtn').addEventListener('click',function(){var q=prompt('Film veya dizi adı yazın:');if(!q)return;var found=catalog.find(function(x){return x.title.toLocaleLowerCase('tr').includes(q.toLocaleLowerCase('tr'))});if(found)openDetail(found);else alert('Bu isimde bir yapım bulunamadı.')});
+fetch('./catalog-lite.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw new Error('Katalog yüklenemedi');return r.json()}).then(render).catch(function(){ $('rails').innerHTML='<div class="loading">Katalog yüklenemedi. İnternet bağlantısını kontrol edip sayfayı yenileyin.</div>'});
+})();
+</script>
+</body>
+</html>
