@@ -22277,8 +22277,8 @@
         "series-tracking",
         "continue",
         "franchises",
-        "genre-discovery",
-        "watched"
+        "watched",
+        "genre-discovery"
       ],
       "visibility": {
         "watched": true
