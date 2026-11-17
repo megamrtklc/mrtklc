@@ -2274,5 +2274,26 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         })();
     </script>
 
+
+    <script id="cv-tv-remote-vertical-scroll">
+        (() => {
+            const isEditable = (element) => !!element?.closest('input, textarea, select, [contenteditable="true"], [role="textbox"]');
+            document.addEventListener('keydown', (event) => {
+                if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+                if (event.altKey || event.ctrlKey || event.metaKey || isEditable(event.target)) return;
+                const focused = document.activeElement;
+                const focusedRail = focused?.closest?.('.home-card-rail');
+                if (!focusedRail || !document.querySelector('#home-page')) return;
+                const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+                if (!maxScroll) return;
+                const direction = event.key === 'ArrowDown' ? 1 : -1;
+                const current = window.scrollY || document.documentElement.scrollTop || 0;
+                const next = Math.min(maxScroll, Math.max(0, current + direction * Math.max(220, Math.round(window.innerHeight * 0.68))));
+                if (next === current) return;
+                event.preventDefault();
+                window.scrollTo({ top: next, behavior: 'smooth' });
+            }, true);
+        })();
+    </script>
 </body>
 </html>
