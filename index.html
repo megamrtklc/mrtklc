@@ -1008,11 +1008,12 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                    @loadedmetadata="updateVideoProgress(); applyPlaybackRate(); $event.target.volume = isMuted ? 0 : volumeLevel; $event.target.muted = isMuted"
                                    @timeupdate="updateVideoProgress"
                                    @play="pauseNoticeVisible = false; isPlaying = true; hasPlaybackStarted = true; showPlaybackFeedback('play', 5000); schedulePlayerControlsHide()"
-                                   @pause="pauseNoticeVisible = true; isPlaying = false; showPlayerControls()"
-                                   @ended="videoEnded = true; isPlaying = false; showPlayerControls()"
+                                   @pause="pauseNoticeVisible = !$event.target.ended && hasPlaybackStarted; isPlaying = false; showPlayerControls()"
+                                   @ended="videoEnded = true; pauseNoticeVisible = false; isPlaying = false; showPlayerControls()"
                                    @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
+                            <div x-cloak x-show="pauseNoticeVisible && isDirectVideoUrl(getPlaybackUrl())" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-10 bg-black/35" aria-hidden="true"></div>
                             <div x-show="playerControlsVisible" x-transition.opacity x-data="{ brightnessOpen: false }" @mouseenter="brightnessOpen = true" @mouseleave="brightnessOpen = false" @click.stop class="absolute top-[45px] left-3 z-40">
                                 <button type="button" @click="brightnessOpen = true; showPlayerControls()" @focus="showPlayerControls()" aria-label="Video parlaklığını ayarla" title="Video parlaklığı" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300">
                                     <i class="fa-solid fa-sun"></i>
