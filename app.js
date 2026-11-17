@@ -1356,6 +1356,7 @@
                 durationFormatted: '00:00',
                 videoEnded: false,
                 playbackError: false,
+                playbackRate: 1,
                 hasPlaybackStarted: false,
                 playerControlsVisible: true,
                 playerControlsTimer: null,
@@ -1363,8 +1364,53 @@
 
                 toggleCinemaMode() {
                     this.cinemaMode = !this.cinemaMode;
+                    document.body.style.overflow = this.cinemaMode ? 'hidden' : '';
                     if (this.cinemaMode) {
                         this.playerControlsVisible = true;
+                        this.showPlayerControls();
+                    }
+                },
+
+                setPlaybackRate(rate) {
+                    const allowed = [0.75, 1, 1.25, 1.5, 2];
+                    const next = Number(rate);
+                    if (!allowed.includes(next)) return;
+                    this.playbackRate = next;
+                    const video = document.getElementById('customVideoPlayer');
+                    if (video) video.playbackRate = next;
+                },
+
+                applyPlaybackRate() {
+                    const video = document.getElementById('customVideoPlayer');
+                    if (video) video.playbackRate = this.playbackRate || 1;
+                },
+
+                toggleCaptions() {
+                    const tracks = document.getElementById('customVideoPlayer')?.textTracks;
+                    if (!tracks?.length) return;
+                    const showing = Array.from(tracks).findIndex(track => track.mode === 'showing');
+                    tracks.forEach((track, index) => { track.mode = index === (showing < 0 ? 0 : -1) ? 'showing' : 'disabled'; });
+                },
+
+                cycleAudioTrack() {
+                    const tracks = document.getElementById('customVideoPlayer')?.audioTracks;
+                    if (!tracks?.length) return;
+                    let active = Array.from(tracks).findIndex(track => track.enabled);
+                    tracks.forEach((track, index) => { track.enabled = index === ((active + 1) % tracks.length); });
+                },
+
+                handlePlayerKeydown(event) {
+                    if (this.currentPage !== 'watch' || !this.hasPlaybackStarted) return;
+                    if (event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT/.test(event.target?.tagName || '') || event.target?.isContentEditable) return;
+                    const key = event.key.toLowerCase();
+                    if (key === 'arrowleft' || key === 'arrowright' || key === ' ' || key === 'm' || key === 'f' || key === 'c') {
+                        event.preventDefault();
+                        if (key === 'arrowleft') this.skipTime(-10);
+                        else if (key === 'arrowright') this.skipTime(10);
+                        else if (key === ' ') this.togglePlay();
+                        else if (key === 'm') this.toggleMute();
+                        else if (key === 'f') this.toggleFullscreen();
+                        else if (key === 'c') this.toggleCinemaMode();
                         this.showPlayerControls();
                     }
                 },
@@ -1463,8 +1509,9 @@
 
                 skipTime(seconds) {
                     const video = document.getElementById('customVideoPlayer');
-                    if (!video) return;
-                    video.currentTime += seconds;
+                    if (!video || !Number.isFinite(video.duration)) return;
+                    video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
+                    this.showPlayerControls();
                 },
 
                 skipIntro() {
@@ -2226,6 +2273,8 @@
                     this.hasPlaybackStarted = false;
                     this.playerControlsVisible = true;
                     this.cinemaMode = false;
+                    document.body.style.overflow = '';
+                    this.playbackRate = 1;
                     this.videoProgress = 0;
                     this.playbackError = false;
                     this.tmdbDetailsError = '';
