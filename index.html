@@ -491,9 +491,9 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/90 via-[43%] to-gray-950/5"></div>
                         <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_25%,transparent_25%,rgba(0,0,0,.28)_100%)]"></div>
                         <div x-show="currentHero.poster" class="pointer-events-none absolute left-3 top-3 z-[5] flex justify-start" aria-hidden="true">
-                            <img :src="currentHero.poster" :alt="currentHero.title + ' afişi'" loading="lazy" decoding="async" @error="$el.style.display='none'" class="h-auto max-h-[clamp(150px,30vh,190px)] w-[32%] max-w-[132px] rounded-md border border-white/25 object-contain object-top shadow-[0_10px_26px_rgba(0,0,0,.68)] ring-1 ring-black/30">
+                            <img :src="currentHero.poster" :alt="currentHero.title + ' afişi'" loading="lazy" decoding="async" @error="$el.style.display='none'" class="h-auto max-h-[clamp(300px,60vh,380px)] w-[64%] max-w-[264px] rounded-md border border-white/25 object-contain object-top shadow-[0_10px_26px_rgba(0,0,0,.68)] ring-1 ring-black/30">
                         </div>
-                        <div class="absolute inset-x-0 top-0 z-10 flex items-center justify-between p-3">
+                        <div class="absolute inset-x-0 top-0 z-10 flex items-center justify-end p-3">
                             <span class="rounded-md border border-white/20 bg-black/45 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm" x-text="currentHero.type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
                         </div>
                         <button type="button" @click.stop="navigateHeroSlide(-1)" aria-label="Önceki öne çıkan yapım" class="absolute left-2 top-[42%] z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/40 text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 active:scale-95"><i class="fa-solid fa-chevron-left text-xs"></i></button>
