@@ -832,9 +832,21 @@ try {
       const sectionCount = await page.locator('#home-page > [data-home-section]').count();
       for (let i = 0; i < sectionCount; i++) {
         const section = page.locator('#home-page > [data-home-section]').nth(i);
-        if (await section.isVisible().catch(() => false)) {
-          await section.scrollIntoViewIfNeeded().catch(() => {});
-          await page.waitForTimeout(45);
+        const metrics = await section.evaluate(element => ({
+          key: element.dataset.homeSection,
+          display: getComputedStyle(element).display,
+          height: element.getBoundingClientRect().height
+        }));
+        if (metrics.display !== 'none' && metrics.height > 1) {
+          // Lazy-load bölümleri ilk boyamada bilerek visibility:hidden durumunda
+          // tutulur. isVisible() bu nedenle false döner ve eski kontrol bölümü
+          // hiç ekrana taşımadan atlıyordu. Geometriyi kullanarak tetikle.
+          await section.evaluate(element => element.scrollIntoView({ block: 'center', behavior: 'instant' }));
+          await page.waitForFunction(key => {
+            const app = window.Alpine?.$data(document.documentElement);
+            return !!app?.homeSectionReady?.[key];
+          }, metrics.key, { timeout: 10000 });
+          await page.waitForTimeout(60);
         }
       }
       await page.evaluate(() => window.scrollTo(0, 0));
