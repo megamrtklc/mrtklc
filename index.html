@@ -515,7 +515,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
   </div>
 </div>
        <!-- Kişiselleştirilmiş Öneriler -->
-                <section id="home-personalized-section" data-home-section="personalized" x-data="{ showAllPersonalized: false }" x-show="isHomepageSectionVisible('personalized')" class="home-personalized-section w-full px-6 sm:px-12 space-y-4" style="visibility:hidden;min-height:480px;box-sizing:border-box" x-ignore>
+                <section id="home-personalized-section" data-home-section="personalized" x-data="{ showAllPersonalized: false }" x-show="isHomepageSectionVisible('personalized')" class="home-personalized-section w-full px-6 sm:px-12 space-y-4" style="visibility:hidden;min-height:480px!important;height:auto!important;box-sizing:border-box" x-ignore>
                     <div x-cloak x-show="homeSectionLoading.personalized" x-transition.opacity.duration.200ms class="cv-section-loading-overlay" role="status" aria-live="polite">
                         <div class="cv-section-loading-content">
                             <span class="cv-section-loading-mark" aria-hidden="true"><i class="fa-solid fa-clapperboard"></i></span>
@@ -525,7 +525,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             <small>Görseller ve öneriler yükleniyor</small>
                         </div>
                     </div>
-                    <div class="home-personalized-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3" style="height:173px;min-height:173px;box-sizing:border-box">
+                    <div class="home-personalized-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3" style="height:173px!important;min-height:173px!important;box-sizing:border-box">
                         <div class="min-w-0">
                             <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1"><span x-text="homepageConfig?.personalizedSection?.eyebrow || 'SANA ÖZEL'">SANA ÖZEL</span> • <span x-text="currentProfile.name"></span></p>
                             <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white" x-text="homepageConfig?.personalizedSection?.title || 'İzleme Zevkine Göre'">İzleme Zevkine Göre</h2>
@@ -561,7 +561,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </div>
                         </template>
                         
-                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" style="min-height:77px;visibility:hidden" :style="{visibility:homeSectionReady.personalized && displayedPersonalizedRecommendations.length ? 'visible' : 'hidden'}" x-ignore>
+                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" style="display:block!important;height:192px!important;min-height:192px!important;box-sizing:border-box!important;visibility:hidden" :style="{visibility:homeSectionReady.personalized && displayedPersonalizedRecommendations.length ? 'visible' : 'hidden'}" x-ignore>
                             <div class="home-personalized-mobile-backdrop">
                                 <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500])" sizes="100vw" alt="" aria-hidden="true" loading="lazy" decoding="async">
                                 <div></div>
