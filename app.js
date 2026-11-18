@@ -833,7 +833,15 @@
                 },
 
                 removeHeroInitialShell() {
-                    document.getElementById('hero-initial-shell')?.remove();
+                    const mobileShell = document.getElementById('hero-initial-shell');
+                    const mobileHero = document.getElementById('mobileHeroBanner');
+                    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+                    // Mobil iskelet, gerçek manşet DOM'a eklenip Alpine tarafından hazır edilene kadar akışta kalır.
+                    if (isMobile && mobileShell && (!mobileHero || mobileHero.dataset.cvHeroHydrated !== 'true')) {
+                        document.getElementById('hero-initial-shell-desktop')?.remove();
+                        return;
+                    }
+                    mobileShell?.remove();
                     document.getElementById('hero-initial-shell-desktop')?.remove();
                 },
 
@@ -926,7 +934,10 @@
                             const mobile = window.matchMedia('(max-width: 767px)').matches;
                             const activeHero = currentRoot.querySelector(mobile ? '#mobileHeroBanner' : '#desktopEditorialHero');
                             if (activeHero) activeHero.dataset.cvHeroHydrated = 'true';
-                            this.$nextTick(() => this.initHomeSectionObserver());
+                            this.$nextTick(() => {
+                                this.initHomeSectionObserver();
+                                this.removeHeroInitialShell();
+                            });
                         }, delay);
                     });
                 },
