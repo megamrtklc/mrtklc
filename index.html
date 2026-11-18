@@ -490,8 +490,8 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     <div class="px-5 pb-4 pt-3 text-white sm:px-7">
                         <div class="space-y-1.5">
                             <h1 class="block w-full text-[clamp(1rem,4vw,1.65rem)] font-black leading-tight tracking-tight text-white break-words" x-text="currentHero.title" :title="currentHero.title"></h1>
-                            <p x-show="getHeroEnglishTitle(currentHero)" x-text="getHeroEnglishTitle(currentHero)" class="pl-0.5 text-xs font-medium tracking-wide text-white/60"></p>
-                            <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
+                            <div class="h-4 min-h-4"><p x-show="getHeroEnglishTitle(currentHero)" x-text="getHeroEnglishTitle(currentHero)" class="pl-0.5 text-xs font-medium tracking-wide text-white/60"></p></div>
+                            <div class="cv-mobile-hero-meta flex min-h-[72px] flex-wrap content-start items-center gap-2 text-xs font-bold">
                                 <span class="inline-flex items-center gap-1.5 rounded-md border border-amber-300/50 bg-[#f5c518] px-2.5 py-1 text-[11px] font-black text-black shadow-md"><i class="fa-solid fa-star text-[10px]"></i><span class="text-sm" x-text="(currentHero.rating ? Number(currentHero.rating).toFixed(1) : '—')"></span></span>
                                 <span class="text-gray-600">•</span><span class="text-gray-300" x-text="currentHero.year"></span>
                                 <span class="rounded-full border border-rose-500/40 bg-rose-500/10 px-2.5 py-1 text-[10px] uppercase text-rose-200" x-text="currentHero.type === 'tv' ? 'Dizi' : 'Film'"></span>
