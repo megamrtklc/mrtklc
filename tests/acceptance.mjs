@@ -160,7 +160,6 @@ try {
   }));
   console.log('DESKTOP LAYOUT SHIFT DIAGNOSTIC:', JSON.stringify(desktopDiagnostics));
   const desktopCls = desktopDiagnostics.shifts.reduce((total, entry) => total + entry.value, 0);
-  assert.ok(desktopCls < 0.05, 'Masaüstü CLS hedefi aşıldı: ' + desktopCls.toFixed(3));
 
   await check('Tüm içerik görsellerinde yükleme iskeleti ve öneri yükleme ekranı çalışıyor', async () => {
     const loadingStatus = page.locator('#home-personalized-section [role="status"]');
@@ -245,6 +244,9 @@ try {
     console.log('MOBILE PERFORMANCE DIAGNOSTIC:', JSON.stringify(diagnostic));
     await mobileContext.close();
   });
+
+  console.log('CLS SUMMARY:', JSON.stringify({ desktop: desktopCls, desktopShifts: desktopDiagnostics.shifts.length }));
+  assert.ok(desktopCls < 0.05, 'Masaüstü CLS hedefi aşıldı: ' + desktopCls.toFixed(3));
 
   await check('Ana sayfa rafları ekrana yaklaşınca yükleniyor', async () => {
     await page.locator('#home-catalog-section').scrollIntoViewIfNeeded();
