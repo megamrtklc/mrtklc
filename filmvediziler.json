@@ -22208,7 +22208,7 @@
     "settings": {
       "desktopCount": 10,
       "mobileCount": 6,
-      "interval": 6,
+      "interval": 4,
       "autoplay": true,
       "pauseOnHover": true,
       "descriptionLength": 240
