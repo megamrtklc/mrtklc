@@ -285,6 +285,14 @@ try {
     assert.equal(iconFontRequests.length, 0, 'Eski Font Awesome ikon fontu hâlâ indiriliyor');
     const svgIconCount = await page.locator('i.fa-solid svg.perde-icon-svg use[href*="icons.svg#"]').count();
     assert.ok(svgIconCount > 30, `SVG ikonları beklenen şekilde dönüştürülmedi: ${svgIconCount}`);
+    const regularBookmarkIconCount = await page.locator('i.fa-regular.fa-bookmark svg.perde-icon-svg use[href*="#regular-bookmark"]').count();
+    assert.ok(regularBookmarkIconCount > 0, 'Listeme Ekle için çizgi biçimli yer imi ikonu görünmüyor');
+    const regularSpriteSymbols = await page.evaluate(async () => {
+      const response = await fetch('./icons.svg?v=20261118-regular-v2');
+      const source = await response.text();
+      return ['regular-bookmark','regular-circle','regular-heart','regular-star','regular-calendar'].every(id => source.includes('id="' + id + '"'));
+    });
+    assert.ok(regularSpriteSymbols, 'SVG sprite içindeki düzenli/çizgi ikonları eksik');
     const heroThumbnailCount = await page.locator('#heroThumbContainer img').count();
     const configuredDesktopThumbCount = await page.evaluate(async () => {
       const response = await fetch('./filmvediziler.json');
