@@ -8,7 +8,7 @@
     el.classList.forEach(function(c){if(!name&&c.indexOf('fa-')===0&&!ignored.has(c.slice(3)))name=c.slice(3);});
     if(!name)return null;
     var regular=el.classList.contains('fa-regular')||el.classList.contains('far');
-    if(regular&&(name==='bookmark'||name==='circle'))name='regular-'+name;
+    if(regular&&['bookmark','circle','heart','star','calendar'].includes(name))name='regular-'+name;
     return aliases[name]||name;
   }
   function update(el){
@@ -24,7 +24,7 @@
       svg.appendChild(use);el.appendChild(svg);
     }
     var useNode=svg.firstElementChild;
-    var href='./icons.svg?v=20261118-regular-v2#'+id;
+    var href='./icons.svg?v=20261118-regular-v3#'+id;
     if(useNode.getAttribute('href')!==href)useNode.setAttribute('href',href);
   }
   function scan(root){
