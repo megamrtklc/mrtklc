@@ -400,7 +400,7 @@
                     return english;
                 },
                 async loadHeroEnglishTitles() {
-                    const slides = [...new Map((this.heroSlides || []).filter(Boolean).map(item => [String(item.id), item])).values()];
+                    const slides = [...new Map((this.catalog || []).filter(Boolean).map(item => [String(item.id), item])).values()];
                     let cursor = 0;
                     const normalize = value => String(value || '').toLocaleLowerCase('en-US')
                         .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
