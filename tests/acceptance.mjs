@@ -25,6 +25,43 @@ await page.addInitScript(() => {
       }
     }).observe({ type: 'layout-shift', buffered: true });
   } catch {}
+  window.__desktopLayoutTimeline = [];
+  let lastLayoutSignature = '';
+  const rect = element => {
+    if (!element) return null;
+    const value = element.getBoundingClientRect();
+    return { x: Math.round(value.x), y: Math.round(value.y), width: Math.round(value.width), height: Math.round(value.height) };
+  };
+  const sampleLayout = () => {
+    const header = document.querySelector('body > header');
+    const hero = document.querySelector('#desktopEditorialHero, #mobileHeroBanner');
+    const personalized = document.querySelector('#home-personalized-section');
+    const heading = personalized?.querySelector('.home-personalized-heading');
+    const showcase = personalized?.querySelector('.home-personalized-showcase');
+    const logo = header?.querySelector('a img, a > div');
+    const search = header?.querySelector('.cineverse-search-trigger');
+    const profile = header?.querySelector('.cineverse-profile-trigger');
+    const heroImage = hero?.querySelector('picture img, img');
+    const snapshot = {
+      time: Math.round(performance.now()),
+      fonts: { status: document.fonts?.status || 'unsupported', interReady: !!document.fonts?.check?.('12px Inter') },
+      header: { rect: rect(header), logo: rect(logo), search: rect(search), profile: rect(profile), visible: !!header && getComputedStyle(header).visibility !== 'hidden' && getComputedStyle(header).display !== 'none' },
+      hero: { rect: rect(hero), image: rect(heroImage), imageLoaded: !!heroImage && heroImage.complete && heroImage.naturalWidth > 0 },
+      personalized: { rect: rect(personalized), heading: rect(heading), showcase: rect(showcase), visibility: personalized ? getComputedStyle(personalized).visibility : null, display: personalized ? getComputedStyle(personalized).display : null },
+      home: rect(document.querySelector('#home-page')),
+      main: rect(document.querySelector('main'))
+    };
+    const signature = JSON.stringify(snapshot, (key, value) => key === 'time' ? undefined : value);
+    if (signature !== lastLayoutSignature && window.__desktopLayoutTimeline.length < 100) {
+      lastLayoutSignature = signature;
+      window.__desktopLayoutTimeline.push(snapshot);
+    }
+  };
+  const layoutTimer = setInterval(sampleLayout, 40);
+  document.addEventListener('DOMContentLoaded', sampleLayout, { once: true });
+  document.fonts?.addEventListener?.('loadingdone', sampleLayout);
+  window.addEventListener('load', sampleLayout, { once: true });
+  setTimeout(() => clearInterval(layoutTimer), 7000);
 });
 const failures = [];
 const failedResources = [];
