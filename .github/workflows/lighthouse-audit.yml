@@ -39,6 +39,18 @@ jobs:
       - name: Print mobile audit scores
         run: node scripts/print-lighthouse-scores.mjs .lighthouseci
 
+
+      - name: Diagnostic mobile audit (DevTools throttling)
+        run: |
+          lhci autorun \
+            --collect.url=https://megamrtklc.github.io/mrtklc/ \
+            --collect.numberOfRuns=3 \
+            --collect.settings.throttlingMethod=devtools \
+            --upload.target=temporary-public-storage
+
+      - name: Print diagnostic mobile audit scores
+        run: node scripts/print-lighthouse-scores.mjs .lighthouseci
+
       - name: Audit desktop experience
         run: |
           lhci autorun \
