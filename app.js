@@ -390,11 +390,14 @@
                 heroEnglishTitleRequests: {},
                 getHeroEnglishTitle(item = this.currentHero) {
                     if (!item) return '';
-                    const english = String(item.englishTitle || item.tmdbEnglishTitle || '').trim();
                     const title = String(item.title || '').trim();
-                    if (!english) return '';
-                    const normalize = value => value.toLocaleLowerCase('en-US').replace(/[’‘]/g, "'").replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
-                    return normalize(english) && normalize(english) !== normalize(title) ? english : '';
+                    const original = String(item.originalTitle || item.tmdbOriginalTitle || '').trim();
+                    const sameAsDisplay = value => {
+                        const normalize = text => String(text || '').toLocaleLowerCase('en-US').replace(/[’‘]/g, "'").replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+                        return normalize(value) && normalize(value) === normalize(title);
+                    };
+                    const english = String(item.englishTitle || item.tmdbEnglishTitle || (sameAsDisplay(original) ? original : '')).trim();
+                    return english;
                 },
                 async loadHeroEnglishTitles() {
                     const slides = [...new Map((this.heroSlides || []).filter(Boolean).map(item => [String(item.id), item])).values()];
