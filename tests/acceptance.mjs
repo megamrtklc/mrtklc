@@ -272,7 +272,8 @@ try {
       const links = [...document.querySelectorAll('link[rel="stylesheet"]')];
       const iconCss = links.some(link => link.href.includes('icons.css') && (link.media === 'all' || link.media === ''));
       const fontCss = links.some(link => link.href.includes('fonts.css') && (link.media === 'all' || link.media === ''));
-      return iconCss && fontCss;
+      const svgIconReady = !!document.querySelector('i.fa-solid svg.perde-icon-svg use[href*="icons.svg#"]');
+      return iconCss && fontCss && svgIconReady;
     }, { timeout: 15000 });
     const interFontReady = await page.evaluate(async () => {
       await document.fonts.load('700 16px Inter', 'Perde İstanbul');
@@ -280,6 +281,8 @@ try {
         !performance.getEntriesByType('resource').some(entry => entry.name.includes('fonts.googleapis.com'));
     });
     assert.ok(interFontReady, 'Inter değişken fontu veya yerel font yükleme yolu çalışmıyor');
+    const iconFontRequests = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => /fa-(solid|regular)-900?\\.woff2/i.test(entry.name)).map(entry => entry.name));
+    assert.equal(iconFontRequests.length, 0, 'Eski Font Awesome ikon fontu hâlâ indiriliyor');
     const heroThumbnailCount = await page.locator('#heroThumbContainer img').count();
     const configuredDesktopThumbCount = await page.evaluate(async () => {
       const response = await fetch('./filmvediziler.json');
