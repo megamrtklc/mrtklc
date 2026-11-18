@@ -24,7 +24,7 @@
       svg.appendChild(use);el.appendChild(svg);
     }
     var useNode=svg.firstElementChild;
-    var href='./icons.svg#'+id;
+    var href='./icons.svg?v=20261118-regular-v2#'+id;
     if(useNode.getAttribute('href')!==href)useNode.setAttribute('href',href);
   }
   function scan(root){
