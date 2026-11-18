@@ -288,7 +288,7 @@ try {
     const regularBookmarkIconCount = await page.locator('i.fa-regular.fa-bookmark svg.perde-icon-svg use[href*="#regular-bookmark"]').count();
     assert.ok(regularBookmarkIconCount > 0, 'Listeme Ekle için çizgi biçimli yer imi ikonu görünmüyor');
     const regularSpriteSymbols = await page.evaluate(async () => {
-      const response = await fetch('./icons.svg?v=20261118-regular-v2');
+      const response = await fetch('./icons.svg?v=20261118-regular-v3');
       const source = await response.text();
       return ['regular-bookmark','regular-circle','regular-heart','regular-star','regular-calendar'].every(id => source.includes('id="' + id + '"'));
     });
