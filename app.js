@@ -1180,6 +1180,32 @@
                     this.heroPaused = !!value;
                 },
 
+                startHeroTouch(event) {
+                    const touch = event?.touches?.[0];
+                    if (!touch) return;
+                    this.heroTouchStartX = touch.clientX;
+                    this.heroTouchStartY = touch.clientY;
+                    this.heroTouchStartAt = Date.now();
+                    this.setHeroPaused(true);
+                },
+
+                endHeroTouch(event) {
+                    const touch = event?.changedTouches?.[0];
+                    const startX = Number(this.heroTouchStartX);
+                    const startY = Number(this.heroTouchStartY);
+                    if (!touch || !Number.isFinite(startX) || !Number.isFinite(startY)) {
+                        this.setHeroPaused(false);
+                        return;
+                    }
+                    const deltaX = touch.clientX - startX;
+                    const deltaY = touch.clientY - startY;
+                    const isHorizontalSwipe = Math.abs(deltaX) >= 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.25;
+                    if (isHorizontalSwipe) this.navigateHeroSlide(deltaX < 0 ? 1 : -1, '');
+                    this.heroTouchStartX = null;
+                    this.heroTouchStartY = null;
+                    this.setHeroPaused(false);
+                },
+
                 get currentHero() {
                     const active = this.heroSlides[this.currentSlideIndex] || this.heroSlides[0];
                     if (active) return active;
