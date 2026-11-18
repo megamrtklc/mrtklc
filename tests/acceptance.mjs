@@ -237,6 +237,16 @@ try {
         new PerformanceObserver(list => { for (const entry of list.getEntries()) window.__mobileLongTasks.push({ startTime: Math.round(entry.startTime), duration: Math.round(entry.duration), name: entry.name, attribution: (entry.attribution || []).map(item => ({ name: item.name, entryType: item.entryType, containerType: item.containerType, containerName: item.containerName, containerSrc: item.containerSrc, containerId: item.containerId })) }); }).observe({ type: 'longtask', buffered: true });
       } catch {}
     });
+    const mobileSession = await mobileContext.newCDPSession(mobilePage);
+    await mobileSession.send('Network.enable');
+    await mobileSession.send('Network.emulateNetworkConditions', {
+      offline: false,
+      latency: 150,
+      downloadThroughput: 200 * 1024,
+      uploadThroughput: 93.75 * 1024,
+      connectionType: 'cellular3g'
+    });
+    await mobileSession.send('Emulation.setCPUThrottlingRate', { rate: 4 });
     await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await mobilePage.waitForFunction(() => window.Alpine && Array.isArray(window.Alpine.$data(document.documentElement)?.catalog) && window.Alpine.$data(document.documentElement).catalog.length >= 130, { timeout: 60000 });
     await mobilePage.waitForTimeout(6000);
