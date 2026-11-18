@@ -835,17 +835,24 @@ try {
         const metrics = await section.evaluate(element => ({
           key: element.dataset.homeSection,
           display: getComputedStyle(element).display,
-          height: element.getBoundingClientRect().height
+          height: element.getBoundingClientRect().height,
+          needsInit: element.hasAttribute('x-ignore')
         }));
-        if (metrics.display !== 'none' && metrics.height > 1) {
-          // Lazy-load bölümleri ilk boyamada bilerek visibility:hidden durumunda
-          // tutulur. isVisible() bu nedenle false döner ve eski kontrol bölümü
-          // hiç ekrana taşımadan atlıyordu. Geometriyi kullanarak tetikle.
+        if (metrics.key !== 'hero' && metrics.display !== 'none' && metrics.height > 1) {
+          // İlk boyamada x-ignore ile ertelenen bölümleri ekrana taşı ve
+          // yalnızca gerçekten ertelenmiş olanların hazır olmasını bekle.
           await section.evaluate(element => element.scrollIntoView({ block: 'center', behavior: 'instant' }));
-          await page.waitForFunction(key => {
-            const app = window.Alpine?.$data(document.documentElement);
-            return !!app?.homeSectionReady?.[key];
-          }, metrics.key, { timeout: 10000 });
+          if (metrics.key === 'personalized') {
+            await page.waitForFunction(() => {
+              const app = window.Alpine?.$data(document.documentElement);
+              return !!app?.homeSectionReady?.personalized;
+            }, null, { timeout: 15000 });
+          } else if (metrics.needsInit) {
+            await page.waitForFunction(key => {
+              const app = window.Alpine?.$data(document.documentElement);
+              return !!app?.homeSectionReady?.[key];
+            }, metrics.key, { timeout: 10000 });
+          }
           await page.waitForTimeout(60);
         }
       }
