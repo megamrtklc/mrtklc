@@ -1039,9 +1039,13 @@
                                 activate();
                             }
                         }
-                        window.requestAnimationFrame(() => {
-                            section.style.removeProperty('visibility');
-                        });
+                        // Kişiselleştirilmiş alan, öneriler hazır olana kadar gizli kalmalı.
+                        // Diğer raflarda ilk çizimden sonra görünürlüğü açmaya devam et.
+                        if (key !== 'personalized') {
+                            window.requestAnimationFrame(() => {
+                                section.style.removeProperty('visibility');
+                            });
+                        }
                     };
 
                     // Yönetici tarafından kapatılan rafları hemen işle; görünür rafları ekrana yaklaşınca başlat.
