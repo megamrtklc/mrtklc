@@ -234,8 +234,20 @@
                 },
 
                 setTheme(newTheme) {
+                    if (!['dark', 'ivory', 'slate'].includes(newTheme)) return;
                     this.theme = newTheme;
                     safeStorageWrite('cine_theme_v3', newTheme);
+
+                    // Apply the root and body theme immediately; Alpine bindings
+                    // will then reconcile to the same state on its next update.
+                    const root = document.documentElement;
+                    root.classList.remove('dark', 'theme-ivory', 'theme-slate');
+                    root.classList.add(newTheme === 'dark' ? 'dark' : (newTheme === 'ivory' ? 'theme-ivory' : 'theme-slate'));
+
+                    if (document.body) {
+                        document.body.classList.remove('bg-ivory-50', 'bg-slateLight-50', 'bg-[#0b0d11]');
+                        document.body.classList.add(newTheme === 'ivory' ? 'bg-ivory-50' : (newTheme === 'slate' ? 'bg-slateLight-50' : 'bg-[#0b0d11]'));
+                    }
                 },
 
                 getBodyClass() {
