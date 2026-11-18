@@ -281,7 +281,7 @@ try {
         !performance.getEntriesByType('resource').some(entry => entry.name.includes('fonts.googleapis.com'));
     });
     assert.ok(interFontReady, 'Inter değişken fontu veya yerel font yükleme yolu çalışmıyor');
-    const iconFontRequests = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => /fa-(solid|regular)-900?\\.woff2/i.test(entry.name)).map(entry => entry.name));
+    const iconFontRequests = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => /fa-(solid-900|regular-400)\\.woff2/i.test(entry.name)).map(entry => entry.name));
     assert.equal(iconFontRequests.length, 0, 'Eski Font Awesome ikon fontu hâlâ indiriliyor');
     const heroThumbnailCount = await page.locator('#heroThumbContainer img').count();
     const configuredDesktopThumbCount = await page.evaluate(async () => {
