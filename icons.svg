@@ -238,4 +238,22 @@
 <symbol id="user-circle" viewBox="0 0 512 512">
 <path d="M399 384.2C376.9 345.8 335.4 320 288 320l-64 0c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"/>
 </symbol>
+
+<symbol id="regular-bookmark" viewBox="0 0 448 512">
+<path d="M112 32h224c17.7 0 32 14.3 32 32v416L224 384 80 480V64c0-17.7 14.3-32 32-32z" fill="none" stroke="currentColor" stroke-width="32" stroke-linejoin="round"/>
+</symbol>
+<symbol id="regular-circle" viewBox="0 0 512 512">
+<circle cx="256" cy="256" r="208" fill="none" stroke="currentColor" stroke-width="48"/>
+</symbol>
+<symbol id="regular-heart" viewBox="0 0 512 512">
+<path d="M256 448 64 256C-16 176 40 48 144 48c48 0 88 24 112 64 24-40 64-64 112-64 104 0 160 128 80 208L256 448z" fill="none" stroke="currentColor" stroke-width="32" stroke-linejoin="round" stroke-linecap="round"/>
+</symbol>
+<symbol id="regular-star" viewBox="0 0 576 512">
+<path d="m288 40 72 146 161 23-116 113 27 160-144-76-144 76 27-160L55 209l161-23 72-146z" fill="none" stroke="currentColor" stroke-width="32" stroke-linejoin="round"/>
+</symbol>
+<symbol id="regular-calendar" viewBox="0 0 448 512">
+<rect x="32" y="64" width="384" height="400" rx="32" ry="32" fill="none" stroke="currentColor" stroke-width="32"/>
+<path d="M32 176h384M144 32v80M304 32v80" fill="none" stroke="currentColor" stroke-width="32" stroke-linecap="round"/>
+</symbol>
+
 </svg>
