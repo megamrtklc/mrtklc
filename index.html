@@ -83,8 +83,7 @@
       })();
     </script>
     <!-- Kritik harici kaynaklara erken bağlantı -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
 
     <!-- Ana uygulama: Terser ile küçültülmüş üretim dosyası. -->
@@ -93,37 +92,8 @@
     <link rel="preload" as="style" href="./tailwind.css">
     <link rel="stylesheet" href="./tailwind.css">
     <!-- Mobilde ikon fontları ilk manşet yüklemesi tamamlanana kadar ertelenir. -->
-    <script id="cv-fontawesome-loader">
-      (function () {
-        var href = './icons.css?v=20261117-used-icons-v1';
-        if (document.documentElement.dataset.cvDeviceMode === 'tv') {
-          window.addEventListener('load', function () {
-            window.setTimeout(function () { if (window.requestIdleCallback) window.requestIdleCallback(loadIcons, { timeout: 2500 }); else loadIcons(); }, 2500);
-          }, { once: true });
-          return;
-        }
-        function loadIcons() {
-          if (document.getElementById('cv-icons-css')) return;
-          var stylesheet = document.createElement('link');
-          stylesheet.id = 'cv-icons-css';
-          stylesheet.rel = 'stylesheet';
-          stylesheet.href = href;
-          stylesheet.media = 'print';
-          stylesheet.onload = function () { this.media = 'all'; };
-          document.head.appendChild(stylesheet);
-        }
-        if (window.matchMedia('(max-width: 767px)').matches) {
-          function scheduleIcons() {
-            if (window.requestIdleCallback) window.requestIdleCallback(loadIcons, { timeout: 1800 });
-            else window.setTimeout(loadIcons, 900);
-          }
-          if (document.readyState === 'complete') scheduleIcons();
-          else window.addEventListener('load', scheduleIcons, { once: true });
-        } else {
-          loadIcons();
-        }
-      })();
-    </script>
+    <link rel="stylesheet" href="./icons.css?v=20261118-svg-v1">
+    <script src="./icons.js?v=20261118-svg-v1" defer></script>
     <!-- Mobilde sistem fontu kullanıldığı için Inter yalnızca masaüstünde yüklenir. -->
     <!-- Alpine.js -->
     <script id="cv-early-catalog-request">
