@@ -179,7 +179,7 @@ try {
   });
 
   await check('Mobil açılış performansı tanılanıyor', async () => {
-    const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+    const mobileContext = await browser.newContext({ viewport: { width: 412, height: 823 }, deviceScaleFactor: 1.75, isMobile: true, hasTouch: true });
     const mobilePage = await mobileContext.newPage();
     await mobilePage.addInitScript(() => {
       window.__mobileLcpEntries = []; window.__mobileShifts = []; window.__mobileLongTasks = [];
@@ -239,6 +239,7 @@ try {
     });
     const mobileSession = await mobileContext.newCDPSession(mobilePage);
     await mobileSession.send('Network.enable');
+    await mobileSession.send('Network.setCacheDisabled', { cacheDisabled: true });
     await mobileSession.send('Network.emulateNetworkConditions', {
       offline: false,
       latency: 150,
