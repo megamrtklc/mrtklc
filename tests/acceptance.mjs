@@ -188,19 +188,24 @@ try {
       const capturePersonalizedHeading = () => {
         const section = document.querySelector('#home-personalized-section');
         const heading = section?.querySelector('.home-personalized-heading');
-        if (!heading) {
-          window.__personalizedHeadingTimeline.push({ time: Math.round(performance.now()), found: false, sectionDisplay: section ? getComputedStyle(section).display : null, sectionVisibility: section ? getComputedStyle(section).visibility : null });
-          return;
-        }
-        const rect = heading.getBoundingClientRect();
-        const style = getComputedStyle(heading);
+        const overlay = section?.querySelector('.cv-section-loading-overlay');
+        const card = section?.querySelector('.home-personalized-mobile-card');
+        const showcase = section?.querySelector('.home-personalized-showcase');
+        const hero = document.querySelector('#mobileHeroBanner');
+        const rect = element => {
+          if (!element) return null;
+          const r = element.getBoundingClientRect();
+          const c = getComputedStyle(element);
+          return { x: Math.round(r.x), y: Math.round(r.y), width: Math.round(r.width), height: Math.round(r.height),
+            display: c.display, position: c.position, heightCss: c.height, minHeight: c.minHeight,
+            visibility: c.visibility, transform: c.transform, offsetHeight: element.offsetHeight,
+            inlineStyle: element.getAttribute('style'), offsetParent: element.offsetParent?.id || element.offsetParent?.className || element.offsetParent?.tagName || null };
+        };
         window.__personalizedHeadingTimeline.push({
-          time: Math.round(performance.now()), found: true, nodeId: heading.dataset.cvDiagnosticId || null,
-          inlineStyle: heading.getAttribute('style'), className: heading.className,
-          height: Math.round(rect.height * 100) / 100, cssHeight: style.height, minHeight: style.minHeight,
-          display: style.display, visibility: style.visibility, connected: heading.isConnected,
-          sectionDisplay: getComputedStyle(section).display, sectionVisibility: getComputedStyle(section).visibility,
-          xCloak: section.hasAttribute('x-cloak'), xShow: section.getAttribute('x-show')
+          time: Math.round(performance.now()), found: !!heading,
+          section: rect(section), heading: rect(heading), overlay: rect(overlay),
+          card: rect(card), showcase: rect(showcase), hero: rect(hero),
+          sectionChildren: section ? [...section.children].map(node => ({tag:node.tagName,className:typeof node.className==='string'?node.className:'',id:node.id,rect:rect(node)})) : []
         });
       };
       let headingIdentity = 0;
