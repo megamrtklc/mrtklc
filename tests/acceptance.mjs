@@ -128,6 +128,7 @@ try {
   });
   const desktopDiagnostics = await page.evaluate(() => ({
     shifts: window.__desktopLayoutShifts || [],
+    layoutTimeline: window.__desktopLayoutTimeline || [],
     footer: (() => { const el = document.querySelector("#cineverse-footer"); const app = window.Alpine?.$data(document.documentElement); return { catalogLoading: app?.catalogLoading ?? null, enabled: app?.footerConfig?.enabled ?? null, display: el ? getComputedStyle(el).display : null, visibility: el ? getComputedStyle(el).visibility : null, inlineStyle: el?.getAttribute("style") || null, rect: el?.getBoundingClientRect().toJSON() || null }; })(),
     hero: (() => {
       const section = document.querySelector('#desktopEditorialHero');
