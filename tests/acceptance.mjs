@@ -272,7 +272,7 @@ try {
       const links = [...document.querySelectorAll('link[rel="stylesheet"]')];
       const iconCss = links.some(link => link.href.includes('icons.css') && (link.media === 'all' || link.media === ''));
       const fontCss = links.some(link => link.href.includes('fonts.css') && (link.media === 'all' || link.media === ''));
-      const svgIconReady = !!document.querySelector('i.fa-solid svg.perde-icon-svg use[href*="icons.svg#"]');
+      const svgIconReady = !!document.querySelector('i.fa-solid svg.perde-icon-svg use[href*="icons.svg"]');
       return iconCss && fontCss && svgIconReady;
     }, { timeout: 15000 });
     const interFontReady = await page.evaluate(async () => {
@@ -283,7 +283,7 @@ try {
     assert.ok(interFontReady, 'Inter değişken fontu veya yerel font yükleme yolu çalışmıyor');
     const iconFontRequests = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => /fa-(solid-900|regular-400)\\.woff2/i.test(entry.name)).map(entry => entry.name));
     assert.equal(iconFontRequests.length, 0, 'Eski Font Awesome ikon fontu hâlâ indiriliyor');
-    const svgIconCount = await page.locator('i.fa-solid svg.perde-icon-svg use[href*="icons.svg#"]').count();
+    const svgIconCount = await page.locator('i.fa-solid svg.perde-icon-svg use[href*="icons.svg"]').count();
     assert.ok(svgIconCount > 30, `SVG ikonları beklenen şekilde dönüştürülmedi: ${svgIconCount}`);
     const regularBookmarkIconCount = await page.locator('i.fa-regular.fa-bookmark svg.perde-icon-svg use[href*="#regular-bookmark"]').count();
     assert.ok(regularBookmarkIconCount > 0, 'Listeme Ekle için çizgi biçimli yer imi ikonu görünmüyor');
