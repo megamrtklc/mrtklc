@@ -910,6 +910,9 @@
                             window.setTimeout(() => this.scheduleHomePageHydration(), 50);
                             return;
                         }
+                        // İlk boyamada hazır olan hero bootstrap ayarlarıyla bölümlerin nihai sırasını uygula.
+                        // Katalog yanıtı geldiğinde aynı sıra tekrar uygulanacağı için görünür raflar yer değiştirmez.
+                        this.applyHomepageSectionOrder();
                         this.prepareHomeHeroVariant(root);
                         if (!root.hasAttribute('x-ignore') || root.dataset.homeHydrationScheduled === 'true') return;
                         root.dataset.homeHydrationScheduled = 'true';
