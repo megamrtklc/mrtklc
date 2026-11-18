@@ -340,7 +340,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         <button type="button" @click="selectSearchResult(item)" class="cineverse-search-result">
                             <img :src="item.poster || item.image || item.tmdbPoster" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async">
                             <span class="cineverse-search-result-copy">
-                                <span class="cineverse-search-result-title" x-text="item.title"></span>
+                                <span class="cineverse-search-result-title" x-text="item.title"></span><span x-show="getHeroEnglishTitle(item)" x-text="getHeroEnglishTitle(item)" class="block text-[10px] font-medium text-gray-400"></span>
                                 <span class="cineverse-search-result-meta">
                                     <span class="cineverse-search-result-type" x-text="item.type === 'tv' ? 'Dizi' : 'Film'"></span>
                                     <span x-show="item.year" x-text="item.year"></span>
@@ -615,7 +615,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <img class="home-personalized-card-backdrop absolute inset-0 w-full h-full object-cover" @error="handleImageError($event)" :src="item.backdrop || item.poster || item.image" :srcset="getTmdbImageSrcSet(item.backdrop || item.poster || item.image, [342, 500])" sizes="(max-width: 767px) 330px, 342px" :alt="''" aria-hidden="true" loading="lazy" decoding="async">
                                     <div class="home-personalized-card-shade absolute inset-0"></div>
                                     <div class="home-personalized-poster relative z-[1] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-900 shadow-xl"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [154, 185, 342])" sizes="96px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/85 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="(item.rating ? Number(item.rating).toFixed(1) : '—')"></span></span></div>
-                                    <div class="home-personalized-copy relative z-[1] min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-300 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="item.title"></h3><p class="mt-1 text-[10px] text-white/75 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="home-personalized-plot" x-text="item.tmdbOverview || item.desc || item.recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p></div>
+                                    <div class="home-personalized-copy relative z-[1] min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-300 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="item.title"></h3><p x-show="getHeroEnglishTitle(item)" x-text="getHeroEnglishTitle(item)" class="mt-0.5 text-[10px] text-white/65 line-clamp-1"></p><p class="mt-1 text-[10px] text-white/75 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="home-personalized-plot" x-text="item.tmdbOverview || item.desc || item.recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p></div>
                                     
                                 </div>
                             </template>
@@ -753,9 +753,9 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 <div class="home-new-arrival-copy p-3 space-y-2">
                                     <img x-show="index === 0" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [92, 154, 185, 342])" sizes="(max-width: 639px) 88px, 108px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster">
                                     <div x-show="index === 0" class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
-                                        <h3 class="min-w-0 flex-1 text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" x-text="item.title"></h3>
+                                        <div class="min-w-0 flex-1"><h3 class="text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" x-text="item.title"></h3><p x-show="getHeroEnglishTitle(item)" x-text="getHeroEnglishTitle(item)" class="text-[9px] text-white/60 line-clamp-1"></p></div>
                                     </div>
-                                    <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
+                                    <div x-show="index !== 0"><h3 class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3><p x-show="getHeroEnglishTitle(item)" x-text="getHeroEnglishTitle(item)" class="text-[9px] text-gray-500 dark:text-gray-400 line-clamp-1"></p></div>
                                     <p x-show="index === 0" x-text="item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || 'Bu yapımın konu açıklaması henüz eklenmemiş.'"></p>
                                     <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
                                         <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
@@ -910,7 +910,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                         <span class="absolute bottom-2 right-2 rounded bg-black/80 text-amber-400 text-[9px] font-black px-1.5 py-1"><i class="fa-solid fa-star mr-1"></i><span x-text="(item.rating ? Number(item.rating).toFixed(1) : '—')"></span></span>
                                     </div>
                                     <div class="p-2.5 space-y-1">
-                                        <h3 class="text-[11px] font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
+                                        <h3 class="text-[11px] font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3><p x-show="getHeroEnglishTitle(item)" x-text="getHeroEnglishTitle(item)" class="text-[9px] text-gray-500 dark:text-gray-400 line-clamp-1"></p>
                                         <p class="text-[9px] text-gray-500 dark:text-gray-400" x-text="(item.year || '') + (item.genre ? ' • ' + item.genre : '')"></p>
                                     </div>
                                 </button>
@@ -962,7 +962,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 <div class="p-3 flex flex-col flex-grow justify-between space-y-1">
                                     <div>
                                         <span class="text-[9px] font-bold text-rose-700 dark:text-rose-400 uppercase" x-text="item.genre"></span>
-                                        <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3>
+                                        <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="item.title"></h3><p x-show="getHeroEnglishTitle(item)" x-text="getHeroEnglishTitle(item)" class="text-[9px] text-gray-500 dark:text-gray-400 line-clamp-1"></p>
                                     </div>
                                     <div class="flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200 dark:border-gray-800/60">
                                         <span x-text="item.year"></span>
@@ -1308,7 +1308,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         <!-- Synopsis Card -->
                         <div x-data="{ synopsisOpen: false }" data-watch-card="synopsis" :style="'order: ' + getWatchCardOrder('synopsis')" :class="getCardClass()" class="p-5 sm:p-6 rounded-2xl border space-y-4 shadow-sm">
                             <div class="flex items-center justify-between gap-3">
-                                <h1 class="text-xl font-black text-gray-900 dark:text-white uppercase" x-text="selectedItem.title"></h1>
+                                <div class="min-w-0"><h1 class="text-xl font-black text-gray-900 dark:text-white uppercase" x-text="selectedItem.title"></h1><p x-show="getHeroEnglishTitle(selectedItem)" x-text="getHeroEnglishTitle(selectedItem)" class="mt-0.5 text-xs font-medium text-gray-500 dark:text-gray-400"></p></div>
                                 <div class="flex shrink-0 items-center gap-2" role="group" aria-label="Kişisel kütüphane işlemleri">
                                     <button type="button" @click="toggleWatchlist(selectedItem)" :title="isInWatchlist(selectedItem) ? 'Listemden çıkar' : 'Listeme ekle'" :aria-label="isInWatchlist(selectedItem) ? 'Listemden çıkar' : 'Listeme ekle'" :aria-pressed="isInWatchlist(selectedItem)" :class="isInWatchlist(selectedItem) ? 'border-rose-500 bg-rose-600 text-white shadow-md shadow-rose-950/15' : 'border-gray-300 bg-white/70 text-gray-700 hover:border-rose-500 hover:text-rose-600 dark:border-gray-700 dark:bg-white/5 dark:text-white'" class="watch-status-icon" :data-tooltip="isInWatchlist(selectedItem) ? 'Listemden çıkar' : 'Listeme ekle'"><i :class="isInWatchlist(selectedItem) ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'"></i></button>
                                     <button type="button" @click="toggleWatched(selectedItem)" :aria-label="isWatched(selectedItem) ? 'İzledim kaydını kaldır' : 'İzledim'" :aria-pressed="isWatched(selectedItem)" :class="isWatched(selectedItem) ? 'border-emerald-500 bg-emerald-600 text-white shadow-md shadow-emerald-950/15' : 'border-gray-300 bg-white/70 text-gray-700 hover:border-emerald-500 hover:text-emerald-600 dark:border-gray-700 dark:bg-white/5 dark:text-white'" class="watch-status-icon watch-status-action"><i class="fa-solid fa-eye" aria-hidden="true"></i><span x-text="isWatched(selectedItem) ? 'İzlendi' : 'İzledim'"></span></button>
@@ -1800,7 +1800,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </div>
                             <div class="p-2.5 space-y-1 flex-1">
                                 <span class="text-[9px] font-bold text-rose-700 dark:text-rose-400 uppercase" x-text="item.genre"></span>
-                                <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
+                                <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3><p x-show="getHeroEnglishTitle(item)" x-text="getHeroEnglishTitle(item)" class="text-[9px] text-gray-500 dark:text-gray-400 line-clamp-1"></p>
                                 <div class="flex justify-between gap-2 text-[10px] text-gray-500 dark:text-gray-400"><span x-text="item.year"></span><span x-text="item.duration"></span></div>
                             </div>
                         </div>
