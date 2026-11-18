@@ -908,6 +908,11 @@
                             activeHero.dataset.cvHeroHydrated = 'true';
                         }
                     }
+                    // Kök zaten Alpine tarafından hazırsa gerçek manşet burada görünür durumdadır;
+                    // mobil ilk-yükleme iskeletini bekletmeden kaldır ki görsel ikinci kez üstte kalmasın.
+                    if (activeHero?.dataset.cvHeroHydrated === 'true') {
+                        this.$nextTick(() => this.removeHeroInitialShell());
+                    }
                 },
 
                 scheduleHomePageHydration() {
