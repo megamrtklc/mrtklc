@@ -764,7 +764,10 @@
   function heroVotes(item){return Number(item.tmdbVoteCount||item.voteCount||0);}
   function hasHeroVideoUrl(item){
     const urls=[item?.watchUrl,...Object.values(item?.episodeWatchUrls||{})];
-    return urls.some(value=>/^https?:\\/\\/\\S+$/i.test(String(value||'').trim()));
+    return urls.some(value=>{
+      try{const url=new URL(String(value||'').trim());return (url.protocol==='http:'||url.protocol==='https:')&&!!url.hostname;}
+      catch(_){return false;}
+    });
   }
   function autoHeroItems(category,count){
     let items=state.catalog.filter(item=>posterOf(item));
@@ -964,7 +967,7 @@
         const option=document.createElement('option');option.value='video-url';option.textContent='Video Bağlantısı Olanlar';select.appendChild(option);
       }
       const shell=document.createElement('div');shell.className='hero-category-select';
-      select.parentNode.insertBefore(shell,select);shell.appendChild(select);select.classList.add('hero-category-native');
+      select.parentNode.insertBefore(shell,select);shell.appendChild(select);select.classList.add('hero-category-native');select.tabIndex=-1;select.setAttribute('aria-hidden','true');
       const trigger=document.createElement('button');trigger.type='button';trigger.className='hero-category-trigger';trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');
       trigger.innerHTML='<span class="hero-category-current-icon"></span><span class="hero-category-value"></span><svg class="hero-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
       const menu=document.createElement('div');menu.className='hero-category-menu';menu.setAttribute('role','listbox');menu.hidden=true;
