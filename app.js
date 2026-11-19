@@ -1132,7 +1132,7 @@
                         window.clearInterval(this.heroAutoplayTimer);
                     }
                     const settings = this.homepageConfig?.settings || {};
-                    if (document.documentElement.classList.contains('cv-tv-mode') || settings.autoplay === false || this.heroSlides.length < 2) return;
+                    if (document.documentElement.classList.contains('cv-tv-mode') || window.matchMedia('(max-width: 767px)').matches || settings.autoplay === false || this.heroSlides.length < 2) return;
                     const seconds = Math.max(2, Math.min(60, Number(settings.interval) || 6));
                     const advance = () => {
                         if (this.heroPaused || document.hidden || this.heroSlides.length < 2) return;
