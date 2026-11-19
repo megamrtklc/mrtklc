@@ -22215,7 +22215,9 @@
       "descriptionLength": 400,
       "mobileCount": 6,
       "desktopDescriptionMode": "long",
-      "desktopDescriptionLines": 3
+      "desktopDescriptionLines": 3,
+      "desktopDescriptionWidthMode": "narrow",
+      "desktopDescriptionWidthPx": 720
     },
     "heroSlides": [
       {
