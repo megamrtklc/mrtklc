@@ -101,6 +101,47 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',panel,{once:true});else panel();
 })();
 </script>
+<script id="perde-navigation-trace-v1">
+(function(){
+  if(window.__PERDE_NAV_TRACE__)return;
+  window.__PERDE_NAV_TRACE__=true;
+  var diag=window.__PERDE_DIAG__;
+  function log(type,data){try{if(diag&&diag.add)diag.add(type,data)}catch(e){}}
+  function short(v,n){try{return String(v==null?'':v).slice(0,n||500)}catch(e){return '[unavailable]'}}
+  function state(){try{return {url:location.pathname+location.search+location.hash,historyLength:history.length,state:history.state}}catch(e){return {url:location.href}}}
+  ['pushState','replaceState','back','forward','go'].forEach(function(name){
+    try{
+      var original=history[name];
+      if(typeof original!=='function')return;
+      history[name]=function(){
+        var args=Array.prototype.slice.call(arguments);
+        var stack='';try{stack=(new Error()).stack||''}catch(e){}
+        log('history-'+name,{before:state(),urlArgument:name==='pushState'||name==='replaceState'?short(args[2],500):null,delta:name==='go'?args[0]:null,stack:short(stack,1600)});
+        var result=original.apply(this,args);
+        log('history-'+name+'-result',{after:state()});
+        return result;
+      };
+    }catch(e){log('history-wrap-error',{method:name,error:short(e&&e.message)})}
+  });
+  try{
+    if(window.navigation&&window.navigation.addEventListener){
+      window.navigation.addEventListener('navigate',function(e){
+        var dest='';try{dest=e.destination&&e.destination.url||''}catch(x){}
+        log('navigation-api-navigate',{destination:short(dest,600),navigationType:e.navigationType,userInitiated:e.userInitiated,hashChange:e.hashChange,canIntercept:e.canIntercept,formData:!!e.formData,sourceElement:e.sourceElement&&{tag:e.sourceElement.tagName,id:e.sourceElement.id,href:e.sourceElement.href||''},state:state()});
+      });
+      window.navigation.addEventListener('currententrychange',function(e){
+        var entry=window.navigation.currentEntry;
+        log('navigation-api-entrychange',{navigationType:e.navigationType,key:entry&&entry.key,id:entry&&entry.id,index:entry&&entry.index,url:entry&&entry.url,state:state()});
+      });
+      window.navigation.addEventListener('navigateerror',function(e){log('navigation-api-error',{message:short(e.message),state:state()})});
+      window.navigation.addEventListener('navigatesuccess',function(){log('navigation-api-success',{state:state()})});
+      log('navigation-api-ready',{supported:true,currentEntry:window.navigation.currentEntry&&window.navigation.currentEntry.url});
+    }else log('navigation-api-ready',{supported:false});
+  }catch(e){log('navigation-api-init-error',{message:short(e&&e.message)})}
+  window.addEventListener('pageswap',function(e){log('pageswap',{from:e.from&&e.from.url,to:e.destination&&e.destination.url})});
+  window.addEventListener('pagereveal',function(){log('pagereveal',{state:state()})});
+})();
+</script>
 <script id="cv-initial-route-marker">(function(){var h=window.location.hash||"";var home=!h||h==="#"||h==="#/"||h==="#home";document.documentElement.dataset.cvInitialHome=home?"true":"false"})();</script>
 <style id="cv-initial-home-header-geometry">@media(min-width:768px){html[data-cv-initial-home=true] body>header{margin-bottom:-4rem}#home-page #desktopEditorialHero[x-cloak]{display:block!important;visibility:hidden!important;height:623px!important;min-height:623px!important}}@media(max-width:767px){#mobileHeroBanner{margin-top:-40px!important;min-height:576px!important;height:auto!important;box-sizing:border-box}#mobileHeroBanner[x-cloak]{display:block!important;visibility:hidden!important}#mobileHeroBanner>div:nth-child(2){min-height:302px;box-sizing:border-box}}</style>
 <style id="cv-mobile-hero-copy-reservation">@media(max-width:767px){#mobileHeroBanner>div:nth-child(2){min-height:302px;box-sizing:border-box}}@media(max-width:359px){#mobileHeroBanner>div:nth-child(2){min-height:326px}}</style>
