@@ -1035,6 +1035,9 @@
     $('#hero-mobile-count').value=settings.mobileCount??6;
     $('#hero-interval').value=settings.interval??6;
     $('#hero-description-length').value=settings.descriptionLength??220;
+    $('#hero-desktop-description-mode').value=settings.desktopDescriptionMode||'medium';
+    $('#hero-desktop-description-lines').value=Math.max(1,Math.min(8,Number(settings.desktopDescriptionLines)||3));
+    $('#hero-desktop-description-custom').hidden=$('#hero-desktop-description-mode').value!=='custom';
     $('#hero-autoplay').checked=settings.autoplay!==false;
     $('#hero-pause').checked=settings.pauseOnHover!==false;
     const draft=state.heroDraft||{};
@@ -1130,6 +1133,8 @@
       mobileMode:$('#hero-mobile-mode').value,mobileCategory:$('#hero-mobile-category').value,
       settings:{...previous.settings,desktopCount:Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)),mobileCount:Number($('#hero-mobile-count').value)||6,
         interval:Number($('#hero-interval').value)||6,descriptionLength:Math.max(80,Math.min(500,Number($('#hero-description-length').value)||220)),
+        desktopDescriptionMode:$('#hero-desktop-description-mode').value||'medium',
+        desktopDescriptionLines:Math.max(1,Math.min(8,Number($('#hero-desktop-description-lines').value)||3)),
         autoplay:$('#hero-autoplay').checked,pauseOnHover:$('#hero-pause').checked},
       desktopHeroSlides,mobileHeroSlides,heroSlides:desktopHeroSlides};
     const ok=await persist({...state.data,homepageConfig:config},'Manşet ayarları kaydedildi.');
@@ -1469,6 +1474,8 @@
   $('#hero-mobile-category').addEventListener('change',event=>{state.heroRefreshDraft=null;state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=[];homepageConfig().mobileCategory=event.target.value;renderHomepage();});
   $('#hero-mobile-count').addEventListener('change',event=>{state.heroRefreshDraft=null;homepageConfig().settings.mobileCount=Number(event.target.value)||6;renderHomepage();});
   $('#hero-description-length').addEventListener('change',event=>{homepageConfig().settings.descriptionLength=Number(event.target.value)||220;renderHomepage();});
+  $('#hero-desktop-description-mode').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionMode=event.target.value;$('#hero-desktop-description-custom').hidden=event.target.value!=='custom';});
+  $('#hero-desktop-description-lines').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionLines=Math.max(1,Math.min(8,Number(event.target.value)||3));});
 
   $('#watch-layout-save').addEventListener('click',saveWatchLayout);
   $('#watch-available-list').addEventListener('click',event=>{
