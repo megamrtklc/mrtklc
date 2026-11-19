@@ -219,6 +219,7 @@
                 discoveryRating: '0',
                 discoveryYearFrom: '',
                 discoveryYearTo: '',
+                discoveryShuffleSeed: String(safeStorageRead('perde_discovery_shuffle_seed_v1', '') || Math.floor(Math.random() * 0x7fffffff)),
                 discoveryCurrentItemId: String(safeStorageRead('perde_discovery_current_v1', '') || ''),
                 discoverySeenIds: Array.isArray(safeStorageRead('perde_discovery_seen_v1', [])) ? safeStorageRead('perde_discovery_seen_v1', []) : [],
                 selectedItem: null,
@@ -2936,6 +2937,7 @@
                     return currentId ? this.sortedFilteredCatalog.find(item => String(item.id ?? item.title ?? '') === currentId) || null : null;
                 },
                 initializeDiscovery() {
+                    safeStorageWrite('perde_discovery_shuffle_seed_v1', this.discoveryShuffleSeed);
                     const pool = this.sortedFilteredCatalog;
                     if (!pool.length) {
                         this.discoveryCurrentItemId = '';
@@ -3074,6 +3076,22 @@
                     else if (this.sortBy === 'year') result.sort((a, b) => (Number.parseInt(b.year, 10) || 0) - (Number.parseInt(a.year, 10) || 0));
                     else if (this.sortBy === 'oldest') result.sort((a, b) => this.catalog.indexOf(a) - this.catalog.indexOf(b));
                     else if (this.sortBy === 'title') result.sort((a, b) => a.title.localeCompare(b.title, 'tr'));
+                    return result;
+                },
+
+                get discoveryListCatalog() {
+                    const currentId = String(this.discoveryCurrentItemId || '');
+                    const result = this.sortedFilteredCatalog.filter(item => String(item.id ?? item.title ?? '') !== currentId);
+                    if (this.sortBy === 'default') {
+                        const seed = String(this.discoveryShuffleSeed || 1);
+                        const score = item => {
+                            const key = seed + '|' + String(item.id ?? item.title ?? '');
+                            let hash = 2166136261;
+                            for (let i = 0; i < key.length; i++) hash = Math.imul(hash ^ key.charCodeAt(i), 16777619);
+                            return hash >>> 0;
+                        };
+                        result.sort((a, b) => score(a) - score(b) || String(a.id ?? a.title ?? '').localeCompare(String(b.id ?? b.title ?? ''), 'tr'));
+                    }
                     return result;
                 },
 
