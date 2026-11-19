@@ -5,7 +5,7 @@
       "interval": 6,
       "autoplay": true,
       "pauseOnHover": true,
-      "descriptionLength": 300,
+      "descriptionLength": 240,
       "mobileCount": 5
     },
     "desktopHeroSlides": [
@@ -52,7 +52,11 @@
     ],
     "mobileHeroSlides": [
       {
-        "id": "archive-45",
+        "id": "archive-122",
+        "active": true
+      },
+      {
+        "id": "archive-114",
         "active": true
       },
       {
@@ -60,42 +64,17 @@
         "active": true
       },
       {
-        "id": "cv-1794698111552",
+        "id": "archive-27",
         "active": true
       },
       {
-        "id": "archive-112",
-        "active": true
-      },
-      {
-        "id": "archive-15",
+        "id": "archive-88",
         "active": true
       }
     ],
     "heroStyle": "perde"
   },
   "catalog": [
-    {
-      "id": "archive-15",
-      "tmdbId": 49021,
-      "title": "Seçkin Tetikçiler",
-      "type": "movie",
-      "category": "Aksiyon / Macera / Gerilim",
-      "genre": "Aksiyon",
-      "rating": "6.3",
-      "year": "2011",
-      "duration": "116 dk",
-      "country": "Australia, United States of America, United Kingdom, Morocco",
-      "poster": "https://image.tmdb.org/t/p/w500/kdpNb414CLDoE1E67nbDKpwxwur.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/RzIuQRoXiO8WeFdjtnjUCzSymV.jpg",
-      "desc": "İngiliz Gizli Servisi'nin eğitimli ve emekli üyelerinden biri, kendisini yetiştiren kişi zor durumda kalınca bu tehlikeli hayata geri dönmek zorunda kalır. Fakat dostunu kurtarmak için girişeceği bu macerada, karşısında en az kendisi kadar yetenekli bir diğer ajan bulunmaktadır. Dostunu kurtarmak, sandığı kadar kolay olmayacaktır.",
-      "director": "Gary McKendry",
-      "originalTitle": "Killer Elite",
-      "starring": "",
-      "trailerUrl": "https://www.youtube.com/watch?v=2Q8VIPJAox8",
-      "seasons": null,
-      "episodes": null
-    },
     {
       "id": "archive-17",
       "tmdbId": 44878,
@@ -137,6 +116,27 @@
       "trailerUrl": "https://www.youtube.com/watch?v=Q8cBFvpqmH0",
       "seasons": 6,
       "episodes": 86
+    },
+    {
+      "id": "archive-27",
+      "tmdbId": 13,
+      "title": "Forrest Gump",
+      "type": "movie",
+      "category": "Komedi / Dram / Romantik",
+      "genre": "Komedi",
+      "rating": "8.5",
+      "year": "1994",
+      "duration": "142 dk",
+      "country": "United States of America",
+      "poster": "https://image.tmdb.org/t/p/w500/saHP97rTPS5eLmrLQEcANmKrsFl.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/66Kn4XWhkuPkJxOJyPEx4U2CUfN.jpg",
+      "desc": "Forrest Gump, düşük IQ’su olmasına rağmen, Amerikan tarihinin en önemli olaylarının tam ortasında yer alan biridir. Alabama'da büyüyen Forrest, koşma yeteneği sayesinde üniversiteye girer, Vietnam Savaşı'na katılır, Beyaz Saray’a davet edilir ve karides işinden milyoner olur. Ancak tüm bu başarılar, çocukluk aşkı Jenny’ye duyduğu sevginin yanında sönük kalır.",
+      "director": "Robert Zemeckis",
+      "originalTitle": "Forrest Gump",
+      "starring": "",
+      "trailerUrl": "https://www.youtube.com/watch?v=Mj9IA9tTfio",
+      "seasons": null,
+      "episodes": null
     },
     {
       "id": "archive-29",
@@ -181,27 +181,6 @@
       "episodes": null
     },
     {
-      "id": "archive-45",
-      "tmdbId": 955555,
-      "title": "Kuralsızlar 3 : Çıkış Yok",
-      "type": "movie",
-      "category": "Aksiyon / Suç / Gerilim",
-      "genre": "Aksiyon",
-      "rating": "7.3",
-      "year": "2023",
-      "duration": "105 dk",
-      "country": "Bilinmiyor",
-      "poster": "https://image.tmdb.org/t/p/w500/kPtNokhBtgwSp3MHaR3X4O0SPbF.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/5DKVH8KeqFwPacWFMyYqTaECxJP.jpg",
-      "desc": "Dedektif Ma Seok-do, Kore'ye iğrenç suçlar işlemek için giren Japon gangsterlerin kökünü kazımak için Geumcheon Polis Karakolu'ndaki bağlılığını Büyükşehir Soruşturma Ekibi'ne değiştirir.",
-      "director": "Bilinmiyor",
-      "originalTitle": "범죄도시 3",
-      "starring": "",
-      "trailerUrl": "",
-      "seasons": null,
-      "episodes": null
-    },
-    {
       "id": "archive-51",
       "tmdbId": 49797,
       "title": "Şeytanı Gördüm",
@@ -221,6 +200,27 @@
       "trailerUrl": "https://www.youtube.com/watch?v=xwWgp1bqVwE",
       "seasons": null,
       "episodes": null
+    },
+    {
+      "id": "archive-88",
+      "tmdbId": 60574,
+      "title": "Peaky Blinders",
+      "type": "tv",
+      "category": "Dram / Suç",
+      "genre": "Dram",
+      "rating": "8.5",
+      "year": "2013",
+      "duration": "Bilinmiyor",
+      "country": "United Kingdom",
+      "poster": "https://image.tmdb.org/t/p/w500/5aHpODCpUa0kGTPXtiYC0moIPhT.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/dzq83RHwQcnP6WGJ6YkenIqeaa5.jpg",
+      "desc": "Birinci Dünya Savaşı’ndan yeni çıkmış İngiltere’yi, yasadışı faaliyet gösteren çeşitli çeteler sarmıştır. Bunlardan biri de soygunculuk ve at yarışıyla para kazanan Peaky Blinders’dır. Polislere rüşvet yedirerek paçayı kurtaran çete, bir soygunda yanlışlık yapınca başlarına bela olacak yeni bir müfettişin şehre gelmesine vesile olurlar.",
+      "director": "Steven Knight",
+      "originalTitle": "Peaky Blinders",
+      "starring": "",
+      "trailerUrl": "https://www.youtube.com/watch?v=EM12mcTEI88",
+      "seasons": 6,
+      "episodes": 36
     },
     {
       "id": "archive-100",
@@ -286,23 +286,44 @@
       "episodes": null
     },
     {
-      "id": "archive-112",
-      "tmdbId": 157336,
-      "title": "Yıldızlararası",
-      "type": "movie",
-      "category": "Macera / Dram / Bilim-Kurgu",
-      "genre": "Macera",
-      "rating": "8.5",
-      "year": "2014",
-      "duration": "169 dk",
-      "country": "United Kingdom / United States of America",
-      "poster": "https://image.tmdb.org/t/p/w500/xbiycuc84TrieEWwkkuH2hoEa9S.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg",
-      "desc": "Dünya'nın kuraklık ve kıtlıkla yok oluşun eşiğine geldiği bir gelecekte, insanlığın hayatta kalabilmesi için yeni bir yuva bulması şarttır. Keşfedilen gizemli bir solucan deliği, bir grup astronot ve bilim insanına insanlık tarihinin en önemli görevini üstlenme fırsatı verir. Eski bir NASA pilotu olan Cooper, ailesini geride bırakarak yıldızlararası bir yolculuğa çıkar ve bilinmeyen galaksilerde insanlığın kurtuluşunu arar.",
-      "director": "Christopher Nolan",
-      "originalTitle": "Interstellar",
+      "id": "archive-114",
+      "tmdbId": 115970,
+      "title": "50M²",
+      "type": "tv",
+      "category": "Drama / Comedy",
+      "genre": "Drama",
+      "rating": "7.4",
+      "year": "2021",
+      "duration": "49 dk",
+      "country": "Türkiye",
+      "poster": "https://image.tmdb.org/t/p/w500/3m0aiNtGZo6URftj88zGIrsv0V2.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/1aZ7AmKU92ihCzge0eNdNtZ7icg.jpg",
+      "desc": "Getting a second chance is easy, but making use of it is more difficult than one thinks. Gölge is doing the dirty work of Servet Nadir, whom he is raised by. He, who does not remember anything about his childhood, pursues the photograph that ties him to his past. Gölge, escaping with the secrets of Servet Nadir, takes refuge in a 50 square meter tailor shop in a neighbourhood named Güzelce. The inhabitants of the neighbourhood believe that he is Adem, son of Adil, the tailor who has just recently died. No matter how challenging the neighborhood is, Gölge will change the neighborhood and the neighborhood will change Gölge.",
+      "director": "Burak Aksak",
+      "originalTitle": "50M²",
       "starring": "",
-      "trailerUrl": "https://www.youtube.com/watch?v=vVJeYMRam0o",
+      "trailerUrl": "https://www.youtube.com/watch?v=P21mhB-Ea9A",
+      "seasons": 1,
+      "episodes": 8
+    },
+    {
+      "id": "archive-122",
+      "tmdbId": 75640,
+      "title": "Kolpaçino: Bomba",
+      "type": "movie",
+      "category": "Komedi / Macera",
+      "genre": "Komedi",
+      "rating": "5.4",
+      "year": "2011",
+      "duration": "90 dk",
+      "country": "Türkiye",
+      "poster": "https://image.tmdb.org/t/p/w500/aLMYsy2QUXmiExXfujDSuJufJqw.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/rIpgYXtzfGr4sciIMFbKPSBnc8O.jpg",
+      "desc": "Özgür, zengin bir ailenin evlâdıdır. Ancak ne cimri babasından ne de zengin kayınpederinden destek görmez. Eski sevgilisi Şale ise çıkaracağı albüm için maddi destek beklemektedir. Desteği bulamayınca Özgür'ü, gizlice çektiği bir şantaj kaseti ile tehdit eder. Kadınca intikam gibi görünen durumun arkasında büyük hesaplar vardır. Özgür, Sabri ve Tayfun'dan yardım ister.",
+      "director": "Şafak Sezer",
+      "originalTitle": "Kolpaçino: Bomba",
+      "starring": "",
+      "trailerUrl": "https://www.youtube.com/watch?v=_sBSqaHp8MA",
       "seasons": null,
       "episodes": null
     },
@@ -345,27 +366,6 @@
       "originalTitle": "火遮眼",
       "starring": "",
       "trailerUrl": "https://youtu.be/cpRUEnZD0q4?si=Vi4hqlYtedGlNCgo",
-      "seasons": null,
-      "episodes": null
-    },
-    {
-      "id": "cv-1794698111552",
-      "tmdbId": 490132,
-      "title": "Yeşil Rehber",
-      "type": "movie",
-      "category": "Dram / Komedi / Tarih / Biyografi",
-      "genre": "Dram",
-      "rating": "8.2",
-      "year": "2018",
-      "duration": "130 dk",
-      "country": "United States of America",
-      "poster": "https://image.tmdb.org/t/p/w500/vEzS2VOhdpBIANoEYBHRvcaeBXD.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/5En0fmDagt3Pk8d7P3uTwfeQceg.jpg",
-      "desc": "1962 yılında geçen, gerçek bir hikâyeden esinlenen film, ırkçılığın Amerika Birleşik Devletleri'nin güneyinde hâlâ çok yaygın olduğu bir dönemde, Afro-Amerikalı dünyaca ünlü piyanist Dr. Don Shirley ve İtalyan-Amerikalı kaba saba şoförü Tony Lip arasındaki beklenmedik dostluğu konu alır. Don Shirley, Güney Amerika’da bir konser turuna çıkmaya karar verir. Ancak o dönemde ırkçılık hâlâ büyük bir sorundur ve özellikle güney eyaletlerinde siyahi vatandaşlara yönelik ayrımcılık yoğundur. Dr. Shirley, güvenliği için Tony Lip adlı sert mizaçlı, sokak zekâsına sahip bir adamı şoför ve koruma olarak tutar. İkili, Shirley'nin güvenli bir şekilde konaklamasına yardımcı olması için dönemin Afro-Amerikan sürücülerine yönelik özel bir rehber olan “The Green Book” (Yeşil Rehber) adlı kılavuzu kullanır. Başlangıçta zıt karakterlere sahip olan Tony ve Shirley, zamanla aralarındaki önyargıları kırarak güçlü bir dostluk kurarlar.",
-      "director": "Peter Farrelly",
-      "originalTitle": "Green Book",
-      "starring": "",
-      "trailerUrl": "https://www.youtube.com/watch?v=_rPFXcqBWuU",
       "seasons": null,
       "episodes": null
     },
