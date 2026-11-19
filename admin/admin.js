@@ -26,7 +26,7 @@
   const yearOf = item => Number(item.year || item.releaseYear || (item.tmdbReleaseDate || '').slice(0,4)) || '—';
   const collectionList = () => Array.isArray(state.data?.collections) ? state.data.collections : [];
   const franchiseList = () => Array.isArray(state.data?.franchises) ? state.data.franchises : [];
-  const toast = message => { const el=$('#toast'); if(!el)return; el.textContent=message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),3000); };
+  const toast = (message,type='info') => { const el=$('#toast'); if(!el)return; const title=$('#toast-title'),body=$('#toast-message'),icon=el.querySelector('.toast-icon'); if(title)title.textContent=type==='success'?'KAYIT TAMAMLANDI':type==='error'?'İŞLEM TAMAMLANAMADI':'BİLGİLENDİRME'; if(body)body.textContent=String(message||''); if(icon)icon.textContent=type==='success'?'✓':type==='error'?'!':'i'; el.dataset.type=type; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),4200); };
   async function fetchWithTimeout(url,options={},timeoutMs=15000){
     const controller=new AbortController();
     const timer=setTimeout(()=>controller.abort(),timeoutMs);
@@ -277,11 +277,10 @@
       if(!response.ok)throw new Error(result.error||'Değişiklik kaydedilemedi.');
       state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];
       state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderMissingTrailers();renderCollections();renderFranchises();renderAnalytics();renderHomepage();renderHomepageLayout();renderPersonalizedSection();renderOverviewInsights();
-      $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
       renderWatchLayout();renderAdminProfile();
-      toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.');
+      toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.','success');
       return true;
-    }catch(error){toast(error.message);console.error(error);return false;}
+    }catch(error){toast(error.message,'error');console.error(error);return false;}
     finally{state.saving=false;}
   }
   function headerFooterDefaults(){
@@ -962,7 +961,6 @@
           :(category==='new-arrivals'?'Kataloğa en son eklenen yapımlar, en yeni kayıt üstte olacak şekilde getirilir.':category==='random'?'Katalogdan belirlenen sayı kadar tekrarsız rastgele yapım seçildi.':'Seçilen ölçüte göre katalogdan otomatik '+pool.length+' yapım getirildi.'))
         :'Katalogda ara; kutucuğu işaretleyerek manşete ekle, işareti kaldırarak çıkar.';
     });
-    $('#homepage-config').textContent=JSON.stringify(config,null,2);
   }
   async function saveHomepage(event){
     event.preventDefault();if(!canWrite())return;
@@ -1171,7 +1169,6 @@
       const writeHint=state.apiEnabled?'Yeni yapım ekle':'Form açılır; kaydetmek için GitHub yazma bağlantısı gerekir.';
       $('#add-content').title=writeHint;$('#catalog-add').title=writeHint;$('#collection-add').title=state.apiEnabled?'Yeni koleksiyon ekle':'Kayıt için GitHub yazma bağlantısı gerekir.';
       updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderOverviewInsights();renderAdminProfile();renderWatchLayout();renderHeaderFooter();
-      $('#homepage-config').textContent=JSON.stringify(state.data.homepageConfig||{},null,2);
       $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
       $('.notice b').textContent='Katalog verileri yüklendi';
       $('.notice p').textContent=payload.readOnlyReason||'Katalog bağlantısı aktif. Yönetim işlemleri güvenli API üzerinden yürütülüyor.';
