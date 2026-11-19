@@ -25,47 +25,66 @@
 <script id="perde-diagnostics-v1">
 (function(){
   if(window.__PERDE_DIAG__) return;
-  var KEY='perde_diag_log_v1', MAX=80, logs=[];
+  var KEY='perde_diag_log_v1',MAX=100,logs=[],lastInteraction=null;
   function read(){try{var v=JSON.parse(localStorage.getItem(KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
   logs=read();
   function save(){try{localStorage.setItem(KEY,JSON.stringify(logs.slice(-MAX)))}catch(e){}}
   function clean(v,n){try{return String(v==null?'':v).slice(0,n||700)}catch(e){return '[okunamadı]'}}
+  function describe(el){
+    if(!el)return null;
+    return {tag:clean(el.tagName,30),id:clean(el.id,100),className:clean(typeof el.className==='string'?el.className:'',180),type:clean(el.type,40),text:clean((el.innerText||el.value||'').trim(),100),html:clean(el.outerHTML,450)};
+  }
   function add(type,data){
     var item={time:new Date().toISOString(),type:type};
-    if(data) Object.keys(data).forEach(function(k){item[k]=data[k]});
-    logs.push(item); if(logs.length>MAX) logs=logs.slice(-MAX); save();
+    if(data)Object.keys(data).forEach(function(k){item[k]=data[k]});
+    logs.push(item);if(logs.length>MAX)logs=logs.slice(-MAX);save();
   }
-  function current(){return location.pathname+location.hash}
-  window.__PERDE_DIAG__={add:add,get:function(){return logs.slice()},clear:function(){logs=[];save()},export:function(){return JSON.stringify({createdAt:new Date().toISOString(),userAgent:navigator.userAgent,url:current(),logs:logs},null,2)}};
+  function current(){return location.pathname+location.search+location.hash}
+  function active(){return describe(document.activeElement)}
+  window.__PERDE_DIAG__={add:add,get:function(){return logs.slice()},clear:function(){logs=[];save()},export:function(){return JSON.stringify({createdAt:new Date().toISOString(),userAgent:navigator.userAgent,url:current(),lastInteraction:lastInteraction,logs:logs},null,2)}};
   var nav=null;try{nav=performance.getEntriesByType('navigation')[0]}catch(e){}
-  add('page-load',{url:current(),navigationType:nav?nav.type:'unknown',redirectCount:nav?nav.redirectCount:null,referrer:clean(document.referrer,250),visibility:document.visibilityState});
+  var sw='unavailable';try{sw=navigator.serviceWorker?(navigator.serviceWorker.controller?'controlled':'no-controller'):'unsupported'}catch(e){}
+  add('page-load',{url:current(),navigationType:nav?nav.type:'unknown',redirectCount:nav?nav.redirectCount:null,referrer:clean(document.referrer,250),visibility:document.visibilityState,readyState:document.readyState,serviceWorker:sw,historyLength:history.length});
+  function interaction(type,e){
+    var el=e&&e.target&&e.target.nodeType===1?e.target:null;
+    lastInteraction={time:new Date().toISOString(),type:type,target:describe(el)};
+  }
+  document.addEventListener('pointerdown',function(e){interaction('pointerdown',e)},true);
+  document.addEventListener('click',function(e){
+    interaction('click',e);
+    var el=e.target&&e.target.closest?e.target.closest('a[href],button,input[type=submit],input[type=button]'):null;
+    if(el)add('element-click',{target:describe(el),href:clean(el.href||'',400),defaultPrevented:e.defaultPrevented});
+  },true);
+  document.addEventListener('keydown',function(e){if(['Enter',' ','F5','r'].indexOf(e.key)>=0&&(e.key!=='r'||e.ctrlKey||e.metaKey))interaction('keydown:'+e.key,e)},true);
+  document.addEventListener('focusin',function(e){add('focusin',{target:describe(e.target)})},true);
+  document.addEventListener('focusout',function(e){add('focusout',{target:describe(e.target),next:describe(e.relatedTarget)})},true);
+  document.addEventListener('visibilitychange',function(){add('visibilitychange',{visibility:document.visibilityState,focused:document.hasFocus()})});
+  window.addEventListener('online',function(){add('online',{url:current()})});
+  window.addEventListener('offline',function(){add('offline',{url:current()})});
   window.addEventListener('error',function(e){
-    var target=e.target;
-    if(target&&target!==window){add('resource-error',{tag:target.tagName||'',src:clean(target.src||target.href||'',400),url:current()});return}
+    var t=e.target;
+    if(t&&t!==window){add('resource-error',{tag:t.tagName||'',src:clean(t.src||t.href||'',400),url:current()});return}
     add('javascript-error',{message:clean(e.message),source:clean(e.filename,400),line:e.lineno||0,column:e.colno||0,stack:clean(e.error&&e.error.stack,1400),url:current()});
   },true);
-  window.addEventListener('unhandledrejection',function(e){
-    var r=e.reason;add('unhandled-rejection',{reason:clean(r&&r.stack||r&&r.message||r,1400),url:current()});
-  });
-  window.addEventListener('beforeunload',function(){add('beforeunload',{url:current(),activeElement:clean(document.activeElement&&document.activeElement.tagName,40)})});
-  window.addEventListener('pagehide',function(e){add('pagehide',{persisted:!!e.persisted,url:current()})});
-  window.addEventListener('pageshow',function(e){if(e.persisted)add('pageshow-bfcache',{url:current()})});
+  window.addEventListener('unhandledrejection',function(e){var x=e.reason;add('unhandled-rejection',{reason:clean(x&&x.stack||x&&x.message||x,1400),url:current()})});
+  window.addEventListener('beforeunload',function(){add('beforeunload',{url:current(),activeElement:active(),lastInteraction:lastInteraction,visibility:document.visibilityState,focused:document.hasFocus()})});
+  window.addEventListener('unload',function(){add('unload',{url:current()})});
+  window.addEventListener('pagehide',function(e){add('pagehide',{persisted:!!e.persisted,url:current(),activeElement:active()})});
+  window.addEventListener('pageshow',function(e){add('pageshow',{persisted:!!e.persisted,url:current(),visibility:document.visibilityState})});
   window.addEventListener('hashchange',function(e){add('hashchange',{oldURL:clean(e.oldURL,300),newURL:clean(e.newURL,300)})});
   window.addEventListener('popstate',function(){add('popstate',{url:current()})});
-  document.addEventListener('submit',function(e){var f=e.target;add('form-submit',{action:clean(f&&f.action,400),method:clean(f&&f.method,20)})},true);
-  document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a[href]'):null;if(a)add('link-click',{href:clean(a.href,400),target:clean(a.target,40)})},true);
+  document.addEventListener('submit',function(e){var f=e.target;add('form-submit',{action:clean(f&&f.action,400),method:clean(f&&f.method,20),target:describe(f)})},true);
   var oldError=console.error;
   console.error=function(){try{add('console-error',{message:Array.prototype.map.call(arguments,function(x){return clean(x&&x.stack||x&&x.message||x,500)}).join(' | ')})}catch(e){}return oldError.apply(console,arguments)};
-  try{
-    if(window.PerformanceObserver){var po=new PerformanceObserver(function(list){list.getEntries().forEach(function(x){if(x.duration>1200)add('long-task',{duration:Math.round(x.duration),startTime:Math.round(x.startTime)})})});po.observe({entryTypes:['longtask']})}
-  }catch(e){}
+  try{if(window.PerformanceObserver){var po=new PerformanceObserver(function(list){list.getEntries().forEach(function(x){if(x.duration>1200)add('long-task',{duration:Math.round(x.duration),startTime:Math.round(x.startTime)})})});po.observe({entryTypes:['longtask']})}}catch(e){}
   function panel(){
     if(document.getElementById('perde-diag-launch'))return;
-    var style=document.createElement('style');style.textContent='#perde-diag-launch{position:fixed;z-index:2147483000;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));border:1px solid rgba(255,210,100,.55);border-radius:999px;background:#171717;color:#ffe2a0;padding:10px 14px;font:600 12px system-ui;box-shadow:0 4px 18px #0008}#perde-diag-panel{position:fixed;z-index:2147483001;inset:8% 4% auto;max-height:84dvh;overflow:auto;background:#111827;color:#f8fafc;border:1px solid #b88b38;border-radius:14px;padding:14px;font:13px/1.45 system-ui;box-shadow:0 12px 40px #000b}#perde-diag-panel[hidden]{display:none}#perde-diag-panel button{background:#8b6829;color:white;border:0;border-radius:8px;padding:9px 12px;margin:4px 4px 10px 0;font-weight:600}#perde-diag-panel pre{white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.4 ui-monospace,monospace;background:#020617;padding:10px;border-radius:8px}';
+    var style=document.createElement('style');
+    style.textContent='#perde-diag-launch{position:fixed;z-index:2147483000;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));border:1px solid rgba(255,210,100,.55);border-radius:999px;background:#171717;color:#ffe2a0;padding:10px 14px;font:600 12px system-ui;box-shadow:0 4px 18px #0008}#perde-diag-panel{position:fixed;z-index:2147483001;inset:8% 4% auto;max-height:84dvh;overflow:auto;background:#111827;color:#f8fafc;border:1px solid #b88b38;border-radius:14px;padding:14px;font:13px/1.45 system-ui;box-shadow:0 12px 40px #000b}#perde-diag-panel[hidden]{display:none}#perde-diag-panel button{background:#8b6829;color:white;border:0;border-radius:8px;padding:9px 12px;margin:4px 4px 10px 0;font-weight:600}#perde-diag-panel pre{white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.4 ui-monospace,monospace;background:#020617;padding:10px;border-radius:8px}';
     document.head.appendChild(style);
     var b=document.createElement('button');b.id='perde-diag-launch';b.type='button';b.textContent='Hata kaydı';
     var p=document.createElement('section');p.id='perde-diag-panel';p.hidden=true;
-    p.innerHTML='<strong>Perde tanılama kaydı</strong><p>Sayfa yenilenmesi, JavaScript hataları ve uzun görevler burada saklanır.</p><button type="button" data-copy>Kaydı kopyala</button><button type="button" data-refresh>Güncelle</button><button type="button" data-close>Kapat</button><button type="button" data-clear>Kaydı temizle</button><pre data-log></pre>';
+    p.innerHTML='<strong>Perde tanılama kaydı</strong><p>Yenileme öncesi etkileşim, odak, bağlantı ve sayfa olayları kaydedilir.</p><button type="button" data-copy>Kaydı kopyala</button><button type="button" data-refresh>Güncelle</button><button type="button" data-close>Kapat</button><button type="button" data-clear>Kaydı temizle</button><pre data-log></pre>';
     function render(){p.querySelector('[data-log]').textContent=window.__PERDE_DIAG__.export()}
     b.addEventListener('click',function(){p.hidden=!p.hidden;if(!p.hidden)render()});
     p.querySelector('[data-close]').addEventListener('click',function(){p.hidden=true});
@@ -73,8 +92,7 @@
     p.querySelector('[data-clear]').addEventListener('click',function(){window.__PERDE_DIAG__.clear();render()});
     p.querySelector('[data-copy]').addEventListener('click',function(){
       var value=window.__PERDE_DIAG__.export(),ta=document.createElement('textarea');ta.value=value;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
-      var ok=false;try{ok=document.execCommand('copy')}catch(e){}
-      ta.remove();
+      var ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();
       if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(value).then(function(){p.querySelector('[data-copy]').textContent='Kopyalandı'}).catch(function(){p.querySelector('[data-copy]').textContent=ok?'Kopyalandı':'Kopyalanamadı'});
       else p.querySelector('[data-copy]').textContent=ok?'Kopyalandı':'Kopyalanamadı';
     });
