@@ -22207,7 +22207,6 @@
     "version": 4,
     "settings": {
       "desktopCount": 10,
-      "mobileCount": 5,
       "interval": 6,
       "autoplay": true,
       "pauseOnHover": true,
@@ -22277,8 +22276,6 @@
     ],
     "desktopMode": "auto",
     "desktopCategory": "random",
-    "mobileMode": "auto",
-    "mobileCategory": "random",
     "desktopHeroSlides": [
       {
         "id": "archive-29",
@@ -22336,38 +22333,6 @@
       },
       {
         "id": "perde-mw5w3oth",
-        "active": true,
-        "headline": "",
-        "description": ""
-      }
-    ],
-    "mobileHeroSlides": [
-      {
-        "id": "archive-45",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1794683689165",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1794698111552",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-112",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-15",
         "active": true,
         "headline": "",
         "description": ""

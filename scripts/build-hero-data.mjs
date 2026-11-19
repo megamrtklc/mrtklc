@@ -8,10 +8,7 @@ const config = source?.homepageConfig || {};
 const desktopSlides = Array.isArray(config.desktopHeroSlides) && config.desktopHeroSlides.length
   ? config.desktopHeroSlides
   : (Array.isArray(config.heroSlides) ? config.heroSlides : []);
-const mobileSlides = Array.isArray(config.mobileHeroSlides) && config.mobileHeroSlides.length
-  ? config.mobileHeroSlides
-  : (Array.isArray(config.heroSlides) ? config.heroSlides : []);
-const ids = new Set([...desktopSlides, ...mobileSlides]
+const ids = new Set([...desktopSlides]
   .filter(slide => slide && slide.active !== false && slide.id != null)
   .map(slide => String(slide.id)));
 const heroCatalog = catalog
@@ -94,7 +91,6 @@ const output = {
   homepageConfig: {
     settings: config.settings || {},
     desktopHeroSlides: desktopSlides.map(({ id, active }) => ({ id, active })),
-    mobileHeroSlides: mobileSlides.map(({ id, active }) => ({ id, active })),
     heroStyle: config.heroStyle || 'current'
   },
   catalog: heroCatalog
@@ -121,33 +117,6 @@ if (artworkUrl) {
   }
   await writeFile('index.html', updatedHtml);
 }
-
-// Mobil manşet görselini büyük bootstrap JSON'u ayrıştırılmadan önce keşfedilebilir kıl.
-const firstMobileSlide = mobileSlides.find(slide => slide && slide.active !== false && slide.id != null);
-const firstMobileItem = firstMobileSlide
-  ? catalog.find(item => String(item.id ?? item.tmdbId ?? item.title) === String(firstMobileSlide.id))
-  : null;
-const mobileArtworkUrl = firstMobileItem?.backdrop || firstMobileItem?.tmdbBackdrop || firstMobileItem?.poster || firstMobileItem?.tmdbPoster || '';
-let mobileHtml = await readFile('index.html', 'utf8');
-const mobilePreloadTag = /<link id="mobile-hero-image-preload"[^>]*>/;
-if (mobileArtworkUrl) {
-  const mobileMatch = mobileArtworkUrl.match(/^(https:\/\/image\.tmdb\.org\/t\/p\/)(?:w\d+|original)(\/.*)$/);
-  if (!mobileMatch) throw new Error('Mobile hero artwork must use a supported TMDB image URL.');
-  const base = mobileMatch[1];
-  const file = mobileMatch[2];
-  const mobileLink = `<link id="mobile-hero-image-preload" rel="preload" as="image" href="${base}w500${file}" imagesrcset="${base}w342${file} 342w, ${base}w500${file} 500w" imagesizes="100vw" fetchpriority="high" media="(max-width: 767px)">`;
-  if (mobilePreloadTag.test(mobileHtml)) mobileHtml = mobileHtml.replace(mobilePreloadTag, mobileLink);
-  else mobileHtml = mobileHtml.replace('</head>', `    ${mobileLink}\n</head>`);
-  const mobileShellFrame = /(<div class="aspect-\[16\/9\] w-full rounded-2xl border border-white\/10 bg-white\/\[0\.045\] shadow-2xl shadow-black\/30">)[\s\S]*?(<\/div>)/;
-  if (!mobileShellFrame.test(mobileHtml)) throw new Error('Mobile hero shell artwork slot is missing from index.html.');
-  const mobileShellImage = `<img src="${base}w500${file}" srcset="${base}w342${file} 342w, ${base}w500${file} 500w" sizes="100vw" alt="" fetchpriority="high" decoding="async" class="h-full w-full rounded-2xl object-cover">`;
-  mobileHtml = mobileHtml.replace(mobileShellFrame, `$1${mobileShellImage}$2`);
-} else {
-  if (mobilePreloadTag.test(mobileHtml)) mobileHtml = mobileHtml.replace(mobilePreloadTag, '');
-  const mobileShellFrame = /(<div class="aspect-\[16\/9\] w-full rounded-2xl border border-white\/10 bg-white\/\[0\.045\] shadow-2xl shadow-black\/30">)[\s\S]*?(<\/div>)/;
-  if (mobileShellFrame.test(mobileHtml)) mobileHtml = mobileHtml.replace(mobileShellFrame, '$1$2');
-}
-await writeFile('index.html', mobileHtml);
 
 // İlk HTML çiziminde masaüstü manşetinde de doğru başlık ve bilgiler görünsün.
 if (firstDesktopItem) {
@@ -190,9 +159,9 @@ const inlineJson = JSON.stringify(output).replace(/</g, '\\u003c');
 let updatedHtml = html.slice(0, bootstrapStart) + bootstrapPrefix + inlineJson + bootstrapSuffix + html.slice(bootstrapEnd + bootstrapSuffix.length);
 updatedHtml = updatedHtml.split('    <link rel="preload" as="fetch" href="./hero-data.json" crossorigin="anonymous" fetchpriority="high">').join('');
 // Kritik manşet görselleri, büyük bootstrap JSON ayrıştırılmadan önce keşfedilsin.
-const heroPreloadTags = [...updatedHtml.matchAll(/<link id="(?:mobile|desktop)-hero-image-preload"[^>]*>/g)]
+const heroPreloadTags = [...updatedHtml.matchAll(/<link id="desktop-hero-image-preload"[^>]*>/g)]
   .map(match => match[0]);
-updatedHtml = updatedHtml.replace(/\s*<link id="(?:mobile|desktop)-hero-image-preload"[^>]*>/g, '');
+updatedHtml = updatedHtml.replace(/\s*<link id="desktop-hero-image-preload"[^>]*>/g, '');
 const viewportTag = /(<meta name="viewport"[^>]*>)/;
 if (!viewportTag.test(updatedHtml)) throw new Error('Viewport meta tag is missing; cannot position hero preloads.');
 if (heroPreloadTags.length) {

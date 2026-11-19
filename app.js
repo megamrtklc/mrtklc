@@ -833,15 +833,6 @@
                 },
 
                 removeHeroInitialShell() {
-                    const mobileShell = document.getElementById('hero-initial-shell');
-                    const mobileHero = document.getElementById('mobileHeroBanner');
-                    const isMobile = window.matchMedia('(max-width: 767px)').matches;
-                    // Mobil iskelet, gerçek manşet DOM'a eklenip Alpine tarafından hazır edilene kadar akışta kalır.
-                    if (isMobile && mobileShell && (!mobileHero || mobileHero.dataset.cvHeroHydrated !== 'true')) {
-                        document.getElementById('hero-initial-shell-desktop')?.remove();
-                        return;
-                    }
-                    mobileShell?.remove();
                     document.getElementById('hero-initial-shell-desktop')?.remove();
                 },
 
@@ -893,26 +884,21 @@
 
                 prepareHomeHeroVariant(root) {
                     if (!root) return;
-                    const mobile = window.matchMedia('(max-width: 767px)').matches;
-                    const activeHero = root.querySelector(mobile ? '#mobileHeroBanner' : '#desktopEditorialHero');
-                    const inactiveHero = root.querySelector(mobile ? '#desktopEditorialHero' : '#mobileHeroBanner');
-                    // Görünmeyen cihaz varyantını ilk Alpine taramasının dışında tut.
-                    if (inactiveHero && inactiveHero.dataset.cvHeroHydrated !== 'true' && !inactiveHero.hasAttribute('x-ignore')) {
-                        inactiveHero.setAttribute('x-ignore', '');
+                    const desktopHero = root.querySelector('#desktopEditorialHero');
+                    const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+                    if (!isDesktop) {
+                        if (desktopHero && desktopHero.dataset.cvHeroHydrated !== 'true' && !desktopHero.hasAttribute('x-ignore')) desktopHero.setAttribute('x-ignore', '');
+                        return;
                     }
-                    if (activeHero?.hasAttribute('x-ignore')) {
-                        activeHero.removeAttribute('x-ignore');
-                        activeHero._x_ignore = false;
+                    if (desktopHero?.hasAttribute('x-ignore')) {
+                        desktopHero.removeAttribute('x-ignore');
+                        desktopHero._x_ignore = false;
                         if (!root.hasAttribute('x-ignore')) {
-                            window.Alpine?.initTree?.(activeHero);
-                            activeHero.dataset.cvHeroHydrated = 'true';
+                            window.Alpine?.initTree?.(desktopHero);
+                            desktopHero.dataset.cvHeroHydrated = 'true';
                         }
                     }
-                    // Kök zaten Alpine tarafından hazırsa gerçek manşet burada görünür durumdadır;
-                    // mobil ilk-yükleme iskeletini bekletmeden kaldır ki görsel ikinci kez üstte kalmasın.
-                    if (activeHero?.dataset.cvHeroHydrated === 'true') {
-                        this.$nextTick(() => this.removeHeroInitialShell());
-                    }
+                    if (desktopHero?.dataset.cvHeroHydrated === 'true') this.$nextTick(() => this.removeHeroInitialShell());
                 },
 
                 scheduleHomePageHydration() {
@@ -936,9 +922,8 @@
                             currentRoot.removeAttribute('x-ignore');
                             currentRoot._x_ignore = false;
                             window.Alpine?.initTree?.(currentRoot);
-                            const mobile = window.matchMedia('(max-width: 767px)').matches;
-                            const activeHero = currentRoot.querySelector(mobile ? '#mobileHeroBanner' : '#desktopEditorialHero');
-                            if (activeHero) activeHero.dataset.cvHeroHydrated = 'true';
+                            const desktopHero = window.matchMedia('(min-width: 768px)').matches ? currentRoot.querySelector('#desktopEditorialHero') : null;
+                            if (desktopHero) desktopHero.dataset.cvHeroHydrated = 'true';
                             this.$nextTick(() => {
                                 this.initHomeSectionObserver();
                                 this.removeHeroInitialShell();
@@ -1104,34 +1089,21 @@
                 },
 
                 get heroSlides() {
-                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
                     const sourceCatalog = this.heroCatalog.length ? this.heroCatalog : this.catalog;
-                    const device = mobile ? 'mobile' : 'desktop';
-                    const personalMode = this.homepageConfig?.[device + 'Mode'] || 'manual';
-                    const personalCategory = this.homepageConfig?.[device + 'Category'] || '';
+                    const personalMode = this.homepageConfig?.desktopMode || 'manual';
+                    const personalCategory = this.homepageConfig?.desktopCategory || '';
+                    const configuredCount = Number(this.homepageConfig?.settings?.desktopCount);
+                    const count = Math.max(5, Math.min(15, configuredCount || 10));
                     if (personalMode === 'auto' && ['user-watchlist','user-watched','user-favorites'].includes(personalCategory)) {
                         const personalItems = this.getPersonalStatusItems(personalCategory).filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
-                        const personalCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']) || (mobile ? 6 : 10);
-                        // Kişisel kaynak boşsa genel katalog/manşet seçimine düşme.
-                        return personalItems.slice(0, Math.max(1, personalCount));
+                        return personalItems.slice(0, count);
                     }
-                    if (personalMode === 'auto' && personalCategory === 'new-arrivals') {
-                        const newestCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']) || (mobile ? 6 : 10);
-                        return this.catalog.slice(-Math.max(1, newestCount)).reverse()
-                            .filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
-                    }
-                    const configured = this.homepageConfig?.[mobile ? 'mobileHeroSlides' : 'desktopHeroSlides'] || this.homepageConfig?.heroSlides;
+                    if (personalMode === 'auto' && personalCategory === 'new-arrivals') return this.catalog.slice(-count).reverse().filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
+                    const configured = this.homepageConfig?.desktopHeroSlides || this.homepageConfig?.heroSlides;
                     if (!Array.isArray(configured) || !configured.length) return sourceCatalog;
                     const byId = new Map(sourceCatalog.map(item => [String(item.id), item]));
-                    const selected = configured.filter(entry => entry && entry.active !== false)
-                        .map(entry => byId.get(String(entry.id))).filter(Boolean);
-                    if (!selected.length) return sourceCatalog;
-                    if (!mobile) {
-                        const configuredCount = Number(this.homepageConfig?.settings?.desktopCount);
-                        const count = Math.max(5, Math.min(15, configuredCount || 10));
-                        return selected.slice(0, count);
-                    }
-                    return selected;
+                    const selected = configured.filter(entry => entry && entry.active !== false).map(entry => byId.get(String(entry.id))).filter(Boolean);
+                    return selected.length ? selected.slice(0, count) : sourceCatalog.slice(0, count);
                 },
 
                 get publishedCollections() {
@@ -1149,9 +1121,8 @@
 
                 get heroThumbSlides() {
                     const settings = this.homepageConfig?.settings || {};
-                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
-                    const configuredCount = Number(mobile ? settings.mobileCount : settings.desktopCount);
-                    const count = Math.max(1, Math.min(mobile ? 12 : 20, configuredCount || (mobile ? 6 : 10)));
+                    const configuredCount = Number(settings.desktopCount);
+                    const count = Math.max(1, Math.min(20, configuredCount || 10));
                     return this.heroSlides.slice(0, count);
                 },
 
@@ -1163,47 +1134,18 @@
                     const settings = this.homepageConfig?.settings || {};
                     if (document.documentElement.classList.contains('cv-tv-mode') || settings.autoplay === false || this.heroSlides.length < 2) return;
                     const seconds = Math.max(2, Math.min(60, Number(settings.interval) || 6));
-                    const isMobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
                     const advance = () => {
                         if (this.heroPaused || document.hidden || this.heroSlides.length < 2) return;
                         this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
                     };
-                    // Mobilde ilk manşet görseli tam yüklenip LCP ölçümü tamamlanmadan değişmesin.
-                    const initialDelay = isMobile ? Math.max(seconds * 1000, 15000) : seconds * 1000;
                     this.heroAutoplayTimer = window.setTimeout(() => {
                         advance();
                         this.heroAutoplayTimer = window.setInterval(advance, seconds * 1000);
-                    }, initialDelay);
+                    }, seconds * 1000);
                 },
 
                 setHeroPaused(value) {
                     this.heroPaused = !!value;
-                },
-
-                startHeroTouch(event) {
-                    const touch = event?.touches?.[0];
-                    if (!touch) return;
-                    this.heroTouchStartX = touch.clientX;
-                    this.heroTouchStartY = touch.clientY;
-                    this.heroTouchStartAt = Date.now();
-                    this.setHeroPaused(true);
-                },
-
-                endHeroTouch(event) {
-                    const touch = event?.changedTouches?.[0];
-                    const startX = Number(this.heroTouchStartX);
-                    const startY = Number(this.heroTouchStartY);
-                    if (!touch || !Number.isFinite(startX) || !Number.isFinite(startY)) {
-                        this.setHeroPaused(false);
-                        return;
-                    }
-                    const deltaX = touch.clientX - startX;
-                    const deltaY = touch.clientY - startY;
-                    const isHorizontalSwipe = Math.abs(deltaX) >= 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.25;
-                    if (isHorizontalSwipe) this.navigateHeroSlide(deltaX < 0 ? 1 : -1, '');
-                    this.heroTouchStartX = null;
-                    this.heroTouchStartY = null;
-                    this.setHeroPaused(false);
                 },
 
                 get currentHero() {
