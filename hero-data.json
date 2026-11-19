@@ -5,7 +5,8 @@
       "interval": 6,
       "autoplay": true,
       "pauseOnHover": true,
-      "descriptionLength": 300
+      "descriptionLength": 300,
+      "mobileCount": 5
     },
     "desktopHeroSlides": [
       {
@@ -49,9 +50,52 @@
         "active": true
       }
     ],
+    "mobileHeroSlides": [
+      {
+        "id": "archive-45",
+        "active": true
+      },
+      {
+        "id": "cv-1794683689165",
+        "active": true
+      },
+      {
+        "id": "cv-1794698111552",
+        "active": true
+      },
+      {
+        "id": "archive-112",
+        "active": true
+      },
+      {
+        "id": "archive-15",
+        "active": true
+      }
+    ],
     "heroStyle": "perde"
   },
   "catalog": [
+    {
+      "id": "archive-15",
+      "tmdbId": 49021,
+      "title": "Seçkin Tetikçiler",
+      "type": "movie",
+      "category": "Aksiyon / Macera / Gerilim",
+      "genre": "Aksiyon",
+      "rating": "6.3",
+      "year": "2011",
+      "duration": "116 dk",
+      "country": "Australia, United States of America, United Kingdom, Morocco",
+      "poster": "https://image.tmdb.org/t/p/w500/kdpNb414CLDoE1E67nbDKpwxwur.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/RzIuQRoXiO8WeFdjtnjUCzSymV.jpg",
+      "desc": "İngiliz Gizli Servisi'nin eğitimli ve emekli üyelerinden biri, kendisini yetiştiren kişi zor durumda kalınca bu tehlikeli hayata geri dönmek zorunda kalır. Fakat dostunu kurtarmak için girişeceği bu macerada, karşısında en az kendisi kadar yetenekli bir diğer ajan bulunmaktadır. Dostunu kurtarmak, sandığı kadar kolay olmayacaktır.",
+      "director": "Gary McKendry",
+      "originalTitle": "Killer Elite",
+      "starring": "",
+      "trailerUrl": "https://www.youtube.com/watch?v=2Q8VIPJAox8",
+      "seasons": null,
+      "episodes": null
+    },
     {
       "id": "archive-17",
       "tmdbId": 44878,
@@ -131,6 +175,27 @@
       "desc": "Güney Kore yapımı bir aksiyon filmi olup ve \"The Roundup\" serisinin devamı niteliğindedir. Film, dedektif Ma Seok-do'nun (Don Lee) heyecan dolu maceralarını sürdürüyor ve onu yeni bir suç çetesiyle karşı karşıya getiriyor. Ma Seok-do, uluslararası bir suç örgütünün peşine düşmektedir. Bu suç örgütü, insan kaçakçılığı ve uyuşturucu ticareti gibi yasadışı faaliyetlerle uğraşmaktadır. Dedektifimiz, bu tehlikeli çetenin lideri olan acımasız bir suçlu ile yüzleşmek zorunda kalır. Ancak, Ma Seok-do'nun karşısındaki düşman sadece fiziksel güç değil; aynı zamanda zekâ ve strateji gerektiren bir rakiptir. Ma Seok-do, geçmişte yaşadığı kayıplar ve içsel çatışmalarla yüzleşirken, izleyicilere onun kararlılığını ve adalet arayışını gösteriyor. Ayrıca, filmdeki yan karakterler de oldukça önemli bir rol oynuyor; bazıları dostken, bazıları da haindir. Adaletin peşinde koşan bir adamın hikâyesini anlatırken, aynı zamanda insan doğasının karanlık yönlerine de ışık tutuyor.",
       "director": "Bilinmiyor",
       "originalTitle": "범죄도시 4",
+      "starring": "",
+      "trailerUrl": "",
+      "seasons": null,
+      "episodes": null
+    },
+    {
+      "id": "archive-45",
+      "tmdbId": 955555,
+      "title": "Kuralsızlar 3 : Çıkış Yok",
+      "type": "movie",
+      "category": "Aksiyon / Suç / Gerilim",
+      "genre": "Aksiyon",
+      "rating": "7.3",
+      "year": "2023",
+      "duration": "105 dk",
+      "country": "Bilinmiyor",
+      "poster": "https://image.tmdb.org/t/p/w500/kPtNokhBtgwSp3MHaR3X4O0SPbF.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/5DKVH8KeqFwPacWFMyYqTaECxJP.jpg",
+      "desc": "Dedektif Ma Seok-do, Kore'ye iğrenç suçlar işlemek için giren Japon gangsterlerin kökünü kazımak için Geumcheon Polis Karakolu'ndaki bağlılığını Büyükşehir Soruşturma Ekibi'ne değiştirir.",
+      "director": "Bilinmiyor",
+      "originalTitle": "범죄도시 3",
       "starring": "",
       "trailerUrl": "",
       "seasons": null,
@@ -221,6 +286,27 @@
       "episodes": null
     },
     {
+      "id": "archive-112",
+      "tmdbId": 157336,
+      "title": "Yıldızlararası",
+      "type": "movie",
+      "category": "Macera / Dram / Bilim-Kurgu",
+      "genre": "Macera",
+      "rating": "8.5",
+      "year": "2014",
+      "duration": "169 dk",
+      "country": "United Kingdom / United States of America",
+      "poster": "https://image.tmdb.org/t/p/w500/xbiycuc84TrieEWwkkuH2hoEa9S.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/8sNiAPPYU14PUepFNeSNGUTiHW.jpg",
+      "desc": "Dünya'nın kuraklık ve kıtlıkla yok oluşun eşiğine geldiği bir gelecekte, insanlığın hayatta kalabilmesi için yeni bir yuva bulması şarttır. Keşfedilen gizemli bir solucan deliği, bir grup astronot ve bilim insanına insanlık tarihinin en önemli görevini üstlenme fırsatı verir. Eski bir NASA pilotu olan Cooper, ailesini geride bırakarak yıldızlararası bir yolculuğa çıkar ve bilinmeyen galaksilerde insanlığın kurtuluşunu arar.",
+      "director": "Christopher Nolan",
+      "originalTitle": "Interstellar",
+      "starring": "",
+      "trailerUrl": "https://www.youtube.com/watch?v=vVJeYMRam0o",
+      "seasons": null,
+      "episodes": null
+    },
+    {
       "id": "perde-mw5w3oth",
       "tmdbId": 345887,
       "title": "Adalet 2",
@@ -238,6 +324,48 @@
       "originalTitle": "The Equalizer 2",
       "starring": "",
       "trailerUrl": "https://www.youtube.com/watch?v=tIHyWhi61mA",
+      "seasons": null,
+      "episodes": null
+    },
+    {
+      "id": "cv-1794683689165",
+      "tmdbId": 1280738,
+      "title": "Amansız",
+      "type": "movie",
+      "category": "Aksiyon / Suç / Gerilim",
+      "genre": "Aksiyon",
+      "rating": "8.2",
+      "year": "2026",
+      "duration": "113 dk",
+      "country": "Hong Kong, China, United States of America",
+      "poster": "https://image.tmdb.org/t/p/w500/sTWqYMxpTBWwFYouzpD27XpVTgq.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/i0eR9O1FnCgBm1cH8WwqxGbAXMS.jpg",
+      "desc": "Eski bir özel kuvvet askeri, kayıp kızını kurtarmak için kuzey Myanmar'a sızar ve dolandırıcılık çeteleri ile organ kaçakçılarına karşı savaşarak suç patronuyla son bir hesaplaşmaya girer.",
+      "director": "Kenji Tanigaki",
+      "originalTitle": "火遮眼",
+      "starring": "",
+      "trailerUrl": "https://youtu.be/cpRUEnZD0q4?si=Vi4hqlYtedGlNCgo",
+      "seasons": null,
+      "episodes": null
+    },
+    {
+      "id": "cv-1794698111552",
+      "tmdbId": 490132,
+      "title": "Yeşil Rehber",
+      "type": "movie",
+      "category": "Dram / Komedi / Tarih / Biyografi",
+      "genre": "Dram",
+      "rating": "8.2",
+      "year": "2018",
+      "duration": "130 dk",
+      "country": "United States of America",
+      "poster": "https://image.tmdb.org/t/p/w500/vEzS2VOhdpBIANoEYBHRvcaeBXD.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/5En0fmDagt3Pk8d7P3uTwfeQceg.jpg",
+      "desc": "1962 yılında geçen, gerçek bir hikâyeden esinlenen film, ırkçılığın Amerika Birleşik Devletleri'nin güneyinde hâlâ çok yaygın olduğu bir dönemde, Afro-Amerikalı dünyaca ünlü piyanist Dr. Don Shirley ve İtalyan-Amerikalı kaba saba şoförü Tony Lip arasındaki beklenmedik dostluğu konu alır. Don Shirley, Güney Amerika’da bir konser turuna çıkmaya karar verir. Ancak o dönemde ırkçılık hâlâ büyük bir sorundur ve özellikle güney eyaletlerinde siyahi vatandaşlara yönelik ayrımcılık yoğundur. Dr. Shirley, güvenliği için Tony Lip adlı sert mizaçlı, sokak zekâsına sahip bir adamı şoför ve koruma olarak tutar. İkili, Shirley'nin güvenli bir şekilde konaklamasına yardımcı olması için dönemin Afro-Amerikan sürücülerine yönelik özel bir rehber olan “The Green Book” (Yeşil Rehber) adlı kılavuzu kullanır. Başlangıçta zıt karakterlere sahip olan Tony ve Shirley, zamanla aralarındaki önyargıları kırarak güçlü bir dostluk kurarlar.",
+      "director": "Peter Farrelly",
+      "originalTitle": "Green Book",
+      "starring": "",
+      "trailerUrl": "https://www.youtube.com/watch?v=_rPFXcqBWuU",
       "seasons": null,
       "episodes": null
     },
