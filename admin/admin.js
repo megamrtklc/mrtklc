@@ -762,8 +762,13 @@
   }
   function heroRating(item){return Number(item.tmdbRating||item.rating)||0;}
   function heroVotes(item){return Number(item.tmdbVoteCount||item.voteCount||0);}
+  function hasHeroVideoUrl(item){
+    const urls=[item?.watchUrl,...Object.values(item?.episodeWatchUrls||{})];
+    return urls.some(value=>/^https?:\\/\\/\\S+$/i.test(String(value||'').trim()));
+  }
   function autoHeroItems(category,count){
     let items=state.catalog.filter(item=>posterOf(item));
+    if(category==='video-url')items=items.filter(hasHeroVideoUrl);
     if(['user-watchlist','user-watched','user-favorites'].includes(category))return [];
     if(category==='new-arrivals')return items.slice().reverse().slice(0,Math.max(1,Number(count)||10));
     if(category==='movies')items=items.filter(item=>!isSeries(item));
@@ -889,7 +894,7 @@
   function refreshHeroSelection(device){
     const mode=$('#hero-'+device+'-mode').value;
     const category=$('#hero-'+device+'-category').value;
-    if(mode!=='auto'||['user-watchlist','user-watched','user-favorites'].includes(category))return;
+    if(mode!=='auto'||!['random','video-url'].includes(category))return;
     const limit=device==='desktop'
       ?Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10))
       :Math.max(1,Math.min(12,Number($('#hero-mobile-count').value)||6));
@@ -911,7 +916,96 @@
     renderHomepage();
     toast((device==='desktop'?'Masaüstü':'Mobil')+' manşet yapımları yenilendi.','success');
   }
-  function ensureHeroRefreshControl(device,mode,personalCategory){
+  function heroCategoryIcon(value){
+    const paths={
+      'top-rated':'<path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/>',
+      popular:'<path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+      'most-watched':'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+      random:'<path d="m16 3 5 5-5 5"/><path d="M4 7h3c5 0 5 10 10 10h4"/><path d="m16 16 5 1-5 4"/><path d="M4 17h3c1.6 0 2.7-1.4 3.7-3"/>',
+      movies:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4m-4 6h4m10-6h4m-4 6h4"/>',
+      series:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m10 9 5 3-5 3V9Z"/>',
+      all:'<path d="M3 7h18v13H3zM3 7l3-4h4L7 7m3 0 3-4h4l-3 4m3 0 3-4h2l-3 4"/>',
+      'user-watchlist':'<path d="M6 4h12v17l-6-4-6 4V4Z"/>',
+      'user-watched':'<circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/>',
+      'user-favorites':'<path d="M20.8 8.8c0 5-8.8 10.2-8.8 10.2S3.2 13.8 3.2 8.8A4.8 4.8 0 0 1 12 6.1a4.8 4.8 0 0 1 8.8 2.7Z"/>',
+      'new-arrivals':'<path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z"/>',
+      'video-url':'<circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4V8Z"/>'
+    };
+    return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(paths[value]||paths.movies)+'</svg>';
+  }
+  function syncHeroCategorySelects(){
+    ['desktop','mobile'].forEach(device=>{
+      const select=$('#hero-'+device+'-category');
+      const shell=select?.closest('.hero-category-select');
+      if(!shell)return;
+      const option=select.options[select.selectedIndex];
+      const trigger=shell.querySelector('.hero-category-trigger');
+      if(!option||!trigger)return;
+      trigger.querySelector('.hero-category-current-icon').innerHTML=heroCategoryIcon(option.value);
+      trigger.querySelector('.hero-category-value').textContent=option.textContent;
+      shell.querySelectorAll('.hero-category-option').forEach(button=>{
+        const active=button.dataset.value===select.value;
+        button.classList.toggle('is-selected',active);
+        button.setAttribute('aria-selected',active?'true':'false');
+      });
+    });
+  }
+  function enhanceHeroCategorySelects(){
+    if(!$('#hero-category-dropdown-style')){
+      const style=document.createElement('style');
+      style.id='hero-category-dropdown-style';
+      style.textContent='.hero-category-select{position:relative;width:100%;min-width:0}.hero-category-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important}.hero-category-trigger{display:flex;align-items:center;gap:10px;width:100%;min-height:42px;padding:0 12px;border:1px solid #354354;border-radius:10px;background:linear-gradient(145deg,#182331,#111923);color:#edf2f7;text-align:left;font:600 12px Inter,sans-serif;cursor:pointer;transition:border-color .14s,background .14s}.hero-category-trigger:hover,.hero-category-select.is-open .hero-category-trigger{border-color:rgba(218,177,99,.72);background:#1b2735}.hero-category-current-icon{display:grid;place-items:center;width:19px;height:19px;color:#d7b46c;flex:0 0 19px}.hero-category-current-icon svg,.hero-category-option-icon svg,.hero-category-chevron{display:block;width:18px;height:18px}.hero-category-value{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hero-category-chevron{width:15px;height:15px;color:#8c9aaa;transition:transform .14s}.hero-category-select.is-open .hero-category-chevron{transform:rotate(180deg)}.hero-category-menu{position:absolute;z-index:80;top:calc(100% + 6px);left:0;right:0;max-height:min(320px,52vh);overflow-y:auto;padding:5px;border:1px solid #3a4859;border-radius:12px;background:#111a25;box-shadow:0 14px 34px rgba(0,0,0,.42)}.hero-category-menu[hidden]{display:none}.hero-category-option{display:flex;align-items:center;gap:10px;width:100%;min-height:38px;padding:7px 9px;border:0;border-radius:8px;background:transparent;color:#c7d1dc;text-align:left;font:500 11px Inter,sans-serif;cursor:pointer}.hero-category-option:hover,.hero-category-option:focus-visible{outline:0;background:#202d3c;color:#fff}.hero-category-option-icon{display:grid;place-items:center;width:19px;height:19px;color:#8795a5;flex:0 0 19px}.hero-category-option.is-selected{background:rgba(214,174,99,.12);color:#f2d28f}.hero-category-option.is-selected .hero-category-option-icon{color:#e2bd73}.hero-category-option-check{width:14px;height:14px;margin-left:auto;color:#e2bd73;opacity:0}.hero-category-option.is-selected .hero-category-option-check{opacity:1}.hero-category-select:focus-within .hero-category-trigger:focus-visible{outline:2px solid #d7b46c;outline-offset:2px}@media(prefers-reduced-motion:reduce){.hero-category-trigger,.hero-category-chevron{transition:none}}';
+      document.head.appendChild(style);
+    }
+    ['desktop','mobile'].forEach(device=>{
+      const select=$('#hero-'+device+'-category');
+      if(!select||select.dataset.heroCategoryEnhanced==='true')return;
+      if(!Array.from(select.options).some(option=>option.value==='video-url')){
+        const option=document.createElement('option');option.value='video-url';option.textContent='Video Bağlantısı Olanlar';select.appendChild(option);
+      }
+      const shell=document.createElement('div');shell.className='hero-category-select';
+      select.parentNode.insertBefore(shell,select);shell.appendChild(select);select.classList.add('hero-category-native');
+      const trigger=document.createElement('button');trigger.type='button';trigger.className='hero-category-trigger';trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');
+      trigger.innerHTML='<span class="hero-category-current-icon"></span><span class="hero-category-value"></span><svg class="hero-category-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+      const menu=document.createElement('div');menu.className='hero-category-menu';menu.setAttribute('role','listbox');menu.hidden=true;
+      menu.innerHTML=Array.from(select.options).map(option=>'<button type="button" class="hero-category-option" role="option" data-value="'+escapeHtml(option.value)+'" aria-selected="false"><span class="hero-category-option-icon">'+heroCategoryIcon(option.value)+'</span><span>'+escapeHtml(option.textContent)+'</span><svg class="hero-category-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></button>').join('');
+      shell.append(trigger,menu);
+      trigger.addEventListener('click',()=>{
+        const open=menu.hidden;menu.hidden=!open;shell.classList.toggle('is-open',open);trigger.setAttribute('aria-expanded',String(open));
+        if(open)menu.querySelector('[aria-selected="true"]')?.focus();
+      });
+      menu.addEventListener('click',event=>{
+        const choice=event.target.closest('.hero-category-option');if(!choice)return;
+        select.value=choice.dataset.value;menu.hidden=true;shell.classList.remove('is-open');trigger.setAttribute('aria-expanded','false');
+        select.dispatchEvent(new Event('change',{bubbles:true}));trigger.focus();
+      });
+      trigger.addEventListener('keydown',event=>{
+        if(event.key==='ArrowDown'){event.preventDefault();if(menu.hidden)trigger.click();}
+      });
+      menu.addEventListener('keydown',event=>{
+        const choices=Array.from(menu.querySelectorAll('.hero-category-option'));
+        const index=choices.indexOf(document.activeElement);
+        if(event.key==='ArrowDown'||event.key==='ArrowUp'){
+          event.preventDefault();choices[Math.max(0,Math.min(choices.length-1,index+(event.key==='ArrowDown'?1:-1))) ]?.focus();
+        }else if(event.key==='Escape'){
+          event.preventDefault();menu.hidden=true;shell.classList.remove('is-open');trigger.setAttribute('aria-expanded','false');trigger.focus();
+        }
+      });
+      select.dataset.heroCategoryEnhanced='true';
+    });
+    if(!document.documentElement.dataset.heroCategoryOutsideBound){
+      document.addEventListener('click',event=>{
+        if(event.target.closest('.hero-category-select'))return;
+        $('.hero-category-select.is-open').forEach(shell=>{
+          const menu=shell.querySelector('.hero-category-menu'),trigger=shell.querySelector('.hero-category-trigger');
+          if(menu)menu.hidden=true;shell.classList.remove('is-open');trigger?.setAttribute('aria-expanded','false');
+        });
+      });
+      document.documentElement.dataset.heroCategoryOutsideBound='true';
+    }
+    syncHeroCategorySelects();
+  }
+  function ensureHeroRefreshControl(device,mode,category){
     const hint=$('#hero-'+device+'-hint');
     if(!hint)return;
     let row=$('#hero-'+device+'-refresh-row');
@@ -927,11 +1021,12 @@
       row.className='hero-refresh-row';
       hint.insertAdjacentElement('beforebegin',row);
     }
-    row.hidden=mode!=='auto'||personalCategory;
+    row.hidden=mode!=='auto'||!['random','video-url'].includes(category);
     row.innerHTML='<button class="hero-refresh-button" type="button" aria-label="'+(device==='desktop'?'Masaüstü':'Mobil')+' manşet yapımlarını yenile"><span class="refresh-symbol" aria-hidden="true">↻</span> YENİLE</button>';
     row.querySelector('button').addEventListener('click',()=>refreshHeroSelection(device));
   }
   function renderHomepage(){
+    enhanceHeroCategorySelects();
     const config=homepageConfig(),settings=config.settings;
     $('#hero-desktop-count').value=Math.max(5,Math.min(15,Number(settings.desktopCount)||10));
     $('#hero-mobile-count').value=settings.mobileCount??6;
@@ -1008,8 +1103,9 @@
           ?'Canlı sitede her ziyaretçinin yalnızca kendi '+({'user-watchlist':'izleme listesi','user-watched':'izledikleri','user-favorites':'favorileri'}[category])+' gösterilir. Herkes için aynı katalog listesini kullanmaz.'
           :(category==='new-arrivals'?'Kataloğa en son eklenen yapımlar, en yeni kayıt üstte olacak şekilde getirilir.':category==='random'?'Katalogdan belirlenen sayı kadar tekrarsız rastgele yapım seçildi.':'Seçilen ölçüte göre katalogdan otomatik '+pool.length+' yapım getirildi.'))
         :'Katalogda ara; kutucuğu işaretleyerek manşete ekle, işareti kaldırarak çıkar.';
-      ensureHeroRefreshControl(device,mode,personalCategory);
+      ensureHeroRefreshControl(device,mode,category);
     });
+    syncHeroCategorySelects();
   }
   async function saveHomepage(event){
     event.preventDefault();if(!canWrite())return;
