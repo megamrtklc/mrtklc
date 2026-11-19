@@ -1028,13 +1028,23 @@
     row.innerHTML='<button class="hero-refresh-button" type="button" aria-label="'+(device==='desktop'?'Masaüstü':'Mobil')+' manşet yapımlarını yenile"><span class="refresh-symbol" aria-hidden="true">↻</span> YENİLE</button>';
     row.querySelector('button').addEventListener('click',()=>refreshHeroSelection(device));
   }
+  function mobileDescriptionLimit(){
+    const mode=$('#hero-description-length-mode').value||'220';
+    if(mode==='custom')return Math.max(80,Math.min(5000,Number($('#hero-description-length-custom-value').value)||750));
+    return Math.max(80,Math.min(5000,Number(mode)||220));
+  }
   function renderHomepage(){
     enhanceHeroCategorySelects();
     const config=homepageConfig(),settings=config.settings;
     $('#hero-desktop-count').value=Math.max(5,Math.min(15,Number(settings.desktopCount)||10));
     $('#hero-mobile-count').value=settings.mobileCount??6;
     $('#hero-interval').value=settings.interval??6;
-    $('#hero-description-length').value=settings.descriptionLength??220;
+    const savedDescriptionLength=Math.max(80,Math.min(5000,Number(settings.descriptionLength)||220));
+    const savedDescriptionMode=settings.descriptionLengthMode||([120,220,360,500].includes(savedDescriptionLength)?String(savedDescriptionLength):'custom');
+    $('#hero-description-length-mode').value=savedDescriptionMode;
+    $('#hero-description-length-custom-value').value=Math.max(80,Math.min(5000,Number(settings.descriptionLengthCustom)||(savedDescriptionMode==='custom'?savedDescriptionLength:750)));
+    $('#hero-description-length-custom').hidden=savedDescriptionMode!=='custom';
+    $('#hero-description-length-count').textContent='Uygulanacak sınır: '+$('#hero-description-length-custom-value').value+' karakter';
     $('#hero-desktop-description-mode').value=settings.desktopDescriptionMode||'medium';
     $('#hero-desktop-description-lines').value=Math.max(1,Math.min(8,Number(settings.desktopDescriptionLines)||3));
     $('#hero-desktop-description-custom').hidden=$('#hero-desktop-description-mode').value!=='custom';
@@ -1088,10 +1098,10 @@
           return;
         }
         if(!item){host.innerHTML='<div class="hero-preview-empty">Henüz manşet yapımı seçilmedi.</div>';return;}
-        const max=Math.max(80,Math.min(500,Number($('#hero-description-length').value)||220));
+        const max=mobileDescriptionLimit();
         const desc=String(item.desc||item.tmdbOverview||'');
         const excerpt=desc.length>max?desc.slice(0,max).trimEnd()+'…':desc;
-        host.innerHTML='<div class="hero-preview-art" style="background-image:linear-gradient(90deg,rgba(5,7,12,.96),rgba(5,7,12,.62) 58%,rgba(5,7,12,.12)),url(\''+escapeHtml(item.backdrop||posterOf(item))+'\')"><div class="hero-preview-copy"><span class="hero-preview-kicker">● ÖNE ÇIKAN YAPIM</span><h3>'+escapeHtml(titleOf(item))+'</h3><div class="hero-preview-meta">★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'　·　'+escapeHtml(yearOf(item))+'　·　'+(isSeries(item)?'DİZİ':'FİLM')+'</div><p>'+escapeHtml(excerpt)+'</p></div></div>';
+        host.innerHTML='<div class="hero-preview-art" style="background-image:linear-gradient(90deg,rgba(5,7,12,.96),rgba(5,7,12,.62) 58%,rgba(5,7,12,.12)),url(\''+escapeHtml(item.backdrop||posterOf(item))+'\')"><div class="hero-preview-copy"><span class="hero-preview-kicker">● ÖNE ÇIKAN YAPIM</span><h3>'+escapeHtml(titleOf(item))+'</h3><div class="hero-preview-meta">★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'　·　'+escapeHtml(yearOf(item))+'　·　'+(isSeries(item)?'DİZİ':'FİLM')+'</div><p>'+escapeHtml(excerpt)+'</p><small class="hero-preview-character-count">Metin: '+desc.length+' · Gösterilen: '+Math.min(desc.length,max)+' / '+max+' karakter</small></div></div>';
       };
       count();preview();
       $$('#hero-'+device+'-slide-list input').forEach(input=>input.addEventListener('change',()=>{
@@ -1135,7 +1145,7 @@
     const config={...previous,version:4,desktopMode:$('#hero-desktop-mode').value,desktopCategory:$('#hero-desktop-category').value,
       mobileMode:$('#hero-mobile-mode').value,mobileCategory:$('#hero-mobile-category').value,
       settings:{...previous.settings,desktopCount:Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)),mobileCount:Number($('#hero-mobile-count').value)||6,
-        interval:Number($('#hero-interval').value)||6,descriptionLength:Math.max(80,Math.min(500,Number($('#hero-description-length').value)||220)),
+        interval:Number($('#hero-interval').value)||6,descriptionLength:mobileDescriptionLimit(),descriptionLengthMode:$('#hero-description-length-mode').value||'220',descriptionLengthCustom:Math.max(80,Math.min(5000,Number($('#hero-description-length-custom-value').value)||750)),
         desktopDescriptionMode:$('#hero-desktop-description-mode').value||'medium',
         desktopDescriptionLines:Math.max(1,Math.min(8,Number($('#hero-desktop-description-lines').value)||3)),
         desktopDescriptionWidthMode:$('#hero-desktop-description-width').value||'medium',
@@ -1478,7 +1488,24 @@
   $('#hero-mobile-mode').addEventListener('change',event=>{state.heroRefreshDraft=null;state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=event.target.value==='auto'&&$('#hero-mobile-category').value==='random'?[]:Array.from(document.querySelectorAll('#hero-mobile-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().mobileMode=event.target.value;renderHomepage();});
   $('#hero-mobile-category').addEventListener('change',event=>{state.heroRefreshDraft=null;state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=[];homepageConfig().mobileCategory=event.target.value;renderHomepage();});
   $('#hero-mobile-count').addEventListener('change',event=>{state.heroRefreshDraft=null;homepageConfig().settings.mobileCount=Number(event.target.value)||6;renderHomepage();});
-  $('#hero-description-length').addEventListener('change',event=>{homepageConfig().settings.descriptionLength=Number(event.target.value)||220;renderHomepage();});
+  $('#hero-description-length-mode').addEventListener('change',event=>{
+    const mode=event.target.value;
+    const limit=mode==='custom'?Math.max(80,Math.min(5000,Number($('#hero-description-length-custom-value').value)||750)):Number(mode)||220;
+    homepageConfig().settings.descriptionLengthMode=mode;
+    homepageConfig().settings.descriptionLength=limit;
+    $('#hero-description-length-custom').hidden=mode!=='custom';
+    renderHomepage();
+  });
+  $('#hero-description-length-custom-value').addEventListener('input',event=>{
+    const value=Math.max(80,Math.min(5000,Number(event.target.value)||750));
+    $('#hero-description-length-count').textContent='Uygulanacak sınır: '+value+' karakter';
+  });
+  $('#hero-description-length-custom-value').addEventListener('change',event=>{
+    const value=Math.max(80,Math.min(5000,Number(event.target.value)||750));
+    homepageConfig().settings.descriptionLengthCustom=value;
+    if($('#hero-description-length-mode').value==='custom')homepageConfig().settings.descriptionLength=value;
+    renderHomepage();
+  });
   $('#hero-desktop-description-mode').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionMode=event.target.value;$('#hero-desktop-description-custom').hidden=event.target.value!=='custom';});
   $('#hero-desktop-description-lines').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionLines=Math.max(1,Math.min(8,Number(event.target.value)||3));});
   $('#hero-desktop-description-width').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionWidthMode=event.target.value;$('#hero-desktop-description-width-custom').hidden=event.target.value!=='custom';});

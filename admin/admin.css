@@ -278,3 +278,6 @@
 /* Manşet özel alanları: hidden durumu ortak .field display:grid kuralından etkilenmesin. */
 .homepage-settings #hero-desktop-description-custom[hidden],
 .homepage-settings #hero-desktop-description-width-custom[hidden]{display:none!important;}
+.homepage-settings #hero-description-length-custom[hidden]{display:none!important;}
+.homepage-settings .field-hint{display:block;margin-top:7px;color:var(--muted,#8992a5);font-size:11px;line-height:1.45}
+.homepage-settings .hero-preview-character-count{display:block;margin-top:7px;color:rgba(255,255,255,.68);font-size:10px;line-height:1.4;}

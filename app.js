@@ -1199,7 +1199,7 @@
 
                 get heroDescription() {
                     const text = String(this.currentHero?.desc || '');
-                    const max = Math.max(80, Math.min(500, Number(this.homepageConfig?.settings?.descriptionLength) || 220));
+                    const max = Math.max(80, Math.min(5000, Number(this.homepageConfig?.settings?.descriptionLength) || 220));
                     return text.length > max ? text.slice(0, max).trimEnd() + '…' : text;
                 },
 
