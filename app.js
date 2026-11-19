@@ -219,6 +219,8 @@
                 discoveryRating: '0',
                 discoveryYearFrom: '',
                 discoveryYearTo: '',
+                discoveryCurrentItemId: String(safeStorageRead('perde_discovery_current_v1', '') || ''),
+                discoverySeenIds: Array.isArray(safeStorageRead('perde_discovery_seen_v1', [])) ? safeStorageRead('perde_discovery_seen_v1', []) : [],
                 selectedItem: null,
                 currentSlideIndex: 0,
                 userRating: 8,
@@ -2929,6 +2931,58 @@
                     this.discoveryGenre = genre;
                 },
 
+                get discoveryCurrentItem() {
+                    const currentId = String(this.discoveryCurrentItemId || '');
+                    return currentId ? this.sortedFilteredCatalog.find(item => String(item.id ?? item.title ?? '') === currentId) || null : null;
+                },
+                initializeDiscovery() {
+                    const pool = this.sortedFilteredCatalog;
+                    if (!pool.length) {
+                        this.discoveryCurrentItemId = '';
+                        safeStorageWrite('perde_discovery_current_v1', '');
+                        return;
+                    }
+                    if (this.discoveryCurrentItem) return;
+                    const catalogIds = new Set(this.catalog.map(item => String(item.id ?? item.title ?? '')));
+                    let seen = [...new Set((Array.isArray(this.discoverySeenIds) ? this.discoverySeenIds : []).map(String).filter(id => catalogIds.has(id)))];
+                    const currentId = String(this.discoveryCurrentItemId || '');
+                    let candidates = pool.filter(item => !seen.includes(String(item.id ?? item.title ?? '')));
+                    if (!candidates.length) {
+                        seen = currentId ? [currentId] : [];
+                        candidates = pool.filter(item => String(item.id ?? item.title ?? '') !== currentId);
+                        if (!candidates.length) candidates = pool;
+                    }
+                    const picked = candidates[Math.floor(Math.random() * candidates.length)];
+                    if (!picked) return;
+                    const pickedId = String(picked.id ?? picked.title ?? '');
+                    this.discoveryCurrentItemId = pickedId;
+                    if (!seen.includes(pickedId)) seen.push(pickedId);
+                    this.discoverySeenIds = seen;
+                    safeStorageWrite('perde_discovery_current_v1', pickedId);
+                    safeStorageWrite('perde_discovery_seen_v1', seen);
+                },
+                pickAnotherDiscovery() {
+                    const pool = this.sortedFilteredCatalog;
+                    if (pool.length < 2) return;
+                    const currentId = String(this.discoveryCurrentItemId || '');
+                    let seen = [...new Set((Array.isArray(this.discoverySeenIds) ? this.discoverySeenIds : []).map(String))];
+                    let candidates = pool.filter(item => {
+                        const id = String(item.id ?? item.title ?? '');
+                        return id !== currentId && !seen.includes(id);
+                    });
+                    if (!candidates.length) {
+                        seen = currentId ? [currentId] : [];
+                        candidates = pool.filter(item => String(item.id ?? item.title ?? '') !== currentId);
+                    }
+                    if (!candidates.length) return;
+                    const picked = candidates[Math.floor(Math.random() * candidates.length)];
+                    const pickedId = String(picked.id ?? picked.title ?? '');
+                    this.discoveryCurrentItemId = pickedId;
+                    if (!seen.includes(pickedId)) seen.push(pickedId);
+                    this.discoverySeenIds = seen;
+                    safeStorageWrite('perde_discovery_current_v1', pickedId);
+                    safeStorageWrite('perde_discovery_seen_v1', seen);
+                },
                 get watchableCatalog() {
                     return this.catalog.filter(item => typeof item.watchUrl === 'string' && item.watchUrl.trim().length > 0);
                 },
