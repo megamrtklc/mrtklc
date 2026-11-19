@@ -48,7 +48,15 @@
     ],
     "mobileHeroSlides": [
       {
-        "id": "archive-28",
+        "id": "archive-120",
+        "active": true
+      },
+      {
+        "id": "cv-1794683689165",
+        "active": true
+      },
+      {
+        "id": "cv-1794714577385",
         "active": true
       },
       {
@@ -56,88 +64,17 @@
         "active": true
       },
       {
-        "id": "archive-80",
+        "id": "perde-mw5zwmbz",
         "active": true
       },
       {
-        "id": "cv-1794683819669",
-        "active": true
-      },
-      {
-        "id": "archive-36",
-        "active": true
-      },
-      {
-        "id": "cv-1794697915528",
+        "id": "perde-mw67it9i",
         "active": true
       }
     ],
     "heroStyle": "perde"
   },
   "catalog": [
-    {
-      "id": "archive-28",
-      "tmdbId": 20453,
-      "title": "3 Aptal",
-      "type": "movie",
-      "category": "Dram / Komedi",
-      "genre": "Dram",
-      "rating": "8.0",
-      "year": "2009",
-      "duration": "171 dk",
-      "country": "India",
-      "poster": "https://image.tmdb.org/t/p/w500/fcQJRYPlat8ZYpo0a0DPrfIHh62.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/u7kuUaySqXBVAtqEl9vkTkAzHV9.jpg",
-      "desc": "Hindistan’da mühendislik okuyan Farhan, bu bölüme ailesinin zoruyla girmiştir. Farhan'ın asıl arzusu ise fotoğrafçılık eğitimi almaktır. Oda arkadaşı Raju ise fakir bir ailede büyümüş, bir an önce mesleğini eline alıp onlara bakmak için çırpınan bir mühendis adayıdır. Odalarına gelen Rancho (Aamir Khan) ise her ikisinden de tamamen farklı, tuhaf ve bir o kadar da zeki bir çocuktur. Birbirlerinin en yakın arkadaşı haline gelen Farhan, Raju ve Rancho, Rancho’nun içinde bulunduğu okulu ve eğitim sistemini değiştirme çabalarının sonucunda okulun diktatör hocası “Virus”ün görüş alanına girerler. Kendilerine ve tüm okula ilham olan, herkesten farklı düşünen ve sistemi değiştirmenin mümkün olduğunu savunan Rancho, mezun olduktan sonra ortadan kaybolur. Rancho’yu bulmak için yıllar sonra yollara düşen Farhan ve Raju, bu yolculuklarında Rancho’nun şaşırtıcı hikâyesine tanık olacaktır.",
-      "director": "Rajkumar Hirani",
-      "originalTitle": "3 Idiots",
-      "starring": "",
-      "trailerUrl": "https://www.youtube.com/watch?v=zIKu9k50SDo",
-      "seasons": null,
-      "episodes": null
-    },
-    {
-      "id": "archive-36",
-      "tmdbId": 117378,
-      "title": "Mouse",
-      "type": "tv",
-      "category": "Suç / Gizem",
-      "genre": "Suç",
-      "rating": "8.3",
-      "year": "2021",
-      "duration": "76 dk / bölüm",
-      "country": "South Korea",
-      "poster": "https://image.tmdb.org/t/p/w500/lrWHBK1h4rrEnx5Ml8iDR1SwNux.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/ikU9een11dr6UFy0XzQMJv3YJQq.jpg",
-      "desc": "Çılgın bir seri katilin acımasız cinayetleri tüm ulusu korku içinde bırakmış ve kaos hüküm sürmektedir. Adalet arayan çaylak polis memuru Jung Ba Reum, katille yüz yüze gelir. Jung Ba Reum, psikopatla yaşadığı tehlikeli karşılaşmadan sağ kurtulurken, hayatının gözlerinin önünde tamamen değiştiğini fark eder.",
-      "director": "Bilinmiyor",
-      "originalTitle": "마우스",
-      "starring": "",
-      "trailerUrl": "https://www.youtube.com/watch?v=IFldpzaHFmw",
-      "seasons": 1,
-      "episodes": 20
-    },
-    {
-      "id": "archive-80",
-      "tmdbId": 360814,
-      "title": "Dangal",
-      "type": "movie",
-      "category": "Dram / Aile / Komedi",
-      "genre": "Dram",
-      "rating": "7.9",
-      "year": "2016",
-      "duration": "161 dk",
-      "country": "India",
-      "poster": "https://image.tmdb.org/t/p/w500/taUigNpu8yEf36dqMBTy1X6znIE.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/l0fNAHLOFReQJsxCOmGWvJDnimn.jpg",
-      "desc": "Eski bir güreşçi olan Mahavir Singh Phogat, toplumsal ön yargılara rağmen kızlarını İngiliz Milletler Topluluğu Oyunları'na yetiştirerek ülkesine altın madalya kazandırma hayalini gerçekleştirmeye karar verir.",
-      "director": "Nitesh Tiwari",
-      "originalTitle": "दंगल",
-      "starring": "",
-      "trailerUrl": "",
-      "seasons": null,
-      "episodes": null
-    },
     {
       "id": "archive-120",
       "tmdbId": 222766,
@@ -303,48 +240,6 @@
       "originalTitle": "The Mongoose",
       "starring": "",
       "trailerUrl": "https://youtu.be/XiktXLtob6U?si=9UiIMOQvfkVzRv5G",
-      "seasons": null,
-      "episodes": null
-    },
-    {
-      "id": "cv-1794683819669",
-      "tmdbId": 1423191,
-      "title": "Resident Evil",
-      "type": "movie",
-      "category": "Korku / Bilim-Kurgu / Macera",
-      "genre": "Korku",
-      "rating": "7.5",
-      "year": "2026",
-      "duration": "94 dk",
-      "country": "United States of America, Germany, France",
-      "poster": "https://image.tmdb.org/t/p/w500/yXs3qdcTxteZnZZH78xvm7Q6iK2.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/8R79AZjX1Bt4219Ub3CrRMsPQsW.jpg",
-      "desc": "Uzak bir hastaneye paket götürmekle görevlendirilen talihsiz bir kurye, vardığında kendini aniden bir salgının tam ortasında bulur. Hayatta kalabilmek için mutasyona uğramış yaratık sürülerine karşı amansız bir mücadele vermek zorundadır.",
-      "director": "Zach Cregger",
-      "originalTitle": "Resident Evil",
-      "starring": "",
-      "trailerUrl": "https://www.youtube.com/watch?v=FrjdaJJS3J4",
-      "seasons": null,
-      "episodes": null
-    },
-    {
-      "id": "cv-1794697915528",
-      "tmdbId": 603,
-      "title": "Matrix",
-      "type": "movie",
-      "category": "Aksiyon / Bilim-Kurgu",
-      "genre": "Aksiyon",
-      "rating": "8.3",
-      "year": "1999",
-      "duration": "136 dk",
-      "country": "United States of America",
-      "poster": "https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg",
-      "backdrop": "https://image.tmdb.org/t/p/w1280/tlm8UkiQsitc8rSuIAscQDCnP8d.jpg",
-      "desc": "Bir bilgisayar programcısı olan Thomas Anderson aynı zamanda Neo takma isimli çok usta bir bilgisayar korsanıdır. Ancak siyah takım elbiseli ve gözlüklü adamların yakın takibindedir. Bu takibin nedenini ise karşılaşacağı Morpheus'dan öğrenecektir. Neo, birden kendini Morpheus'un anlattıklarına güvenmek zorunda kaldığı büyük bir komplonun içinde bulacaktır. İçinde yaşadığımızı sandığımız bu dünya tamamiyle aldatıcıdır. Tüm insanlık aslında uzaydan gelen yaratıkların köleleridir. Neo, Trinity ve Morpheus'un da yardımıyla kendilerini bu düzeni yıkmaya adayan bir grubun içine katılır.",
-      "director": "Lana Wachowski, Lilly Wachowski",
-      "originalTitle": "The Matrix",
-      "starring": "",
-      "trailerUrl": "",
       "seasons": null,
       "episodes": null
     },
