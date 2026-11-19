@@ -220,6 +220,7 @@
                 discoveryYearFrom: '',
                 discoveryYearTo: '',
                 discoveryShuffleSeed: String(safeStorageRead('perde_discovery_shuffle_seed_v1', '') || Math.floor(Math.random() * 0x7fffffff)),
+                discoveryShowcaseSeed: String(safeStorageRead('perde_discovery_showcase_seed_v1', '') || Math.floor(Math.random() * 0x7fffffff)),
                 discoveryCurrentItemId: String(safeStorageRead('perde_discovery_current_v1', '') || ''),
                 discoverySeenIds: Array.isArray(safeStorageRead('perde_discovery_seen_v1', [])) ? safeStorageRead('perde_discovery_seen_v1', []) : [],
                 selectedItem: null,
@@ -3079,13 +3080,31 @@
                     return result;
                 },
 
+                refreshDiscoveryShowcase() {
+                    const nextSeed = String(Math.floor(Math.random() * 0x7fffffff));
+                    this.discoveryShowcaseSeed = nextSeed === String(this.discoveryShowcaseSeed) ? String((Number(nextSeed) + 1) % 0x7fffffff) : nextSeed;
+                    safeStorageWrite('perde_discovery_showcase_seed_v1', this.discoveryShowcaseSeed);
+                },
+
                 get discoveryShowcaseItems() {
-                    return this.discoveryListCatalog.slice(0, 6);
+                    const currentId = String(this.discoveryCurrentItemId || '');
+                    const result = this.sortedFilteredCatalog.filter(item => String(item.id ?? item.title ?? '') !== currentId);
+                    const seed = String(this.discoveryShowcaseSeed || 1);
+                    const score = item => {
+                        const key = seed + '|' + String(item.id ?? item.title ?? '');
+                        let hash = 2166136261;
+                        for (let i = 0; i < key.length; i++) hash = Math.imul(hash ^ key.charCodeAt(i), 16777619);
+                        return hash >>> 0;
+                    };
+                    return result.sort((a, b) => score(a) - score(b) || String(a.id ?? a.title ?? '').localeCompare(String(b.id ?? b.title ?? ''), 'tr')).slice(0, 6);
                 },
 
                 get discoveryListCatalog() {
-                    const currentId = String(this.discoveryCurrentItemId || '');
-                    const result = this.sortedFilteredCatalog.filter(item => String(item.id ?? item.title ?? '') !== currentId);
+                    const excludedIds = new Set([
+                        String(this.discoveryCurrentItemId || ''),
+                        ...this.discoveryShowcaseItems.map(item => String(item.id ?? item.title ?? ''))
+                    ]);
+                    const result = this.sortedFilteredCatalog.filter(item => !excludedIds.has(String(item.id ?? item.title ?? '')));
                     if (this.sortBy === 'default') {
                         const seed = String(this.discoveryShuffleSeed || 1);
                         const score = item => {
