@@ -390,10 +390,13 @@
                 heroEnglishTitleRequests: {},
                 getHeroEnglishTitle(item = this.currentHero) {
                     if (!item) return '';
-                    const english = String(item.englishTitle || item.tmdbEnglishTitle || '').trim();
-                    const title = String(item.title || '').trim();
+                    const english = String(item.englishTitle || item.tmdbEnglishTitle ||
+                        (item.originalLanguage === 'en' ? (item.originalTitle || item.title) : '') || '').trim();
                     if (!english) return '';
                     const normalize = value => value.toLocaleLowerCase('en-US').replace(/[’‘]/g, "'").replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+                    // Mobil manşette orijinal ad, Türkçe başlıkla aynı olsa bile daima gösterilir.
+                    if (window.matchMedia('(max-width: 767px)').matches) return english;
+                    const title = String(item.title || '').trim();
                     return normalize(english) && normalize(english) !== normalize(title) ? english : '';
                 },
                 async loadHeroEnglishTitles() {
@@ -467,7 +470,10 @@
                                     String(entry?.title || entry?.name || '').trim()
                                 );
                                 const candidates = [localizedEnglish, englishAlternative?.title || englishAlternative?.name, originalEnglish];
-                                const english = candidates.find(value => value && normalize(value) && normalize(value) !== normalize(item.title));
+                                const mobileHero = window.matchMedia('(max-width: 767px)').matches;
+                                const english = candidates.find(value => value && normalize(value) &&
+                                    (mobileHero || normalize(value) !== normalize(item.title)));
+                                if (details.original_language) item.originalLanguage = details.original_language;
                                 if (english) {
                                     item.englishTitle = String(english).trim();
                                     item.tmdbEnglishTitle = item.englishTitle;
@@ -480,7 +486,7 @@
                         }
                     };
                     // Mobilde arka plan TMDB trafiğini azalt; masaüstü paralelliğini koru.
-                    const workerCount = window.matchMedia('(max-width: 767px)').matches ? 1 : 3;
+                    const workerCount = window.matchMedia('(max-width: 767px)').matches ? 2 : 3;
                     await Promise.all(Array.from({ length: Math.min(workerCount, slides.length) }, worker));
                 },
 
@@ -776,18 +782,18 @@
                         if (invalidCatalogCount) console.warn('Geçersiz katalog kayıtları atlandı:', invalidCatalogCount);
                         this.catalog = markStaticCatalog(normalizedCatalog);
                         this.heroCatalog = this.catalog;
-                        // İngilizce alternatif başlıklar kritik değil; mobilde manşet açılışından sonra yükle.
+                        // Mobil manşetin İngilizce adlarını katalog hazır olur olmaz yükle.
                         const loadEnglishTitlesWhenIdle = () => this.loadHeroEnglishTitles();
                         const mobileDevice = window.matchMedia('(max-width: 767px)').matches;
                         const scheduleEnglishTitles = () => {
                             if ('requestIdleCallback' in window) {
-                                window.requestIdleCallback(loadEnglishTitlesWhenIdle, { timeout: mobileDevice ? 2500 : 1800 });
+                                window.requestIdleCallback(loadEnglishTitlesWhenIdle, { timeout: 1800 });
                             } else {
-                                window.setTimeout(loadEnglishTitlesWhenIdle, mobileDevice ? 500 : 900);
+                                window.setTimeout(loadEnglishTitlesWhenIdle, 300);
                             }
                         };
                         const tvDevice = document.documentElement.classList.contains('cv-tv-mode');
-                        if (mobileDevice) window.setTimeout(scheduleEnglishTitles, 5000);
+                        if (mobileDevice) loadEnglishTitlesWhenIdle();
                         else if (!tvDevice) scheduleEnglishTitles();
 
                         this.currentSlideIndex = 0;
