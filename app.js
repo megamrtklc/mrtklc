@@ -3079,6 +3079,10 @@
                     return result;
                 },
 
+                get discoveryShowcaseItems() {
+                    return this.discoveryListCatalog.slice(0, 6);
+                },
+
                 get discoveryListCatalog() {
                     const currentId = String(this.discoveryCurrentItemId || '');
                     const result = this.sortedFilteredCatalog.filter(item => String(item.id ?? item.title ?? '') !== currentId);
