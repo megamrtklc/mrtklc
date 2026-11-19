@@ -22210,7 +22210,7 @@
       "interval": 6,
       "autoplay": true,
       "pauseOnHover": true,
-      "descriptionLength": 300,
+      "descriptionLength": 240,
       "mobileCount": 5
     },
     "heroSlides": [
@@ -22369,7 +22369,13 @@
     "mobileCategory": "random",
     "mobileHeroSlides": [
       {
-        "id": "archive-45",
+        "id": "archive-122",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-114",
         "active": true,
         "headline": "",
         "description": ""
@@ -22381,19 +22387,13 @@
         "description": ""
       },
       {
-        "id": "cv-1794698111552",
+        "id": "archive-27",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "archive-112",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-15",
+        "id": "archive-88",
         "active": true,
         "headline": "",
         "description": ""
