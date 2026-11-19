@@ -22356,10 +22356,22 @@
       "description": "İzleme alışkanlıklarından ilham alan, sana özel seçkiler"
     },
     "mobileMode": "auto",
-    "mobileCategory": "random",
+    "mobileCategory": "video-url",
     "mobileHeroSlides": [
       {
-        "id": "archive-28",
+        "id": "archive-120",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683689165",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794714577385",
         "active": true,
         "headline": "",
         "description": ""
@@ -22371,25 +22383,13 @@
         "description": ""
       },
       {
-        "id": "archive-80",
+        "id": "perde-mw5zwmbz",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683819669",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-36",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1794697915528",
+        "id": "perde-mw67it9i",
         "active": true,
         "headline": "",
         "description": ""
