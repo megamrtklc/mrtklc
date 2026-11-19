@@ -1199,19 +1199,20 @@
 
                 get heroDescription() {
                     const text = String(this.currentHero?.desc || '');
+                    const max = Math.max(80, Math.min(500, Number(this.homepageConfig?.settings?.descriptionLength) || 220));
+                    return text.length > max ? text.slice(0, max).trimEnd() + '…' : text;
+                },
+
+                get desktopHeroDescription() {
+                    const text = String(this.currentHero?.desc || '');
                     const settings = this.homepageConfig?.settings || {};
-                    const desktop = window.matchMedia && window.matchMedia('(min-width: 768px)').matches;
                     const mode = settings.desktopDescriptionMode || 'medium';
-                    const desktopLimits = { short: 120, medium: 220, long: 360, custom: 500 };
-                    const max = desktop
-                        ? (desktopLimits[mode] || 220)
-                        : Math.max(80, Math.min(500, Number(settings.descriptionLength) || 220));
+                    const limits = { short: 120, medium: 220, long: 360, custom: 500 };
+                    const max = limits[mode] || 220;
                     return text.length > max ? text.slice(0, max).trimEnd() + '…' : text;
                 },
 
                 get heroDescriptionLines() {
-                    const desktop = window.matchMedia && window.matchMedia('(min-width: 768px)').matches;
-                    if (!desktop) return 3;
                     const settings = this.homepageConfig?.settings || {};
                     const mode = settings.desktopDescriptionMode || 'medium';
                     if (mode === 'short') return 2;
