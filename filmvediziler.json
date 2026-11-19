@@ -22212,122 +22212,136 @@
       "interval": 6,
       "autoplay": true,
       "pauseOnHover": true,
-      "descriptionLength": 400,
+      "descriptionLength": 360,
       "mobileCount": 6,
-      "desktopDescriptionMode": "long",
+      "desktopDescriptionMode": "medium",
       "desktopDescriptionLines": 3,
-      "desktopDescriptionWidthMode": "narrow",
-      "desktopDescriptionWidthPx": 720
+      "desktopDescriptionWidthMode": "medium",
+      "desktopDescriptionWidthPx": 720,
+      "descriptionLengthMode": "360",
+      "descriptionLengthCustom": 750
     },
     "heroSlides": [
       {
-        "id": "archive-120",
+        "id": "archive-75",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683689165",
+        "id": "cv-1794698111552",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794714577385",
+        "id": "archive-10",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-91",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-54",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-102",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794698010352",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-53",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794697966673",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
         "id": "cv-1794683662829",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw5zwmbz",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw67it9i",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw63ykt1",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw5w3oth",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1794683709989",
         "active": true,
         "headline": "",
         "description": ""
       }
     ],
     "desktopMode": "auto",
-    "desktopCategory": "video-url",
+    "desktopCategory": "random",
     "desktopHeroSlides": [
       {
-        "id": "archive-120",
+        "id": "archive-75",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683689165",
+        "id": "cv-1794698111552",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794714577385",
+        "id": "archive-10",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-91",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-54",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-102",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794698010352",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-53",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794697966673",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
         "id": "cv-1794683662829",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw5zwmbz",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw67it9i",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw63ykt1",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw5w3oth",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1794683709989",
         "active": true,
         "headline": "",
         "description": ""
@@ -22363,37 +22377,37 @@
     "mobileCategory": "random",
     "mobileHeroSlides": [
       {
+        "id": "cv-1794698470655",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-71",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-27",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-92",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794697995185",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
         "id": "cv-1794698259535",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-54",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "perde-mw6yns6p",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-84",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-8",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "archive-66",
         "active": true,
         "headline": "",
         "description": ""
