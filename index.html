@@ -50,6 +50,10 @@
     lastInteraction={time:new Date().toISOString(),type:type,target:describe(el)};
   }
   document.addEventListener('pointerdown',function(e){interaction('pointerdown',e)},true);
+  document.addEventListener('pointerup',function(e){interaction('pointerup',e);add('pointerup',{target:describe(e.target),pointerType:e.pointerType||'',x:e.clientX,y:e.clientY,scrollY:window.scrollY})},true);
+  document.addEventListener('touchstart',function(e){var t=e.touches&&e.touches[0];add('touchstart',{target:describe(e.target),x:t?t.clientX:null,y:t?t.clientY:null,scrollY:window.scrollY,touchCount:e.touches?e.touches.length:0})},{capture:true,passive:true});
+  document.addEventListener('touchend',function(e){var t=e.changedTouches&&e.changedTouches[0];add('touchend',{target:describe(e.target),x:t?t.clientX:null,y:t?t.clientY:null,scrollY:window.scrollY,touchCount:e.touches?e.touches.length:0})},{capture:true,passive:true});
+  document.addEventListener('touchcancel',function(e){add('touchcancel',{target:describe(e.target),scrollY:window.scrollY})},true);
   document.addEventListener('click',function(e){
     interaction('click',e);
     var el=e.target&&e.target.closest?e.target.closest('a[href],button,input[type=submit],input[type=button]'):null;
