@@ -1174,23 +1174,10 @@
                     if (this.heroAutoplayTimer) {
                         window.clearTimeout(this.heroAutoplayTimer);
                         window.clearInterval(this.heroAutoplayTimer);
+                        this.heroAutoplayTimer = null;
                     }
-                    const settings = this.homepageConfig?.settings || {};
-                    if (document.documentElement.classList.contains('cv-tv-mode') || settings.autoplay === false || this.heroSlides.length < 2) return;
-                    const seconds = Math.max(2, Math.min(60, Number(settings.interval) || 6));
-                    const isMobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
-                    const advance = () => {
-                        if (this.heroPaused || document.hidden || this.heroSlides.length < 2) return;
-                        this.currentSlideIndex = (this.currentSlideIndex + 1) % this.heroSlides.length;
-                    };
-                    // Mobilde ilk manşet görseli tam yüklenip LCP ölçümü tamamlanmadan değişmesin.
-                    const initialDelay = isMobile ? Math.max(seconds * 1000, 15000) : seconds * 1000;
-                    this.heroAutoplayTimer = window.setTimeout(() => {
-                        advance();
-                        this.heroAutoplayTimer = window.setInterval(advance, seconds * 1000);
-                    }, initialDelay);
+                    // Temporary diagnostic: keep the hero static on every device.
                 },
-
                 setHeroPaused(value) {
                     this.heroPaused = !!value;
                 },
