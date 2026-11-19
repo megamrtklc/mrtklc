@@ -26,7 +26,7 @@
   const yearOf = item => Number(item.year || item.releaseYear || (item.tmdbReleaseDate || '').slice(0,4)) || '—';
   const collectionList = () => Array.isArray(state.data?.collections) ? state.data.collections : [];
   const franchiseList = () => Array.isArray(state.data?.franchises) ? state.data.franchises : [];
-  const toast = (message,type='info') => { const el=$('#toast'); if(!el)return; const title=$('#toast-title'),body=$('#toast-message'),icon=el.querySelector('.toast-icon'); if(title)title.textContent=type==='success'?'KAYIT TAMAMLANDI':type==='error'?'İŞLEM TAMAMLANAMADI':'BİLGİLENDİRME'; if(body)body.textContent=String(message||''); if(icon)icon.textContent=type==='success'?'✓':type==='error'?'!':'i'; el.dataset.type=type; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),4200); };
+  const toast = (message,type='warning') => { const el=$('#toast'); if(!el)return; const title=$('#toast-title'),body=$('#toast-message'),icon=el.querySelector('.toast-icon'); const safeType=['success','warning','error','info'].includes(type)?type:'warning'; const config={success:{title:'İŞLEM BAŞARILI',icon:'✓',duration:2600,role:'status'},warning:{title:'İŞLEM BAŞARISIZ',icon:'!',duration:4800,role:'alert'},error:{title:'SİSTEM HATASI',icon:'×',duration:5200,role:'alert'},info:{title:'BİLGİLENDİRME',icon:'i',duration:3800,role:'status'}}[safeType]; if(title)title.textContent=config.title; if(body)body.textContent=String(message||''); if(icon)icon.textContent=config.icon; el.dataset.type=safeType; el.setAttribute('role',config.role); el.setAttribute('aria-live',config.role==='alert'?'assertive':'polite'); document.body.classList.add('has-admin-toast'); el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.classList.remove('show');document.body.classList.remove('has-admin-toast');},config.duration); };
   async function fetchWithTimeout(url,options={},timeoutMs=15000){
     const controller=new AbortController();
     const timer=setTimeout(()=>controller.abort(),timeoutMs);
@@ -57,13 +57,13 @@
     const contentButton=event.target.closest?.('#add-content, #catalog-add');
     if(contentButton){
       event.preventDefault();
-      try{openEditor();}catch(error){console.error('Yeni yapım formu açılamadı:',error);toast('Yeni yapım formu açılamadı: '+(error.message||'Beklenmeyen hata.'));}
+      try{openEditor();}catch(error){console.error('Yeni yapım formu açılamadı:',error);toast('Yeni yapım formu açılamadı: '+(error.message||'Beklenmeyen hata.'),'error');}
       return;
     }
     const collectionButton=event.target.closest?.('#collection-add');
-    if(collectionButton){event.preventDefault();try{openCollectionEditor(null);}catch(error){console.error('Koleksiyon formu açılamadı:',error);toast('Koleksiyon formu açılamadı: '+(error.message||'Beklenmeyen hata.'));}return;}
+    if(collectionButton){event.preventDefault();try{openCollectionEditor(null);}catch(error){console.error('Koleksiyon formu açılamadı:',error);toast('Koleksiyon formu açılamadı: '+(error.message||'Beklenmeyen hata.'),'error');}return;}
     const franchiseButton=event.target.closest?.('#franchise-add');
-    if(franchiseButton){event.preventDefault();try{openFranchiseEditor(null);}catch(error){console.error('Seri formu açılamadı:',error);toast('Seri formu açılamadı: '+(error.message||'Beklenmeyen hata.'));}return;}
+    if(franchiseButton){event.preventDefault();try{openFranchiseEditor(null);}catch(error){console.error('Seri formu açılamadı:',error);toast('Seri formu açılamadı: '+(error.message||'Beklenmeyen hata.'),'error');}return;}
   });
   function canWrite(){ if(!state.apiEnabled||!state.sha){toast('Katalog şu anda salt okunur. GitHub erişim bağlantısı doğrulanınca düzenleme açılacak.');return false;} return true; }
   function navigate(view){
@@ -110,7 +110,7 @@
       if(!response.ok)throw new Error(result.error||'Fotoğraf kaydedilemedi.');
       applyProfilePhoto(result.url);
       $('#profile-dialog').close();$('#profile-form').reset();toast('Profil fotoğrafı güncellendi.');
-    }catch(error){$('#profile-upload-status').textContent=error.message;toast(error.message);}
+    }catch(error){$('#profile-upload-status').textContent=error.message;toast(error.message,'error');}
     finally{button.disabled=false;button.textContent='Fotoğrafı kaydet';}
   }
   function renderAdminProfile(){
@@ -453,7 +453,7 @@
       if(!results.length){status.textContent='Eşleşme bulunamadı. Başlığı manuel girebilirsin.';return;}
       status.textContent=results.length+' eşleşme bulundu. Bilgilerini almak için bir yapım seç.';
       renderTmdbResults(results);
-    }catch(error){if(request!==state.tmdbSearchRequest)return;status.textContent='TMDB araması yapılamadı. Bilgileri manuel girebilirsin.';toast(error.message);}
+    }catch(error){if(request!==state.tmdbSearchRequest)return;status.textContent='TMDB araması yapılamadı. Bilgileri manuel girebilirsin.';toast(error.message,'error');}
   }
   async function selectTmdbTitle(id,type){
     const status=$('#tmdb-search-status'),host=$('#tmdb-search-results');
@@ -490,7 +490,7 @@
       setField('field-desc',record.tmdbOverview);
       status.textContent='✓ '+title+' bilgileri alındı. Alanları düzenleyebilir veya eksik bilgileri manuel tamamlayabilirsin.';
       renderContentPreview();
-    }catch(error){status.textContent='Yapım bilgileri alınamadı. Alanları manuel doldurabilirsin.';toast(error.message);}
+    }catch(error){status.textContent='Yapım bilgileri alınamadı. Alanları manuel doldurabilirsin.';toast(error.message,'error');}
   }
   function renderContentPreview(){
     const value=id=>String($('#'+id)?.value||'').trim();
@@ -531,7 +531,7 @@
     const existingId=$('#edit-id').value,existing=existingId?state.catalog.find(x=>String(x.id)===existingId):null;
     const type=$('#field-type').value;
     let episodeWatchUrls={};
-    try{episodeWatchUrls=parseEpisodeWatchUrls($('#field-episode-urls').value);}catch(error){toast(error.message);return;}
+    try{episodeWatchUrls=parseEpisodeWatchUrls($('#field-episode-urls').value);}catch(error){toast(error.message,'error');return;}
     const record={...(existing||{}),id:existing?.id??('cv-'+Date.now()),title:$('#field-title').value.trim(),type,
       year:$('#field-year').value.trim(),rating:$('#field-rating').value.trim(),genre:$('#field-genre').value.trim(),
       category:$('#field-category').value.trim(),duration:$('#field-duration').value.trim(),country:$('#field-country').value.trim(),
@@ -1137,7 +1137,7 @@
         try{await restoreMainSitePersonalStorage(previousBrowserData);}
         catch(rollbackError){console.error('Ana site kişisel kayıtları geri alınamadı:',rollbackError);}
       }
-      toast(error.message||'Geri yükleme tamamlanamadı.');
+      toast(error.message||'Geri yükleme tamamlanamadı.','error');
     }
   }
   function initBackupTools(){
@@ -1194,7 +1194,7 @@
       $('#health-catalog').textContent='Bağlantı yok';$('#health-json').textContent='Okunamadı';$('#metric-total').textContent='—';
       $('#recent-list').innerHTML='<div class="loading-line">'+escapeHtml(error.message||'Katalog yüklenemedi.')+'</div>';
       $('#catalog-rows').innerHTML='<tr><td colspan="6" class="empty-cell">Katalog yüklenemedi.</td></tr>';
-      toast(error.message||'Katalog yüklenemedi.');
+      toast(error.message||'Katalog yüklenemedi.','error');
     }
   }
   // Tema seçici kaldırıldı: yeni yönetim arayüzü tek ve tutarlı bir tasarım sistemidir.
@@ -1269,7 +1269,7 @@
     $('#hf-'+kind+'-logo-file')?.addEventListener('change',async event=>{
       const file=event.target.files?.[0];if(!file)return;
       try{const data=await readLogoFile(file);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage=data;renderLogoPreview(kind,data);toast('Logo yüklendi. Değişikliği uygulamak için ayarları kaydet.');}
-      catch(error){toast(error.message);}finally{event.target.value='';}
+      catch(error){toast(error.message,'error');}finally{event.target.value='';}
     });
     $('[data-remove-logo="'+kind+'"]')?.addEventListener('click',()=>{
       state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');toast('Logo kaldırıldı. Değişikliği uygulamak için ayarları kaydet.');
