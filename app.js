@@ -1095,21 +1095,34 @@
                 },
 
                 get heroSlides() {
+                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
                     const sourceCatalog = this.heroCatalog.length ? this.heroCatalog : this.catalog;
-                    const personalMode = this.homepageConfig?.desktopMode || 'manual';
-                    const personalCategory = this.homepageConfig?.desktopCategory || '';
-                    const configuredCount = Number(this.homepageConfig?.settings?.desktopCount);
-                    const count = Math.max(5, Math.min(15, configuredCount || 10));
+                    const device = mobile ? 'mobile' : 'desktop';
+                    const personalMode = this.homepageConfig?.[device + 'Mode'] || 'manual';
+                    const personalCategory = this.homepageConfig?.[device + 'Category'] || '';
                     if (personalMode === 'auto' && ['user-watchlist','user-watched','user-favorites'].includes(personalCategory)) {
                         const personalItems = this.getPersonalStatusItems(personalCategory).filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
-                        return personalItems.slice(0, count);
+                        const personalCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']) || (mobile ? 6 : 10);
+                        // Kişisel kaynak boşsa genel katalog/manşet seçimine düşme.
+                        return personalItems.slice(0, Math.max(1, personalCount));
                     }
-                    if (personalMode === 'auto' && personalCategory === 'new-arrivals') return this.catalog.slice(-count).reverse().filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
-                    const configured = this.homepageConfig?.desktopHeroSlides || this.homepageConfig?.heroSlides;
+                    if (personalMode === 'auto' && personalCategory === 'new-arrivals') {
+                        const newestCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']) || (mobile ? 6 : 10);
+                        return this.catalog.slice(-Math.max(1, newestCount)).reverse()
+                            .filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
+                    }
+                    const configured = this.homepageConfig?.[mobile ? 'mobileHeroSlides' : 'desktopHeroSlides'] || this.homepageConfig?.heroSlides;
                     if (!Array.isArray(configured) || !configured.length) return sourceCatalog;
                     const byId = new Map(sourceCatalog.map(item => [String(item.id), item]));
-                    const selected = configured.filter(entry => entry && entry.active !== false).map(entry => byId.get(String(entry.id))).filter(Boolean);
-                    return selected.length ? selected.slice(0, count) : sourceCatalog.slice(0, count);
+                    const selected = configured.filter(entry => entry && entry.active !== false)
+                        .map(entry => byId.get(String(entry.id))).filter(Boolean);
+                    if (!selected.length) return sourceCatalog;
+                    if (!mobile) {
+                        const configuredCount = Number(this.homepageConfig?.settings?.desktopCount);
+                        const count = Math.max(5, Math.min(15, configuredCount || 10));
+                        return selected.slice(0, count);
+                    }
+                    return selected;
                 },
 
                 get publishedCollections() {
@@ -1127,8 +1140,9 @@
 
                 get heroThumbSlides() {
                     const settings = this.homepageConfig?.settings || {};
-                    const configuredCount = Number(settings.desktopCount);
-                    const count = Math.max(1, Math.min(20, configuredCount || 10));
+                    const mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+                    const configuredCount = Number(mobile ? settings.mobileCount : settings.desktopCount);
+                    const count = Math.max(1, Math.min(mobile ? 12 : 20, configuredCount || (mobile ? 6 : 10)));
                     return this.heroSlides.slice(0, count);
                 },
 

@@ -8,7 +8,10 @@ const config = source?.homepageConfig || {};
 const desktopSlides = Array.isArray(config.desktopHeroSlides) && config.desktopHeroSlides.length
   ? config.desktopHeroSlides
   : (Array.isArray(config.heroSlides) ? config.heroSlides : []);
-const ids = new Set([...desktopSlides]
+const mobileSlides = Array.isArray(config.mobileHeroSlides) && config.mobileHeroSlides.length
+  ? config.mobileHeroSlides
+  : (Array.isArray(config.heroSlides) ? config.heroSlides : []);
+const ids = new Set([...desktopSlides, ...mobileSlides]
   .filter(slide => slide && slide.active !== false && slide.id != null)
   .map(slide => String(slide.id)));
 const heroCatalog = catalog
@@ -91,6 +94,7 @@ const output = {
   homepageConfig: {
     settings: config.settings || {},
     desktopHeroSlides: desktopSlides.map(({ id, active }) => ({ id, active })),
+    mobileHeroSlides: mobileSlides.map(({ id, active }) => ({ id, active })),
     heroStyle: config.heroStyle || 'current'
   },
   catalog: heroCatalog

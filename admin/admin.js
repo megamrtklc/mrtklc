@@ -610,7 +610,7 @@
     await persist({...state.data,collections:collectionList().filter(x=>String(x.id)!==String(id))},'Koleksiyon silindi.');
   }
   function homepageConfig(){
-    if(!state.data.homepageConfig)state.data.homepageConfig={version:2,settings:{desktopCount:10,interval:6,autoplay:true,pauseOnHover:true},heroSlides:[]};
+    if(!state.data.homepageConfig)state.data.homepageConfig={version:2,settings:{desktopCount:10,mobileCount:6,interval:6,autoplay:true,pauseOnHover:true},heroSlides:[]};
     if(!state.data.homepageConfig.settings)state.data.homepageConfig.settings={};
     if(!Array.isArray(state.data.homepageConfig.heroSlides))state.data.homepageConfig.heroSlides=[];
     return state.data.homepageConfig;
@@ -890,12 +890,13 @@
   function renderHomepage(){
     const config=homepageConfig(),settings=config.settings;
     $('#hero-desktop-count').value=Math.max(5,Math.min(15,Number(settings.desktopCount)||10));
+    $('#hero-mobile-count').value=settings.mobileCount??6;
     $('#hero-interval').value=settings.interval??6;
     $('#hero-description-length').value=settings.descriptionLength??220;
     $('#hero-autoplay').checked=settings.autoplay!==false;
     $('#hero-pause').checked=settings.pauseOnHover!==false;
     const draft=state.heroDraft||{};
-    const devices=['desktop'];
+    const devices=['desktop','mobile'];
     devices.forEach(device=>{
       const mode=config[device+'Mode']||'manual';
       const category=config[device+'Category']||'top-rated';
@@ -967,21 +968,24 @@
     event.preventDefault();if(!canWrite())return;
     const previous=homepageConfig();
     const legacyById=new Map(previous.heroSlides.map(x=>[String(x.id),x]));
-    const oldEntries=Array.isArray(previous.desktopHeroSlides)?previous.desktopHeroSlides:previous.heroSlides;
-    const oldMap=new Map(oldEntries.map(x=>[String(x.id),x]));
-    const selectedInputs=$$('#hero-desktop-slide-list input:checked');
-    const max=Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10));
-    const desktopHeroSlides=selectedInputs.slice(0,max).map(input=>{
-      const id=input.value,old=oldMap.get(String(id))||legacyById.get(String(id))||{};
-      return {...old,id,active:true,headline:old.headline||'',description:old.description||''};
-    });
-    const config={...previous};delete config.mobileMode;delete config.mobileCategory;delete config.mobileHeroSlides;
-    const settings={...previous.settings};delete settings.mobileCount;
-    config.version=4;config.desktopMode=$('#hero-desktop-mode').value;config.desktopCategory=$('#hero-desktop-category').value;
-    config.settings={...settings,desktopCount:max,interval:Number($('#hero-interval').value)||6,
-      descriptionLength:Math.max(80,Math.min(500,Number($('#hero-description-length').value)||220)),
-      autoplay:$('#hero-autoplay').checked,pauseOnHover:$('#hero-pause').checked};
-    config.desktopHeroSlides=desktopHeroSlides;config.heroSlides=desktopHeroSlides;
+    const buildSlides=device=>{
+      const listId='#hero-'+device+'-slide-list';
+      const oldEntries=Array.isArray(previous[device+'HeroSlides'])?previous[device+'HeroSlides']:previous.heroSlides;
+      const oldMap=new Map(oldEntries.map(x=>[String(x.id),x]));
+      const selectedInputs=$$(listId+' input:checked');
+      const max=device==='desktop'?Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)):12;
+      return selectedInputs.slice(0,max).map(input=>{
+        const id=input.value,old=oldMap.get(String(id))||legacyById.get(String(id))||{};
+        return {...old,id,active:true,headline:old.headline||'',description:old.description||''};
+      });
+    };
+    const desktopHeroSlides=buildSlides('desktop'),mobileHeroSlides=buildSlides('mobile');
+    const config={...previous,version:4,desktopMode:$('#hero-desktop-mode').value,desktopCategory:$('#hero-desktop-category').value,
+      mobileMode:$('#hero-mobile-mode').value,mobileCategory:$('#hero-mobile-category').value,
+      settings:{...previous.settings,desktopCount:Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)),mobileCount:Number($('#hero-mobile-count').value)||6,
+        interval:Number($('#hero-interval').value)||6,descriptionLength:Math.max(80,Math.min(500,Number($('#hero-description-length').value)||220)),
+        autoplay:$('#hero-autoplay').checked,pauseOnHover:$('#hero-pause').checked},
+      desktopHeroSlides,mobileHeroSlides,heroSlides:desktopHeroSlides};
     const ok=await persist({...state.data,homepageConfig:config},'Manşet ayarları kaydedildi.');
     if(ok){state.heroDraft=null;renderHomepage();}
   }
@@ -1315,6 +1319,9 @@
     homepageConfig().settings.desktopCount=next;
     renderHomepage();
   });
+  $('#hero-mobile-mode').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=event.target.value==='auto'&&$('#hero-mobile-category').value==='random'?[]:Array.from(document.querySelectorAll('#hero-mobile-slide-list input:checked')).map(x=>({id:x.value,active:true}));homepageConfig().mobileMode=event.target.value;renderHomepage();});
+  $('#hero-mobile-category').addEventListener('change',event=>{state.heroDraft=state.heroDraft||{};state.heroDraft.mobile=[];homepageConfig().mobileCategory=event.target.value;renderHomepage();});
+  $('#hero-mobile-count').addEventListener('change',event=>{homepageConfig().settings.mobileCount=Number(event.target.value)||6;renderHomepage();});
   $('#hero-description-length').addEventListener('change',event=>{homepageConfig().settings.descriptionLength=Number(event.target.value)||220;renderHomepage();});
 
   $('#watch-layout-save').addEventListener('click',saveWatchLayout);

@@ -22210,7 +22210,8 @@
       "interval": 6,
       "autoplay": true,
       "pauseOnHover": true,
-      "descriptionLength": 300
+      "descriptionLength": 300,
+      "mobileCount": 5
     },
     "heroSlides": [
       {
@@ -22363,7 +22364,41 @@
       "eyebrow": "SANA ÖZEL",
       "title": "İzleme Zevkine Göre",
       "description": "İzleme alışkanlıklarından ilham alan, sana özel seçkiler"
-    }
+    },
+    "mobileMode": "auto",
+    "mobileCategory": "random",
+    "mobileHeroSlides": [
+      {
+        "id": "archive-45",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794683689165",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794698111552",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-112",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-15",
+        "active": true,
+        "headline": "",
+        "description": ""
+      }
+    ]
   },
   "exportedAt": "2026-11-10T22:20:23.455Z",
   "watchPageConfig": {
