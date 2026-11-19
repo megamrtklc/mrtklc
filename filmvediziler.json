@@ -22212,9 +22212,9 @@
       "interval": 6,
       "autoplay": true,
       "pauseOnHover": true,
-      "descriptionLength": 300,
+      "descriptionLength": 400,
       "mobileCount": 6,
-      "desktopDescriptionMode": "medium",
+      "desktopDescriptionMode": "long",
       "desktopDescriptionLines": 3
     },
     "heroSlides": [
@@ -22358,40 +22358,40 @@
       "description": "İzleme alışkanlıklarından ilham alan, sana özel seçkiler"
     },
     "mobileMode": "auto",
-    "mobileCategory": "video-url",
+    "mobileCategory": "random",
     "mobileHeroSlides": [
       {
-        "id": "archive-120",
+        "id": "cv-1794698259535",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683689165",
+        "id": "archive-54",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794714577385",
+        "id": "perde-mw6yns6p",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794683662829",
+        "id": "archive-84",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "perde-mw5zwmbz",
+        "id": "archive-8",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "perde-mw67it9i",
+        "id": "archive-66",
         "active": true,
         "headline": "",
         "description": ""
