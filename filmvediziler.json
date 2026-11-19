@@ -22212,8 +22212,10 @@
       "interval": 6,
       "autoplay": true,
       "pauseOnHover": true,
-      "descriptionLength": 220,
-      "mobileCount": 6
+      "descriptionLength": 300,
+      "mobileCount": 6,
+      "desktopDescriptionMode": "medium",
+      "desktopDescriptionLines": 3
     },
     "heroSlides": [
       {
