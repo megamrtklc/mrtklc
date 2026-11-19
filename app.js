@@ -1221,6 +1221,16 @@
                     return 3;
                 },
 
+                get desktopHeroDescriptionWidth() {
+                    const settings = this.homepageConfig?.settings || {};
+                    const mode = settings.desktopDescriptionWidthMode || 'medium';
+                    const widths = { narrow: 560, medium: 720, wide: 900 };
+                    const width = mode === 'custom'
+                        ? Math.max(360, Math.min(1200, Number(settings.desktopDescriptionWidthPx) || 720))
+                        : (widths[mode] || 720);
+                    return width + 'px';
+                },
+
                 selectHeroSlide(idx) {
                     this.currentSlideIndex = idx;
                 },

@@ -1038,6 +1038,9 @@
     $('#hero-desktop-description-mode').value=settings.desktopDescriptionMode||'medium';
     $('#hero-desktop-description-lines').value=Math.max(1,Math.min(8,Number(settings.desktopDescriptionLines)||3));
     $('#hero-desktop-description-custom').hidden=$('#hero-desktop-description-mode').value!=='custom';
+    $('#hero-desktop-description-width').value=settings.desktopDescriptionWidthMode||'medium';
+    $('#hero-desktop-description-width-px').value=Math.max(360,Math.min(1200,Number(settings.desktopDescriptionWidthPx)||720));
+    $('#hero-desktop-description-width-custom').hidden=$('#hero-desktop-description-width').value!=='custom';
     $('#hero-autoplay').checked=settings.autoplay!==false;
     $('#hero-pause').checked=settings.pauseOnHover!==false;
     const draft=state.heroDraft||{};
@@ -1135,6 +1138,8 @@
         interval:Number($('#hero-interval').value)||6,descriptionLength:Math.max(80,Math.min(500,Number($('#hero-description-length').value)||220)),
         desktopDescriptionMode:$('#hero-desktop-description-mode').value||'medium',
         desktopDescriptionLines:Math.max(1,Math.min(8,Number($('#hero-desktop-description-lines').value)||3)),
+        desktopDescriptionWidthMode:$('#hero-desktop-description-width').value||'medium',
+        desktopDescriptionWidthPx:Math.max(360,Math.min(1200,Number($('#hero-desktop-description-width-px').value)||720)),
         autoplay:$('#hero-autoplay').checked,pauseOnHover:$('#hero-pause').checked},
       desktopHeroSlides,mobileHeroSlides,heroSlides:desktopHeroSlides};
     const ok=await persist({...state.data,homepageConfig:config},'Manşet ayarları kaydedildi.');
@@ -1476,6 +1481,8 @@
   $('#hero-description-length').addEventListener('change',event=>{homepageConfig().settings.descriptionLength=Number(event.target.value)||220;renderHomepage();});
   $('#hero-desktop-description-mode').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionMode=event.target.value;$('#hero-desktop-description-custom').hidden=event.target.value!=='custom';});
   $('#hero-desktop-description-lines').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionLines=Math.max(1,Math.min(8,Number(event.target.value)||3));});
+  $('#hero-desktop-description-width').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionWidthMode=event.target.value;$('#hero-desktop-description-width-custom').hidden=event.target.value!=='custom';});
+  $('#hero-desktop-description-width-px').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionWidthPx=Math.max(360,Math.min(1200,Number(event.target.value)||720));});
 
   $('#watch-layout-save').addEventListener('click',saveWatchLayout);
   $('#watch-available-list').addEventListener('click',event=>{
