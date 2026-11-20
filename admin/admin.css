@@ -281,3 +281,53 @@
 .homepage-settings #hero-description-length-custom[hidden]{display:none!important;}
 .homepage-settings .field-hint{display:block;margin-top:7px;color:var(--muted,#8992a5);font-size:11px;line-height:1.45}
 .homepage-settings .hero-preview-character-count{display:block;margin-top:7px;color:rgba(255,255,255,.68);font-size:10px;line-height:1.4;}
+
+
+/* PERDE — Genel Bakış / sinematik altın tema */
+#view-overview{--overview-gold:#d8b66b;--overview-gold-soft:#a98a4f;--overview-ink:#111318;--overview-panel:#191a20}
+#view-overview .dashboard-welcome{border-color:#8c744044;background:radial-gradient(ellipse at 78% 48%,#51432c 0,#29251f 34%,#191a20 68%,#15161b 100%);box-shadow:0 18px 48px #0004}
+#view-overview .dashboard-welcome:after{background:linear-gradient(90deg,#17181d 0%,#17181ddd 34%,transparent 78%)}
+#view-overview .dashboard-welcome h1 em{color:var(--overview-gold)}
+#view-overview .dashboard-welcome p{color:#c1b9a9}
+#view-overview .dashboard-primary{background:var(--overview-gold);color:#211b10;box-shadow:0 8px 24px #d8b66b20}
+#view-overview .dashboard-primary:hover{background:#e7ca88}
+#view-overview .dashboard-secondary{border-color:#6d5b39;background:#24211c;color:#e4d4b2}
+#view-overview .dashboard-art-disc{border-color:#d8b66b99;background:radial-gradient(circle at 35% 30%,#9a7940,#30271b 72%);box-shadow:0 0 70px #d8b66b25;color:#f0dba9}
+#view-overview .dashboard-art-orbit{border-color:#d8b66b33}
+#view-overview .dashboard-art-note{border-color:#9d824c66;background:#211e19dd}
+#view-overview .dashboard-art-note span{color:#c4a66b}
+#view-overview .dashboard-art-note b,#view-overview .dashboard-art-spark{color:var(--overview-gold)}
+#view-overview .dashboard-welcome-index{color:#b09a70}
+#view-overview .dashboard-live{color:#d8bd82}
+#view-overview .dashboard-live i{background:var(--overview-gold);box-shadow:0 0 10px #d8b66b88}
+#view-overview .dashboard-metric{border-color:#38332a;background:linear-gradient(145deg,#222127,#17181e);box-shadow:0 10px 28px #0002}
+#view-overview .dashboard-metric-icon{background:#393022;color:#e0c17c}
+#view-overview .metric-movies .dashboard-metric-icon{background:#292f3c;color:#aab9d8}
+#view-overview .metric-series .dashboard-metric-icon{background:#3b2d2b;color:#d8a18c}
+#view-overview .metric-collections .dashboard-metric-icon{background:#39312a;color:#d8bd82}
+#view-overview .dashboard-card{border-color:#35312a;background:linear-gradient(145deg,#202027,#17181e);box-shadow:0 10px 28px #0002}
+#view-overview .dashboard-eyebrow{color:#b59a60}
+#view-overview .dashboard-link{color:var(--overview-gold)}
+#view-overview .dashboard-shortcut{border-color:#35312a}
+#view-overview .shortcut-gold{background:#3b3222;color:#e4c57f}
+#view-overview .dashboard-insight-stats>div{border:1px solid #332f29;background:#17181d}
+#view-overview .dashboard-year-chart{margin-top:22px}
+#view-overview .overview-yearline{border-color:#51432d}
+#view-overview .overview-yearline span{background:linear-gradient(0deg,#80633a,#e0c17b)}
+#view-overview .dashboard-health-icon{background:#3a3020;color:#e0c17b}
+#view-overview .dashboard-health-row{border-color:#35312a}
+#view-overview .dashboard-balance{margin-top:17px;padding:13px 14px;border:1px solid #39332a;border-radius:10px;background:#17181d}
+#view-overview .balance-heading,#view-overview .balance-legend{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#view-overview .balance-heading{margin-bottom:10px;color:#c8b27f;font-size:8px;font-weight:800;letter-spacing:1px}
+#view-overview .balance-heading small{color:#7f8490;font-size:8px;font-weight:500;letter-spacing:0}
+#view-overview .balance-track{display:flex;height:9px;overflow:hidden;border-radius:20px;background:#303039}
+#view-overview .balance-track span{display:block;min-width:0;transition:width .35s ease}
+#view-overview #overview-balance-movies{background:linear-gradient(90deg,#8c7043,#d8b66b)}
+#view-overview #overview-balance-series{background:linear-gradient(90deg,#56647f,#9aaacb)}
+#view-overview .balance-legend{justify-content:flex-start;flex-wrap:wrap;margin-top:10px;color:#9da0a9;font-size:9px}
+#view-overview .balance-legend>span{display:flex;align-items:center;gap:6px}
+#view-overview .balance-legend b{color:#e2d6bd;font-size:9px}
+#view-overview .balance-dot{width:7px;height:7px;border-radius:50%}
+#view-overview .movie-dot{background:#d8b66b}
+#view-overview .series-dot{background:#9aaacb}
+@media(max-width:600px){#view-overview .dashboard-balance{padding:11px}#view-overview .balance-heading{font-size:7px}}
