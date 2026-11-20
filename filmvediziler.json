@@ -22564,7 +22564,11 @@
         "genre-discovery"
       ],
       "visibility": {
-        "watched": true
+        "watched": true,
+        "personalized": false,
+        "published-collections": false,
+        "series-tracking": false,
+        "genre-discovery": false
       },
       "labels": {}
     },
