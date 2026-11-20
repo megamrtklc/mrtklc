@@ -1664,7 +1664,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             <template x-for="(item, index) in discoveryShowcaseItems" :key="'showcase-' + item.id">
                                 <article @mouseenter="if (window.matchMedia('(hover: hover)').matches) activePanel = index" @mouseleave="if (window.matchMedia('(hover: hover)').matches && activePanel === index) activePanel = null" @click="activePanel = activePanel === index ? null : index" :class="activePanel === index ? 'flex-[3.2] sm:flex-[3.5] z-20' : 'flex-1'" class="relative isolate min-w-0 overflow-hidden cursor-pointer bg-gray-950 transition-[flex] duration-300 ease-out">
                                     <div class="absolute inset-0 flex items-center justify-center bg-gray-950 transition-opacity duration-200" :class="activePanel === index ? 'opacity-0' : 'opacity-100'">
-                                        <img :src="item.poster || item.backdrop || ''" :alt="item.title + ' afişi'" loading="lazy" decoding="async" class="h-full w-full object-contain object-center p-1.5 sm:p-2">
+                                        <img :src="item.poster || item.backdrop || ''" :alt="item.title + ' afişi'" loading="lazy" decoding="async" class="h-full w-full object-contain object-center p-1.5 sm:p-2 transition-transform duration-300 ease-out" :style="activePanel === index ? 'transform:rotate(0deg) scale(.90)' : 'transform:rotate(-3deg) scale(.90)'">
                                     </div>
                                     <template x-if="activePanel === index">
                                         <div class="absolute inset-0">
