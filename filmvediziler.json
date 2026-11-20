@@ -22202,6 +22202,207 @@
       "tmdbVoteCount": 28,
       "seasons": 1,
       "episodes": 8
+    },
+    {
+      "id": "cv-1795153743620",
+      "title": "Robin Hood'un Ölümü",
+      "type": "movie",
+      "year": "2026",
+      "rating": "6.7",
+      "genre": "Macera",
+      "category": "Macera / Dram / Aksiyon",
+      "duration": "123 dk",
+      "country": "United States of America, United Kingdom",
+      "director": "Michael Sarnoski",
+      "platform": "",
+      "watchUrl": "https://s9.gelsistirire.top/d/yinesdcmsk3rtzj5dtwrdxevk5h4atz7s2zazyxyjhvw52deungwhxqrae6pmvjwclyechtz/The%20Death%20of%20Robin%20Hood%202026%20WEB%20DL%201080p%20DUAL.mp4",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1284465,
+      "imdbId": "tt32273171",
+      "image": "https://image.tmdb.org/t/p/w500/arDhnrSib3xRUHw0rIqgt8qHNeC.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/lh3BDkmWJh998n4fQcHYcVi7dpm.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=BU7sdYLhyZ4",
+      "trailerProvider": "auto",
+      "desc": "Suç ve cinayetlerle dolu bir hayatın ardından geçmişiyle yüzleşen Robin Hood, sonuncusu olacağını düşündüğü bir savaşın ardından ağır şekilde yaralanır. Gizemli bir kadının ellerinde, kendisine kurtuluş için yeni bir şans sunulur.",
+      "cast": [
+        "Hugh Jackman",
+        "Jodie Comer",
+        "Bill Skarsgård",
+        "Murray Bartlett",
+        "Noah Jupe",
+        "Jade Croot",
+        "Faith Delaney",
+        "Tabitha Smyth",
+        "Beau Thompson",
+        "Alfie Lawless",
+        "Asher de Silva",
+        "Elijah Ungvary",
+        "Fintan Shevlin",
+        "Katie Breen",
+        "Michael Hanna",
+        "Andrew McCracken",
+        "Clive Russell",
+        "Amy McElhatton",
+        "Maeve Connelly",
+        "Maggie Hayes"
+      ],
+      "tmdbTitle": "Robin Hood'un Ölümü",
+      "tmdbOriginalTitle": "The Death of Robin Hood",
+      "tmdbReleaseDate": "2026-06-18",
+      "tmdbGenres": "Macera / Dram / Aksiyon",
+      "tmdbRuntime": "123 dk",
+      "tmdbCountries": "United States of America, United Kingdom",
+      "tmdbDirector": "Michael Sarnoski",
+      "tmdbCast": [
+        {
+          "id": 6968,
+          "name": "Hugh Jackman",
+          "character": "Robin Hood",
+          "profile": "https://image.tmdb.org/t/p/w185/4Xujtewxqt6aU0Y81tsS9gkjizk.jpg",
+          "order": 0
+        },
+        {
+          "id": 1388593,
+          "name": "Jodie Comer",
+          "character": "Sister Brigid",
+          "profile": "https://image.tmdb.org/t/p/w185/AfsBpnfw0E2h8NZK4zkFcOjYlEb.jpg",
+          "order": 1
+        },
+        {
+          "id": 137905,
+          "name": "Bill Skarsgård",
+          "character": "Little John",
+          "profile": "https://image.tmdb.org/t/p/w185/xBXLx1m0uzhXIbY3wN8lmPGeUHl.jpg",
+          "order": 2
+        },
+        {
+          "id": 152416,
+          "name": "Murray Bartlett",
+          "character": "The Leper",
+          "profile": "https://image.tmdb.org/t/p/w185/eN20zfcRB2F51bmUbTK9byQCpb9.jpg",
+          "order": 3
+        },
+        {
+          "id": 1590759,
+          "name": "Noah Jupe",
+          "character": "Arthur / Godwyn",
+          "profile": "https://image.tmdb.org/t/p/w185/xbswZN0SHgeCbyo5GQ0xfZKH3vs.jpg",
+          "order": 4
+        },
+        {
+          "id": 1303071,
+          "name": "Jade Croot",
+          "character": "Wainwright",
+          "profile": "https://image.tmdb.org/t/p/w185/j4DuuFPDdnEcDWFWCyBUuhhHkxg.jpg",
+          "order": 5
+        },
+        {
+          "id": 4526195,
+          "name": "Faith Delaney",
+          "character": "Little Margaret",
+          "profile": "https://image.tmdb.org/t/p/w185/jIKjTzr4dCoybQgNhyREahh9Aym.jpg",
+          "order": 6
+        },
+        {
+          "id": 5396679,
+          "name": "Tabitha Smyth",
+          "character": "Sarah",
+          "profile": "https://image.tmdb.org/t/p/w185/uREVbfIi4rD2W29zWbtzNqIhP4u.jpg",
+          "order": 7
+        },
+        {
+          "id": 3676238,
+          "name": "Beau Thompson",
+          "character": "Hob",
+          "profile": "https://image.tmdb.org/t/p/w185/9mGiYt7w8YqsqM6TLoGqYV9SvFY.jpg",
+          "order": 8
+        },
+        {
+          "id": 4633814,
+          "name": "Alfie Lawless",
+          "character": "Hendrie",
+          "profile": "https://image.tmdb.org/t/p/w185/761sH9H88m86M3iUuxMJpLQ2GE2.jpg",
+          "order": 9
+        },
+        {
+          "id": 3169520,
+          "name": "Asher de Silva",
+          "character": "Moshe",
+          "profile": "https://image.tmdb.org/t/p/w185/fQinMbIfOTCCqtAFuLwMqNoXzYw.jpg",
+          "order": 10
+        },
+        {
+          "id": 1700997,
+          "name": "Elijah Ungvary",
+          "character": "Hairy Kinsman",
+          "profile": "https://image.tmdb.org/t/p/w185/fpuW3g10qPuJHrhI4Eu6lC3WsxZ.jpg",
+          "order": 11
+        },
+        {
+          "id": 3466281,
+          "name": "Fintan Shevlin",
+          "character": "Farmhand",
+          "profile": "",
+          "order": 12
+        },
+        {
+          "id": 6295964,
+          "name": "Katie Breen",
+          "character": "Margaret",
+          "profile": "",
+          "order": 13
+        },
+        {
+          "id": 1620783,
+          "name": "Michael Hanna",
+          "character": "Second Kill at Farm",
+          "profile": "",
+          "order": 14
+        },
+        {
+          "id": 3491831,
+          "name": "Andrew McCracken",
+          "character": "Hendrie's Father",
+          "profile": "",
+          "order": 15
+        },
+        {
+          "id": 19901,
+          "name": "Clive Russell",
+          "character": "Elderfather",
+          "profile": "https://image.tmdb.org/t/p/w185/eC37Kmdo5YKNG2MyirCG4tWDxCS.jpg",
+          "order": 16
+        },
+        {
+          "id": 5276575,
+          "name": "Amy McElhatton",
+          "character": "Hendrie's Aunt",
+          "profile": "",
+          "order": 17
+        },
+        {
+          "id": 6295967,
+          "name": "Maeve Connelly",
+          "character": "Hendrie's Great Aunt",
+          "profile": "",
+          "order": 18
+        },
+        {
+          "id": 230685,
+          "name": "Maggie Hayes",
+          "character": "Hendrie's Grandmother",
+          "profile": "https://image.tmdb.org/t/p/w185/zUbNP8rs31cGvDYe81uYXu4fKdi.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Suç ve cinayetlerle dolu bir hayatın ardından geçmişiyle yüzleşen Robin Hood, sonuncusu olacağını düşündüğü bir savaşın ardından ağır şekilde yaralanır. Gizemli bir kadının ellerinde, kendisine kurtuluş için yeni bir şans sunulur.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/arDhnrSib3xRUHw0rIqgt8qHNeC.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/lh3BDkmWJh998n4fQcHYcVi7dpm.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt32273171",
+      "tmdbRating": "6.7",
+      "tmdbVoteCount": 632
     }
   ],
   "collections": [],
