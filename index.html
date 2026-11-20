@@ -208,7 +208,26 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     <style id="cv-mobile-no-url-player-layout">@media (max-width:767px){.cv-no-url-backdrop{object-fit:cover!important;opacity:.32!important;filter:blur(7px)!important;transform:scale(1.06)}.cv-no-url-content{flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;padding:12px 12px 54px!important;text-align:left!important}.cv-no-url-poster{display:block!important;width:clamp(68px,22vw,88px)!important;height:auto!important;aspect-ratio:2/3!important;max-width:none!important;flex:0 0 auto!important;object-fit:cover!important;border-radius:8px!important}.cv-no-url-info{min-width:0!important;width:auto!important;max-width:none!important;flex:1 1 auto!important;text-align:left!important}.cv-no-url-info>div:first-child{justify-content:flex-start!important;font-size:9px!important}.cv-no-url-info h3{font-size:clamp(13px, 4vw, 16px)!important;line-height:1.2!important;overflow-wrap:anywhere!important}.cv-no-url-description{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;overflow:hidden!important;font-size:10px!important;line-height:1.35!important}.cv-no-url-trailer{right:10px!important;bottom:9px!important;min-height:34px!important;padding:7px 11px!important;font-size:10px!important}}</style>
 
 
-</head>
+
+    <style id="perde-discovery-showcase-theme">
+      #perde-discovery-showcase .cv-discovery-poster-bg{background-color:#f3f2ef}
+      #perde-discovery-showcase .cv-discovery-expanded-shade{background:linear-gradient(0deg,rgba(5,7,12,.96) 0%,rgba(5,7,12,.72) 43%,rgba(5,7,12,.08) 100%),linear-gradient(90deg,rgba(5,7,12,.16),transparent 72%)}
+      #perde-discovery-showcase .cv-discovery-trailer-button{border-color:rgba(255,255,255,.58);background:rgba(5,7,12,.38);color:#fff}
+      html.theme-ivory #perde-discovery-showcase article{background-color:#fbf9f5!important;border-color:rgba(148,130,105,.22)!important}
+      html.theme-slate #perde-discovery-showcase article{background-color:#f0f3f7!important;border-color:rgba(100,116,139,.22)!important}
+      html.theme-ivory #perde-discovery-showcase .cv-discovery-poster-bg{background-color:#fbf9f5;background-image:radial-gradient(ellipse at 50% 44%,rgba(255,255,255,.98) 0%,rgba(248,245,238,.92) 48%,rgba(234,228,216,.42) 100%)}
+      html.theme-slate #perde-discovery-showcase .cv-discovery-poster-bg{background-color:#f0f3f7;background-image:radial-gradient(ellipse at 50% 44%,rgba(255,255,255,.98) 0%,rgba(238,243,248,.94) 50%,rgba(216,225,235,.48) 100%)}
+      html.theme-ivory #perde-discovery-showcase .cv-discovery-expanded-shade,html.theme-slate #perde-discovery-showcase .cv-discovery-expanded-shade{background:linear-gradient(0deg,rgba(255,255,255,.97) 0%,rgba(255,255,255,.86) 48%,rgba(255,255,255,.18) 100%),linear-gradient(90deg,rgba(255,255,255,.2),transparent 72%);backdrop-filter:blur(1.5px)}
+      html.theme-ivory #perde-discovery-showcase .cv-discovery-expanded-copy,html.theme-slate #perde-discovery-showcase .cv-discovery-expanded-copy{color:#202a36;text-shadow:0 1px 2px rgba(255,255,255,.28)}
+      html.theme-ivory #perde-discovery-showcase .cv-discovery-expanded-copy>span:first-child,html.theme-slate #perde-discovery-showcase .cv-discovery-expanded-copy>span:first-child{color:#be345c}
+      html.theme-ivory #perde-discovery-showcase .cv-discovery-expanded-copy .text-white\/80,html.theme-slate #perde-discovery-showcase .cv-discovery-expanded-copy .text-white\/80{color:#475569}
+      html.theme-ivory #perde-discovery-showcase .cv-discovery-expanded-copy p,html.theme-slate #perde-discovery-showcase .cv-discovery-expanded-copy p{color:#334155}
+      html.theme-ivory #perde-discovery-showcase .cv-discovery-trailer-button,html.theme-slate #perde-discovery-showcase .cv-discovery-trailer-button{border-color:rgba(71,85,105,.28);background:rgba(255,255,255,.72);color:#263445;box-shadow:0 2px 10px rgba(15,23,42,.06)}
+      html.theme-ivory #perde-discovery-showcase .cv-discovery-trailer-button:hover,html.theme-slate #perde-discovery-showcase .cv-discovery-trailer-button:hover{background:rgba(255,255,255,.94)}
+      html.theme-ivory #perde-discovery-showcase .cv-discovery-mobile-thumb-title,html.theme-slate #perde-discovery-showcase .cv-discovery-mobile-thumb-title{color:#263445;text-shadow:0 1px 3px rgba(255,255,255,.65)}
+      @media(prefers-reduced-motion:reduce){#perde-discovery-showcase .cv-discovery-poster-bg{transition:none!important}}
+    </style>
+    </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
@@ -1714,7 +1733,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         </template>
 
         <template x-if="currentPage === 'explore'">
-            <div x-data="{ catalogPage: 1, filterKey: '' }" x-effect="const key = [searchQuery, discoveryType, discoveryMood, discoveryGenre, discoveryCountry, discoveryPlatform, discoveryRating, discoveryYearFrom, discoveryYearTo, sortBy, discoveryDirector, quickFilter].join('|'); if (filterKey !== key) { filterKey = key; catalogPage = 1; initializeDiscovery() }" class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
+            <div x-data="{ catalogPage: 1, filterKey: '', discoveryTrailerOpen: false, discoveryTrailerItem: null }" @keydown.escape.window="discoveryTrailerOpen = false; discoveryTrailerItem = null" x-effect="const key = [searchQuery, discoveryType, discoveryMood, discoveryGenre, discoveryCountry, discoveryPlatform, discoveryRating, discoveryYearFrom, discoveryYearTo, sortBy, discoveryDirector, quickFilter].join('|'); if (filterKey !== key) { filterKey = key; catalogPage = 1; initializeDiscovery() }" class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
                     <div class="text-xs font-bold text-gray-500 dark:text-gray-400">
                         <span class="text-rose-600 text-base" x-text="sortedFilteredCatalog.length"></span>
@@ -1722,7 +1741,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     </div>
                 </div>
 
-                <section :class="getCardClass()" class="relative overflow-hidden rounded-2xl border shadow-lg" x-data="{ activePanel: null }">
+                <section id="perde-discovery-showcase" :class="getCardClass()" class="relative overflow-hidden rounded-2xl border shadow-lg" x-data="{ activePanel: null }">
                     <div class="relative overflow-hidden p-4 sm:p-5">
                         <div class="relative z-10 mb-4 flex flex-wrap items-center justify-between gap-3">
                             <div>
@@ -1734,17 +1753,17 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         <div class="hidden md:flex h-[245px] sm:h-[310px] lg:h-[350px] items-stretch gap-1 sm:gap-1.5" @keydown.escape="activePanel = null">
                             <template x-for="(item, index) in discoveryShowcaseItems" :key="'showcase-' + item.id">
                                 <article @mouseenter="if (window.matchMedia('(hover: hover)').matches) activePanel = index" @mouseleave="if (window.matchMedia('(hover: hover)').matches && activePanel === index) activePanel = null" @click="activePanel = activePanel === index ? null : index" :class="activePanel === index ? 'flex-[3.2] sm:flex-[3.5] z-20 shadow-[0_18px_42px_rgba(0,0,0,0.42)]' : 'flex-1'" class="relative isolate min-w-0 overflow-hidden cursor-pointer border border-black/[0.045] bg-[#f3f2ef] dark:border-white/[0.07] dark:bg-[#191a1e] transition-[flex,box-shadow] duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
-                                    <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-500 ease-out" class="bg-[radial-gradient(ellipse_at_50%_46%,rgba(0,0,0,0.035)_0%,rgba(0,0,0,0.012)_48%,transparent_78%)] dark:bg-[radial-gradient(ellipse_at_50%_46%,rgba(255,255,255,0.075)_0%,rgba(255,255,255,0.025)_48%,transparent_78%)]" :class="activePanel === index ? 'opacity-0' : 'opacity-100'">
+                                    <div class="cv-discovery-poster-bg absolute inset-0 flex items-center justify-center bg-[radial-gradient(ellipse_at_50%_46%,rgba(0,0,0,0.035)_0%,rgba(0,0,0,0.012)_48%,transparent_78%)] dark:bg-[radial-gradient(ellipse_at_50%_46%,rgba(255,255,255,0.075)_0%,rgba(255,255,255,0.025)_48%,transparent_78%)] transition-opacity duration-500 ease-out" :class="activePanel === index ? 'opacity-0' : 'opacity-100'">
                                         <img :src="item.poster || item.backdrop || ''" :alt="item.title + ' afişi'" loading="lazy" decoding="async" class="h-full w-full object-contain object-center p-1 sm:p-1.5 drop-shadow-[0_7px_13px_rgba(0,0,0,0.14)] dark:drop-shadow-[0_10px_18px_rgba(0,0,0,0.38)]">
                                     </div>
                                     <template x-if="activePanel === index">
                                         <div x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-[1.025]" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0">
                                             <img :src="item.backdrop || item.poster || ''" :alt="item.title + ' kapak görseli'" loading="lazy" decoding="async" class="h-full w-full object-cover object-center">
-                                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/65 to-black/10"></div>
-                                            <div class="absolute inset-0 bg-black/10"></div>
+                                            <div class="cv-discovery-expanded-shade absolute inset-0"></div>
+                                            
                                         </div>
                                     </template>
-                                    <div x-show="activePanel === index" x-cloak x-transition:enter="transition ease-out duration-500 delay-100" x-transition:enter-start="opacity-0 translate-y-3" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 text-white" @click.stop>
+                                    <div x-show="activePanel === index" x-cloak x-transition:enter="transition ease-out duration-500 delay-100" x-transition:enter-start="opacity-0 translate-y-3" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="cv-discovery-expanded-copy absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 text-white" @click.stop>
                                         <span class="text-[9px] font-black uppercase tracking-wider text-rose-300" x-text="(item.type === 'tv' ? 'DİZİ' : 'FİLM') + (item.year ? ' • ' + item.year : '')"></span>
                                         <h3 class="mt-1 text-sm sm:text-lg font-black leading-tight line-clamp-2 break-words" x-text="item.title"></h3>
                                         <div class="mt-1 flex flex-wrap items-center gap-2 text-[9px] sm:text-xs text-amber-300">
@@ -1754,7 +1773,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                         <p class="mt-1.5 max-w-full text-[10px] sm:text-xs leading-relaxed text-white/90 line-clamp-3" x-text="item.desc || 'Bu yapımı keşfet ve yeni bir hikâyeye adım at.'"></p>
                                         <div class="mt-2 flex flex-wrap gap-1.5">
                                             <button type="button" @click.stop="openWatchPage(item)" class="rounded-md bg-rose-600 px-2.5 py-1.5 text-[9px] sm:text-[11px] font-black text-white hover:bg-rose-700"><i class="fa-solid fa-play mr-1"></i>Şimdi izle</button>
-                                            <button type="button" @click.stop="$dispatch('open-filmm-hero-trailer', { title: item.title || '', trailerUrl: item.trailerUrl || '' })" class="rounded-md border border-white/50 bg-black/35 px-2.5 py-1.5 text-[9px] sm:text-[11px] font-bold text-white hover:bg-white/15"><i class="fa-solid fa-film mr-1"></i>Fragman</button>
+                                            <button type="button" @click.stop="discoveryTrailerItem = item; discoveryTrailerOpen = true" class="cv-discovery-trailer-button rounded-md border border-white/50 bg-black/35 px-2.5 py-1.5 text-[9px] sm:text-[11px] font-bold text-white hover:bg-white/15"><i class="fa-solid fa-film mr-1"></i>Fragman</button>
                                         </div>
                                     </div>
                                     <div x-show="activePanel !== index" class="absolute inset-x-0 bottom-2 text-center text-[10px] font-black text-white drop-shadow-lg" x-text="String(index + 1).padStart(2, '0')"></div>
@@ -1767,9 +1786,9 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <div class="flex gap-2.5 overflow-x-auto pb-2 cv-discovery-mobile-thumbs snap-x snap-mandatory" aria-label="Keşif önerileri">
                                         <template x-for="(item, index) in discoveryShowcaseItems" :key="'mobile-showcase-' + item.id">
                                             <button type="button" @click="mobilePanel = index" :aria-pressed="(mobilePanel === index).toString()" :class="mobilePanel === index ? 'ring-2 ring-rose-500 opacity-100' : 'opacity-75'" class="relative shrink-0 w-[108px] sm:w-[118px] overflow-hidden rounded-xl text-left transition duration-200 snap-start">
-                                                <div class="relative aspect-[2/3] bg-gray-200 dark:bg-gray-800 bg-cover bg-center" :style="'background-image:linear-gradient(180deg,rgba(0,0,0,.04) 42%,rgba(0,0,0,.88)),url(' + (item.poster || item.backdrop || '') + ')'">
+                                                <div class="cv-discovery-mobile-thumb-bg relative aspect-[2/3] bg-gray-200 dark:bg-gray-800 bg-cover bg-center" :style="'background-image:linear-gradient(180deg,rgba(0,0,0,.04) 42%,' + (theme === 'dark' ? 'rgba(0,0,0,.88)' : 'rgba(255,255,255,.94)') + '),url(' + (item.poster || item.backdrop || '') + ')'">
                                                     <span class="absolute right-1.5 top-1.5 rounded-md bg-black/75 px-1.5 py-1 text-[10px] font-black text-amber-400" x-show="Number(item.rating) > 0"><i class="fa-solid fa-star mr-0.5"></i><span x-text="Number(item.rating).toFixed(1)"></span></span>
-                                                    <span class="absolute inset-x-0 bottom-0 px-2.5 pb-2.5 pt-7 text-[11px] font-extrabold leading-tight text-white line-clamp-2" x-text="item.title"></span>
+                                                    <span class="cv-discovery-mobile-thumb-title absolute inset-x-0 bottom-0 px-2.5 pb-2.5 pt-7 text-[11px] font-extrabold leading-tight text-white line-clamp-2" x-text="item.title"></span>
                                                 </div>
                                             </button>
                                         </template>
@@ -1793,7 +1812,13 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     </div>
                 </section>
 
-                
+                <div x-show="discoveryTrailerOpen" x-cloak x-transition.opacity @click.self="discoveryTrailerOpen = false; discoveryTrailerItem = null" class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" :aria-label="(discoveryTrailerItem?.title || 'Yapım') + ' fragmanı'">
+                    <div class="w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
+                        <div class="flex items-center justify-between gap-4 border-b border-white/10 p-4"><div class="min-w-0"><p class="text-[10px] font-black uppercase tracking-[.2em] text-rose-300">FRAGMAN</p><strong class="block truncate text-sm font-bold text-white" x-text="discoveryTrailerItem?.title || 'Fragman'"></strong></div><button type="button" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:bg-white/10" @click="discoveryTrailerOpen = false; discoveryTrailerItem = null" aria-label="Fragmanı kapat"><i class="fa-solid fa-xmark"></i></button></div>
+                        <div class="aspect-video bg-black"><iframe x-show="discoveryTrailerOpen && discoveryTrailerItem?.trailerUrl" :src="discoveryTrailerOpen && discoveryTrailerItem?.trailerUrl ? window.cineTrailerEmbedUrl(discoveryTrailerItem.trailerUrl) : 'about:blank'" class="h-full w-full" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="Yapım fragmanı"></iframe><div x-show="!discoveryTrailerItem?.trailerUrl" class="flex h-full min-h-[220px] flex-col items-center justify-center gap-2 p-8 text-center text-white/75"><i class="fa-solid fa-film text-2xl text-rose-300"></i><p class="text-sm font-bold text-white">Fragman bulunamadı</p><p class="max-w-md text-xs leading-5">Bu yapım için izlenebilir bir fragman bağlantısı bulunmuyor.</p></div></div>
+                    </div>
+                </div>
+
                 <section x-data="{ filtersExpanded: false }" :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm">
                     <div class="flex items-center justify-between gap-3">
                         <div>
