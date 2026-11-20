@@ -1662,16 +1662,25 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         </div>
                         <div class="hidden md:flex h-[245px] sm:h-[310px] lg:h-[350px] items-stretch gap-1.5 sm:gap-2" @keydown.escape="activePanel = null">
                             <template x-for="(item, index) in discoveryShowcaseItems" :key="'showcase-' + item.id">
-                                <article @mouseenter="if (window.matchMedia('(hover: hover)').matches) activePanel = index" @mouseleave="if (window.matchMedia('(hover: hover)').matches && activePanel === index) activePanel = null" @click="activePanel = activePanel === index ? null : index" :class="activePanel === index ? 'flex-[3.2] sm:flex-[3.5] z-20' : 'flex-1'" class="relative min-w-0 overflow-hidden cursor-pointer transition-[flex] duration-300 ease-out" :style="'background-image:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.82)),url(' + (item.poster || item.backdrop || '') + ');background-size:cover;background-position:center;clip-path:polygon(10% 0,100% 0,90% 100%,0 100%)'">
-                                    <div class="absolute inset-0 bg-black/10 transition-colors" :class="activePanel === index ? 'bg-black/35' : 'group-hover:bg-black/20'"></div>
-                                    <div x-show="activePanel === index" x-cloak x-transition.opacity class="absolute inset-x-0 bottom-0 z-10 p-2.5 sm:p-4 text-white" @click.stop>
+                                <article @mouseenter="if (window.matchMedia('(hover: hover)').matches) activePanel = index" @mouseleave="if (window.matchMedia('(hover: hover)').matches && activePanel === index) activePanel = null" @click="activePanel = activePanel === index ? null : index" :class="activePanel === index ? 'flex-[3.2] sm:flex-[3.5] z-20' : 'flex-1'" class="relative isolate min-w-0 overflow-hidden cursor-pointer bg-gray-950 transition-[flex] duration-300 ease-out" :style="'clip-path:polygon(10% 0,100% 0,90% 100%,0 100%)'">
+                                    <div class="absolute inset-0 flex items-center justify-center bg-gray-950 transition-opacity duration-200" :class="activePanel === index ? 'opacity-0' : 'opacity-100'">
+                                        <img :src="item.poster || item.backdrop || ''" :alt="item.title + ' afişi'" loading="lazy" decoding="async" class="h-full w-full object-contain object-center p-1.5 sm:p-2">
+                                    </div>
+                                    <template x-if="activePanel === index">
+                                        <div class="absolute inset-0">
+                                            <img :src="item.backdrop || item.poster || ''" :alt="item.title + ' kapak görseli'" loading="lazy" decoding="async" class="h-full w-full object-cover object-center">
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/65 to-black/10"></div>
+                                            <div class="absolute inset-0 bg-black/10"></div>
+                                        </div>
+                                    </template>
+                                    <div x-show="activePanel === index" x-cloak x-transition.opacity class="absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 text-white" @click.stop>
                                         <span class="text-[9px] font-black uppercase tracking-wider text-rose-300" x-text="(item.type === 'tv' ? 'DİZİ' : 'FİLM') + (item.year ? ' • ' + item.year : '')"></span>
-                                        <h3 class="mt-1 text-xs sm:text-lg font-black leading-tight line-clamp-2" x-text="item.title"></h3>
+                                        <h3 class="mt-1 text-sm sm:text-lg font-black leading-tight line-clamp-2 break-words" x-text="item.title"></h3>
                                         <div class="mt-1 flex flex-wrap items-center gap-2 text-[9px] sm:text-xs text-amber-300">
                                             <span x-show="Number(item.rating) > 0"><i class="fa-solid fa-star"></i> <span x-text="Number(item.rating).toFixed(1)"></span></span>
-                                            <span class="text-white/75" x-text="item.genre || item.category || ''"></span>
+                                            <span class="text-white/80" x-text="item.genre || item.category || ''"></span>
                                         </div>
-                                        <p class="mt-1.5 text-[10px] sm:text-xs leading-relaxed text-white/85 line-clamp-3" x-text="item.desc || 'Bu yapımı keşfet ve yeni bir hikâyeye adım at.'"></p>
+                                        <p class="mt-1.5 max-w-full text-[10px] sm:text-xs leading-relaxed text-white/90 line-clamp-3" x-text="item.desc || 'Bu yapımı keşfet ve yeni bir hikâyeye adım at.'"></p>
                                         <div class="mt-2 flex flex-wrap gap-1.5">
                                             <button type="button" @click.stop="openWatchPage(item)" class="rounded-md bg-rose-600 px-2.5 py-1.5 text-[9px] sm:text-[11px] font-black text-white hover:bg-rose-700"><i class="fa-solid fa-play mr-1"></i>Şimdi izle</button>
                                             <button type="button" @click.stop="openWatchPage(item)" class="rounded-md border border-white/50 bg-black/35 px-2.5 py-1.5 text-[9px] sm:text-[11px] font-bold text-white hover:bg-white/15"><i class="fa-solid fa-film mr-1"></i>Fragman</button>
