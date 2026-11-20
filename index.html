@@ -776,7 +776,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     </button>
                                 </template>
                                 <template x-if="index !== 0">
-                                    <div @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-catalog-card group rounded-xl overflow-hidden border transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
+                                    <div @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-new-arrival-card home-catalog-card group rounded-xl overflow-hidden border transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
                                         <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                             <span class="absolute top-2 left-2 z-[3] rounded-md border border-amber-300/30 bg-black/80 px-2 py-1 text-[9px] font-black tracking-wide text-amber-300 shadow-lg backdrop-blur-sm">FAVORİ</span>
                                             <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop)" sizes="(max-width: 639px) 148px, 178px" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
