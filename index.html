@@ -731,7 +731,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                             </div>
                                         </div>
                                         <div class="home-new-arrival-copy p-3 space-y-2">
-                                            <img :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [92, 154, 185, 342])" sizes="(max-width: 639px) 88px, 108px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster"><span class="home-feature-poster-badge home-feature-poster-badge--watched">İZLENDİ</span><span class="home-feature-poster-badge home-feature-poster-badge--favorite">FAVORİ</span>
+                                            <img :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [92, 154, 185, 342])" sizes="(max-width: 639px) 88px, 108px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster"><span class="home-feature-poster-badge home-feature-poster-badge--watched">İZLENDİ</span>
                                             <div class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
                                                 <h3 class="min-w-0 flex-1 text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" :style="'font-size:' + Math.max(8.5, Math.min(18, 18 - Math.max(0, (String(item.title || '').length - 16) * 0.32)) + 'px'" x-text="item.title"></h3>
                                             </div>
@@ -820,7 +820,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                             </div>
                                         </div>
                                         <div class="home-new-arrival-copy p-3 space-y-2">
-                                            <img :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [92, 154, 185, 342])" sizes="(max-width: 639px) 88px, 108px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster">
+                                            <img :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [92, 154, 185, 342])" sizes="(max-width: 639px) 88px, 108px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster"><span class="home-feature-poster-badge home-feature-poster-badge--favorite">FAVORİ</span>
                                             <div class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
                                                 <h3 class="min-w-0 flex-1 text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" :style="'font-size:' + Math.max(8.5, Math.min(18, 18 - Math.max(0, (String(item.title || '').length - 16) * 0.32)) + 'px'" x-text="item.title"></h3>
                                             </div>
@@ -898,7 +898,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                         
                                     </div>
                                     <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
-                                     <p x-show="index === 0" x-text="item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || &quot;Bu yapımın konu açıklaması henüz eklenmemiş.&quot;"></p>
+                                     <p x-show="index === 0" x-text="(item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || &quot;Bu yapımın konu açıklaması henüz eklenmemiş.&quot;).trim().slice(0,180)"></p>
                                     <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
                                         <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
                                     </div>
@@ -1088,7 +1088,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                         
                                     </div>
                                     <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
-                                     <p x-show="index === 0" x-text="item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || &quot;Bu yapımın konu açıklaması henüz eklenmemiş.&quot;"></p>
+                                     <p x-show="index === 0" x-text="(item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || &quot;Bu yapımın konu açıklaması henüz eklenmemiş.&quot;).trim().slice(0,180)"></p>
                                     <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
                                         <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
                                     </div>
