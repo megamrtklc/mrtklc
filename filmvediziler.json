@@ -22565,13 +22565,21 @@
       ],
       "visibility": {
         "watched": true
-      },
-      "labels": {}
+      }
     },
     "heroStyle": "perde",
     "personalizedSection": {
+      "discoveryModes": {
+        "taste": true,
+        "surprise": true,
+        "series": true,
+        "gems": true
+      },
+      "excludeWatched": true,
+      "excludeWatchlist": true,
+      "excludeFavorites": true,
       "eyebrow": "SANA ÖZEL",
-      "title": "İzleme Zevkine Göre",
+      "title": "Moduna Göre",
       "description": "İzleme alışkanlıklarından ilham alan, sana özel seçkiler"
     },
     "mobileMode": "auto",
