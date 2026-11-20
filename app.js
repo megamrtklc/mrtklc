@@ -11,6 +11,22 @@
             catch (error) { console.warn('Yerel kayıt kaydedilemedi:', key, error); return false; }
         }
 
+        function applyPerdeTheme(theme) {
+            const activeTheme = ['ivory', 'slate', 'dark'].includes(theme) ? theme : 'dark';
+            const root = document.documentElement;
+            root.classList.remove('dark', 'theme-ivory', 'theme-slate');
+            root.classList.add(activeTheme === 'dark' ? 'dark' : (activeTheme === 'ivory' ? 'theme-ivory' : 'theme-slate'));
+            root.dataset.theme = activeTheme;
+            root.dataset.themeReady = 'true';
+            root.style.colorScheme = activeTheme === 'dark' ? 'dark' : 'light';
+            if (document.body) {
+                document.body.classList.remove('bg-ivory-50', 'bg-slateLight-50', 'bg-[#0b0d11]');
+                document.body.classList.add(activeTheme === 'ivory' ? 'bg-ivory-50' : (activeTheme === 'slate' ? 'bg-slateLight-50' : 'bg-[#0b0d11]'));
+            }
+            const themeColor = document.querySelector('meta[name="theme-color"]');
+            if (themeColor) themeColor.setAttribute('content', activeTheme === 'dark' ? '#0b0d11' : (activeTheme === 'ivory' ? '#fffdf9' : '#f4f5f7'));
+        }
+
         function migrateToSingleProfileStorage() {
             const legacyProgress = safeStorageRead('perde_profile_player_progress_v1', null);
             if (safeStorageRead('cine_movie_progress_v1', null) === null && legacyProgress && typeof legacyProgress === 'object' && !Array.isArray(legacyProgress)) {
@@ -238,8 +254,10 @@
                 },
 
                 setTheme(newTheme) {
+                    if (!['ivory', 'slate', 'dark'].includes(newTheme)) return;
                     this.theme = newTheme;
                     safeStorageWrite('cine_theme_v3', newTheme);
+                    applyPerdeTheme(newTheme);
                 },
 
                 getBodyClass() {
