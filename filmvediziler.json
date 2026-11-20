@@ -22565,7 +22565,8 @@
       ],
       "visibility": {
         "watched": true
-      }
+      },
+      "labels": {}
     },
     "heroStyle": "perde",
     "personalizedSection": {
