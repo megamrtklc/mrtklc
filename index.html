@@ -737,7 +737,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                             </div>
                                             <p x-text="(item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || 'Bu yapımın konu açıklaması henüz eklenmemiş.').trim().slice(0,180)"></p>
                                             <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
-                                                <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
+                                                <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span><span class="opacity-60">•</span><span class="truncate" x-show="item.type === 'tv' || item.type === 'series'" x-text="(item.seasons ? item.seasons + ' Sezon' : '') + (item.seasons && item.episodes ? ' • ' : '') + (item.episodes ? item.episodes + ' Bölüm' : '')"></span><span class="truncate" x-show="item.type !== 'tv' && item.type !== 'series' && item.duration && item.duration !== 'Dizi' && item.duration !== 'Bilinmiyor'" x-text="item.duration"></span>
                                             </div>
                                         </div>
                                     </button>
@@ -826,7 +826,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                             </div>
                                             <p x-text="(item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || 'Bu yapımın konu açıklaması henüz eklenmemiş.').trim().slice(0,180)"></p>
                                             <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
-                                                <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
+                                                <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span><span class="opacity-60">•</span><span class="truncate" x-show="item.type === 'tv' || item.type === 'series'" x-text="(item.seasons ? item.seasons + ' Sezon' : '') + (item.seasons && item.episodes ? ' • ' : '') + (item.episodes ? item.episodes + ' Bölüm' : '')"></span><span class="truncate" x-show="item.type !== 'tv' && item.type !== 'series' && item.duration && item.duration !== 'Dizi' && item.duration !== 'Bilinmiyor'" x-text="item.duration"></span>
                                             </div>
                                         </div>
                                     </button>
@@ -900,7 +900,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
                                      <p x-show="index === 0" x-text="(item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || &quot;Bu yapımın konu açıklaması henüz eklenmemiş.&quot;).trim().slice(0,180)"></p>
                                     <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
-                                        <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
+                                        <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span><span class="opacity-60">•</span><span class="truncate" x-show="item.type === 'tv' || item.type === 'series'" x-text="(item.seasons ? item.seasons + ' Sezon' : '') + (item.seasons && item.episodes ? ' • ' : '') + (item.episodes ? item.episodes + ' Bölüm' : '')"></span><span class="truncate" x-show="item.type !== 'tv' && item.type !== 'series' && item.duration && item.duration !== 'Dizi' && item.duration !== 'Bilinmiyor'" x-text="item.duration"></span>
                                     </div>
                                 </div>
                             </button>
@@ -1090,7 +1090,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
                                      <p x-show="index === 0" x-text="(item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || &quot;Bu yapımın konu açıklaması henüz eklenmemiş.&quot;).trim().slice(0,180)"></p>
                                     <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
-                                        <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
+                                        <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span><span class="opacity-60">•</span><span class="truncate" x-show="item.type === 'tv' || item.type === 'series'" x-text="(item.seasons ? item.seasons + ' Sezon' : '') + (item.seasons && item.episodes ? ' • ' : '') + (item.episodes ? item.episodes + ' Bölüm' : '')"></span><span class="truncate" x-show="item.type !== 'tv' && item.type !== 'series' && item.duration && item.duration !== 'Dizi' && item.duration !== 'Bilinmiyor'" x-text="item.duration"></span>
                                     </div>
                                 </div>
                             </button>
