@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepagePreviewMode:'draft', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
+  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -1215,29 +1215,21 @@
     renderHomepageLayoutPreview(layout);
     renderHomepagePublishCheck();
   }
-  function sendHomepageLayoutPreview(layout=homepageLayoutConfig()){
-    const frame=$('#homepage-layout-preview-frame');
-    if(!frame?.contentWindow)return;
-    const targetOrigin='https://megamrtklc.github.io';
-    const previewLayout=state.homepagePreviewMode==='published'&&state.homepageLayoutPublished
-      ?state.homepageLayoutPublished
-      :layout;
-    frame.contentWindow.postMessage({
-      type:'cv-home-preview-layout',
-      layout:{
-        order:[...previewLayout.order],
-        visibility:{...previewLayout.visibility},
-        labels:{...previewLayout.labels}
-      }
-    },targetOrigin);
-  }
   function renderHomepageLayoutPreview(layout=homepageLayoutConfig()){
     const root=$('#homepage-layout-preview');
-    if(!root)return;
+    const canvas=$('#homepage-draft-canvas');
+    if(!root||!canvas)return;
     root.dataset.device=state.homepagePreviewDevice||'desktop';
-    sendHomepageLayoutPreview(layout);
+    const hero='<div class="homepage-draft-hero"><div class="homepage-draft-hero-copy"><span>ÖNE ÇIKAN YAPIM</span><b>Sinema keyfin burada başlıyor</b><small>Manşet alanı bu taslakta sabit tutulur.</small><i>ŞİMDİ KEŞFET</i></div><div class="homepage-draft-hero-art"><span>▶</span></div></div>';
+    const sections=layout.order.filter(key=>key!=='hero'&&HOMEPAGE_LAYOUT_ITEMS[key]&&layout.visibility[key]!==false).map((key,index)=>{
+      const item=HOMEPAGE_LAYOUT_ITEMS[key];
+      const label=layout.labels[key]||{};
+      const title=label.title??item.title;
+      const description=label.description??item.description;
+      return '<section class="homepage-draft-section"><div class="homepage-draft-section-head"><div><span>'+String(index+1).padStart(2,'0')+' / KEŞFET</span><b>'+escapeHtml(title)+'</b><small>'+escapeHtml(description)+'</small></div><em>TÜMÜNÜ GÖR →</em></div><div class="homepage-draft-posters"><i></i><i></i><i></i><i></i></div></section>';
+    }).join('');
+    canvas.innerHTML='<div class="homepage-draft-topbar"><b>PERDE<span>.</span></b><nav><i>Ana Sayfa</i><i>Keşfet</i><i>Kütüphanem</i></nav><span>⌕　☰</span></div>'+hero+'<div class="homepage-draft-content">'+(sections||'<p class="homepage-draft-empty">Gösterilecek açık bölüm bulunmuyor.</p>')+'</div><div class="homepage-draft-watermark">TASLAK ÖNİZLEMESİ · GERÇEK SİTE DEĞİL</div>';
     $('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
-    $('[data-home-preview-mode]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewMode===state.homepagePreviewMode));
   }
   function moveHomepageSection(key,direction){
     const layout=homepageLayoutConfig();
@@ -1312,7 +1304,6 @@
     if(ok){
       state.homepageLayoutDirty=false;
       state.homepageLayoutPublished=snapshotHomepageLayout(nextLayout);
-      state.homepagePreviewMode='draft';
       const confirm=$('#homepage-publish-confirm');if(confirm)confirm.hidden=true;
       renderHomepageLayout();
     }else renderHomepagePublishCheck();
@@ -1968,19 +1959,13 @@
     const remove=event.target.closest('[data-remove-custom-link]');
     if(remove){const row=remove.closest('[data-custom-link-row]');const kind=row.dataset.customLinkRow;const current=$('#hf-'+kind+'-custom-links [data-custom-link-row]').filter(item=>item!==row).map(item=>({label:item.querySelector('[data-custom-link-label]').value.trim(),page:item.querySelector('[data-custom-link-page]').value}));renderCustomLinkRows(kind,current);}
   });
-  $('#homepage-layout-preview-frame')?.addEventListener('load',()=>sendHomepageLayoutPreview());
   $('#homepage-layout-save').addEventListener('click',requestHomepageLayoutPublish);
   $('#homepage-publish-confirm-button')?.addEventListener('click',saveHomepageLayout);
   $('#homepage-publish-cancel')?.addEventListener('click',()=>{const confirm=$('#homepage-publish-confirm');if(confirm)confirm.hidden=true;});
   $('#view-homepage-layout').addEventListener('click',event=>{
     const device=event.target.closest('[data-home-preview-device]');
-    const mode=event.target.closest('[data-home-preview-mode]');
     if(device){
       state.homepagePreviewDevice=device.dataset.homePreviewDevice==='mobile'?'mobile':'desktop';
-      renderHomepageLayoutPreview();
-    }
-    if(mode){
-      state.homepagePreviewMode=mode.dataset.homePreviewMode==='published'?'published':'draft';
       renderHomepageLayoutPreview();
     }
   });
