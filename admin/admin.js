@@ -149,7 +149,7 @@
     if(view==='watch-layout')renderWatchLayout();
     if(view==='header-footer')renderHeaderFooter();
     if(view==='backup')refreshBackupSummary();
-    if(view==='system')refreshSystemDiagnostics();
+    if(view==='system'){refreshSystemDiagnostics();refreshCredentialStatus();}
   }
   function applyProfilePhoto(url){
     const targets=[$('#avatar-photo'),$('#profile-photo-preview'),$('#profile-dialog-preview')];
@@ -802,11 +802,10 @@
     const dialog=$('#content-dialog');
     if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
   }
-  const TMDB_API_KEY='3108265ab3fdbf3af14175edf64a9c7f';
   const TMDB_IMAGE='https://image.tmdb.org/t/p/';
   async function tmdbRequest(path){
-    const response=await fetch('https://api.themoviedb.org/3/'+path+(path.includes('?')?'&':'?')+'api_key='+TMDB_API_KEY+'&language=tr-TR');
-    if(!response.ok)throw new Error('TMDB yanıt vermedi (HTTP '+response.status+').');
+    const response=await fetch('/api/tmdb?path='+encodeURIComponent(path),{cache:'no-store',credentials:'same-origin'});
+    if(!response.ok){let detail='';try{detail=(await response.json()).error||'';}catch(_){}throw new Error(detail||'TMDB yanıt vermedi (HTTP '+response.status+').');}
     return response.json();
   }
   function normalizeContentTitle(value){
@@ -1823,6 +1822,22 @@
   function restoreMainSitePersonalStorage(browserData){
     return requestMainSiteBackup('RESTORE',{browserData});
   }
+  async function refreshCredentialStatus(){
+    const button=$('#credentials-refresh'),note=$('#credentials-status-note');
+    if(button){button.disabled=true;button.textContent='↻ Kontrol ediliyor…';}
+    if(note)note.textContent='GitHub hesap kimliği ve TMDB secret yapılandırması kontrol ediliyor…';
+    const set=(id,value,state)=>{const el=$('#'+id);if(el){el.textContent=value;el.dataset.state=state||'neutral';}};
+    try{
+      const response=await fetchWithTimeout('/api/credentials',{cache:'no-store',credentials:'same-origin'});
+      const data=await response.json();if(!response.ok)throw new Error(data.error||'Kimlik bilgileri okunamadı.');
+      if(data.github?.configured){set('credential-github-state','Bağlı','good');set('credential-github-identity',data.github.login?(data.github.name?data.github.name+' · @'+data.github.login:'@'+data.github.login):'Token tanımlı; kimlik okunamadı',data.github.login?'good':'bad');set('credential-github-permission',data.github.repoPermission||'Yetki doğrulanamadı','good');}
+      else{set('credential-github-state','Bağlı değil','bad');set('credential-github-identity','GitHub token’ı sunucuda tanımlı değil.','bad');set('credential-github-permission','—','bad');}
+      if(data.tmdb?.configured){set('credential-tmdb-state','Tanımlı','good');set('credential-tmdb-identity','TMDB API anahtarı Worker secret olarak kayıtlı.','good');}
+      else{set('credential-tmdb-state','Eksik','bad');set('credential-tmdb-identity','TMDB_API_KEY secret tanımlanmamış.','bad');}
+      if(note)note.textContent='Son kontrol: '+new Date().toLocaleString('tr-TR')+'. Gizli değerler sunucudan alınmadı.';
+    }catch(error){set('credential-github-state','Kontrol edilemedi','bad');set('credential-tmdb-state','Kontrol edilemedi','bad');if(note)note.textContent=error.message||'Kimlik bilgileri kontrol edilemedi.';}
+    finally{if(button){button.disabled=false;button.textContent='↻ Yenile';}}
+  }
   function setSystemStatus(id,detailId,status,detail,type='neutral'){
     const value=$('#'+id),copy=$('#'+detailId);
     if(value){value.textContent=status;value.dataset.state=type;}
@@ -2184,6 +2199,7 @@
     }
   });
   $('#system-refresh')?.addEventListener('click',refreshSystemDiagnostics);
+  $('#credentials-refresh')?.addEventListener('click',refreshCredentialStatus);
   $('#personalized-section-form').addEventListener('submit',event=>{event.preventDefault();stagePersonalizedSectionSave();});
   $('#personalized-mode-order-list')?.addEventListener('click',event=>{
     const settings=event.target.closest('[data-personalized-rules]');if(settings){openPersonalizedRules(settings.dataset.personalizedRules);return;}

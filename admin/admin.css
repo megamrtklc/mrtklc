@@ -1058,3 +1058,28 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 .system-action-strip span{font-size:11px;line-height:1.55;color:#8999aa}
 .system-action-strip .secondary-button{white-space:nowrap;text-decoration:none}
 @media(max-width:600px){.system-action-strip{align-items:flex-start;flex-direction:column}.system-action-strip .secondary-button{width:100%;justify-content:center}}
+
+/* Secure API and GitHub credential manager */
+.credential-manager{margin-top:18px}
+.credential-manager>.panel-card-heading{align-items:flex-start}
+.credential-manager>.panel-card-heading>div{min-width:0}
+.credential-manager>.panel-card-heading p{max-width:680px}
+.credential-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:18px}
+.credential-card{min-width:0;padding:17px;border:1px solid #394655;border-radius:12px;background:linear-gradient(145deg,#202a36,#151d27)}
+.credential-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.credential-symbol{display:grid;place-items:center;width:38px;height:34px;border:1px solid #586579;border-radius:9px;background:#273546;color:#e5c47d;font-size:11px;font-weight:900}
+.credential-symbol-tmdb{font-size:9px;letter-spacing:-.04em}
+.credential-state{padding:5px 8px;border:1px solid #526273;border-radius:20px;color:#aab7c5;font-size:10px;font-weight:800}
+.credential-state[data-state="good"]{border-color:#39795d;background:#173b2d;color:#7bd6a8}
+.credential-state[data-state="bad"]{border-color:#8a4b4b;background:#432526;color:#f0a0a0}
+.credential-card h3{margin:14px 0 5px;color:#edf1f6;font-size:14px}
+.credential-identity{min-height:22px;margin:0 0 13px;color:#c7d0dc;font-size:12px;overflow-wrap:anywhere}
+.credential-meta{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid #354251;color:#95a2b1;font-size:11px}
+.credential-meta b{color:#d9e0e8;text-align:right}
+.credential-card>small{display:block;margin-top:10px;color:#8593a3;font-size:10px;line-height:1.5}
+.credential-security-note{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:7px 18px;margin-top:14px;padding:15px;border:1px solid rgba(199,164,92,.28);border-radius:11px;background:rgba(199,164,92,.055)}
+.credential-security-note>b{grid-column:1/-1;color:#e2c581;font-size:12px}
+.credential-security-note>span{color:#a5afbb;font-size:11px;line-height:1.55}
+.credential-security-note>a{white-space:nowrap;text-decoration:none}
+.credential-status-note{margin:12px 0 0;color:#8998a9;font-size:10px}
+@media(max-width:680px){.credential-cards{grid-template-columns:1fr}.credential-security-note{grid-template-columns:1fr}.credential-security-note>b{grid-column:auto}.credential-security-note>a{width:100%;justify-content:center}.credential-manager>.panel-card-heading{flex-direction:column}.credential-manager>.panel-card-heading button{width:100%}}

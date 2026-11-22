@@ -36,7 +36,7 @@ The workflow requires these repository secrets:
 - `CINEVERSE_GITHUB_TOKEN` — fine-grained GitHub token scoped to this repository, Contents read/write.
 - `CINEVERSE_ADMIN_PASSWORD` — unique administrator password, at least 20 characters.
 
-The workflow stores `ADMIN_PASSWORD`, `SESSION_SECRET`, and `GITHUB_TOKEN` as encrypted Worker secrets. Do not commit `.dev.vars`, `.env`, or any token.
+The workflow stores `ADMIN_PASSWORD`, `SESSION_SECRET`, `GITHUB_TOKEN`, and (when supplied) `TMDB_API_KEY` as encrypted Worker secrets. The admin panel shows GitHub account identity and whether integration secrets are configured, but never reveals secret values. Update or revoke secrets under GitHub → Settings → Secrets and variables → Actions, then rerun deployment. Do not commit `.dev.vars`, `.env`, or any token.
 
 ## 4. Open the panel
 
@@ -44,7 +44,9 @@ Open the Worker hostname. The CineVerse login page appears. Enter the administra
 
 ## API
 
-- `GET /api/session` — verified Access identity.
+- `GET /api/session` — verified administrator session.
+- `GET /api/credentials` — integration status and GitHub account identity; never returns secret values.
+- `GET /api/tmdb?path=...` — authenticated TMDB proxy using the Worker secret.
 - `GET /api/catalog` — current catalog and GitHub blob SHA.
 - `PUT /api/catalog` — validated catalog update. Requires the latest SHA; stale writes return HTTP 409.
 

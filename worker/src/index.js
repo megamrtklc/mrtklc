@@ -345,6 +345,35 @@ export default {
     const response=await (async()=>{
       if(!path.startsWith("/api/"))return env.ASSETS.fetch(request);
       if(request.method==="GET"&&path==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
+      if(request.method==="GET"&&path==="/api/credentials") {
+        const result={github:{configured:!!env.GITHUB_TOKEN},tmdb:{configured:!!env.TMDB_API_KEY}};
+        if(env.GITHUB_TOKEN) {
+          try {
+            const headers=githubHeaders(env);
+            const [ur,rr]=await Promise.all([fetch("https://api.github.com/user",{headers}),fetch("https://api.github.com/repos/"+encodeURIComponent(env.GITHUB_OWNER||"megamrtklc")+"/"+encodeURIComponent(env.GITHUB_REPO||"mrtklc"),{headers})]);
+            const user=await ur.json().catch(()=>({})),repository=await rr.json().catch(()=>({}));
+            if(!ur.ok)throw new Error(user.message||"GitHub hesap kimliği doğrulanamadı.");
+            result.github.login=user.login||"";result.github.name=user.name||"";
+            result.github.repoPermission=rr.ok?(repository.permissions?.push?"Yazma ve yayınlama":repository.permissions?.pull?"Salt okunur":"Depo erişimi doğrulandı"):"Hesap doğrulandı; depo yetkisi okunamadı";
+          }catch(error){result.github.identityError=error.message||"GitHub kimliği doğrulanamadı.";}
+        }
+        return json(result);
+      }
+      if(request.method==="GET"&&path==="/api/tmdb") {
+        if(!env.TMDB_API_KEY)return json({error:"TMDB_API_KEY secret tanımlanmamış. GitHub Actions Secrets alanına ekleyip dağıtımı yeniden çalıştır."},503);
+        const targetPath=String(url.searchParams.get("path")||"");
+        if(!targetPath||targetPath.length>500||targetPath.includes("..")||/[^a-zA-Z0-9_/?=&.%\-]/.test(targetPath))return json({error:"Geçersiz TMDB isteği."},400);
+        try {
+          const target=new URL("https://api.themoviedb.org/3/"+targetPath);
+          target.searchParams.set("api_key",env.TMDB_API_KEY);
+          if(!target.searchParams.has("language"))target.searchParams.set("language","tr-TR");
+          const upstream=await fetch(target.toString(),{headers:{"accept":"application/json"}});
+          const payload=await upstream.json().catch(()=>({}));
+          if(!upstream.ok)return json({error:payload.status_message||"TMDB isteği başarısız."},upstream.status);
+          return json(payload);
+        }catch(error){return json({error:error.message||"TMDB servisine ulaşılamadı."},502);}
+      }
+
       if(request.method==="GET"&&path==="/api/profile-photo")return getProfilePhoto(env);
       if(request.method==="POST"&&path==="/api/profile-photo") {
         try{return await saveProfilePhoto(request,env);}
