@@ -558,3 +558,7 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 .analytics-detail-pagination button:disabled{opacity:.35;cursor:not-allowed}
 @media(max-width:900px){.analytics-detail-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-detail-toolbar .search-box{grid-column:1/-1}.analytics-detail-toolbar .result-count{grid-column:1/-1}}
 @media(max-width:560px){.analytics-detail-heading{display:grid;gap:12px}.analytics-detail-heading .secondary-button{width:100%}.analytics-detail-toolbar{grid-template-columns:1fr 1fr;gap:8px}.analytics-detail-toolbar select{min-width:0;font-size:11px}.analytics-detail-toolbar .search-box{grid-column:1/-1}.analytics-detail-item{padding:10px;gap:10px}.analytics-detail-item img{width:42px;height:60px;flex-basis:42px}.analytics-detail-item-main b{font-size:12px}.analytics-detail-item-main small{font-size:10px}}
+
+#view-analytics .analytics-bar-action{display:grid;grid-template-columns:65px minmax(0,1fr) 34px 12px;align-items:center;gap:12px;padding:0;border:0;border-radius:8px;font:inherit}
+#view-analytics .analytics-bar-action .bar-track{display:block;min-width:0}
+#view-analytics .analytics-bar-action .bar-action-arrow{justify-self:end}
