@@ -494,3 +494,25 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #view-analytics .analytics-disclaimer{margin:11px 2px;color:#78889a;font-size:9px;line-height:1.6}
 @media(max-width:900px){#view-analytics .analytics-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){#view-analytics .analytics-page-heading{align-items:flex-start;flex-direction:column;gap:10px}#view-analytics .analytics-page-heading .secondary-button{width:100%;justify-content:center}#view-analytics .analytics-summary-grid{gap:8px}#view-analytics .analytics-summary-card{padding:13px}#view-analytics .analytics-summary-card>b{font-size:24px;margin:9px 0 4px}#view-analytics .analytics-summary-card>span{font-size:7px}#view-analytics .analytics-summary-card>small{font-size:8px}#view-analytics .analytics-report-grid{grid-template-columns:1fr;gap:9px}#view-analytics .analytics-report-card{min-height:0;padding:15px}#view-analytics .analytics-report-card .bar-chart{gap:12px}#view-analytics .analytics-foot-card{align-items:flex-start;padding:15px}#view-analytics .analytics-foot-mark{width:35px;height:35px;flex-basis:35px}}
+
+/* Analytics interactions: expandable years and clickable IMDb ranges */
+#view-analytics .analytics-more-button{margin-top:12px;padding:8px 12px;border:1px solid #55472f;border-radius:9px;background:#c5a15d12;color:#dfc18a;font-size:10px;font-weight:700}
+#view-analytics .analytics-more-button:hover{background:#c5a15d24}
+#view-analytics .rating-bar-row{width:100%;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;border-radius:7px}
+#view-analytics .rating-bar-row:hover,#view-analytics .rating-bar-row.is-selected{background:#c5a15d12}
+#view-analytics .rating-bar-row .bar-track{display:block;overflow:hidden;border-radius:20px}
+#view-analytics .rating-bar-row .bar-fill{display:block;height:100%;border-radius:20px}
+#view-analytics .rating-results{margin-top:15px;padding:13px;border:1px solid #4a402f;border-radius:12px;background:#111821}
+#view-analytics .rating-results-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+#view-analytics .rating-results-head b,#view-analytics .rating-results-head small{display:block}
+#view-analytics .rating-results-head b{color:#e8d6b1;font-size:11px}
+#view-analytics .rating-results-head small{margin-top:4px;color:#8493a4;font-size:9px}
+#view-analytics .rating-results-close{width:27px;height:27px;border:1px solid #394555;border-radius:8px;background:#1b2531;color:#cbd3dc;font-size:18px}
+#view-analytics .rating-results-list{display:grid;gap:7px;max-height:360px;overflow:auto}
+#view-analytics .rating-result-item{display:flex;align-items:center;gap:10px;min-width:0;padding:7px;border:1px solid #273342;border-radius:9px;background:#151e29}
+#view-analytics .rating-result-item img{width:34px;height:48px;flex:0 0 34px;object-fit:cover;border-radius:5px;background:#222d39}
+#view-analytics .rating-result-item>span{flex:1;min-width:0}
+#view-analytics .rating-result-item b,#view-analytics .rating-result-item small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#view-analytics .rating-result-item b{color:#e4eaf0;font-size:10px}
+#view-analytics .rating-result-item small{margin-top:4px;color:#8493a4;font-size:9px}
+#view-analytics .rating-result-item strong{color:#dfc18a;font-size:10px;white-space:nowrap}
