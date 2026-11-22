@@ -1922,26 +1922,34 @@
                     const enabled = this.personalizedRecommendationModeConfig;
                     const mode = enabled[this.recommendationMode] ? this.recommendationMode : 'taste';
                     let pool = [...base];
-                    if (mode === 'series') {
-                        pool = pool.filter(item => item.type === 'tv').sort((a,b) => (Number(b.year)||0)-(Number(a.year)||0) || (Number(b.rating)||0)-(Number(a.rating)||0));
-                    } else if (mode === 'gems') {
-                        const rules=this.homepageConfig?.personalizedSection||{};
-                        const minRating=Math.max(0,Math.min(10,Number(rules.gemsMinRating??7)));
-                        const maxRating=Math.max(minRating,Math.min(10,Number(rules.gemsMaxRating??8.8)));
-                        const minYear=Math.max(1900,Math.min(2099,Number(rules.gemsMinYear??1900)));
-                        const maxYear=Math.max(minYear,Math.min(2099,Number(rules.gemsMaxYear??2099)));
-                        pool = pool.filter(item => {
-                            const rating=Number(item.rating)||0,year=Number(item.year)||0;
-                            return rating>=minRating && rating<=maxRating && (!year || (year>=minYear && year<=maxYear));
-                        }).sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0) || (Number(b.year)||0)-(Number(a.year)||0));
-                    } else if (mode === 'surprise') {
+                    const sectionRules=this.homepageConfig?.personalizedSection||{};
+                    const defaults={taste:{mediaType:'all',minRating:0,maxRating:10,minYear:1900,maxYear:2099,limit:8},surprise:{mediaType:'all',minRating:0,maxRating:10,minYear:1900,maxYear:2099,limit:8},series:{mediaType:'tv',minRating:6.5,maxRating:10,minYear:2015,maxYear:2099,limit:8},gems:{mediaType:'all',minRating:7,maxRating:8.8,minYear:1900,maxYear:2099,limit:8}};
+                    const legacy=mode==='gems'?{minRating:sectionRules.gemsMinRating??7,maxRating:sectionRules.gemsMaxRating??8.8,minYear:sectionRules.gemsMinYear??1900,maxYear:sectionRules.gemsMaxYear??2099}:{};
+                    const rules={...defaults[mode],...legacy,...(sectionRules.personalizedRules?.[mode]||{})};
+                    if(mode==='series')rules.mediaType='tv';
+                    const minRating=Math.max(0,Math.min(10,Number(rules.minRating)||0));
+                    const maxRating=Math.max(minRating,Math.min(10,Number(rules.maxRating??10)));
+                    const minYear=Math.max(1900,Math.min(2099,Number(rules.minYear??1900)));
+                    const maxYear=Math.max(minYear,Math.min(2099,Number(rules.maxYear??2099)));
+                    pool=pool.filter(item=>{
+                        const type=item.type==='tv'||item.type==='series'?'tv':'movie';
+                        const rating=Number(item.rating)||0,year=Number(item.year)||0;
+                        const typeMatch=rules.mediaType==='all'||rules.mediaType===type;
+                        const ratingMatch=!rating||(rating>=minRating&&rating<=maxRating);
+                        const yearMatch=!year||(year>=minYear&&year<=maxYear);
+                        return typeMatch&&ratingMatch&&yearMatch;
+                    });
+                    if(mode==='series')pool.sort((a,b)=>(Number(b.year)||0)-(Number(a.year)||0)||(Number(b.rating)||0)-(Number(a.rating)||0));
+                    else if(mode==='gems')pool.sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0)||(Number(b.year)||0)-(Number(a.year)||0));
+                    else if(mode==='surprise'){
                         const seed=this.recommendationRefreshIndex+1;
                         const hash=value=>{let result=seed*2654435761;for(const char of String(value))result=Math.imul(result^char.charCodeAt(0),16777619);return result>>>0;};
                         pool.sort((a,b)=>hash(a.id)-hash(b.id));
-                    }
-                    if (!pool.length) pool=[...base];
+                    }else pool.sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0));
+                    if(!pool.length)pool=[...base];
                     const offset=(this.recommendationRefreshIndex*5)%pool.length;
-                    const value = mode==='surprise' ? pool : pool.slice(offset).concat(pool.slice(0,offset));
+                    const limit=Math.max(4,Math.min(20,Number(rules.limit)||8));
+                    const value=(mode==='surprise'?pool:pool.slice(offset).concat(pool.slice(0,offset))).slice(0,limit);
                     this.recommendationDisplayCache = { base, mode: this.recommendationMode, rotation: this.recommendationRefreshIndex, value };
                     return value;
                 },

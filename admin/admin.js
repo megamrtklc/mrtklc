@@ -1351,10 +1351,6 @@
     $('#personalized-eyebrow').value=section.eyebrow;
     $('#personalized-title').value=section.title;
     $('#personalized-description').value=section.description;
-    $('#personalized-gems-min-rating').value=section.gemsMinRating??7;
-    $('#personalized-gems-max-rating').value=section.gemsMaxRating??8.8;
-    $('#personalized-gems-min-year').value=section.gemsMinYear??1900;
-    $('#personalized-gems-max-year').value=section.gemsMaxYear??2099;
     ['taste','surprise','series','gems'].forEach(mode=>{const input=$('#personalized-mode-'+mode);if(input)input.checked=section.discoveryModes?.[mode]!==false;const label=$('#personalized-label-'+mode);if(label)label.value=section.discoveryModeLabels?.[mode]||PERSONALIZED_MODE_META[mode].label;});
     ['excludeWatched','excludeWatchlist','excludeFavorites'].forEach(key=>{const input=$('#personalized-'+key);if(input)input.checked=section[key]!==false;});
     const defaults=['taste','surprise','series','gems'],stored=Array.isArray(section.discoveryModeOrder)?section.discoveryModeOrder:[];
@@ -1362,11 +1358,47 @@
     renderPersonalizedModeOrder();renderPersonalizedStaticPreview();
     const check=$('#personalized-publish-check');if(check)check.hidden=true;
   }
-  const PERSONALIZED_MODE_META={taste:{label:'Zevkime Uygun',hint:'İzleme geçmişine göre'},surprise:{label:'Beni Şaşırt',hint:'Çeşitli ve farklı öneriler'},series:{label:'Yeni Diziler',hint:'Dizi odaklı keşif'},gems:{label:'Gizli Hazineler',hint:'7.0–8.8 puan aralığı'}};
+  const PERSONALIZED_MODE_META={taste:{label:'Zevkime Uygun',hint:'İzleme geçmişine göre'},surprise:{label:'Beni Şaşırt',hint:'Çeşitli ve farklı öneriler'},series:{label:'Yeni Diziler',hint:'Yeni ve yüksek puanlı diziler'},gems:{label:'Gizli Hazineler',hint:'Yüksek puanlı, daha az bilinen yapımlar'}};
+  const PERSONALIZED_RULE_DEFAULTS={
+    taste:{mediaType:'all',minRating:0,maxRating:10,minYear:1900,maxYear:2099,limit:8},
+    surprise:{mediaType:'all',minRating:0,maxRating:10,minYear:1900,maxYear:2099,limit:8},
+    series:{mediaType:'tv',minRating:6.5,maxRating:10,minYear:2015,maxYear:2099,limit:8},
+    gems:{mediaType:'all',minRating:7,maxRating:8.8,minYear:1900,maxYear:2099,limit:8}
+  };
+  let personalizedRulesEditingMode=null;
+  let personalizedRulesDraft=null;
+  function personalizedRulesFor(mode,section=homepageConfig().personalizedSection||{}){
+    const legacy=mode==='gems'?{minRating:section.gemsMinRating??7,maxRating:section.gemsMaxRating??8.8,minYear:section.gemsMinYear??1900,maxYear:section.gemsMaxYear??2099}:{};
+    return {...PERSONALIZED_RULE_DEFAULTS[mode],...(section.personalizedRules?.[mode]||legacy)};
+  }
+  function renderPersonalizedRulesModal(mode){
+    const modal=$('#personalized-rules-modal'),host=$('#personalized-rules-fields');if(!modal||!host)return;
+    const rules=personalizedRulesDraft||personalizedRulesFor(mode),isSeries=mode==='series';
+    const field=(key,label,min,max,step='1')=>'<label class="field"><span>'+label+'</span><input type="number" data-rule="'+key+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+rules[key]+'"></label>';
+    host.innerHTML='<div class="personalized-rule-field"><label class="field"><span>Yapım türü</span><select data-rule="mediaType" '+(isSeries?'disabled':'')+'><option value="all" '+(rules.mediaType==='all'?'selected':'')+'>Film ve dizi</option><option value="movie" '+(rules.mediaType==='movie'?'selected':'')+'>Yalnızca filmler</option><option value="tv" '+(rules.mediaType==='tv'?'selected':'')+'>Yalnızca diziler</option></select></label></div><div class="personalized-rule-field"><div class="personalized-rule-label">IMDb puan aralığı</div><div class="personalized-rule-range">'+field('minRating','En düşük puan',0,10,'0.1')+field('maxRating','En yüksek puan',0,10,'0.1')+'</div></div><div class="personalized-rule-field"><div class="personalized-rule-label">Yayın yılı aralığı</div><div class="personalized-rule-range">'+field('minYear','İlk yıl',1900,2099)+field('maxYear','Son yıl',1900,2099)+'</div></div><div class="personalized-rule-field">'+field('limit','Gösterilecek öneri sayısı',4,20)+'</div>';
+    $('#personalized-rules-title').textContent=PERSONALIZED_MODE_META[mode].label+' · Öneri kriterleri';
+    $('#personalized-rules-description').textContent=mode==='taste'?'Kişisel eşleşmeleri puan ve dönem tercihinle sınırlandır.':mode==='surprise'?'Sürpriz seçkide hangi tür ve dönemlerin yer alacağını belirle.':mode==='series'?'Dizi keşfini yayın dönemi ve IMDb puanına göre daralt.':'Yüksek puanlı, daha az bilinen yapımların aralığını belirle.';
+    modal.dataset.mode=mode;modal.hidden=false;
+  }
+  function openPersonalizedRules(mode){personalizedRulesEditingMode=mode;personalizedRulesDraft=personalizedRulesFor(mode);renderPersonalizedRulesModal(mode);}
+  function closePersonalizedRules(){const modal=$('#personalized-rules-modal');if(modal)modal.hidden=true;personalizedRulesEditingMode=null;personalizedRulesDraft=null;}
+  async function savePersonalizedRules(){
+    if(!canWrite()||!personalizedRulesEditingMode)return;
+    const mode=personalizedRulesEditingMode,fields=$('#personalized-rules-fields [data-rule]'),rules={};
+    fields.forEach(input=>{rules[input.dataset.rule]=input.dataset.rule==='mediaType'?input.value:Number(input.value);});
+    if(!Number.isFinite(rules.minRating)||!Number.isFinite(rules.maxRating)||rules.minRating<0||rules.maxRating>10||rules.minRating>rules.maxRating){toast('IMDb puan aralığını kontrol et.','error');return;}
+    if(!Number.isInteger(rules.minYear)||!Number.isInteger(rules.maxYear)||rules.minYear<1900||rules.maxYear>2099||rules.minYear>rules.maxYear){toast('Yayın yılı aralığını kontrol et.','error');return;}
+    if(!Number.isInteger(rules.limit)||rules.limit<4||rules.limit>20){toast('Öneri sayısı 4–20 arasında olmalı.','error');return;}
+    const config=homepageConfig(),section={...(config.personalizedSection||{})},allRules={...(section.personalizedRules||{})};
+    if(mode==='series')rules.mediaType='tv';
+    allRules[mode]=rules;section.personalizedRules=allRules;
+    const ok=await persist({...state.data,homepageConfig:{...config,personalizedSection:section}},PERSONALIZED_MODE_META[mode].label+' kriterleri kaydedildi.');
+    if(ok){closePersonalizedRules();renderPersonalizedSection();}
+  }
   function renderPersonalizedModeOrder(){
     const host=$('#personalized-mode-order-list');if(!host)return;
     const order=state.personalizedModeOrder||['taste','surprise','series','gems'];
-    host.innerHTML=order.map((mode,index)=>{const meta=PERSONALIZED_MODE_META[mode],label=$('#personalized-label-'+mode)?.value.trim()||meta.label;return '<div class="personalized-order-row" data-personalized-mode="'+mode+'"><span class="personalized-order-number">'+(index+1)+'</span><div><b>'+escapeHtml(label)+'</b><small>'+meta.hint+'</small></div><div class="personalized-order-actions"><button type="button" data-personalized-order="up" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" data-personalized-order="down" aria-label="Aşağı taşı" '+(index===order.length-1?'disabled':'')+'>↓</button></div></div>';}).join('');
+    host.innerHTML=order.map((mode,index)=>{const meta=PERSONALIZED_MODE_META[mode],label=$('#personalized-label-'+mode)?.value.trim()||meta.label;return '<div class="personalized-order-row" data-personalized-mode="'+mode+'"><span class="personalized-order-number">'+(index+1)+'</span><div class="personalized-order-copy"><b>'+escapeHtml(label)+'</b><small>'+meta.hint+'</small></div><div class="personalized-order-actions"><button type="button" data-personalized-order="up" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" data-personalized-order="down" aria-label="Aşağı taşı" '+(index===order.length-1?'disabled':'')+'>↓</button><button type="button" class="personalized-rule-settings" data-personalized-rules="'+mode+'" aria-label="'+escapeHtml(meta.label)+' kriterlerini düzenle" title="Öneri kriterlerini düzenle">⚙</button></div></div>';}).join('');
   }
   function renderPersonalizedStaticPreview(){
     const set=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
@@ -1387,7 +1419,6 @@
     compare('Başlık ve açıklama',[current.eyebrow||'SANA ÖZEL',current.title||'İzleme Zevkine Göre',current.description||''],[$('#personalized-eyebrow').value.trim()||'SANA ÖZEL',$('#personalized-title').value.trim()||'İzleme Zevkine Göre',$('#personalized-description').value.trim()]);
     compare('Keşif modları',current.discoveryModes||{taste:true,surprise:true,series:true,gems:true},Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-mode-'+mode)?.checked!==false])));
     compare('Buton isimleri',current.discoveryModeLabels||{taste:'Zevkime Uygun',surprise:'Beni Şaşırt',series:'Yeni Diziler',gems:'Gizli Hazineler'},Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-label-'+mode)?.value.trim()||PERSONALIZED_MODE_META[mode].label])));
-    compare('Gizli Hazineler kriterleri',[current.gemsMinRating??7,current.gemsMaxRating??8.8,current.gemsMinYear??1900,current.gemsMaxYear??2099],['personalized-gems-min-rating','personalized-gems-max-rating','personalized-gems-min-year','personalized-gems-max-year'].map(id=>Number($('#'+id).value)));
     compare('Keşif modu sırası',oldOrder,newOrder);
     compare('Öneri filtreleri',['excludeWatched','excludeWatchlist','excludeFavorites'].map(key=>current[key]!==false),['excludeWatched','excludeWatchlist','excludeFavorites'].map(key=>$('#personalized-'+key)?.checked!==false));
     const panel=$('#personalized-publish-check'),summary=$('#personalized-publish-summary');if(!panel||!summary)return;
@@ -1398,10 +1429,6 @@
   async function savePersonalizedSection(event){
     event.preventDefault();
     if(!canWrite())return;
-    const minRating=Number($('#personalized-gems-min-rating').value),maxRating=Number($('#personalized-gems-max-rating').value);
-    const minYear=Number($('#personalized-gems-min-year').value),maxYear=Number($('#personalized-gems-max-year').value);
-    if(!Number.isFinite(minRating)||!Number.isFinite(maxRating)||minRating<0||maxRating>10||minRating>maxRating){toast('IMDb puan aralığını kontrol et. Minimum değer maksimumdan büyük olamaz.','error');return;}
-    if(!Number.isInteger(minYear)||!Number.isInteger(maxYear)||minYear<1900||maxYear>2099||minYear>maxYear){toast('Yayın yılı aralığını kontrol et. İlk yıl son yıldan büyük olamaz.','error');return;}
     const config=homepageConfig();
     const layout=homepageLayoutConfig();
     const visibility={...layout.visibility};
@@ -1419,10 +1446,6 @@
       discoveryModes,
       discoveryModeLabels:Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-label-'+mode)?.value.trim().slice(0,24)||PERSONALIZED_MODE_META[mode].label])),
       discoveryModeOrder:[...(state.personalizedModeOrder||['taste','surprise','series','gems'])],
-      gemsMinRating:Math.max(0,Math.min(10,Number($('#personalized-gems-min-rating').value)||0)),
-      gemsMaxRating:Math.max(0,Math.min(10,Number($('#personalized-gems-max-rating').value)||0)),
-      gemsMinYear:Math.max(1900,Math.min(2099,Math.round(Number($('#personalized-gems-min-year').value)||1900))),
-      gemsMaxYear:Math.max(1900,Math.min(2099,Math.round(Number($('#personalized-gems-max-year').value)||2099))),
       excludeWatched:$('#personalized-excludeWatched')?.checked!==false,
       excludeWatchlist:$('#personalized-excludeWatchlist')?.checked!==false,
       excludeFavorites:$('#personalized-excludeFavorites')?.checked!==false
@@ -2103,12 +2126,17 @@
   $('#system-refresh')?.addEventListener('click',refreshSystemDiagnostics);
   $('#personalized-section-form').addEventListener('submit',event=>{event.preventDefault();stagePersonalizedSectionSave();});
   $('#personalized-mode-order-list')?.addEventListener('click',event=>{
+    const settings=event.target.closest('[data-personalized-rules]');if(settings){openPersonalizedRules(settings.dataset.personalizedRules);return;}
     const button=event.target.closest('[data-personalized-order]'),row=event.target.closest('[data-personalized-mode]');if(!button||!row)return;
     const order=[...(state.personalizedModeOrder||[])],index=order.indexOf(row.dataset.personalizedMode),next=index+(button.dataset.personalizedOrder==='up'?-1:1);
     if(index<0||next<0||next>=order.length)return;
     [order[index],order[next]]=[order[next],order[index]];state.personalizedModeOrder=order;renderPersonalizedModeOrder();renderPersonalizedStaticPreview();
   });
-  ['personalized-enabled','personalized-eyebrow','personalized-title','personalized-description','personalized-mode-taste','personalized-mode-surprise','personalized-mode-series','personalized-mode-gems','personalized-label-taste','personalized-label-surprise','personalized-label-series','personalized-label-gems','personalized-gems-min-rating','personalized-gems-max-rating','personalized-gems-min-year','personalized-gems-max-year'].forEach(id=>{
+  $('#personalized-rules-modal')?.addEventListener('click',event=>{if(event.target.id==='personalized-rules-modal'||event.target.closest('[data-rules-close]'))closePersonalizedRules();});
+  $('#personalized-rules-reset')?.addEventListener('click',()=>{if(!personalizedRulesEditingMode)return;personalizedRulesDraft={...PERSONALIZED_RULE_DEFAULTS[personalizedRulesEditingMode]};renderPersonalizedRulesModal(personalizedRulesEditingMode);});
+  $('#personalized-rules-save')?.addEventListener('click',savePersonalizedRules);
+  $('#personalized-rules-fields')?.addEventListener('input',event=>{const input=event.target.closest('[data-rule]');if(input&&personalizedRulesDraft)personalizedRulesDraft[input.dataset.rule]=input.dataset.rule==='mediaType'?input.value:Number(input.value);});
+  ['personalized-enabled','personalized-eyebrow','personalized-title','personalized-description','personalized-mode-taste','personalized-mode-surprise','personalized-mode-series','personalized-mode-gems','personalized-label-taste','personalized-label-surprise','personalized-label-series','personalized-label-gems'].forEach(id=>{
     $('#'+id)?.addEventListener('input',()=>{renderPersonalizedModeOrder();renderPersonalizedStaticPreview();});$('#'+id)?.addEventListener('change',()=>{renderPersonalizedModeOrder();renderPersonalizedStaticPreview();});
   });
   $('#personalized-preview-modes')?.closest('.personalized-preview-card')?.addEventListener('click',event=>{

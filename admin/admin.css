@@ -944,3 +944,36 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #view-header-footer .hf-save-row{align-items:center}
 #view-header-footer #hf-save-hint{color:#8f9cab;font-size:10px}
 @media(max-width:760px){#view-header-footer .hf-draft-toolbar{align-items:stretch;flex-direction:column}#view-header-footer .hf-draft-actions{display:grid;grid-template-columns:1fr 1fr}#view-header-footer .hf-draft-actions #hf-save{grid-column:1/-1}}
+
+/* Personalized discovery controls: wider labels, per-mode criteria popup */
+#view-personalized-section .personalized-admin-options{min-width:0}
+#view-personalized-section .personalized-mode-admin-grid{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);align-items:stretch}
+#view-personalized-section .personalized-admin-options .toggle-field{align-items:flex-start;min-width:0}
+#view-personalized-section .personalized-admin-options .toggle-field>span{display:block;flex:1;min-width:0;width:100%}
+#view-personalized-section .personalized-mode-label-input{display:block;width:100%;min-height:40px;margin-top:9px;padding:9px 12px;font-size:13px;box-sizing:border-box}
+#view-personalized-section .personalized-label-count{font-size:10px}
+#view-personalized-section .personalized-order-row{grid-template-columns:28px minmax(0,1fr) auto;gap:10px}
+#view-personalized-section .personalized-order-copy{min-width:0}
+#view-personalized-section .personalized-order-actions{display:flex;align-items:center;gap:5px;flex-wrap:nowrap}
+#view-personalized-section .personalized-rule-settings{width:31px;height:31px;border:1px solid #75613e;border-radius:8px;background:#30291f;color:#e8c77f;font-size:15px;cursor:pointer}
+#view-personalized-section .personalized-rule-settings:hover{background:#493b25;border-color:#c7a45c}
+.personalized-rules-backdrop{position:fixed;inset:0;z-index:10050;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(5,9,14,.78);backdrop-filter:blur(7px)}
+.personalized-rules-backdrop[hidden]{display:none}
+.personalized-rules-dialog{width:min(620px,100%);max-height:min(86vh,760px);overflow:auto;padding:22px;border:1px solid #4b5360;border-radius:16px;background:linear-gradient(145deg,#202a36,#141c26);box-shadow:0 24px 80px rgba(0,0,0,.5);color:#edf2f7}
+.personalized-rules-dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:20px}
+.personalized-rules-dialog-head h2{margin:5px 0;font-size:20px}
+.personalized-rules-dialog-head p{margin:0;color:#9ba8b8;font-size:12px;line-height:1.5}
+.personalized-rules-close{min-width:36px;padding:7px}
+.personalized-rules-fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.personalized-rule-field{min-width:0;padding:13px;border:1px solid #364352;border-radius:11px;background:rgba(8,14,22,.35)}
+.personalized-rule-field>.field{display:block}
+.personalized-rule-label{margin-bottom:9px;color:#e0c48a;font-size:12px;font-weight:800}
+.personalized-rule-range{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.personalized-rule-field .field span{display:block;margin-bottom:6px;color:#aeb9c7;font-size:11px}
+.personalized-rule-field input,.personalized-rule-field select{width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid #435163;border-radius:8px;background:#111a25;color:#f0f3f7;font-size:13px;box-sizing:border-box}
+.personalized-rule-field input:focus,.personalized-rule-field select:focus{outline:0;border-color:#c7a45c;box-shadow:0 0 0 2px rgba(199,164,92,.15)}
+.personalized-rules-footnote{margin:15px 0;color:#929eac;font-size:11px;line-height:1.55}
+.personalized-rules-actions{display:flex;align-items:center;gap:8px;padding-top:14px;border-top:1px solid #354150}
+.personalized-rules-actions>span{flex:1}
+@media(max-width:850px){#view-personalized-section .personalized-mode-admin-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.personalized-rules-dialog{padding:17px}.personalized-rules-fields{grid-template-columns:1fr}.personalized-rules-actions{display:grid;grid-template-columns:1fr 1fr}.personalized-rules-actions>span{display:none}.personalized-rules-actions #personalized-rules-reset{grid-column:1/-1}.personalized-rules-actions #personalized-rules-save{grid-column:1/-1}#view-personalized-section .personalized-mode-label-input{min-height:42px;font-size:14px}}
