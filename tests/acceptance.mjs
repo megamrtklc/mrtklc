@@ -696,7 +696,7 @@ try {
     await mobileMenu.waitFor({ state: 'visible' });
     await mobileMenu.getByRole('link', { name: 'Keşfet', exact: true }).click();
     await page.waitForFunction(() => window.location.hash === '#/explore');
-    assert.ok(await page.getByText('İlgi alanlarına göre keşfet', { exact: true }).isVisible());
+    assert.ok(await page.locator('#perde-discovery-showcase').isVisible(), 'Keşfet sayfasının rastgele yapım vitrini görünmeli');
   });
 
   await check('Mobil, tablet ve masaüstünde yatay taşma kontrolü', async () => {
