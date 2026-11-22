@@ -514,7 +514,7 @@
           return '<button type="button" class="analytics-detail-summary-row" data-report-action="'+(kind==='years'?'year':'genre')+'" data-report-value="'+escapeHtml(row[0])+'"><span><b>'+escapeHtml(label)+'</b><small>'+row[1]+' yapım</small></span><i>›</i></button>';
         }
         const rating=getItemRating(row),ratingText=Number.isFinite(rating)&&rating>0?rating.toFixed(1).replace('.',','):'—';
-        return '<article class="analytics-detail-item"><img loading="lazy" src="'+escapeHtml(posterOf(row))+'" alt="" onerror="this.style.visibility=\\'hidden\\'"><div class="analytics-detail-item-main"><b>'+escapeHtml(titleOf(row))+'</b><small>'+(isSeries(row)?'Dizi':'Film')+' · '+escapeHtml(yearOf(row))+' · '+escapeHtml(row.director||row.tmdbDirector||'Yönetmen bilgisi yok')+'</small></div><strong>★ '+ratingText+'</strong></article>';
+        return '<article class="analytics-detail-item"><img loading="lazy" src="'+escapeHtml(posterOf(row))+'" alt="" onerror="this.remove()"><div class="analytics-detail-item-main"><b>'+escapeHtml(titleOf(row))+'</b><small>'+(isSeries(row)?'Dizi':'Film')+' · '+escapeHtml(yearOf(row))+' · '+escapeHtml(row.director||row.tmdbDirector||'Yönetmen bilgisi yok')+'</small></div><strong>★ '+ratingText+'</strong></article>';
       }).join(''):'<div class="analytics-detail-empty">Bu filtrelerle eşleşen kayıt bulunamadı.</div>';
     }
     const countEl=$('#analytics-detail-count');if(countEl)countEl.textContent=count.toLocaleString('tr-TR')+(isSummary?' kategori':' yapım');
