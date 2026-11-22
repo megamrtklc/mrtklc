@@ -802,10 +802,11 @@
     const dialog=$('#content-dialog');
     if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
   }
+  const TMDB_API_KEY='3108265ab3fdbf3af14175edf64a9c7f';
   const TMDB_IMAGE='https://image.tmdb.org/t/p/';
   async function tmdbRequest(path){
-    const response=await fetch('/api/tmdb?path='+encodeURIComponent(path),{cache:'no-store',credentials:'same-origin'});
-    if(!response.ok){let detail='';try{detail=(await response.json()).error||'';}catch(_){}throw new Error(detail||'TMDB yanıt vermedi (HTTP '+response.status+').');}
+    const response=await fetch('https://api.themoviedb.org/3/'+path+(path.includes('?')?'&':'?')+'api_key='+TMDB_API_KEY+'&language=tr-TR');
+    if(!response.ok)throw new Error('TMDB yanıt vermedi (HTTP '+response.status+').');
     return response.json();
   }
   function normalizeContentTitle(value){
@@ -1832,8 +1833,8 @@
       const data=await response.json();if(!response.ok)throw new Error(data.error||'Kimlik bilgileri okunamadı.');
       if(data.github?.configured){set('credential-github-state','Bağlı','good');set('credential-github-identity',data.github.login?(data.github.name?data.github.name+' · @'+data.github.login:'@'+data.github.login):'Token tanımlı; kimlik okunamadı',data.github.login?'good':'bad');set('credential-github-permission',data.github.repoPermission||'Yetki doğrulanamadı','good');}
       else{set('credential-github-state','Bağlı değil','bad');set('credential-github-identity','GitHub token’ı sunucuda tanımlı değil.','bad');set('credential-github-permission','—','bad');}
-      if(data.tmdb?.configured){set('credential-tmdb-state','Tanımlı','good');set('credential-tmdb-identity','TMDB API anahtarı Worker secret olarak kayıtlı.','good');}
-      else{set('credential-tmdb-state','Eksik','bad');set('credential-tmdb-identity','TMDB_API_KEY secret tanımlanmamış.','bad');}
+      if(data.tmdb?.configured){set('credential-tmdb-state','Mevcut anahtar kullanılıyor','good');set('credential-tmdb-identity','Mevcut TMDB yapılandırması korunuyor.','good');}
+      else{set('credential-tmdb-state','Kontrol edilemiyor','neutral');set('credential-tmdb-identity','Mevcut TMDB anahtarı uygulama yapılandırmasından kullanılıyor.','neutral');}
       if(note)note.textContent='Son kontrol: '+new Date().toLocaleString('tr-TR')+'. Gizli değerler sunucudan alınmadı.';
     }catch(error){set('credential-github-state','Kontrol edilemedi','bad');set('credential-tmdb-state','Kontrol edilemedi','bad');if(note)note.textContent=error.message||'Kimlik bilgileri kontrol edilemedi.';}
     finally{if(button){button.disabled=false;button.textContent='↻ Yenile';}}
