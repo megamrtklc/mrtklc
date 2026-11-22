@@ -1761,7 +1761,7 @@
     watchDemoViewport=button.dataset.demoDevice;
     renderWatchLayout();
   }));
-  $('input[name="panel-density"],input[name="panel-theme"],input[name="panel-sidebar"],input[name="panel-page-size"]').forEach(input=>input.addEventListener('change',renderPreferenceDraftStatus));
+  $$('input[name="panel-density"],input[name="panel-theme"],input[name="panel-sidebar"],input[name="panel-page-size"]').forEach(input=>input.addEventListener('change',renderPreferenceDraftStatus));
   $('#panel-reduce-motion')?.addEventListener('change',renderPreferenceDraftStatus);
   $('#panel-notifications')?.addEventListener('change',renderPreferenceDraftStatus);
   document.addEventListener('click',event=>{const info=event.target.closest('[data-pref-info]');if(info)openPreferenceGuide(info.dataset.prefInfo);});
