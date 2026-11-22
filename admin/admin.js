@@ -18,6 +18,33 @@
     'published-collections':{title:'Yayınlanan Koleksiyonlar',description:'Admin panelinde hazırlanan özel seçkiler',icon:'▧'},
     catalog:{title:'Tüm Yapımlar & Trendler',description:'Katalogdan seçilen genel yapım rafı',icon:'▥'}
   };
+  const ADMIN_PREFERENCES_KEY='perde-admin-preferences-v1';
+  function readAdminPreferences(){
+    const defaults={density:'comfortable',reduceMotion:false};
+    try{
+      const saved=JSON.parse(localStorage.getItem(ADMIN_PREFERENCES_KEY)||'{}');
+      return {density:saved.density==='compact'?'compact':'comfortable',reduceMotion:saved.reduceMotion===true};
+    }catch(_){return defaults;}
+  }
+  function applyAdminPreferences(){
+    const preferences=readAdminPreferences();
+    document.body.classList.toggle('admin-density-compact',preferences.density==='compact');
+    document.body.classList.toggle('admin-reduce-motion',preferences.reduceMotion);
+    const density=$('input[name="panel-density"][value="'+preferences.density+'"]');
+    if(density)density.checked=true;
+    const motion=$('#panel-reduce-motion');
+    if(motion)motion.checked=preferences.reduceMotion;
+    return preferences;
+  }
+  function saveAdminPreferences(patch){
+    const current=readAdminPreferences(),next={...current,...patch};
+    try{localStorage.setItem(ADMIN_PREFERENCES_KEY,JSON.stringify(next));}
+    catch(_){toast('Tarayıcı tercihi kaydedilemedi. Depolama iznini kontrol et.','warning');return false;}
+    applyAdminPreferences();
+    const status=$('#preferences-status');
+    if(status)status.textContent='Tercihler kaydedildi · '+new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+    return true;
+  }
   function applyAdminTheme(){ document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark'); const meta=document.querySelector('meta[name="theme-color"]'); if(meta)meta.content='#f4f3ef'; }
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const titleOf = item => item.title || item.tmdbTitle || item.originalTitle || item.tmdbOriginalTitle || 'Başlıksız yapım';
@@ -1422,6 +1449,7 @@
     refreshBackupSummary();
   }
   async function init(){
+    applyAdminPreferences();
     applyAdminTheme();
     const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
@@ -1694,6 +1722,12 @@
     watchDemoViewport=button.dataset.demoDevice;
     renderWatchLayout();
   }));
+  $('input[name="panel-density"]').forEach(input=>input.addEventListener('change',event=>saveAdminPreferences({density:event.target.value})));
+  $('#panel-reduce-motion')?.addEventListener('change',event=>saveAdminPreferences({reduceMotion:event.target.checked}));
+  $('#preferences-reset')?.addEventListener('click',()=>{
+    if(!saveAdminPreferences({density:'comfortable',reduceMotion:false}))return;
+    toast('Panel tercihleri varsayılanlara döndürüldü.','success');
+  });
   initBackupTools();
   init();
 })();
