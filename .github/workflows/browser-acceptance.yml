@@ -29,6 +29,8 @@ jobs:
         run: npm install --no-save playwright
       - name: Install Chromium
         run: npx playwright install chromium
+      - name: Run admin browser interaction tests
+        run: node tests/admin-browser-interactions.mjs
       - name: Wait for Pages deployment
         run: sleep 90
       - name: Run production browser acceptance tests
