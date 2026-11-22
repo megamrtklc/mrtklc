@@ -15,6 +15,21 @@ try {
     if (/catalog-cast\.json/i.test(request.url())) castRequests.push(request.url());
   });
   page.on('pageerror', error => errors.push(error.stack || error.message));
+  await page.addInitScript(() => {
+    window.__alpineExpressionDiagnostics = [];
+    for (const method of ['error', 'warn']) {
+      const original = console[method].bind(console);
+      console[method] = (...args) => {
+        if (args.some(value => String(value).includes('Alpine Expression Error'))) {
+          window.__alpineExpressionDiagnostics.push(args.map(value => {
+            if (value instanceof Element) return value.outerHTML.slice(0, 1800);
+            return String(value);
+          }));
+        }
+        original(...args);
+      };
+    }
+  });
 
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForFunction(() => {
@@ -53,6 +68,8 @@ try {
   await page.waitForTimeout(150);
   const scrollAfterUp = await page.evaluate(() => window.scrollY);
   assert.ok(scrollAfterUp < scrollAfterDown, 'Kumanda yukarı yön tuşu sayfayı geri kaydırmadı');
+  const alpineDiagnostics = await page.evaluate(() => window.__alpineExpressionDiagnostics || []);
+  if (alpineDiagnostics.length) console.error('ALPINE EXPRESSION DIAGNOSTICS:', JSON.stringify(alpineDiagnostics));
   assert.deepEqual(errors, [], 'Android TV sayfasında JavaScript hatası oluştu');
   console.log('PASS: Genel Android TV algılama, sade ana sayfa, ertelenen veriler ve kumanda ile dikey gezinme', JSON.stringify({ ...tvState, scrollAfterDown, scrollAfterUp }));
   await tv.close();

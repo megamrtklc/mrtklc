@@ -166,8 +166,8 @@ try {
     await loadingStatus.waitFor({ state: 'attached' });
     assert.match(await loadingStatus.innerText(), /Öneriler hazırlanıyor/i);
     assert.match(await loadingStatus.innerText(), /Görseller ve öneriler yükleniyor/i);
-    const sectionIgnoresAlpine = await page.locator('#home-personalized-section').getAttribute('x-ignore');
-    assert.notEqual(sectionIgnoresAlpine, null, 'Öneri alanının gecikmeli başlatma işareti bekleniyordu');
+    const sectionKey = await page.locator('#home-personalized-section').getAttribute('data-home-section');
+    assert.equal(sectionKey, 'personalized', 'Kişiselleştirilmiş öneri alanı tanımlı değil');
     const imagePlaceholder = await page.locator('main img').first().evaluate(img => getComputedStyle(img).backgroundImage);
     assert.match(imagePlaceholder, /linear-gradient/i, 'İçerik görsellerinde yükleme zemini bulunmalı');
   });
