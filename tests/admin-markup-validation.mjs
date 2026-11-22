@@ -26,6 +26,7 @@ console.log('PASS: Admin HTML kimlikleri benzersiz');
 console.log('PASS: main alanı doğru açılıp kapanıyor');
 console.log('PASS: Admin CSS ve JS kaynakları mevcut');
 
+
 const adminJs = readFileSync(resolve(root, 'admin/admin.js'), 'utf8');
 const adminCss = readFileSync(resolve(root, 'admin/admin.css'), 'utf8');
 
@@ -37,25 +38,24 @@ for (const view of views) {
 }
 
 // Static event bindings must point to elements that actually exist in the admin markup.
-const boundIds = [...adminJs.matchAll(/\\$\\(['"]#([a-zA-Z0-9_-]+)['"]\\)\\.addEventListener/g)]
+const boundIds = [...adminJs.matchAll(/\$\(['"]#([a-zA-Z0-9_-]+)['"]\)\.addEventListener/g)]
   .map(match => match[1]);
 for (const id of new Set(boundIds)) {
   assert.ok(ids.includes(id), 'Olay dinleyicisinin hedefi HTML içinde bulunamadı: #' + id);
 }
 
 // Each form must have an explicit submit listener so save actions are not silently inert.
-const formIds = [...html.matchAll(/<form\\b[^>]*\\bid=["']([^"']+)["']/g)].map(match => match[1]);
+const formIds = [...html.matchAll(/<form\b[^>]*\bid=["']([^"']+)["']/g)].map(match => match[1]);
+const submitIds = [...adminJs.matchAll(/\$\(['"]#([a-zA-Z0-9_-]+)['"]\)\.addEventListener\(['"]submit['"]/g)]
+  .map(match => match[1]);
 for (const id of formIds) {
-  assert.ok(
-    new RegExp('\\\\$\\\\(["\\']#' + id + '["\\']\\\\)\\\\.addEventListener\\\\(["\\']submit["\\']').test(adminJs),
-    'Form için kaydetme/submit olayı bulunamadı: #' + id
-  );
+  assert.ok(submitIds.includes(id), 'Form için kaydetme/submit olayı bulunamadı: #' + id);
 }
 
 // Mobile sidebar must have both the responsive closed state and its open state.
-assert.match(adminCss, /@media\\s*\\(max-width:\\s*700px\\)[\\s\\S]*?\\.sidebar\\s*\\{[^}]*transform:\\s*translateX\\(-105%\\)/,
+assert.match(adminCss, /@media\s*\(max-width:\s*700px\)[\s\S]*?\.sidebar\s*\{[^}]*transform:\s*translateX\(-105%\)/,
   'Mobilde kenar menü başlangıçta ekran dışında olmalı');
-assert.match(adminCss, /\\.sidebar\\.open\\s*\\{[^}]*transform:\\s*translateX\\(0\\)/,
+assert.match(adminCss, /\.sidebar\.open\s*\{[^}]*transform:\s*translateX\(0\)/,
   'Mobil menü açılma durumu tanımlı olmalı');
 
 console.log('PASS: Admin navigasyonundaki tüm bölümler gerçek bir panele bağlanıyor');
