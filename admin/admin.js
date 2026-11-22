@@ -1917,6 +1917,29 @@
       toast(error.message||'Ana site kişisel kayıtları okunamadı.');
     }finally{if(button)button.disabled=false;}
   }
+  function validateBackupStorageMap(value,label){
+    if(!value||typeof value!=='object'||Array.isArray(value))throw new Error(label+' alanı geçerli bir kayıt listesi değil.');
+    for(const [key,item] of Object.entries(value)){
+      if(!BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix)))throw new Error(label+' içinde izin verilmeyen kayıt anahtarı var: '+key);
+      if(typeof item!=='string')throw new Error(label+' içindeki '+key+' kaydı metin biçiminde değil.');
+    }
+    return Object.keys(value).length;
+  }
+  function validateBackupPayload(data){
+    if(!data||typeof data!=='object'||Array.isArray(data)||data.version!==1)throw new Error('Yedek biçimi veya sürümü desteklenmiyor.');
+    const isSite=data.format==='perde-site-backup'&&data.siteData&&typeof data.siteData==='object'&&!Array.isArray(data.siteData)&&Array.isArray(data.siteData.catalog);
+    const isPersonal=data.format==='perde-personal-backup'&&data.browserData&&typeof data.browserData==='object';
+    const isLegacy=data.format==='perde-full-backup'&&data.siteData&&typeof data.siteData==='object'&&Array.isArray(data.siteData.catalog)&&data.browserData&&typeof data.browserData==='object';
+    if(!isSite&&!isPersonal&&!isLegacy)throw new Error('Bu dosya geçerli bir Perde yedek dosyası değil.');
+    if(isSite||isLegacy){
+      if(data.siteData.catalog.some(item=>!item||typeof item!=='object'||Array.isArray(item)))throw new Error('Katalog içinde geçersiz yapım kaydı bulundu.');
+    }
+    let personal=0;
+    if(isPersonal||isLegacy){
+      personal=validateBackupStorageMap(data.browserData.localStorage,'localStorage')+validateBackupStorageMap(data.browserData.sessionStorage,'sessionStorage');
+    }
+    return {isSite,isPersonal,isLegacy,count:data.siteData?.catalog?.length||0,personal};
+  }
   function inspectBackupFile(file){
     selectedBackup=null;
     const button=$('#restore-full-backup'),summary=$('#restore-backup-summary');
@@ -1926,19 +1949,20 @@
     reader.onload=()=>{
       try{
         const data=JSON.parse(String(reader.result||''));
-        const isSite=data.format==='perde-site-backup'&&data.siteData&&Array.isArray(data.siteData.catalog);
-        const isPersonal=data.format==='perde-personal-backup'&&data.browserData&&typeof data.browserData.localStorage==='object'&&typeof data.browserData.sessionStorage==='object';
-        const isLegacy=data.format==='perde-full-backup'&&data.siteData&&Array.isArray(data.siteData.catalog)&&data.browserData&&typeof data.browserData.localStorage==='object';
-        if(data.version!==1||(!isSite&&!isPersonal&&!isLegacy))throw new Error('Bu dosya geçerli bir Perde yedek dosyası değil.');
+        const info=validateBackupPayload(data);
         selectedBackup=data;
-        const count=data.siteData?.catalog?.length||0;
-        const personal=data.browserData?backupStorageCount(data.browserData):0;
-        const date=data.exportedAt?new Date(data.exportedAt).toLocaleString('tr-TR'):'Tarih bilgisi yok';
-        const kind=isSite?'Yapım ve site verileri':isPersonal?'Kişisel tarayıcı verileri':'Eski tip tam yedek';
-        summary.innerHTML='<span>Dosya doğrulandı</span><b>'+escapeHtml(kind)+' · '+(isSite?count+' yapım':isPersonal?personal+' kişisel kayıt':count+' yapım · '+personal+' kişisel kayıt')+' · '+escapeHtml(date)+'</b>';
-        button.disabled=isSite&&!state.apiEnabled||isLegacy&&!state.apiEnabled;
-        if((isSite||isLegacy)&&!state.apiEnabled)summary.innerHTML+='<small class="helper-text">Sunucu yazma bağlantısı hazır değil; bu yedek şu an geri yüklenemiyor.</small>';
-      }catch(error){summary.innerHTML='<span>Dosya durumu</span><b class="state-warning">'+escapeHtml(error.message)+'</b>';selectedBackup=null;}
+        const date=data.exportedAt&&!Number.isNaN(Date.parse(data.exportedAt))?new Date(data.exportedAt).toLocaleString('tr-TR'):'Tarih bilgisi yok';
+        const kind=info.isSite?'Yapım ve site verileri':info.isPersonal?'Kişisel tarayıcı verileri':'Eski tip tam yedek';
+        const movies=info.isSite||info.isLegacy?data.siteData.catalog.filter(item=>!isSeries(item)).length:0;
+        const series=info.isSite||info.isLegacy?info.count-movies:0;
+        const details=[];
+        if(info.isSite||info.isLegacy)details.push(info.count+' yapım ('+movies+' film · '+series+' dizi)');
+        if(info.isPersonal||info.isLegacy)details.push(info.personal+' kişisel kayıt');
+        details.push((file.size/1024).toLocaleString('tr-TR',{maximumFractionDigits:1})+' KB');
+        summary.innerHTML='<span>Dosya doğrulandı · '+escapeHtml(file.name)+'</span><b>'+escapeHtml(kind)+' · '+escapeHtml(details.join(' · '))+'</b><small class="helper-text">Yedek tarihi: '+escapeHtml(date)+' · İçerik ve kayıt biçimleri kontrol edildi.</small>';
+        button.disabled=(info.isSite||info.isLegacy)&&!state.apiEnabled;
+        if((info.isSite||info.isLegacy)&&!state.apiEnabled)summary.innerHTML+='<small class="helper-text">Sunucu yazma bağlantısı hazır değil; bu yedek şu an geri yüklenemiyor.</small>';
+      }catch(error){summary.innerHTML='<span>Dosya doğrulanamadı</span><b class="state-warning">'+escapeHtml(error.message)+'</b>';selectedBackup=null;}
     };
     reader.onerror=()=>{summary.innerHTML='<span>Dosya durumu</span><b class="state-warning">Dosya okunamadı.</b>';};
     reader.readAsText(file);
@@ -1950,9 +1974,12 @@
     const isPersonal=data.format==='perde-personal-backup';
     const isLegacy=data.format==='perde-full-backup';
     if((isSite||isLegacy)&&!state.apiEnabled){toast('Site verilerini geri yüklemek için sunucu bağlantısı gerekli.');return;}
-    const catalogCount=data.siteData?.catalog?.length||0,personalCount=data.browserData?backupStorageCount(data.browserData):0;
+    let validated;
+    try{validated=validateBackupPayload(data);}catch(error){toast(error.message||'Yedek doğrulanamadı.','error');return;}
+    const catalogCount=validated.count,personalCount=validated.personal;
     const description=isSite?catalogCount+' yapım ve site ayarı':isPersonal?personalCount+' kişisel kayıt':catalogCount+' yapım ve '+personalCount+' kişisel kayıt';
-    if(!confirm(description+' geri yüklenecek. İlgili mevcut verilerin üzerine yazılacak. Devam edilsin mi?'))return;
+    const scope=isSite?'Yalnızca site kataloğu ve ayarları':isPersonal?'Yalnızca ana sitedeki kişisel tarayıcı kayıtları':'Site verileri ve kişisel tarayıcı kayıtları';
+    if(!confirm('GERİ YÜKLEME ONAYI\\n\\n'+scope+' değiştirilecek.\\n'+description+' aktarılacak.\\n\\nMevcut ilgili kayıtların üzerine yazılacak. İşlemden önce ayrıca mevcut kişisel kayıtların geri alma kopyası alınır. Devam edilsin mi?'))return;
     let previousBrowserData=null;
     try{
       if(data.browserData)previousBrowserData=await restoreMainSitePersonalStorage(data.browserData);
