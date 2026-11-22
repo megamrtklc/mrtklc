@@ -389,7 +389,7 @@
     setText('#analytics-rated-count',ratings.length+' / '+total+' yapımda puan var');
     const drawBars=(selector,rows,empty,maxOverride)=>{
       const root=$(selector);if(!root)return;
-      const max=Math.max(1,maxOverride||...rows.map(row=>row[1]));
+      const max=Math.max(1,maxOverride||0,...rows.map(row=>row[1]));
       root.innerHTML=rows.length?rows.map(([name,count])=>'<div class="bar-row"><span>'+escapeHtml(name)+'</span><div class="bar-track"><div class="bar-fill" style="width:'+(count/max*100)+'%"></div></div><b>'+count+'</b></div>').join():'<small class="analytics-empty">'+escapeHtml(empty)+'</small>';
     };
     drawBars('#type-chart',[['Film',movies],['Dizi',series]],'Henüz katalog kaydı yok.');
