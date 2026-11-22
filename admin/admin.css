@@ -787,3 +787,23 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
   #view-homepage-layout .homepage-layout-preview-head{flex-direction:column;align-items:stretch}
   #view-homepage-layout .homepage-preview-controls{justify-content:flex-start}
 }
+
+/* Manşet sıralama listesi */
+.hero-order-panel{margin-top:14px;padding:12px;border:1px solid #344252;border-radius:11px;background:#101923}
+.hero-order-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.hero-order-heading b{font-size:10px;color:#e5c477;letter-spacing:.04em}
+.hero-order-heading span{font-size:8px;color:#8191a3}
+.hero-order-list{display:grid;gap:6px;max-height:290px;overflow:auto}
+.hero-order-row{display:flex;align-items:center;gap:9px;min-width:0;padding:7px;border:1px solid #2c3b4a;border-radius:8px;background:#172330}
+.hero-order-number{display:grid;place-items:center;width:22px;height:22px;flex:0 0 22px;border-radius:6px;background:rgba(215,180,108,.13);color:#e5c477;font-size:9px;font-weight:800}
+.hero-order-row>img{width:27px;height:37px;flex:0 0 27px;object-fit:cover;border-radius:4px;background:#263442}
+.hero-order-title{display:block;flex:1;min-width:0}
+.hero-order-title b,.hero-order-title small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero-order-title b{font-size:9px;color:#e7edf3}
+.hero-order-title small{margin-top:3px;font-size:8px;color:#8292a4}
+.hero-order-actions{display:flex;gap:4px}
+.hero-order-actions button{width:27px;height:27px;border:1px solid #405064;border-radius:7px;background:#202d3b;color:#e7edf3;font-size:13px;cursor:pointer}
+.hero-order-actions button:hover:not(:disabled){border-color:#d7b46c;color:#f0d18e}
+.hero-order-actions button:disabled{opacity:.3;cursor:not-allowed}
+.hero-order-empty{padding:15px;text-align:center;color:#8292a4;font-size:9px}
+@media(max-width:700px){.hero-order-panel{padding:9px}.hero-order-heading{align-items:flex-start;flex-direction:column;gap:4px}.hero-order-row{gap:7px}}
