@@ -982,3 +982,21 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #personalized-publish-check{border-color:rgba(199,164,92,.48);background:linear-gradient(145deg,rgba(54,43,27,.34),rgba(24,31,40,.94))}
 #personalized-publish-summary{white-space:normal;line-height:1.7}
 #personalized-publish-confirm:disabled{opacity:.48;cursor:not-allowed}
+
+@media(max-width:600px){
+.personalized-rules-backdrop{align-items:flex-end;padding:8px;padding-bottom:max(8px,env(safe-area-inset-bottom))}
+.personalized-rules-dialog{width:100%;max-height:calc(100vh - 16px);overflow-y:auto;overscroll-behavior:contain;padding:16px;border-radius:16px 16px 12px 12px}
+.personalized-rules-dialog-head{gap:10px;margin-bottom:14px}
+.personalized-rules-dialog-head h2{font-size:18px;line-height:1.25}
+.personalized-rules-dialog-head p{font-size:11px}
+.personalized-rules-fields{gap:9px}
+.personalized-rule-field{padding:11px}
+.personalized-rule-range{gap:8px}
+.personalized-rule-field input,.personalized-rule-field select{min-height:44px;font-size:16px}
+.personalized-rules-footnote{font-size:10px;margin:11px 0}
+.personalized-rules-actions{position:sticky;bottom:-16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 0 8px;background:#19232f}
+.personalized-rules-actions>span{display:none}
+.personalized-rules-actions #personalized-rules-reset{grid-column:1/-1}
+.personalized-rules-actions [data-rules-close]{grid-column:1}
+.personalized-rules-actions #personalized-rules-save{grid-column:2}
+}

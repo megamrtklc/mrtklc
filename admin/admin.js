@@ -1384,7 +1384,7 @@
   function closePersonalizedRules(){const modal=$('#personalized-rules-modal');if(modal)modal.hidden=true;personalizedRulesEditingMode=null;personalizedRulesDraft=null;}
   function savePersonalizedRules(){
     if(!personalizedRulesEditingMode)return;
-    const mode=personalizedRulesEditingMode,fields=$('#personalized-rules-fields [data-rule]'),rules={};
+    const mode=personalizedRulesEditingMode,fields=$$('#personalized-rules-fields [data-rule]'),rules={};
     fields.forEach(input=>{rules[input.dataset.rule]=input.dataset.rule==='mediaType'?input.value:Number(input.value);});
     if(!Number.isFinite(rules.minRating)||!Number.isFinite(rules.maxRating)||rules.minRating<0||rules.maxRating>10||rules.minRating>rules.maxRating){toast('IMDb puan aralığını kontrol et.','error');return;}
     if(!Number.isInteger(rules.minYear)||!Number.isInteger(rules.maxYear)||rules.minYear<1900||rules.maxYear>2099||rules.minYear>rules.maxYear){toast('Yayın yılı aralığını kontrol et.','error');return;}
@@ -2144,7 +2144,7 @@
   $('#personalized-preview-modes')?.closest('.personalized-preview-card')?.addEventListener('click',event=>{
     const button=event.target.closest('[data-personalized-preview-device]');if(!button)return;
     const preview=$('#personalized-static-preview');if(!preview)return;preview.dataset.device=button.dataset.personalizedPreviewDevice;
-    $('.personalized-preview-switch [data-personalized-preview-device]').forEach(item=>item.classList.toggle('active',item===button));
+    $$('.personalized-preview-switch [data-personalized-preview-device]').forEach(item=>item.classList.toggle('active',item===button));
   });
   $('#personalized-labels-reset')?.addEventListener('click',()=>{
     ['taste','surprise','series','gems'].forEach(mode=>{const input=$('#personalized-label-'+mode);if(input)input.value=PERSONALIZED_MODE_META[mode].label;});
