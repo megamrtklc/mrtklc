@@ -2109,7 +2109,7 @@
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
   $('#header-footer-form').addEventListener('input',updateHeaderFooterDraftState);
   $('#header-footer-form').addEventListener('change',updateHeaderFooterDraftState);
-  $('.hf-preview-device').forEach(button=>button.addEventListener('click',()=>{headerFooterPreviewDevice=button.dataset.device;$('.hf-preview-device').forEach(item=>item.classList.toggle('active',item===button));renderHeaderFooterPreview();}));
+  $$('.hf-preview-device').forEach(button=>button.addEventListener('click',()=>{headerFooterPreviewDevice=button.dataset.device;$$('.hf-preview-device').forEach(item=>item.classList.toggle('active',item===button));renderHeaderFooterPreview();}));
   $('#hf-reset')?.addEventListener('click',()=>{if(confirm('Header ve Footer ayarlarını varsayılan değerlere döndürmek istiyor musun? Bu işlem kaydetmeden canlı siteyi değiştirmez.'))resetHeaderFooterDraft(true);});
   $('#hf-discard')?.addEventListener('click',()=>{if(confirm('Kaydedilmemiş tüm Header ve Footer değişiklikleri geri alınsın mı?'))resetHeaderFooterDraft(false);});
   ['header','footer'].forEach(kind=>{
