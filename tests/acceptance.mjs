@@ -589,7 +589,7 @@ try {
       const third = cards[2].getBoundingClientRect();
       return {
         count: cards.length,
-        columns: getComputedStyle(element).gridTemplateColumns.split(' ').length,
+        columns: new Set(cards.map(card => Math.round(card.getBoundingClientRect().left))).size,
         firstTwoShareRow: Math.abs(first.top - second.top) < 2,
         nextRowBelow: third.top > first.top
       };
