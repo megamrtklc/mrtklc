@@ -425,11 +425,11 @@
     setText('#catalog-undated',undatedCount.toLocaleString('tr-TR')+' yapımın eklenme tarihi bilinmiyor');
     const monthNames=Array.from({length:6},(_,i)=>{const d=new Date(now.getFullYear(),now.getMonth()-(5-i),1);return {key:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),label:d.toLocaleDateString('tr-TR',{month:'short'})+' '+String(d.getFullYear()).slice(-2)};});
     const monthCounts=monthNames.map(month=>[month.label,datedCatalog.filter(row=>row.date.getFullYear()+'-'+String(row.date.getMonth()+1).padStart(2,'0')===month.key).length]);
-    drawBars('#catalog-monthly-chart',monthCounts,'Henüz tarihli ekleme bulunmuyor.');
+    if(datedCatalog.length)drawBars('#catalog-monthly-chart',monthCounts,'Henüz tarihli ekleme bulunmuyor.');else{const monthlyRoot=$('#catalog-monthly-chart');if(monthlyRoot)monthlyRoot.innerHTML='<small class="analytics-empty">Eski kayıtların eklenme tarihleri tutulmadığı için aylık geçmiş henüz oluşmadı.</small>';}
     const annualCounts={};
     datedCatalog.forEach(row=>{const year=row.date.getFullYear();annualCounts[year]=(annualCounts[year]||0)+1;});
     const annualRows=Object.entries(annualCounts).sort((a,b)=>Number(b[0])-Number(a[0])).slice(0,6);
-    drawBars('#catalog-annual-chart',annualRows,'Henüz yıllık ekleme verisi bulunmuyor.');
+    if(annualRows.length)drawBars('#catalog-annual-chart',annualRows,'Henüz yıllık ekleme verisi bulunmuyor.');else{const annualRoot=$('#catalog-annual-chart');if(annualRoot)annualRoot.innerHTML='<small class="analytics-empty">Yıllık rapor, yeni kayıtların eklenme tarihleri kaydedildikçe oluşacak.</small>';}
     const genreCounts={};
     catalog.forEach(item=>getItemGenres(item).forEach(name=>{genreCounts[name]=(genreCounts[name]||0)+1;}));
     const genreRows=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'tr'));
