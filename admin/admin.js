@@ -401,6 +401,22 @@
     const yearChart=$('#year-chart'),yearMore=$('#year-chart-more');
     const drawYears=(expanded=false)=>{if(!yearChart)return;const visible=expanded?yearRows:yearRows.slice(0,6);drawBars('#year-chart',visible,'Yapım yılı bilgisi bulunamadı.');if(yearMore){yearMore.hidden=yearRows.length<=6;yearMore.textContent=expanded?'Daha az göster':'Daha fazla göster ('+yearRows.length+')';yearMore.setAttribute('aria-expanded',String(expanded));}};
     drawYears(yearMore?.dataset.expanded==='true');
+    const now=new Date(),monthStart=new Date(now.getFullYear(),now.getMonth(),1);
+    const datedCatalog=catalog.map(item=>({item,date:item.addedAt?new Date(item.addedAt):null})).filter(row=>row.date&&!Number.isNaN(row.date.getTime()));
+    const daysAgo=days=>new Date(now.getTime()-days*86400000);
+    const added30=datedCatalog.filter(row=>row.date>=daysAgo(30)&&row.date<=now).length;
+    const added90=datedCatalog.filter(row=>row.date>=daysAgo(90)&&row.date<=now).length;
+    const undatedCount=total-datedCatalog.length;
+    setText('#catalog-added-30',String(added30));
+    setText('#catalog-added-90',String(added90));
+    setText('#catalog-undated',undatedCount.toLocaleString('tr-TR')+' yapımın eklenme tarihi bilinmiyor');
+    const monthNames=Array.from({length:6},(_,i)=>{const d=new Date(now.getFullYear(),now.getMonth()-(5-i),1);return {key:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),label:d.toLocaleDateString('tr-TR',{month:'short'})+' '+String(d.getFullYear()).slice(-2)};});
+    const monthCounts=monthNames.map(month=>[month.label,datedCatalog.filter(row=>row.date.getFullYear()+'-'+String(row.date.getMonth()+1).padStart(2,'0')===month.key).length]);
+    drawBars('#catalog-monthly-chart',monthCounts,'Henüz tarihli ekleme bulunmuyor.');
+    const annualCounts={};
+    datedCatalog.forEach(row=>{const year=row.date.getFullYear();annualCounts[year]=(annualCounts[year]||0)+1;});
+    const annualRows=Object.entries(annualCounts).sort((a,b)=>Number(b[0])-Number(a[0])).slice(0,6);
+    drawBars('#catalog-annual-chart',annualRows,'Henüz yıllık ekleme verisi bulunmuyor.');
     const genreCounts={};
     catalog.forEach(item=>{
       let values=item.genres??item.genre??item.category??item.categories??[];
@@ -428,7 +444,7 @@
   function exportAnalyticsCsv(){
     const catalog=Array.isArray(state.catalog)?state.catalog:[];
     if(!catalog.length){toast('Dışa aktarılacak katalog kaydı bulunamadı.','info');return;}
-    const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['Puan',x=>x.rating??x.imdbRating??x.voteAverage??''],['Tür etiketleri',x=>{const v=x.genres??x.genre??x.category??x.categories??'';return Array.isArray(v)?v.map(g=>g&&typeof g==='object'?g.name:g).join(' / '):v;}],['Yönetmen',x=>x.director??x.directors??''],['TMDB ID',x=>x.tmdbId??x.tmdb_id??'']];
+    const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['Kataloğa eklenme tarihi',x=>x.addedAt||'Bilinmiyor'],['Puan',x=>x.rating??x.imdbRating??x.voteAverage??''],['Tür etiketleri',x=>{const v=x.genres??x.genre??x.category??x.categories??'';return Array.isArray(v)?v.map(g=>g&&typeof g==='object'?g.name:g).join(' / '):v;}],['Yönetmen',x=>x.director??x.directors??''],['TMDB ID',x=>x.tmdbId??x.tmdb_id??'']];
     const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
     const csv='\uFEFF'+[columns.map(c=>quote(c[0])).join(';'),...catalog.map(item=>columns.map(c=>quote(c[1](item))).join(';'))].join('\r\n');
     const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
@@ -708,7 +724,7 @@
     const type=$('#field-type').value;
     let episodeWatchUrls={};
     try{episodeWatchUrls=parseEpisodeWatchUrls($('#field-episode-urls').value);}catch(error){toast(error.message,'error');return;}
-    const record={...(existing||{}),id:existing?.id??('cv-'+Date.now()),title:$('#field-title').value.trim(),type,
+    const record={...(existing||{}),...(existing?{}:{addedAt:new Date().toISOString()}),id:existing?.id??('cv-'+Date.now()),title:$('#field-title').value.trim(),type,
       year:$('#field-year').value.trim(),rating:$('#field-rating').value.trim(),genre:$('#field-genre').value.trim(),
       category:$('#field-category').value.trim(),duration:$('#field-duration').value.trim(),country:$('#field-country').value.trim(),
       director:$('#field-director').value.trim(),platform:$('#field-platform').value.trim(),watchUrl:$('#field-watch').value.trim(),
