@@ -356,24 +356,55 @@
        </article>
       </section>
       <section class="view" id="view-preferences">
-       <div class="page-heading"><div><div class="eyebrow">WORKSPACE / PREFERENCES</div><h1>Panel Tercihleri</h1><p>Yönetim panelinin görünümünü ve hareket davranışını kendi çalışma alışkanlığına göre ayarla.</p></div></div>
-       <div class="settings-grid preferences-grid">
-        <article class="panel-card">
-         <div class="panel-card-heading"><div><span class="eyebrow">INTERFACE DENSITY</span><h2>Arayüz yoğunluğu</h2></div><span class="state-ready">GÖRÜNÜM</span></div>
-         <p class="helper-text">Kartların, satırların ve içerik alanlarının dikey boşluklarını belirler. Tercih yalnızca bu tarayıcıda saklanır.</p>
+       <div class="page-heading"><div><div class="eyebrow">WORKSPACE / PERSONALIZATION</div><h1>Panel Tercihleri</h1><p>Yönetim alanını çalışma ritmine göre düzenle. Değişiklikler anında uygulanır ve yalnızca bu tarayıcıda saklanır.</p></div><span class="state-ready preferences-live-state">ANINDA UYGULANIR</span></div>
+       <div class="preferences-grid">
+        <article class="panel-card preference-main-card">
+         <div class="panel-card-heading"><div><span class="eyebrow">01 / WORKSPACE DENSITY</span><h2>Arayüz yoğunluğu</h2></div><span class="state-ready">GÖRÜNÜM</span></div>
+         <p class="helper-text">Kartlar ve tablolar arasındaki boşluğu seç. İçerik veya katalog verileri değişmez.</p>
          <div class="preference-choice-group" role="group" aria-label="Arayüz yoğunluğu">
-          <label class="preference-choice"><input type="radio" name="panel-density" value="comfortable" checked><span><b>Rahat</b><small>Daha geniş aralıklar</small></span></label>
-          <label class="preference-choice"><input type="radio" name="panel-density" value="compact"><span><b>Kompakt</b><small>Daha fazla içerik alanı</small></span></label>
+          <label class="preference-choice">
+           <input type="radio" name="panel-density" value="comfortable" checked>
+           <span class="preference-choice-copy"><b>Rahat görünüm</b><small>Geniş aralıklar, daha ferah çalışma</small></span>
+           <span class="density-preview density-preview-comfortable" aria-hidden="true"><i></i><i></i><i></i></span>
+          </label>
+          <label class="preference-choice">
+           <input type="radio" name="panel-density" value="compact">
+           <span class="preference-choice-copy"><b>Kompakt görünüm</b><small>Daha sıkı satırlar, ekranda daha çok kayıt</small></span>
+           <span class="density-preview density-preview-compact" aria-hidden="true"><i></i><i></i><i></i></span>
+          </label>
+         </div>
+         <div class="preference-tip"><span class="preference-tip-icon">✦</span><span><b>İpucu</b> Çok sayıda yapım düzenlerken Kompakt; uzun süreli içerik incelemesinde Rahat görünüm daha kullanışlı olabilir.</span></div>
+        </article>
+        <article class="panel-card preference-main-card">
+         <div class="panel-card-heading"><div><span class="eyebrow">02 / MOTION & ACCESSIBILITY</span><h2>Hareket efektleri</h2></div><span class="state-ready">KONFOR</span></div>
+         <p class="helper-text">Paneldeki geçiş ve animasyonların ne kadar hareketli olacağını belirle.</p>
+         <label class="preference-toggle preference-motion-toggle"><input type="checkbox" id="panel-reduce-motion"><span><b>Hareketleri azalt</b><small>Animasyonları ve geçişleri en aza indirir.</small></span><em class="preference-toggle-state" id="preference-motion-state">Kapalı</em></label>
+         <div class="motion-preview" aria-label="Hareket ayarı görsel önizlemesi">
+          <div class="motion-preview-track"><span class="motion-preview-dot"></span></div>
+          <div class="motion-preview-labels"><span>Standart geçiş</span><span>Azaltılmış hareket</span></div>
+          <p>Bu ayar yalnızca yönetim panelinin hareketlerini etkiler.</p>
          </div>
         </article>
-        <article class="panel-card">
-         <div class="panel-card-heading"><div><span class="eyebrow">MOTION & ACCESSIBILITY</span><h2>Hareket efektleri</h2></div><span class="state-ready">ERİŞİLEBİLİRLİK</span></div>
-         <p class="helper-text">Paneldeki geçişleri ve animasyonları azaltır. Uzun süreli kullanımda daha sakin bir görünüm sağlar.</p>
-         <label class="preference-toggle"><input type="checkbox" id="panel-reduce-motion"><span><b>Hareketleri azalt</b><small>Animasyon ve geçişleri en aza indir.</small></span></label>
-        </article>
        </div>
-       <article class="panel-card preferences-footer-card"><div><b>Tercihleri sıfırla</b><p class="helper-text">Panel görünümünü varsayılan rahat aralıklara ve standart hareketlere döndürür. Katalog veya site ayarlarına dokunmaz.</p></div><button class="secondary-button" type="button" id="preferences-reset">Varsayılanlara dön</button></article>
-       <p class="system-health-footnote" id="preferences-status" role="status">Tercihler bu tarayıcıda saklanır; katalog verilerine veya ziyaretçilerin gördüğü siteye etki etmez.</p>
+       <article class="panel-card preference-guide-card">
+        <div class="panel-card-heading"><div><span class="eyebrow">QUICK GUIDE / VISUAL HELP</span><h2>Görsel kullanım rehberi</h2></div><span class="state-ready">3 KISA NOT</span></div>
+        <div class="preference-guide-grid">
+         <div class="preference-guide-item">
+          <div class="guide-visual guide-visual-spacing" aria-hidden="true"><div class="guide-window"><b></b><i></i><i></i><i></i></div><div class="guide-window guide-window-tight"><b></b><i></i><i></i><i></i></div></div>
+          <b>Boşlukları yönet</b><p>Rahat ve Kompakt seçenekleri kart ve tablo yoğunluğunu değiştirir; içerik sırasına dokunmaz.</p>
+         </div>
+         <div class="preference-guide-item">
+          <div class="guide-visual guide-visual-motion" aria-hidden="true"><span class="guide-motion-line"></span><span class="guide-motion-point"></span><span class="guide-motion-stop">Ⅱ</span></div>
+          <b>Daha sakin kullanım</b><p>Hareketleri azalt seçeneği, dikkat dağıtan animasyon ve geçişleri minimuma indirir.</p>
+         </div>
+         <div class="preference-guide-item">
+          <div class="guide-visual guide-visual-device" aria-hidden="true"><div class="guide-device"><span></span><i></i><i></i><i></i></div><div class="guide-device guide-device-mobile"><span></span><i></i><i></i></div></div>
+          <b>Sadece bu tarayıcı</b><p>Tercihler bu cihazın tarayıcısında saklanır. Başka cihazlara veya ziyaretçilere aktarılmaz.</p>
+         </div>
+        </div>
+       </article>
+       <article class="panel-card preferences-footer-card"><div><b>Varsayılan ayarlara dön</b><p class="helper-text">Rahat görünüm ve standart hareket davranışı yeniden etkinleşir. Katalog, ana site ve yayın ayarları etkilenmez.</p></div><button class="secondary-button" type="button" id="preferences-reset">↺　Tercihleri sıfırla</button></article>
+       <p class="system-health-footnote" id="preferences-status" role="status" aria-live="polite">Tercihler henüz değiştirilmedi. Seçimlerin otomatik kaydedilir.</p>
       </section>
       <section class="view" id="view-system">
         <div class="page-heading"><div><div class="eyebrow">SYSTEM / HEALTH</div><h1>Sistem Kontrol Merkezi</h1><p>Perde yönetim bağlantılarını, katalog bütünlüğünü ve yayınlama erişimini buradan kontrol et.</p></div><button class="primary-button" id="system-refresh" type="button">↻　Kontrolleri yenile</button></div>
