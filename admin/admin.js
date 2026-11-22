@@ -1472,7 +1472,7 @@
       // Render the catalog immediately after the data API succeeds. A secondary
       // session/profile endpoint must never prevent the catalog from appearing.
       $('#health-catalog').textContent='Bağlandı';$('#health-json').textContent='Geçerli';
-      $('#data-version').textContent=String(state.data.version??'Belirtilmemiş');
+      const versionLabel=$('#system-data-version');if(versionLabel)versionLabel.textContent=String(state.data.version??'Belirtilmemiş');
       $('#add-content').disabled=false;$('#catalog-add').disabled=false;$('#collection-add').disabled=false;
       const writeHint=state.apiEnabled?'Yeni yapım ekle':'Form açılır; kaydetmek için GitHub yazma bağlantısı gerekir.';
       $('#add-content').title=writeHint;$('#catalog-add').title=writeHint;$('#collection-add').title=state.apiEnabled?'Yeni koleksiyon ekle':'Kayıt için GitHub yazma bağlantısı gerekir.';
