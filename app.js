@@ -1891,6 +1891,13 @@
                     const config = this.homepageConfig?.personalizedSection?.discoveryModes || {};
                     return { taste: config.taste !== false, surprise: config.surprise !== false, series: config.series !== false, gems: config.gems !== false };
                 },
+                get personalizedRecommendationModes() {
+                    const config=this.homepageConfig?.personalizedSection||{};
+                    const labels={taste:'Zevkime Uygun',surprise:'Beni Şaşırt',series:'Yeni Diziler',gems:'Gizli Hazineler'};
+                    const valid=['taste','surprise','series','gems'];
+                    const order=Array.isArray(config.discoveryModeOrder)?config.discoveryModeOrder:[];
+                    return [...order.filter((mode,index)=>valid.includes(mode)&&order.indexOf(mode)===index),...valid.filter(mode=>!order.includes(mode))].map(id=>({id,label:labels[id]}));
+                },
                 isPersonalizedModeEnabled(mode) { return this.personalizedRecommendationModeConfig[mode] !== false; },
                 recommendationDisplayCache: null,
                 setPersonalizedRecommendationMode(mode) {
@@ -2715,7 +2722,7 @@
                         const id = String(item.id);
                         if (!history.has(id)) history.set(id, { item, weight: 0.85 });
                     });
-                    const excluded = new Set([...watchedHistoryIds, ...(sectionConfig.excludeWatchlist === false ? [] : watchlist.map(item => String(item.id))), ...watchedItems.map(item => String(item.id)), ...favoriteItems.map(item => String(item.id))]);
+                    const excluded = new Set([...(sectionConfig.excludeWatched === false ? [] : watchedHistoryIds), ...(sectionConfig.excludeWatchlist === false ? [] : watchlist.map(item => String(item.id))), ...watchedItems.map(item => String(item.id)), ...favoriteItems.map(item => String(item.id))]);
                     const prefs = {
                         genres: new Map(), types: new Map(), countries: new Map(),
                         directors: new Map(), actors: new Map(), themes: new Map(),
