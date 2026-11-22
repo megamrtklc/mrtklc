@@ -1651,7 +1651,7 @@
       const listId='#hero-'+device+'-slide-list';
       const oldEntries=Array.isArray(previous[device+'HeroSlides'])?previous[device+'HeroSlides']:previous.heroSlides;
       const oldMap=new Map(oldEntries.map(x=>[String(x.id),x]));
-      const selectedInputs=$(listId+' input:checked');
+      const selectedInputs=$$(listId+' input:checked');
       const selectedIds=new Set(selectedInputs.map(input=>String(input.value)));
       const max=device==='desktop'?Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)):Math.max(1,Math.min(12,Number($('#hero-mobile-count').value)||6));
       const orderedIds=(state.heroOrderDraft?.[device]||[]).filter(id=>selectedIds.has(String(id)));
