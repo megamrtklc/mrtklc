@@ -753,3 +753,37 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
  .homepage-publish-confirm-actions{display:grid;grid-template-columns:1fr 1fr}
  .homepage-publish-confirm-actions button{width:100%;padding-inline:8px}
 }
+
+
+/* Ana sayfa düzeni: yatay bilgi kartı ve isteğe bağlı taslak önizlemesi */
+#view-homepage-layout .homepage-layout-side{
+  display:grid;
+  grid-template-columns:minmax(145px,.85fr) repeat(3,minmax(0,1fr)) auto;
+  align-items:center;
+  gap:0 18px;
+  margin-top:18px;
+  padding:16px 20px;
+}
+#view-homepage-layout .homepage-layout-side-heading{min-width:0}
+#view-homepage-layout .homepage-layout-side-heading h2{margin:5px 0 0;color:#edf2f7;font:800 16px Inter,sans-serif}
+#view-homepage-layout .homepage-layout-side .homepage-layout-note{align-self:stretch;padding:5px 0 5px 15px;border-top:0;border-left:1px solid #2a3745}
+#view-homepage-layout .homepage-layout-side .homepage-layout-note b{font-size:10px}
+#view-homepage-layout .homepage-layout-side .homepage-layout-note p{font-size:9px;line-height:1.5}
+#view-homepage-layout .homepage-layout-side .secondary-button{width:auto;margin:0;white-space:nowrap}
+#view-homepage-layout .homepage-preview-controls{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+#view-homepage-layout .homepage-preview-toggle{white-space:nowrap}
+#view-homepage-layout #homepage-preview-content[hidden]{display:none!important}
+@media(max-width:1050px){
+  #view-homepage-layout .homepage-layout-side{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px}
+  #view-homepage-layout .homepage-layout-side-heading{grid-column:1/-1}
+  #view-homepage-layout .homepage-layout-side .homepage-layout-note{padding-left:12px}
+  #view-homepage-layout .homepage-layout-side .secondary-button{grid-column:1/-1;justify-self:start}
+}
+@media(max-width:700px){
+  #view-homepage-layout .homepage-layout-side{grid-template-columns:minmax(0,1fr);gap:0;padding:15px}
+  #view-homepage-layout .homepage-layout-side-heading{grid-column:auto;padding-bottom:8px}
+  #view-homepage-layout .homepage-layout-side .homepage-layout-note{padding:11px 0;border-top:1px solid #2a3745;border-left:0}
+  #view-homepage-layout .homepage-layout-side .secondary-button{grid-column:auto;margin-top:10px}
+  #view-homepage-layout .homepage-layout-preview-head{flex-direction:column;align-items:stretch}
+  #view-homepage-layout .homepage-preview-controls{justify-content:flex-start}
+}
