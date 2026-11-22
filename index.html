@@ -564,10 +564,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-text="homepageConfig?.personalizedSection?.description || 'İzleme alışkanlıklarından ilham alan, sana özel seçkiler'">İzleme alışkanlıklarından ilham alan, sana özel seçkiler</p>
                         </div>
                         <div class="home-personalized-toolbar shrink-0"><div class="home-personalized-modes" aria-label="Öneri keşif modu">
-<button type="button" @click="setPersonalizedRecommendationMode('taste')" :class="recommendationMode === 'taste' ? 'is-active' : ''" x-show="isPersonalizedModeEnabled('taste')">Zevkime Uygun</button>
-<button type="button" @click="setPersonalizedRecommendationMode('surprise')" :class="recommendationMode === 'surprise' ? 'is-active' : ''" x-show="isPersonalizedModeEnabled('surprise')">Beni Şaşırt</button>
-<button type="button" @click="setPersonalizedRecommendationMode('series')" :class="recommendationMode === 'series' ? 'is-active' : ''" x-show="isPersonalizedModeEnabled('series')">Yeni Diziler</button>
-<button type="button" @click="setPersonalizedRecommendationMode('gems')" :class="recommendationMode === 'gems' ? 'is-active' : ''" x-show="isPersonalizedModeEnabled('gems')">Gizli Hazineler</button>
+<template x-for="mode in personalizedRecommendationModes" :key="mode.id"><button type="button" @click="setPersonalizedRecommendationMode(mode.id)" :class="recommendationMode === mode.id ? 'is-active' : ''" x-show="isPersonalizedModeEnabled(mode.id)" x-text="mode.label"></button></template>
 </div><button type="button" class="home-personalized-refresh" @click="refreshPersonalizedRecommendations()" title="Yeni öneriler getir"><i class="fa-solid fa-arrows-rotate"></i><span>Yenile</span></button></div>
                     </div>
                     <div class="home-personalized-showcase" :class="{ 'cv-personalized-showcase-pending': !homeSectionReady.personalized }" style="height:360px;min-height:360px;box-sizing:border-box">
