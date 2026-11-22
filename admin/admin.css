@@ -607,3 +607,70 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #view-quality .quality-page-size-label{display:inline-flex;align-items:center;gap:7px;color:var(--muted,#92939a);font-size:11px;white-space:nowrap}
 #view-quality .quality-page-size-label select{min-width:68px;padding:8px 26px 8px 10px;border:1px solid var(--line,rgba(255,255,255,.12));border-radius:8px;background:var(--panel,#17191f);color:var(--text,#eee);font:inherit}
 @media(max-width:620px){#view-quality .quality-page-size-label{justify-content:space-between;width:100%}#view-quality .quality-page-size-label select{flex:0 0 92px}}
+
+
+/* Ana sayfa düzeni: geniş metin alanları ve masaüstü/mobil taslak önizlemesi */
+#view-homepage-layout .homepage-layout-row{grid-template-columns:38px minmax(0,1fr) auto auto;align-items:start}
+#view-homepage-layout .homepage-layout-row-copy{display:grid;gap:9px;min-width:0;width:100%}
+#view-homepage-layout .homepage-layout-field{grid-template-columns:76px minmax(0,1fr);align-items:start}
+#view-homepage-layout .homepage-layout-field>span{padding-top:10px}
+#view-homepage-layout .homepage-layout-field input,
+#view-homepage-layout .homepage-layout-field textarea{display:block;width:100%;min-width:0;min-height:38px;padding:9px 11px;border:1px solid #3b4b5d;border-radius:8px;background:#111b26;color:#e5edf5;font:600 12px/1.45 'Inter',sans-serif;outline:none;box-sizing:border-box}
+#view-homepage-layout .homepage-layout-field textarea{min-height:54px;resize:vertical;white-space:pre-wrap;overflow-wrap:anywhere}
+#view-homepage-layout .homepage-layout-field input:focus,
+#view-homepage-layout .homepage-layout-field textarea:focus{border-color:#d8b45d;box-shadow:0 0 0 2px #d8b45d22}
+.homepage-layout-preview-panel{margin-top:18px;padding:22px}
+.homepage-layout-preview-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}
+.homepage-layout-preview-head h2{margin:6px 0;color:#edf2f7;font:800 19px Inter,sans-serif}
+.homepage-layout-preview-head p{margin:0;color:#8998a8;font-size:11px;line-height:1.55}
+.homepage-preview-switch{display:flex;gap:5px;padding:4px;border:1px solid #354456;border-radius:10px;background:#101923;flex:0 0 auto}
+.homepage-preview-switch button{padding:8px 12px;border:0;border-radius:7px;background:transparent;color:#9ba9b8;font:700 10px Inter,sans-serif;cursor:pointer}
+.homepage-preview-switch button.is-active{background:#c7a45d;color:#171717}
+.homepage-layout-preview{display:flex;justify-content:center;padding:16px;border:1px solid #354354;border-radius:14px;background:linear-gradient(145deg,#0e151e,#182432)}
+.homepage-preview-browser{width:100%;max-width:100%;overflow:hidden;border:1px solid #3b4a5b;border-radius:10px;background:#0d1118;box-shadow:0 14px 36px #0005;transition:max-width .2s}
+.homepage-layout-preview[data-device=mobile] .homepage-preview-browser{max-width:390px}
+.homepage-preview-browser-bar{height:25px;display:flex;align-items:center;gap:5px;padding:0 10px;background:#202a36;border-bottom:1px solid #34404d}
+.homepage-preview-browser-bar i{width:6px;height:6px;border-radius:50%;background:#758292}
+.homepage-preview-browser-bar span{margin-left:7px;color:#8290a0;font-size:8px}
+.homepage-preview-site-head{height:43px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid #293542;color:#e9edf2}
+.homepage-preview-site-head b{font-size:14px;letter-spacing:2px;color:#d9b66c}
+.homepage-preview-site-head span{font-size:8px;color:#a9b4c0;letter-spacing:.4px}
+.homepage-preview-hero-placeholder{min-height:116px;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:18px 22px;background:linear-gradient(100deg,#27303b,#111820 68%,#2c261d);border-bottom:1px solid #303a45}
+.homepage-preview-hero-placeholder span,.homepage-preview-hero-kicker{font-size:8px;font-weight:900;letter-spacing:1.2px;color:#d9b66c}
+.homepage-preview-hero-placeholder b{font-size:17px;color:#f1f3f5}
+.homepage-preview-hero-placeholder small{font-size:9px;color:#a7b1bc}
+.homepage-preview-sections{padding:8px 18px 16px}
+.homepage-preview-section{position:relative;display:flex;align-items:center;gap:12px;min-height:70px;padding:12px 2px;border-bottom:1px solid #293440}
+.homepage-preview-section-copy{min-width:0;flex:1}
+.homepage-preview-section-index{width:21px;flex:0 0 21px;color:#c9a65e;font-size:9px;font-weight:900}
+.homepage-preview-section-copy b{display:block;color:#f0f2f5;font-size:12px;font-weight:800;line-height:1.4;overflow-wrap:anywhere}
+.homepage-preview-section-copy p{margin:4px 0 0;color:#9ba8b6;font-size:9px;line-height:1.5;overflow-wrap:anywhere}
+.homepage-preview-poster-rail{display:flex;gap:5px;flex:0 0 auto}
+.homepage-preview-poster-rail i{display:block;width:25px;height:38px;border-radius:4px;background:linear-gradient(145deg,#495b6b,#202c39 65%,#78603c)}
+.homepage-preview-poster-rail i:nth-child(2){background:linear-gradient(145deg,#665348,#252d3a)}
+.homepage-preview-poster-rail i:nth-child(3){background:linear-gradient(145deg,#52645c,#27313c)}
+.homepage-preview-poster-rail i:nth-child(4){background:linear-gradient(145deg,#645d75,#28313b)}
+.homepage-preview-section.is-hero{min-height:54px}
+.homepage-preview-section.is-hero .homepage-preview-section-copy b{font-size:13px}
+.homepage-preview-hero-cta{padding:7px 9px;border:1px solid #9c814c;border-radius:5px;color:#d9b66c;font-size:8px;font-weight:900;white-space:nowrap}
+.homepage-preview-empty{padding:24px;text-align:center;color:#a8b4c1;font-size:11px}
+.homepage-preview-disclaimer{margin:10px 2px 0;color:#7f8d9b;font-size:9px;line-height:1.5}
+@media(max-width:900px){
+ #view-homepage-layout .homepage-layout-row{grid-template-columns:34px minmax(0,1fr);gap:10px}
+ #view-homepage-layout .homepage-layout-row>.homepage-layout-state,
+ #view-homepage-layout .homepage-layout-row>.homepage-layout-actions{grid-column:2}
+ #view-homepage-layout .homepage-layout-field{grid-template-columns:76px minmax(0,1fr)}
+}
+@media(max-width:600px){
+ .homepage-layout-preview-panel{padding:15px}
+ .homepage-layout-preview-head{display:grid}
+ .homepage-preview-switch{width:max-content}
+ .homepage-layout-preview{padding:7px}
+ .homepage-preview-site-head span{font-size:6px}
+ .homepage-preview-sections{padding:6px 10px 12px}
+ .homepage-preview-section{gap:7px}
+ .homepage-preview-poster-rail i{width:17px;height:28px}
+ .homepage-preview-section-copy b{font-size:10px}
+ .homepage-preview-section-copy p{font-size:8px}
+ #view-homepage-layout .homepage-layout-field{grid-template-columns:64px minmax(0,1fr)}
+}
