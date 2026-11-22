@@ -1838,6 +1838,7 @@
   $('#missing-trailer-search').addEventListener('input',()=>{state.missingTrailerPage=1;renderMissingTrailers();});
   $('#quality-search').addEventListener('input',()=>{state.qualityPage=1;renderQualityAudit();});
   $('#quality-filter').addEventListener('change',()=>{state.qualityPage=1;renderQualityAudit();});
+  $('#quality-page-size')?.addEventListener('change',event=>{state.qualityPageSize=Math.max(1,Number(event.target.value)||10);state.qualityPage=1;renderQualityAudit();});
   $('#quality-refresh').addEventListener('click',()=>{renderQualityAudit();renderQualityHistory();});
   $('#quality-prev')?.addEventListener('click',()=>{state.qualityPage=Math.max(1,state.qualityPage-1);renderQualityAudit();});
   $('#quality-next')?.addEventListener('click',()=>{state.qualityPage++;renderQualityAudit();});
