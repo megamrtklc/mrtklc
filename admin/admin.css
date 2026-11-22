@@ -686,3 +686,6 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
  #homepage-layout-preview-frame{height:680px}
  .homepage-layout-preview[data-device=mobile] #homepage-layout-preview-frame{height:680px;flex-basis:390px}
 }
+
+.homepage-preview-controls{display:grid;gap:7px;justify-items:end;flex:0 0 auto}
+@media(max-width:600px){.homepage-preview-controls{justify-items:start;display:flex;flex-wrap:wrap}}
