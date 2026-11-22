@@ -14,7 +14,7 @@ try {
   page.on('request', request => {
     if (/catalog-cast\.json/i.test(request.url())) castRequests.push(request.url());
   });
-  page.on('pageerror', error => errors.push(error.message));
+  page.on('pageerror', error => errors.push(error.stack || error.message));
 
   await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForFunction(() => {
