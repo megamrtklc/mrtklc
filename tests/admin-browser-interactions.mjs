@@ -34,6 +34,11 @@ let data = {
 let sha = 'mock-sha-1';
 const writes = [];
 const putResponses = [];
+const browserDiagnostics = { requests: [], failures: [], errors: [] };
+page.on('request', request => { if (request.url().includes('/api/')) browserDiagnostics.requests.push(request.method() + ' ' + request.url()); });
+page.on('requestfailed', request => browserDiagnostics.failures.push(request.url() + ' :: ' + request.failure()?.errorText));
+page.on('pageerror', error => browserDiagnostics.errors.push(error.message));
+page.on('console', message => { if (message.type() === 'error') browserDiagnostics.errors.push(message.text()); });
 await page.route('**/api/**', async route => {
   const url = new URL(route.request().url());
   if (url.pathname === '/api/catalog' && route.request().method() === 'GET') {
@@ -59,7 +64,8 @@ const toastText = () => page.locator('#toast-message').textContent();
 
 try {
   await page.goto('http://127.0.0.1:' + address.port + '/', { waitUntil: 'networkidle' });
-  await page.waitForFunction(() => document.querySelector('#health-catalog')?.textContent === 'Bağlandı');
+  await page.waitForFunction(() => document.querySelector('#health-catalog')?.textContent !== 'Kontrol ediliyor', { timeout: 8000 }).catch(() => {});
+  assert.equal(await page.locator('#health-catalog').textContent(), 'Bağlandı', 'Katalog başlangıç verisi yüklenemedi. ' + JSON.stringify({ status: await page.locator('#health-catalog').textContent(), notice: await page.locator('.notice').innerText().catch(() => ''), ...browserDiagnostics }));
   assert.equal(await page.locator('#health-catalog').textContent(), 'Bağlandı');
 
   // Mobile navigation opens, navigates, and closes.
