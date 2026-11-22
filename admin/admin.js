@@ -456,6 +456,7 @@
   function renderAnalyticsDetail(){
     const config=state.analyticsDetail;if(!config)return;
     const kind=config.kind,catalog=Array.isArray(state.catalog)?state.catalog:[];
+    const ratingBounds=kind==='rating'?RATING_BOUNDS[Number(config.value)]:null;
     const heading=$('#analytics-detail-title'),description=$('#analytics-detail-description');
     const search=$('#analytics-detail-search'),typeFilter=$('#analytics-detail-type'),sort=$('#analytics-detail-sort'),pageSize=$('#analytics-detail-page-size');
     const isSummary=kind==='years'||kind==='genres';
@@ -465,8 +466,8 @@
     const type=typeFilter?.value||'all',sortMode=sort?.value||'default';
     const size=Number(pageSize?.value)||12;state.analyticsDetailPageSize=size;
     if(kind==='rating'){
-      const index=Number(config.value),bounds=RATING_BOUNDS[index];
-      if(!bounds)return;
+      const index=Number(config.value);
+      if(!ratingBounds)return;
       heading.textContent='IMDb '+RATING_LABELS[index]+' puan aralığı';
       description.textContent='Bu puan aralığındaki yapımlar. Listeyi ara, filtrele ve sıralayabilirsin.';
     }else if(kind==='years'){
@@ -495,7 +496,7 @@
     }else{
       rows=catalog.filter(item=>{
         if(!matchesType(item))return false;
-        if(kind==='rating'){const n=getItemRating(item);return Number.isFinite(n)&&n>0&&n<=10&&n>=bounds[0]&&n<bounds[1];}
+        if(kind==='rating'){const n=getItemRating(item);return Number.isFinite(n)&&n>0&&n<=10&&n>=ratingBounds[0]&&n<ratingBounds[1];}
         if(kind==='year')return String(yearOf(item))===String(config.value);
         if(kind==='genre')return getItemGenres(item).includes(String(config.value));
         return false;
