@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "history": [
+    {
+      "id": "q-1795379297963",
+      "createdAt": "2026-11-22T20:28:17.963Z",
+      "total": 161,
+      "affected": 151,
+      "counts": {
+        "poster": 0,
+        "rating": 0,
+        "trailer": 33,
+        "watch": 151,
+        "cast": 1,
+        "director": 0,
+        "year": 0,
+        "description": 0,
+        "tmdb": 0
+      }
+    }
+  ]
+}
