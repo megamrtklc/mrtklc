@@ -363,7 +363,6 @@
     $('#quality-rows').innerHTML=visibleRows.length?visibleRows.map(({item,issues},index)=>'<article class="quality-list-row"><span class="quality-row-number">'+(start+index+1)+'.</span><img class="quality-list-poster" loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><div class="quality-list-main"><div class="quality-list-title"><b>'+escapeHtml(titleOf(item))+'</b><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span><small>'+escapeHtml(yearOf(item))+'</small></div><div class="quality-tags">'+issues.map(key=>'<span>'+escapeHtml(QUALITY_LABELS[key])+'</span>').join('')+'</div></div><button class="row-action quality-list-edit" data-quality-edit="'+escapeHtml(item.id)+'">Düzenle</button></article>').join(''):'<div class="quality-list-empty">'+(filter!=='all'||query?'Bu filtreyle eşleşen eksik kayıt bulunamadı.':'Harika! Katalogda kontrol gerektiren eksik bilgi bulunamadı.')+'</div>';
     const pagination=$('#quality-pagination');
     if(pagination){pagination.hidden=rows.length<=state.qualityPageSize;$('#quality-page-info').textContent='Sayfa '+state.qualityPage+' / '+pages+' · '+(start+1)+'–'+Math.min(start+state.qualityPageSize,rows.length)+' / '+rows.length;$('#quality-prev').disabled=state.qualityPage<=1;$('#quality-next').disabled=state.qualityPage>=pages;}
-    $('#quality-rows [data-quality-edit]').forEach(btn=>btn.addEventListener('click',event=>{event.preventDefault();const item=state.catalog.find(x=>String(x.id)===btn.dataset.qualityEdit);if(!item){toast('Düzenlenecek yapım katalogda bulunamadı.','warning');return;}try{openEditor(item);}catch(error){console.error('Veri kalitesi düzenleme formu açılamadı:',error);toast('Düzenleme formu açılamadı: '+(error.message||'Beklenmeyen hata.'),'error');}}));
   }
   function renderCollections(){
     const list=collectionList();
@@ -1836,6 +1835,7 @@
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#catalog-sort').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#missing-trailer-search').addEventListener('input',()=>{state.missingTrailerPage=1;renderMissingTrailers();});
+  $('#quality-rows').addEventListener('click',event=>{const btn=event.target.closest('[data-quality-edit]');if(!btn)return;event.preventDefault();const item=state.catalog.find(x=>String(x.id)===btn.dataset.qualityEdit);if(!item){toast('Düzenlenecek yapım katalogda bulunamadı.','warning');return;}try{openEditor(item);}catch(error){console.error('Veri kalitesi düzenleme formu açılamadı:',error);toast('Düzenleme formu açılamadı: '+(error.message||'Beklenmeyen hata.'),'error');}});
   $('#quality-search').addEventListener('input',()=>{state.qualityPage=1;renderQualityAudit();});
   $('#quality-filter').addEventListener('change',()=>{state.qualityPage=1;renderQualityAudit();});
   $('#quality-page-size')?.addEventListener('change',event=>{state.qualityPageSize=Math.max(1,Number(event.target.value)||10);state.qualityPage=1;renderQualityAudit();});
