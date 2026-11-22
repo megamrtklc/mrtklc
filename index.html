@@ -2835,9 +2835,10 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
       var section=root.querySelector('[data-home-section="'+key.replace(/"/g,'')+'"]');
       if(!section)return;
       var heading=section.querySelector('h2');
-      if(heading&&typeof values.title==='string'&&values.title.trim())heading.textContent=values.title.trim();
+      var title=typeof values.title==='string'?values.title.trim():'';
+      if(heading&&title&&heading.textContent!==title)heading.textContent=title;
       var subtitle=heading&&heading.nextElementSibling;
-      if(subtitle&&subtitle.tagName==='P'&&typeof values.description==='string')subtitle.textContent=values.description;
+      if(subtitle&&subtitle.tagName==='P'&&typeof values.description==='string'&&subtitle.textContent!==values.description)subtitle.textContent=values.description;
     });
     if(window.parent&&window.parent!==window)window.parent.postMessage({type:'cv-home-preview-applied'},allowedOrigin);
   }
