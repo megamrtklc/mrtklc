@@ -588,7 +588,18 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 @media(max-width:900px){.analytics-detail-export{grid-column:1/-1;width:100%}}
 
 /* Veri kalitesi: sayfalı eksik kayıt listesi */
-#view-quality .quality-row-number{width:54px;color:var(--muted,#9b9588);font-variant-numeric:tabular-nums;text-align:center}
+#view-quality .quality-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+#view-quality .quality-list-row{display:flex;align-items:center;gap:14px;min-width:0;padding:12px 14px;border:1px solid var(--line,rgba(255,255,255,.09));border-radius:11px;background:var(--panel,#17191f);transition:border-color .18s,background .18s}
+#view-quality .quality-list-row:hover{border-color:rgba(191,157,91,.38);background:rgba(191,157,91,.035)}
+#view-quality .quality-row-number{flex:0 0 34px;color:var(--muted,#9b9588);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
+#view-quality .quality-list-poster{flex:0 0 42px;width:42px;height:58px;object-fit:cover;border-radius:6px;background:#24252b}
+#view-quality .quality-list-main{flex:1;min-width:0}
+#view-quality .quality-list-title{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+#view-quality .quality-list-title b{color:var(--text,#eee);font-size:13px;font-weight:700}
+#view-quality .quality-list-title small{color:var(--muted,#92939a);font-size:10px}
+#view-quality .quality-list-edit{flex:0 0 auto}
+#view-quality .quality-list-empty{padding:24px;text-align:center;border:1px dashed var(--line,rgba(255,255,255,.12));border-radius:10px;color:var(--muted,#92939a);font-size:12px}
+@media(max-width:620px){#view-quality .quality-list-row{gap:9px;padding:10px}#view-quality .quality-row-number{flex-basis:24px;font-size:11px}#view-quality .quality-list-poster{flex-basis:36px;width:36px;height:50px}#view-quality .quality-list-title{gap:6px;margin-bottom:7px}#view-quality .quality-list-title b{font-size:12px}#view-quality .quality-list-edit{padding:6px 8px;font-size:10px}#view-quality .quality-tags{gap:4px}}
 #view-quality .quality-pagination{margin:14px 0 4px}
 #view-quality .quality-pagination[hidden]{display:none}
 #view-quality .quality-pagination button{min-width:92px}
