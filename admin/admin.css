@@ -921,3 +921,13 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #view-personalized-section .personalized-gems-rule-note{margin:12px 0 0;color:var(--muted,#8993a4);font-size:12px;line-height:1.6}
 @media(max-width:850px){#view-personalized-section .personalized-gems-rule-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){#view-personalized-section .personalized-gems-rule-grid{grid-template-columns:1fr}}
+
+/* Watch layout draft controls */
+#view-watch-layout .watch-layout-page-heading{align-items:flex-start;gap:18px}
+#view-watch-layout .watch-layout-page-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+#view-watch-layout .watch-layout-page-actions button{white-space:nowrap}
+#view-watch-layout .watch-layout-page-actions button:disabled{opacity:.42;cursor:not-allowed}
+#view-watch-layout .watch-layout-draft-status{display:inline-flex;align-items:center;margin-top:9px;font-size:11px;font-weight:700;color:#69c99b}
+#view-watch-layout .watch-layout-draft-status[data-state="dirty"]{color:#e8b95d}
+@media(max-width:760px){#view-watch-layout .watch-layout-page-heading{flex-direction:column}#view-watch-layout .watch-layout-page-actions{width:100%;justify-content:flex-start}#view-watch-layout .watch-layout-page-actions button{flex:1 1 auto}}
+@media(max-width:460px){#view-watch-layout .watch-layout-page-actions{display:grid;grid-template-columns:1fr 1fr}#view-watch-layout #watch-layout-save{grid-column:1/-1}}

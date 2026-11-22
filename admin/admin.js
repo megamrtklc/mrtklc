@@ -996,6 +996,27 @@
   };
   const watchCardIds=Object.keys(watchCardDefinitions);
   let watchDemoType='movie';
+  let watchLayoutSavedSnapshot=null;
+  let watchLayoutDirty=false;
+  function watchLayoutSnapshot(config=watchLayoutConfig()){return JSON.parse(JSON.stringify({left:config.left,right:config.right,hidden:config.hidden,removed:config.removed}));}
+  function setWatchLayoutDirty(value=true){
+    watchLayoutDirty=value;
+    const status=$('#watch-layout-draft-status'),save=$('#watch-layout-save'),discard=$('#watch-layout-discard');
+    if(status){status.textContent=value?'● Kaydedilmemiş değişiklik var':'● Kayıtlı düzen';status.dataset.state=value?'dirty':'saved';}
+    if(save)save.disabled=!value;
+    if(discard)discard.disabled=!value;
+  }
+  function resetWatchLayoutDraft(){
+    state.data.watchPageConfig={};setWatchLayoutDirty(true);renderWatchLayout();
+    toast('Varsayılan düzen taslağa yüklendi. Kaydetmeden yayınlanmaz.','info');
+  }
+  function discardWatchLayoutDraft(){
+    if(!watchLayoutSavedSnapshot)return;
+    state.data.watchPageConfig=watchLayoutSnapshot(watchLayoutSavedSnapshot);
+    setWatchLayoutDirty(false);renderWatchLayout();
+    toast('Kaydedilmemiş düzen değişiklikleri geri alındı.','info');
+  }
+
   function watchLayoutConfig(){
     const saved=state.data?.watchPageConfig||{};
     const left=[],right=[],used=new Set();
@@ -1062,6 +1083,8 @@
   }
   function renderWatchLayout(){
     const config=watchLayoutConfig();
+    if(watchLayoutSavedSnapshot===null)watchLayoutSavedSnapshot=watchLayoutSnapshot(config);
+    setWatchLayoutDirty(watchLayoutDirty);
     for(const side of ['left','right']){
       const root=$('#watch-'+side+'-list');
       root.innerHTML=config[side].map((id,index)=>{
@@ -1091,19 +1114,19 @@
   function toggleWatchCard(id){
     const config=watchLayoutConfig();
     config.hidden=config.hidden.includes(id)?config.hidden.filter(x=>x!==id):[...config.hidden,id];
-    state.data.watchPageConfig=config;renderWatchLayout();
+    state.data.watchPageConfig=config;setWatchLayoutDirty();renderWatchLayout();
   }
   function removeWatchCard(side,id){
     const config=watchLayoutConfig();
     config[side]=config[side].filter(x=>x!==id);config.hidden=config.hidden.filter(x=>x!==id);
     config.removed=[...new Set([...config.removed,id])];
-    state.data.watchPageConfig=config;renderWatchLayout();
+    state.data.watchPageConfig=config;setWatchLayoutDirty();renderWatchLayout();
   }
   function addWatchCard(side,id){
     if(!['left','right'].includes(side)||!watchCardIds.includes(id))return;
     const config=watchLayoutConfig();if(!config.removed.includes(id))return;
     config.removed=config.removed.filter(x=>x!==id);config[side].push(id);
-    state.data.watchPageConfig=config;renderWatchLayout();
+    state.data.watchPageConfig=config;setWatchLayoutDirty();renderWatchLayout();
   }
   function moveWatchCard(side,id,targetSide,index){
     if(!['left','right'].includes(side)||!['left','right'].includes(targetSide))return;
@@ -1123,12 +1146,13 @@
       config[targetSide].splice(destination,0,id);
     }
     state.data.watchPageConfig=config;
-    renderWatchLayout();
+    setWatchLayoutDirty();renderWatchLayout();
   }
   async function saveWatchLayout(){
+    if(!watchLayoutDirty)return;
     const config=watchLayoutConfig();
     const ok=await persist({...state.data,watchPageConfig:config},'İzleme sayfası düzeni kaydedildi ve yayın kuyruğuna alındı.');
-    if(ok)renderWatchLayout();
+    if(ok){watchLayoutSavedSnapshot=watchLayoutSnapshot(config);setWatchLayoutDirty(false);renderWatchLayout();}
   }
   function heroRating(item){return Number(item.tmdbRating||item.rating)||0;}
   function heroVotes(item){return Number(item.tmdbVoteCount||item.voteCount||0);}
@@ -2151,6 +2175,8 @@
   $('#hero-desktop-description-width-px').addEventListener('change',event=>{homepageConfig().settings.desktopDescriptionWidthPx=Math.max(360,Math.min(1200,Number(event.target.value)||720));});
 
   $('#watch-layout-save').addEventListener('click',saveWatchLayout);
+  $('#watch-layout-reset')?.addEventListener('click',resetWatchLayoutDraft);
+  $('#watch-layout-discard')?.addEventListener('click',discardWatchLayoutDraft);
   $('#watch-available-list').addEventListener('click',event=>{
     const button=event.target.closest('[data-add-card]');
     if(button)addWatchCard(button.dataset.addSide,button.dataset.addCard);
