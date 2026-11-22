@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { homepageLayoutDirty:false, data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
+  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -1205,6 +1205,26 @@
           (locked?'<span class="homepage-layout-lock" title="Manşet bu ekrandan değiştirilemez">🔒</span>':'<button type="button" class="homepage-layout-toggle" data-layout-action="toggle" aria-label="'+(active?'Bölümü gizle':'Bölümü göster')+'">'+(active?'◉':'○')+'</button>')+
         '</div></div>';
     }).join('');
+    renderHomepageLayoutPreview(layout);
+  }
+  function renderHomepageLayoutPreview(layout=homepageLayoutConfig()){
+    const root=$('#homepage-layout-preview');
+    if(!root)return;
+    root.dataset.device=state.homepagePreviewDevice||'desktop';
+    const sections=layout.order.filter(key=>key==='hero'||layout.visibility[key]!==false).map((key,index)=>{
+      const item=HOMEPAGE_LAYOUT_ITEMS[key];if(!item)return '';
+      const label=layout.labels[key]||{};
+      const title=label.title??item.title;
+      const description=label.description??item.description;
+      const hero=key==='hero';
+      return '<article class="homepage-preview-section'+(hero?' is-hero':'')+'" data-preview-key="'+escapeHtml(key)+'">'+
+        (hero?'<span class="homepage-preview-hero-kicker">CINEVERSE · ÖNE ÇIKAN</span>':'<span class="homepage-preview-section-index">'+String(index).padStart(2,'0')+'</span>')+
+        '<div class="homepage-preview-section-copy"><b>'+escapeHtml(title)+'</b><p>'+escapeHtml(description)+'</p></div>'+
+        (hero?'<span class="homepage-preview-hero-cta">KEŞFET ↗</span>':'<div class="homepage-preview-poster-rail"><i></i><i></i><i></i><i></i></div>')+
+      '</article>';
+    }).join('');
+    root.innerHTML='<div class="homepage-preview-browser"><div class="homepage-preview-browser-bar"><i></i><i></i><i></i><span>megamrtklc.github.io / ana sayfa taslağı</span></div><div class="homepage-preview-site-head"><b>PERDE</b><span>ANA SAYFA　 KEŞFET　 KOLEKSİYONLAR</span></div><div class="homepage-preview-hero-placeholder"><span>ÖNE ÇIKAN YAPIM</span><b>Sinematik manşet alanı</b><small>Masaüstü ve mobil manşet bu ekrandan bağımsız yönetilir.</small></div><div class="homepage-preview-sections">'+(sections||'<p class="homepage-preview-empty">Gösterilecek bölüm bulunmuyor.</p>')+'</div></div>';
+    $('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
   }
   function moveHomepageSection(key,direction){
     const layout=homepageLayoutConfig();
@@ -1881,6 +1901,12 @@
     if(remove){const row=remove.closest('[data-custom-link-row]');const kind=row.dataset.customLinkRow;const current=$('#hf-'+kind+'-custom-links [data-custom-link-row]').filter(item=>item!==row).map(item=>({label:item.querySelector('[data-custom-link-label]').value.trim(),page:item.querySelector('[data-custom-link-page]').value}));renderCustomLinkRows(kind,current);}
   });
   $('#homepage-layout-save').addEventListener('click',saveHomepageLayout);
+  $('#view-homepage-layout').addEventListener('click',event=>{
+    const button=event.target.closest('[data-home-preview-device]');
+    if(!button)return;
+    state.homepagePreviewDevice=button.dataset.homePreviewDevice==='mobile'?'mobile':'desktop';
+    renderHomepageLayoutPreview();
+  });
   $('#system-refresh')?.addEventListener('click',refreshSystemDiagnostics);
   $('#personalized-section-form').addEventListener('submit',savePersonalizedSection);
   $('#homepage-layout-list').addEventListener('input',event=>{
