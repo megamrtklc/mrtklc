@@ -75,6 +75,7 @@
     setMobileSidebar(false);
     if(view==='catalog')renderCatalog();
     if(view==='trailers-missing')renderMissingTrailers();
+    if(view==='quality')renderQualityAudit();
     if(view==='collections')renderCollections();
     if(view==='franchises')renderFranchises();
     if(view==='homepage')renderHomepage();
@@ -211,6 +212,42 @@
     $('#missing-trailer-prev').disabled=state.missingTrailerPage<=1;
     $('#missing-trailer-next').disabled=state.missingTrailerPage>=pages;
     document.querySelectorAll('#missing-trailer-rows [data-missing-trailer-edit]').forEach(btn=>btn.addEventListener('click',event=>{event.preventDefault();const item=state.catalog.find(x=>String(x.id)===btn.dataset.missingTrailerEdit);if(!item){toast('Düzenlenecek yapım katalogda bulunamadı.');return;}try{openEditor(item);}catch(error){console.error('Fragman kaydı düzenleyicisi açılamadı:',error);toast('Düzenleme ekranı açılamadı: '+(error.message||'Beklenmeyen hata.'));}}));
+  }
+  const QUALITY_LABELS={poster:'Afiş',rating:'IMDb puanı',trailer:'Fragman',watch:'İzleme bağlantısı',cast:'Oyuncu bilgisi',director:'Yönetmen',year:'Yapım yılı',description:'Konu',tmdb:'TMDB eşleşmesi'};
+  function qualityIssuesFor(item){
+    const issues=[];
+    if(!posterOf(item))issues.push('poster');
+    if(!(Number(item.rating||item.tmdbRating)>0))issues.push('rating');
+    if(!String(item.trailerUrl||item.tmdbTrailerUrl||'').trim())issues.push('trailer');
+    if(!(String(item.watchUrl||'').trim()||(item.episodeWatchUrls&&Object.values(item.episodeWatchUrls).some(url=>String(url||'').trim()))))issues.push('watch');
+    if(!((Array.isArray(item.cast)&&item.cast.length)||(Array.isArray(item.tmdbCast)&&item.tmdbCast.length)))issues.push('cast');
+    if(!String(item.director||item.tmdbDirector||'').trim())issues.push('director');
+    if(yearOf(item)==='—')issues.push('year');
+    if(!String(item.desc||item.tmdbOverview||'').trim())issues.push('description');
+    if(!String(item.tmdbId||'').trim())issues.push('tmdb');
+    return issues;
+  }
+  function renderQualityAudit(){
+    const query=($('#quality-search')?.value||'').trim().toLocaleLowerCase('tr');
+    const filter=$('#quality-filter')?.value||'all';
+    const issueKeys=['poster','rating','trailer','watch','cast','director','year','description','tmdb'];
+    const summary={};issueKeys.forEach(key=>summary[key]=0);
+    const audited=state.catalog.map(item=>({item,issues:qualityIssuesFor(item)}));
+    audited.forEach(row=>row.issues.forEach(key=>summary[key]++));
+    const otherCount=['director','year','description','tmdb'].reduce((sum,key)=>sum+summary[key],0);
+    $('#quality-page-poster').textContent=summary.poster.toLocaleString('tr-TR');
+    $('#quality-page-rating').textContent=summary.rating.toLocaleString('tr-TR');
+    $('#quality-page-trailer').textContent=summary.trailer.toLocaleString('tr-TR');
+    $('#quality-page-watch').textContent=summary.watch.toLocaleString('tr-TR');
+    $('#quality-page-cast').textContent=summary.cast.toLocaleString('tr-TR');
+    $('#quality-page-other').textContent=otherCount.toLocaleString('tr-TR');
+    const affected=audited.filter(row=>row.issues.length);
+    $('#quality-total-affected').textContent=affected.length.toLocaleString('tr-TR');
+    $('#quality-issue-count').textContent=String(affected.length);
+    const rows=affected.filter(({item,issues})=>(!query||titleOf(item).toLocaleLowerCase('tr').includes(query))&&(filter==='all'||(filter==='other'?issues.some(key=>['director','year','description','tmdb'].includes(key)):issues.includes(filter))));
+    $('#quality-result-count').textContent=rows.length.toLocaleString('tr-TR')+' yapım';
+    $('#quality-rows').innerHTML=rows.length?rows.map(({item,issues})=>'<tr><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><div class="quality-tags">'+issues.map(key=>'<span>'+escapeHtml(QUALITY_LABELS[key])+'</span>').join('')+'</div></td><td class="row-actions"><button class="row-action" data-quality-edit="'+escapeHtml(item.id)+'">Düzenle</button></td></tr>').join(''):'<tr><td colspan="5" class="empty-cell">'+(filter!=='all'||query?'Bu filtreyle eşleşen eksik kayıt bulunamadı.':'Harika! Katalogda kontrol gerektiren eksik bilgi bulunamadı.')+'</td></tr>';
+    $('#quality-rows [data-quality-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.qualityEdit);if(item)openEditor(item);}));
   }
   function renderCollections(){
     const list=collectionList();
@@ -1428,6 +1465,9 @@
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#catalog-sort').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#missing-trailer-search').addEventListener('input',()=>{state.missingTrailerPage=1;renderMissingTrailers();});
+  $('#quality-search').addEventListener('input',renderQualityAudit);
+  $('#quality-filter').addEventListener('change',renderQualityAudit);
+  $('#quality-refresh').addEventListener('click',renderQualityAudit);
   $('#missing-trailer-prev').addEventListener('click',()=>{state.missingTrailerPage=Math.max(1,state.missingTrailerPage-1);renderMissingTrailers();});
   $('#missing-trailer-next').addEventListener('click',()=>{state.missingTrailerPage++;renderMissingTrailers();});
   $('#prev-page').addEventListener('click',()=>{state.page=Math.max(1,state.page-1);renderCatalog();});
