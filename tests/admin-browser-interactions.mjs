@@ -22,9 +22,18 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const address = server.address();
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, deviceScaleFactor: 1 });
-let data = { version: 1, catalog: [], collections: [], franchises: [], homepageConfig: { settings: {}, heroSlides: [], layout: {} } };
+let data = {
+  version: 1,
+  catalog: [
+    { id: 'seed-1', title: 'Başlangıç Filmi', type: 'movie', year: '2020', rating: '7.1' },
+    { id: 'seed-2', title: 'İkinci Başlangıç', type: 'movie', year: '2021', rating: '7.4' }
+  ],
+  collections: [], franchises: [],
+  homepageConfig: { settings: {}, heroSlides: [], layout: {} }
+};
 let sha = 'mock-sha-1';
 const writes = [];
+const putResponses = [];
 await page.route('**/api/**', async route => {
   const url = new URL(route.request().url());
   if (url.pathname === '/api/catalog' && route.request().method() === 'GET') {
@@ -33,6 +42,8 @@ await page.route('**/api/**', async route => {
   if (url.pathname === '/api/catalog' && route.request().method() === 'PUT') {
     const payload = route.request().postDataJSON();
     writes.push(payload);
+    const failure = putResponses.shift();
+    if (failure) return route.fulfill({ status: failure.status, contentType: 'application/json', body: JSON.stringify(failure.body || {}) });
     data = payload.data;
     sha = 'mock-sha-' + (writes.length + 1);
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ sha }) });
@@ -42,6 +53,9 @@ await page.route('**/api/**', async route => {
   if (url.pathname === '/api/quality-history') return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ history: [] }) });
   return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
 });
+
+const catalogRow = title => page.locator('#catalog-rows tr').filter({ hasText: title });
+const toastText = () => page.locator('#toast-message').textContent();
 
 try {
   await page.goto('http://127.0.0.1:' + address.port + '/', { waitUntil: 'networkidle' });
@@ -62,23 +76,75 @@ try {
   await page.locator('#save-content').click();
   await page.waitForFunction(() => document.querySelector('#content-dialog')?.open === false);
   assert.equal(writes.length, 1, 'Yapım kaydı API PUT isteği üretmeli');
-  assert.equal(data.catalog.length, 1);
-  assert.equal(data.catalog[0].title, 'Tarayıcı Test Filmi');
+  assert.equal(data.catalog.length, 3);
+  assert.equal(data.catalog.find(x => x.title === 'Tarayıcı Test Filmi')?.year, '2026');
+
+  // Edit the new item and verify its original ID is retained.
+  const createdId = String(data.catalog.find(x => x.title === 'Tarayıcı Test Filmi').id);
+  await catalogRow('Tarayıcı Test Filmi').locator('[data-edit]').click();
+  assert.equal(await page.locator('#edit-id').inputValue(), createdId);
+  await page.locator('#field-title').fill('Düzenlenmiş Test Filmi');
+  await page.locator('#save-content').click();
+  await page.waitForFunction(() => document.querySelector('#content-dialog')?.open === false);
+  assert.equal(writes.length, 2);
+  assert.equal(data.catalog.find(x => String(x.id) === createdId)?.title, 'Düzenlenmiş Test Filmi');
+
+  // A whitespace-only title must not be persisted and must leave the editor open.
+  await page.locator('#catalog-add').click();
+  await page.locator('#field-title').fill('   ');
+  await page.locator('#save-content').click();
+  await page.waitForFunction(() => document.querySelector('#toast-message')?.textContent.includes('Yapım adı zorunludur.'));
+  assert.equal(writes.length, 2, 'Boş/boşluk başlık API isteği üretmemeli');
+  assert.equal(await page.locator('#content-dialog').evaluate(el => el.open), true);
+  await page.locator('#cancel-editor').click();
+
+  // API failure and 409 conflict must not close the editor or mutate local data.
+  await catalogRow('Düzenlenmiş Test Filmi').locator('[data-edit]').click();
+  await page.locator('#field-title').fill('Sunucu Hatası Testi');
+  putResponses.push({ status: 500, body: { error: 'Test sunucu hatası' } });
+  await page.locator('#save-content').click();
+  await page.waitForFunction(() => document.querySelector('#toast-message')?.textContent.includes('Test sunucu hatası'));
+  assert.equal(await page.locator('#content-dialog').evaluate(el => el.open), true);
+  assert.equal(data.catalog.find(x => String(x.id) === createdId)?.title, 'Düzenlenmiş Test Filmi');
+
+  putResponses.push({ status: 409, body: { error: 'Çakışma' } });
+  await page.locator('#save-content').click();
+  await page.waitForFunction(() => document.querySelector('#toast-message')?.textContent.includes('Katalog başka bir işlemde güncellenmiş'));
+  assert.equal(await page.locator('#content-dialog').evaluate(el => el.open), true);
+  assert.equal(data.catalog.find(x => String(x.id) === createdId)?.title, 'Düzenlenmiş Test Filmi');
+
+  // A successful retry proves the save lock is released after failed requests.
+  await page.locator('#save-content').click();
+  await page.waitForFunction(() => document.querySelector('#content-dialog')?.open === false);
+  assert.equal(data.catalog.find(x => String(x.id) === createdId)?.title, 'Sunucu Hatası Testi');
 
   // Create a collection and ensure it references the selected catalog record.
   await page.locator('.nav-link[data-view="collections"]').click();
   await page.locator('#collection-add').click();
   await page.locator('#collection-title').fill('Tarayıcı Test Koleksiyonu');
-  await page.locator('#collection-items input[type="checkbox"]').first().check();
+  await page.locator('.collection-pick').filter({ hasText: 'Sunucu Hatası Testi' }).locator('input').check();
   await page.locator('#collection-form button[type="submit"]').click();
   await page.waitForFunction(() => document.querySelector('#collection-dialog')?.open === false);
-  assert.equal(writes.length, 2, 'Koleksiyon kaydı API PUT isteği üretmeli');
   assert.equal(data.collections.length, 1);
-  assert.deepEqual(data.collections[0].items, [String(data.catalog[0].id)]);
+  assert.deepEqual(data.collections[0].items, [createdId]);
+
+  // Deletion cancellation must be harmless; confirmation must remove the item and its collection reference.
+  await page.locator('.nav-link[data-view="catalog"]').click();
+  page.once('dialog', dialog => dialog.dismiss());
+  await catalogRow('Sunucu Hatası Testi').locator('[data-delete]').click();
+  assert.ok(data.catalog.some(x => String(x.id) === createdId), 'İptal edilen silme kaydı korumalı');
+  page.once('dialog', dialog => dialog.accept());
+  await catalogRow('Sunucu Hatası Testi').locator('[data-delete]').click();
+  await page.waitForFunction(() => !document.querySelector('#catalog-rows')?.textContent.includes('Sunucu Hatası Testi'));
+  assert.equal(data.catalog.some(x => String(x.id) === createdId), false);
+  assert.deepEqual(data.collections[0].items, []);
 
   console.log('PASS: Mobil yönetim menüsü açılıyor, gezinip kapanıyor');
-  console.log('PASS: Yapım ekleme formu API üzerinden kaydediliyor');
+  console.log('PASS: Yapım ekleme ve düzenleme kayıtları API üzerinden işleniyor');
+  console.log('PASS: Boş başlık kaydı engelleniyor');
+  console.log('PASS: API hatası ve 409 çakışması doğru gösteriliyor; kayıt kilidi açılıyor');
   console.log('PASS: Koleksiyon oluşturma ve yapım ilişkilendirme kaydediliyor');
+  console.log('PASS: Silme iptali güvenli; onaylı silme ilişkileri temizliyor');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
