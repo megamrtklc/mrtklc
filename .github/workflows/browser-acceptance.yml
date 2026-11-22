@@ -23,6 +23,7 @@ jobs:
       - name: Validate admin panel markup and JavaScript
         run: |
           node tests/admin-markup-validation.mjs
+          node tests/admin-action-contracts.mjs
           node --check admin/admin.js
       - name: Install Playwright
         run: npm install --no-save playwright
