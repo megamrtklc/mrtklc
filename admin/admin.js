@@ -19,48 +19,69 @@
     catalog:{title:'Tüm Yapımlar & Trendler',description:'Katalogdan seçilen genel yapım rafı',icon:'▥'}
   };
   const ADMIN_PREFERENCES_KEY='perde-admin-preferences-v1';
+  const PREFERENCE_GUIDES={
+    density:{title:'Arayüz yoğunluğu',intro:'Yönetim ekranlarındaki içeriklerin dikey boşluklarını düzenler.',body:'<p><b>Nerede değişir?</b> Yapım Kütüphanesi satırları, yönetim kartları ve form alanlarının boşlukları etkilenir.</p><p><b>Rahat:</b> Daha fazla nefes alan, göz yormayan yerleşim.</p><p><b>Kompakt:</b> Daha az boşlukla ekranda daha fazla kayıt.</p><p>Önizleme, bu sayfanın üstündeki örnek tablo satırlarında görünür. Kaydetmeden gerçek panele uygulanmaz.</p>'},
+    theme:{title:'Görünüm teması',intro:'Panelin renk kontrastını ve vurgu görünümünü belirler.',body:'<p><b>Nerede değişir?</b> Sol menü, üst çubuk, kart yüzeyleri, metinler ve kenarlıklar etkilenir.</p><p><b>Sinematik koyu:</b> Mevcut koyu zemin ve altın vurgular korunur.</p><p><b>Yüksek kontrast:</b> Metinler ve sınırlar daha belirgin hale gelir.</p><p>Yalnızca yönetim panelini etkiler; ziyaretçi sitesinin temasını değiştirmez.</p>'},
+    sidebar:{title:'Panel düzeni',intro:'Sol navigasyon menüsünün kapladığı alanı ayarlar.',body:'<p><b>Nerede değişir?</b> Masaüstünde sol menü genişliği ve ana içerik alanının kullanılabilir genişliği değişir.</p><p><b>Standart:</b> Menü ikonları ve adları görünür.</p><p><b>Dar:</b> Menü ikon odaklı dar bir şeride dönüşür; içerik alanı genişler. Mobil menü davranışı değişmez.</p>'},
+    tables:{title:'Tablo ve liste ayarları',intro:'Kütüphane sayfasında her sayfada kaç kayıt gösterileceğini belirler.',body:'<p><b>Nerede değişir?</b> Film &amp; Diziler sayfasındaki kayıt listesi ve sayfalama kontrolü etkilenir.</p><p>12 kayıt kısa sayfalar, 24 kayıt dengeli görünüm, 48 kayıt daha az sayfa ile uzun liste sunar.</p><p>Fragmanı olmayanlar ekranının kendi sayfalama ayarı bu tercihten bağımsız kalır.</p>'},
+    notifications:{title:'Bildirim tercihleri',intro:'İşlem sonrası başarı ve bilgi mesajlarının gösterimini kontrol eder.',body:'<p><b>Nerede değişir?</b> Yönetim panelindeki kaydetme ve bilgilendirme toast mesajları etkilenir.</p><p>Kapalı olduğunda başarı ve bilgi bildirimleri gizlenir. Hata ve güvenlik uyarıları her zaman görünür kalır.</p>'},
+    motion:{title:'Hareket ve erişilebilirlik',intro:'Arayüzdeki animasyon ve geçişlerin hızını azaltır.',body:'<p><b>Nerede değişir?</b> Sayfa geçişleri, menü açılışları, kart hareketleri ve küçük animasyonlar etkilenir.</p><p>Hareketleri azalt seçeneği açık olduğunda bu efektler en aza indirilir. Sistem düzeyindeki hareket azaltma tercihi de ayrıca korunur.</p>'}
+  };
   function readAdminPreferences(){
-    const defaults={density:'comfortable',reduceMotion:false};
+    const defaults={density:'comfortable',reduceMotion:false,theme:'dark',sidebar:'normal',pageSize:12,notifications:true};
     try{
       const saved=JSON.parse(localStorage.getItem(ADMIN_PREFERENCES_KEY)||'{}');
-      return {density:saved.density==='compact'?'compact':'comfortable',reduceMotion:saved.reduceMotion===true};
+      return {density:saved.density==='compact'?'compact':'comfortable',reduceMotion:saved.reduceMotion===true,theme:saved.theme==='contrast'?'contrast':'dark',sidebar:saved.sidebar==='compact'?'compact':'normal',pageSize:[12,24,48].includes(Number(saved.pageSize))?Number(saved.pageSize):12,notifications:saved.notifications!==false};
     }catch(_){return defaults;}
   }
   function applyAdminPreferences(preferences=readAdminPreferences()){
     document.body.classList.toggle('admin-density-compact',preferences.density==='compact');
     document.body.classList.toggle('admin-reduce-motion',preferences.reduceMotion);
+    document.body.classList.toggle('admin-theme-contrast',preferences.theme==='contrast');
+    document.body.classList.toggle('admin-sidebar-compact',preferences.sidebar==='compact');
+    state.pageSize=preferences.pageSize;
     return preferences;
   }
   function readPreferenceDraft(){
-    const density=$('input[name="panel-density"]:checked');
-    return {density:density?.value==='compact'?'compact':'comfortable',reduceMotion:!!$('#panel-reduce-motion')?.checked};
+    const checked=name=>$('input[name="'+name+'"]:checked')?.value;
+    return {density:checked('panel-density')==='compact'?'compact':'comfortable',reduceMotion:!!$('#panel-reduce-motion')?.checked,theme:checked('panel-theme')==='contrast'?'contrast':'dark',sidebar:checked('panel-sidebar')==='compact'?'compact':'normal',pageSize:[12,24,48].includes(Number(checked('panel-page-size')))?Number(checked('panel-page-size')):12,notifications:!!$('#panel-notifications')?.checked};
+  }
+  function updatePreferencePreviews(draft=readPreferenceDraft()){
+    const density=$('#preview-density');if(density)density.classList.toggle('is-compact',draft.density==='compact');
+    const theme=$('#preview-theme');if(theme)theme.classList.toggle('is-contrast',draft.theme==='contrast');
+    const sidebar=$('#preview-sidebar');if(sidebar)sidebar.classList.toggle('is-compact',draft.sidebar==='compact');
+    const size=$('#preview-page-size');if(size){size.querySelector('b').textContent=draft.pageSize;size.querySelector('i').textContent='Sayfa 1 · '+Math.max(1,Math.ceil((state.catalog.length||125)/draft.pageSize))+' sayfa';}
+    const notices=$('#preview-notifications');if(notices)notices.classList.toggle('is-muted',!draft.notifications);
+    const motion=$('#preview-motion');if(motion){motion.classList.toggle('is-reduced',draft.reduceMotion);motion.querySelector('i').textContent=draft.reduceMotion?'Azaltıldı':'0.22 sn';}
   }
   function renderPreferenceDraftStatus(){
     const saved=readAdminPreferences(),draft=readPreferenceDraft();
-    const dirty=saved.density!==draft.density||saved.reduceMotion!==draft.reduceMotion;
+    const dirty=Object.keys(saved).some(key=>saved[key]!==draft[key]);
     const status=$('#preferences-status'),save=$('#preferences-save'),indicator=$('#preferences-saved-indicator');
     if(save)save.disabled=!dirty;
     if(indicator){indicator.textContent=dirty?'● KAYDEDİLMEMİŞ DEĞİŞİKLİK':'● KAYITLI AYARLAR';indicator.classList.toggle('is-dirty',dirty);}
-    if(status){
-      const message=status.querySelector('span:last-child');
-      if(message)message.textContent=dirty?'Kaydedilmemiş seçimlerin var. Uygulamak için Değişiklikleri Kaydet düğmesine bas.':'Mevcut kayıtlı ayarların kullanılıyor. Henüz bekleyen değişiklik yok.';
-      status.classList.toggle('is-dirty',dirty);
-    }
+    if(status){const message=status.querySelector('span:last-child');if(message)message.textContent=dirty?'Önizlemeler güncellendi. Gerçek paneli değiştirmek için Kaydet düğmesine bas.':'Mevcut kayıtlı ayarların kullanılıyor. Henüz bekleyen değişiklik yok.';status.classList.toggle('is-dirty',dirty);}
+    updatePreferencePreviews(draft);
   }
   function loadPreferenceDraft(preferences=readAdminPreferences()){
-    const density=$('input[name="panel-density"][value="'+preferences.density+'"]');
-    if(density)density.checked=true;
+    const set=(name,value)=>{const input=$('input[name="'+name+'"][value="'+value+'"]');if(input)input.checked=true;};
+    set('panel-density',preferences.density);set('panel-theme',preferences.theme);set('panel-sidebar',preferences.sidebar);set('panel-page-size',String(preferences.pageSize));
     const motion=$('#panel-reduce-motion');if(motion)motion.checked=preferences.reduceMotion;
+    const notifications=$('#panel-notifications');if(notifications)notifications.checked=preferences.notifications;
     renderPreferenceDraftStatus();
   }
   function saveAdminPreferences(){
     const next=readPreferenceDraft();
     try{localStorage.setItem(ADMIN_PREFERENCES_KEY,JSON.stringify(next));}
     catch(_){toast('Tercihler kaydedilemedi. Tarayıcı depolama iznini kontrol et.','warning');return false;}
-    applyAdminPreferences(next);
-    loadPreferenceDraft(next);
-    toast('Panel tercihleri kaydedildi ve uygulandı.','success');
-    return true;
+    applyAdminPreferences(next);loadPreferenceDraft(next);
+    if(state.data&&state.view==='catalog'){state.page=1;renderCatalog();}
+    toast('Panel tercihleri kaydedildi ve uygulandı.','success');return true;
+  }
+  function openPreferenceGuide(key){
+    const guide=PREFERENCE_GUIDES[key];if(!guide)return;
+    $('#preferences-info-title').textContent=guide.title;$('#preferences-info-intro').textContent=guide.intro;$('#preferences-info-body').innerHTML=guide.body;
+    $('#preferences-info-dialog').showModal();
   }
   function applyAdminTheme(){ document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark'); const meta=document.querySelector('meta[name="theme-color"]'); if(meta)meta.content='#f4f3ef'; }
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -70,7 +91,7 @@
   const yearOf = item => Number(item.year || item.releaseYear || (item.tmdbReleaseDate || '').slice(0,4)) || '—';
   const collectionList = () => Array.isArray(state.data?.collections) ? state.data.collections : [];
   const franchiseList = () => Array.isArray(state.data?.franchises) ? state.data.franchises : [];
-  const toast = (message,type='warning') => { const el=$('#toast'); if(!el)return; const title=$('#toast-title'),body=$('#toast-message'),icon=el.querySelector('.toast-icon'); const safeType=['success','warning','error','info'].includes(type)?type:'warning'; const config={success:{title:'İŞLEM BAŞARILI',icon:'✓',duration:2600,role:'status'},warning:{title:'İŞLEM BAŞARISIZ',icon:'!',duration:4800,role:'alert'},error:{title:'SİSTEM HATASI',icon:'×',duration:5200,role:'alert'},info:{title:'BİLGİLENDİRME',icon:'i',duration:3800,role:'status'}}[safeType]; if(title)title.textContent=config.title; if(body)body.textContent=String(message||''); if(icon)icon.textContent=config.icon; el.dataset.type=safeType; el.setAttribute('role',config.role); el.setAttribute('aria-live',config.role==='alert'?'assertive':'polite'); document.body.classList.add('has-admin-toast'); el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.classList.remove('show');document.body.classList.remove('has-admin-toast');},config.duration); };
+  const toast = (message,type='warning') => { const prefs=readAdminPreferences(); if(!prefs.notifications&&['success','info'].includes(type))return; const el=$('#toast'); if(!el)return; const title=$('#toast-title'),body=$('#toast-message'),icon=el.querySelector('.toast-icon'); const safeType=['success','warning','error','info'].includes(type)?type:'warning'; const config={success:{title:'İŞLEM BAŞARILI',icon:'✓',duration:2600,role:'status'},warning:{title:'İŞLEM BAŞARISIZ',icon:'!',duration:4800,role:'alert'},error:{title:'SİSTEM HATASI',icon:'×',duration:5200,role:'alert'},info:{title:'BİLGİLENDİRME',icon:'i',duration:3800,role:'status'}}[safeType]; if(title)title.textContent=config.title; if(body)body.textContent=String(message||''); if(icon)icon.textContent=config.icon; el.dataset.type=safeType; el.setAttribute('role',config.role); el.setAttribute('aria-live',config.role==='alert'?'assertive':'polite'); document.body.classList.add('has-admin-toast'); el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.classList.remove('show');document.body.classList.remove('has-admin-toast');},config.duration); };
   async function fetchWithTimeout(url,options={},timeoutMs=15000){
     const controller=new AbortController();
     const timer=setTimeout(()=>controller.abort(),timeoutMs);
@@ -1740,8 +1761,13 @@
     watchDemoViewport=button.dataset.demoDevice;
     renderWatchLayout();
   }));
-  $('input[name="panel-density"]').forEach(input=>input.addEventListener('change',renderPreferenceDraftStatus));
+  $('input[name="panel-density"],input[name="panel-theme"],input[name="panel-sidebar"],input[name="panel-page-size"]').forEach(input=>input.addEventListener('change',renderPreferenceDraftStatus));
   $('#panel-reduce-motion')?.addEventListener('change',renderPreferenceDraftStatus);
+  $('#panel-notifications')?.addEventListener('change',renderPreferenceDraftStatus);
+  document.addEventListener('click',event=>{const info=event.target.closest('[data-pref-info]');if(info)openPreferenceGuide(info.dataset.prefInfo);});
+  $('#preferences-info-close')?.addEventListener('click',()=>$('#preferences-info-dialog').close());
+  $('#preferences-info-done')?.addEventListener('click',()=>$('#preferences-info-dialog').close());
+  $('#preferences-info-dialog')?.addEventListener('click',event=>{if(event.target===$('#preferences-info-dialog'))$('#preferences-info-dialog').close();});
   $('#preferences-save')?.addEventListener('click',saveAdminPreferences);
   $('#preferences-discard')?.addEventListener('click',()=>{loadPreferenceDraft();toast('Bekleyen değişikliklerden vazgeçildi.','info');});
   $('#preferences-reset')?.addEventListener('click',()=>{loadPreferenceDraft({density:'comfortable',reduceMotion:false});toast('Varsayılan tercihler taslağa yüklendi. Kaydetmeden uygulanmaz.','info');});
