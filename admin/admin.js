@@ -1380,20 +1380,19 @@
     $('#personalized-rules-description').textContent=mode==='taste'?'Kişisel eşleşmeleri puan ve dönem tercihinle sınırlandır.':mode==='surprise'?'Sürpriz seçkide hangi tür ve dönemlerin yer alacağını belirle.':mode==='series'?'Dizi keşfini yayın dönemi ve IMDb puanına göre daralt.':'Yüksek puanlı, daha az bilinen yapımların aralığını belirle.';
     modal.dataset.mode=mode;modal.hidden=false;
   }
-  function openPersonalizedRules(mode){personalizedRulesEditingMode=mode;personalizedRulesDraft=personalizedRulesFor(mode);renderPersonalizedRulesModal(mode);}
+  function openPersonalizedRules(mode){personalizedRulesEditingMode=mode;personalizedRulesDraft=state.personalizedRulesDraft?.[mode]||personalizedRulesFor(mode);renderPersonalizedRulesModal(mode);}
   function closePersonalizedRules(){const modal=$('#personalized-rules-modal');if(modal)modal.hidden=true;personalizedRulesEditingMode=null;personalizedRulesDraft=null;}
-  async function savePersonalizedRules(){
-    if(!canWrite()||!personalizedRulesEditingMode)return;
+  function savePersonalizedRules(){
+    if(!personalizedRulesEditingMode)return;
     const mode=personalizedRulesEditingMode,fields=$('#personalized-rules-fields [data-rule]'),rules={};
     fields.forEach(input=>{rules[input.dataset.rule]=input.dataset.rule==='mediaType'?input.value:Number(input.value);});
     if(!Number.isFinite(rules.minRating)||!Number.isFinite(rules.maxRating)||rules.minRating<0||rules.maxRating>10||rules.minRating>rules.maxRating){toast('IMDb puan aralığını kontrol et.','error');return;}
     if(!Number.isInteger(rules.minYear)||!Number.isInteger(rules.maxYear)||rules.minYear<1900||rules.maxYear>2099||rules.minYear>rules.maxYear){toast('Yayın yılı aralığını kontrol et.','error');return;}
     if(!Number.isInteger(rules.limit)||rules.limit<4||rules.limit>20){toast('Öneri sayısı 4–20 arasında olmalı.','error');return;}
-    const config=homepageConfig(),section={...(config.personalizedSection||{})},allRules={...(section.personalizedRules||{})};
     if(mode==='series')rules.mediaType='tv';
-    allRules[mode]=rules;section.personalizedRules=allRules;
-    const ok=await persist({...state.data,homepageConfig:{...config,personalizedSection:section}},PERSONALIZED_MODE_META[mode].label+' kriterleri kaydedildi.');
-    if(ok){closePersonalizedRules();renderPersonalizedSection();}
+    state.personalizedRulesDraft={...(state.personalizedRulesDraft||{}),[mode]:rules};
+    closePersonalizedRules();
+    toast(PERSONALIZED_MODE_META[mode].label+' kriterleri taslağa eklendi. Yayın öncesi kontrolü tamamlayıp kaydet.','success');
   }
   function renderPersonalizedModeOrder(){
     const host=$('#personalized-mode-order-list');if(!host)return;
@@ -1421,6 +1420,8 @@
     compare('Buton isimleri',current.discoveryModeLabels||{taste:'Zevkime Uygun',surprise:'Beni Şaşırt',series:'Yeni Diziler',gems:'Gizli Hazineler'},Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-label-'+mode)?.value.trim()||PERSONALIZED_MODE_META[mode].label])));
     compare('Keşif modu sırası',oldOrder,newOrder);
     compare('Öneri filtreleri',['excludeWatched','excludeWatchlist','excludeFavorites'].map(key=>current[key]!==false),['excludeWatched','excludeWatchlist','excludeFavorites'].map(key=>$('#personalized-'+key)?.checked!==false));
+    const pendingRules=state.personalizedRulesDraft||{},savedRules=current.personalizedRules||{};
+    ['taste','surprise','series','gems'].forEach(mode=>{if(pendingRules[mode]&&JSON.stringify(personalizedRulesFor(mode,current))!==JSON.stringify(pendingRules[mode]))changes.push(PERSONALIZED_MODE_META[mode].label+' kriterleri');});
     const panel=$('#personalized-publish-check'),summary=$('#personalized-publish-summary');if(!panel||!summary)return;
     summary.textContent=changes.length?changes.length+' başlıkta değişiklik var: '+changes.join(' · ')+'. Onaylarsan ayarlar kaydedilecek.':'Kaydedilecek yeni bir değişiklik bulunamadı.';
     panel.hidden=false;const confirm=$('#personalized-publish-confirm');if(confirm){confirm.disabled=!changes.length;confirm.textContent=changes.length?'Değişiklikleri kaydet':'Değişiklik yok';}
@@ -1448,11 +1449,12 @@
       discoveryModeOrder:[...(state.personalizedModeOrder||['taste','surprise','series','gems'])],
       excludeWatched:$('#personalized-excludeWatched')?.checked!==false,
       excludeWatchlist:$('#personalized-excludeWatchlist')?.checked!==false,
-      excludeFavorites:$('#personalized-excludeFavorites')?.checked!==false
+      excludeFavorites:$('#personalized-excludeFavorites')?.checked!==false,
+      personalizedRules:{...(existing.personalizedRules||{}),...(state.personalizedRulesDraft||{})}
     };
     const nextConfig={...config,personalizedSection,layout:{order:[...layout.order],visibility}};
     const ok=await persist({...state.data,homepageConfig:nextConfig},'İzleme Zevkine Göre ayarları kaydedildi.');
-    if(ok)renderPersonalizedSection();
+    if(ok){state.personalizedRulesDraft={};renderPersonalizedSection();}
   }
   function refreshHeroSelection(device){
     const mode=$('#hero-'+device+'-mode').value;

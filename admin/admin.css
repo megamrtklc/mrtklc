@@ -977,3 +977,8 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 .personalized-rules-actions>span{flex:1}
 @media(max-width:850px){#view-personalized-section .personalized-mode-admin-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.personalized-rules-dialog{padding:17px}.personalized-rules-fields{grid-template-columns:1fr}.personalized-rules-actions{display:grid;grid-template-columns:1fr 1fr}.personalized-rules-actions>span{display:none}.personalized-rules-actions #personalized-rules-reset{grid-column:1/-1}.personalized-rules-actions #personalized-rules-save{grid-column:1/-1}#view-personalized-section .personalized-mode-label-input{min-height:42px;font-size:14px}}
+
+/* Personalized discovery preflight: per-mode change detail */
+#personalized-publish-check{border-color:rgba(199,164,92,.48);background:linear-gradient(145deg,rgba(54,43,27,.34),rgba(24,31,40,.94))}
+#personalized-publish-summary{white-space:normal;line-height:1.7}
+#personalized-publish-confirm:disabled{opacity:.48;cursor:not-allowed}
