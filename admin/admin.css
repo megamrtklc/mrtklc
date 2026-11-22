@@ -581,3 +581,8 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 .quality-history-empty{width:100%;align-self:center;text-align:center;color:var(--muted,#999);font-size:12px;padding:24px 8px}
 .quality-history-note{margin:12px 0 0;color:var(--muted,#999);font-size:11px;line-height:1.5}
 @media(max-width:700px){.quality-trend-panel{padding:16px}.quality-trend-head{flex-direction:column}.quality-trend-head .primary-button{width:100%}.quality-trend-stats{grid-template-columns:1fr 1fr}.quality-trend-stats article:last-child{grid-column:1/-1}}
+
+/* Filtered analytics report export */
+.analytics-detail-export{min-height:40px;white-space:nowrap;border:1px solid #6a5636!important;background:#c5a15d12!important;color:#dfc18a!important;font-size:10px!important}
+.analytics-detail-export:hover{background:#c5a15d24!important;border-color:#987746!important}
+@media(max-width:900px){.analytics-detail-export{grid-column:1/-1;width:100%}}
