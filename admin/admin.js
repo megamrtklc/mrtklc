@@ -159,6 +159,8 @@
     $('#quality-missing-trailer').textContent=quality.trailer.toLocaleString('tr-TR');
     $('#quality-missing-watch').textContent=quality.watch.toLocaleString('tr-TR');
     $('#quality-missing-cast').textContent=quality.cast.toLocaleString('tr-TR');
+    const affectedCount=state.catalog.filter(item=>qualityIssuesFor(item).length>0).length;
+    $('#overview-quality-affected').textContent=affectedCount.toLocaleString('tr-TR')+' eksik kayıt';
     const counts={};state.catalog.forEach(x=>{const y=yearOf(x);if(y!=='—')counts[y]=(counts[y]||0)+1;});
     const top=Object.entries(counts).sort((a,b)=>Number(a[0])-Number(b[0])).slice(-12),max=Math.max(1,...top.map(x=>x[1]));
     $('#overview-yearline').innerHTML=top.map(([year,count])=>'<span style="height:'+Math.max(8,count/max*100)+'%" title="'+escapeHtml(year)+': '+count+' yapım"><small>'+escapeHtml(String(year).slice(-2))+'</small></span>').join('');
