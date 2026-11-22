@@ -375,12 +375,56 @@
     await persist({...state.data,franchises:franchiseList().filter(x=>String(x.id)!==String(id))},'Film serisi silindi; katalogdaki filmler korundu.');
   }
   function renderAnalytics(){
-    const movies=state.catalog.filter(x=>!isSeries(x)).length,series=state.catalog.length-movies,max=Math.max(movies,series,1);
-    $('#type-chart').innerHTML=[['Film',movies],['Dizi',series]].map(([name,n])=>'<div class="bar-row"><span>'+name+'</span><div class="bar-track"><div class="bar-fill" style="width:'+(n/max*100)+'%"></div></div><b>'+n+'</b></div>').join('');
-    const counts={};state.catalog.forEach(x=>{const y=yearOf(x);if(y!=='—')counts[y]=(counts[y]||0)+1;});
-    const top=Object.entries(counts).sort((a,b)=>Number(b[0])-Number(a[0])).slice(0,10).sort((a,b)=>Number(a[0])-Number(b[0]));
-    const maxYear=Math.max(1,...top.map(x=>x[1]));
-    $('#year-chart').innerHTML=top.map(([y,n])=>'<div class="bar-row"><span>'+escapeHtml(y)+'</span><div class="bar-track"><div class="bar-fill" style="width:'+(n/maxYear*100)+'%"></div></div><b>'+n+'</b></div>').join('')||'<small>Yıl verisi bulunamadı.</small>';
+    const catalog=Array.isArray(state.catalog)?state.catalog:[];
+    const total=catalog.length,movies=catalog.filter(x=>!isSeries(x)).length,series=total-movies;
+    const ratings=catalog.map(x=>Number(String(x.rating??x.imdbRating??x.voteAverage??'').replace(',','.'))).filter(n=>Number.isFinite(n)&&n>0&&n<=10);
+    const average=ratings.length?ratings.reduce((a,b)=>a+b,0)/ratings.length:0;
+    const setText=(selector,value)=>{const el=$(selector);if(el)el.textContent=value;};
+    setText('#analytics-total',total.toLocaleString('tr-TR'));
+    setText('#analytics-movies',movies.toLocaleString('tr-TR'));
+    setText('#analytics-series',series.toLocaleString('tr-TR'));
+    setText('#analytics-average',average?average.toFixed(1).replace('.',',')+'/10':'—');
+    setText('#analytics-movie-share',total?Math.round(movies/total*100)+'% of catalog':'Katalog boş');
+    setText('#analytics-series-share',total?Math.round(series/total*100)+'% of catalog':'Katalog boş');
+    setText('#analytics-rated-count',ratings.length+' / '+total+' yapımda puan var');
+    const drawBars=(selector,rows,empty,maxOverride)=>{
+      const root=$(selector);if(!root)return;
+      const max=Math.max(1,maxOverride||...rows.map(row=>row[1]));
+      root.innerHTML=rows.length?rows.map(([name,count])=>'<div class="bar-row"><span>'+escapeHtml(name)+'</span><div class="bar-track"><div class="bar-fill" style="width:'+(count/max*100)+'%"></div></div><b>'+count+'</b></div>').join():'<small class="analytics-empty">'+escapeHtml(empty)+'</small>';
+    };
+    drawBars('#type-chart',[['Film',movies],['Dizi',series]],'Henüz katalog kaydı yok.');
+    const typeBalance=$('#analytics-type-balance');
+    if(typeBalance)typeBalance.innerHTML='<span><i class="analytics-dot movie"></i>Film <b>'+movies+'</b></span><span><i class="analytics-dot series"></i>Dizi <b>'+series+'</b></span>';
+    const yearCounts={};
+    catalog.forEach(item=>{const y=yearOf(item);if(y!=='—'&&Number(y)>=1880&&Number(y)<=2100)yearCounts[y]=(yearCounts[y]||0)+1;});
+    const yearRows=Object.entries(yearCounts).sort((a,b)=>Number(b[0])-Number(a[0])).slice(0,12).sort((a,b)=>Number(a[0])-Number(b[0]));
+    drawBars('#year-chart',yearRows,'Yapım yılı bilgisi bulunamadı.');
+    const genreCounts={};
+    catalog.forEach(item=>{
+      let values=item.genres??item.genre??item.category??item.categories??[];
+      if(!Array.isArray(values))values=String(values||'').split(/[,/|;]+/);
+      values.forEach(value=>{const name=String(typeof value==='object'?(value.name||value.title||''):value).trim();if(name&&name!=='—')genreCounts[name]=(genreCounts[name]||0)+1;});
+    });
+    const genreRows=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    drawBars('#genre-chart',genreRows,'Tür etiketi bulunan kayıt yok.');
+    const ratingRows=[['0–4,9',0],['5–5,9',0],['6–6,9',0],['7–7,9',0],['8–8,9',0],['9–10',0]];
+    ratings.forEach(n=>{const index=n<5?0:n<6?1:n<7?2:n<8?3:n<9?4:5;ratingRows[index][1]++;});
+    drawBars('#rating-chart',ratingRows,'Puan bilgisi bulunamadı.');
+    const bestYear=yearRows.slice().sort((a,b)=>b[1]-a[1])[0],bestGenre=genreRows[0];
+    setText('#analytics-insight-title',total?('Arşivinde '+total+' yapım bulunuyor'):'Arşivin henüz boş');
+    setText('#analytics-insight-copy',total?((bestYear?'En yoğun yapım yılı '+bestYear[0]+' ('+bestYear[1]+' kayıt). ':'')+(bestGenre?'En sık görülen tür '+bestGenre[0]+' ('+bestGenre[1]+' kayıt). ':'')+(ratings.length?'Puan ortalaması '+average.toFixed(1).replace('.',',')+'/10.':'Henüz puan verisi bulunmuyor.')):'İlk yapımlarını eklediğinde tür, yıl ve puan analizleri burada otomatik oluşacak.');
+  }
+  function exportAnalyticsCsv(){
+    const catalog=Array.isArray(state.catalog)?state.catalog:[];
+    if(!catalog.length){toast('Dışa aktarılacak katalog kaydı bulunamadı.','info');return;}
+    const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['Puan',x=>x.rating??x.imdbRating??x.voteAverage??''],['Tür etiketleri',x=>{const v=x.genres??x.genre??x.category??x.categories??'';return Array.isArray(v)?v.map(g=>typeof g==='object'?g.name:g).join(' / '):v;}],['Yönetmen',x=>x.director??x.directors??''],['TMDB ID',x=>x.tmdbId??x.tmdb_id??x.id??'']];
+    const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
+    const csv='\uFEFF'+[columns.map(c=>quote(c[0])).join(';'),...catalog.map(item=>columns.map(c=>quote(c[1](item))).join(';'))].join('\r\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    const url=URL.createObjectURL(blob),link=document.createElement('a');
+    link.href=url;link.download='perde-katalog-raporu-'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);
+    toast('Katalog CSV raporu indirilmeye hazır.','success');
   }
   function refreshYearFilter(){
     const el=$('#year-filter'),selected=el.value;
@@ -1771,6 +1815,7 @@
   $('#preferences-save')?.addEventListener('click',saveAdminPreferences);
   $('#preferences-discard')?.addEventListener('click',()=>{loadPreferenceDraft();toast('Bekleyen değişikliklerden vazgeçildi.','info');});
   $('#preferences-reset')?.addEventListener('click',()=>{loadPreferenceDraft({density:'comfortable',reduceMotion:false,theme:'dark',sidebar:'normal',pageSize:12,notifications:true});toast('Varsayılan tercihler taslağa yüklendi. Kaydetmeden uygulanmaz.','info');});
+  $('#analytics-export')?.addEventListener('click',exportAnalyticsCsv);
   initBackupTools();
   init();
 })();
