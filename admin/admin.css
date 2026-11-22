@@ -516,3 +516,6 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #view-analytics .rating-result-item b{color:#e4eaf0;font-size:10px}
 #view-analytics .rating-result-item small{margin-top:4px;color:#8493a4;font-size:9px}
 #view-analytics .rating-result-item strong{color:#dfc18a;font-size:10px;white-space:nowrap}
+
+/* Catalog growth reporting */
+.growth-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:8px 0 18px}.growth-metrics>div{padding:13px 14px;border:1px solid var(--line-soft);border-radius:12px;background:var(--surface-2)}.growth-metrics small{display:block;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.08em}.growth-metrics b{display:block;margin-top:6px;font-size:25px;line-height:1.1;font-variant-numeric:tabular-nums}.growth-data-note{display:block;margin-top:14px;color:var(--muted);font-size:11px;line-height:1.5}.catalog-growth-card .bar-chart{margin-top:14px}@media(max-width:700px){.growth-metrics b{font-size:22px}.catalog-growth-card{min-width:0}}
