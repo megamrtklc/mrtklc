@@ -1962,6 +1962,15 @@
   $('#homepage-layout-save').addEventListener('click',requestHomepageLayoutPublish);
   $('#homepage-publish-confirm-button')?.addEventListener('click',saveHomepageLayout);
   $('#homepage-publish-cancel')?.addEventListener('click',()=>{const confirm=$('#homepage-publish-confirm');if(confirm)confirm.hidden=true;});
+  $('#homepage-preview-toggle')?.addEventListener('click',()=>{
+    const content=$('#homepage-preview-content');
+    const button=$('#homepage-preview-toggle');
+    if(!content||!button)return;
+    const show=content.hidden;
+    content.hidden=!show;
+    button.setAttribute('aria-expanded',String(show));
+    button.textContent=show?'Önizlemeyi gizle':'Önizlemeyi göster';
+  });
   $('#view-homepage-layout').addEventListener('click',event=>{
     const device=event.target.closest('[data-home-preview-device]');
     if(device){
