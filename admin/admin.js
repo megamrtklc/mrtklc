@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { homepageLayoutDirty:false, data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
+  const state = { homepageLayoutDirty:false, data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -355,9 +355,15 @@
     $('#quality-total-affected').textContent=affected.length.toLocaleString('tr-TR');
     $('#quality-issue-count').textContent=String(affected.length);
     const rows=affected.filter(({item,issues})=>(!query||titleOf(item).toLocaleLowerCase('tr').includes(query))&&(filter==='all'||(filter==='other'?issues.some(key=>['director','year','description','tmdb'].includes(key)):issues.includes(filter))));
+    const pages=Math.max(1,Math.ceil(rows.length/state.qualityPageSize));
+    state.qualityPage=Math.min(state.qualityPage,pages);
+    const start=(state.qualityPage-1)*state.qualityPageSize;
+    const visibleRows=rows.slice(start,start+state.qualityPageSize);
     $('#quality-result-count').textContent=rows.length.toLocaleString('tr-TR')+' yapım';
-    $('#quality-rows').innerHTML=rows.length?rows.map(({item,issues})=>'<tr><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><div class="quality-tags">'+issues.map(key=>'<span>'+escapeHtml(QUALITY_LABELS[key])+'</span>').join('')+'</div></td><td class="row-actions"><button class="row-action" data-quality-edit="'+escapeHtml(item.id)+'">Düzenle</button></td></tr>').join(''):'<tr><td colspan="5" class="empty-cell">'+(filter!=='all'||query?'Bu filtreyle eşleşen eksik kayıt bulunamadı.':'Harika! Katalogda kontrol gerektiren eksik bilgi bulunamadı.')+'</td></tr>';
-    $$('#quality-rows [data-quality-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.qualityEdit);if(item)openEditor(item);}));
+    $('#quality-rows').innerHTML=visibleRows.length?visibleRows.map(({item,issues},index)=>'<tr><td class="quality-row-number">'+(start+index+1)+'.</td><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><div class="quality-tags">'+issues.map(key=>'<span>'+escapeHtml(QUALITY_LABELS[key])+'</span>').join('')+'</div></td><td class="row-actions"><button class="row-action" data-quality-edit="'+escapeHtml(item.id)+'">Düzenle</button></td></tr>').join(''):'<tr><td colspan="6" class="empty-cell">'+(filter!=='all'||query?'Bu filtreyle eşleşen eksik kayıt bulunamadı.':'Harika! Katalogda kontrol gerektiren eksik bilgi bulunamadı.')+'</td></tr>';
+    const pagination=$('#quality-pagination');
+    if(pagination){pagination.hidden=rows.length<=state.qualityPageSize;$('#quality-page-info').textContent='Sayfa '+state.qualityPage+' / '+pages+' · '+(start+1)+'–'+Math.min(start+state.qualityPageSize,rows.length)+' / '+rows.length;$('#quality-prev').disabled=state.qualityPage<=1;$('#quality-next').disabled=state.qualityPage>=pages;}
+    $('#quality-rows [data-quality-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.qualityEdit);if(item)openEditor(item);}));
   }
   function renderCollections(){
     const list=collectionList();
@@ -1830,9 +1836,11 @@
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#catalog-sort').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#missing-trailer-search').addEventListener('input',()=>{state.missingTrailerPage=1;renderMissingTrailers();});
-  $('#quality-search').addEventListener('input',renderQualityAudit);
-  $('#quality-filter').addEventListener('change',renderQualityAudit);
+  $('#quality-search').addEventListener('input',()=>{state.qualityPage=1;renderQualityAudit();});
+  $('#quality-filter').addEventListener('change',()=>{state.qualityPage=1;renderQualityAudit();});
   $('#quality-refresh').addEventListener('click',()=>{renderQualityAudit();renderQualityHistory();});
+  $('#quality-prev')?.addEventListener('click',()=>{state.qualityPage=Math.max(1,state.qualityPage-1);renderQualityAudit();});
+  $('#quality-next')?.addEventListener('click',()=>{state.qualityPage++;renderQualityAudit();});
   $('#quality-snapshot-save')?.addEventListener('click',saveQualitySnapshot);
   $('#missing-trailer-prev').addEventListener('click',()=>{state.missingTrailerPage=Math.max(1,state.missingTrailerPage-1);renderMissingTrailers();});
   $('#missing-trailer-next').addEventListener('click',()=>{state.missingTrailerPage++;renderMissingTrailers();});
