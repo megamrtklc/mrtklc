@@ -1539,9 +1539,35 @@
         const checked=selected.has(String(item.id));
         return '<label class="hero-pick" data-search="'+escapeHtml((titleOf(item)+' '+yearOf(item)).toLocaleLowerCase('tr-TR'))+'"><input type="checkbox" value="'+escapeHtml(item.id)+'" '+(checked?'checked ':'')+(mode==='auto'?'disabled ':'')+'><img src="'+escapeHtml(posterOf(item))+'" alt=""><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+' · ★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'</small></span></label>';
       }).join('');
-      const count=()=>$('#hero-'+device+'-selected-count').textContent=$$('#hero-'+device+'-slide-list input:checked').length+' yapım seçildi';
+      state.heroOrderDraft=state.heroOrderDraft||{};
+      const savedOrder=(Array.isArray(state.heroOrderDraft[device])?state.heroOrderDraft[device]:
+        (Array.isArray(config[device+'HeroSlides'])?config[device+'HeroSlides']:config.heroSlides||[]))
+        .map(entry=>String(typeof entry==='object'?entry.id:entry));
+      const checkedNow=$('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value));
+      const ordered=[...savedOrder.filter(id=>checkedNow.includes(id)),...checkedNow.filter(id=>!savedOrder.includes(id))];
+      state.heroOrderDraft[device]=ordered;
+      const orderHost=$('#hero-'+device+'-order-list');
+      const renderOrder=()=>{
+        const ids=(state.heroOrderDraft[device]||[]).filter(id=>checkedNow.includes(id));
+        state.heroOrderDraft[device]=ids;
+        orderHost.innerHTML=ids.length?ids.map((id,index)=>{
+          const item=state.catalog.find(entry=>String(entry.id)===id);
+          if(!item)return '';
+          return '<div class="hero-order-row" data-id="'+escapeHtml(id)+'"><span class="hero-order-number">'+(index+1)+'</span><img src="'+escapeHtml(posterOf(item))+'" alt=""><span class="hero-order-title"><b>'+escapeHtml(titleOf(item))+'</b><small>'+(index===0?'İlk manşet':'Sıra '+(index+1))+'</small></span><span class="hero-order-actions"><button type="button" data-hero-order-action="up" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" data-hero-order-action="down" aria-label="Aşağı taşı" '+(index===ids.length-1?'disabled':'')+'>↓</button></span></div>';
+        }).join(''):'<div class="hero-order-empty">Henüz seçili yapım yok. Yukarıdaki listeden yapım seç.</div>';
+      };
+      orderHost.onclick=event=>{
+        const button=event.target.closest('[data-hero-order-action]');if(!button)return;
+        const row=button.closest('.hero-order-row');if(!row)return;
+        const ids=state.heroOrderDraft[device]||[],index=ids.indexOf(row.dataset.id);
+        const next=index+(button.dataset.heroOrderAction==='up'?-1:1);
+        if(index<0||next<0||next>=ids.length)return;
+        [ids[index],ids[next]]=[ids[next],ids[index]];
+        renderOrder();count();preview();
+      };
+      const count=()=>$('#hero-'+device+'-selected-count').textContent=$('#hero-'+device+'-slide-list input:checked').length+' yapım seçildi';
       const preview=()=>{
-        const firstId=$$('#hero-'+device+'-slide-list input:checked')[0]?.value;
+        const firstId=(state.heroOrderDraft[device]||[])[0];
         const item=state.catalog.find(x=>String(x.id)===String(firstId));
         const host=$('#hero-'+device+'-preview');
         if(personalCategory){
@@ -1555,14 +1581,17 @@
         const excerpt=desc.length>max?desc.slice(0,max).trimEnd()+'…':desc;
         host.innerHTML='<div class="hero-preview-art" style="background-image:linear-gradient(90deg,rgba(5,7,12,.96),rgba(5,7,12,.62) 58%,rgba(5,7,12,.12)),url(\''+escapeHtml(item.backdrop||posterOf(item))+'\')"><div class="hero-preview-copy"><span class="hero-preview-kicker">● ÖNE ÇIKAN YAPIM</span><h3>'+escapeHtml(titleOf(item))+'</h3><div class="hero-preview-meta">★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'　·　'+escapeHtml(yearOf(item))+'　·　'+(isSeries(item)?'DİZİ':'FİLM')+'</div><p>'+escapeHtml(excerpt)+'</p><small class="hero-preview-character-count">Metin: '+desc.length+' · Gösterilen: '+Math.min(desc.length,max)+' / '+max+' karakter</small></div></div>';
       };
-      count();preview();
+      renderOrder();count();preview();
       $$('#hero-'+device+'-slide-list input').forEach(input=>input.addEventListener('change',()=>{
         if(device==='desktop'&&input.checked){
           const checked=$$('#hero-desktop-slide-list input:checked');
           const max=Number($('#hero-desktop-count').value)||10;
           if(checked.length>max){input.checked=false;toast('Masaüstü manşetinde en fazla '+max+' yapım seçebilirsin.');}
         }
-        count();preview();
+        const current=$('#hero-'+device+'-slide-list input:checked').map(entry=>String(entry.value));
+        const prior=state.heroOrderDraft[device]||[];
+        state.heroOrderDraft[device]=[...prior.filter(id=>current.includes(id)),...current.filter(id=>!prior.includes(id))];
+        renderOrder();count();preview();
       }));
       $('#hero-'+device+'-search').value='';
       $('#hero-'+device+'-search').oninput=event=>{
@@ -1586,10 +1615,13 @@
       const listId='#hero-'+device+'-slide-list';
       const oldEntries=Array.isArray(previous[device+'HeroSlides'])?previous[device+'HeroSlides']:previous.heroSlides;
       const oldMap=new Map(oldEntries.map(x=>[String(x.id),x]));
-      const selectedInputs=$$(listId+' input:checked');
-      const max=device==='desktop'?Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)):12;
-      return selectedInputs.slice(0,max).map(input=>{
-        const id=input.value,old=oldMap.get(String(id))||legacyById.get(String(id))||{};
+      const selectedInputs=$(listId+' input:checked');
+      const selectedIds=new Set(selectedInputs.map(input=>String(input.value)));
+      const max=device==='desktop'?Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10)):Math.max(1,Math.min(12,Number($('#hero-mobile-count').value)||6));
+      const orderedIds=(state.heroOrderDraft?.[device]||[]).filter(id=>selectedIds.has(String(id)));
+      selectedInputs.forEach(input=>{if(!orderedIds.includes(String(input.value)))orderedIds.push(String(input.value));});
+      return orderedIds.slice(0,max).map(id=>{
+        const old=oldMap.get(String(id))||legacyById.get(String(id))||{};
         return {...old,id,active:true,headline:old.headline||'',description:old.description||''};
       });
     };
@@ -1605,7 +1637,7 @@
         autoplay:$('#hero-autoplay').checked,pauseOnHover:$('#hero-pause').checked},
       desktopHeroSlides,mobileHeroSlides,heroSlides:desktopHeroSlides};
     const ok=await persist({...state.data,homepageConfig:config},'Manşet ayarları kaydedildi.');
-    if(ok){state.heroDraft=null;state.heroRefreshDraft=null;renderHomepage();}
+    if(ok){state.heroDraft=null;state.heroRefreshDraft=null;state.heroOrderDraft=null;renderHomepage();}
   }
   const BACKUP_STORAGE_PREFIXES=['cine_','perde_'];
   const PERSONAL_BACKUP_SITE_ORIGIN='https://megamrtklc.github.io';
