@@ -1548,7 +1548,8 @@
       state.heroOrderDraft[device]=ordered;
       const orderHost=$('#hero-'+device+'-order-list');
       const renderOrder=()=>{
-        const ids=(state.heroOrderDraft[device]||[]).filter(id=>checkedNow.includes(id));
+        const activeIds=$('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value));
+        const ids=(state.heroOrderDraft[device]||[]).filter(id=>activeIds.includes(id));
         state.heroOrderDraft[device]=ids;
         orderHost.innerHTML=ids.length?ids.map((id,index)=>{
           const item=state.catalog.find(entry=>String(entry.id)===id);
