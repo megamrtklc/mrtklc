@@ -34,6 +34,8 @@
     if(density)density.checked=true;
     const motion=$('#panel-reduce-motion');
     if(motion)motion.checked=preferences.reduceMotion;
+    const motionState=$('#preference-motion-state');
+    if(motionState)motionState.textContent=preferences.reduceMotion?'Açık':'Kapalı';
     return preferences;
   }
   function saveAdminPreferences(patch){
@@ -42,7 +44,11 @@
     catch(_){toast('Tarayıcı tercihi kaydedilemedi. Depolama iznini kontrol et.','warning');return false;}
     applyAdminPreferences();
     const status=$('#preferences-status');
-    if(status)status.textContent='Tercihler kaydedildi · '+new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+    if(status){
+      const density=next.density==='compact'?'Kompakt görünüm':'Rahat görünüm';
+      const motion=next.reduceMotion?'Hareketler azaltıldı':'Standart hareketler';
+      status.textContent='Kaydedildi · '+density+' · '+motion+' · '+new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+    }
     return true;
   }
   function applyAdminTheme(){ document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark'); const meta=document.querySelector('meta[name="theme-color"]'); if(meta)meta.content='#f4f3ef'; }
