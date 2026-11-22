@@ -145,6 +145,18 @@
     const movieShare=movieCount/totalCount*100,seriesShare=seriesCount/totalCount*100;
     $('#overview-balance-movies').style.width=movieShare+'%';$('#overview-balance-series').style.width=seriesShare+'%';
     $('#overview-balance-movie-count').textContent=movieCount.toLocaleString('tr-TR');$('#overview-balance-series-count').textContent=seriesCount.toLocaleString('tr-TR');
+    const quality={
+      poster:state.catalog.filter(x=>!posterOf(x)).length,
+      rating:state.catalog.filter(x=>!(Number(x.rating||x.tmdbRating)>0)).length,
+      trailer:state.catalog.filter(x=>!(x.trailerUrl||x.tmdbTrailerUrl)).length,
+      watch:state.catalog.filter(x=>!(x.watchUrl||(Array.isArray(x.episodeWatchUrls)&&x.episodeWatchUrls.some(Boolean)))).length,
+      cast:state.catalog.filter(x=>!((Array.isArray(x.cast)&&x.cast.length)||(Array.isArray(x.tmdbCast)&&x.tmdbCast.length))).length
+    };
+    $('#quality-missing-poster').textContent=quality.poster.toLocaleString('tr-TR');
+    $('#quality-missing-rating').textContent=quality.rating.toLocaleString('tr-TR');
+    $('#quality-missing-trailer').textContent=quality.trailer.toLocaleString('tr-TR');
+    $('#quality-missing-watch').textContent=quality.watch.toLocaleString('tr-TR');
+    $('#quality-missing-cast').textContent=quality.cast.toLocaleString('tr-TR');
     const counts={};state.catalog.forEach(x=>{const y=yearOf(x);if(y!=='—')counts[y]=(counts[y]||0)+1;});
     const top=Object.entries(counts).sort((a,b)=>Number(a[0])-Number(b[0])).slice(-12),max=Math.max(1,...top.map(x=>x[1]));
     $('#overview-yearline').innerHTML=top.map(([year,count])=>'<span style="height:'+Math.max(8,count/max*100)+'%" title="'+escapeHtml(year)+': '+count+' yapım"><small>'+escapeHtml(String(year).slice(-2))+'</small></span>').join('');
