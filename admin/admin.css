@@ -476,10 +476,10 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #view-analytics .analytics-card-head h2{margin:7px 0 4px;color:#e7ebf0;font-size:14px}
 #view-analytics .analytics-card-head p{margin:0;color:#8493a4;font-size:9px;line-height:1.5}
 #view-analytics .analytics-report-card .bar-chart{gap:13px;padding:17px 0 5px}
-#view-analytics .analytics-report-card .bar-row{grid-template-columns:minmax(58px,86px) minmax(30px,1fr) 28px;gap:9px;font-size:9px}
+#view-analytics .analytics-report-card .bar-row{grid-template-columns:minmax(58px,86px) minmax(30px,1fr) 28px 10px;gap:9px;font-size:9px}
 #view-analytics .analytics-report-card .bar-row>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #view-analytics .analytics-report-card .bar-track{height:8px;background:#2a3039}
-#view-analytics .analytics-report-card .bar-fill{background:linear-gradient(90deg,#82683c,#d8b66e)}
+#view-analytics .analytics-report-card .bar-fill{display:block;height:100%;background:linear-gradient(90deg,#82683c,#d8b66e)}
 #view-analytics .analytics-report-card .bar-row b{color:#e1d3b2;font-size:9px}
 #view-analytics .analytics-type-balance{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;padding-top:12px;border-top:1px solid #303944;color:#9aa6b4;font-size:9px}
 #view-analytics .analytics-type-balance>span{display:flex;align-items:center;gap:6px}
