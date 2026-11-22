@@ -189,26 +189,29 @@
             <div class="panel-heading"><div><span class="section-index">01 / SIRALAMA</span><h2>Ana sayfa bölümleri</h2><p>Liste sırası, sitedeki yukarıdan aşağıya gösterim sırasıdır.</p></div><span class="homepage-layout-live">CANLI VİTRİN</span></div>
             <div id="homepage-layout-list" class="homepage-layout-list"><div class="empty-cell">Bölümler yükleniyor…</div></div>
           </div>
-          <aside class="panel-card homepage-layout-side">
-            <span class="section-index">02 / BİLGİ</span><h2>Nasıl çalışır?</h2>
-            <div class="homepage-layout-note"><b>Manşet sabit kalır</b><p>Masaüstü ve mobil manşet aynı yerde kalır. Görünümü ve çalışma şekli bu ekrandan değiştirilmez.</p></div>
-            <div class="homepage-layout-note"><b>İçerik koşulları korunur</b><p>Örneğin izleme listesi boşsa o bölüm yine otomatik gizlenir. Buradaki anahtar yalnızca bölümü genel olarak açar veya kapatır.</p></div>
-            <div class="homepage-layout-note"><b>Yayınlama</b><p>Kaydettiğinde sıralama ve görünürlük ayarları katalog verisine yazılır ve siteye gönderilir.</p></div>
-            <button class="secondary-button" id="homepage-layout-reset" type="button">Varsayılan sıraya dön</button>
-          </aside>
         </div>
+        <aside class="panel-card homepage-layout-side">
+          <div class="homepage-layout-side-heading"><span class="section-index">02 / BİLGİ</span><h2>Nasıl çalışır?</h2></div>
+          <div class="homepage-layout-note"><b>Manşet sabit kalır</b><p>Masaüstü ve mobil manşet aynı yerde kalır. Görünümü ve çalışma şekli bu ekrandan değiştirilmez.</p></div>
+          <div class="homepage-layout-note"><b>İçerik koşulları korunur</b><p>Örneğin izleme listesi boşsa o bölüm yine otomatik gizlenir. Buradaki anahtar yalnızca bölümü genel olarak açar veya kapatır.</p></div>
+          <div class="homepage-layout-note"><b>Yayınlama</b><p>Kaydettiğinde sıralama ve görünürlük ayarları katalog verisine yazılır ve siteye gönderilir.</p></div>
+          <button class="secondary-button" id="homepage-layout-reset" type="button">Varsayılan sıraya dön</button>
+        </aside>
         <section class="panel-card homepage-layout-preview-panel" aria-labelledby="homepage-layout-preview-title">
           <div class="homepage-layout-preview-head">
             <div><span class="section-index">03 / CANLI TASLAK</span><h2 id="homepage-layout-preview-title">Ana sayfa önizlemesi</h2><p>Sıralama, görünürlük, başlık ve alt metin değişikliklerini yayınlamadan önce burada kontrol et.</p></div>
             <div class="homepage-preview-controls">
+              <button type="button" class="secondary-button homepage-preview-toggle" id="homepage-preview-toggle" aria-controls="homepage-preview-content" aria-expanded="false">Önizlemeyi göster</button>
               <div class="homepage-preview-switch" role="group" aria-label="Önizleme cihazı">
                 <button type="button" data-home-preview-device="desktop" class="is-active">Masaüstü</button>
                 <button type="button" data-home-preview-device="mobile">Mobil</button>
               </div>
             </div>
           </div>
-          <div id="homepage-layout-preview" class="homepage-layout-preview" data-device="desktop" aria-live="polite"><div class="homepage-draft-canvas" id="homepage-draft-canvas"></div></div>
-          <p class="homepage-preview-disclaimer">Bu, gerçek siteyi yüklemeyen bağımsız bir taslak çizimidir. Değişiklikler burada anında gösterilir; siteye yalnızca yayınlama onayıyla kaydedilir.</p>
+          <div id="homepage-preview-content" hidden>
+            <div id="homepage-layout-preview" class="homepage-layout-preview" data-device="desktop" aria-live="polite"><div class="homepage-draft-canvas" id="homepage-draft-canvas"></div></div>
+            <p class="homepage-preview-disclaimer">Bu, gerçek siteyi yüklemeyen bağımsız bir taslak çizimidir. Değişiklikler burada anında gösterilir; siteye yalnızca yayınlama onayıyla kaydedilir.</p>
+          </div>
         </section>
         <section class="panel-card homepage-publish-check" aria-labelledby="homepage-publish-check-title">
           <div class="homepage-publish-check-head">
