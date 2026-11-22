@@ -1697,7 +1697,7 @@
         [ids[index],ids[next]]=[ids[next],ids[index]];
         renderOrder();count();preview();
       };
-      const count=()=>$('#hero-'+device+'-selected-count').textContent=$('#hero-'+device+'-slide-list input:checked').length+' yapım seçildi';
+      const count=()=>$('#hero-'+device+'-selected-count').textContent=$$('#hero-'+device+'-slide-list input:checked').length+' yapım seçildi';
       const preview=()=>{
         const firstId=(state.heroOrderDraft[device]||[])[0];
         const item=state.catalog.find(x=>String(x.id)===String(firstId));
