@@ -603,3 +603,7 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #view-quality .quality-pagination{margin:14px 0 4px}
 #view-quality .quality-pagination[hidden]{display:none}
 #view-quality .quality-pagination button{min-width:92px}
+
+#view-quality .quality-page-size-label{display:inline-flex;align-items:center;gap:7px;color:var(--muted,#92939a);font-size:11px;white-space:nowrap}
+#view-quality .quality-page-size-label select{min-width:68px;padding:8px 26px 8px 10px;border:1px solid var(--line,rgba(255,255,255,.12));border-radius:8px;background:var(--panel,#17191f);color:var(--text,#eee);font:inherit}
+@media(max-width:620px){#view-quality .quality-page-size-label{justify-content:space-between;width:100%}#view-quality .quality-page-size-label select{flex:0 0 92px}}
