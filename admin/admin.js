@@ -1354,7 +1354,7 @@
       ?Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10))
       :Math.max(1,Math.min(12,Number($('#hero-mobile-count').value)||6));
     const list=$('#hero-'+device+'-slide-list');
-    const currentIds=new Set($$('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value)));
+    const currentIds=new Set($$$('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value)));
     const eligible=autoHeroItems(category,Math.max(state.catalog.length,limit));
     const fresh=eligible.filter(item=>!currentIds.has(String(item.id)));
     let next=fresh.slice(0,limit);
@@ -1543,12 +1543,12 @@
       const savedOrder=(Array.isArray(state.heroOrderDraft[device])?state.heroOrderDraft[device]:
         (Array.isArray(config[device+'HeroSlides'])?config[device+'HeroSlides']:config.heroSlides||[]))
         .map(entry=>String(typeof entry==='object'?entry.id:entry));
-      const checkedNow=$('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value));
+      const checkedNow=$$('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value));
       const ordered=[...savedOrder.filter(id=>checkedNow.includes(id)),...checkedNow.filter(id=>!savedOrder.includes(id))];
       state.heroOrderDraft[device]=ordered;
       const orderHost=$('#hero-'+device+'-order-list');
       const renderOrder=()=>{
-        const activeIds=$('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value));
+        const activeIds=$$('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value));
         const ids=(state.heroOrderDraft[device]||[]).filter(id=>activeIds.includes(id));
         state.heroOrderDraft[device]=ids;
         orderHost.innerHTML=ids.length?ids.map((id,index)=>{
@@ -1589,7 +1589,7 @@
           const max=Number($('#hero-desktop-count').value)||10;
           if(checked.length>max){input.checked=false;toast('Masaüstü manşetinde en fazla '+max+' yapım seçebilirsin.');}
         }
-        const current=$('#hero-'+device+'-slide-list input:checked').map(entry=>String(entry.value));
+        const current=$$('#hero-'+device+'-slide-list input:checked').map(entry=>String(entry.value));
         const prior=state.heroOrderDraft[device]||[];
         state.heroOrderDraft[device]=[...prior.filter(id=>current.includes(id)),...current.filter(id=>!prior.includes(id))];
         renderOrder();count();preview();
