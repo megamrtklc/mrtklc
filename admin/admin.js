@@ -377,14 +377,14 @@
   function renderAnalytics(){
     const catalog=Array.isArray(state.catalog)?state.catalog:[];
     const total=catalog.length,movies=catalog.filter(x=>!isSeries(x)).length,series=total-movies;
-    const ratings=catalog.map(x=>Number(String(x.rating??x.imdbRating??x.voteAverage??'').replace(',','.'))).filter(n=>Number.isFinite(n)&&n>0&&n<=10);
+    const ratings=catalog.map(x=>parseFloat(String(x.rating??x.imdbRating??x.voteAverage??'').replace(',','.'))).filter(n=>Number.isFinite(n)&&n>0&&n<=10);
     const average=ratings.length?ratings.reduce((a,b)=>a+b,0)/ratings.length:0;
     const setText=(selector,value)=>{const el=$(selector);if(el)el.textContent=value;};
     setText('#analytics-total',total.toLocaleString('tr-TR'));
     setText('#analytics-movies',movies.toLocaleString('tr-TR'));
     setText('#analytics-series',series.toLocaleString('tr-TR'));
     setText('#analytics-average',average?average.toFixed(1).replace('.',',')+'/10':'—');
-    setText('#analytics-movie-share',total?Math.round(movies/total*100)+'% of catalog':'Katalog boş');
+    setText('#analytics-movie-share',total?Math.round(movies/total*100)+'% katalog':'Katalog boş');
     setText('#analytics-series-share',total?Math.round(series/total*100)+'% of catalog':'Katalog boş');
     setText('#analytics-rated-count',ratings.length+' / '+total+' yapımda puan var');
     const drawBars=(selector,rows,empty,maxOverride)=>{
@@ -403,7 +403,7 @@
     catalog.forEach(item=>{
       let values=item.genres??item.genre??item.category??item.categories??[];
       if(!Array.isArray(values))values=String(values||'').split(/[,/|;]+/);
-      values.forEach(value=>{const name=String(typeof value==='object'?(value.name||value.title||''):value).trim();if(name&&name!=='—')genreCounts[name]=(genreCounts[name]||0)+1;});
+      values.forEach(value=>{const name=String(value&&typeof value==='object'?(value.name||value.title||''):value).trim();if(name&&name!=='—')genreCounts[name]=(genreCounts[name]||0)+1;});
     });
     const genreRows=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
     drawBars('#genre-chart',genreRows,'Tür etiketi bulunan kayıt yok.');
@@ -417,7 +417,7 @@
   function exportAnalyticsCsv(){
     const catalog=Array.isArray(state.catalog)?state.catalog:[];
     if(!catalog.length){toast('Dışa aktarılacak katalog kaydı bulunamadı.','info');return;}
-    const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['Puan',x=>x.rating??x.imdbRating??x.voteAverage??''],['Tür etiketleri',x=>{const v=x.genres??x.genre??x.category??x.categories??'';return Array.isArray(v)?v.map(g=>typeof g==='object'?g.name:g).join(' / '):v;}],['Yönetmen',x=>x.director??x.directors??''],['TMDB ID',x=>x.tmdbId??x.tmdb_id??x.id??'']];
+    const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['Puan',x=>x.rating??x.imdbRating??x.voteAverage??''],['Tür etiketleri',x=>{const v=x.genres??x.genre??x.category??x.categories??'';return Array.isArray(v)?v.map(g=>g&&typeof g==='object'?g.name:g).join(' / '):v;}],['Yönetmen',x=>x.director??x.directors??''],['TMDB ID',x=>x.tmdbId??x.tmdb_id??'']];
     const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
     const csv='\uFEFF'+[columns.map(c=>quote(c[0])).join(';'),...catalog.map(item=>columns.map(c=>quote(c[1](item))).join(';'))].join('\r\n');
     const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
