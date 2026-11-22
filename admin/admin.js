@@ -1364,6 +1364,10 @@
   async function savePersonalizedSection(event){
     event.preventDefault();
     if(!canWrite())return;
+    const minRating=Number($('#personalized-gems-min-rating').value),maxRating=Number($('#personalized-gems-max-rating').value);
+    const minYear=Number($('#personalized-gems-min-year').value),maxYear=Number($('#personalized-gems-max-year').value);
+    if(!Number.isFinite(minRating)||!Number.isFinite(maxRating)||minRating<0||maxRating>10||minRating>maxRating){toast('IMDb puan aralığını kontrol et. Minimum değer maksimumdan büyük olamaz.','error');return;}
+    if(!Number.isInteger(minYear)||!Number.isInteger(maxYear)||minYear<1900||maxYear>2099||minYear>maxYear){toast('Yayın yılı aralığını kontrol et. İlk yıl son yıldan büyük olamaz.','error');return;}
     const config=homepageConfig();
     const layout=homepageLayoutConfig();
     const visibility={...layout.visibility};
