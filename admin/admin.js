@@ -566,6 +566,47 @@
     if(next)next.disabled=state.analyticsDetailPage>=pages;
     if(pageSize)pageSize.value=String(size);
   }
+  function exportAnalyticsDetailCsv(){
+    const config=state.analyticsDetail;if(!config){toast('Önce bir rapor aç.','info');return;}
+    const catalog=Array.isArray(state.catalog)?state.catalog:[];
+    const kind=config.kind,query=($('#analytics-detail-search')?.value||'').trim().toLocaleLowerCase('tr');
+    const type=$('#analytics-detail-type')?.value||'all',sortMode=$('#analytics-detail-sort')?.value||'default';
+    const matchesType=item=>type==='all'||(type==='tv'?isSeries(item):!isSeries(item));
+    let rows=[];
+    if(kind==='years'||kind==='genres'){
+      const counts={};
+      catalog.filter(matchesType).forEach(item=>{
+        if(kind==='years'){const y=yearOf(item);if(y!=='—'&&Number(y)>=1880&&Number(y)<=2100)counts[y]=(counts[y]||0)+1;}
+        else getItemGenres(item).forEach(name=>{counts[name]=(counts[name]||0)+1;});
+      });
+      rows=Object.entries(counts).filter(([name])=>!query||String(name).toLocaleLowerCase('tr').includes(query));
+      rows.sort((a,b)=>sortMode==='name'?a[0].localeCompare(b[0],'tr'):sortMode==='ascending'?a[1]-b[1]:kind==='years'?Number(b[0])-Number(a[0]):b[1]-a[1]);
+      const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\\r\\n]+/g,' ')+'"';
+      const csv='\\uFEFF'+[quote(kind==='years'?'Yapım yılı':'Tür')+';'+quote('Yapım sayısı'),...rows.map(row=>row.map(quote).join(';'))].join('\\r\\n');
+      downloadAnalyticsCsv(csv,'perde-'+(kind==='years'?'yil':'tur')+'-raporu');
+      return;
+    }
+    const bounds=kind==='rating'?RATING_BOUNDS[Number(config.value)]:null;
+    rows=catalog.filter(item=>{
+      if(!matchesType(item))return false;
+      if(kind==='rating'){const n=getItemRating(item);return !!bounds&&Number.isFinite(n)&&n>0&&n<=10&&n>=bounds[0]&&n<bounds[1];}
+      if(kind==='year')return String(yearOf(item))===String(config.value);
+      if(kind==='genre')return getItemGenres(item).includes(String(config.value));
+      return false;
+    }).filter(item=>!query||[titleOf(item),yearOf(item),item.director||item.tmdbDirector||''].join(' ').toLocaleLowerCase('tr').includes(query));
+    rows.sort((a,b)=>sortMode==='title'?titleOf(a).localeCompare(titleOf(b),'tr'):sortMode==='year'?Number(yearOf(b))-Number(yearOf(a)):getItemRating(b)-getItemRating(a));
+    const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['IMDb puanı',x=>getItemRating(x)||''],['Yönetmen',x=>x.director||x.tmdbDirector||''],['Tür etiketleri',x=>getItemGenres(x).join(' / ')],['Eklenme tarihi',x=>x.addedAt||'Bilinmiyor'],['TMDB ID',x=>x.tmdbId??x.tmdb_id??'']];
+    const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\\r\\n]+/g,' ')+'"';
+    const csv='\\uFEFF'+[columns.map(column=>quote(column[0])).join(';'),...rows.map(item=>columns.map(column=>quote(column[1](item))).join(';'))].join('\\r\\n');
+    downloadAnalyticsCsv(csv,'perde-detayli-rapor');
+  }
+  function downloadAnalyticsCsv(csv,baseName){
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    const url=URL.createObjectURL(blob),link=document.createElement('a');
+    link.href=url;link.download=baseName+'-'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);
+    toast('Filtrelenmiş rapor CSV olarak indirildi.','success');
+  }
   function handleAnalyticsAction(action,value){
     if(action==='rating')openAnalyticsDetail('rating',Number(value));
     else if(action==='year')openAnalyticsDetail('year',String(value));
@@ -1983,6 +2024,7 @@
   $('#genre-chart-all')?.addEventListener('click',()=>openAnalyticsDetail('genres'));
   ['#rating-chart','#year-chart','#genre-chart','#analytics-detail-results'].forEach(selector=>$(selector)?.addEventListener('click',event=>{const button=event.target.closest('[data-report-action]');if(button)handleAnalyticsAction(button.dataset.reportAction,button.dataset.reportValue);}));
   $('#analytics-detail-back')?.addEventListener('click',()=>navigate('analytics'));
+  $('#analytics-detail-export')?.addEventListener('click',exportAnalyticsDetailCsv);
   ['#analytics-detail-search','#analytics-detail-type','#analytics-detail-sort','#analytics-detail-page-size'].forEach(selector=>$(selector)?.addEventListener(selector==='#analytics-detail-search'?'input':'change',()=>{state.analyticsDetailPage=1;renderAnalyticsDetail();}));
   $('#analytics-detail-prev')?.addEventListener('click',()=>{state.analyticsDetailPage=Math.max(1,state.analyticsDetailPage-1);renderAnalyticsDetail();});
   $('#analytics-detail-next')?.addEventListener('click',()=>{state.analyticsDetailPage++;renderAnalyticsDetail();});
