@@ -1893,7 +1893,7 @@
                 },
                 get personalizedRecommendationModes() {
                     const config=this.homepageConfig?.personalizedSection||{};
-                    const labels={taste:'Zevkime Uygun',surprise:'Beni Şaşırt',series:'Yeni Diziler',gems:'Gizli Hazineler'};
+                    const defaults={taste:'Zevkime Uygun',surprise:'Beni Şaşırt',series:'Yeni Diziler',gems:'Gizli Hazineler'};const labels={...defaults,...(config.discoveryModeLabels||{})};
                     const valid=['taste','surprise','series','gems'];
                     const order=Array.isArray(config.discoveryModeOrder)?config.discoveryModeOrder:[];
                     return [...order.filter((mode,index)=>valid.includes(mode)&&order.indexOf(mode)===index),...valid.filter(mode=>!order.includes(mode))].map(id=>({id,label:labels[id]}));
