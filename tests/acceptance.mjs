@@ -582,6 +582,12 @@ try {
     await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 4, { timeout: 10000 });
     assert.equal(await page.getByRole('button', { name: 'Tüm önerileri gör' }).count(), 0,
       'Dört kartlık öneri alanında genişletme kontrolü bulunmamalı');
+    // The homepage can intentionally hide this section through its saved visibility settings.
+    // Reveal it only inside the test so its responsive card layout can still be measured.
+    await page.locator('#home-personalized-section').evaluate(element => {
+      element.style.setProperty('display', 'block', 'important');
+    });
+    await page.waitForTimeout(100);
     const initialLayout = await rail.evaluate(element => {
       const cards = [...element.querySelectorAll('.home-personalized-alternative')];
       const first = cards[0].getBoundingClientRect();
