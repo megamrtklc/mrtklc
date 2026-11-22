@@ -331,3 +331,14 @@
 #view-overview .movie-dot{background:#d8b66b}
 #view-overview .series-dot{background:#9aaacb}
 @media(max-width:600px){#view-overview .dashboard-balance{padding:11px}#view-overview .balance-heading{font-size:7px}}
+
+
+/* Dashboard — compact content quality snapshot */
+#view-overview .dashboard-quality-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:17px 0 9px;padding-top:14px;border-top:1px solid #35312a}
+#view-overview .dashboard-quality-head>span{color:#b59a60;font-size:8px;font-weight:850;letter-spacing:1px}
+#view-overview .dashboard-quality-head>small{color:#85858d;font-size:8px}
+#view-overview .dashboard-quality-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+#view-overview .dashboard-quality-grid>div{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;padding:9px 10px;border:1px solid #35312a;border-radius:8px;background:#17181d}
+#view-overview .dashboard-quality-grid b{color:#e0c17b;font-size:13px;font-variant-numeric:tabular-nums}
+#view-overview .dashboard-quality-grid span{color:#a7a3a0;font-size:9px;text-align:right}
+@media(max-width:600px){#view-overview .dashboard-quality-grid{grid-template-columns:1fr 1fr}#view-overview .dashboard-quality-grid>div{padding:8px}#view-overview .dashboard-quality-grid span{font-size:8px}}
