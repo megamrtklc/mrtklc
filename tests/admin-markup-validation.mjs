@@ -5,16 +5,16 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(resolve(root, 'admin/index.html'), 'utf8');
-const ids = [...html.matchAll(/\\bid=["']([^"']+)["']/g)].map(match => match[1]);
+const ids = [...html.matchAll(/\bid=["']([^"']+)["']/g)].map(match => match[1]);
 const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
 assert.deepEqual([...new Set(duplicates)], [], 'Admin HTML içinde yinelenen id bulunmamalı');
 
-const mainOpen = (html.match(/<main\\b/gi) || []).length;
-const mainClose = (html.match(/<\\/main>/gi) || []).length;
+const mainOpen = (html.match(/<main\b/gi) || []).length;
+const mainClose = (html.match(/<\/main>/gi) || []).length;
 assert.equal(mainOpen, 1, 'Admin panelinde tek bir main alanı olmalı');
 assert.equal(mainClose, 1, 'main etiketi tam bir kez kapatılmalı');
 
-const localAssets = [...html.matchAll(/<(?:script|link)\\b[^>]*?(?:src|href)=["']([^"']+)["']/gi)]
+const localAssets = [...html.matchAll(/<(?:script|link)\b[^>]*?(?:src|href)=["']([^"']+)["']/gi)]
   .map(match => match[1])
   .filter(path => path.startsWith('./') || path.startsWith('../'));
 for (const asset of localAssets) {

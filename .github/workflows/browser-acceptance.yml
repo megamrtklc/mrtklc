@@ -20,6 +20,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Validate admin panel markup and JavaScript
+        run: |
+          node tests/admin-markup-validation.mjs
+          node --check admin/admin.js
       - name: Install Playwright
         run: npm install --no-save playwright
       - name: Install Chromium
