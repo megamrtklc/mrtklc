@@ -1770,7 +1770,7 @@
   $('#preferences-info-dialog')?.addEventListener('click',event=>{if(event.target===$('#preferences-info-dialog'))$('#preferences-info-dialog').close();});
   $('#preferences-save')?.addEventListener('click',saveAdminPreferences);
   $('#preferences-discard')?.addEventListener('click',()=>{loadPreferenceDraft();toast('Bekleyen değişikliklerden vazgeçildi.','info');});
-  $('#preferences-reset')?.addEventListener('click',()=>{loadPreferenceDraft({density:'comfortable',reduceMotion:false});toast('Varsayılan tercihler taslağa yüklendi. Kaydetmeden uygulanmaz.','info');});
+  $('#preferences-reset')?.addEventListener('click',()=>{loadPreferenceDraft({density:'comfortable',reduceMotion:false,theme:'dark',sidebar:'normal',pageSize:12,notifications:true});toast('Varsayılan tercihler taslağa yüklendi. Kaydetmeden uygulanmaz.','info');});
   initBackupTools();
   init();
 })();
