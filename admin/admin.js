@@ -449,6 +449,7 @@
   function openAnalyticsDetail(kind,value){
     state.analyticsDetail={kind,value:value??null};
     state.analyticsDetailPage=1;
+    const search=$('#analytics-detail-search');if(search)search.value='';
     navigate('analytics-detail');
     renderAnalyticsDetail();
   }
@@ -457,10 +458,12 @@
     const kind=config.kind,catalog=Array.isArray(state.catalog)?state.catalog:[];
     const heading=$('#analytics-detail-title'),description=$('#analytics-detail-description');
     const search=$('#analytics-detail-search'),typeFilter=$('#analytics-detail-type'),sort=$('#analytics-detail-sort'),pageSize=$('#analytics-detail-page-size');
+    const isSummary=kind==='years'||kind==='genres';
+    const sortOptions=isSummary?'<option value="default">'+(kind==='years'?'En yeni yıl':'En çok yapım')+'</option><option value="ascending">En az yapım</option><option value="name">Alfabetik</option>':'<option value="default">IMDb puanı</option><option value="year">Yapım yılı</option><option value="title">Yapım adı</option>';
+    if(sort&&sort.dataset.kind!==kind){sort.innerHTML=sortOptions;sort.dataset.kind=kind;sort.value='default';}
     const query=(search?.value||'').trim().toLocaleLowerCase('tr');
     const type=typeFilter?.value||'all',sortMode=sort?.value||'default';
     const size=Number(pageSize?.value)||12;state.analyticsDetailPageSize=size;
-    const isSummary=kind==='years'||kind==='genres';
     if(kind==='rating'){
       const index=Number(config.value),bounds=RATING_BOUNDS[index];
       if(!bounds)return;
@@ -518,9 +521,6 @@
     const prev=$('#analytics-detail-prev'),next=$('#analytics-detail-next');
     if(prev)prev.disabled=state.analyticsDetailPage<=1;
     if(next)next.disabled=state.analyticsDetailPage>=pages;
-    const sortOptions=isSummary?'<option value="default">'+(kind==='years'?'En yeni yıl':'En çok yapım')+'</option><option value="ascending">En az yapım</option><option value="name">Alfabetik</option>':'<option value="default">IMDb puanı</option><option value="year">Yapım yılı</option><option value="title">Yapım adı</option>';
-    if(sort&&sort.dataset.kind!==kind){sort.innerHTML=sortOptions;sort.dataset.kind=kind;}
-    if(sort)sort.value=sortMode;
     if(pageSize)pageSize.value=String(size);
   }
   function handleAnalyticsAction(action,value){
