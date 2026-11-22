@@ -1337,6 +1337,7 @@
     set('#personalized-preview-description',$('#personalized-description')?.value||'İzleme alışkanlıklarından ilham alan, sana özel seçkiler');
     const host=$('#personalized-preview-modes');
     if(host)host.innerHTML=(state.personalizedModeOrder||['taste','surprise','series','gems']).filter(mode=>$('#personalized-mode-'+mode)?.checked).map(mode=>'<span>'+escapeHtml($('#personalized-label-'+mode)?.value.trim()||PERSONALIZED_MODE_META[mode].label)+'</span>').join('')||'<small>En az bir keşif modu açık olmalı.</small>';
+    ['taste','surprise','series','gems'].forEach(mode=>{const input=$('#personalized-label-'+mode),counter=$('[data-label-count="'+mode+'"]');if(counter)counter.textContent=(input?.value.length||0)+'/24 karakter';});
     const preview=$('#personalized-static-preview');if(preview)preview.dataset.visible=$('#personalized-enabled')?.checked?'true':'false';
   }
   function stagePersonalizedSectionSave(){
@@ -2057,12 +2058,17 @@
     [order[index],order[next]]=[order[next],order[index]];state.personalizedModeOrder=order;renderPersonalizedModeOrder();renderPersonalizedStaticPreview();
   });
   ['personalized-enabled','personalized-eyebrow','personalized-title','personalized-description','personalized-mode-taste','personalized-mode-surprise','personalized-mode-series','personalized-mode-gems','personalized-label-taste','personalized-label-surprise','personalized-label-series','personalized-label-gems'].forEach(id=>{
-    $('#'+id)?.addEventListener('input',renderPersonalizedStaticPreview);$('#'+id)?.addEventListener('change',renderPersonalizedStaticPreview);
+    $('#'+id)?.addEventListener('input',()=>{renderPersonalizedModeOrder();renderPersonalizedStaticPreview();});$('#'+id)?.addEventListener('change',()=>{renderPersonalizedModeOrder();renderPersonalizedStaticPreview();});
   });
   $('#personalized-preview-modes')?.closest('.personalized-preview-card')?.addEventListener('click',event=>{
     const button=event.target.closest('[data-personalized-preview-device]');if(!button)return;
     const preview=$('#personalized-static-preview');if(!preview)return;preview.dataset.device=button.dataset.personalizedPreviewDevice;
     $('.personalized-preview-switch [data-personalized-preview-device]').forEach(item=>item.classList.toggle('active',item===button));
+  });
+  $('#personalized-labels-reset')?.addEventListener('click',()=>{
+    ['taste','surprise','series','gems'].forEach(mode=>{const input=$('#personalized-label-'+mode);if(input)input.value=PERSONALIZED_MODE_META[mode].label;});
+    renderPersonalizedModeOrder();renderPersonalizedStaticPreview();
+    toast('Buton isimleri varsayılan hâline getirildi. Kaydetmeyi unutma.','info');
   });
   $('#personalized-publish-cancel')?.addEventListener('click',()=>{$('#personalized-publish-check').hidden=true;});
   $('#personalized-publish-confirm')?.addEventListener('click',()=>savePersonalizedSection({preventDefault(){}}));
