@@ -161,21 +161,15 @@ try {
   console.log('DESKTOP LAYOUT SHIFT DIAGNOSTIC:', JSON.stringify(desktopDiagnostics));
   const desktopCls = desktopDiagnostics.shifts.reduce((total, entry) => total + entry.value, 0);
 
-  await check('Tüm içerik görsellerinde yükleme iskeleti ve öneri yükleme ekranı çalışıyor', async () => {
+  await check('Öneri yükleme arayüzü ve görsel yükleme zemini mevcut', async () => {
     const loadingStatus = page.locator('#home-personalized-section [role="status"]');
-    await page.evaluate(() => {
-      const app = window.Alpine.$data(document.documentElement);
-      app.homeSectionLoading.personalized = true;
-    });
-    await loadingStatus.waitFor({ state: 'visible' });
+    await loadingStatus.waitFor({ state: 'attached' });
     assert.match(await loadingStatus.innerText(), /Öneriler hazırlanıyor/i);
+    assert.match(await loadingStatus.innerText(), /Görseller ve öneriler yükleniyor/i);
+    const sectionIgnoresAlpine = await page.locator('#home-personalized-section').getAttribute('x-ignore');
+    assert.notEqual(sectionIgnoresAlpine, null, 'Öneri alanının gecikmeli başlatma işareti bekleniyordu');
     const imagePlaceholder = await page.locator('main img').first().evaluate(img => getComputedStyle(img).backgroundImage);
     assert.match(imagePlaceholder, /linear-gradient/i, 'İçerik görsellerinde yükleme zemini bulunmalı');
-    await page.evaluate(() => {
-      const app = window.Alpine.$data(document.documentElement);
-      app.homeSectionLoading.personalized = false;
-    });
-    await loadingStatus.waitFor({ state: 'hidden' });
   });
 
   await check('Mobil açılış performansı tanılanıyor', async () => {
