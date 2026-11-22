@@ -20,6 +20,7 @@
    <button class="nav-link active" data-view="overview"><span class="nav-icon">⌂</span><span>Kontrol Merkezi</span><kbd>01</kbd></button>
    <button class="nav-link" data-view="catalog"><span class="nav-icon">▤</span><span>Yapım Kütüphanesi</span><em id="nav-count">—</em></button>
    <button class="nav-link" data-view="trailers-missing"><span class="nav-icon">▷</span><span>Fragmanı Olmayanlar</span><em id="missing-trailer-count">—</em></button>
+   <button class="nav-link" data-view="quality"><span class="nav-icon">⌕</span><span>Veri Kalitesi</span><em id="quality-issue-count">—</em></button>
    <button class="nav-link" data-view="collections"><span class="nav-icon">▧</span><span>Koleksiyon Stüdyosu</span><kbd>03</kbd></button>
    <button class="nav-link" data-view="franchises"><span class="nav-icon">▤</span><span>Seri Filmler</span><kbd>04</kbd></button>
    <button class="nav-link" data-view="homepage"><span class="nav-icon">▣</span><span>Vitrin Tasarımı</span><kbd>04</kbd></button>
@@ -126,6 +127,21 @@
        <div class="catalog-toolbar missing-trailer-toolbar"><label class="search-box"><span>⌕</span><input id="missing-trailer-search" type="search" placeholder="Yapım adı ara…"></label><span class="result-count" id="missing-trailer-result-count">—</span></div>
        <div class="catalog-table-wrap"><table class="catalog-table"><thead><tr><th>YAPIM</th><th>TÜR</th><th>YIL</th><th>DURUM</th><th></th></tr></thead><tbody id="missing-trailer-rows"><tr><td colspan="5" class="empty-cell">Katalog yükleniyor…</td></tr></tbody></table></div>
        <div class="pagination"><span id="missing-trailer-page-info">—</span><div><button id="missing-trailer-prev" disabled>←</button><button id="missing-trailer-next" disabled>→</button></div></div>
+      </section>
+      <section class="view" id="view-quality">
+       <div class="page-heading"><div><div class="eyebrow">ARCHIVE AUDIT / 03</div><h1>Veri Kalitesi</h1><p>Eksik bilgileri tespit et, ilgili yapımı aç ve doğrudan düzenle.</p></div><button class="primary-button" id="quality-refresh" type="button">↻ Taramayı yenile</button></div>
+       <div class="quality-intro panel-card"><div><span class="section-index">OTOMATİK KATALOG TARAMASI</span><h2>Arşivinin tamamını kontrol et</h2><p>Her yapım için temel bilgileri denetliyoruz. Bir yapımda birden fazla eksik varsa tümü birlikte listelenir.</p></div><div class="quality-total"><b id="quality-total-affected">—</b><span>kontrol gerektiren yapım</span></div></div>
+       <div class="quality-summary-grid">
+        <article class="quality-summary-card"><span>AFİŞ</span><b id="quality-page-poster">—</b><small>Görsel bağlantısı eksik</small></article>
+        <article class="quality-summary-card"><span>PUAN</span><b id="quality-page-rating">—</b><small>IMDb puanı eksik</small></article>
+        <article class="quality-summary-card"><span>FRAGMAN</span><b id="quality-page-trailer">—</b><small>Fragman bağlantısı eksik</small></article>
+        <article class="quality-summary-card"><span>İZLEME</span><b id="quality-page-watch">—</b><small>İzleme bağlantısı eksik</small></article>
+        <article class="quality-summary-card"><span>OYUNCULAR</span><b id="quality-page-cast">—</b><small>Oyuncu bilgisi eksik</small></article>
+        <article class="quality-summary-card"><span>DİĞER BİLGİLER</span><b id="quality-page-other">—</b><small>Yönetmen, yıl, konu veya TMDB</small></article>
+       </div>
+       <div class="catalog-toolbar quality-toolbar"><label class="search-box"><span>⌕</span><input id="quality-search" type="search" placeholder="Yapım adı ara…"></label><select id="quality-filter" aria-label="Eksik bilgi türüne göre filtrele"><option value="all">Tüm eksikler</option><option value="poster">Eksik afiş</option><option value="rating">Eksik puan</option><option value="trailer">Eksik fragman</option><option value="watch">İzleme bağlantısı</option><option value="cast">Oyuncu bilgisi</option><option value="other">Diğer bilgiler</option></select><span class="result-count" id="quality-result-count">—</span></div>
+       <div class="catalog-table-wrap"><table class="catalog-table quality-table"><thead><tr><th>YAPIM</th><th>TÜR</th><th>YIL</th><th>EKSİK BİLGİLER</th><th></th></tr></thead><tbody id="quality-rows"><tr><td colspan="5" class="empty-cell">Katalog taranıyor…</td></tr></tbody></table></div>
+       <p class="quality-footnote">Bu ekran yalnızca eksik alanları tespit eder; hiçbir katalog kaydını kendiliğinden değiştirmez.</p>
       </section>
       <section class="view" id="view-collections"><div class="page-heading"><div><div class="eyebrow">CURATED / 02</div><h1>Koleksiyonlar</h1><p>Özel seçkiler oluştur, içerikleri seç ve yayına al.</p></div><button class="primary-button" id="collection-add">＋ Yeni koleksiyon</button></div><div id="collection-grid" class="collection-grid"><div class="panel-card">Koleksiyonlar yükleniyor…</div></div></section>
       <section class="view" id="view-franchises"><div class="page-heading"><div><div class="eyebrow">FRANCHISE MANAGER / 04</div><h1>Seri Filmler</h1><p>Mevcut film kayıtlarını seriler altında grupla, izleme sırasını düzenle ve ana sayfada yayınla.</p></div><button class="primary-button" id="franchise-add">＋ Yeni seri</button></div><div id="franchise-grid" class="collection-grid"><div class="panel-card">Seriler yükleniyor…</div></div></section>
