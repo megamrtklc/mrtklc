@@ -369,3 +369,11 @@
 
 /* System health center */
 .system-health-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:14px}.system-health-card{min-height:140px;padding:18px}.system-health-kicker{display:block;color:#9aa8b7;font-size:8px;font-weight:900;letter-spacing:1.3px}.system-health-card strong{display:block;margin:14px 0 7px;color:#dce6ee;font-size:20px;letter-spacing:-.4px}.system-health-card strong[data-state=good]{color:#a9d9b2}.system-health-card strong[data-state=warn]{color:#f0c978}.system-health-card strong[data-state=bad]{color:#f19a91}.system-health-card p{margin:0;color:#8999aa;font-size:9px;line-height:1.6;overflow-wrap:anywhere}.system-detail-grid{align-items:start}.system-backup-link{display:inline-flex;margin-top:12px;text-decoration:none}.system-health-footnote{margin:14px 2px;color:#8190a1;font-size:9px;line-height:1.6}@media(max-width:900px){.system-health-grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.system-health-grid{grid-template-columns:1fr;gap:9px}.system-health-card{min-height:112px;padding:14px}.system-health-card strong{margin:9px 0 5px;font-size:18px}.system-detail-grid{grid-template-columns:1fr}}
+
+/* Overview — direct links to maintenance centers */
+#view-overview .dashboard-health-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+#view-overview .dashboard-health-actions button{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;padding:10px 11px;border:1px solid #49402f;border-radius:8px;background:#211f1b;color:#d9c79e;font:inherit;font-size:9px;text-align:left;cursor:pointer;transition:border-color .2s ease,background .2s ease}
+#view-overview .dashboard-health-actions button:hover{border-color:#a8894e;background:#2a261e}
+#view-overview .dashboard-health-actions button b{margin-left:auto;color:#e0c17b;font-size:8px;font-weight:700;white-space:nowrap}
+#view-overview .dashboard-health-actions button span{color:#c7a75f;font-size:12px}
+@media(max-width:600px){#view-overview .dashboard-health-actions{grid-template-columns:1fr}#view-overview .dashboard-health-actions button{padding:11px}}
