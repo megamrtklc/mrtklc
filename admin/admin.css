@@ -377,3 +377,22 @@
 #view-overview .dashboard-health-actions button b{margin-left:auto;color:#e0c17b;font-size:8px;font-weight:700;white-space:nowrap}
 #view-overview .dashboard-health-actions button span{color:#c7a75f;font-size:12px}
 @media(max-width:600px){#view-overview .dashboard-health-actions{grid-template-columns:1fr}#view-overview .dashboard-health-actions button{padding:11px}}
+
+/* Workspace preferences */
+.preferences-grid{align-items:stretch}.preference-choice-group{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.preference-choice{display:flex;align-items:center;gap:10px;min-width:0;padding:14px;border:1px solid var(--line,rgba(255,255,255,.1));border-radius:10px;background:var(--panel-soft,rgba(255,255,255,.025));cursor:pointer}
+.preference-choice:has(input:checked){border-color:rgba(194,158,91,.72);background:rgba(194,158,91,.09)}
+.preference-choice input,.preference-toggle input{accent-color:#c5a15d;width:16px;height:16px;flex:0 0 auto}
+.preference-choice span,.preference-toggle span{display:grid;gap:4px;min-width:0}
+.preference-choice b,.preference-toggle b{color:var(--text,#eee);font-size:12px}
+.preference-choice small,.preference-toggle small{color:var(--muted,#92939a);font-size:10px;line-height:1.45}
+.preference-toggle{display:flex;align-items:center;gap:12px;margin-top:18px;padding:14px;border:1px solid var(--line,rgba(255,255,255,.1));border-radius:10px;background:var(--panel-soft,rgba(255,255,255,.025));cursor:pointer}
+.preferences-footer-card{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:16px;padding:18px 20px}
+.preferences-footer-card>div{min-width:0}.preferences-footer-card p{margin:6px 0 0}
+body.admin-density-compact .panel-card{padding-top:15px;padding-bottom:15px}
+body.admin-density-compact .dashboard-card{padding-top:16px;padding-bottom:16px}
+body.admin-density-compact .dashboard-metric{padding-top:15px;padding-bottom:15px}
+body.admin-density-compact .setting-row{padding-top:8px;padding-bottom:8px}
+body.admin-density-compact .catalog-table td,body.admin-density-compact .catalog-table th{padding-top:8px;padding-bottom:8px}
+body.admin-reduce-motion *,body.admin-reduce-motion *::before,body.admin-reduce-motion *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+@media(max-width:650px){.preference-choice-group{grid-template-columns:1fr}.preferences-footer-card{align-items:flex-start;flex-direction:column}.preferences-footer-card .secondary-button{width:100%}}
