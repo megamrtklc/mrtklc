@@ -353,7 +353,31 @@
         </div>
        </article>
       </section>
-      <section class="view" id="view-system"><div class="page-heading"><div><div class="eyebrow">PREFERENCES / 06</div><h1>Sistem &amp; Ayarlar</h1><p>Bağlantılar, veri kaynağı ve güvenlik kurulumu.</p></div></div><div class="settings-grid"><article class="panel-card"><h2>Veri kaynağı</h2><div class="setting-row"><span>Katalog dosyası</span><b>filmvediziler.json</b></div><div class="setting-row"><span>Okuma yolu</span><b>../filmvediziler.json</b></div><div class="setting-row"><span>Yapı</span><b id="data-version">—</b></div></article><article class="panel-card"><h2>Güvenlik kurulumu</h2><div class="setting-row"><span>Giriş doğrulama</span><b class="state-ready">Aktif</b></div><div class="setting-row"><span>GitHub token</span><b class="state-ready">Worker secret</b></div><div class="setting-row"><span>Yayınlama</span><b class="state-ready">Aktif</b></div><p class="helper-text">Gizli anahtarlar hiçbir zaman bu sayfanın JavaScript koduna eklenmeyecek.</p></article></div></section>
+      <section class="view" id="view-system">
+        <div class="page-heading"><div><div class="eyebrow">SYSTEM / HEALTH</div><h1>Sistem Kontrol Merkezi</h1><p>Perde yönetim bağlantılarını, katalog bütünlüğünü ve yayınlama erişimini buradan kontrol et.</p></div><button class="primary-button" id="system-refresh" type="button">↻　Kontrolleri yenile</button></div>
+        <div class="system-health-grid">
+          <article class="panel-card system-health-card"><span class="system-health-kicker">YÖNETİM API</span><strong id="system-api-status">Kontrol bekliyor</strong><p id="system-api-detail">Katalog servisi bağlantısı henüz test edilmedi.</p></article>
+          <article class="panel-card system-health-card"><span class="system-health-kicker">YÖNETİCİ OTURUMU</span><strong id="system-auth-status">Kontrol bekliyor</strong><p id="system-auth-detail">Oturum doğrulaması henüz test edilmedi.</p></article>
+          <article class="panel-card system-health-card"><span class="system-health-kicker">YAZMA / YAYINLAMA</span><strong id="system-write-status">Kontrol bekliyor</strong><p id="system-write-detail">GitHub yazma erişimi durumu.</p></article>
+        </div>
+        <div class="settings-grid system-detail-grid">
+          <article class="panel-card"><div class="panel-card-heading"><div><span class="eyebrow">CATALOG HEALTH</span><h2>Katalog bütünlüğü</h2></div><span class="state-ready" id="system-json-status">—</span></div>
+            <div class="setting-row"><span>Kayıtlı yapım</span><b id="system-catalog-count">—</b></div>
+            <div class="setting-row"><span>Geçerli kayıt</span><b id="system-valid-count">—</b></div>
+            <div class="setting-row"><span>Tekrarlanan kimlik</span><b id="system-duplicate-count">—</b></div>
+            <div class="setting-row"><span>Veri sürümü</span><b id="system-data-version">—</b></div>
+            <div class="setting-row"><span>Son kontrol</span><b id="system-last-check">—</b></div>
+          </article>
+          <article class="panel-card"><div class="panel-card-heading"><div><span class="eyebrow">DATA SOURCE</span><h2>Veri kaynağı</h2></div><span class="state-ready">JSON</span></div>
+            <div class="setting-row"><span>Katalog servisi</span><b>/api/catalog</b></div>
+            <div class="setting-row"><span>Yedekleme</span><b>Veri Yedekleme</b></div>
+            <div class="setting-row"><span>Yönetim oturumu</span><b>/api/session</b></div>
+            <p class="helper-text">Gizli anahtarlar tarayıcıya veya bu ekrana yazılmaz. Kimlik doğrulama ve GitHub erişimi sunucu tarafında tutulur.</p>
+            <a class="secondary-button system-backup-link" href="#backup" data-go="backup">Yedekleme alanına git ↗</a>
+          </article>
+        </div>
+        <p class="system-health-footnote" id="system-check-note" role="status">Kontroller, yalnızca bağlantı ve katalog durumunu okur; veriler üzerinde değişiklik yapmaz.</p>
+       </section>
       <footer class="footer-note"><span>CINEVERSE STUDIO</span><span>CONTENT OPERATIONS · 2026</span></footer>
     </div>
   
