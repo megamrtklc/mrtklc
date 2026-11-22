@@ -1213,6 +1213,7 @@
         '</div></div>';
     }).join('');
     renderHomepageLayoutPreview(layout);
+    renderHomepagePublishCheck();
   }
   function sendHomepageLayoutPreview(layout=homepageLayoutConfig()){
     const frame=$('#homepage-layout-preview-frame');
@@ -1254,12 +1255,67 @@
     state.homepageLayoutDirty=true;
     renderHomepageLayout();
   }
+  function homepageLayoutChanges(){
+    const current=snapshotHomepageLayout(homepageLayoutConfig());
+    const published=state.homepageLayoutPublished||snapshotHomepageLayout({});
+    const changes=[];
+    const titleFor=key=>HOMEPAGE_LAYOUT_ITEMS[key]?.title||key;
+    current.order.forEach((key,index)=>{
+      const oldIndex=published.order.indexOf(key);
+      if(oldIndex!==index)changes.push({title:titleFor(key),detail:'Sıra: '+(oldIndex+1)+'. sıradan '+(index+1)+'. sıraya taşındı.'});
+    });
+    HOMEPAGE_LAYOUT_DEFAULTS.forEach(key=>{
+      if(key!=='hero'){
+        const wasVisible=published.visibility[key]!==false;
+        const isVisible=current.visibility[key]!==false;
+        if(wasVisible!==isVisible)changes.push({title:titleFor(key),detail:'Görünürlük: '+(wasVisible?'Açık':'Gizli')+' → '+(isVisible?'Açık':'Gizli')+'.'});
+      }
+      const defaults=HOMEPAGE_LAYOUT_ITEMS[key]||{};
+      const before=published.labels[key]||{};
+      const after=current.labels[key]||{};
+      const oldTitle=before.title??defaults.title??key;
+      const newTitle=after.title??defaults.title??key;
+      if(oldTitle!==newTitle)changes.push({title:titleFor(key),detail:'Başlık: “'+oldTitle+'” → “'+newTitle+'”.'});
+      const oldDescription=before.description??defaults.description??'';
+      const newDescription=after.description??defaults.description??'';
+      if(oldDescription!==newDescription)changes.push({title:titleFor(key),detail:'Alt metin güncellendi: “'+oldDescription+'” → “'+newDescription+'”.'});
+    });
+    return changes;
+  }
+  function renderHomepagePublishCheck(){
+    const list=$('#homepage-publish-change-list');
+    const count=$('#homepage-publish-change-count');
+    const nochange=$('#homepage-publish-nochange');
+    const publish=$('#homepage-layout-save');
+    if(!list||!count)return;
+    const changes=homepageLayoutChanges();
+    count.textContent=changes.length?changes.length+' değişiklik':'Değişiklik yok';
+    count.dataset.state=changes.length?'changed':'clean';
+    list.innerHTML=changes.length?changes.map(change=>'<article class="homepage-publish-change"><b>'+escapeHtml(change.title)+'</b><span>'+escapeHtml(change.detail)+'</span></article>').join(''):'<p class="homepage-publish-empty">Yayındaki düzen ile taslak tamamen aynı.</p>';
+    if(nochange)nochange.hidden=changes.length>0;
+    if(publish)publish.disabled=changes.length===0||state.saving;
+    if(!changes.length){const confirm=$('#homepage-publish-confirm');if(confirm)confirm.hidden=true;}
+  }
+  function requestHomepageLayoutPublish(){
+    const changes=homepageLayoutChanges();
+    if(!changes.length){renderHomepagePublishCheck();return;}
+    const confirm=$('#homepage-publish-confirm');
+    if(confirm){confirm.hidden=false;confirm.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  }
   async function saveHomepageLayout(){
+    const changes=homepageLayoutChanges();
+    if(!changes.length){renderHomepagePublishCheck();return;}
     const config=homepageConfig();
     const layout=homepageLayoutConfig();
     const nextLayout={order:[...layout.order],visibility:{...layout.visibility},labels:{...layout.labels}};
     const ok=await persist({...state.data,homepageConfig:{...config,layout:nextLayout}},'Ana sayfa bölümleri ve sıralaması kaydedildi.');
-    if(ok){state.homepageLayoutDirty=false;state.homepageLayoutPublished=snapshotHomepageLayout(nextLayout);state.homepagePreviewMode='draft';renderHomepageLayout();}
+    if(ok){
+      state.homepageLayoutDirty=false;
+      state.homepageLayoutPublished=snapshotHomepageLayout(nextLayout);
+      state.homepagePreviewMode='draft';
+      const confirm=$('#homepage-publish-confirm');if(confirm)confirm.hidden=true;
+      renderHomepageLayout();
+    }else renderHomepagePublishCheck();
   }
   function renderPersonalizedSection(){
     if(!state.data)return;
@@ -1913,7 +1969,9 @@
     if(remove){const row=remove.closest('[data-custom-link-row]');const kind=row.dataset.customLinkRow;const current=$('#hf-'+kind+'-custom-links [data-custom-link-row]').filter(item=>item!==row).map(item=>({label:item.querySelector('[data-custom-link-label]').value.trim(),page:item.querySelector('[data-custom-link-page]').value}));renderCustomLinkRows(kind,current);}
   });
   $('#homepage-layout-preview-frame')?.addEventListener('load',()=>sendHomepageLayoutPreview());
-  $('#homepage-layout-save').addEventListener('click',saveHomepageLayout);
+  $('#homepage-layout-save').addEventListener('click',requestHomepageLayoutPublish);
+  $('#homepage-publish-confirm-button')?.addEventListener('click',saveHomepageLayout);
+  $('#homepage-publish-cancel')?.addEventListener('click',()=>{const confirm=$('#homepage-publish-confirm');if(confirm)confirm.hidden=true;});
   $('#view-homepage-layout').addEventListener('click',event=>{
     const device=event.target.closest('[data-home-preview-device]');
     const mode=event.target.closest('[data-home-preview-mode]');
@@ -1937,6 +1995,7 @@
     state.homepageLayoutDirty=true;
     const draftStatus=$('#homepage-layout-draft');if(draftStatus){draftStatus.dataset.state='draft';draftStatus.textContent='● Yayınlanmamış değişiklikler';}
     renderHomepageLayoutPreview(layout);
+    renderHomepagePublishCheck();
   });
   $('#homepage-layout-list').addEventListener('click',event=>{
     const button=event.target.closest('[data-layout-action]');
