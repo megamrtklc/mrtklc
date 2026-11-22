@@ -1354,7 +1354,7 @@
       ?Math.max(5,Math.min(15,Number($('#hero-desktop-count').value)||10))
       :Math.max(1,Math.min(12,Number($('#hero-mobile-count').value)||6));
     const list=$('#hero-'+device+'-slide-list');
-    const currentIds=new Set($('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value)));
+    const currentIds=new Set($$('#hero-'+device+'-slide-list input:checked').map(input=>String(input.value)));
     const eligible=autoHeroItems(category,Math.max(state.catalog.length,limit));
     const fresh=eligible.filter(item=>!currentIds.has(String(item.id)));
     let next=fresh.slice(0,limit);
