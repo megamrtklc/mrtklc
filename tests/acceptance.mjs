@@ -435,7 +435,7 @@ try {
           heroArtwork: document.querySelector('#mobileCinematicHero .cv-mhero-backdrop img')?.currentSrc || '',
           activeSlide: window.Alpine?.$data(document.documentElement)?.currentSlideIndex ?? null,
           currentHeroTitle: window.Alpine?.$data(document.documentElement)?.currentHero?.title || '',
-          navigationControls: document.querySelectorAll('#mobileCinematicHero button[aria-label*=\"öne çıkan yapım\"]').length,
+          navigationControls: document.querySelectorAll('#mobileCinematicHero .cv-mhero-controls button.cv-mhero-arrow[aria-label]').length,
           lcp,
           layoutShifts: window.__layoutShiftEntries || [],
           longTasks: window.__longTasks || [],
