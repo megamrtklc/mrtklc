@@ -397,8 +397,10 @@
     if(typeBalance)typeBalance.innerHTML='<span><i class="analytics-dot movie"></i>Film <b>'+movies+'</b></span><span><i class="analytics-dot series"></i>Dizi <b>'+series+'</b></span>';
     const yearCounts={};
     catalog.forEach(item=>{const y=yearOf(item);if(y!=='—'&&Number(y)>=1880&&Number(y)<=2100)yearCounts[y]=(yearCounts[y]||0)+1;});
-    const yearRows=Object.entries(yearCounts).sort((a,b)=>Number(b[0])-Number(a[0])).slice(0,12).sort((a,b)=>Number(a[0])-Number(b[0]));
-    drawBars('#year-chart',yearRows,'Yapım yılı bilgisi bulunamadı.');
+    const yearRows=Object.entries(yearCounts).sort((a,b)=>Number(b[0])-Number(a[0]));
+    const yearChart=$('#year-chart'),yearMore=$('#year-chart-more');
+    const drawYears=(expanded=false)=>{if(!yearChart)return;const visible=expanded?yearRows:yearRows.slice(0,6);drawBars('#year-chart',visible,'Yapım yılı bilgisi bulunamadı.');if(yearMore){yearMore.hidden=yearRows.length<=6;yearMore.textContent=expanded?'Daha az göster':'Daha fazla göster ('+yearRows.length+')';yearMore.setAttribute('aria-expanded',String(expanded));}};
+    drawYears(yearMore?.dataset.expanded==='true');
     const genreCounts={};
     catalog.forEach(item=>{
       let values=item.genres??item.genre??item.category??item.categories??[];
@@ -409,10 +411,19 @@
     drawBars('#genre-chart',genreRows,'Tür etiketi bulunan kayıt yok.');
     const ratingRows=[['0–4,9',0],['5–5,9',0],['6–6,9',0],['7–7,9',0],['8–8,9',0],['9–10',0]];
     ratings.forEach(n=>{const index=n<5?0:n<6?1:n<7?2:n<8?3:n<9?4:5;ratingRows[index][1]++;});
-    drawBars('#rating-chart',ratingRows,'Puan bilgisi bulunamadı.');
+    const ratingRoot=$('#rating-chart');
+    if(ratingRoot)ratingRoot.innerHTML=ratingRows.map(([name,count],index)=>'<button type="button" class="bar-row rating-bar-row" data-rating-range="'+index+'" aria-label="'+escapeHtml(name)+' puan aralığındaki '+count+' yapımı görüntüle"><span>'+escapeHtml(name)+'</span><span class="bar-track"><i class="bar-fill" style="width:'+(count/Math.max(1,...ratingRows.map(row=>row[1]))*100)+'%"></i></span><b>'+count+'</b></button>').join('');
+    const ratingResults=$('#rating-results');if(ratingResults&&!ratingResults.dataset.open)ratingResults.hidden=true;
     const bestYear=yearRows.slice().sort((a,b)=>b[1]-a[1])[0],bestGenre=genreRows[0];
     setText('#analytics-insight-title',total?('Arşivinde '+total+' yapım bulunuyor'):'Arşivin henüz boş');
     setText('#analytics-insight-copy',total?((bestYear?'En yoğun yapım yılı '+bestYear[0]+' ('+bestYear[1]+' kayıt). ':'')+(bestGenre?'En sık görülen tür '+bestGenre[0]+' ('+bestGenre[1]+' kayıt). ':'')+(ratings.length?'Puan ortalaması '+average.toFixed(1).replace('.',',')+'/10.':'Henüz puan verisi bulunmuyor.')):'İlk yapımlarını eklediğinde tür, yıl ve puan analizleri burada otomatik oluşacak.');
+  }
+  function showRatingRange(index){
+    const bounds=[[0,5],[5,6],[6,7],[7,8],[8,9],[9,10.000001]][index];if(!bounds)return;
+    const items=state.catalog.filter(item=>{const n=parseFloat(String(item.rating??item.imdbRating??item.voteAverage??'').replace(',','.'));return Number.isFinite(n)&&n>0&&n<=10&&n>=bounds[0]&&n<bounds[1];}).sort((a,b)=>parseFloat(String(b.rating??b.imdbRating??b.voteAverage??0).replace(',','.'))-parseFloat(String(a.rating??a.imdbRating??a.voteAverage??0).replace(',','.')));
+    const host=$('#rating-results');if(!host)return;const label=['0–4,9','5–5,9','6–6,9','7–7,9','8–8,9','9–10'][index];
+    host.hidden=false;host.dataset.open='true';host.innerHTML='<div class="rating-results-head"><div><b>'+escapeHtml(label)+' puan aralığındaki yapımlar</b><small>'+items.length.toLocaleString('tr-TR')+' kayıt</small></div><button type="button" class="rating-results-close" aria-label="Sonuçları kapat">×</button></div>'+(items.length?'<div class="rating-results-list">'+items.map(item=>'<div class="rating-result-item"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></span><strong>★ '+escapeHtml(item.rating??item.imdbRating??item.voteAverage??'—')+'</strong></div>').join('')+'</div>':'<p class="analytics-empty">Bu puan aralığında yapım bulunamadı.</p>');
+    $('#rating-chart .rating-bar-row').forEach((button,i)=>button.classList.toggle('is-selected',i===index));
   }
   function exportAnalyticsCsv(){
     const catalog=Array.isArray(state.catalog)?state.catalog:[];
@@ -1816,6 +1827,9 @@
   $('#preferences-discard')?.addEventListener('click',()=>{loadPreferenceDraft();toast('Bekleyen değişikliklerden vazgeçildi.','info');});
   $('#preferences-reset')?.addEventListener('click',()=>{loadPreferenceDraft({density:'comfortable',reduceMotion:false,theme:'dark',sidebar:'normal',pageSize:12,notifications:true});toast('Varsayılan tercihler taslağa yüklendi. Kaydetmeden uygulanmaz.','info');});
   $('#analytics-export')?.addEventListener('click',exportAnalyticsCsv);
+  $('#year-chart-more')?.addEventListener('click',()=>{const button=$('#year-chart-more'),expanded=button.dataset.expanded!=='true';button.dataset.expanded=String(expanded);renderAnalytics();});
+  $('#rating-chart')?.addEventListener('click',event=>{const button=event.target.closest('[data-rating-range]');if(button)showRatingRange(Number(button.dataset.ratingRange));});
+  $('#rating-results')?.addEventListener('click',event=>{if(event.target.closest('.rating-results-close')){const host=$('#rating-results');host.hidden=true;delete host.dataset.open;$('#rating-chart .rating-bar-row').forEach(button=>button.classList.remove('is-selected'));}});
   initBackupTools();
   init();
 })();
