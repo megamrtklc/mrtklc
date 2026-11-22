@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
+  const state = { homepageLayoutDirty:false, data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, view:'overview', sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -863,6 +863,7 @@
     if(!list)return;
     const visibleCount=HOMEPAGE_LAYOUT_DEFAULTS.filter(key=>key==='hero'||layout.visibility[key]!==false).length;
     $('#homepage-layout-count').textContent=visibleCount+' / '+HOMEPAGE_LAYOUT_DEFAULTS.length+' açık';
+    const draftStatus=$('#homepage-layout-draft');if(draftStatus){draftStatus.dataset.state=state.homepageLayoutDirty?'draft':'saved';draftStatus.textContent=state.homepageLayoutDirty?'● Yayınlanmamış değişiklikler':'● Yayındaki düzen';}
     list.innerHTML=layout.order.map((key,index)=>{
       const item=HOMEPAGE_LAYOUT_ITEMS[key];
       if(!item)return '';
@@ -894,12 +895,14 @@
     const target=index+direction;
     if(index<1||target<1||target>=layout.order.length)return;
     [layout.order[index],layout.order[target]]=[layout.order[target],layout.order[index]];
+    state.homepageLayoutDirty=true;
     renderHomepageLayout();
   }
   function toggleHomepageSection(key){
     const layout=homepageLayoutConfig();
     if(!HOMEPAGE_LAYOUT_ITEMS[key]||HOMEPAGE_LAYOUT_ITEMS[key].locked)return;
     layout.visibility[key]=layout.visibility[key]===false;
+    state.homepageLayoutDirty=true;
     renderHomepageLayout();
   }
   async function saveHomepageLayout(){
@@ -907,7 +910,7 @@
     const layout=homepageLayoutConfig();
     const nextLayout={order:[...layout.order],visibility:{...layout.visibility},labels:{...layout.labels}};
     const ok=await persist({...state.data,homepageConfig:{...config,layout:nextLayout}},'Ana sayfa bölümleri ve sıralaması kaydedildi.');
-    if(ok)renderHomepageLayout();
+    if(ok){state.homepageLayoutDirty=false;renderHomepageLayout();}
   }
   function renderPersonalizedSection(){
     if(!state.data)return;
@@ -1513,6 +1516,8 @@
     if(!field||!row)return;
     const layout=homepageLayoutConfig();
     layout.labels[row.dataset.layoutKey]={...(layout.labels[row.dataset.layoutKey]||{}),[field.dataset.layoutLabel]:field.value};
+    state.homepageLayoutDirty=true;
+    const draftStatus=$('#homepage-layout-draft');if(draftStatus){draftStatus.dataset.state='draft';draftStatus.textContent='● Yayınlanmamış değişiklikler';}
   });
   $('#homepage-layout-list').addEventListener('click',event=>{
     const button=event.target.closest('[data-layout-action]');
@@ -1527,6 +1532,7 @@
     const layout=homepageLayoutConfig();
     layout.order=[...HOMEPAGE_LAYOUT_DEFAULTS];
     layout.visibility={};
+    state.homepageLayoutDirty=true;
     renderHomepageLayout();
     toast('Varsayılan sıra taslağa alındı. Kalıcı olması için Düzeni yayınla.');
   });
