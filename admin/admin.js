@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
+  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepagePreviewMode:'draft', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -1162,6 +1162,13 @@
     else if(category!=='random')items.sort((a,b)=>heroRating(b)-heroRating(a)||heroVotes(b)-heroVotes(a));
     return items.slice(0,Math.max(1,Number(count)||10));
   }
+  function snapshotHomepageLayout(layout){
+    const source=layout&&typeof layout==='object'?layout:{};
+    const known=new Set(HOMEPAGE_LAYOUT_DEFAULTS);
+    const order=Array.isArray(source.order)?source.order.filter(key=>known.has(key)):[...HOMEPAGE_LAYOUT_DEFAULTS];
+    HOMEPAGE_LAYOUT_DEFAULTS.forEach(key=>{if(!order.includes(key))order.push(key);});
+    return {order,visibility:{...(source.visibility||{})},labels:JSON.parse(JSON.stringify(source.labels||{}))};
+  }
   function homepageLayoutConfig(){
     const config=homepageConfig();
     if(!config.layout||typeof config.layout!=='object')config.layout={};
@@ -1211,12 +1218,15 @@
     const frame=$('#homepage-layout-preview-frame');
     if(!frame?.contentWindow)return;
     const targetOrigin='https://megamrtklc.github.io';
+    const previewLayout=state.homepagePreviewMode==='published'&&state.homepageLayoutPublished
+      ?state.homepageLayoutPublished
+      :layout;
     frame.contentWindow.postMessage({
       type:'cv-home-preview-layout',
       layout:{
-        order:[...layout.order],
-        visibility:{...layout.visibility},
-        labels:{...layout.labels}
+        order:[...previewLayout.order],
+        visibility:{...previewLayout.visibility},
+        labels:{...previewLayout.labels}
       }
     },targetOrigin);
   }
@@ -1225,7 +1235,8 @@
     if(!root)return;
     root.dataset.device=state.homepagePreviewDevice||'desktop';
     sendHomepageLayoutPreview(layout);
-    $$('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
+    $('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
+    $('[data-home-preview-mode]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewMode===state.homepagePreviewMode));
   }
   function moveHomepageSection(key,direction){
     const layout=homepageLayoutConfig();
@@ -1248,7 +1259,7 @@
     const layout=homepageLayoutConfig();
     const nextLayout={order:[...layout.order],visibility:{...layout.visibility},labels:{...layout.labels}};
     const ok=await persist({...state.data,homepageConfig:{...config,layout:nextLayout}},'Ana sayfa bölümleri ve sıralaması kaydedildi.');
-    if(ok){state.homepageLayoutDirty=false;renderHomepageLayout();}
+    if(ok){state.homepageLayoutDirty=false;state.homepageLayoutPublished=snapshotHomepageLayout(nextLayout);state.homepagePreviewMode='draft';renderHomepageLayout();}
   }
   function renderPersonalizedSection(){
     if(!state.data)return;
@@ -1765,7 +1776,7 @@
     try{
       const apiResponse=await fetchWithTimeout('/api/catalog',{cache:'no-store',credentials:'same-origin'});
       if(!apiResponse.ok){const p=await apiResponse.json().catch(()=>({}));throw new Error(p.error||'Yönetim API hatası: '+apiResponse.status);}
-      const payload=await apiResponse.json();state.data=payload.data;state.sha=payload.sha||null;state.apiEnabled=!!state.sha&&payload.writable!==false;
+      const payload=await apiResponse.json();state.data=payload.data;state.sha=payload.sha||null;state.apiEnabled=!!state.sha&&payload.writable!==false;state.homepageLayoutPublished=snapshotHomepageLayout(state.data?.homepageConfig?.layout);
       if(!Array.isArray(state.data?.catalog))throw new Error('Katalog listesi bulunamadı.');
       state.catalog=state.data.catalog.filter(x=>x&&typeof x==='object');
       refreshBackupSummary();
@@ -1904,10 +1915,16 @@
   $('#homepage-layout-preview-frame')?.addEventListener('load',()=>sendHomepageLayoutPreview());
   $('#homepage-layout-save').addEventListener('click',saveHomepageLayout);
   $('#view-homepage-layout').addEventListener('click',event=>{
-    const button=event.target.closest('[data-home-preview-device]');
-    if(!button)return;
-    state.homepagePreviewDevice=button.dataset.homePreviewDevice==='mobile'?'mobile':'desktop';
-    renderHomepageLayoutPreview();
+    const device=event.target.closest('[data-home-preview-device]');
+    const mode=event.target.closest('[data-home-preview-mode]');
+    if(device){
+      state.homepagePreviewDevice=device.dataset.homePreviewDevice==='mobile'?'mobile':'desktop';
+      renderHomepageLayoutPreview();
+    }
+    if(mode){
+      state.homepagePreviewMode=mode.dataset.homePreviewMode==='published'?'published':'draft';
+      renderHomepageLayoutPreview();
+    }
   });
   $('#system-refresh')?.addEventListener('click',refreshSystemDiagnostics);
   $('#personalized-section-form').addEventListener('submit',savePersonalizedSection);
