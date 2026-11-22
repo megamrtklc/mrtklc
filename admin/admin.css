@@ -674,3 +674,15 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
  .homepage-preview-section-copy p{font-size:8px}
  #view-homepage-layout .homepage-layout-field{grid-template-columns:64px minmax(0,1fr)}
 }
+
+/* Gerçek ana sayfa taslak iframe'i */
+.homepage-layout-preview{display:flex;justify-content:center;align-items:flex-start;min-height:620px;padding:14px;overflow:auto}
+.homepage-layout-preview-frame{display:block;width:100%;height:760px;border:1px solid #394858;border-radius:9px;background:#0c1118;box-shadow:0 14px 36px #0005}
+#homepage-layout-preview-frame{display:block;width:100%;height:760px;border:1px solid #394858;border-radius:9px;background:#0c1118;box-shadow:0 14px 36px #0005}
+.homepage-layout-preview[data-device=mobile]{background:#101923}
+.homepage-layout-preview[data-device=mobile] #homepage-layout-preview-frame{width:390px;max-width:100%;height:780px;flex:0 0 390px}
+@media(max-width:600px){
+ .homepage-layout-preview{min-height:540px;padding:7px}
+ #homepage-layout-preview-frame{height:680px}
+ .homepage-layout-preview[data-device=mobile] #homepage-layout-preview-frame{height:680px;flex-basis:390px}
+}
