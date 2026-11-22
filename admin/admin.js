@@ -653,6 +653,7 @@
     }catch(error){toast(error.message,'error');console.error(error);return false;}
     finally{state.saving=false;}
   }
+  let headerFooterSavedSnapshot=null;
   function headerFooterDefaults(){
     return {
       header:{enabled:true,sticky:true,showLogoIcon:true,brandPrimary:'CINE',brandAccent:'VERSE',logoImage:'',showHome:true,homeLabel:'Ana Sayfa',showExplore:true,exploreLabel:'Keşfet',showFranchises:true,franchisesLabel:'Seri Filmler',showVideo:true,videoLabel:'Video Bağlantıları',showSearch:true,showProfile:true,showMobileMenu:true,catalogMenusInitialized:false,customLinks:[]},
@@ -717,34 +718,43 @@
     Object.entries(checks).forEach(([id,value])=>{const el=$('#'+id);if(el)el.checked=value;});
     renderCustomLinkRows('header',h.customLinks);renderCustomLinkRows('footer',f.customLinks);
     renderLogoPreview('header',h.logoImage);renderLogoPreview('footer',f.logoImage);
+    headerFooterSavedSnapshot=JSON.stringify(collectHeaderFooterDraft());updateHeaderFooterDraftState();
+  }
+  function collectHeaderFooterDraft(){
+    headerFooterConfig();
+    const value=id=>String($('#'+id)?.value||'').trim(),checked=id=>!!$('#'+id)?.checked;
+    const header={enabled:checked('hf-header-enabled'),sticky:checked('hf-header-sticky'),showLogoIcon:checked('hf-header-logo-icon'),brandPrimary:value('hf-header-primary'),brandAccent:value('hf-header-accent'),logoImage:state.data.headerConfig?.logoImage||'',showHome:checked('hf-header-home'),homeLabel:value('hf-header-home-label')||'Ana Sayfa',showExplore:checked('hf-header-explore'),exploreLabel:value('hf-header-explore-label')||'Keşfet',showFranchises:checked('hf-header-franchises'),franchisesLabel:value('hf-header-franchises-label')||'Seri Filmler',showVideo:checked('hf-header-video'),videoLabel:value('hf-header-video-label')||'Video Bağlantıları',showSearch:checked('hf-header-search'),showProfile:checked('hf-header-profile'),showMobileMenu:checked('hf-header-mobile'),catalogMenusInitialized:true,customLinks:readCustomLinkRows('header')};
+    const footer={enabled:checked('hf-footer-enabled'),brandPrimary:value('hf-footer-primary'),brandAccent:value('hf-footer-accent'),logoImage:state.data.footerConfig?.logoImage||'',description:value('hf-footer-description'),showBadges:checked('hf-footer-badges'),badgeOne:value('hf-footer-badge-one'),badgeTwo:value('hf-footer-badge-two'),columnOneTitle:value('hf-footer-col-one'),homeLabel:value('hf-footer-home-label'),exploreLabel:value('hf-footer-explore-label'),libraryLabel:value('hf-footer-library-label'),columnTwoTitle:value('hf-footer-col-two'),watchlistLabel:value('hf-footer-watchlist-label'),statsLabel:value('hf-footer-stats-label'),featureTitle:value('hf-footer-feature-title'),featureDescription:value('hf-footer-feature-description'),ctaLabel:value('hf-footer-cta-label'),showCta:checked('hf-footer-cta'),copyright:value('hf-footer-copyright'),showBackToTop:checked('hf-footer-backtop'),customLinks:readCustomLinkRows('footer')};
+    return {header,footer};
+  }
+  function updateHeaderFooterDraftState(){
+    const save=$('#hf-save'),discard=$('#hf-discard'),status=$('#hf-draft-status'),hint=$('#hf-save-hint');
+    if(!save||!status)return;
+    const changed=headerFooterSavedSnapshot!==null&&JSON.stringify(collectHeaderFooterDraft())!==headerFooterSavedSnapshot;
+    status.dataset.state=changed?'dirty':'saved';
+    status.textContent=changed?'● Kaydedilmemiş değişiklik var':'● Kayıtlı ayarlar';
+    save.disabled=!changed||state.saving;if(discard)discard.disabled=!changed||state.saving;
+    if(hint)hint.textContent=changed?'Değişiklikler taslakta. Kaydetmeden canlı siteye aktarılmaz.':'Henüz kaydedilmemiş değişiklik yok.';
+  }
+  function resetHeaderFooterDraft(useDefaults){
+    if(!state.data)return;
+    const savedBaseline=headerFooterSavedSnapshot;
+    if(useDefaults){
+      const defaults=headerFooterDefaults();
+      state.data.headerConfig={...defaults.header,catalogMenusInitialized:true,customLinks:[{label:'Filmler',page:'movies'},{label:'Diziler',page:'series'},{label:'Yerli Yapımlar',page:'turkish'}]};
+      state.data.footerConfig={...defaults.footer};
+    }else if(savedBaseline){
+      const saved=JSON.parse(savedBaseline);state.data.headerConfig=saved.header;state.data.footerConfig=saved.footer;
+    }
+    renderHeaderFooter();
+    if(useDefaults){headerFooterSavedSnapshot=savedBaseline;updateHeaderFooterDraftState();}
   }
   async function saveHeaderFooter(event){
-    event.preventDefault();
-    if(!canWrite())return;
-    headerFooterConfig();
-    const value=id=>String($('#'+id).value||'').trim();
-    const checked=id=>$('#'+id).checked;
-    const header={
-      enabled:checked('hf-header-enabled'),sticky:checked('hf-header-sticky'),showLogoIcon:checked('hf-header-logo-icon'),
-      brandPrimary:value('hf-header-primary'),brandAccent:value('hf-header-accent'),
-      logoImage:state.data.headerConfig?.logoImage||'',
-      showHome:checked('hf-header-home'),homeLabel:value('hf-header-home-label')||'Ana Sayfa',
-      showExplore:checked('hf-header-explore'),exploreLabel:value('hf-header-explore-label')||'Keşfet',
-      showFranchises:checked('hf-header-franchises'),franchisesLabel:value('hf-header-franchises-label')||'Seri Filmler',
-      showVideo:checked('hf-header-video'),videoLabel:value('hf-header-video-label')||'Video Bağlantıları',
-      showSearch:checked('hf-header-search'),showProfile:checked('hf-header-profile'),showMobileMenu:checked('hf-header-mobile'),catalogMenusInitialized:true,customLinks:readCustomLinkRows('header')
-    };
-    const footer={
-      enabled:checked('hf-footer-enabled'),brandPrimary:value('hf-footer-primary'),brandAccent:value('hf-footer-accent'),
-      logoImage:state.data.footerConfig?.logoImage||'',
-      description:value('hf-footer-description'),showBadges:checked('hf-footer-badges'),badgeOne:value('hf-footer-badge-one'),badgeTwo:value('hf-footer-badge-two'),
-      columnOneTitle:value('hf-footer-col-one'),homeLabel:value('hf-footer-home-label'),exploreLabel:value('hf-footer-explore-label'),libraryLabel:value('hf-footer-library-label'),
-      columnTwoTitle:value('hf-footer-col-two'),watchlistLabel:value('hf-footer-watchlist-label'),statsLabel:value('hf-footer-stats-label'),
-      featureTitle:value('hf-footer-feature-title'),featureDescription:value('hf-footer-feature-description'),ctaLabel:value('hf-footer-cta-label'),
-      showCta:checked('hf-footer-cta'),copyright:value('hf-footer-copyright'),showBackToTop:checked('hf-footer-backtop'),customLinks:readCustomLinkRows('footer')
-    };
-    const ok=await persist({...state.data,headerConfig:header,footerConfig:footer},'Header ve Footer ayarları kaydedildi.');
-    if(ok)renderHeaderFooter();
+    event.preventDefault();if(!canWrite())return;
+    const draft=collectHeaderFooterDraft();
+    if(JSON.stringify(draft)===headerFooterSavedSnapshot){updateHeaderFooterDraftState();return;}
+    const ok=await persist({...state.data,headerConfig:draft.header,footerConfig:draft.footer},'Header ve Footer ayarları kaydedildi.');
+    if(ok)renderHeaderFooter();else updateHeaderFooterDraftState();
   }
   function setField(id,value){const el=$('#'+id);if(el)el.value=value??'';}
   function openEditor(item=null){
@@ -2051,21 +2061,25 @@
   $('#franchise-cancel').addEventListener('click',()=>$('#franchise-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
+  $('#header-footer-form').addEventListener('input',updateHeaderFooterDraftState);
+  $('#header-footer-form').addEventListener('change',updateHeaderFooterDraftState);
+  $('#hf-reset')?.addEventListener('click',()=>{if(confirm('Header ve Footer ayarlarını varsayılan değerlere döndürmek istiyor musun? Bu işlem kaydetmeden canlı siteyi değiştirmez.'))resetHeaderFooterDraft(true);});
+  $('#hf-discard')?.addEventListener('click',()=>{if(confirm('Kaydedilmemiş tüm Header ve Footer değişiklikleri geri alınsın mı?'))resetHeaderFooterDraft(false);});
   ['header','footer'].forEach(kind=>{
     $('#hf-'+kind+'-logo-file')?.addEventListener('change',async event=>{
       const file=event.target.files?.[0];if(!file)return;
-      try{const data=await readLogoFile(file);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage=data;renderLogoPreview(kind,data);toast('Logo yüklendi. Değişikliği uygulamak için ayarları kaydet.');}
+      try{const data=await readLogoFile(file);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage=data;renderLogoPreview(kind,data);updateHeaderFooterDraftState();toast('Logo yüklendi. Değişikliği uygulamak için ayarları kaydet.');}
       catch(error){toast(error.message,'error');}finally{event.target.value='';}
     });
     $('[data-remove-logo="'+kind+'"]')?.addEventListener('click',()=>{
-      state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');toast('Logo kaldırıldı. Değişikliği uygulamak için ayarları kaydet.');
+      state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');updateHeaderFooterDraftState();toast('Logo kaldırıldı. Değişikliği uygulamak için ayarları kaydet.');
     });
   });
   $('#header-footer-form').addEventListener('click',event=>{
     const add=event.target.closest('[data-add-custom-link]');
-    if(add){const kind=add.dataset.addCustomLink;const root=$('#hf-'+kind+'-custom-links');const current=readCustomLinkRows(kind);current.push({label:'',page:'home'});renderCustomLinkRows(kind,current);const inputs=root.querySelectorAll('[data-custom-link-label]');if(inputs.length)inputs[inputs.length-1].focus();return;}
+    if(add){const kind=add.dataset.addCustomLink;const root=$('#hf-'+kind+'-custom-links');const current=readCustomLinkRows(kind);current.push({label:'',page:'home'});renderCustomLinkRows(kind,current);const inputs=root.querySelectorAll('[data-custom-link-label]');if(inputs.length)inputs[inputs.length-1].focus();updateHeaderFooterDraftState();return;}
     const remove=event.target.closest('[data-remove-custom-link]');
-    if(remove){const row=remove.closest('[data-custom-link-row]');const kind=row.dataset.customLinkRow;const current=$('#hf-'+kind+'-custom-links [data-custom-link-row]').filter(item=>item!==row).map(item=>({label:item.querySelector('[data-custom-link-label]').value.trim(),page:item.querySelector('[data-custom-link-page]').value}));renderCustomLinkRows(kind,current);}
+    if(remove){const row=remove.closest('[data-custom-link-row]');const kind=row.dataset.customLinkRow;const current=$('#hf-'+kind+'-custom-links [data-custom-link-row]').filter(item=>item!==row).map(item=>({label:item.querySelector('[data-custom-link-label]').value.trim(),page:item.querySelector('[data-custom-link-page]').value}));renderCustomLinkRows(kind,current);updateHeaderFooterDraftState();}
   });
   $('#homepage-layout-save').addEventListener('click',requestHomepageLayoutPublish);
   $('#homepage-publish-confirm-button')?.addEventListener('click',saveHomepageLayout);
