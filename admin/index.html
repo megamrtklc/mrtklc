@@ -356,55 +356,29 @@
        </article>
       </section>
       <section class="view" id="view-preferences">
-       <div class="page-heading"><div><div class="eyebrow">WORKSPACE / PERSONALIZATION</div><h1>Panel Tercihleri</h1><p>Yönetim alanını çalışma ritmine göre düzenle. Değişiklikler anında uygulanır ve yalnızca bu tarayıcıda saklanır.</p></div><span class="state-ready preferences-live-state">ANINDA UYGULANIR</span></div>
-       <div class="preferences-grid">
-        <article class="panel-card preference-main-card">
-         <div class="panel-card-heading"><div><span class="eyebrow">01 / WORKSPACE DENSITY</span><h2>Arayüz yoğunluğu</h2></div><span class="state-ready">GÖRÜNÜM</span></div>
-         <p class="helper-text">Kartlar ve tablolar arasındaki boşluğu seç. İçerik veya katalog verileri değişmez.</p>
-         <div class="preference-choice-group" role="group" aria-label="Arayüz yoğunluğu">
-          <label class="preference-choice">
-           <input type="radio" name="panel-density" value="comfortable" checked>
-           <span class="preference-choice-copy"><b>Rahat görünüm</b><small>Geniş aralıklar, daha ferah çalışma</small></span>
-           <span class="density-preview density-preview-comfortable" aria-hidden="true"><i></i><i></i><i></i></span>
-          </label>
-          <label class="preference-choice">
-           <input type="radio" name="panel-density" value="compact">
-           <span class="preference-choice-copy"><b>Kompakt görünüm</b><small>Daha sıkı satırlar, ekranda daha çok kayıt</small></span>
-           <span class="density-preview density-preview-compact" aria-hidden="true"><i></i><i></i><i></i></span>
-          </label>
+       <div class="page-heading"><div><div class="eyebrow">WORKSPACE / SETTINGS</div><h1>Panel Tercihleri</h1><p>Yönetim alanının görünümünü ve kullanım konforunu belirle.</p></div><span class="preferences-saved-indicator" id="preferences-saved-indicator">● KAYITLI AYARLAR</span></div>
+       <div class="preferences-intro panel-card">
+        <div class="preferences-intro-mark">⚙</div>
+        <div><b>Çalışma alanını kendine göre düzenle</b><p>Burada yaptığın seçimler taslak olarak kalır. Panel görünümü, yalnızca <strong>Değişiklikleri Kaydet</strong> düğmesine bastığında güncellenir.</p></div>
+       </div>
+       <div class="preferences-settings-grid">
+        <article class="panel-card preferences-setting-card">
+         <div class="preferences-setting-heading"><span class="preferences-setting-number">01</span><div><h2>Arayüz yoğunluğu</h2><p>Paneldeki kartların ve tablo satırlarının boşluklarını belirle.</p></div></div>
+         <div class="preferences-options" role="radiogroup" aria-label="Arayüz yoğunluğu">
+          <label class="preferences-option"><input type="radio" name="panel-density" value="comfortable" checked><span class="preferences-option-mark"></span><span class="preferences-option-copy"><b>Rahat</b><small>Daha geniş aralıklar ve ferah görünüm</small></span><span class="preferences-option-preview preview-comfortable"><i></i><i></i><i></i></span></label>
+          <label class="preferences-option"><input type="radio" name="panel-density" value="compact"><span class="preferences-option-mark"></span><span class="preferences-option-copy"><b>Kompakt</b><small>Daha sıkı satırlar, daha fazla kayıt</small></span><span class="preferences-option-preview preview-compact"><i></i><i></i><i></i></span></label>
          </div>
-         <div class="preference-tip"><span class="preference-tip-icon">✦</span><span><b>İpucu</b> Çok sayıda yapım düzenlerken Kompakt; uzun süreli içerik incelemesinde Rahat görünüm daha kullanışlı olabilir.</span></div>
         </article>
-        <article class="panel-card preference-main-card">
-         <div class="panel-card-heading"><div><span class="eyebrow">02 / MOTION & ACCESSIBILITY</span><h2>Hareket efektleri</h2></div><span class="state-ready">KONFOR</span></div>
-         <p class="helper-text">Paneldeki geçiş ve animasyonların ne kadar hareketli olacağını belirle.</p>
-         <label class="preference-toggle preference-motion-toggle"><input type="checkbox" id="panel-reduce-motion"><span><b>Hareketleri azalt</b><small>Animasyonları ve geçişleri en aza indirir.</small></span><em class="preference-toggle-state" id="preference-motion-state">Kapalı</em></label>
-         <div class="motion-preview" aria-label="Hareket ayarı görsel önizlemesi">
-          <div class="motion-preview-track"><span class="motion-preview-dot"></span></div>
-          <div class="motion-preview-labels"><span>Standart geçiş</span><span>Azaltılmış hareket</span></div>
-          <p>Bu ayar yalnızca yönetim panelinin hareketlerini etkiler.</p>
-         </div>
+        <article class="panel-card preferences-setting-card">
+         <div class="preferences-setting-heading"><span class="preferences-setting-number">02</span><div><h2>Hareket ve geçişler</h2><p>Paneldeki animasyonların ve geçiş efektlerinin davranışını seç.</p></div></div>
+         <label class="preferences-motion-option"><span class="preferences-motion-copy"><b>Hareketleri azalt</b><small>Animasyonları ve geçişleri en aza indirir.</small></span><input type="checkbox" id="panel-reduce-motion"><span class="preferences-switch" aria-hidden="true"></span></label>
+         <div class="preferences-note"><span>ⓘ</span> Bu seçenek yalnızca yönetim panelini etkiler; Perde ziyaretçi sitesinin görünümü değişmez.</div>
         </article>
        </div>
-       <article class="panel-card preference-guide-card">
-        <div class="panel-card-heading"><div><span class="eyebrow">QUICK GUIDE / VISUAL HELP</span><h2>Görsel kullanım rehberi</h2></div><span class="state-ready">3 KISA NOT</span></div>
-        <div class="preference-guide-grid">
-         <div class="preference-guide-item">
-          <div class="guide-visual guide-visual-spacing" aria-hidden="true"><div class="guide-window"><b></b><i></i><i></i><i></i></div><div class="guide-window guide-window-tight"><b></b><i></i><i></i><i></i></div></div>
-          <b>Boşlukları yönet</b><p>Rahat ve Kompakt seçenekleri kart ve tablo yoğunluğunu değiştirir; içerik sırasına dokunmaz.</p>
-         </div>
-         <div class="preference-guide-item">
-          <div class="guide-visual guide-visual-motion" aria-hidden="true"><span class="guide-motion-line"></span><span class="guide-motion-point"></span><span class="guide-motion-stop">Ⅱ</span></div>
-          <b>Daha sakin kullanım</b><p>Hareketleri azalt seçeneği, dikkat dağıtan animasyon ve geçişleri minimuma indirir.</p>
-         </div>
-         <div class="preference-guide-item">
-          <div class="guide-visual guide-visual-device" aria-hidden="true"><div class="guide-device"><span></span><i></i><i></i><i></i></div><div class="guide-device guide-device-mobile"><span></span><i></i><i></i></div></div>
-          <b>Sadece bu tarayıcı</b><p>Tercihler bu cihazın tarayıcısında saklanır. Başka cihazlara veya ziyaretçilere aktarılmaz.</p>
-         </div>
-        </div>
-       </article>
-       <article class="panel-card preferences-footer-card"><div><b>Varsayılan ayarlara dön</b><p class="helper-text">Rahat görünüm ve standart hareket davranışı yeniden etkinleşir. Katalog, ana site ve yayın ayarları etkilenmez.</p></div><button class="secondary-button" type="button" id="preferences-reset">↺　Tercihleri sıfırla</button></article>
-       <p class="system-health-footnote" id="preferences-status" role="status" aria-live="polite">Tercihler henüz değiştirilmedi. Seçimlerin otomatik kaydedilir.</p>
+       <div class="preferences-bottom-row">
+        <div class="preferences-draft-status" id="preferences-status" role="status" aria-live="polite"><span class="preferences-status-dot"></span><span>Mevcut kayıtlı ayarların kullanılıyor. Henüz bekleyen değişiklik yok.</span></div>
+        <div class="preferences-actions"><button class="secondary-button" type="button" id="preferences-reset">Varsayılanları yükle</button><button class="secondary-button" type="button" id="preferences-discard">Vazgeç</button><button class="primary-button" type="button" id="preferences-save" disabled>Değişiklikleri Kaydet</button></div>
+       </div>
       </section>
       <section class="view" id="view-system">
         <div class="page-heading"><div><div class="eyebrow">SYSTEM / HEALTH</div><h1>Sistem Kontrol Merkezi</h1><p>Perde yönetim bağlantılarını, katalog bütünlüğünü ve yayınlama erişimini buradan kontrol et.</p></div><button class="primary-button" id="system-refresh" type="button">↻　Kontrolleri yenile</button></div>
@@ -459,5 +433,5 @@
 <dialog class="editor-dialog collection-dialog" id="franchise-dialog" aria-labelledby="franchise-dialog-title"><form id="franchise-form" class="editor-form"><div class="editor-head"><div><div class="eyebrow">FILM FRANCHISE</div><h2 id="franchise-dialog-title">Yeni film serisi</h2><p>Seri bilgilerini gir ve mevcut film kayıtlarını vizyon sırasına göre seç.</p></div><button type="button" class="dialog-close" id="franchise-close" aria-label="Kapat">×</button></div><input type="hidden" id="franchise-id"><div class="editor-grid"><label class="field wide"><span>Seri adı *</span><input id="franchise-title" required maxlength="120" placeholder="Örn. Matrix Serisi"></label><label class="field wide"><span>Açıklama</span><textarea id="franchise-description" rows="2" maxlength="500" placeholder="Seri hakkında kısa bir açıklama…"></textarea></label><label class="field wide"><span>Kapak / arka plan görseli URL</span><input id="franchise-backdrop" type="url" maxlength="1000" placeholder="https://image.tmdb.org/t/p/w1280/…"></label><label class="toggle-field wide"><input id="franchise-active" type="checkbox" checked><span>Seriyi ana sayfada ve Seri Filmler sayfasında yayınla</span></label></div><div class="collection-picker-head"><h3>Filmleri vizyon sırasına göre seç</h3><input id="franchise-search" type="search" placeholder="Katalogda film ara…"></div><div id="franchise-items" class="collection-items"></div><div class="editor-footer"><span>Filmler yayın yıllarına göre sıralanır. En az iki film seç.</span><div><button type="button" class="secondary-button" id="franchise-cancel">Vazgeç</button><button type="submit" class="primary-button">Seriyi kaydet</button></div></div></form></dialog><dialog class="editor-dialog profile-dialog" id="profile-dialog" aria-labelledby="profile-dialog-title"><form id="profile-form" class="editor-form"><div class="editor-head"><div><div class="eyebrow">ADMIN PROFILE</div><h2 id="profile-dialog-title">Profil fotoğrafı</h2><p>Yönetici fotoğrafını buradan yükleyebilir veya değiştirebilirsin. Görünen yönetici adını Kullanıcılar bölümünden düzenleyebilirsin.</p></div><button type="button" class="dialog-close" id="profile-close" aria-label="Kapat">×</button></div><div class="profile-upload-preview"><div class="profile-photo-large"><span id="profile-dialog-initials">CV</span><img id="profile-dialog-preview" alt="" hidden></div><div><b>Yönetici fotoğrafı</b><small>Görünen ad Kullanıcılar bölümünden değiştirilir.</small></div></div><label class="field wide"><span>Fotoğraf dosyası (JPG, PNG veya WebP · en fazla 700 KB)</span><input id="profile-file" type="file" accept="image/jpeg,image/png,image/webp" required></label><p class="helper-text">Fotoğraf yönetim panelinde kullanılır ve GitHub deposundaki özel olmayan yönetici görseli dosyasında saklanır.</p><div class="editor-footer"><span id="profile-upload-status">Henüz fotoğraf seçilmedi.</span><div><button type="button" class="secondary-button" id="profile-cancel">Vazgeç</button><button type="submit" class="primary-button" id="profile-save">Fotoğrafı kaydet</button></div></div></form></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon" aria-hidden="true">i</span><span class="toast-content"><span class="toast-kicker" id="toast-title">CINEVERSE STUDIO</span><span class="toast-message" id="toast-message"></span></span></div>
 
-<script src="./admin.js?v=20261122-null-element-fix-v1" defer></script>
+<script src="./admin.js?v=20261122-preferences-draft-v2" defer></script>
 </body></html>
