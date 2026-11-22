@@ -1,0 +1,60 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+
+const js = readFileSync(new URL('../admin/admin.js', import.meta.url), 'utf8');
+
+function has(pattern, message) {
+  assert.match(js, pattern, message);
+}
+
+// The shared persistence path must serialize writes, preserve the GitHub SHA,
+// handle stale-write conflicts, and restore the saving lock after every result.
+has(/async function persist\(nextData,successMessage\)\s*\{[\s\S]*?if\(!canWrite\(\)\|\|state\.saving\)return false;[\s\S]*?fetch\('\/api\/catalog',\{method:'PUT',[\s\S]*?credentials:'same-origin'[\s\S]*?sha:state\.sha[\s\S]*?response\.status===409[\s\S]*?if\(!response\.ok\)[\s\S]*?finally\{state\.saving=false;\}/,
+  'Katalog kayıt akışı güvenli ve çakışma kontrollü olmalı');
+
+// Create/update flows must validate input and persist through the same API path.
+for (const [name, marker] of [
+  ['saveContent', /if\(!record\.title\)[\s\S]*?findDuplicateContent[\s\S]*?persist\(nextData/],
+  ['saveFranchise', /selected\.length<2[\s\S]*?if\(!title\)[\s\S]*?persist\(nextData/],
+  ['saveCollection', /if\(!record\.title\)[\s\S]*?persist\(nextData/],
+  ['saveHeaderFooter', /collectHeaderFooterDraft\(\)[\s\S]*?persist\(\{\.\.\.state\.data,headerConfig/],
+  ['saveWatchLayout', /if\(!watchLayoutDirty\)return[\s\S]*?persist\(\{\.\.\.state\.data,watchPageConfig/],
+  ['saveHomepageLayout', /homepageLayoutChanges\(\)[\s\S]*?persist\(\{\.\.\.state\.data,homepageConfig/]
+]) {
+  const start = js.indexOf('async function ' + name + '(');
+  assert.notEqual(start, -1, name + ' async kayıt fonksiyonu bulunmalı');
+  const next = js.indexOf('\n  async function ', start + 1);
+  const body = js.slice(start, next < 0 ? js.length : next);
+  assert.match(body, marker, name + ' doğrulama ve kayıt akışını korumalı');
+}
+
+// Destructive actions require explicit confirmation and must use persist().
+for (const [name, confirmation] of [
+  ['deleteContent', /confirm\([\s\S]*?persist\(nextData/],
+  ['deleteFranchise', /confirm\([\s\S]*?persist\(/],
+  ['deleteCollection', /confirm\([\s\S]*?persist\(/]
+]) {
+  const start = js.indexOf('async function ' + name + '(');
+  assert.notEqual(start, -1, name + ' silme fonksiyonu bulunmalı');
+  const next = js.indexOf('\n  async function ', start + 1);
+  const body = js.slice(start, next < 0 ? js.length : next);
+  assert.match(body, confirmation, name + ' silme öncesi onay almalı ve kalıcı kayıt yapmalı');
+}
+
+// Verify the visible forms/buttons are actually wired to their action handlers.
+for (const binding of [
+  /#content-form'\)\.addEventListener\('submit',saveContent\)/,
+  /#franchise-form'\)\.addEventListener\('submit',saveFranchise\)/,
+  /#collection-form'\)\.addEventListener\('submit',saveCollection\)/,
+  /#header-footer-form'\)\.addEventListener\('submit',saveHeaderFooter\)/,
+  /#homepage-form'\)\.addEventListener\('submit',saveHomepage\)/,
+  /#homepage-layout-save'\)\.addEventListener\('click',requestHomepageLayoutPublish\)/,
+  /#homepage-publish-confirm-button'\)\?\.addEventListener\('click',saveHomepageLayout\)/,
+  /#watch-layout-save'\)\.addEventListener\('click',saveWatchLayout\)/,
+  /#personalized-rules-save'\)\?\.addEventListener\('click',savePersonalizedRules\)/
+]) assert.match(js, binding, 'Kayıt/yayınlama kontrolü gerçek işlem fonksiyonuna bağlı olmalı');
+
+console.log('PASS: Ortak katalog kayıt akışı ve çakışma yönetimi');
+console.log('PASS: Yapım, koleksiyon, film serisi ve düzenleme kayıt doğrulamaları');
+console.log('PASS: Silme işlemlerinde kullanıcı onayı ve kalıcı kayıt');
+console.log('PASS: Yayınlama ve kayıt kontrollerinin olay bağlantıları');
