@@ -1317,6 +1317,10 @@
     $('#personalized-eyebrow').value=section.eyebrow;
     $('#personalized-title').value=section.title;
     $('#personalized-description').value=section.description;
+    $('#personalized-gems-min-rating').value=section.gemsMinRating??7;
+    $('#personalized-gems-max-rating').value=section.gemsMaxRating??8.8;
+    $('#personalized-gems-min-year').value=section.gemsMinYear??1900;
+    $('#personalized-gems-max-year').value=section.gemsMaxYear??2099;
     ['taste','surprise','series','gems'].forEach(mode=>{const input=$('#personalized-mode-'+mode);if(input)input.checked=section.discoveryModes?.[mode]!==false;const label=$('#personalized-label-'+mode);if(label)label.value=section.discoveryModeLabels?.[mode]||PERSONALIZED_MODE_META[mode].label;});
     ['excludeWatched','excludeWatchlist','excludeFavorites'].forEach(key=>{const input=$('#personalized-'+key);if(input)input.checked=section[key]!==false;});
     const defaults=['taste','surprise','series','gems'],stored=Array.isArray(section.discoveryModeOrder)?section.discoveryModeOrder:[];
@@ -1349,6 +1353,7 @@
     compare('Başlık ve açıklama',[current.eyebrow||'SANA ÖZEL',current.title||'İzleme Zevkine Göre',current.description||''],[$('#personalized-eyebrow').value.trim()||'SANA ÖZEL',$('#personalized-title').value.trim()||'İzleme Zevkine Göre',$('#personalized-description').value.trim()]);
     compare('Keşif modları',current.discoveryModes||{taste:true,surprise:true,series:true,gems:true},Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-mode-'+mode)?.checked!==false])));
     compare('Buton isimleri',current.discoveryModeLabels||{taste:'Zevkime Uygun',surprise:'Beni Şaşırt',series:'Yeni Diziler',gems:'Gizli Hazineler'},Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-label-'+mode)?.value.trim()||PERSONALIZED_MODE_META[mode].label])));
+    compare('Gizli Hazineler kriterleri',[current.gemsMinRating??7,current.gemsMaxRating??8.8,current.gemsMinYear??1900,current.gemsMaxYear??2099],['personalized-gems-min-rating','personalized-gems-max-rating','personalized-gems-min-year','personalized-gems-max-year'].map(id=>Number($('#'+id).value)));
     compare('Keşif modu sırası',oldOrder,newOrder);
     compare('Öneri filtreleri',['excludeWatched','excludeWatchlist','excludeFavorites'].map(key=>current[key]!==false),['excludeWatched','excludeWatchlist','excludeFavorites'].map(key=>$('#personalized-'+key)?.checked!==false));
     const panel=$('#personalized-publish-check'),summary=$('#personalized-publish-summary');if(!panel||!summary)return;
@@ -1376,6 +1381,10 @@
       discoveryModes,
       discoveryModeLabels:Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-label-'+mode)?.value.trim().slice(0,24)||PERSONALIZED_MODE_META[mode].label])),
       discoveryModeOrder:[...(state.personalizedModeOrder||['taste','surprise','series','gems'])],
+      gemsMinRating:Math.max(0,Math.min(10,Number($('#personalized-gems-min-rating').value)||0)),
+      gemsMaxRating:Math.max(0,Math.min(10,Number($('#personalized-gems-max-rating').value)||0)),
+      gemsMinYear:Math.max(1900,Math.min(2099,Math.round(Number($('#personalized-gems-min-year').value)||1900))),
+      gemsMaxYear:Math.max(1900,Math.min(2099,Math.round(Number($('#personalized-gems-max-year').value)||2099))),
       excludeWatched:$('#personalized-excludeWatched')?.checked!==false,
       excludeWatchlist:$('#personalized-excludeWatchlist')?.checked!==false,
       excludeFavorites:$('#personalized-excludeFavorites')?.checked!==false
@@ -2057,7 +2066,7 @@
     if(index<0||next<0||next>=order.length)return;
     [order[index],order[next]]=[order[next],order[index]];state.personalizedModeOrder=order;renderPersonalizedModeOrder();renderPersonalizedStaticPreview();
   });
-  ['personalized-enabled','personalized-eyebrow','personalized-title','personalized-description','personalized-mode-taste','personalized-mode-surprise','personalized-mode-series','personalized-mode-gems','personalized-label-taste','personalized-label-surprise','personalized-label-series','personalized-label-gems'].forEach(id=>{
+  ['personalized-enabled','personalized-eyebrow','personalized-title','personalized-description','personalized-mode-taste','personalized-mode-surprise','personalized-mode-series','personalized-mode-gems','personalized-label-taste','personalized-label-surprise','personalized-label-series','personalized-label-gems','personalized-gems-min-rating','personalized-gems-max-rating','personalized-gems-min-year','personalized-gems-max-year'].forEach(id=>{
     $('#'+id)?.addEventListener('input',()=>{renderPersonalizedModeOrder();renderPersonalizedStaticPreview();});$('#'+id)?.addEventListener('change',()=>{renderPersonalizedModeOrder();renderPersonalizedStaticPreview();});
   });
   $('#personalized-preview-modes')?.closest('.personalized-preview-card')?.addEventListener('click',event=>{

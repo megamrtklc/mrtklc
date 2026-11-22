@@ -354,6 +354,16 @@
             </div>
             <article class="personalized-order-card"><div class="personalized-subheading"><div><b>Ana sayfadaki buton sırası</b><small>Yukarı / aşağı oklarıyla keşif modlarının sırasını belirle.</small></div><span>ÖNCE GÖRÜNEN</span></div><div id="personalized-mode-order-list" class="personalized-mode-order-list"></div></article>
           </div>
+          <article class="panel-card personalized-gems-rules">
+            <div class="panel-heading"><div><span class="section-index">03B / GİZLİ HAZİNELER</span><h2>Öneri kriterleri</h2><p>Bu değerler yalnızca Gizli Hazineler modunu etkiler. Puan ve yıl aralığını belirleyerek seçkiyi daraltabilirsin.</p></div></div>
+            <div class="personalized-gems-rule-grid">
+              <label class="field"><span>Minimum IMDb puanı</span><input id="personalized-gems-min-rating" type="number" min="0" max="10" step="0.1" value="7.0"></label>
+              <label class="field"><span>Maksimum IMDb puanı</span><input id="personalized-gems-max-rating" type="number" min="0" max="10" step="0.1" value="8.8"></label>
+              <label class="field"><span>İlk yayın yılı</span><input id="personalized-gems-min-year" type="number" min="1900" max="2099" step="1" value="1900"></label>
+              <label class="field"><span>Son yayın yılı</span><input id="personalized-gems-max-year" type="number" min="1900" max="2099" step="1" value="2099"></label>
+            </div>
+            <p class="personalized-gems-rule-note">Yıl bilgisi bulunmayan yapımlar, diğer kriterleri karşılıyorsa listede kalır. Varsayılan 7.0–8.8 IMDb aralığı mevcut öneri davranışını korur.</p>
+          </article>
           <article class="personalized-preview-card">
             <div class="personalized-subheading"><div><b>Statik ana sayfa taslağı</b><small>Gerçek siteyi veya dış kaynağı yüklemez; yalnızca ayarların örnek görünümünü çizer.</small></div><div class="personalized-preview-switch"><button type="button" class="active" data-personalized-preview-device="desktop">Masaüstü</button><button type="button" data-personalized-preview-device="mobile">Mobil</button></div></div>
             <div id="personalized-static-preview" class="personalized-static-preview" data-device="desktop">

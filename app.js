@@ -1925,8 +1925,15 @@
                     if (mode === 'series') {
                         pool = pool.filter(item => item.type === 'tv').sort((a,b) => (Number(b.year)||0)-(Number(a.year)||0) || (Number(b.rating)||0)-(Number(a.rating)||0));
                     } else if (mode === 'gems') {
-                        pool = pool.filter(item => { const rating=Number(item.rating)||0; return rating>=7 && rating<=8.8; })
-                            .sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0) || (Number(b.year)||0)-(Number(a.year)||0));
+                        const rules=this.homepageConfig?.personalizedSection||{};
+                        const minRating=Math.max(0,Math.min(10,Number(rules.gemsMinRating??7)));
+                        const maxRating=Math.max(minRating,Math.min(10,Number(rules.gemsMaxRating??8.8)));
+                        const minYear=Math.max(1900,Math.min(2099,Number(rules.gemsMinYear??1900)));
+                        const maxYear=Math.max(minYear,Math.min(2099,Number(rules.gemsMaxYear??2099)));
+                        pool = pool.filter(item => {
+                            const rating=Number(item.rating)||0,year=Number(item.year)||0;
+                            return rating>=minRating && rating<=maxRating && (!year || (year>=minYear && year<=maxYear));
+                        }).sort((a,b)=>(Number(b.rating)||0)-(Number(a.rating)||0) || (Number(b.year)||0)-(Number(a.year)||0));
                     } else if (mode === 'surprise') {
                         const seed=this.recommendationRefreshIndex+1;
                         const hash=value=>{let result=seed*2654435761;for(const char of String(value))result=Math.imul(result^char.charCodeAt(0),16777619);return result>>>0;};
