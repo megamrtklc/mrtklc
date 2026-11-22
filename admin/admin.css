@@ -807,3 +807,47 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 .hero-order-actions button:disabled{opacity:.3;cursor:not-allowed}
 .hero-order-empty{padding:15px;text-align:center;color:#8292a4;font-size:9px}
 @media(max-width:700px){.hero-order-panel{padding:9px}.hero-order-heading{align-items:flex-start;flex-direction:column;gap:4px}.hero-order-row{gap:7px}}
+
+
+/* Ana sayfa bölümleri: tam genişlik ve kompakt liste */
+#view-homepage-layout .homepage-layout-columns{display:block;width:100%;margin:0}
+#view-homepage-layout .homepage-layout-panel{width:100%;padding:18px}
+#view-homepage-layout .homepage-layout-panel .panel-heading{margin-bottom:12px}
+#view-homepage-layout .homepage-layout-list{gap:6px}
+#view-homepage-layout .homepage-layout-row{
+  grid-template-columns:32px minmax(0,1fr) auto auto;
+  align-items:center;gap:9px;padding:8px 10px;border-radius:10px
+}
+#view-homepage-layout .homepage-layout-row-icon{width:32px;height:32px;flex-basis:32px;border-radius:9px;font-size:15px}
+#view-homepage-layout .homepage-layout-row-copy{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:10px;min-width:0
+}
+#view-homepage-layout .homepage-layout-field{grid-template-columns:55px minmax(0,1fr);gap:6px;min-width:0}
+#view-homepage-layout .homepage-layout-field>span{font-size:8px}
+#view-homepage-layout .homepage-layout-field textarea{
+  width:100%;min-width:0;height:34px;min-height:34px;max-height:34px;padding:6px 8px;
+  resize:vertical;overflow:auto;font-size:10px;line-height:1.35
+}
+#view-homepage-layout .homepage-layout-field textarea:focus{height:58px;max-height:90px}
+#view-homepage-layout .homepage-layout-state{padding:4px 6px;font-size:7px}
+#view-homepage-layout .homepage-layout-actions{gap:4px}
+#view-homepage-layout .homepage-layout-actions button{width:26px;height:26px}
+#view-homepage-layout .homepage-layout-position{width:16px;font-size:8px}
+@media(max-width:900px){
+  #view-homepage-layout .homepage-layout-panel{padding:15px}
+  #view-homepage-layout .homepage-layout-row{grid-template-columns:30px minmax(0,1fr) auto;gap:8px}
+  #view-homepage-layout .homepage-layout-row-copy{grid-template-columns:1fr 1fr;gap:8px}
+  #view-homepage-layout .homepage-layout-row>.homepage-layout-actions{grid-column:2/-1;justify-self:end}
+  #view-homepage-layout .homepage-layout-row>.homepage-layout-state{grid-column:3;grid-row:1}
+}
+@media(max-width:600px){
+  #view-homepage-layout .homepage-layout-panel{padding:12px}
+  #view-homepage-layout .homepage-layout-panel .panel-heading{align-items:flex-start}
+  #view-homepage-layout .homepage-layout-row{grid-template-columns:28px minmax(0,1fr);align-items:start;padding:8px}
+  #view-homepage-layout .homepage-layout-row-icon{width:28px;height:28px;flex-basis:28px}
+  #view-homepage-layout .homepage-layout-row-copy{grid-column:2;grid-template-columns:1fr;gap:6px}
+  #view-homepage-layout .homepage-layout-row>.homepage-layout-state{grid-column:2;grid-row:auto;justify-self:start}
+  #view-homepage-layout .homepage-layout-row>.homepage-layout-actions{grid-column:2;grid-row:auto;justify-self:start}
+  #view-homepage-layout .homepage-layout-field{grid-template-columns:58px minmax(0,1fr)}
+  #view-homepage-layout .homepage-layout-position{display:inline-block}
+}
