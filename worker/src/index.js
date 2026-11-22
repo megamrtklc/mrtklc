@@ -350,6 +350,35 @@ export default {
         try{return await saveProfilePhoto(request,env);}
         catch(error){return json({error:error.message||"Profil fotoğrafı kaydedilemedi."},502);}
       }
+      if(request.method==="GET"&&path==="/api/quality-history") {
+        try {
+          const historyPath="data/quality-history.json";
+          const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc"),branch=encodeURIComponent(env.GITHUB_BRANCH||"main");
+          const apiUrl=`https://api.github.com/repos/${owner}/${repo}/contents/${historyPath}?ref=${branch}`;
+          const response=await fetch(apiUrl,{headers:githubHeaders(env)});
+          if(response.status===404)return json({history:[],sha:null});
+          const payload=await response.json();if(!response.ok)throw new Error(payload.message||"Kalite geçmişi okunamadı.");
+          const bytes=Uint8Array.from(atob(String(payload.content||"").replace(/\s/g,"")),ch=>ch.charCodeAt(0));
+          const data=JSON.parse(new TextDecoder().decode(bytes));
+          return json({history:Array.isArray(data.history)?data.history:[],sha:payload.sha||null});
+        } catch(error){return json({error:error.message||"Kalite geçmişi okunamadı."},502);}
+      }
+      if(request.method==="PUT"&&path==="/api/quality-history") {
+        if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+        try {
+          if(!env.GITHUB_TOKEN)return json({error:"GitHub yazma bağlantısı yapılandırılmamış."},503);
+          const body=await request.json();if(!body||!Array.isArray(body.history)||body.history.length>180)return json({error:"Kalite geçmişi biçimi geçersiz."},400);
+          const historyPath="data/quality-history.json",owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc"),branch=encodeURIComponent(env.GITHUB_BRANCH||"main");
+          const apiUrl=`https://api.github.com/repos/${owner}/${repo}/contents/${historyPath}`;
+          const current=await fetch(apiUrl+"?ref="+branch,{headers:githubHeaders(env)});const currentData=await current.json().catch(()=>({}));
+          const currentSha=current.ok?currentData.sha:null;
+          if(currentSha!==(body.sha||null))return json({error:"Kalite geçmişi başka bir işlemde güncellenmiş.",sha:currentSha},409);
+          const content=bytesToBase64(new TextEncoder().encode(JSON.stringify({version:1,history:body.history},null,2)));
+          const response=await fetch(apiUrl,{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Update catalog quality history",content,sha:currentSha||undefined,branch:env.GITHUB_BRANCH||"main"})});
+          const result=await response.json();if(!response.ok)throw new Error(result.message||"Kalite ölçümü kaydedilemedi.");
+          return json({ok:true,sha:result.content?.sha||null,commit:result.commit?.sha||null});
+        } catch(error){return json({error:error.message||"Kalite ölçümü kaydedilemedi."},502);}
+      }
       if(request.method==="GET"&&path==="/api/catalog") {
         try { return json(await readCatalog(env)); }
         catch(error) { return json({error:error.message||"Katalog okunamadı."},502); }
