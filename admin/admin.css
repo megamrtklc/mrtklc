@@ -1050,3 +1050,11 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #restore-backup-summary>b{overflow-wrap:anywhere;line-height:1.55}
 #restore-backup-summary>.helper-text{grid-column:1/-1;margin:0;line-height:1.5}
 @media(max-width:720px){.backup-safety-note{padding:12px}#restore-backup-summary{padding:12px;gap:7px}}
+
+/* System diagnostics action and extended metrics */
+.system-action-strip{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:15px;padding:16px 18px;border:1px solid rgba(205,164,83,.2);border-radius:13px;background:rgba(205,164,83,.045)}
+.system-action-strip>div{display:grid;gap:4px;min-width:0}
+.system-action-strip b{font-size:12px;color:#e4d4b1}
+.system-action-strip span{font-size:11px;line-height:1.55;color:#8999aa}
+.system-action-strip .secondary-button{white-space:nowrap;text-decoration:none}
+@media(max-width:600px){.system-action-strip{align-items:flex-start;flex-direction:column}.system-action-strip .secondary-button{width:100%;justify-content:center}}

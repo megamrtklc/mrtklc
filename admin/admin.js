@@ -1835,21 +1835,30 @@
     setSystemStatus('system-api-status','system-api-detail','Kontrol ediliyor','/api/catalog yanıtı bekleniyor.');
     setSystemStatus('system-auth-status','system-auth-detail','Kontrol ediliyor','/api/session yanıtı bekleniyor.');
     try{
+      const startedAt=performance.now();
       const response=await fetchWithTimeout('/api/catalog',{cache:'no-store',credentials:'same-origin'});
       if(!response.ok)throw new Error('Katalog servisi HTTP '+response.status);
       const payload=await response.json();
-      const catalog=Array.isArray(payload?.data?.catalog)?payload.data.catalog:[];
+      const elapsed=Math.round(performance.now()-startedAt);
+      if(!payload?.data||!Array.isArray(payload.data.catalog))throw new Error('Katalog yanıtı beklenen JSON yapısında değil.');
+      const catalog=payload.data.catalog;
       const valid=catalog.filter(item=>item&&typeof item==='object'&&!Array.isArray(item));
       const ids=valid.map(item=>String(item.id??item.tmdbId??'').trim()).filter(Boolean);
-      const duplicates=ids.filter((id,index)=>ids.indexOf(id)!==index);
-      const duplicateCount=new Set(duplicates).size;
-      setSystemStatus('system-api-status','system-api-detail','Bağlandı','Katalog servisi yanıt verdi.','good');
+      const duplicateCount=new Set(ids.filter((id,index)=>ids.indexOf(id)!==index)).size;
+      const missingTitle=valid.filter(item=>!String(item.title??item.name??'').trim()).length;
+      const missingId=valid.filter(item=>!String(item.id??item.tmdbId??'').trim()).length;
+      const jsonBytes=new Blob([JSON.stringify(payload.data)]).size;
+      const clean=valid.length===catalog.length&&duplicateCount===0&&missingTitle===0&&missingId===0;
+      setSystemStatus('system-api-status','system-api-detail','Bağlandı','/api/catalog yanıt süresi: '+elapsed+' ms.','good');
       $('#system-catalog-count').textContent=catalog.length+' yapım';
       $('#system-valid-count').textContent=valid.length+' kayıt';
       $('#system-duplicate-count').textContent=duplicateCount+' kimlik';
+      $('#system-missing-title').textContent=missingTitle+' yapım';
+      $('#system-missing-id').textContent=missingId+' yapım';
+      $('#system-json-size').textContent=jsonBytes<1024*1024?(jsonBytes/1024).toLocaleString('tr-TR',{maximumFractionDigits:1})+' KB':(jsonBytes/1024/1024).toLocaleString('tr-TR',{maximumFractionDigits:2})+' MB';
       $('#system-data-version').textContent=String(payload.data.version??'Belirtilmemiş');
-      $('#system-json-status').textContent=valid.length===catalog.length&&duplicateCount===0?'Kontrol temiz':'İnceleme gerekli';
-      $('#system-json-status').className=valid.length===catalog.length&&duplicateCount===0?'state-ready':'state-warning';
+      $('#system-json-status').textContent=clean?'Kontrol temiz':'İnceleme gerekli';
+      $('#system-json-status').className=clean?'state-ready':'state-warning';
       setSystemStatus('system-write-status','system-write-detail',payload.writable===false?'Salt okunur':'Yazma erişimi mevcut',payload.readOnlyReason|| (payload.writable===false?'Sunucu yazma izni vermiyor.':'Katalog API yazılabilir olarak bildirildi.'),payload.writable===false?'warn':'good');
     }catch(error){
       setSystemStatus('system-api-status','system-api-detail','Bağlantı yok',error.message,'bad');
