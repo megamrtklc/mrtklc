@@ -26,29 +26,40 @@
       return {density:saved.density==='compact'?'compact':'comfortable',reduceMotion:saved.reduceMotion===true};
     }catch(_){return defaults;}
   }
-  function applyAdminPreferences(){
-    const preferences=readAdminPreferences();
+  function applyAdminPreferences(preferences=readAdminPreferences()){
     document.body.classList.toggle('admin-density-compact',preferences.density==='compact');
     document.body.classList.toggle('admin-reduce-motion',preferences.reduceMotion);
-    const density=$('input[name="panel-density"][value="'+preferences.density+'"]');
-    if(density)density.checked=true;
-    const motion=$('#panel-reduce-motion');
-    if(motion)motion.checked=preferences.reduceMotion;
-    const motionState=$('#preference-motion-state');
-    if(motionState)motionState.textContent=preferences.reduceMotion?'Açık':'Kapalı';
     return preferences;
   }
-  function saveAdminPreferences(patch){
-    const current=readAdminPreferences(),next={...current,...patch};
-    try{localStorage.setItem(ADMIN_PREFERENCES_KEY,JSON.stringify(next));}
-    catch(_){toast('Tarayıcı tercihi kaydedilemedi. Depolama iznini kontrol et.','warning');return false;}
-    applyAdminPreferences();
-    const status=$('#preferences-status');
+  function readPreferenceDraft(){
+    const density=$('input[name="panel-density"]:checked');
+    return {density:density?.value==='compact'?'compact':'comfortable',reduceMotion:!!$('#panel-reduce-motion')?.checked};
+  }
+  function renderPreferenceDraftStatus(){
+    const saved=readAdminPreferences(),draft=readPreferenceDraft();
+    const dirty=saved.density!==draft.density||saved.reduceMotion!==draft.reduceMotion;
+    const status=$('#preferences-status'),save=$('#preferences-save'),indicator=$('#preferences-saved-indicator');
+    if(save)save.disabled=!dirty;
+    if(indicator){indicator.textContent=dirty?'● KAYDEDİLMEMİŞ DEĞİŞİKLİK':'● KAYITLI AYARLAR';indicator.classList.toggle('is-dirty',dirty);}
     if(status){
-      const density=next.density==='compact'?'Kompakt görünüm':'Rahat görünüm';
-      const motion=next.reduceMotion?'Hareketler azaltıldı':'Standart hareketler';
-      status.textContent='Kaydedildi · '+density+' · '+motion+' · '+new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+      const message=status.querySelector('span:last-child');
+      if(message)message.textContent=dirty?'Kaydedilmemiş seçimlerin var. Uygulamak için Değişiklikleri Kaydet düğmesine bas.':'Mevcut kayıtlı ayarların kullanılıyor. Henüz bekleyen değişiklik yok.';
+      status.classList.toggle('is-dirty',dirty);
     }
+  }
+  function loadPreferenceDraft(preferences=readAdminPreferences()){
+    const density=$('input[name="panel-density"][value="'+preferences.density+'"]');
+    if(density)density.checked=true;
+    const motion=$('#panel-reduce-motion');if(motion)motion.checked=preferences.reduceMotion;
+    renderPreferenceDraftStatus();
+  }
+  function saveAdminPreferences(){
+    const next=readPreferenceDraft();
+    try{localStorage.setItem(ADMIN_PREFERENCES_KEY,JSON.stringify(next));}
+    catch(_){toast('Tercihler kaydedilemedi. Tarayıcı depolama iznini kontrol et.','warning');return false;}
+    applyAdminPreferences(next);
+    loadPreferenceDraft(next);
+    toast('Panel tercihleri kaydedildi ve uygulandı.','success');
     return true;
   }
   function applyAdminTheme(){ document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark'); const meta=document.querySelector('meta[name="theme-color"]'); if(meta)meta.content='#f4f3ef'; }
@@ -1728,12 +1739,11 @@
     watchDemoViewport=button.dataset.demoDevice;
     renderWatchLayout();
   }));
-  $$('input[name="panel-density"]').forEach(input=>input.addEventListener('change',event=>saveAdminPreferences({density:event.target.value})));
-  $('#panel-reduce-motion')?.addEventListener('change',event=>saveAdminPreferences({reduceMotion:event.target.checked}));
-  $('#preferences-reset')?.addEventListener('click',()=>{
-    if(!saveAdminPreferences({density:'comfortable',reduceMotion:false}))return;
-    toast('Panel tercihleri varsayılanlara döndürüldü.','success');
-  });
+  $('input[name="panel-density"]').forEach(input=>input.addEventListener('change',renderPreferenceDraftStatus));
+  $('#panel-reduce-motion')?.addEventListener('change',renderPreferenceDraftStatus);
+  $('#preferences-save')?.addEventListener('click',saveAdminPreferences);
+  $('#preferences-discard')?.addEventListener('click',()=>{loadPreferenceDraft();toast('Bekleyen değişikliklerden vazgeçildi.','info');});
+  $('#preferences-reset')?.addEventListener('click',()=>{loadPreferenceDraft({density:'comfortable',reduceMotion:false});toast('Varsayılan tercihler taslağa yüklendi. Kaydetmeden uygulanmaz.','info');});
   initBackupTools();
   init();
 })();
