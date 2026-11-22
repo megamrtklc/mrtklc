@@ -35,6 +35,7 @@
    <button class="nav-link" data-view="users"><span class="nav-icon">♙</span><span>Hesap &amp; Erişim</span><kbd>10</kbd></button>
    <button class="nav-link" data-view="backup"><span class="nav-icon">⇅</span><span>Veri Yedekleme</span><kbd>12</kbd></button>
    <button class="nav-link" data-view="system"><span class="nav-icon">⚙</span><span>Sistem Ayarları</span><kbd>11</kbd></button>
+   <button class="nav-link" data-view="preferences"><span class="nav-icon">☷</span><span>Panel Tercihleri</span><kbd>13</kbd></button>
   </nav>
   <div class="sidebar-bottom">
    <div class="sidebar-status"><span class="status-pulse"></span><span><b>Yönetim servisi</b><small>Bağlantı bekleniyor</small></span></div>
@@ -353,6 +354,26 @@
          <div><b>Kişisel kullanım verileri</b><p class="helper-text">İzlemeye Devam Et, İzleme Listem, İzlediklerim, Favorilerim, bölüm ilerlemesi, öneri geri bildirimleri, beğeniler, yorumlar ve diğer Perde tarayıcı tercihleri.</p></div>
         </div>
        </article>
+      </section>
+      <section class="view" id="view-preferences">
+       <div class="page-heading"><div><div class="eyebrow">WORKSPACE / PREFERENCES</div><h1>Panel Tercihleri</h1><p>Yönetim panelinin görünümünü ve hareket davranışını kendi çalışma alışkanlığına göre ayarla.</p></div></div>
+       <div class="settings-grid preferences-grid">
+        <article class="panel-card">
+         <div class="panel-card-heading"><div><span class="eyebrow">INTERFACE DENSITY</span><h2>Arayüz yoğunluğu</h2></div><span class="state-ready">GÖRÜNÜM</span></div>
+         <p class="helper-text">Kartların, satırların ve içerik alanlarının dikey boşluklarını belirler. Tercih yalnızca bu tarayıcıda saklanır.</p>
+         <div class="preference-choice-group" role="group" aria-label="Arayüz yoğunluğu">
+          <label class="preference-choice"><input type="radio" name="panel-density" value="comfortable" checked><span><b>Rahat</b><small>Daha geniş aralıklar</small></span></label>
+          <label class="preference-choice"><input type="radio" name="panel-density" value="compact"><span><b>Kompakt</b><small>Daha fazla içerik alanı</small></span></label>
+         </div>
+        </article>
+        <article class="panel-card">
+         <div class="panel-card-heading"><div><span class="eyebrow">MOTION & ACCESSIBILITY</span><h2>Hareket efektleri</h2></div><span class="state-ready">ERİŞİLEBİLİRLİK</span></div>
+         <p class="helper-text">Paneldeki geçişleri ve animasyonları azaltır. Uzun süreli kullanımda daha sakin bir görünüm sağlar.</p>
+         <label class="preference-toggle"><input type="checkbox" id="panel-reduce-motion"><span><b>Hareketleri azalt</b><small>Animasyon ve geçişleri en aza indir.</small></span></label>
+        </article>
+       </div>
+       <article class="panel-card preferences-footer-card"><div><b>Tercihleri sıfırla</b><p class="helper-text">Panel görünümünü varsayılan rahat aralıklara ve standart hareketlere döndürür. Katalog veya site ayarlarına dokunmaz.</p></div><button class="secondary-button" type="button" id="preferences-reset">Varsayılanlara dön</button></article>
+       <p class="system-health-footnote" id="preferences-status" role="status">Tercihler bu tarayıcıda saklanır; katalog verilerine veya ziyaretçilerin gördüğü siteye etki etmez.</p>
       </section>
       <section class="view" id="view-system">
         <div class="page-heading"><div><div class="eyebrow">SYSTEM / HEALTH</div><h1>Sistem Kontrol Merkezi</h1><p>Perde yönetim bağlantılarını, katalog bütünlüğünü ve yayınlama erişimini buradan kontrol et.</p></div><button class="primary-button" id="system-refresh" type="button">↻　Kontrolleri yenile</button></div>
