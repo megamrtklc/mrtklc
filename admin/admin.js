@@ -1229,7 +1229,7 @@
       return '<section class="homepage-draft-section"><div class="homepage-draft-section-head"><div><span>'+String(index+1).padStart(2,'0')+' / KEŞFET</span><b>'+escapeHtml(title)+'</b><small>'+escapeHtml(description)+'</small></div><em>TÜMÜNÜ GÖR →</em></div><div class="homepage-draft-posters"><i></i><i></i><i></i><i></i></div></section>';
     }).join('');
     canvas.innerHTML='<div class="homepage-draft-topbar"><b>PERDE<span>.</span></b><nav><i>Ana Sayfa</i><i>Keşfet</i><i>Kütüphanem</i></nav><span>⌕　☰</span></div>'+hero+'<div class="homepage-draft-content">'+(sections||'<p class="homepage-draft-empty">Gösterilecek açık bölüm bulunmuyor.</p>')+'</div><div class="homepage-draft-watermark">TASLAK ÖNİZLEMESİ · GERÇEK SİTE DEĞİL</div>';
-    $('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
+    $$('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
   }
   function moveHomepageSection(key,direction){
     const layout=homepageLayoutConfig();
