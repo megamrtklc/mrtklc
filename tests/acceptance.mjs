@@ -34,7 +34,7 @@ await page.addInitScript(() => {
   };
   const sampleLayout = () => {
     const header = document.querySelector('body > header');
-    const hero = document.querySelector('#desktopEditorialHero, #mobileHeroBanner');
+    const hero = document.querySelector('#desktopEditorialHero, #mobileCinematicHero');
     const personalized = document.querySelector('#home-personalized-section');
     const heading = personalized?.querySelector('.home-personalized-heading');
     const showcase = personalized?.querySelector('.home-personalized-showcase');
@@ -184,7 +184,7 @@ try {
         const overlay = section?.querySelector('.cv-section-loading-overlay');
         const card = section?.querySelector('.home-personalized-mobile-card');
         const showcase = section?.querySelector('.home-personalized-showcase');
-        const hero = document.querySelector('#mobileHeroBanner');
+        const hero = document.querySelector('#mobileCinematicHero');
         const rect = element => {
           if (!element) return null;
           const r = element.getBoundingClientRect();
@@ -245,7 +245,7 @@ try {
     await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await mobilePage.waitForFunction(() => window.Alpine && Array.isArray(window.Alpine.$data(document.documentElement)?.catalog) && window.Alpine.$data(document.documentElement).catalog.length >= 130, { timeout: 60000 });
     await mobilePage.waitForTimeout(6000);
-    const diagnostic = await mobilePage.evaluate(() => { const app = window.Alpine.$data(document.documentElement); const footer = document.querySelector('#cineverse-footer'); return { lcp: window.__mobileLcpEntries, shifts: window.__mobileShifts, longTasks: window.__mobileLongTasks, personalizedHeadingTimeline: window.__personalizedHeadingTimeline, personalizedHeadingMutations: window.__personalizedHeadingMutations, resources: performance.getEntriesByType('resource').filter(entry => /app\\.js|alpinejs|catalog-lite|hero-data|icons\.css|fonts\.css|fa-(?:solid-900|regular-400)|fonts\\.gstatic|fonts\\.googleapis/.test(entry.name)).map(entry => ({ name: entry.name.split('/').pop(), type: entry.initiatorType, startTime: Math.round(entry.startTime), duration: Math.round(entry.duration), transferSize: entry.transferSize || 0, responseStatus: entry.responseStatus || 0 })), longTaskSummary: { count: window.__mobileLongTasks.length, totalDuration: window.__mobileLongTasks.reduce((sum, task) => sum + task.duration, 0), longest: Math.max(0, ...window.__mobileLongTasks.map(task => task.duration)) }, homeSections: [...(document.querySelector('#home-page')?.children || [])].map(element => ({ id: element.id || '', section: element.dataset.homeSection || '', ignoreAttr: element.hasAttribute('x-ignore'), ignoreState: !!element._x_ignore, initialized: !!element._x_marker, descendants: element.querySelectorAll('*').length })), totalDomElements: document.querySelectorAll('*').length, catalogLoading: app.catalogLoading, footerEnabled: app.footerConfig?.enabled, footerReady: app.footerConfigReady, footerDisplay: footer ? getComputedStyle(footer).display : null, footerRect: footer?.getBoundingClientRect().toJSON() || null, heroTitle: app.currentHero?.title || '', mobileHeroVisible: !!document.querySelector('#mobileHeroBanner') && getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none' }; });
+    const diagnostic = await mobilePage.evaluate(() => { const app = window.Alpine.$data(document.documentElement); const footer = document.querySelector('#cineverse-footer'); return { lcp: window.__mobileLcpEntries, shifts: window.__mobileShifts, longTasks: window.__mobileLongTasks, personalizedHeadingTimeline: window.__personalizedHeadingTimeline, personalizedHeadingMutations: window.__personalizedHeadingMutations, resources: performance.getEntriesByType('resource').filter(entry => /app\\.js|alpinejs|catalog-lite|hero-data|icons\.css|fonts\.css|fa-(?:solid-900|regular-400)|fonts\\.gstatic|fonts\\.googleapis/.test(entry.name)).map(entry => ({ name: entry.name.split('/').pop(), type: entry.initiatorType, startTime: Math.round(entry.startTime), duration: Math.round(entry.duration), transferSize: entry.transferSize || 0, responseStatus: entry.responseStatus || 0 })), longTaskSummary: { count: window.__mobileLongTasks.length, totalDuration: window.__mobileLongTasks.reduce((sum, task) => sum + task.duration, 0), longest: Math.max(0, ...window.__mobileLongTasks.map(task => task.duration)) }, homeSections: [...(document.querySelector('#home-page')?.children || [])].map(element => ({ id: element.id || '', section: element.dataset.homeSection || '', ignoreAttr: element.hasAttribute('x-ignore'), ignoreState: !!element._x_ignore, initialized: !!element._x_marker, descendants: element.querySelectorAll('*').length })), totalDomElements: document.querySelectorAll('*').length, catalogLoading: app.catalogLoading, footerEnabled: app.footerConfig?.enabled, footerReady: app.footerConfigReady, footerDisplay: footer ? getComputedStyle(footer).display : null, footerRect: footer?.getBoundingClientRect().toJSON() || null, heroTitle: app.currentHero?.title || '', mobileHeroVisible: !!document.querySelector('#mobileCinematicHero') && getComputedStyle(document.querySelector('#mobileCinematicHero')).display !== 'none' }; });
     console.log('MOBILE PERFORMANCE DIAGNOSTIC:', JSON.stringify(diagnostic));
     await mobileContext.close();
   });
@@ -414,28 +414,28 @@ try {
       await mobileCdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
       await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await mobilePage.waitForFunction(() => {
-        const image = document.querySelector('#mobileHeroBanner img');
+        const image = document.querySelector('#mobileCinematicHero .cv-mhero-poster img');
         return image && image.complete && image.naturalWidth > 0;
       }, { timeout: 30000 });
       const mobileState = await mobilePage.evaluate(async () => {
-        const image = document.querySelector('#mobileHeroBanner img');
+        const image = document.querySelector('#mobileCinematicHero .cv-mhero-poster img');
         await new Promise(resolve => setTimeout(resolve, 6000));
         const lcp = window.__lcpEntries || [];
         const resources = performance.getEntriesByType('resource')
           .filter(entry => /image\.tmdb\.org|filmvediziler\.json|alpinejs|fonts\.(googleapis|gstatic)|icons\.css|fa-(?:solid-900|regular-400)/.test(entry.name))
           .map(entry => ({ name: entry.name, start: Math.round(entry.startTime), duration: Math.round(entry.duration), bytes: entry.transferSize || 0, initiator: entry.initiatorType }));
         return {
-          mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
+          mobileVisible: getComputedStyle(document.querySelector('#mobileCinematicHero')).display !== 'none',
           desktopVisible: getComputedStyle(document.querySelector('#desktopEditorialHero')).display !== 'none',
           desktopHeroSource: document.querySelector('#desktopEditorialHero img')?.currentSrc || '',
           source: image.currentSrc || image.src,
           sourceAttribute: image.getAttribute('src') || '',
           imageComplete: image.complete,
           imageNaturalWidth: image.naturalWidth,
-          heroArtwork: document.querySelector('#mobileHeroArtwork')?.currentSrc || '',
+          heroArtwork: document.querySelector('#mobileCinematicHero .cv-mhero-backdrop img')?.currentSrc || '',
           activeSlide: window.Alpine?.$data(document.documentElement)?.currentSlideIndex ?? null,
           currentHeroTitle: window.Alpine?.$data(document.documentElement)?.currentHero?.title || '',
-          navigationControls: document.querySelectorAll('#mobileHeroBanner button[aria-label*=\"öne çıkan yapım\"]').length,
+          navigationControls: document.querySelectorAll('#mobileCinematicHero button[aria-label*=\"öne çıkan yapım\"]').length,
           lcp,
           layoutShifts: window.__layoutShiftEntries || [],
           longTasks: window.__longTasks || [],
@@ -449,9 +449,9 @@ try {
               alpineReady: !!window.Alpine,
               catalogCount: app?.catalog?.length ?? null,
               catalogLoading: app?.catalogLoading ?? null,
-              initialShellPresent: !!document.getElementById('hero-initial-shell'),
+              initialShellPresent: !!document.getElementById('hero-initial-shell-desktop-artwork'),
               homeSections: app?.homeSectionReady || null,
-              heroTitle: document.querySelector('#mobileHeroBanner')?.innerText?.trim().slice(0, 100) || ''
+              heroTitle: document.querySelector('#mobileCinematicHero')?.innerText?.trim().slice(0, 100) || ''
             };
           })(),
           resources
@@ -491,7 +491,7 @@ try {
       await mobilePage.close();
     }
     const desktopState = await page.evaluate(() => ({
-      mobileVisible: getComputedStyle(document.querySelector('#mobileHeroBanner')).display !== 'none',
+      mobileVisible: getComputedStyle(document.querySelector('#mobileCinematicHero')).display !== 'none',
       desktopVisible: getComputedStyle(document.querySelector('#desktopEditorialHero')).display !== 'none',
     }));
     assert.ok(!desktopState.mobileVisible, 'Mobil manşet masaüstünde görünmemeli');
