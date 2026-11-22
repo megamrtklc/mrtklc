@@ -283,7 +283,7 @@
     const rows=affected.filter(({item,issues})=>(!query||titleOf(item).toLocaleLowerCase('tr').includes(query))&&(filter==='all'||(filter==='other'?issues.some(key=>['director','year','description','tmdb'].includes(key)):issues.includes(filter))));
     $('#quality-result-count').textContent=rows.length.toLocaleString('tr-TR')+' yapım';
     $('#quality-rows').innerHTML=rows.length?rows.map(({item,issues})=>'<tr><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><div class="quality-tags">'+issues.map(key=>'<span>'+escapeHtml(QUALITY_LABELS[key])+'</span>').join('')+'</div></td><td class="row-actions"><button class="row-action" data-quality-edit="'+escapeHtml(item.id)+'">Düzenle</button></td></tr>').join(''):'<tr><td colspan="5" class="empty-cell">'+(filter!=='all'||query?'Bu filtreyle eşleşen eksik kayıt bulunamadı.':'Harika! Katalogda kontrol gerektiren eksik bilgi bulunamadı.')+'</td></tr>';
-    $('#quality-rows [data-quality-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.qualityEdit);if(item)openEditor(item);}));
+    $$('#quality-rows [data-quality-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.qualityEdit);if(item)openEditor(item);}));
   }
   function renderCollections(){
     const list=collectionList();
@@ -1091,7 +1091,7 @@
     if(!document.documentElement.dataset.heroCategoryOutsideBound){
       document.addEventListener('click',event=>{
         if(event.target.closest('.hero-category-select'))return;
-        $('.hero-category-select.is-open').forEach(shell=>{
+        $$('.hero-category-select.is-open').forEach(shell=>{
           const menu=shell.querySelector('.hero-category-menu'),trigger=shell.querySelector('.hero-category-trigger');
           if(menu)menu.hidden=true;shell.classList.remove('is-open');trigger?.setAttribute('aria-expanded','false');
         });
@@ -1728,7 +1728,7 @@
     watchDemoViewport=button.dataset.demoDevice;
     renderWatchLayout();
   }));
-  $('input[name="panel-density"]').forEach(input=>input.addEventListener('change',event=>saveAdminPreferences({density:event.target.value})));
+  $$('input[name="panel-density"]').forEach(input=>input.addEventListener('change',event=>saveAdminPreferences({density:event.target.value})));
   $('#panel-reduce-motion')?.addEventListener('change',event=>saveAdminPreferences({reduceMotion:event.target.checked}));
   $('#preferences-reset')?.addEventListener('click',()=>{
     if(!saveAdminPreferences({density:'comfortable',reduceMotion:false}))return;
