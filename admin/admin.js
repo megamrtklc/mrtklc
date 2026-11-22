@@ -1194,8 +1194,8 @@
         '<span class="homepage-layout-row-icon">'+item.icon+'</span>'+
         '<div class="homepage-layout-row-copy">'+
           (locked?'<b>'+escapeHtml(title)+'</b><small>'+escapeHtml(description)+'</small>':
-          '<label class="homepage-layout-field"><span>Başlık</span><input type="text" maxlength="70" data-layout-label="title" value="'+escapeHtml(title)+'" aria-label="'+escapeHtml(item.title)+' bölüm başlığı"></label>'+
-          '<label class="homepage-layout-field"><span>Alt metin</span><input type="text" maxlength="180" data-layout-label="description" value="'+escapeHtml(description)+'" aria-label="'+escapeHtml(item.title)+' bölüm alt metni"></label>')+
+          '<label class="homepage-layout-field"><span>Başlık</span><textarea rows="2" maxlength="70" data-layout-label="title" aria-label="'+escapeHtml(item.title)+' bölüm başlığı">'+escapeHtml(title)+'</textarea></label>'+
+          '<label class="homepage-layout-field"><span>Alt metin</span><textarea rows="2" maxlength="180" data-layout-label="description" aria-label="'+escapeHtml(item.title)+' bölüm alt metni">'+escapeHtml(description)+'</textarea></label>')+
         '</div>'+
         '<span class="homepage-layout-state '+(locked?'is-locked':(active?'is-active':'is-hidden'))+'">'+(locked?'SABİT':(active?'AÇIK':'GİZLİ'))+'</span>'+
         '<div class="homepage-layout-actions">'+
