@@ -581,8 +581,8 @@
       });
       rows=Object.entries(counts).filter(([name])=>!query||String(name).toLocaleLowerCase('tr').includes(query));
       rows.sort((a,b)=>sortMode==='name'?a[0].localeCompare(b[0],'tr'):sortMode==='ascending'?a[1]-b[1]:kind==='years'?Number(b[0])-Number(a[0]):b[1]-a[1]);
-      const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\\r\\n]+/g,' ')+'"';
-      const csv='\\uFEFF'+[quote(kind==='years'?'Yapım yılı':'Tür')+';'+quote('Yapım sayısı'),...rows.map(row=>row.map(quote).join(';'))].join('\\r\\n');
+      const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
+      const csv='\uFEFF'+[quote(kind==='years'?'Yapım yılı':'Tür')+';'+quote('Yapım sayısı'),...rows.map(row=>row.map(quote).join(';'))].join('\r\n');
       downloadAnalyticsCsv(csv,'perde-'+(kind==='years'?'yil':'tur')+'-raporu');
       return;
     }
@@ -596,8 +596,8 @@
     }).filter(item=>!query||[titleOf(item),yearOf(item),item.director||item.tmdbDirector||''].join(' ').toLocaleLowerCase('tr').includes(query));
     rows.sort((a,b)=>sortMode==='title'?titleOf(a).localeCompare(titleOf(b),'tr'):sortMode==='year'?Number(yearOf(b))-Number(yearOf(a)):getItemRating(b)-getItemRating(a));
     const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['IMDb puanı',x=>getItemRating(x)||''],['Yönetmen',x=>x.director||x.tmdbDirector||''],['Tür etiketleri',x=>getItemGenres(x).join(' / ')],['Eklenme tarihi',x=>x.addedAt||'Bilinmiyor'],['TMDB ID',x=>x.tmdbId??x.tmdb_id??'']];
-    const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\\r\\n]+/g,' ')+'"';
-    const csv='\\uFEFF'+[columns.map(column=>quote(column[0])).join(';'),...rows.map(item=>columns.map(column=>quote(column[1](item))).join(';'))].join('\\r\\n');
+    const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
+    const csv='\uFEFF'+[columns.map(column=>quote(column[0])).join(';'),...rows.map(item=>columns.map(column=>quote(column[1](item))).join(';'))].join('\r\n');
     downloadAnalyticsCsv(csv,'perde-detayli-rapor');
   }
   function downloadAnalyticsCsv(csv,baseName){
