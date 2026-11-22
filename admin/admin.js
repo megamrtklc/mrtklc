@@ -1317,7 +1317,7 @@
     $('#personalized-eyebrow').value=section.eyebrow;
     $('#personalized-title').value=section.title;
     $('#personalized-description').value=section.description;
-    ['taste','surprise','series','gems'].forEach(mode=>{const input=$('#personalized-mode-'+mode);if(input)input.checked=section.discoveryModes?.[mode]!==false;});
+    ['taste','surprise','series','gems'].forEach(mode=>{const input=$('#personalized-mode-'+mode);if(input)input.checked=section.discoveryModes?.[mode]!==false;const label=$('#personalized-label-'+mode);if(label)label.value=section.discoveryModeLabels?.[mode]||PERSONALIZED_MODE_META[mode].label;});
     ['excludeWatched','excludeWatchlist','excludeFavorites'].forEach(key=>{const input=$('#personalized-'+key);if(input)input.checked=section[key]!==false;});
     const defaults=['taste','surprise','series','gems'],stored=Array.isArray(section.discoveryModeOrder)?section.discoveryModeOrder:[];
     state.personalizedModeOrder=[...stored.filter(mode=>defaults.includes(mode)),...defaults.filter(mode=>!stored.includes(mode))];
@@ -1328,7 +1328,7 @@
   function renderPersonalizedModeOrder(){
     const host=$('#personalized-mode-order-list');if(!host)return;
     const order=state.personalizedModeOrder||['taste','surprise','series','gems'];
-    host.innerHTML=order.map((mode,index)=>{const meta=PERSONALIZED_MODE_META[mode];return '<div class="personalized-order-row" data-personalized-mode="'+mode+'"><span class="personalized-order-number">'+(index+1)+'</span><div><b>'+meta.label+'</b><small>'+meta.hint+'</small></div><div class="personalized-order-actions"><button type="button" data-personalized-order="up" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" data-personalized-order="down" aria-label="Aşağı taşı" '+(index===order.length-1?'disabled':'')+'>↓</button></div></div>';}).join('');
+    host.innerHTML=order.map((mode,index)=>{const meta=PERSONALIZED_MODE_META[mode],label=$('#personalized-label-'+mode)?.value.trim()||meta.label;return '<div class="personalized-order-row" data-personalized-mode="'+mode+'"><span class="personalized-order-number">'+(index+1)+'</span><div><b>'+escapeHtml(label)+'</b><small>'+meta.hint+'</small></div><div class="personalized-order-actions"><button type="button" data-personalized-order="up" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" data-personalized-order="down" aria-label="Aşağı taşı" '+(index===order.length-1?'disabled':'')+'>↓</button></div></div>';}).join('');
   }
   function renderPersonalizedStaticPreview(){
     const set=(id,value)=>{const el=$(id);if(el)el.textContent=value;};
@@ -1336,7 +1336,7 @@
     set('#personalized-preview-title',$('#personalized-title')?.value||'İzleme Zevkine Göre');
     set('#personalized-preview-description',$('#personalized-description')?.value||'İzleme alışkanlıklarından ilham alan, sana özel seçkiler');
     const host=$('#personalized-preview-modes');
-    if(host)host.innerHTML=(state.personalizedModeOrder||['taste','surprise','series','gems']).filter(mode=>$('#personalized-mode-'+mode)?.checked).map(mode=>'<span>'+PERSONALIZED_MODE_META[mode].label+'</span>').join('')||'<small>En az bir keşif modu açık olmalı.</small>';
+    if(host)host.innerHTML=(state.personalizedModeOrder||['taste','surprise','series','gems']).filter(mode=>$('#personalized-mode-'+mode)?.checked).map(mode=>'<span>'+escapeHtml($('#personalized-label-'+mode)?.value.trim()||PERSONALIZED_MODE_META[mode].label)+'</span>').join('')||'<small>En az bir keşif modu açık olmalı.</small>';
     const preview=$('#personalized-static-preview');if(preview)preview.dataset.visible=$('#personalized-enabled')?.checked?'true':'false';
   }
   function stagePersonalizedSectionSave(){
@@ -1347,6 +1347,7 @@
     compare('Bölüm görünürlüğü',layout.visibility.personalized!==false,$('#personalized-enabled').checked);
     compare('Başlık ve açıklama',[current.eyebrow||'SANA ÖZEL',current.title||'İzleme Zevkine Göre',current.description||''],[$('#personalized-eyebrow').value.trim()||'SANA ÖZEL',$('#personalized-title').value.trim()||'İzleme Zevkine Göre',$('#personalized-description').value.trim()]);
     compare('Keşif modları',current.discoveryModes||{taste:true,surprise:true,series:true,gems:true},Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-mode-'+mode)?.checked!==false])));
+    compare('Buton isimleri',current.discoveryModeLabels||{taste:'Zevkime Uygun',surprise:'Beni Şaşırt',series:'Yeni Diziler',gems:'Gizli Hazineler'},Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-label-'+mode)?.value.trim()||PERSONALIZED_MODE_META[mode].label])));
     compare('Keşif modu sırası',oldOrder,newOrder);
     compare('Öneri filtreleri',['excludeWatched','excludeWatchlist','excludeFavorites'].map(key=>current[key]!==false),['excludeWatched','excludeWatchlist','excludeFavorites'].map(key=>$('#personalized-'+key)?.checked!==false));
     const panel=$('#personalized-publish-check'),summary=$('#personalized-publish-summary');if(!panel||!summary)return;
@@ -1372,6 +1373,7 @@
       title:$('#personalized-title').value.trim()||'İzleme Zevkine Göre',
       description:$('#personalized-description').value.trim(),
       discoveryModes,
+      discoveryModeLabels:Object.fromEntries(['taste','surprise','series','gems'].map(mode=>[mode,$('#personalized-label-'+mode)?.value.trim().slice(0,24)||PERSONALIZED_MODE_META[mode].label])),
       discoveryModeOrder:[...(state.personalizedModeOrder||['taste','surprise','series','gems'])],
       excludeWatched:$('#personalized-excludeWatched')?.checked!==false,
       excludeWatchlist:$('#personalized-excludeWatchlist')?.checked!==false,
@@ -2054,7 +2056,7 @@
     if(index<0||next<0||next>=order.length)return;
     [order[index],order[next]]=[order[next],order[index]];state.personalizedModeOrder=order;renderPersonalizedModeOrder();renderPersonalizedStaticPreview();
   });
-  ['personalized-enabled','personalized-eyebrow','personalized-title','personalized-description','personalized-mode-taste','personalized-mode-surprise','personalized-mode-series','personalized-mode-gems'].forEach(id=>{
+  ['personalized-enabled','personalized-eyebrow','personalized-title','personalized-description','personalized-mode-taste','personalized-mode-surprise','personalized-mode-series','personalized-mode-gems','personalized-label-taste','personalized-label-surprise','personalized-label-series','personalized-label-gems'].forEach(id=>{
     $('#'+id)?.addEventListener('input',renderPersonalizedStaticPreview);$('#'+id)?.addEventListener('change',renderPersonalizedStaticPreview);
   });
   $('#personalized-preview-modes')?.closest('.personalized-preview-card')?.addEventListener('click',event=>{
