@@ -675,22 +675,54 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
  #view-homepage-layout .homepage-layout-field{grid-template-columns:64px minmax(0,1fr)}
 }
 
-/* Gerçek ana sayfa taslak iframe'i */
-.homepage-layout-preview{display:flex;justify-content:center;align-items:flex-start;min-height:620px;padding:14px;overflow:auto}
-.homepage-layout-preview-frame{display:block;width:100%;height:760px;border:1px solid #394858;border-radius:9px;background:#0c1118;box-shadow:0 14px 36px #0005}
-#homepage-layout-preview-frame{display:block;width:100%;height:760px;border:1px solid #394858;border-radius:9px;background:#0c1118;box-shadow:0 14px 36px #0005}
-.homepage-layout-preview[data-device=mobile]{background:#101923}
-.homepage-layout-preview[data-device=mobile] #homepage-layout-preview-frame{width:390px;max-width:100%;height:780px;flex:0 0 390px}
-@media(max-width:600px){
- .homepage-layout-preview{min-height:540px;padding:7px}
- #homepage-layout-preview-frame{height:680px}
- .homepage-layout-preview[data-device=mobile] #homepage-layout-preview-frame{height:680px;flex-basis:390px}
-}
-
+/* Bağımsız ana sayfa taslak çizimi — dış site veya iframe yüklemez */
+.homepage-layout-preview{display:flex;justify-content:center;align-items:flex-start;min-height:560px;padding:14px;overflow:auto;background:linear-gradient(145deg,#0e151e,#182432)}
+.homepage-draft-canvas{position:relative;width:100%;max-width:100%;min-height:520px;overflow:hidden;border:1px solid #3b4a5b;border-radius:10px;background:#0c1118;color:#eef2f6;box-shadow:0 14px 36px #0005;transition:max-width .2s}
+.homepage-layout-preview[data-device=mobile] .homepage-draft-canvas{width:390px;max-width:100%;flex:0 0 390px}
+.homepage-draft-topbar{height:48px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 22px;border-bottom:1px solid #293542;background:#101720}
+.homepage-draft-topbar>b{color:#f0f2f5;font-size:15px;font-weight:900;letter-spacing:2px}
+.homepage-draft-topbar>b span{color:#d6b36b}
+.homepage-draft-topbar nav{display:flex;gap:18px}
+.homepage-draft-topbar nav i,.homepage-draft-topbar>span{color:#aab5c1;font-size:9px;font-style:normal}
+.homepage-draft-hero{display:grid;grid-template-columns:1.2fr .8fr;min-height:178px;overflow:hidden;background:linear-gradient(110deg,#202c39,#121a24 65%,#292319);border-bottom:1px solid #303a45}
+.homepage-draft-hero-copy{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;padding:22px 26px}
+.homepage-draft-hero-copy>span,.homepage-draft-section-head>div>span{color:#d8b66e;font-size:8px;font-weight:900;letter-spacing:1.2px}
+.homepage-draft-hero-copy>b{max-width:360px;color:#f4f5f6;font-size:21px;line-height:1.2}
+.homepage-draft-hero-copy>small{color:#a7b2bd;font-size:9px}
+.homepage-draft-hero-copy>i{margin-top:4px;padding:7px 11px;border-radius:5px;background:#c7a45d;color:#171717;font-size:8px;font-style:normal;font-weight:900}
+.homepage-draft-hero-art{display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 55% 45%,#92764a 0,#384354 24%,#1b2633 60%,#121923 100%)}
+.homepage-draft-hero-art span{display:grid;place-items:center;width:42px;height:42px;border:1px solid #e3c98d;border-radius:50%;color:#f1d99e;font-size:15px}
+.homepage-draft-content{padding:5px 22px 30px}
+.homepage-draft-section{padding:17px 0 14px;border-bottom:1px solid #293440}
+.homepage-draft-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.homepage-draft-section-head>div{display:grid;gap:4px;min-width:0}
+.homepage-draft-section-head>div>b{color:#f0f2f5;font-size:13px;font-weight:800;overflow-wrap:anywhere}
+.homepage-draft-section-head>div>small{color:#9ba8b6;font-size:9px;line-height:1.4;overflow-wrap:anywhere}
+.homepage-draft-section-head>em{flex:0 0 auto;color:#d4b36d;font-size:8px;font-style:normal;font-weight:800}
+.homepage-draft-posters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.homepage-draft-posters i{display:block;aspect-ratio:2/2.8;border:1px solid #4a5664;border-radius:5px;background:linear-gradient(145deg,#46596a,#202b38 62%,#79603b)}
+.homepage-draft-posters i:nth-child(2){background:linear-gradient(145deg,#75604a,#303342 62%,#222b35)}
+.homepage-draft-posters i:nth-child(3){background:linear-gradient(145deg,#475c54,#202c38 62%,#6c4c48)}
+.homepage-draft-posters i:nth-child(4){background:linear-gradient(145deg,#5a4c68,#242c3a 62%,#7a6543)}
+.homepage-draft-empty{padding:26px 0;color:#98a6b4;font-size:11px}
+.homepage-draft-watermark{position:sticky;bottom:0;padding:7px 12px;border-top:1px solid #344252;background:#101923eF;color:#8998a8;text-align:center;font-size:8px;font-weight:800;letter-spacing:1px}
 .homepage-preview-controls{display:grid;gap:7px;justify-items:end;flex:0 0 auto}
-@media(max-width:600px){.homepage-preview-controls{justify-items:start;display:flex;flex-wrap:wrap}}
-
-
+@media(max-width:700px){
+ .homepage-layout-preview{min-height:500px;padding:7px}
+ .homepage-layout-preview[data-device=desktop] .homepage-draft-canvas{min-width:620px}
+ .homepage-draft-topbar{padding:0 12px}
+ .homepage-draft-topbar nav{gap:8px}
+ .homepage-draft-topbar nav i{font-size:8px}
+ .homepage-draft-content{padding-inline:12px}
+ .homepage-draft-hero-copy{padding:16px}
+ .homepage-draft-hero-copy>b{font-size:17px}
+ .homepage-draft-section-head>div>b{font-size:11px}
+ .homepage-draft-section-head>div>small{font-size:8px}
+ .homepage-preview-controls{justify-items:start;display:flex;flex-wrap:wrap}
+}
+@media(max-width:600px){
+ .homepage-layout-preview[data-device=mobile] .homepage-draft-canvas{width:390px;flex-basis:390px}
+}
 /* Ana sayfa düzeni: yayın öncesi fark kontrolü ve açık onay */
 .homepage-publish-check{margin-top:18px;padding:22px;border:1px solid #3a4653;background:linear-gradient(145deg,#1c2631,#171e27)}
 .homepage-publish-check-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
