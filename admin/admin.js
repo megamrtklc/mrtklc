@@ -84,6 +84,7 @@
     if(view==='watch-layout')renderWatchLayout();
     if(view==='header-footer')renderHeaderFooter();
     if(view==='backup')refreshBackupSummary();
+    if(view==='system')refreshSystemDiagnostics();
   }
   function applyProfilePhoto(url){
     const targets=[$('#avatar-photo'),$('#profile-photo-preview'),$('#profile-dialog-preview')];
@@ -1263,6 +1264,53 @@
   function restoreMainSitePersonalStorage(browserData){
     return requestMainSiteBackup('RESTORE',{browserData});
   }
+  function setSystemStatus(id,detailId,status,detail,type='neutral'){
+    const value=$('#'+id),copy=$('#'+detailId);
+    if(value){value.textContent=status;value.dataset.state=type;}
+    if(copy)copy.textContent=detail;
+  }
+  async function refreshSystemDiagnostics(){
+    const button=$('#system-refresh'),note=$('#system-check-note');
+    if(button){button.disabled=true;button.textContent='↻  Kontrol ediliyor…';}
+    if(note)note.textContent='Bağlantılar ve katalog verisi kontrol ediliyor…';
+    setSystemStatus('system-api-status','system-api-detail','Kontrol ediliyor','/api/catalog yanıtı bekleniyor.');
+    setSystemStatus('system-auth-status','system-auth-detail','Kontrol ediliyor','/api/session yanıtı bekleniyor.');
+    try{
+      const response=await fetchWithTimeout('/api/catalog',{cache:'no-store',credentials:'same-origin'});
+      if(!response.ok)throw new Error('Katalog servisi HTTP '+response.status);
+      const payload=await response.json();
+      const catalog=Array.isArray(payload?.data?.catalog)?payload.data.catalog:[];
+      const valid=catalog.filter(item=>item&&typeof item==='object'&&!Array.isArray(item));
+      const ids=valid.map(item=>String(item.id??item.tmdbId??'').trim()).filter(Boolean);
+      const duplicates=ids.filter((id,index)=>ids.indexOf(id)!==index);
+      const duplicateCount=new Set(duplicates).size;
+      setSystemStatus('system-api-status','system-api-detail','Bağlandı','Katalog servisi yanıt verdi.','good');
+      $('#system-catalog-count').textContent=catalog.length+' yapım';
+      $('#system-valid-count').textContent=valid.length+' kayıt';
+      $('#system-duplicate-count').textContent=duplicateCount+' kimlik';
+      $('#system-data-version').textContent=String(payload.data.version??'Belirtilmemiş');
+      $('#system-json-status').textContent=valid.length===catalog.length&&duplicateCount===0?'Kontrol temiz':'İnceleme gerekli';
+      $('#system-json-status').className=valid.length===catalog.length&&duplicateCount===0?'state-ready':'state-warning';
+      setSystemStatus('system-write-status','system-write-detail',payload.writable===false?'Salt okunur':'Yazma erişimi mevcut',payload.readOnlyReason|| (payload.writable===false?'Sunucu yazma izni vermiyor.':'Katalog API yazılabilir olarak bildirildi.'),payload.writable===false?'warn':'good');
+    }catch(error){
+      setSystemStatus('system-api-status','system-api-detail','Bağlantı yok',error.message,'bad');
+      setSystemStatus('system-write-status','system-write-detail','Doğrulanamadı','Katalog servisi yanıt vermedi.','warn');
+      $('#system-json-status').textContent='Kontrol edilemedi';
+      $('#system-json-status').className='state-warning';
+    }
+    try{
+      const response=await fetchWithTimeout('/api/session',{cache:'no-store',credentials:'same-origin'},10000);
+      if(!response.ok)throw new Error('Oturum doğrulaması HTTP '+response.status);
+      const session=await response.json();
+      setSystemStatus('system-auth-status','system-auth-detail','Aktif',session.email||'Yetkili yönetici oturumu doğrulandı.','good');
+    }catch(error){
+      setSystemStatus('system-auth-status','system-auth-detail','Doğrulanamadı',error.message,'warn');
+    }
+    const checked=new Date().toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'});
+    $('#system-last-check').textContent=checked;
+    if(note)note.textContent='Kontrol tamamlandı: '+checked+'. Bu işlem katalog verilerini değiştirmedi.';
+    if(button){button.disabled=false;button.textContent='↻  Kontrolleri yenile';}
+  }
   function refreshBackupSummary(){
     const catalogCount=Array.isArray(state.data?.catalog)?state.data.catalog.length:0;
     $('#backup-catalog-count').textContent=catalogCount+' yapım';
@@ -1509,6 +1557,7 @@
     if(remove){const row=remove.closest('[data-custom-link-row]');const kind=row.dataset.customLinkRow;const current=$('#hf-'+kind+'-custom-links [data-custom-link-row]').filter(item=>item!==row).map(item=>({label:item.querySelector('[data-custom-link-label]').value.trim(),page:item.querySelector('[data-custom-link-page]').value}));renderCustomLinkRows(kind,current);}
   });
   $('#homepage-layout-save').addEventListener('click',saveHomepageLayout);
+  $('#system-refresh')?.addEventListener('click',refreshSystemDiagnostics);
   $('#personalized-section-form').addEventListener('submit',savePersonalizedSection);
   $('#homepage-layout-list').addEventListener('input',event=>{
     const field=event.target.closest('[data-layout-label]');
