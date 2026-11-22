@@ -2777,14 +2777,17 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
   var allowedOrigin='https://cineverse-admin.megamrtklc.workers.dev';
   var pendingLayout=null;
   var observer=null;
-  var rootObserver=new MutationObserver(function(){
+  var observedRoot=null;
+  var rootObserver=new MutationObserver(attachRoot);
+  function attachRoot(){
     var root=document.getElementById('home-page');
-    if(root&&!observer){
-      observer=new MutationObserver(applyPreview);
-      observer.observe(root,{childList:true,subtree:true});
-      applyPreview();
-    }
-  });
+    if(!root||root===observedRoot)return;
+    if(observer)observer.disconnect();
+    observedRoot=root;
+    observer=new MutationObserver(applyPreview);
+    observer.observe(root,{childList:true,subtree:true});
+    applyPreview();
+  }
   var style=document.createElement('style');
   style.textContent='.cv-admin-preview-hidden{display:none!important}';
   document.head.appendChild(style);
@@ -2845,8 +2848,8 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     pendingLayout=layout;
     applyPreview();
   });
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){rootObserver.observe(document.documentElement,{childList:true,subtree:true});});
-  else rootObserver.observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){rootObserver.observe(document.documentElement,{childList:true,subtree:true});attachRoot();});
+  else{rootObserver.observe(document.documentElement,{childList:true,subtree:true});attachRoot();}
 })();
 </script>
 </body>
