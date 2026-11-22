@@ -1207,24 +1207,25 @@
     }).join('');
     renderHomepageLayoutPreview(layout);
   }
+  function sendHomepageLayoutPreview(layout=homepageLayoutConfig()){
+    const frame=$('#homepage-layout-preview-frame');
+    if(!frame?.contentWindow)return;
+    const targetOrigin='https://megamrtklc.github.io';
+    frame.contentWindow.postMessage({
+      type:'cv-home-preview-layout',
+      layout:{
+        order:[...layout.order],
+        visibility:{...layout.visibility},
+        labels:{...layout.labels}
+      }
+    },targetOrigin);
+  }
   function renderHomepageLayoutPreview(layout=homepageLayoutConfig()){
     const root=$('#homepage-layout-preview');
     if(!root)return;
     root.dataset.device=state.homepagePreviewDevice||'desktop';
-    const sections=layout.order.filter(key=>key==='hero'||layout.visibility[key]!==false).map((key,index)=>{
-      const item=HOMEPAGE_LAYOUT_ITEMS[key];if(!item)return '';
-      const label=layout.labels[key]||{};
-      const title=label.title??item.title;
-      const description=label.description??item.description;
-      const hero=key==='hero';
-      return '<article class="homepage-preview-section'+(hero?' is-hero':'')+'" data-preview-key="'+escapeHtml(key)+'">'+
-        (hero?'<span class="homepage-preview-hero-kicker">CINEVERSE · ÖNE ÇIKAN</span>':'<span class="homepage-preview-section-index">'+String(index).padStart(2,'0')+'</span>')+
-        '<div class="homepage-preview-section-copy"><b>'+escapeHtml(title)+'</b><p>'+escapeHtml(description)+'</p></div>'+
-        (hero?'<span class="homepage-preview-hero-cta">KEŞFET ↗</span>':'<div class="homepage-preview-poster-rail"><i></i><i></i><i></i><i></i></div>')+
-      '</article>';
-    }).join('');
-    root.innerHTML='<div class="homepage-preview-browser"><div class="homepage-preview-browser-bar"><i></i><i></i><i></i><span>megamrtklc.github.io / ana sayfa taslağı</span></div><div class="homepage-preview-site-head"><b>PERDE</b><span>ANA SAYFA　 KEŞFET　 KOLEKSİYONLAR</span></div><div class="homepage-preview-hero-placeholder"><span>ÖNE ÇIKAN YAPIM</span><b>Sinematik manşet alanı</b><small>Masaüstü ve mobil manşet bu ekrandan bağımsız yönetilir.</small></div><div class="homepage-preview-sections">'+(sections||'<p class="homepage-preview-empty">Gösterilecek bölüm bulunmuyor.</p>')+'</div></div>';
-    $('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
+    sendHomepageLayoutPreview(layout);
+    $$('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
   }
   function moveHomepageSection(key,direction){
     const layout=homepageLayoutConfig();
@@ -1900,6 +1901,7 @@
     const remove=event.target.closest('[data-remove-custom-link]');
     if(remove){const row=remove.closest('[data-custom-link-row]');const kind=row.dataset.customLinkRow;const current=$('#hf-'+kind+'-custom-links [data-custom-link-row]').filter(item=>item!==row).map(item=>({label:item.querySelector('[data-custom-link-label]').value.trim(),page:item.querySelector('[data-custom-link-page]').value}));renderCustomLinkRows(kind,current);}
   });
+  $('#homepage-layout-preview-frame')?.addEventListener('load',()=>sendHomepageLayoutPreview());
   $('#homepage-layout-save').addEventListener('click',saveHomepageLayout);
   $('#view-homepage-layout').addEventListener('click',event=>{
     const button=event.target.closest('[data-home-preview-device]');
@@ -1917,6 +1919,7 @@
     layout.labels[row.dataset.layoutKey]={...(layout.labels[row.dataset.layoutKey]||{}),[field.dataset.layoutLabel]:field.value};
     state.homepageLayoutDirty=true;
     const draftStatus=$('#homepage-layout-draft');if(draftStatus){draftStatus.dataset.state='draft';draftStatus.textContent='● Yayınlanmamış değişiklikler';}
+    renderHomepageLayoutPreview(layout);
   });
   $('#homepage-layout-list').addEventListener('click',event=>{
     const button=event.target.closest('[data-layout-action]');
