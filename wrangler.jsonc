@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "mrtsinema-dynamic",
-  "main": "worker/index.js",
+  "main": "worker/index.mjs",
   "compatibility_date": "2026-11-23",
   "workers_dev": true,
   "preview_urls": true,
