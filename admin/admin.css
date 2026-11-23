@@ -1350,3 +1350,7 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
 .users-security-badge i{width:7px;height:7px;border-radius:50%;background:#d4ad60;box-shadow:0 0 10px rgba(212,173,96,.45)}
 @media(max-width:900px){.users-access-grid{grid-template-columns:1fr}.users-access-grid>.panel-card{min-height:0}}
 @media(max-width:560px){.users-access-grid>.panel-card{padding:16px}.users-info-row{font-size:9px}.users-security-badge{margin-top:12px}}
+
+/* Administrator login identity */
+.admin-username-form{margin-top:16px;padding-top:16px;border-top:1px solid var(--line-soft,rgba(255,255,255,.07))}
+@media(max-width:560px){.admin-username-form{align-items:stretch;flex-direction:column}.admin-username-form .primary-button{width:100%}}
