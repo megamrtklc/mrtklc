@@ -31,3 +31,5 @@ jobs:
           node-version: 22
       - name: Test dynamic routes
         run: node tests/dynamic-routes.mjs
+      - name: Validate Cloudflare Worker bundle
+        run: npx --yes wrangler@4 deploy --dry-run --config wrangler.jsonc
