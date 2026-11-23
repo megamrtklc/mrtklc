@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import worker from "../worker/index.js";
+import worker from "../worker/index.mjs";
 
 const catalog = { catalog: [
   { id:"m1", title:"Şahsiyet", type:"movie", year:2018, desc:"Agâh Beyoğlu'nun hikâyesi.", poster:"https://example.test/poster.jpg", tmdbId:123, tmdbGenres:"Suç / Dram", tmdbRating:"8.2", tmdbVoteCount:100, tmdbDirector:"Onur Saylak", tmdbCast:[
