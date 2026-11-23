@@ -2021,14 +2021,21 @@
                     return base + '-' + this.getRouteSlug(sameYear.length > 1 ? item?.id : (year || item?.id || ''));
                 },
 
+                getDirectorNames(value) {
+                    const values = Array.isArray(value) ? value : [value];
+                    return [...new Set(values.flatMap(entry => String(entry || '').split(/[,;|/]+/))
+                        .map(name => name.trim()).filter(Boolean))];
+                },
+
                 getCatalogPeople(kind) {
                     const people = [];
                     const seen = new Set();
                     (this.catalog || []).forEach(item => {
                         if (kind === 'director') {
-                            const name = String(item.tmdbDirector || item.director || '').trim();
-                            const key = this.normalizeSearchText(name);
-                            if (name && !seen.has(key)) { seen.add(key); people.push({ name, id: null }); }
+                            this.getDirectorNames(item.tmdbDirector || item.director).forEach(name => {
+                                const key = this.normalizeSearchText(name);
+                                if (key && !seen.has(key)) { seen.add(key); people.push({ name, id: null }); }
+                            });
                             return;
                         }
                         const cast = Array.isArray(item.tmdbCast) && item.tmdbCast.length ? item.tmdbCast : (Array.isArray(item.cast) ? item.cast : []);
@@ -2050,8 +2057,7 @@
                     const base = this.getRouteSlug(person?.name || '');
                     if (!base) return '';
                     const matches = this.getCatalogPeople(kind).filter(entry => this.getRouteSlug(entry.name) === base);
-                    const ids = [...new Set(matches.map(entry => String(entry.id || '')).filter(Boolean))];
-                    return ids.length > 1 && person?.id ? base + '-' + String(person.id) : base;
+                    return matches.length > 1 && person?.id ? base + '-' + String(person.id) : base;
                 },
 
                 getRouteHash(page = this.currentPage, item = this.selectedItem) {
@@ -2117,7 +2123,7 @@
                             if (!person.id) {
                                 try {
                                     const result = await this.fetchTmdb('search/person?query=' + encodeURIComponent(person.name));
-                                    person = (result.results || []).find(entry => this.normalizeSearchText(entry.name) === this.normalizeSearchText(person.name)) || (result.results || [])[0] || person;
+                                    person = (result.results || []).find(entry => this.normalizeSearchText(entry.name) === this.normalizeSearchText(person.name)) || person;
                                 } catch (error) { console.warn('Oyuncu profili aranamadı:', error); }
                             }
                             if (person.id) { this.openActorProfile({ ...person, id: Number(person.id) }, false); return; }
@@ -2330,7 +2336,8 @@
                     if (!directorName) return actor;
                     const normalizedName = this.normalizeSearchText(directorName);
                     const candidates = (this.catalog || []).filter(item =>
-                        this.normalizeSearchText(item.tmdbDirector || item.director || '') === normalizedName &&
+                        this.getDirectorNames(item.tmdbDirector || item.director)
+                            .some(name => this.normalizeSearchText(name) === normalizedName) &&
                         item.tmdbId
                     );
                     for (const item of candidates) {
