@@ -39,7 +39,7 @@ function shell({ title, description, canonical, image, schema, body, robots }) {
   const imageMeta = image ? '<meta property="og:image" content="' + esc(image) + '">' : "";
   return '<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<title>' + esc(title) + '</title><meta name="description" content="' + esc(description) + '">' +
-    '<meta name="robots" content="' + esc(robots || "index,follow,max-image-preview:large") + '">' +
+    '<meta name="robots" content="' + esc(robots || (new URL(canonical).hostname.endsWith(".workers.dev") ? "noindex,nofollow" : "index,follow,max-image-preview:large")) + '">' +
     '<link rel="canonical" href="' + esc(canonical) + '">' +
     '<meta property="og:type" content="website"><meta property="og:site_name" content="MRTSINEMA">' +
     '<meta property="og:title" content="' + esc(title) + '"><meta property="og:description" content="' + esc(description) + '">' + imageMeta +
@@ -168,7 +168,12 @@ export default {
       try {
         const catalog = await loadCatalog(env, request), index = buildIndex(catalog);
         if (path === "/sitemap.xml") return response(sitemap(index,url.origin),"application/xml; charset=utf-8");
-        if (path === "/robots.txt") return response("User-agent: *\nAllow: /\nSitemap: " + url.origin + "/sitemap.xml\n","text/plain; charset=utf-8");
+        if (path === "/robots.txt") {
+          const content = url.hostname.endsWith(".workers.dev")
+            ? "User-agent: *\\nDisallow: /\\n"
+            : "User-agent: *\\nAllow: /\\nSitemap: " + url.origin + "/sitemap.xml\\n";
+          return response(content,"text/plain; charset=utf-8");
+        }
         const kind = segments[0], slug = segments[1];
         if (kind === "film" || kind === "dizi") {
           const item = catalog.find((entry) => typeOf(entry) === (kind === "dizi" ? "tv" : "movie") && index.itemSlugs.get(entry) === slug);
@@ -193,6 +198,12 @@ export default {
         return response("Sayfa oluşturulamadı: " + esc(error.message || error),"text/plain; charset=utf-8",500);
       }
     }
-    return env.ASSETS.fetch(request);
+    const assetResponse = await env.ASSETS.fetch(request);
+    if (url.hostname.endsWith(".workers.dev")) {
+      const headers = new Headers(assetResponse.headers);
+      headers.set("X-Robots-Tag", "noindex, nofollow");
+      return new Response(assetResponse.body, { status: assetResponse.status, statusText: assetResponse.statusText, headers });
+    }
+    return assetResponse;
   }
 };
