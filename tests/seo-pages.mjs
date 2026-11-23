@@ -44,7 +44,7 @@ try {
   assert.match(actor, /Haluk Bilginer/);
   assert.ok(actor.includes('/perde/#/actor/77'), 'Oyuncu profili uygulamadaki TMDB profil rotasına bağlanmalı');
   assert.match(director, /Nuri Bilge Ceylan|Onur Saylak/);
-  assert.doesNotMatch(director, /#\\/director\\//, 'TMDB kimliği doğrulanmadan uygulama profiline bağlantı eklenmemeli');
+  assert.equal(director.includes('#/director/'), false, 'TMDB kimliği doğrulanmadan uygulama profiline bağlantı eklenmemeli');
   assert.match(sitemap, /https:\/\/example\.test\/perde\/film\/sahsiyet\.html/);
   assert.match(robots, /Sitemap: https:\/\/example\.test\/perde\/sitemap\.xml/);
   const manifest = JSON.parse(await readFile(path.join(outputPath,'.seo-generated-files.json'),'utf8'));
