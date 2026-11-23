@@ -2008,7 +2008,7 @@
                 getItemRouteSlug(item) {
                     const titleSlug = entry => [entry?.originalTitle, entry?.englishTitle, entry?.title]
                         .map(value => this.getRouteSlug(value || '')).find(Boolean) || '';
-                    const base = titleSlug(item);
+                    const base = titleSlug(item) || ('yapim-' + this.getRouteSlug(item?.id || ''));
                     if (!base) return '';
                     const type = item?.type === 'tv' || item?.type === 'series' ? 'tv' : 'movie';
                     const matches = (this.catalog || []).filter(entry =>
@@ -2055,7 +2055,7 @@
 
                 getPersonRouteSlug(person, kind) {
                     const base = this.getRouteSlug(person?.name || '');
-                    if (!base) return '';
+                    if (!base) return person?.id ? (kind === 'director' ? 'yonetmen-' : 'oyuncu-') + String(person.id) : '';
                     const matches = this.getCatalogPeople(kind).filter(entry => this.getRouteSlug(entry.name) === base);
                     return matches.length > 1 && person?.id ? base + '-' + String(person.id) : base;
                 },
@@ -2109,7 +2109,15 @@
                     const personRoute = hash.match(/^#\/(oyuncu|yonetmen)\/([^/?#]+)$/i);
                     if (personRoute) {
                         const kind = personRoute[1].toLocaleLowerCase('tr-TR') === 'oyuncu' ? 'actor' : 'director';
-                        const slug = this.getRouteSlug(decodePart(personRoute[2]));
+                        const rawSlug = decodePart(personRoute[2]);
+                        const slug = this.getRouteSlug(rawSlug);
+                        const idFallback = rawSlug.match(/^(?:oyuncu|yonetmen)-(\d+)$/i);
+                        if (idFallback) {
+                            const id = Number(idFallback[1]);
+                            if (kind === 'actor') this.openActorProfile({ id, name: 'Oyuncu' }, false);
+                            else this.openDirectorProfile({ id, name: 'Yönetmen' }, false);
+                            return;
+                        }
                         if (kind === 'actor') {
                             try { await this.loadCatalogCastData(); }
                             catch (error) { console.warn('Oyuncu kataloğu bağlantı için yüklenemedi:', error); }
