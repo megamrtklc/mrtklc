@@ -766,6 +766,12 @@ try {
       const app = window.Alpine?.$data(document.documentElement);
       return app && !app.catalogLoading && !!window.__cineverseHomeSectionObserver;
     }, null, { timeout: 15000 });
+    // Keep the user's saved homepage visibility preference intact; reveal and hydrate this section only in the test context.
+    await page.locator('#home-personalized-section').evaluate(element => {
+      element.style.setProperty('display', 'block', 'important');
+      const app = window.Alpine?.$data(document.documentElement);
+      app?.prepareHomePersonalizedVariant?.(element);
+    });
     for (const viewport of [{ width: 360, height: 800 }, { width: 768, height: 1024 }]) {
       await page.setViewportSize(viewport);
       await page.locator('#home-catalog-section').evaluate(element =>
