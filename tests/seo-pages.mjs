@@ -48,7 +48,8 @@ try {
   assert.match(series, /TVSeries/);
   assert.match(actor, /Haluk Bilginer/);
   assert.ok(actor.includes('/perde/#/actor/77'), 'Oyuncu profili uygulamadaki TMDB profil rotasına bağlanmalı');
-  const actorSchema = JSON.parse(actor.match(/<script type="application\\/ld\\+json">([\\s\\S]*?)<\\/script>/)[1]);
+  const actorSchemaMatch = actor.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  const actorSchema = JSON.parse(actorSchemaMatch[1]);
   assert.equal(actorSchema['@type'], 'ProfilePage', 'Oyuncu sayfası ProfilePage olarak işaretlenmeli');
   assert.equal(actorSchema.mainEntity['@type'], 'Person', 'Oyuncu profili ana varlığı Person olmalı');
   assert.ok(actorSchema.mainEntity.subjectOf.some(work => work.actor?.characterName === 'Agâh'), 'Oyuncunun karakter rolleri yapılandırılmış veride bulunmalı');
