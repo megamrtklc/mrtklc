@@ -237,9 +237,11 @@ for (const person of actors) {
   const works = [...new Map(person.works.map(entry => [itemId(entry.item), entry])).values()]
     .sort((a,b) => (Number(yearOf(b.item)) || 0) - (Number(yearOf(a.item)) || 0));
   const cards = works.slice(0,48).map(entry => linkCard(entry.item, BASE_PATH + itemPaths.get(entry.item))).join('');
+  const appProfileUrl = BASE_PATH + '/#/actor/' + encodeURIComponent(person.id);
   const body = '<nav class="crumb"><a href="' + esc(BASE_PATH + '/') + '">Ana sayfa</a> / Oyuncular / ' + esc(person.name) + '</nav>' +
     '<section class="hero">' + (person.profile ? '<img class="poster" src="' + esc(person.profile.replace('/w185/','/w342/')) + '" alt="' + esc(person.name) + '">' : '<div class="poster-placeholder">Profil fotoğrafı yok</div>') +
     '<div><div class="eyebrow">Oyuncu profili</div><h1>' + esc(person.name) + '</h1><p class="summary">' + esc(person.name) + ' filmleri ve dizileri. Perde kataloğunda yer alan yapımları ve canlandırdığı karakterleri keşfedin.</p>' +
+    '<a class="watch-cta" href="' + esc(appProfileUrl) + '">Perde uygulamasında oyuncu profilini aç →</a>' +
     '<div class="meta"><span>' + works.length + ' katalog yapımı</span></div></div></section>' +
     '<section class="panel"><h2>Perde kataloğundaki yapımları</h2>' + (cards ? '<div class="grid">' + cards + '</div>' : '<p class="empty">Henüz katalog yapımı bulunmuyor.</p>') + '</section>';
   const schema = {'@context':'https://schema.org','@type':'Person','name':person.name,'url':canonical,'jobTitle':'Actor',...(person.profile?{image:person.profile}:{})};
