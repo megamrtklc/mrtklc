@@ -81,7 +81,8 @@ function buildIndex(catalog) {
   const directors = [...directorsByName.values()].sort((a,b) => a.name.localeCompare(b.name,"tr"));
   const actorSlugs = uniqueSlugs(actors, (p) => p.name, (p) => p.id);
   const directorSlugs = uniqueSlugs(directors, (p) => p.name, (p) => p.name);
-  const watchSlugs = uniqueSlugs(catalog, titleOf, itemId);\n  return { catalog, itemSlugs, actors, directors, actorSlugs, directorSlugs, watchSlugs };
+  const watchSlugs = uniqueSlugs(catalog, titleOf, itemId);
+  return { catalog, itemSlugs, actors, directors, actorSlugs, directorSlugs, watchSlugs };
 }
 function itemPath(item, index) { return "/" + (typeOf(item) === "tv" ? "dizi" : "film") + "/" + index.itemSlugs.get(item) + "/"; }
 function renderItem(item, index, origin) {
