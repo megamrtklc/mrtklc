@@ -2208,6 +2208,11 @@
     reader.readAsDataURL(file);$('#profile-upload-status').textContent=file.name;
   });
   $('#logout-button')?.addEventListener('click',async()=>{try{await fetch('/api/logout',{method:'POST',credentials:'same-origin'});}finally{window.location.reload();}});
+  $('#catalog-select-all-page')?.addEventListener('click',()=>{
+    const visible=state.filtered.slice((state.page-1)*state.pageSize,state.page*state.pageSize);
+    visible.forEach(item=>state.selectedCatalogIds.add(String(item.id)));
+    renderCatalog();
+  });
   $('#catalog-select-page')?.addEventListener('change',event=>{
     const visible=state.filtered.slice((state.page-1)*state.pageSize,state.page*state.pageSize);
     visible.forEach(item=>{const id=String(item.id);if(event.target.checked)state.selectedCatalogIds.add(id);else state.selectedCatalogIds.delete(id);});renderCatalog();
