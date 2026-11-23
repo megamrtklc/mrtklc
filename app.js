@@ -548,6 +548,7 @@
                     const cacheKey = item.type + ':' + item.tmdbId;
                     if (this.tmdbDetailsCache[cacheKey]) {
                         Object.assign(item, this.tmdbDetailsCache[cacheKey]);
+                        this.updateSelectedWatchRoute(item);
                         if (item.type === 'tv') await this.loadSeasonEpisodes(this.selectedSeason || 1, item);
                         return;
                     }
@@ -596,7 +597,9 @@
                             director,
                             directorPersonId,
                             originalTitle: details.original_title || details.original_name || item.originalTitle,
-                            englishTitle: englishDetails?.title || englishDetails?.name || item.englishTitle || '',
+                            tmdbOriginalTitle: details.original_title || details.original_name || item.tmdbOriginalTitle || '',
+                            englishTitle: englishDetails?.title || englishDetails?.name || item.englishTitle || item.tmdbEnglishTitle || '',
+                            tmdbEnglishTitle: englishDetails?.title || englishDetails?.name || item.tmdbEnglishTitle || item.englishTitle || '',
                             tmdbCast: cast.length ? cast : (item.tmdbCast || []),
                             starring: cast.slice(0, 3).map(person => person.name).filter(Boolean).join(' / ') || item.starring,
                             trailerUrl: trailer ? 'https://www.youtube.com/watch?v=' + trailer.key : item.trailerUrl,
@@ -608,6 +611,7 @@
                         this.tmdbDetailsCache[cacheKey] = enriched;
                         Object.assign(item, enriched);
                         if (this.selectedItem?.id === item.id) Object.assign(this.selectedItem, enriched);
+                        this.updateSelectedWatchRoute(item);
                         if (mediaType === 'tv') await this.loadSeasonEpisodes(this.selectedSeason || 1, item);
                     } catch (error) {
                         this.tmdbDetailsError = error.message || 'TMDB verileri alınamadı.';
@@ -2006,11 +2010,21 @@
                     return this.normalizeSearchText(value).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
                 },
 
+                getItemRouteAliases(item) {
+                    return [...new Set([
+                        item?.englishTitle, item?.tmdbEnglishTitle, item?.english_title,
+                        item?.originalTitle, item?.tmdbOriginalTitle, item?.original_title,
+                        item?.original_name, item?.tmdb?.original_title, item?.tmdb?.original_name,
+                        item?.title, item?.tmdbTitle, item?.name
+                    ].map(value => this.getRouteSlug(value || '')).filter(Boolean))];
+                },
+
                 getItemRouteSlug(item) {
-                    const titleSlug = entry => [entry?.originalTitle, entry?.tmdbOriginalTitle, entry?.original_title, entry?.original_name, entry?.tmdb?.original_title, entry?.tmdb?.original_name, entry?.englishTitle, entry?.tmdbEnglishTitle, entry?.english_title, entry?.title, entry?.tmdbTitle, entry?.name]
-                        .map(value => this.getRouteSlug(value || '')).find(Boolean) || '';
-                    const base = titleSlug(item) || ('yapim-' + this.getRouteSlug(item?.id || ''));
-                    if (!base) return '';
+                    const titleSlug = entry => {
+                        const aliases = this.getItemRouteAliases(entry);
+                        return aliases[0] || '';
+                    };
+                    const base = titleSlug(item) || 'isimsiz-yapim';
                     const type = item?.type === 'tv' || item?.type === 'series' ? 'tv' : 'movie';
                     const matches = (this.catalog || []).filter(entry =>
                         (entry.type === 'tv' || entry.type === 'series' ? 'tv' : 'movie') === type &&
@@ -2020,6 +2034,14 @@
                     const year = String(item?.year || '').trim();
                     const sameYear = matches.filter(entry => String(entry.year || '').trim() === year);
                     return base + '-' + this.getRouteSlug(sameYear.length > 1 ? item?.id : (year || item?.id || ''));
+                },
+
+                updateSelectedWatchRoute(item) {
+                    if (this.currentPage !== 'watch' || !item?.id || String(this.selectedItem?.id) !== String(item.id)) return;
+                    const nextHash = this.getRouteHash('watch', item);
+                    if (window.location.hash === nextHash) return;
+                    const currentState = window.history.state && typeof window.history.state === 'object' ? window.history.state : {};
+                    window.history.replaceState(currentState, '', window.location.pathname + window.location.search + nextHash);
                 },
 
                 getDirectorNames(value) {
@@ -2120,6 +2142,21 @@
                             (entry.type === 'tv' || entry.type === 'series' ? 'tv' : 'movie') === type &&
                             this.getItemRouteSlug(entry) === slug
                         );
+                        let item = (this.catalog || []).find(entry =>
+                            (entry.type === 'tv' || entry.type === 'series' ? 'tv' : 'movie') === type &&
+                            (this.getItemRouteSlug(entry) === slug || this.getItemRouteAliases(entry).includes(slug))
+                        );
+                        // Paylaşılan İngilizce URL henüz katalogda önbelleklenmemişse TMDB İngilizce aramasıyla kaydı bul.
+                        if (!item && slug) {
+                            try {
+                                const query = decodePart(titleRoute[2]).replace(/-/g, ' ');
+                                const results = await this.fetchTmdb('search/' + (type === 'tv' ? 'tv' : 'movie') + '?query=' + encodeURIComponent(query), 'en-US');
+                                const match = (results.results || []).find(result => this.getRouteSlug(result.title || result.name || '') === slug);
+                                if (match) item = (this.catalog || []).find(entry => String(entry.tmdbId || '') === String(match.id));
+                            } catch (error) {
+                                console.warn('İngilizce yapım bağlantısı çözümlenemedi:', error);
+                            }
+                        }
                         if (item) { this.openWatchPage(item, false); return; }
                     }
 
