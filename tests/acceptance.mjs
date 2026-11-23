@@ -253,10 +253,27 @@ try {
   console.log('CLS SUMMARY:', JSON.stringify({ desktop: desktopCls, desktopShifts: desktopDiagnostics.shifts.length }));
   assert.ok(desktopCls < 0.05, 'Masaüstü CLS hedefi aşıldı: ' + desktopCls.toFixed(3));
 
+  await check('Tailwind stili tek istekle yükleniyor', async () => {
+    const styles = await page.evaluate(() => ({
+      stylesheet: [...document.querySelectorAll('link[rel="stylesheet"][href*="tailwind.css"]')].map(link => new URL(link.href).href),
+      preload: document.querySelector('link[rel="preload"][as="style"][href*="tailwind.css"]')?.href || null
+    }));
+    assert.equal(styles.stylesheet.length, 1, 'Tailwind CSS birden fazla kez isteniyor');
+    assert.equal(styles.preload, styles.stylesheet[0], 'Tailwind CSS preload ve stylesheet adresleri eşleşmiyor');
+  });
+
   await check('Ana sayfa rafları ekrana yaklaşınca yükleniyor', async () => {
     await page.locator('#home-catalog-section').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => window.Alpine.$data(document.documentElement).homeSectionReady?.catalog === true, { timeout: 10000 });
     await page.evaluate(() => window.scrollTo(0, 0));
+  });
+  await check('İlk ekran dışındaki ana sayfa afişleri erteleniyor', async () => {
+    const images = await page.evaluate(() => ({
+      newArrivals: document.querySelector('#home-new-arrivals-rail .home-new-arrival-card img')?.getAttribute('loading'),
+      catalog: document.querySelector('#home-catalog-rail .home-new-arrival-card img')?.getAttribute('loading')
+    }));
+    assert.equal(images.newArrivals, 'lazy', 'Son eklenenler ilk afişi erken yükleniyor');
+    assert.equal(images.catalog, 'lazy', 'Katalog ilk afişi erken yükleniyor');
   });
   adaletId = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.find(item => item.title === 'Adalet 2')?.id);
   assert.ok(adaletId, 'Adalet 2 katalogda bulunamadı');
