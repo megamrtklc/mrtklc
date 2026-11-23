@@ -2006,15 +2006,19 @@
                 },
 
                 getItemRouteSlug(item) {
-                    const base = this.getRouteSlug(item?.originalTitle || item?.englishTitle || item?.title || '');
+                    const titleSlug = entry => [entry?.originalTitle, entry?.englishTitle, entry?.title]
+                        .map(value => this.getRouteSlug(value || '')).find(Boolean) || '';
+                    const base = titleSlug(item);
                     if (!base) return '';
                     const type = item?.type === 'tv' || item?.type === 'series' ? 'tv' : 'movie';
                     const matches = (this.catalog || []).filter(entry =>
                         (entry.type === 'tv' || entry.type === 'series' ? 'tv' : 'movie') === type &&
-                        this.getRouteSlug(entry.originalTitle || entry.englishTitle || entry.title || '') === base
+                        titleSlug(entry) === base
                     );
                     if (matches.length < 2) return base;
-                    return base + '-' + this.getRouteSlug(item?.year || item?.id || '');
+                    const year = String(item?.year || '').trim();
+                    const sameYear = matches.filter(entry => String(entry.year || '').trim() === year);
+                    return base + '-' + this.getRouteSlug(sameYear.length > 1 ? item?.id : (year || item?.id || ''));
                 },
 
                 getCatalogPeople(kind) {
@@ -2100,6 +2104,10 @@
                     if (personRoute) {
                         const kind = personRoute[1].toLocaleLowerCase('tr-TR') === 'oyuncu' ? 'actor' : 'director';
                         const slug = this.getRouteSlug(decodePart(personRoute[2]));
+                        if (kind === 'actor') {
+                            try { await this.loadCatalogCastData(); }
+                            catch (error) { console.warn('Oyuncu kataloğu bağlantı için yüklenemedi:', error); }
+                        }
                         let person = this.getCatalogPeople(kind).find(entry => {
                             const base = this.getRouteSlug(entry.name);
                             return slug === base || (entry.id && slug === base + '-' + String(entry.id));
