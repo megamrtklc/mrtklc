@@ -791,7 +791,7 @@
   let contentEditorReturnView='overview';
   let contentEditorSnapshot='';
   let contentEditorPreviousType='movie';
-  function contentEditorFormSnapshot(){return new URLSearchParams(new FormData($('#content-form'))).toString();}
+  function contentEditorFormSnapshot(){return JSON.stringify(Array.from($('#content-form').querySelectorAll('input,select,textarea')).map(el=>[el.id,el.type==='checkbox'||el.type==='radio'?el.checked:el.value]));}
   function closeContentEditor(){
     if(contentEditorSnapshot&&contentEditorFormSnapshot()!==contentEditorSnapshot&&!confirm('Kaydedilmemiş değişikliklerin var. Sayfadan çıkmak istiyor musun?'))return;
     navigate(contentEditorReturnView||'overview');
