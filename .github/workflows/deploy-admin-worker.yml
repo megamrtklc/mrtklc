@@ -152,6 +152,8 @@ jobs:
             echo "--- $table ---"
             npx --yes wrangler@latest d1 execute cineverse-admin-security --remote --command="PRAGMA table_info($table)" --config worker/wrangler.generated.json --json
           done
+          echo "--- Safe row-count diagnostics ---"
+          npx --yes wrangler@latest d1 execute cineverse-admin-security --remote --command="SELECT (SELECT COUNT(*) FROM admin_credentials) AS credential_rows, (SELECT COUNT(*) FROM admin_security_settings) AS settings_rows, (SELECT COUNT(*) FROM admin_app_secrets) AS signing_secret_rows" --config worker/wrangler.generated.json --json
 
       - name: Deploy Worker
         if: steps.preflight.outputs.configured == 'true'
