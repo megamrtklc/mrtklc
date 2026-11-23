@@ -112,6 +112,21 @@ try {
 
   await page.waitForTimeout(8500);
 
+  await check('Ana sayfa katalog afişleri küçük başlangıç kaynağı ve duyarlı adaylar kullanıyor', async () => {
+    const posterImages = page.locator('main .home-rail-card img');
+    await posterImages.first().waitFor({ state: 'attached' });
+    const samples = await posterImages.evaluateAll(images => images
+      .filter(image => /image\\.tmdb\\.org/.test(image.getAttribute('srcset') || ''))
+      .slice(0, 12)
+      .map(image => ({ src: image.getAttribute('src') || '', srcset: image.getAttribute('srcset') || '' })));
+    assert.ok(samples.length > 0, 'Duyarlı katalog afişleri bulunamadı');
+    for (const image of samples) {
+      assert.match(image.src, /\\/w154\\//, 'Katalog afişinin başlangıç kaynağı gereğinden büyük: ' + image.src);
+      assert.match(image.srcset, /\\/w260\\/.*260w/, 'Yüksek yoğunluklu mobil ekranlar için 260px adayı eksik: ' + image.srcset);
+      assert.match(image.srcset, /\\/w342\\/.*342w/, 'Yüksek yoğunluklu ekranlar için kaliteli büyük aday korunmalı: ' + image.srcset);
+    }
+  });
+
   await check('Global arama canlı katalog sonuçlarını afiş ve bilgilerle gösteriyor', async () => {
     await page.getByRole('button', { name: 'Film ve dizi ara' }).click();
     const dialog = page.getByRole('dialog', { name: 'Film ve dizi ara' });
