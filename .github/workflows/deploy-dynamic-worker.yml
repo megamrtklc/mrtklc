@@ -48,8 +48,11 @@ jobs:
         if: ${{ env.CF_API_TOKEN != '' && env.CF_ACCOUNT_ID != '' }}
         run: |
           BASE="https://mrtsinema-dynamic.megamrtklc.workers.dev"
-          curl -fsS "$BASE/film/adalet-2/" | grep -q 'rel="canonical"'
-          curl -fsS "$BASE/oyuncu/haluk-bilginer/" | grep -q 'ProfilePage'
-          curl -fsS "$BASE/sitemap.xml" | grep -q '/film/adalet-2/'
+          curl -fsS "$BASE/film/adalet-2/" -o /tmp/mrtsinema-film.html
+          grep -q 'rel="canonical"' /tmp/mrtsinema-film.html
+          curl -fsS "$BASE/oyuncu/haluk-bilginer/" -o /tmp/mrtsinema-actor.html
+          grep -q 'ProfilePage' /tmp/mrtsinema-actor.html
+          curl -fsS "$BASE/sitemap.xml" -o /tmp/mrtsinema-sitemap.xml
+          grep -q '/film/adalet-2/' /tmp/mrtsinema-sitemap.xml
           STATUS=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/film/adalet-2.html")
           test "$STATUS" = "301"
