@@ -15,7 +15,7 @@ for (const [name, source] of [['app.js', app], ['app.min.js', minified]]) {
 
 assert.match(html, /:src="isMobileHeroViewport \? \(currentHero\.backdrop \|\| ''\) : ''"/,
   'Mobil manşet arka planı yalnızca mobil görünümde kaynak almalı');
-assert.match(html, /:src="isMobileHeroViewport \? \(currentHero\.poster \|\| item\.image/,
+assert.match(html, /:src="isMobileHeroViewport \? \(currentHero\.poster \|\| currentHero\.image/,
   'Mobil manşet afişi yalnızca mobil görünümde kaynak almalı');
 assert.match(html, /isMobileHeroViewport \? getTmdbImageSrcSet\(currentHero\.backdrop/,
   'Mobil manşet arka planının duyarlı kaynakları mobil görünümle sınırlı olmalı');
