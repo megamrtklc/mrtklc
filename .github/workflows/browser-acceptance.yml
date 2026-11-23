@@ -30,6 +30,7 @@ jobs:
           node --check app.js
           node --check app.min.js
           node tests/mobile-hero-resource-contract.mjs
+          node tests/seo-pages.mjs
           node --check tests/acceptance.mjs
       - name: Install Playwright
         run: npm install --no-save playwright
