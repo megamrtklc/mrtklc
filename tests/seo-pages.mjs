@@ -30,10 +30,10 @@ try {
   assert.match(film, /<title>Şahsiyet \(2018\) \| Perde<\/title>/);
   assert.match(film, /application\/ld\+json/);
   assert.equal((film.match(/class="person"/g) || []).length, 6, 'Yapım sayfasında en fazla 6 oyuncu görünmeli');
-  assert.match(film, /izle\/sahsiyet-film-1\.html/);
-  assert.match(watch, /noindex,follow/);
-  assert.match(watch, /window\\.location\\.replace/);
-  assert.match(watch, /#\\/watch\\/film-1/);
+  assert.ok(film.includes('/perde/izle/sahsiyet-film-1.html'));
+  assert.ok(watch.includes('noindex,follow'));
+  assert.ok(watch.includes('window.location.replace'));
+  assert.ok(watch.includes('#/watch/film-1'));
   assert.match(film, /Tek Yapımlık Oyuncu/, 'Tek yapımlık oyuncu ilk 6 içindeyse kadroda görünmeli');
   assert.doesNotMatch(film, /Yedinci Oyuncu/, 'Yedinci oyuncu gösterilmemeli');
   await assert.rejects(readFile(path.join(outputPath,'oyuncu/tek-yapimlik-oyuncu.html'),'utf8'));
