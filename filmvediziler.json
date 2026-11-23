@@ -22296,6 +22296,106 @@
       "tmdbImdbId": "tt32273171",
       "tmdbRating": "6.7",
       "tmdbVoteCount": 632
+    },
+    {
+      "addedAt": "2026-11-23T19:12:30.839Z",
+      "id": "cv-1795461150842",
+      "title": "The Blue Road",
+      "type": "tv",
+      "year": "2026",
+      "rating": "7.7",
+      "genre": "Suç",
+      "category": "Suç / Gizem",
+      "duration": "",
+      "country": "South Korea",
+      "director": "Han Jun-hee, Jo Yoo-jin",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 300523,
+      "imdbId": "tt38336631",
+      "image": "https://image.tmdb.org/t/p/w500/9mmOjx2bWuLd9NnVpC71OUEXBym.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/7ojpD6ARKYhRxnsjzMIrorOfj4T.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Farklı ülkelerde yaşayan iki dedektif, vahşi cinayetler ve şifreli mesajlarla karşılaşınca iş birliği yapar. Ama ölümcül gerçek, her an tehlike yaratabilecek kadar yakındır.",
+      "cast": [
+        "Son Seok-koo",
+        "Eita Nagayama",
+        "Kim Shin-rok",
+        "Yosuke Kubozuka",
+        "Choi Sung-eun",
+        "Jung Jae-young",
+        "Kentaro Sakaguçi"
+      ],
+      "tmdbTitle": "The Blue Road",
+      "tmdbOriginalTitle": "푸른길",
+      "tmdbReleaseDate": "2026-11-20",
+      "tmdbGenres": "Suç / Gizem",
+      "tmdbRuntime": "",
+      "tmdbCountries": "South Korea",
+      "tmdbDirector": "Han Jun-hee, Jo Yoo-jin",
+      "tmdbCast": [
+        {
+          "id": 2035488,
+          "name": "Son Seok-koo",
+          "character": "Kim Seok",
+          "profile": "https://image.tmdb.org/t/p/w185/natZWFVBAWLKWCYebgVGywHtsME.jpg",
+          "order": 0
+        },
+        {
+          "id": 117975,
+          "name": "Eita Nagayama",
+          "character": "Inose Hiroshi",
+          "profile": "https://image.tmdb.org/t/p/w185/10Q2xdJyMJ4Bngx8NDYtFbBcWLQ.jpg",
+          "order": 1
+        },
+        {
+          "id": 3038410,
+          "name": "Kim Shin-rok",
+          "character": "Ri Yun-ok",
+          "profile": "https://image.tmdb.org/t/p/w185/x4zo2mSbehnQY80PbuldAZ7ruGm.jpg",
+          "order": 2
+        },
+        {
+          "id": 84755,
+          "name": "Yosuke Kubozuka",
+          "character": "Takahashi",
+          "profile": "https://image.tmdb.org/t/p/w185/5opFqfk2WoNGCmQLKS8mUW0wnRb.jpg",
+          "order": 3
+        },
+        {
+          "id": 2483538,
+          "name": "Choi Sung-eun",
+          "character": "Yun Su-gyeong",
+          "profile": "https://image.tmdb.org/t/p/w185/sbtcXMrHoFVyX2Mw5s5NDryaUaM.jpg",
+          "order": 4
+        },
+        {
+          "id": 83682,
+          "name": "Jung Jae-young",
+          "character": "Seo Hyeon-tae",
+          "profile": "https://image.tmdb.org/t/p/w185/xeiFPl5GOHemLGGMpvzeiK0Nlpm.jpg",
+          "order": 5
+        },
+        {
+          "id": 1470127,
+          "name": "Kentaro Sakaguçi",
+          "character": "Emi Shunsuke",
+          "profile": "https://image.tmdb.org/t/p/w185/llQqj3BE4MUWBBzjUA2rpHIENxV.jpg",
+          "order": 6
+        }
+      ],
+      "tmdbOverview": "Farklı ülkelerde yaşayan iki dedektif, vahşi cinayetler ve şifreli mesajlarla karşılaşınca iş birliği yapar. Ama ölümcül gerçek, her an tehlike yaratabilecek kadar yakındır.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/9mmOjx2bWuLd9NnVpC71OUEXBym.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/7ojpD6ARKYhRxnsjzMIrorOfj4T.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt38336631",
+      "tmdbRating": "7.7",
+      "tmdbVoteCount": 16,
+      "seasons": 1,
+      "episodes": 8
     }
   ],
   "collections": [],
