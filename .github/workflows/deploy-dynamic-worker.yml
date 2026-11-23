@@ -50,6 +50,10 @@ jobs:
           BASE="https://mrtsinema-dynamic.megamrtklc.workers.dev"
           curl -fsS "$BASE/film/adalet-2/" -o /tmp/mrtsinema-film.html
           grep -q 'rel="canonical"' /tmp/mrtsinema-film.html
+          grep -q 'name="robots" content="noindex,nofollow"' /tmp/mrtsinema-film.html
+          curl -fsS "$BASE/robots.txt" -o /tmp/mrtsinema-robots.txt
+          grep -q 'Disallow: /' /tmp/mrtsinema-robots.txt
+          curl -fsSI "$BASE/" | grep -qi 'x-robots-tag: noindex, nofollow'
           curl -fsS "$BASE/oyuncu/haluk-bilginer/" -o /tmp/mrtsinema-actor.html
           grep -q 'ProfilePage' /tmp/mrtsinema-actor.html
           curl -fsS "$BASE/sitemap.xml" -o /tmp/mrtsinema-sitemap.xml
