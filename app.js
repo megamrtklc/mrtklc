@@ -1064,11 +1064,15 @@
                     // Yönetici tarafından kapatılan rafları hemen işle; görünür rafları ekrana yaklaşınca başlat.
                     sections.forEach(section => {
                         const key = section.dataset.homeSection;
-                        section.removeAttribute('x-cloak');
                         if (!this.isHomepageSectionVisible(key)) {
-                            hydrateSection(section);
+                            // Yönetimde kapalı raflar x-ignore olarak kalmalı; Alpine ağacını başlatma.
+                            // Kişiselleştirilmiş alan x-cloak kullanmadığından display:none ile gizle.
+                            section.style.display = 'none';
+                            section.style.visibility = 'hidden';
                             return;
                         }
+                        section.removeAttribute('x-cloak');
+                        section.style.removeProperty('display');
                         section.style.visibility = 'hidden';
                     });
 
