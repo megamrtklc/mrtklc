@@ -64,7 +64,9 @@ async function resolveDirectorIds(items, directorMap) {
         for (const name of directorNames(item)) {
           const aliases = {
             'baik': ['Baek Jong-yeol', 'Jong-Yeol Baek'],
-            '李安': ['Ang Lee']
+            '李安': ['Ang Lee'],
+            '이원태': ['Lee Won-tae', 'Won-Tae Lee', 'Lee Won Tae'],
+            '홍원찬': ['Hong Won-chan', 'Won-chan Hong', 'Hong Won Chan']
           };
           const expectedNames = new Set([name, ...(aliases[normalizePersonName(name)] || aliases[name] || [])].map(normalizePersonName));
           const match = crew.find(person => expectedNames.has(normalizePersonName(person.name)));
