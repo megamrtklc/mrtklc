@@ -67,7 +67,8 @@ async function resolveDirectorIds(items, directorMap) {
             '李安': ['Ang Lee'],
             '이원태': ['Lee Won-tae', 'Won-Tae Lee', 'Lee Won Tae'],
             '홍원찬': ['Hong Won-chan', 'Won-chan Hong', 'Hong Won Chan'],
-            'فرج الله سلحشور': ['Farajollah Salahshoor', 'Farajollah Salahshour', 'Farajollah Salahshur']
+            'فرج الله سلحشور': ['Farajollah Salahshoor', 'Farajollah Salahshour', 'Farajollah Salahshur'],
+            '加藤裕将': ['Yusuke Kato', 'Kato Yusuke']
           };
           const expectedNames = new Set([name, ...(aliases[normalizePersonName(name)] || aliases[name] || [])].map(normalizePersonName));
           const match = crew.find(person => expectedNames.has(normalizePersonName(person.name)));
