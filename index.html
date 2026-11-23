@@ -129,7 +129,7 @@
     <link rel="preconnect" href="https://image.tmdb.org" crossorigin>
 
     <!-- Ana uygulama: Terser ile küçültülmüş üretim dosyası. -->
-    <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js">
+    <!-- Alpine.js düşük öncelikli defer betiği olarak yüklenir; ilk manşet görselleriyle yarışmaması için ayrıca preload edilmez. -->
     <!-- Derlenmiş Tailwind CSS: tarayıcıda JIT/derleme betiği çalıştırılmaz. -->
     <link rel="preload" as="style" href="./tailwind.css?v=20261123-mobile-resource-priority-v1">
     <link rel="stylesheet" href="./tailwind.css?v=20261123-mobile-resource-priority-v1">
