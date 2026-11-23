@@ -1210,3 +1210,84 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
  .content-editor-view .editor-footer>div{display:grid;grid-template-columns:1fr 1fr}
  .content-editor-view .editor-footer .primary-button{min-width:0}
 }
+
+
+/* Editor accent system: carry each highlight color through the full section and its nested fields */
+.content-editor-view .editor-url-section{
+ border-color:#a98a56;
+ background:linear-gradient(145deg,#2a2a27,#1b232c);
+ box-shadow:0 0 0 1px #c5a46d12,inset 0 1px #ffffff08;
+}
+.content-editor-view .editor-url-section>summary{background:linear-gradient(90deg,#c5a46d18,transparent 82%)}
+.content-editor-view .editor-url-section .editor-section-icon{border-color:#816b49;background:#3b3429;color:#e0c58f}
+.content-editor-view .editor-url-section .editor-section-copy>b{color:#e6d2aa}
+.content-editor-view .editor-url-section .editor-section-tag{border-color:#8d744d;background:#c5a46d0d;color:#e0c58f}
+.content-editor-view .editor-watch-section{
+ border-color:#8a454b;
+ background:linear-gradient(145deg,#302226,#1b232c);
+ box-shadow:0 0 0 1px #c65b6412,inset 0 1px #ffffff08;
+}
+.content-editor-view .editor-watch-section>summary{background:linear-gradient(90deg,#d94b551b,transparent 82%)}
+.content-editor-view .editor-watch-section .editor-section-icon{border-color:#87464d;background:#40282d;color:#f0a0a4}
+.content-editor-view .editor-watch-section .editor-section-copy>b{color:#f0c5c7}
+.content-editor-view .editor-watch-section .editor-section-tag{border-color:#87464d;background:#d94b550d;color:#e99a9f}
+.content-editor-view .editor-tv-section{
+ border-color:#685b7e;
+ background:linear-gradient(145deg,#292435,#1b232c);
+ box-shadow:0 0 0 1px #82719b12,inset 0 1px #ffffff08;
+}
+.content-editor-view .editor-tv-section>summary{background:linear-gradient(90deg,#82719b20,transparent 82%)}
+.content-editor-view .editor-tv-section .editor-section-icon{border-color:#685b7e;background:#302a3a;color:#c7b8df}
+.content-editor-view .editor-tv-section .editor-section-copy>b{color:#d8cbea}
+.content-editor-view .editor-tv-section .editor-section-tag{border-color:#685b7e;background:#82719b12;color:#c7b8df}
+
+/* Highlighted field groups inherit a complete accent treatment, not just a left stripe */
+.content-editor-view .editor-url-section .url-highlight-group,
+.content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group){
+ border:1px solid #806b49;
+ border-left:3px solid #c5a46d;
+ background:linear-gradient(135deg,#302c25,#202630);
+ box-shadow:inset 0 1px #ffffff08;
+}
+.content-editor-view .editor-url-section .url-highlight-heading b,
+.content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group) .url-highlight-heading b{color:#e6d2aa}
+.content-editor-view .editor-url-section .url-highlight-icon,
+.content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group) .url-highlight-icon{border:1px solid #806b49;background:#c5a46d20;color:#e0c58f}
+.content-editor-view .editor-url-section .url-highlight-tag,
+.content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group) .url-highlight-tag{border-color:#806b49;background:#c5a46d12;color:#e0c58f}
+
+.content-editor-view .editor-watch-section .url-highlight-group,
+.content-editor-view .playback-url-group{
+ border:1px solid #87464d;
+ border-left:3px solid #d66a72;
+ background:linear-gradient(135deg,#302327,#1d252f);
+ box-shadow:inset 0 1px #ffffff08;
+}
+.content-editor-view .editor-watch-section .url-highlight-heading b,
+.content-editor-view .playback-url-group .url-highlight-heading b{color:#f0c5c7}
+.content-editor-view .editor-watch-section .url-highlight-icon,
+.content-editor-view .playback-url-group .url-highlight-icon{border:1px solid #87464d;background:#d65a6420;color:#f0a0a4}
+.content-editor-view .editor-watch-section .url-highlight-tag,
+.content-editor-view .playback-url-group .url-highlight-tag{border-color:#87464d;background:#d94b5512;color:#e99a9f}
+
+.content-editor-view .media-url-group{
+ border:1px solid #526b83;
+ border-left:3px solid #7f9fb8;
+ background:linear-gradient(135deg,#202d39,#19232e);
+ box-shadow:inset 0 1px #ffffff08;
+}
+.content-editor-view .media-url-group .url-highlight-heading b{color:#c5d7e7}
+.content-editor-view .media-url-group .url-highlight-icon{border:1px solid #526b83;background:#7f9fb820;color:#b6d0e5}
+.content-editor-view .media-url-group .url-highlight-tag{border-color:#526b83;background:#7f9fb812;color:#b6d0e5}
+
+/* Inputs inside highlighted groups echo their parent accent on focus */
+.content-editor-view .url-highlight-group input:focus,
+.content-editor-view .url-highlight-group select:focus,
+.content-editor-view .url-highlight-group textarea:focus{
+ border-color:var(--editor-field-accent,#8fae66);
+ box-shadow:0 0 0 3px color-mix(in srgb,var(--editor-field-accent,#8fae66) 16%,transparent);
+}
+.content-editor-view .editor-url-section .url-highlight-group{--editor-field-accent:#c5a46d}
+.content-editor-view .editor-watch-section .url-highlight-group,
+.content-editor-view .playback-url-group{--editor-field-accent:#d66a72}
+.content-editor-view .media-url-group{--editor-field-accent:#7f9fb8}
