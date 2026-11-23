@@ -150,7 +150,7 @@
       "image": "https://image.tmdb.org/t/p/w500/h7nsyR0I53gM6P1Inxl438UnqS7.jpg",
       "backdrop": "https://image.tmdb.org/t/p/w1280/u4yhC4Q8bS1w7FWIPpKsmY4nv9E.jpg",
       "desc": "İbrahimi dinlerce kutsal olan Hazreti Yusuf'un (a.s) hikayesi binlerce yıldır anlatılıyor. Bu İran Ramazan dizisinde Kur'an ve Ehl-i Beyt kaynaklarından ilham alınarak Yusuf Peygamber'in hayatına ışık tutuluyor.",
-      "director": "فرج الله سلحشور, جمال شورجه",
+      "director": "فرج الله سلحشور",
       "cast": [
         "مصطفی زمانی",
         "کتایون ریاحی",
@@ -172,7 +172,7 @@
       "tmdbGenres": "Dram",
       "tmdbRuntime": "45 dk / bölüm",
       "tmdbCountries": "IR",
-      "tmdbDirector": "فرج الله سلحشور, جمال شورجه",
+      "tmdbDirector": "فرج الله سلحشور",
       "tmdbCast": [
         {
           "id": 1375317,
