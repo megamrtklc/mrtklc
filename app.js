@@ -2138,10 +2138,6 @@
                     if (titleRoute) {
                         const type = titleRoute[1].toLocaleLowerCase('tr-TR') === 'dizi' ? 'tv' : 'movie';
                         const slug = this.getRouteSlug(decodePart(titleRoute[2]));
-                        const item = (this.catalog || []).find(entry =>
-                            (entry.type === 'tv' || entry.type === 'series' ? 'tv' : 'movie') === type &&
-                            this.getItemRouteSlug(entry) === slug
-                        );
                         let item = (this.catalog || []).find(entry =>
                             (entry.type === 'tv' || entry.type === 'series' ? 'tv' : 'movie') === type &&
                             (this.getItemRouteSlug(entry) === slug || this.getItemRouteAliases(entry).includes(slug))
