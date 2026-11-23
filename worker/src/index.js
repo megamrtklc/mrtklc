@@ -1,5 +1,6 @@
 /* Admin UI bundle deployment sync: admin assets are packaged by Wrangler. */
 const API_VERSION = "2022-11-28";
+const BRAND_CONFIG_DEFAULTS = {"brandName":"CINEVERSE","shortName":"CINE","slogan":"Film ve dizi arşivinin kişisel merkezi","pageTitle":"CINEVERSE","metaDescription":"CINEVERSE ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.","copyright":"© 2026 CINEVERSE. Tüm hakları saklıdır.","adminSubtitle":"CONTROL ROOM","scopes":{"site":true,"admin":true,"login":true,"seo":true}};
 let cachedJwks = null;
 let cachedJwksAt = 0;
 
@@ -305,6 +306,35 @@ export function validateCatalogData(data) {
   return true;
 }
 
+function brandConfigUrl(env,withRef=true){
+ const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc");
+ const base="https://api.github.com/repos/"+owner+"/"+repo+"/contents/brand-config.json";
+ return withRef?base+"?ref="+encodeURIComponent(env.GITHUB_BRANCH||"main"):base;
+}
+async function readBrandConfig(env){
+ const headers=env.GITHUB_TOKEN?githubHeaders(env):{"accept":"application/vnd.github+json","x-github-api-version":API_VERSION,"user-agent":"CineVerse-Admin-Worker"};
+ const response=await fetch(brandConfigUrl(env),{headers});
+ if(response.status===404)return {config:BRAND_CONFIG_DEFAULTS,sha:null};
+ const payload=await response.json().catch(()=>({}));
+ if(!response.ok||!payload.content)throw new Error(payload.message||"Marka ayarları okunamadı.");
+ const bytes=Uint8Array.from(atob(String(payload.content).replace(/\s/g,"")),ch=>ch.charCodeAt(0));
+ const config=JSON.parse(new TextDecoder().decode(bytes));
+ return {config:{...BRAND_CONFIG_DEFAULTS,...config,scopes:{...BRAND_CONFIG_DEFAULTS.scopes,...(config.scopes||{})}},sha:payload.sha||null};
+}
+async function writeBrandConfig(env,config,expectedSha){
+ if(!env.GITHUB_TOKEN)throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
+ if(!config||typeof config!=="object"||Array.isArray(config))throw new Error("Marka ayarları geçersiz.");
+ const clean={brandName:String(config.brandName||"").trim().slice(0,40),shortName:String(config.shortName||"").trim().slice(0,16),slogan:String(config.slogan||"").trim().slice(0,100),pageTitle:String(config.pageTitle||"").trim().slice(0,80),metaDescription:String(config.metaDescription||"").trim().slice(0,240),copyright:String(config.copyright||"").trim().slice(0,120),adminSubtitle:String(config.adminSubtitle||"").trim().slice(0,48),scopes:{site:config.scopes?.site!==false,admin:config.scopes?.admin!==false,login:config.scopes?.login!==false,seo:config.scopes?.seo!==false}};
+ if(!clean.brandName||!clean.pageTitle)throw new Error("Ana marka adı ve sayfa başlığı zorunludur.");
+ const currentResponse=await fetch(brandConfigUrl(env),{headers:githubHeaders(env)});let currentSha=null;
+ if(currentResponse.ok){const current=await currentResponse.json();currentSha=current.sha||null;}
+ else if(currentResponse.status!==404){const error=await currentResponse.json().catch(()=>({}));throw new Error(error.message||"Mevcut marka ayarları kontrol edilemedi.");}
+ if(currentSha!==(expectedSha||null))return {conflict:true,sha:currentSha};
+ const content=bytesToBase64(new TextEncoder().encode(JSON.stringify(clean,null,2)));
+ const response=await fetch(brandConfigUrl(env,false),{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Update brand identity settings",content,sha:currentSha||undefined,branch:env.GITHUB_BRANCH||"main"})});
+ const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.message||"Marka ayarları kaydedilemedi.");
+ return {conflict:false,sha:result.content?.sha||null,commit:result.commit?.sha||null,config:clean};
+}
 async function writeCatalog(env, data, expectedSha) {
   if (!env.GITHUB_TOKEN) throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
   validateCatalogData(data);
@@ -344,6 +374,17 @@ export default {
     }
     const response=await (async()=>{
       if(!path.startsWith("/api/"))return env.ASSETS.fetch(request);
+      if(request.method==="GET"&&path==="/api/brand-config") {
+        try { return json(await readBrandConfig(env)); }
+        catch(error) { return json({error:error.message||"Marka ayarları okunamadı."},502); }
+      }
+      if(request.method==="PUT"&&path==="/api/brand-config") {
+        if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+        try { const body=await request.json();const result=await writeBrandConfig(env,body?.config,body?.sha);
+          if(result.conflict)return json({error:"Marka ayarları başka bir işlemde güncellenmiş.",sha:result.sha},409);
+          return json({ok:true,sha:result.sha,commit:result.commit,config:result.config});
+        } catch(error) { return json({error:error.message||"Marka ayarları kaydedilemedi."},400); }
+      }
       if(request.method==="GET"&&path==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
       if(request.method==="GET"&&path==="/api/credentials") {
         const result={github:{configured:!!env.GITHUB_TOKEN},tmdb:{configured:!!env.TMDB_API_KEY}};
