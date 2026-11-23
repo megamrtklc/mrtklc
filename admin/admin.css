@@ -1317,3 +1317,16 @@ html,body,.app-shell,.main-column,.main-content{background-color:var(--bg)}
 input,select,textarea,.field input,.field select,.field textarea,.catalog-toolbar input,.catalog-toolbar select{background:#1c1e25!important;border-color:#41444d!important;color:#f0ede6}
 .secondary-button,.dashboard-secondary,.toolbar-button,.filter-button{background:#292c35!important;border-color:#41444d!important}
 .workspace-switch,.sidebar-status,.dashboard-insight-stats>div{background:#252831!important;border-color:#3a3d46!important}
+
+
+/* Toplu yapım seçimi ve silme */
+.catalog-select-cell{width:42px;text-align:center!important;padding-left:12px!important;padding-right:8px!important}
+.catalog-select-cell input{width:17px;height:17px;accent-color:var(--accent,#d5ad62);cursor:pointer;vertical-align:middle}
+.catalog-bulk-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;padding:12px 15px;border:1px solid rgba(220,75,75,.25);border-radius:12px;background:rgba(220,75,75,.07);color:var(--text-primary,#f0ede6)}
+.catalog-bulk-bar[hidden]{display:none!important}
+.catalog-bulk-bar>div{display:flex;align-items:center;gap:8px}
+.catalog-clear-selection,.catalog-bulk-delete{min-height:36px;padding:7px 12px;border-radius:8px;font:inherit;font-size:13px;cursor:pointer}
+.catalog-clear-selection{border:1px solid var(--border,#3a3d46);background:transparent;color:var(--text-primary,#f0ede6)}
+.catalog-bulk-delete{border:1px solid #b94444;background:#a93636;color:#fff;font-weight:700}
+.catalog-bulk-delete:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:600px){.catalog-bulk-bar{align-items:flex-start;flex-direction:column}.catalog-bulk-bar>div{width:100%}.catalog-clear-selection,.catalog-bulk-delete{flex:1}}
