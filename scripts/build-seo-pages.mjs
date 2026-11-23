@@ -129,7 +129,7 @@ for (const item of items) {
     directorMap.get(key).works.push(item);
   }
 }
-const actors = [...actorMap.values()].sort((a,b)=>a.name.localeCompare(b.name,'tr'));
+const actors = [...actorMap.values()].filter(person => new Set(person.works.map(entry => itemId(entry.item))).size >= 2).sort((a,b)=>a.name.localeCompare(b.name,'tr'));
 const directors = [...directorMap.values()].sort((a,b)=>a.name.localeCompare(b.name,'tr'));
 const actorSlugs = uniqueSlugs(actors, person => person.name, person => person.id);
 const directorSlugs = uniqueSlugs(directors, person => person.name, person => person.name);
@@ -170,17 +170,18 @@ for (const item of items) {
   const canonical = abs(itemPaths.get(item));
   const poster = posterOf(item);
   const directorsForItem = directorNames(item);
-  const cast = array(item.tmdbCast).filter(person => person?.id && clean(person.name)).slice(0,12);
+  const cast = array(item.tmdbCast).filter(person => person?.id && clean(person.name)).slice(0,6);
   const peopleLinks = directorsForItem.map(name => {
     const href = directorPaths.get(name.toLocaleLowerCase('tr'));
     return href ? '<a class="chip" href="' + esc(BASE_PATH + href) + '">' + esc(name) + '</a>' : '';
   }).join('');
   const castLinks = cast.map(person => {
     const href = actorPaths.get(String(person.id));
-    if (!href) return '';
-    return '<a class="person" href="' + esc(BASE_PATH + href) + '">' +
+    const tag = href ? 'a' : 'div';
+    const link = href ? ' href="' + esc(BASE_PATH + href) + '"' : '';
+    return '<' + tag + ' class="person"' + link + '>' +
       (person.profile ? '<img loading="lazy" src="' + esc(person.profile) + '" alt="' + esc(person.name) + '">' : '') +
-      '<div><strong>' + esc(person.name) + '</strong><span>' + esc(person.character || 'Oyuncu') + '</span></div></a>';
+      '<div><strong>' + esc(person.name) + '</strong><span>' + esc(person.character || 'Oyuncu') + '</span></div></' + tag + '>';
   }).join('');
   const crumbs = '<nav class="crumb"><a href="' + esc(BASE_PATH + '/') + '">Ana sayfa</a> / ' +
     '<span>' + (typeOf(item) === 'tv' ? 'Diziler' : 'Filmler') + '</span> / ' + esc(title) + '</nav>';
@@ -209,7 +210,7 @@ for (const item of items) {
     ...(year ? { datePublished: year } : {}),
     ...(genres.length ? { genre: genres } : {}),
     ...(directorsForItem.length ? { director: directorsForItem.map(name => ({'@type':'Person',name})) } : {}),
-    ...(cast.length ? { actor: cast.map(person => ({'@type':'Person',name:person.name,url:abs(actorPaths.get(String(person.id)) || '')})) } : {}),
+    ...(cast.length ? { actor: cast.map(person => ({'@type':'Person',name:person.name,...(actorPaths.has(String(person.id)) ? {url:abs(actorPaths.get(String(person.id)))} : {})})) } : {}),
     ...(rating && voteCountOf(item) ? { aggregateRating: {'@type':'AggregateRating',ratingValue:rating,bestRating:10,ratingCount:voteCountOf(item)} } : {})
   };
   const html = pageShell({ title: title + (year ? ' (' + year + ')' : '') + ' | Perde', description: shortDesc, canonical, image: poster, jsonLd: schema, body, kind: typeOf(item) });
