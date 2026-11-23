@@ -2001,11 +2001,63 @@
                     this.syncRouteToUrl('franchises', null); window.scrollTo({ top: 0, behavior: 'smooth' });
                 },
 
+                getRouteSlug(value) {
+                    return this.normalizeSearchText(value).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                },
+
+                getItemRouteSlug(item) {
+                    const base = this.getRouteSlug(item?.originalTitle || item?.englishTitle || item?.title || '');
+                    if (!base) return '';
+                    const type = item?.type === 'tv' || item?.type === 'series' ? 'tv' : 'movie';
+                    const matches = (this.catalog || []).filter(entry =>
+                        (entry.type === 'tv' || entry.type === 'series' ? 'tv' : 'movie') === type &&
+                        this.getRouteSlug(entry.originalTitle || entry.englishTitle || entry.title || '') === base
+                    );
+                    if (matches.length < 2) return base;
+                    return base + '-' + this.getRouteSlug(item?.year || item?.id || '');
+                },
+
+                getCatalogPeople(kind) {
+                    const people = [];
+                    const seen = new Set();
+                    (this.catalog || []).forEach(item => {
+                        if (kind === 'director') {
+                            const name = String(item.tmdbDirector || item.director || '').trim();
+                            const key = this.normalizeSearchText(name);
+                            if (name && !seen.has(key)) { seen.add(key); people.push({ name, id: null }); }
+                            return;
+                        }
+                        const cast = Array.isArray(item.tmdbCast) && item.tmdbCast.length ? item.tmdbCast : (Array.isArray(item.cast) ? item.cast : []);
+                        cast.forEach(person => {
+                            const name = String(typeof person === 'string' ? person : (person?.name || '')).trim();
+                            if (!name) return;
+                            const id = typeof person === 'object' && person?.id ? String(person.id) : '';
+                            const key = this.normalizeSearchText(name) + ':' + id;
+                            if (!seen.has(key)) {
+                                seen.add(key);
+                                people.push({ ...(typeof person === 'object' ? person : {}), name, id: id || null });
+                            }
+                        });
+                    });
+                    return people;
+                },
+
+                getPersonRouteSlug(person, kind) {
+                    const base = this.getRouteSlug(person?.name || '');
+                    if (!base) return '';
+                    const matches = this.getCatalogPeople(kind).filter(entry => this.getRouteSlug(entry.name) === base);
+                    const ids = [...new Set(matches.map(entry => String(entry.id || '')).filter(Boolean))];
+                    return ids.length > 1 && person?.id ? base + '-' + String(person.id) : base;
+                },
+
                 getRouteHash(page = this.currentPage, item = this.selectedItem) {
-                    if (page === 'watch' && item?.id) return '#/watch/' + encodeURIComponent(item.id);
+                    if (page === 'watch' && item?.id) {
+                        const type = item.type === 'tv' || item.type === 'series' ? 'Dizi' : 'Film';
+                        return '#/' + type + '/' + encodeURIComponent(this.getItemRouteSlug(item));
+                    }
                     if (page === 'franchise' && item?.id) return '#/franchise/' + encodeURIComponent(item.id);
-                    if (page === 'actor' && this.selectedActor?.id) return '#/actor/' + encodeURIComponent(this.selectedActor.id);
-                    if (page === 'director' && this.selectedActor?.id) return '#/director/' + encodeURIComponent(this.selectedActor.id);
+                    if (page === 'actor' && this.selectedActor?.name) return '#/Oyuncu/' + encodeURIComponent(this.getPersonRouteSlug(this.selectedActor, 'actor'));
+                    if (page === 'director' && this.selectedActor?.name) return '#/Yonetmen/' + encodeURIComponent(this.getPersonRouteSlug(this.selectedActor, 'director'));
                     return '#/' + encodeURIComponent(page || 'home');
                 },
 
@@ -2025,32 +2077,56 @@
                     }
                 },
 
-                restoreRouteFromUrl() {
+                async restoreRouteFromUrl() {
                     const hash = window.location.hash || '';
-                    const actorMatch = hash.match(/^#\/actor\/(\d+)$/);
-                    if (actorMatch) {
-                        this.openActorProfile({ id: Number(actorMatch[1]), name: 'Oyuncu' }, false);
-                        return;
+                    const decodePart = value => { try { return decodeURIComponent(value); } catch (_) { return value; } };
+                    const legacyActor = hash.match(/^#\/actor\/(\d+)$/i);
+                    if (legacyActor) { this.openActorProfile({ id: Number(legacyActor[1]), name: 'Oyuncu' }, false); return; }
+                    const legacyDirector = hash.match(/^#\/director\/(\d+)$/i);
+                    if (legacyDirector) { this.openDirectorProfile({ id: Number(legacyDirector[1]), name: 'Yönetmen' }, false); return; }
+
+                    const titleRoute = hash.match(/^#\/(film|dizi)\/([^/?#]+)$/i);
+                    if (titleRoute) {
+                        const type = titleRoute[1].toLocaleLowerCase('tr-TR') === 'dizi' ? 'tv' : 'movie';
+                        const slug = this.getRouteSlug(decodePart(titleRoute[2]));
+                        const item = (this.catalog || []).find(entry =>
+                            (entry.type === 'tv' || entry.type === 'series' ? 'tv' : 'movie') === type &&
+                            this.getItemRouteSlug(entry) === slug
+                        );
+                        if (item) { this.openWatchPage(item, false); return; }
                     }
-                    const directorMatch = hash.match(/^#\/director\/(\d+)$/);
-                    if (directorMatch) {
-                        this.openDirectorProfile({ id: Number(directorMatch[1]), name: 'Yönetmen' }, false);
-                        return;
-                    }
-                    const franchiseMatch = hash.match(/^#\/franchise\/([^/?#]+)$/);
-                    if (franchiseMatch) { this.openFranchise(decodeURIComponent(franchiseMatch[1]), false); return; }
-                    const match = hash.match(/^#\/watch\/(.+)$/);
-                    if (match) {
-                        const itemId = decodeURIComponent(match[1]);
-                        const item = this.catalog.find(entry => String(entry.id) === itemId);
-                        if (item) {
-                            this.openWatchPage(item, false);
-                            return;
+
+                    const personRoute = hash.match(/^#\/(oyuncu|yonetmen)\/([^/?#]+)$/i);
+                    if (personRoute) {
+                        const kind = personRoute[1].toLocaleLowerCase('tr-TR') === 'oyuncu' ? 'actor' : 'director';
+                        const slug = this.getRouteSlug(decodePart(personRoute[2]));
+                        let person = this.getCatalogPeople(kind).find(entry => {
+                            const base = this.getRouteSlug(entry.name);
+                            return slug === base || (entry.id && slug === base + '-' + String(entry.id));
+                        });
+                        if (person) {
+                            if (kind === 'director') { this.openDirectorProfile({ ...person, id: person.id ? Number(person.id) : null }, false); return; }
+                            if (!person.id) {
+                                try {
+                                    const result = await this.fetchTmdb('search/person?query=' + encodeURIComponent(person.name));
+                                    person = (result.results || []).find(entry => this.normalizeSearchText(entry.name) === this.normalizeSearchText(person.name)) || (result.results || [])[0] || person;
+                                } catch (error) { console.warn('Oyuncu profili aranamadı:', error); }
+                            }
+                            if (person.id) { this.openActorProfile({ ...person, id: Number(person.id) }, false); return; }
                         }
                     }
 
+                    const franchise = hash.match(/^#\/franchise\/([^/?#]+)$/);
+                    if (franchise) { this.openFranchise(decodePart(franchise[1]), false); return; }
+                    const legacyWatch = hash.match(/^#\/watch\/(.+)$/);
+                    if (legacyWatch) {
+                        const id = decodePart(legacyWatch[1]);
+                        const item = (this.catalog || []).find(entry => String(entry.id) === id);
+                        if (item) { this.openWatchPage(item, false); return; }
+                    }
+
                     const pageMatch = hash.match(/^#\/([^/?#]+)$/);
-                    const page = pageMatch ? decodeURIComponent(pageMatch[1]) : 'home';
+                    const page = pageMatch ? decodePart(pageMatch[1]) : 'home';
                     const catalogPages = ['movies', 'series', 'turkish'];
                     if (catalogPages.includes(page)) { this.navigateTo(page); return; }
                     const allowedPages = ['home', 'explore', 'video-links', 'library', 'watchlist', 'stats', 'franchises'];
