@@ -136,26 +136,83 @@ body.keyboard-open{align-items:flex-start;padding-top:max(10px,env(safe-area-ins
 </script></body></html>`;
   return new Response(html,{status:200,headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff","referrer-policy":"no-referrer"}});
 }
-async function authorize(request,env) {
-  if(!env.ADMIN_PASSWORD||!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32)return {ok:false,status:503,error:"Yönetici girişi henüz yapılandırılmamış."};
-  const token=getCookie(request,"cv_admin_session");
+const SESSION_COOKIE="cv_admin_session";
+const SESSION_DEFAULT_TTL=7200;
+async function digestText(value){return new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(String(value))));}
+async function hashPassword(password,saltBytes){
+  const material=await crypto.subtle.importKey("raw",new TextEncoder().encode(password),"PBKDF2",false,["deriveBits"]);
+  const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:saltBytes,iterations:310000,hash:"SHA-256"},material,256);
+  return encodeBase64Url(new Uint8Array(bits));
+}
+async function readCredential(env){
+  if(!env.SECURITY_DB)throw new Error("Yönetici güvenlik veritabanı bağlı değil.");
+  return await env.SECURITY_DB.prepare("SELECT password_hash,password_salt,password_iterations FROM admin_credentials WHERE id=1").first();
+}
+async function ensureCredential(env){
+  let credential=await readCredential(env);
+  if(credential)return credential;
+  if(!env.ADMIN_PASSWORD||String(env.ADMIN_PASSWORD).length<10)throw new Error("İlk yönetici şifresi yapılandırılmamış.");
+  const salt=crypto.getRandomValues(new Uint8Array(16));
+  const hash=await hashPassword(env.ADMIN_PASSWORD,salt);
+  await env.SECURITY_DB.prepare("INSERT OR IGNORE INTO admin_credentials (id,password_hash,password_salt,password_iterations,updated_at) VALUES (1,?,?,310000,?)").bind(hash,encodeBase64Url(salt),Math.floor(Date.now()/1000)).run();
+  credential=await readCredential(env);
+  if(!credential)throw new Error("Yönetici kimlik bilgisi oluşturulamadı.");
+  return credential;
+}
+async function verifyPassword(password,credential){
+  try{
+    const salt=decodeBase64Url(credential.password_salt);
+    const candidate=await hashPassword(password,salt);
+    return constantTimeEqual(new TextEncoder().encode(candidate),new TextEncoder().encode(credential.password_hash));
+  }catch{return false;}
+}
+async function requestIpHash(request,env){
+  const ip=request.headers.get("cf-connecting-ip")||"unknown";
+  return encodeBase64Url(await hmac(env.SESSION_SECRET,ip));
+}
+function requestAgent(request){return String(request.headers.get("user-agent")||"").slice(0,240);}
+async function recordLogin(env,request,username,succeeded){
+  if(!env.SECURITY_DB)return;
+  try{
+    await env.SECURITY_DB.prepare("INSERT INTO admin_login_events (attempted_username,succeeded,occurred_at,ip_hash,user_agent) VALUES (?,?,?,?,?)")
+      .bind(String(username||"").slice(0,32),succeeded?1:0,Math.floor(Date.now()/1000),await requestIpHash(request,env),requestAgent(request)).run();
+    await env.SECURITY_DB.prepare("DELETE FROM admin_login_events WHERE occurred_at < ?").bind(Math.floor(Date.now()/1000)-90*86400).run();
+  }catch(error){console.error("Giriş olayı kaydedilemedi:",error);}
+}
+async function issueSession(request,env){
+  const now=Math.floor(Date.now()/1000);
+  const settings=await env.SECURITY_DB.prepare("SELECT session_ttl_seconds FROM admin_security_settings WHERE id=1").first();
+  const ttl=Math.max(900,Math.min(86400,Number(settings?.session_ttl_seconds)||SESSION_DEFAULT_TTL));
+  const sid=crypto.randomUUID();
+  const expires=now+ttl;
+  await env.SECURITY_DB.prepare("INSERT INTO admin_sessions (session_id,created_at,last_seen_at,expires_at,user_agent,ip_hash,revoked_at) VALUES (?,?,?,?,?,?,NULL)")
+    .bind(sid,now,now,expires,requestAgent(request),await requestIpHash(request,env)).run();
+  const payload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",sid,iat:now,exp:expires})));
+  const signature=encodeBase64Url(await hmac(env.SESSION_SECRET,payload));
+  return {token:payload+"."+signature,ttl};
+}
+async function authorize(request,env){
+  if(!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32)return {ok:false,status:503,error:"Yönetici oturumu yapılandırılmamış."};
+  if(!env.SECURITY_DB)return {ok:false,status:503,error:"Güvenlik veritabanı henüz bağlanmadı."};
+  const token=getCookie(request,SESSION_COOKIE);
   if(!token)return {ok:false,status:401,error:"Yönetici oturumu gerekli."};
-  try {
+  try{
     const parts=token.split(".");
     if(parts.length!==2)throw new Error("Invalid session");
     const payload=JSON.parse(new TextDecoder().decode(decodeBase64Url(parts[0])));
     const expected=await hmac(env.SESSION_SECRET,parts[0]);
-    const supplied=decodeBase64Url(parts[1]);
-    if(!constantTimeEqual(expected,supplied)||payload.sub!=="admin"||typeof payload.exp!=="number"||payload.exp<=Math.floor(Date.now()/1000))throw new Error("Invalid session");
-    const refreshedPayload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:payload.iat||Math.floor(Date.now()/1000),exp:Math.floor(Date.now()/1000)+7200})));
-    const refreshedSignature=encodeBase64Url(await hmac(env.SESSION_SECRET,refreshedPayload));
-    return {ok:true,claims:{email:"Yönetici"},cookie:"cv_admin_session="+refreshedPayload+"."+refreshedSignature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=7200"};
-  } catch { return {ok:false,status:401,error:"Yönetici oturumu doğrulanamadı."}; }
+    if(!constantTimeEqual(expected,decodeBase64Url(parts[1]))||payload.sub!=="admin"||typeof payload.exp!=="number"||payload.exp<=Math.floor(Date.now()/1000)||typeof payload.sid!=="string")throw new Error("Invalid session");
+    const session=await env.SECURITY_DB.prepare("SELECT session_id,expires_at,revoked_at,last_seen_at FROM admin_sessions WHERE session_id=?").bind(payload.sid).first();
+    const now=Math.floor(Date.now()/1000);
+    if(!session||session.revoked_at||Number(session.expires_at)<=now)throw new Error("Revoked session");
+    if(now-Number(session.last_seen_at||0)>300)await env.SECURITY_DB.prepare("UPDATE admin_sessions SET last_seen_at=? WHERE session_id=? AND revoked_at IS NULL").bind(now,payload.sid).run();
+    return {ok:true,claims:{email:"Yönetici",sessionId:payload.sid},cookie:null};
+  }catch{return {ok:false,status:401,error:"Yönetici oturumu geçersiz veya sonlandırılmış."};}
 }
-async function handleLogin(request,env) {
+async function handleLogin(request,env){
   if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
-  if(!env.ADMIN_PASSWORD||!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32)return json({error:"Yönetici girişi sunucuda yapılandırılmamış."},503);
-  if(env.LOGIN_LIMITER) {
+  if(!env.SECURITY_DB||!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32)return json({error:"Yönetici güvenlik altyapısı henüz yapılandırılmamış."},503);
+  if(env.LOGIN_LIMITER){
     const ip=request.headers.get("cf-connecting-ip")||"unknown";
     const limit=await env.LOGIN_LIMITER.limit({key:ip});
     if(!limit.success)return new Response("Çok fazla giriş denemesi. Bir dakika sonra tekrar dene.",{status:429,headers:{"content-type":"text/plain; charset=utf-8","retry-after":"60","cache-control":"no-store"}});
@@ -163,25 +220,84 @@ async function handleLogin(request,env) {
   const form=await request.formData();
   const username=String(form.get("username")||"").trim().toLowerCase();
   const password=String(form.get("password")||"");
-  let configuredUsername;
+  let configuredUsername="admin";
   try{
     const catalog=await readCatalog(env);
     configuredUsername=String(catalog.data?.adminProfile?.username||"admin").trim().toLowerCase();
-    if(!/^[a-z0-9._-]{3,32}$/.test(configuredUsername))throw new Error("Yönetici kullanıcı adı yapılandırması geçersiz.");
-  }catch(error){
+    if(!/^[a-z0-9._-]{3,32}$/.test(configuredUsername))throw new Error("Invalid username config");
+  }catch{
     return new Response("Yönetici kullanıcı adı şu anda doğrulanamıyor. Biraz sonra tekrar dene.",{status:503,headers:{"content-type":"text/plain; charset=utf-8","cache-control":"no-store"}});
   }
-  if(!/^[a-z0-9._-]{3,32}$/.test(username)||username!==configuredUsername||password.length<10||password.length>256){let loginBrand=BRAND_CONFIG_DEFAULTS;try{const loaded=await readBrandConfig(env);if(loaded.config)loginBrand=loaded.config;}catch(error){}const page=loginPage(true,loginBrand);return new Response(page.body,{status:401,headers:page.headers});}
-  const [candidate,expected]=await Promise.all([hmac(env.SESSION_SECRET,password),hmac(env.SESSION_SECRET,env.ADMIN_PASSWORD)]);
-  if(!constantTimeEqual(candidate,expected)){let loginBrand=BRAND_CONFIG_DEFAULTS;try{const loaded=await readBrandConfig(env);if(loaded.config)loginBrand=loaded.config;}catch(error){}const page=loginPage(true,loginBrand);return new Response(page.body,{status:401,headers:page.headers});}
-  const now=Math.floor(Date.now()/1000);
-  const payload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:now,exp:now+7200})));
-  const signature=encodeBase64Url(await hmac(env.SESSION_SECRET,payload));
-  return new Response(null,{status:303,headers:{"location":"/","set-cookie":"cv_admin_session="+payload+"."+signature+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=7200","cache-control":"no-store"}});
+  let credential,valid=false;
+  try{
+    credential=await ensureCredential(env);
+    valid=/^[a-z0-9._-]{3,32}$/.test(username)&&username===configuredUsername&&password.length>=10&&password.length<=256&&await verifyPassword(password,credential);
+  }catch(error){console.error("Giriş doğrulama altyapısı:",error);return json({error:"Güvenlik veritabanına erişilemiyor."},503);}
+  await recordLogin(env,request,username,valid);
+  if(!valid){
+    let loginBrand=BRAND_CONFIG_DEFAULTS;try{const loaded=await readBrandConfig(env);if(loaded.config)loginBrand=loaded.config;}catch{}
+    const page=loginPage(true,loginBrand);
+    return new Response(page.body,{status:401,headers:page.headers});
+  }
+  const issued=await issueSession(request,env);
+  return new Response(null,{status:303,headers:{"location":"/","set-cookie":SESSION_COOKIE+"="+issued.token+"; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age="+issued.ttl,"cache-control":"no-store"}});
 }
-async function handleLogout(request) {
+async function handleLogout(request,env){
   if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
-  return new Response(null,{status:303,headers:{"location":"/","set-cookie":"cv_admin_session=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0","cache-control":"no-store"}});
+  const token=getCookie(request,SESSION_COOKIE);
+  if(token&&env.SECURITY_DB){
+    try{const payload=JSON.parse(new TextDecoder().decode(decodeBase64Url(token.split(".")[0])));if(payload.sid)await env.SECURITY_DB.prepare("UPDATE admin_sessions SET revoked_at=? WHERE session_id=? AND revoked_at IS NULL").bind(Math.floor(Date.now()/1000),payload.sid).run();}catch{}
+  }
+  return new Response(null,{status:303,headers:{"location":"/","set-cookie":SESSION_COOKIE+"=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0","cache-control":"no-store"}});
+}
+async function handleSecurityApi(request,env,auth,path){
+  if(!env.SECURITY_DB)return json({error:"Güvenlik veritabanı bağlı değil."},503);
+  const now=Math.floor(Date.now()/1000);
+  if(request.method==="GET"&&path==="/api/security/sessions"){
+    const result=await env.SECURITY_DB.prepare("SELECT session_id,created_at,last_seen_at,expires_at,user_agent,ip_hash FROM admin_sessions WHERE revoked_at IS NULL AND expires_at>? ORDER BY last_seen_at DESC LIMIT 30").bind(now).all();
+    return json({sessions:(result.results||[]).map(s=>({...s,current:s.session_id===auth.claims.sessionId,ip_hint:s.ip_hash?String(s.ip_hash).slice(0,7)+"…":""}))});
+  }
+  if(request.method==="POST"&&path==="/api/security/logout-all"){
+    await env.SECURITY_DB.prepare("UPDATE admin_sessions SET revoked_at=? WHERE revoked_at IS NULL").bind(now).run();
+    return json({ok:true});
+  }
+  if(request.method==="POST"&&path==="/api/security/revoke-session"){
+    const body=await request.json().catch(()=>({}));
+    if(typeof body.sessionId!=="string"||body.sessionId.length>80)return json({error:"Oturum kimliği geçersiz."},400);
+    await env.SECURITY_DB.prepare("UPDATE admin_sessions SET revoked_at=? WHERE session_id=? AND revoked_at IS NULL").bind(now,body.sessionId).run();
+    return json({ok:true});
+  }
+  if(request.method==="GET"&&path==="/api/security/login-history"){
+    const result=await env.SECURITY_DB.prepare("SELECT attempted_username,succeeded,occurred_at,user_agent FROM admin_login_events ORDER BY occurred_at DESC LIMIT 100").all();
+    return json({events:result.results||[]});
+  }
+  if(request.method==="POST"&&path==="/api/security/change-password"){
+    if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+    const body=await request.json().catch(()=>({}));
+    const current=String(body.currentPassword||""),next=String(body.newPassword||""),confirm=String(body.confirmPassword||"");
+    if(next.length<12||next.length>256)return json({error:"Yeni şifre en az 12, en fazla 256 karakter olmalı."},400);
+    if(next!==confirm)return json({error:"Yeni şifre tekrarı eşleşmiyor."},400);
+    if(current===next)return json({error:"Yeni şifre mevcut şifreden farklı olmalı."},400);
+    const credential=await readCredential(env);
+    if(!credential||!await verifyPassword(current,credential))return json({error:"Mevcut şifre doğrulanamadı."},403);
+    const salt=crypto.getRandomValues(new Uint8Array(16)),hash=await hashPassword(next,salt);
+    await env.SECURITY_DB.prepare("UPDATE admin_credentials SET password_hash=?,password_salt=?,password_iterations=310000,updated_at=? WHERE id=1").bind(hash,encodeBase64Url(salt),now).run();
+    await env.SECURITY_DB.prepare("UPDATE admin_sessions SET revoked_at=? WHERE revoked_at IS NULL").bind(now).run();
+    return json({ok:true,message:"Şifre değiştirildi. Güvenlik için tüm oturumlar kapatıldı."});
+  }
+  if(request.method==="GET"&&path==="/api/security/settings"){
+    const settings=await env.SECURITY_DB.prepare("SELECT login_limit,login_window_seconds,session_ttl_seconds,updated_at FROM admin_security_settings WHERE id=1").first();
+    return json({settings:settings||{login_limit:5,login_window_seconds:60,session_ttl_seconds:7200}});
+  }
+  if(request.method==="PUT"&&path==="/api/security/settings"){
+    if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+    const body=await request.json().catch(()=>({}));
+    const loginLimit=Math.max(3,Math.min(10,Math.round(Number(body.loginLimit)||5)));
+    const sessionTtl=Math.max(900,Math.min(86400,Math.round(Number(body.sessionTtlSeconds)||7200)));
+    await env.SECURITY_DB.prepare("UPDATE admin_security_settings SET login_limit=?,session_ttl_seconds=?,updated_at=? WHERE id=1").bind(loginLimit,sessionTtl,now).run();
+    return json({ok:true,settings:{login_limit:loginLimit,login_window_seconds:60,session_ttl_seconds:sessionTtl}});
+  }
+  return json({error:"Güvenlik API endpoint bulunamadı."},404);
 }
 
 function githubHeaders(env) {
