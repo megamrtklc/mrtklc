@@ -761,7 +761,7 @@ try {
 
   await check('Mobil ve tablette yatay kart şeritleri kaydırılabiliyor', async () => {
     await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
-    await page.waitForSelector('#home-personalized-rail', { timeout: 15000 });
+    await page.waitForSelector('#home-personalized-rail', { state: 'attached', timeout: 15000 });
     await page.waitForFunction(() => {
       const app = window.Alpine?.$data(document.documentElement);
       return app && !app.catalogLoading && !!window.__cineverseHomeSectionObserver;
