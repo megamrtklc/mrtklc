@@ -346,6 +346,12 @@ try {
       return !!image && image.naturalWidth > 0 && image.dataset.perdeFallbackApplied !== 'true';
     });
     assert.ok(heroImageOk, 'Masaüstü hero görseli yüklenemedi');
+    const hiddenMobileHeroSources = await page.evaluate(() => [...document.querySelectorAll('#mobileCinematicHero img')].map(image => ({
+      src: image.getAttribute('src') || '',
+      srcset: image.getAttribute('srcset') || ''
+    })));
+    assert.ok(hiddenMobileHeroSources.length >= 2 && hiddenMobileHeroSources.every(image => !image.src && !image.srcset),
+      'Masaüstünde gizli mobil manşet görselleri ağ isteği başlatmamalı: ' + JSON.stringify(hiddenMobileHeroSources));
     const preloadChecks = await page.evaluate(() => ({
       catalog: !!document.querySelector('link[rel="preload"][as="fetch"][href="./filmvediziler.json"]'),
       alpine: [...document.querySelectorAll('link[rel="preload"][as="script"]')].some(link => link.href.includes('alpinejs')),
@@ -465,6 +471,10 @@ try {
         const image = document.querySelector('#mobileCinematicHero .cv-mhero-poster img');
         return image && image.complete && image.naturalWidth > 0;
       }, { timeout: 30000 });
+      await mobilePage.waitForFunction(() => {
+        const image = document.querySelector('#mobileCinematicHero .cv-mhero-backdrop img');
+        return image && image.complete && image.naturalWidth > 0;
+      }, { timeout: 30000 });
       const mobileState = await mobilePage.evaluate(async () => {
         const image = document.querySelector('#mobileCinematicHero .cv-mhero-poster img');
         await new Promise(resolve => setTimeout(resolve, 6000));
@@ -510,6 +520,20 @@ try {
       await mobilePage.waitForFunction(() => {
         const app = window.Alpine?.$data(document.documentElement);
         return app && Array.isArray(app.catalog) && app.catalog.length >= 130;
+      }, { timeout: 30000 });
+      await mobilePage.setViewportSize({ width: 1440, height: 900 });
+      await mobilePage.waitForFunction(() => {
+        const app = window.Alpine?.$data(document.documentElement);
+        const images = [...document.querySelectorAll('#mobileCinematicHero img')];
+        return app?.isMobileHeroViewport === false && images.length >= 2 &&
+          images.every(image => !image.getAttribute('src') && !image.getAttribute('srcset'));
+      }, { timeout: 10000 });
+      await mobilePage.setViewportSize({ width: 412, height: 823 });
+      await mobilePage.waitForFunction(() => {
+        const app = window.Alpine?.$data(document.documentElement);
+        const images = [...document.querySelectorAll('#mobileCinematicHero img')];
+        return app?.isMobileHeroViewport === true && images.length >= 2 &&
+          images.every(image => image.complete && image.naturalWidth > 0);
       }, { timeout: 30000 });
       const mobileSearchTrigger = mobilePage.getByRole('button', { name: 'Film ve dizi ara' });
       assert.ok(await mobileSearchTrigger.isVisible(), 'Mobil arama ikonu görünmüyor');
