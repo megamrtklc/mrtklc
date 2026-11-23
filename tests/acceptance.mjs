@@ -1538,7 +1538,7 @@ try {
     const card = page.locator('main button').filter({ hasText: 'Adalet 2' }).first();
     await card.waitFor({ state: 'visible' });
     await card.click();
-    await page.waitForURL(/#\/watch\//);
+    await page.waitForURL(/#\/(?:Film|Dizi)\//i);
     await page.getByRole('heading', { name: 'Adalet 2' }).waitFor({ state: 'visible' });
     const video = page.locator('#customVideoPlayer');
     await video.waitFor({ state: 'attached' });
