@@ -157,7 +157,10 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url), path = url.pathname;
     const segments = path.split("/").filter(Boolean);
-    if (segments.length === 2 && TYPE_PATHS.has(segments[0]) && !path.endsWith("/") && !segments[1].endsWith(".html")) {\n      return Response.redirect(new URL(path + "/" + url.search, url.origin), 308);\n    }\n    if (segments.length === 2 && TYPE_PATHS.has(segments[0]) && segments[1].endsWith(".html")) {
+    if (segments.length === 2 && TYPE_PATHS.has(segments[0]) && !path.endsWith("/") && !segments[1].endsWith(".html")) {
+      return Response.redirect(new URL(path + "/" + url.search, url.origin), 308);
+    }
+    if (segments.length === 2 && TYPE_PATHS.has(segments[0]) && segments[1].endsWith(".html")) {
       const target = "/" + segments[0] + "/" + segments[1].slice(0,-5) + "/";
       return Response.redirect(new URL(target + url.search, url.origin), 301);
     }
