@@ -125,6 +125,7 @@ try {
   assert.equal(data.catalog.find(x => String(x.id) === createdId)?.title, 'Sunucu Hatası Testi');
 
   // Create a collection and ensure it references the selected catalog record.
+  await page.locator('#mobile-menu').click();
   await page.locator('.nav-link[data-view="collections"]').click();
   await page.locator('#collection-add').click();
   await page.locator('#collection-title').fill('Tarayıcı Test Koleksiyonu');
@@ -135,6 +136,7 @@ try {
   assert.deepEqual(data.collections[0].items, [createdId]);
 
   // Deletion cancellation must be harmless; confirmation must remove the item and its collection reference.
+  await page.locator('#mobile-menu').click();
   await page.locator('.nav-link[data-view="catalog"]').click();
   page.once('dialog', dialog => dialog.dismiss());
   await catalogRow('Sunucu Hatası Testi').locator('[data-delete]').click();
