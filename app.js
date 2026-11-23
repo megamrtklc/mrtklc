@@ -2043,6 +2043,8 @@
                 },
 
                 getItemRouteSlug(item) {
+                    const manualSlug = this.getRouteSlug(item?.routeSlug || '');
+                    if (manualSlug && !/^\d+$/.test(manualSlug)) return manualSlug;
                     const titleSlug = entry => {
                         const preferred = this.getRouteSlug(this.getItemRouteTitle(entry));
                         if (preferred && !/^\\d+$/.test(preferred)) return preferred;
