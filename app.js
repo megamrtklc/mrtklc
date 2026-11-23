@@ -2061,6 +2061,22 @@
                     return matches.length > 1 && person?.id ? base + '-' + String(person.id) : base;
                 },
 
+                getPageRouteSlug(page) {
+                    const routes = {
+                        home: 'ana-sayfa',
+                        explore: 'kesfet',
+                        movies: 'filmler',
+                        series: 'diziler',
+                        turkish: 'yerli-yapimlar',
+                        'video-links': 'fragmanlar',
+                        library: 'kutuphanem',
+                        watchlist: 'izleme-listem',
+                        stats: 'istatistikler',
+                        franchises: 'seriler'
+                    };
+                    return routes[page] || page || 'ana-sayfa';
+                },
+
                 getRouteHash(page = this.currentPage, item = this.selectedItem) {
                     if (page === 'watch' && item?.id) {
                         const type = item.type === 'tv' || item.type === 'series' ? 'Dizi' : 'Film';
@@ -2069,7 +2085,7 @@
                     if (page === 'franchise' && item?.id) return '#/franchise/' + encodeURIComponent(item.id);
                     if (page === 'actor' && this.selectedActor?.name) return '#/Oyuncu/' + encodeURIComponent(this.getPersonRouteSlug(this.selectedActor, 'actor'));
                     if (page === 'director' && this.selectedActor?.name) return '#/Yonetmen/' + encodeURIComponent(this.getPersonRouteSlug(this.selectedActor, 'director'));
-                    return '#/' + encodeURIComponent(page || 'home');
+                    return '#/' + encodeURIComponent(this.getPageRouteSlug(page));
                 },
 
                 syncRouteToUrl(page = this.currentPage, item = this.selectedItem) {
@@ -2149,7 +2165,20 @@
                     }
 
                     const pageMatch = hash.match(/^#\/([^/?#]+)$/);
-                    const page = pageMatch ? decodePart(pageMatch[1]) : 'home';
+                    const route = pageMatch ? decodePart(pageMatch[1]) : 'ana-sayfa';
+                    const pageAliases = {
+                        'ana-sayfa': 'home', home: 'home',
+                        kesfet: 'explore', explore: 'explore',
+                        filmler: 'movies', movies: 'movies',
+                        diziler: 'series', series: 'series',
+                        'yerli-yapimlar': 'turkish', turkish: 'turkish',
+                        fragmanlar: 'video-links', 'video-links': 'video-links',
+                        kutuphanem: 'library', library: 'library',
+                        'izleme-listem': 'watchlist', watchlist: 'watchlist',
+                        istatistikler: 'stats', stats: 'stats',
+                        seriler: 'franchises', franchises: 'franchises'
+                    };
+                    const page = pageAliases[route] || 'home';
                     const catalogPages = ['movies', 'series', 'turkish'];
                     if (catalogPages.includes(page)) { this.navigateTo(page); return; }
                     const allowedPages = ['home', 'explore', 'video-links', 'library', 'watchlist', 'stats', 'franchises'];
