@@ -170,8 +170,8 @@ export default {
         if (path === "/sitemap.xml") return response(sitemap(index,url.origin),"application/xml; charset=utf-8");
         if (path === "/robots.txt") {
           const content = url.hostname.endsWith(".workers.dev")
-            ? "User-agent: *\\nDisallow: /\\n"
-            : "User-agent: *\\nAllow: /\\nSitemap: " + url.origin + "/sitemap.xml\\n";
+            ? "User-agent: *\nDisallow: /\n"
+            : "User-agent: *\nAllow: /\nSitemap: " + url.origin + "/sitemap.xml\n";
           return response(content,"text/plain; charset=utf-8");
         }
         const kind = segments[0], slug = segments[1];
