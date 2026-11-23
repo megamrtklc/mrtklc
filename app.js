@@ -630,7 +630,7 @@
                     return {
                         ...item,
                         id: item.id || item.tmdbId || item.title,
-                        title: item.title || item.tmdbTitle || item.originalTitle || 'İsimsiz yapım',
+                        title: item.title || item.tmdbTitle || item.name || item.originalTitle || item.original_title || item.original_name || 'İsimsiz yapım',
                         type: item.type === 'tv' || item.type === 'series' ? 'tv' : 'movie',
                         category: item.category || item.tmdbGenres || genreText,
                         genre: String(genreText).split('/')[0].trim(),
@@ -644,7 +644,7 @@
                         starring: item.starring || cast.slice(0, 3).map(person => person.name).filter(Boolean).join(' / '),
                         desc: item.desc || item.tmdbOverview || '',
                         director: item.director || item.tmdbDirector || '',
-                        originalTitle: item.originalTitle || item.tmdbOriginalTitle || item.title || '',
+                        originalTitle: item.originalTitle || item.tmdbOriginalTitle || item.original_title || item.original_name || item.tmdb?.original_title || item.tmdb?.original_name || item.title || item.tmdbTitle || '',
                         tmdbCast: cast,
                         trailerUrl: item.trailerUrl || item.tmdbTrailerUrl || '',
                         seasons: item.seasons ?? item.tmdbSeasons ?? null,
@@ -2007,7 +2007,7 @@
                 },
 
                 getItemRouteSlug(item) {
-                    const titleSlug = entry => [entry?.originalTitle, entry?.englishTitle, entry?.title]
+                    const titleSlug = entry => [entry?.originalTitle, entry?.tmdbOriginalTitle, entry?.original_title, entry?.original_name, entry?.tmdb?.original_title, entry?.tmdb?.original_name, entry?.englishTitle, entry?.tmdbEnglishTitle, entry?.english_title, entry?.title, entry?.tmdbTitle, entry?.name]
                         .map(value => this.getRouteSlug(value || '')).find(Boolean) || '';
                     const base = titleSlug(item) || ('yapim-' + this.getRouteSlug(item?.id || ''));
                     if (!base) return '';
