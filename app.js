@@ -2758,65 +2758,89 @@
                         const selected = [];
                         const genreCounts = new Map();
                         const typeCounts = new Map();
-                        const availableByType = new Map();
+                        const remainingTypeCounts = new Map();
                         remaining.forEach(entry => {
                             const type = entry.item.type || 'unknown';
-                            availableByType.set(type, (availableByType.get(type) || 0) + 1);
+                            remainingTypeCounts.set(type, (remainingTypeCounts.get(type) || 0) + 1);
                         });
-                        const typeTargets = new Map([...availableByType.entries()].map(([type, count]) => [
+                        const typeTargets = new Map([...remainingTypeCounts.entries()].map(([type, count]) => [
                             type, Math.max(1, Math.round(40 * count / Math.max(1, ranked.length)))
                         ]));
+                        let remainingMovies = remainingTypeCounts.get('movie') || 0;
+                        let remainingTv = remainingTypeCounts.get('tv') || 0;
                         while (remaining.length && selected.length < 40) {
-                            const remainingTypes = new Set(remaining.map(candidate => candidate.item.type || 'unknown'));
-                            const typesNeedingRoom = new Set([...typeTargets.entries()]
-                                .filter(([type, target]) => (typeCounts.get(type) || 0) < target && remainingTypes.has(type))
-                                .map(([type]) => type));
+                            const typesNeedingRoom = new Set();
+                            typeTargets.forEach((target, type) => {
+                                if ((typeCounts.get(type) || 0) < target && (remainingTypeCounts.get(type) || 0) > 0) {
+                                    typesNeedingRoom.add(type);
+                                }
+                            });
+
                             // İlk 5 görünür öneride (1 büyük + 4 küçük) en az 3 film ve 2 dizi bulunsun.
                             // Puan sıralaması korunur; yalnızca film/dizi kotası dolduğunda seçim dengelenir.
-                            let visibleCandidates = remaining;
+                            let requiredType = '';
                             if (selected.length < 5) {
                                 const selectedMovies = typeCounts.get('movie') || 0;
                                 const selectedTv = typeCounts.get('tv') || 0;
                                 const missingMovies = Math.max(0, 3 - selectedMovies);
                                 const missingTv = Math.max(0, 2 - selectedTv);
-                                const remainingMovies = remaining.filter(entry => entry.item.type === 'movie').length;
-                                const remainingTv = remaining.filter(entry => entry.item.type === 'tv').length;
                                 if (remainingMovies < missingMovies && remainingTv >= missingTv) {
-                                    visibleCandidates = remaining.filter(entry => entry.item.type === 'tv');
+                                    requiredType = 'tv';
                                 } else if (remainingTv < missingTv && remainingMovies >= missingMovies) {
-                                    visibleCandidates = remaining.filter(entry => entry.item.type === 'movie');
+                                    requiredType = 'movie';
                                 } else if (remainingMovies >= missingMovies && remainingTv >= missingTv) {
                                     if (remainingMovies === missingMovies || selectedTv >= 2) {
-                                        visibleCandidates = remaining.filter(entry => entry.item.type === 'movie');
+                                        requiredType = 'movie';
                                     } else if (remainingTv === missingTv || selectedMovies >= 3) {
-                                        visibleCandidates = remaining.filter(entry => entry.item.type === 'tv');
+                                        requiredType = 'tv';
                                     }
                                 }
-                                if (!visibleCandidates.length) visibleCandidates = remaining;
                             }
-                            let bestEntry = null;
+
+                            let bestIndex = -1;
                             let bestAdjusted = -Infinity;
-                            visibleCandidates.forEach(entry => {
-                                const genre = entry.primaryGenre || 'diger';
+                            for (let index = 0; index < remaining.length; index++) {
+                                const entry = remaining[index];
                                 const type = entry.item.type || 'unknown';
+                                if (requiredType && type !== requiredType) continue;
+                                const genre = entry.primaryGenre || 'diger';
                                 const genreCount = genreCounts.get(genre) || 0;
                                 const typeCount = typeCounts.get(type) || 0;
-                                const otherTypeNeedsRoom = [...typesNeedingRoom].some(otherType => otherType !== type);
+                                const otherTypeNeedsRoom = typesNeedingRoom.size > (typesNeedingRoom.has(type) ? 1 : 0);
                                 const typeBalancePenalty = typeCount >= (typeTargets.get(type) || 40) && otherTypeNeedsRoom ? 1000 : 0;
                                 const diversityPenalty = Math.max(0, genreCount - 1) * 1.7 + typeBalancePenalty;
                                 const adjusted = entry.score - diversityPenalty;
                                 if (adjusted > bestAdjusted) {
                                     bestAdjusted = adjusted;
-                                    bestEntry = entry;
+                                    bestIndex = index;
                                 }
-                            });
-                            const bestIndex = remaining.indexOf(bestEntry);
+                            }
+                            // Beklenmeyen tür verilerinde önceki davranıştaki tüm adaylara geri dön.
+                            if (bestIndex < 0) {
+                                for (let index = 0; index < remaining.length; index++) {
+                                    const entry = remaining[index];
+                                    const type = entry.item.type || 'unknown';
+                                    const genre = entry.primaryGenre || 'diger';
+                                    const genreCount = genreCounts.get(genre) || 0;
+                                    const typeCount = typeCounts.get(type) || 0;
+                                    const otherTypeNeedsRoom = typesNeedingRoom.size > (typesNeedingRoom.has(type) ? 1 : 0);
+                                    const typeBalancePenalty = typeCount >= (typeTargets.get(type) || 40) && otherTypeNeedsRoom ? 1000 : 0;
+                                    const adjusted = entry.score - (Math.max(0, genreCount - 1) * 1.7 + typeBalancePenalty);
+                                    if (adjusted > bestAdjusted) {
+                                        bestAdjusted = adjusted;
+                                        bestIndex = index;
+                                    }
+                                }
+                            }
                             const [chosen] = remaining.splice(bestIndex, 1);
-                            selected.push(chosen);
                             const genre = chosen.primaryGenre || 'diger';
                             const type = chosen.item.type || 'unknown';
+                            selected.push(chosen);
                             genreCounts.set(genre, (genreCounts.get(genre) || 0) + 1);
                             typeCounts.set(type, (typeCounts.get(type) || 0) + 1);
+                            remainingTypeCounts.set(type, Math.max(0, (remainingTypeCounts.get(type) || 0) - 1));
+                            if (type === 'movie') remainingMovies--;
+                            if (type === 'tv') remainingTv--;
                         }
                         return selected;
                     };
