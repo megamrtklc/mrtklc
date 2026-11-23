@@ -27,6 +27,51 @@ const directorNames = item => {
   if (!raw || raw.toLocaleLowerCase('tr') === 'bilinmiyor') return [];
   return raw.split(/\s*[,;|]\s*/).map(clean).filter(Boolean);
 };
+const normalizePersonName = value => clean(value).toLocaleLowerCase('tr').replace(/ı/g, 'i').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();
+
+async function resolveDirectorIds(items, directorMap) {
+  const apiKey = process.env.SEO_TMDB_API_KEY;
+  if (!apiKey) return 0;
+  const candidates = [...new Map(items.filter(item => item.tmdbId && directorNames(item).length)
+    .map(item => [(typeOf(item) === 'tv' ? 'tv' : 'movie') + '/' + item.tmdbId, item])).values()];
+  let cursor = 0;
+  let matched = 0;
+  const worker = async () => {
+    while (cursor < candidates.length) {
+      const item = candidates[cursor++];
+      const media = typeOf(item) === 'tv' ? 'tv' : 'movie';
+      try {
+        const url = new URL('https://api.themoviedb.org/3/' + media + '/' + encodeURIComponent(item.tmdbId) + '/credits');
+        url.searchParams.set('api_key', apiKey);
+        const response = await fetch(url, { headers: { accept: 'application/json' } });
+        if (!response.ok) throw new Error('TMDB HTTP ' + response.status);
+        const credits = await response.json();
+        const crew = array(credits.crew).filter(person => person?.id && person.job === 'Director');
+        for (const name of directorNames(item)) {
+          const expected = normalizePersonName(name);
+          const match = crew.find(person => normalizePersonName(person.name) === expected);
+          if (!match) continue;
+          const person = directorMap.get(name.toLocaleLowerCase('tr'));
+          if (!person || person.ambiguous) continue;
+          const id = Number(match.id);
+          if (person.tmdbId && person.tmdbId !== id) {
+            person.tmdbId = null;
+            person.ambiguous = true;
+            person.profile = '';
+            continue;
+          }
+          person.tmdbId = id;
+          person.profile = match.profile_path ? 'https://image.tmdb.org/t/p/w342' + match.profile_path : person.profile;
+          matched++;
+        }
+      } catch (error) {
+        console.warn('Yönetmen TMDB kimliği çözümlenemedi:', titleOf(item), error.message || error);
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: 6 }, worker));
+  return matched;
+}
 const descriptionOf = item => clean(item?.desc || item?.tmdbOverview || item?.overview || '');
 const yearOf = item => clean(item?.year || item?.tmdbReleaseDate || item?.releaseDate).slice(0, 4);
 const genresOf = item => clean(item?.tmdbGenres || item?.genre || item?.category).split(/\s*\/\s*|,\s*/).map(clean).filter(Boolean);
@@ -128,7 +173,7 @@ for (const item of items) {
   }
   for (const name of directorNames(item)) {
     const key = name.toLocaleLowerCase('tr');
-    if (!directorMap.has(key)) directorMap.set(key, { name, works: [] });
+    if (!directorMap.has(key)) directorMap.set(key, { name, works: [], tmdbId: null, profile: '', ambiguous: false });
     directorMap.get(key).works.push(item);
   }
 }
@@ -137,6 +182,7 @@ for (const item of items) {
  // Diğer oyuncular için en az 2 farklı katalog yapımında görünme şartı korunur.
 const actors = [...actorMap.values()].filter(person => person.isLead || new Set(person.works.map(entry => itemId(entry.item))).size >= 2).sort((a,b)=>a.name.localeCompare(b.name,'tr'));
 const directors = [...directorMap.values()].sort((a,b)=>a.name.localeCompare(b.name,'tr'));
+const resolvedDirectorCount = await resolveDirectorIds(items, directorMap);
 const actorSlugs = uniqueSlugs(actors, person => person.name, person => person.id);
 const directorSlugs = uniqueSlugs(directors, person => person.name, person => person.name);
 const itemPaths = new Map();
@@ -256,9 +302,11 @@ for (const person of directors) {
   const works = [...new Map(person.works.map(item => [itemId(item), item])).values()]
     .sort((a,b) => (Number(yearOf(b)) || 0) - (Number(yearOf(a)) || 0));
   const cards = works.map(item => linkCard(item, BASE_PATH + itemPaths.get(item))).join('');
+  const appProfileUrl = person.tmdbId && !person.ambiguous ? BASE_PATH + '/#/director/' + encodeURIComponent(person.tmdbId) : '';
+  const appProfileLink = appProfileUrl ? '<a class="watch-cta" href="' + esc(appProfileUrl) + '">Perde uygulamasında yönetmen profilini aç →</a>' : '';
   const body = '<nav class="crumb"><a href="' + esc(BASE_PATH + '/') + '">Ana sayfa</a> / Yönetmenler / ' + esc(person.name) + '</nav>' +
     '<section><div class="eyebrow">Yönetmen profili</div><h1>' + esc(person.name) + '</h1>' +
-    '<p class="summary">' + esc(person.name) + ' tarafından yönetilen ve Perde kataloğunda bulunan film ve dizileri keşfedin.</p>' +
+    '<p class="summary">' + esc(person.name) + ' tarafından yönetilen ve Perde kataloğunda bulunan film ve dizileri keşfedin.</p>' + appProfileLink +
     '<div class="meta"><span>' + works.length + ' katalog yapımı</span></div></section>' +
     '<section class="panel"><h2>Yönetmen filmografisi</h2><div class="grid">' + cards + '</div></section>';
   const schema = {'@context':'https://schema.org','@type':'Person','name':person.name,'url':canonical,'jobTitle':'Film director'};
@@ -274,4 +322,4 @@ await writeFile(path.join(ROOT, 'sitemap.xml'), sitemap);
 await writeFile(path.join(ROOT, 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: ' + SITE_ROOT + 'sitemap.xml\n');
 await writeFile(MANIFEST, JSON.stringify(generated, null, 2) + '\n');
 
-console.log('SEO sayfalari olusturuldu: ' + items.length + ' film/dizi, ' + actors.length + ' oyuncu, ' + directors.length + ' yonetmen; toplam ' + generated.length + ' HTML sayfasi.');
+console.log('SEO sayfalari olusturuldu: ' + items.length + ' film/dizi, ' + actors.length + ' oyuncu, ' + directors.length + ' yonetmen (' + resolvedDirectorCount + ' TMDB profil eslesmesi); toplam ' + generated.length + ' HTML sayfasi.');
