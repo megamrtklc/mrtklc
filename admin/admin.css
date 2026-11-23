@@ -1086,3 +1086,63 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 
 /* Brand identity manager */
 .brand-manager-intro{display:flex;align-items:center;gap:15px;margin-bottom:16px;padding:18px 20px}.brand-manager-mark{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border:1px solid #6b5939;border-radius:12px;background:#c5a15d18;color:#dfbd74;font-size:20px}.brand-manager-intro b{display:block;margin-bottom:5px;color:#edf1f6;font-size:13px}.brand-manager-intro p{margin:0;color:#95a3b2;font-size:11px;line-height:1.6}.brand-manager-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:15px}.brand-manager-card{min-width:0;padding:20px}.brand-manager-card .panel-card-heading{margin-bottom:18px}.brand-manager-card .panel-card-heading h2,.brand-preview-card h2{margin:5px 0;font-size:16px}.brand-manager-card .panel-card-heading p,.brand-preview-card p{margin:0;color:#8e9cac;font-size:10px;line-height:1.55}.brand-form-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.brand-form-fields .field.wide{grid-column:1/-1}.brand-scope-list{display:grid;gap:9px}.brand-scope{display:flex;align-items:center;gap:11px;padding:12px;border:1px solid #304050;border-radius:10px;background:#121d29;cursor:pointer}.brand-scope input{width:16px;height:16px;accent-color:#c5a15d}.brand-scope span{display:grid;gap:4px}.brand-scope b{color:#e8edf3;font-size:11px}.brand-scope small{color:#8c9bab;font-size:9px;line-height:1.4}.brand-manager-warning{display:grid;gap:5px;margin-top:15px;padding:12px;border:1px solid #66563855;border-radius:10px;background:#c5a15d0c}.brand-manager-warning b{color:#dfbd74;font-size:10px}.brand-manager-warning span{color:#9aa6b3;font-size:9px;line-height:1.55}.brand-preview-card{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:15px;padding:18px 20px}.brand-preview-sample{display:grid;gap:6px;min-width:210px;padding:17px 20px;border:1px solid #3a4653;border-radius:12px;background:linear-gradient(135deg,#202a36,#101720)}.brand-preview-sample b{color:#f4f2ed;font-size:20px;letter-spacing:.12em}.brand-preview-sample span{color:#d4b675;font-size:10px}.brand-preview-sample small{color:#8d9aa8;font-size:9px}.brand-manager-actions{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:15px;padding:14px 16px;border:1px solid #303e4d;border-radius:12px;background:#151f2b}.brand-manager-actions>span{color:#9eacba;font-size:10px;line-height:1.5}.brand-manager-actions>div{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:850px){.brand-manager-grid{grid-template-columns:1fr}.brand-preview-card{align-items:stretch;flex-direction:column}.brand-preview-sample{min-width:0}}@media(max-width:560px){.brand-manager-card{padding:15px}.brand-form-fields{grid-template-columns:1fr}.brand-form-fields .field.wide{grid-column:auto}.brand-manager-actions{align-items:stretch;flex-direction:column}.brand-manager-actions>div{display:grid;grid-template-columns:1fr}.brand-preview-sample b{font-size:18px}}
+
+/* Full-page content editor */
+.content-editor-view{width:100%;max-width:1180px;margin:0 auto;padding-bottom:100px}
+.content-editor-view .editor-form{padding:0;background:transparent}
+.content-editor-view .editor-head{align-items:center;padding:22px 0 18px;margin:0 0 18px}
+.content-editor-view .editor-head h2{font-size:clamp(22px,3vw,30px)}
+.content-editor-view .editor-head p{font-size:12px}
+.editor-back-button{flex:0 0 auto;padding:10px 14px;border:1px solid #465364;border-radius:10px;background:#202a36;color:#dbe3ec;font-size:12px;font-weight:700;cursor:pointer}
+.editor-back-button:hover{border-color:#c5a46d;color:#e6cc99;background:#292d32}
+.content-editor-view .content-search-studio{margin-bottom:16px}
+.content-editor-view .content-preview-card{margin-bottom:18px}
+.editor-accordion{display:grid;gap:11px}
+.editor-accordion-section{min-width:0;overflow:hidden;border:1px solid #354252;border-radius:13px;background:linear-gradient(145deg,#1d2733,#151e29);box-shadow:0 5px 18px #00000012}
+.editor-accordion-section>summary{display:flex;align-items:center;gap:12px;min-height:64px;padding:13px 16px;cursor:pointer;list-style:none}
+.editor-accordion-section>summary::-webkit-details-marker{display:none}
+.editor-accordion-section>summary:after{content:"＋";margin-left:auto;color:#8794a3;font-size:18px;transition:transform .18s ease}
+.editor-accordion-section[open]>summary:after{content:"−"}
+.editor-section-icon{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border:1px solid #435164;border-radius:10px;background:#263342;color:#c6d0dc;font-size:15px}
+.editor-section-copy{display:grid;gap:4px;min-width:0}
+.editor-section-copy>b{color:#e7edf4;font-size:13px}
+.editor-section-copy>small{color:#8997a7;font-size:10px;line-height:1.45}
+.editor-section-tag{margin-left:auto;padding:5px 8px;border:1px solid #465568;border-radius:6px;color:#aebdcb;font-size:9px;font-weight:800;letter-spacing:.06em;white-space:nowrap}
+.editor-accordion-body{padding:0 16px 17px;border-top:1px solid #303d4c}
+.editor-grid-inner{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-top:16px}
+.editor-url-section{border-color:#a98a56;background:linear-gradient(145deg,#2a2a27,#1b232c);box-shadow:0 0 0 1px #c5a46d12,inset 0 1px #ffffff08}
+.editor-url-section>summary{background:linear-gradient(90deg,#c5a46d13,transparent 75%)}
+.editor-url-section .editor-section-icon{border-color:#816b49;background:#3b3429;color:#e0c58f}
+.editor-url-section .editor-section-copy>b{color:#e6d2aa}
+.editor-url-section .editor-section-tag{border-color:#8d744d;color:#e0c58f}
+.editor-watch-section{border-color:#52697d}
+.editor-watch-section>summary{background:linear-gradient(90deg,#6e8ca414,transparent 75%)}
+.editor-watch-section .editor-section-icon{border-color:#4d657b;background:#253647;color:#b6d0e5}
+.editor-tv-section{border-color:#685b7e}
+.editor-tv-section>summary{background:linear-gradient(90deg,#82719b14,transparent 75%)}
+.editor-tv-section .editor-section-icon{border-color:#685b7e;background:#302a3a;color:#c7b8df}
+.editor-tv-section[hidden]{display:none!important}
+.route-url-mode{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+.route-url-preview{display:grid;gap:5px;margin-top:14px;padding:13px 15px;border:1px solid #6d5b3d;border-radius:10px;background:#c5a46d0c}
+.route-url-preview>span{color:#d6b978;font-size:9px;font-weight:800;letter-spacing:.1em}
+.route-url-preview>b{color:#f0e4cc;font-size:13px;overflow-wrap:anywhere}
+.route-url-preview>small{color:#9eacb9;font-size:10px;line-height:1.5}
+.content-editor-view .url-highlight-group{border-color:#596a5c;border-left:3px solid #7d9b83;background:linear-gradient(135deg,#222e2b,#1a2530);box-shadow:none}
+.content-editor-view .media-url-group{border-color:#526b83;border-left-color:#7f9fb8;background:linear-gradient(135deg,#202d39,#19232e)}
+.content-editor-view .url-highlight-heading b,.content-editor-view .media-url-group .url-highlight-heading b{color:#d3dfd6}
+.content-editor-view .url-highlight-icon,.content-editor-view .media-url-group .url-highlight-icon{background:#8cae9820;color:#b6cbbd}
+.content-editor-view .editor-footer{position:sticky;bottom:10px;z-index:20;margin-top:20px;padding:13px 15px;border:1px solid #465365;border-radius:12px;background:rgba(20,29,40,.96);box-shadow:0 10px 32px #0005;backdrop-filter:blur(12px)}
+.content-editor-view .editor-footer>span{font-size:11px}
+.content-editor-view .editor-footer .primary-button{min-width:160px}
+@media(max-width:700px){
+ .content-editor-view{padding-bottom:120px}
+ .content-editor-view .editor-head{align-items:flex-start;flex-direction:column}
+ .editor-grid-inner,.route-url-mode{grid-template-columns:1fr}
+ .editor-accordion-section>summary{padding:12px;gap:9px}
+ .editor-section-copy>small{font-size:9px}
+ .editor-section-tag{font-size:8px}
+ .editor-accordion-body{padding:0 12px 14px}
+ .content-editor-view .editor-footer{bottom:6px;align-items:stretch;flex-direction:column}
+ .content-editor-view .editor-footer>div{display:grid;grid-template-columns:1fr 1fr}
+ .content-editor-view .editor-footer .primary-button{min-width:0}
+}
