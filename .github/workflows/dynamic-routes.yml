@@ -1,0 +1,33 @@
+name: Dynamic SEO route tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'worker/**'
+      - 'tests/dynamic-routes.mjs'
+      - 'wrangler.jsonc'
+      - '.assetsignore'
+      - '.github/workflows/dynamic-routes.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'worker/**'
+      - 'tests/dynamic-routes.mjs'
+      - 'wrangler.jsonc'
+      - '.assetsignore'
+      - '.github/workflows/dynamic-routes.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test dynamic routes
+        run: node tests/dynamic-routes.mjs
