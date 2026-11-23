@@ -77,6 +77,8 @@ try {
 
   // Create a catalog item through the real form and the mocked persistence API.
   await page.locator('#catalog-add').click();
+  await page.locator('#content-editor-sections [data-editor-section="basic"] > summary').click();
+  await page.locator('#section-route-url > summary').click();
   assert.equal(await page.locator('#section-tv-data').isVisible(), false, 'Film eklerken sezon ve bölüm alanları gizli olmalı');
   await page.locator('#field-type').selectOption('tv');
   assert.equal(await page.locator('#section-tv-data').isVisible(), true, 'Dizi seçildiğinde sezon ve bölüm alanları görünmeli');
