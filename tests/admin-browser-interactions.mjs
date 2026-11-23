@@ -77,6 +77,13 @@ try {
 
   // Create a catalog item through the real form and the mocked persistence API.
   await page.locator('#catalog-add').click();
+  assert.equal(await page.locator('#section-tv-data').isVisible(), false, 'Film eklerken sezon ve bölüm alanları gizli olmalı');
+  await page.locator('#field-type').selectOption('tv');
+  assert.equal(await page.locator('#section-tv-data').isVisible(), true, 'Dizi seçildiğinde sezon ve bölüm alanları görünmeli');
+  await page.locator('#field-type').selectOption('movie');
+  assert.equal(await page.locator('#section-tv-data').isVisible(), false, 'Film seçildiğinde sezon ve bölüm alanları gizlenmeli');
+  await page.locator('#field-route-mode').selectOption('manual');
+  await page.locator('#field-route-slug').fill('tarayici-test-film');
   await page.locator('#field-title').fill('Tarayıcı Test Filmi');
   await page.locator('#field-year').fill('2026');
   await page.locator('#save-content').click();
@@ -84,6 +91,7 @@ try {
   assert.equal(writes.length, 1, 'Yapım kaydı API PUT isteği üretmeli');
   assert.equal(data.catalog.length, 3);
   assert.equal(data.catalog.find(x => x.title === 'Tarayıcı Test Filmi')?.year, '2026');
+  assert.equal(data.catalog.find(x => x.title === 'Tarayıcı Test Filmi')?.routeSlug, 'tarayici-test-film', 'Manuel URL adı katalog kaydına yazılmalı');
 
   // Edit the new item and verify its original ID is retained.
   const createdId = String(data.catalog.find(x => x.title === 'Tarayıcı Test Filmi').id);
