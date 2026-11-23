@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://megamrtklc.github.io/mrtklc/sitemap.xml
