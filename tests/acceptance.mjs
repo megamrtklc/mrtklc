@@ -116,6 +116,44 @@ try {
 
   await page.waitForTimeout(8500);
 
+  await check('Katalogdaki tüm film ve diziler benzersiz okunabilir URL üretiyor', async () => {
+    const routes = await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      return app.catalog.map(item => ({
+        id: String(item.id),
+        route: app.getRouteHash('watch', item),
+        slug: app.getItemRouteSlug(item)
+      }));
+    });
+    assert.ok(routes.length >= 130, 'Tam katalog yüklenmedi: ' + routes.length);
+    assert.ok(routes.every(item => item.slug && /^#\/(Film|Dizi)\//.test(item.route)),
+      'Slug üretilemeyen film/dizi bulundu: ' + JSON.stringify(routes.filter(item => !item.slug || !/^#\/(Film|Dizi)\//.test(item.route)).slice(0, 10)));
+    assert.equal(new Set(routes.map(item => item.route)).size, routes.length,
+      'Aynı URL’ye yönlenen birden fazla katalog kaydı var');
+  });
+
+  await check('Film, dizi, oyuncu ve yönetmen bağlantıları doğrudan açılıyor', async () => {
+    await page.goto(BASE_URL + '#/Film/the-matrix-reloaded', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => String(window.Alpine?.$data(document.documentElement)?.selectedItem?.id) === 'cv-1794698369607', { timeout: 30000 });
+    assert.equal(await page.evaluate(() => window.Alpine.$data(document.documentElement).currentPage), 'watch');
+
+    await page.goto(BASE_URL + '#/Dizi/the-blue-road', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => String(window.Alpine?.$data(document.documentElement)?.selectedItem?.id) === 'cv-1795461150842', { timeout: 30000 });
+    assert.equal(await page.evaluate(() => window.Alpine.$data(document.documentElement).currentPage), 'watch');
+
+    await page.goto(BASE_URL + '#/Oyuncu/haluk-bilginer', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      return app?.currentPage === 'actor' && String(app.selectedActor?.id) === '117640';
+    }, { timeout: 30000 });
+
+    await page.goto(BASE_URL + '#/Yonetmen/robert-zemeckis', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      return app?.currentPage === 'director' && String(app.selectedActor?.id) === '24';
+    }, { timeout: 30000 });
+  });
+
   await check('Masaüstü manşet arka planı ekran yoğunluğuna uygun TMDB boyutunu seçiyor', async () => {
     await page.waitForFunction(() => {
       const image = document.querySelector('#desktopEditorialHero picture img');
@@ -1657,7 +1695,12 @@ try {
     await page.locator('header nav a').filter({ hasText: 'Video Bağlantıları' }).first().click();
     await page.waitForURL(/#\/video-links$/);
     await page.locator('main button').filter({ hasText: 'Adalet 2' }).first().click();
-    await page.waitForURL(new RegExp('#/watch/' + adaletId + String.fromCharCode(36)));
+    const expectedAdaletRoute = await page.evaluate(expectedId => {
+      const app = window.Alpine.$data(document.documentElement);
+      const item = app.catalog.find(entry => String(entry.id) === String(expectedId));
+      return app.getRouteHash('watch', item);
+    }, adaletId);
+    await page.waitForURL(url => url.hash === expectedAdaletRoute);
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.waitForFunction(expectedId => window.Alpine && String(window.Alpine.$data(document.documentElement)?.selectedItem?.id) === String(expectedId), adaletId, { timeout: 30000 });
   });
