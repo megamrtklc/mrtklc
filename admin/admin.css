@@ -1354,3 +1354,29 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
 /* Administrator login identity */
 .admin-username-form{margin-top:16px;padding-top:16px;border-top:1px solid var(--line-soft,rgba(255,255,255,.07))}
 @media(max-width:560px){.admin-username-form{align-items:stretch;flex-direction:column}.admin-username-form .primary-button{width:100%}}
+
+/* Account & access security controls */
+.security-form{display:grid;gap:12px;margin-top:16px}
+.security-form .field{display:grid;gap:7px}
+.security-form .field span{font-size:12px;color:var(--text-muted,#aaa)}
+.security-form input,.security-form select{width:100%;min-height:42px;padding:9px 12px;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:10px;background:var(--input-bg,rgba(0,0,0,.2));color:inherit;font:inherit}
+.security-form input:focus,.security-form select:focus{outline:2px solid rgba(215,181,109,.35);border-color:var(--accent,#d7b56d)}
+.security-form .primary-button{width:100%;margin-top:3px}
+.security-card-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.security-card-heading h2{margin:0}
+.security-card-heading p{margin:5px 0 0}
+.security-record-list{display:grid;gap:9px;margin:16px 0;max-height:330px;overflow:auto}
+.security-record{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px;border:1px solid var(--border,rgba(255,255,255,.1));border-radius:11px;background:rgba(255,255,255,.025);min-width:0}
+.security-record-main,.security-record-actions{display:grid;gap:5px;min-width:0}
+.security-record-main b{font-size:13px}
+.security-record small{font-size:10px;line-height:1.45;color:var(--text-muted,#aaa);overflow-wrap:anywhere}
+.security-record-actions{text-align:right;justify-items:end}
+.security-current-tag,.security-event-tag{font-size:9px;font-weight:800;letter-spacing:.6px}
+.security-current-tag{color:var(--accent,#d7b56d)}
+.security-event-tag.is-success{color:#75c99b}
+.security-event-tag.is-failed,.danger-text{color:#e58c86}
+.security-empty{padding:14px;border:1px dashed var(--border,rgba(255,255,255,.15));border-radius:10px;color:var(--text-muted,#aaa);font-size:12px;text-align:center}
+.danger-button{width:100%;min-height:42px;padding:10px 14px;border:1px solid rgba(219,104,96,.4);border-radius:10px;background:rgba(160,50,45,.12);color:#e99b94;font-weight:700;cursor:pointer}
+.danger-button:hover{background:rgba(160,50,45,.2)}
+.security-settings-card .users-info-row{margin-top:13px}
+@media(max-width:720px){.security-record{flex-direction:column}.security-record-actions{text-align:left;justify-items:start;width:100%}.security-card-heading{align-items:center}}
