@@ -141,6 +141,18 @@ jobs:
           NODE
           npx --yes wrangler@latest d1 migrations apply cineverse-admin-security --remote --config worker/wrangler.generated.json
 
+      - name: Diagnose security database schema
+        if: steps.preflight.outputs.configured == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          for table in admin_credentials admin_sessions admin_login_events admin_security_settings admin_app_secrets; do
+            echo "--- $table ---"
+            npx --yes wrangler@latest d1 execute cineverse-admin-security --remote --command="PRAGMA table_info($table)" --config worker/wrangler.generated.json --json
+          done
+
       - name: Deploy Worker
         if: steps.preflight.outputs.configured == 'true'
         env:
