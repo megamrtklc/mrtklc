@@ -115,12 +115,13 @@ const actorMap = new Map();
 const directorMap = new Map();
 
 for (const item of items) {
-  for (const person of array(item.tmdbCast)) {
+  for (const [castIndex, person] of array(item.tmdbCast).entries()) {
     if (!person?.id || !clean(person.name)) continue;
     const id = String(person.id);
-    if (!actorMap.has(id)) actorMap.set(id, { id, name: clean(person.name), profile: clean(person.profile), works: [] });
+    if (!actorMap.has(id)) actorMap.set(id, { id, name: clean(person.name), profile: clean(person.profile), works: [], isLead: false });
     const actor = actorMap.get(id);
     if (!actor.profile && person.profile) actor.profile = person.profile;
+    if (castIndex < 3) actor.isLead = true;
     actor.works.push({ item, character: clean(person.character) });
   }
   for (const name of directorNames(item)) {
@@ -129,7 +130,10 @@ for (const item of items) {
     directorMap.get(key).works.push(item);
   }
 }
-const actors = [...actorMap.values()].filter(person => new Set(person.works.map(entry => itemId(entry.item))).size >= 2).sort((a,b)=>a.name.localeCompare(b.name,'tr'));
+// TMDB oyuncu sıralamasındaki ilk 3 isim başrol/öne çıkan oyuncu kabul edilir.
+ // Tek bir yapımda bile ilk 3 sırada yer alan oyuncuya profil açılır.
+ // Diğer oyuncular için en az 2 farklı katalog yapımında görünme şartı korunur.
+const actors = [...actorMap.values()].filter(person => person.isLead || new Set(person.works.map(entry => itemId(entry.item))).size >= 2).sort((a,b)=>a.name.localeCompare(b.name,'tr'));
 const directors = [...directorMap.values()].sort((a,b)=>a.name.localeCompare(b.name,'tr'));
 const actorSlugs = uniqueSlugs(actors, person => person.name, person => person.id);
 const directorSlugs = uniqueSlugs(directors, person => person.name, person => person.name);
