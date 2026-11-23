@@ -26,9 +26,14 @@ try {
   const director = await readFile(path.join(outputPath,'yonetmen/onur-saylak.html'),'utf8');
   const sitemap = await readFile(path.join(outputPath,'sitemap.xml'),'utf8');
   const robots = await readFile(path.join(outputPath,'robots.txt'),'utf8');
+  const watch = await readFile(path.join(outputPath,'izle/sahsiyet.html'),'utf8');
   assert.match(film, /<title>Şahsiyet \(2018\) \| Perde<\/title>/);
   assert.match(film, /application\/ld\+json/);
   assert.equal((film.match(/class="person"/g) || []).length, 6, 'Yapım sayfasında en fazla 6 oyuncu görünmeli');
+  assert.match(film, /izle\\/sahsiyet\\.html/);
+  assert.match(watch, /noindex,follow/);
+  assert.match(watch, /window\\.location\\.replace/);
+  assert.match(watch, /#\\/watch\\/film-1/);
   assert.match(film, /Tek Yapımlık Oyuncu/, 'Tek yapımlık oyuncu ilk 6 içindeyse kadroda görünmeli');
   assert.doesNotMatch(film, /Yedinci Oyuncu/, 'Yedinci oyuncu gösterilmemeli');
   await assert.rejects(readFile(path.join(outputPath,'oyuncu/tek-yapimlik-oyuncu.html'),'utf8'));
@@ -41,7 +46,7 @@ try {
   assert.match(sitemap, /https:\/\/example\.test\/perde\/film\/sahsiyet\.html/);
   assert.match(robots, /Sitemap: https:\/\/example\.test\/perde\/sitemap\.xml/);
   const manifest = JSON.parse(await readFile(path.join(outputPath,'.seo-generated-files.json'),'utf8'));
-  assert.equal(manifest.length, 9);
+  assert.equal(manifest.length, 12);
   console.log('PASS: SEO sayfa üretimi, slug çakışması, canonical, JSON-LD, sitemap ve robots.txt');
 } finally {
   await rm(temp, { recursive:true, force:true });
