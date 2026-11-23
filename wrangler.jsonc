@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mrtsinema-dynamic",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-11-23",
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/film/*",
+      "/dizi/*",
+      "/oyuncu/*",
+      "/yonetmen/*",
+      "/izle/*",
+      "/sitemap.xml",
+      "/robots.txt"
+    ]
+  }
+}
