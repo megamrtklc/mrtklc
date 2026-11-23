@@ -941,6 +941,7 @@
       setField('field-desc',record.tmdbOverview);
       status.textContent='✓ '+title+' bilgileri alındı. Alanları düzenleyebilir veya eksik bilgileri manuel tamamlayabilirsin.';
       renderContentPreview();
+      updateRouteSlugPreview();syncContentTypeFields();
     }catch(error){status.textContent='Yapım bilgileri alınamadı. Alanları manuel doldurabilirsin.';toast(error.message,'error');}
   }
   function renderContentPreview(){
