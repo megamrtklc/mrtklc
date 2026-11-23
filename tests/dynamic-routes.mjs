@@ -46,7 +46,7 @@ assert.equal(res.status,200);
 html = await res.text();
 assert.match(html,/name="robots" content="noindex,nofollow"/);
 res = await staging("/robots.txt");
-assert.match(await res.text(),/Disallow: \\/);
+assert.ok((await res.text()).includes("Disallow: /"));
 res = await staging("/");
 assert.equal(res.headers.get("X-Robots-Tag"),"noindex, nofollow");
 console.log("PASS: dynamic SEO routes, canonical, JSON-LD, six-person cast, legacy redirects and sitemap");
