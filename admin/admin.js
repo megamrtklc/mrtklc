@@ -180,6 +180,15 @@
     }catch(error){$('#profile-upload-status').textContent=error.message;toast(error.message,'error');}
     finally{button.disabled=false;button.textContent='Fotoğrafı kaydet';}
   }
+  function securityDate(value){const date=new Date(Number(value||0)*1000);return Number.isNaN(date.getTime())?'—':date.toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+  async function securityRequest(path,options={}){const response=await fetch(path,{credentials:'same-origin',cache:'no-store',...options,headers:{...(options.headers||{}),...(options.body?{'content-type':'application/json'}:{})}});const payload=await response.json().catch(()=>({}));if(!response.ok)throw new Error(payload.error||'Güvenlik işlemi tamamlanamadı.');return payload;}
+  async function loadSecuritySessions(){const host=$('#security-session-list');if(!host)return;host.innerHTML='<p class="loading-line">Oturumlar yükleniyor…</p>';try{const data=await securityRequest('/api/security/sessions'),sessions=Array.isArray(data.sessions)?data.sessions:[];host.innerHTML=sessions.length?sessions.map(item=>'<div class="security-record"><div class="security-record-main"><b>'+(item.current?'Bu cihaz · Aktif oturum':'Diğer cihaz')+'</b><small>'+escapeHtml(item.user_agent||'Tarayıcı bilgisi yok')+'</small><small>Son etkinlik: '+escapeHtml(securityDate(item.last_seen_at))+'</small></div><div class="security-record-actions"><small>Bitiş: '+escapeHtml(securityDate(item.expires_at))+'</small>'+(item.current?'<span class="security-current-tag">Şu anki cihaz</span>':'<button type="button" class="text-button danger-text" data-security-revoke="'+escapeHtml(item.session_id)+'">Sonlandır</button>')+'</div></div>').join(''):'<p class="security-empty">Etkin oturum bulunamadı.</p>';}catch(error){host.innerHTML='<p class="security-empty">'+escapeHtml(error.message)+'</p>';}}
+  async function loadSecurityHistory(){const host=$('#security-login-history');if(!host)return;host.innerHTML='<p class="loading-line">Giriş geçmişi yükleniyor…</p>';try{const data=await securityRequest('/api/security/login-history'),events=Array.isArray(data.events)?data.events:[];host.innerHTML=events.length?events.map(item=>'<div class="security-record"><div class="security-record-main"><b>'+(Number(item.succeeded)?'Başarılı giriş':'Başarısız giriş')+'</b><small>Kullanıcı adı: '+escapeHtml(item.attempted_username||'—')+'</small><small>'+escapeHtml(item.user_agent||'Tarayıcı bilgisi yok')+'</small></div><div class="security-record-actions"><span class="security-event-tag '+(Number(item.succeeded)?'is-success':'is-failed')+'">'+(Number(item.succeeded)?'BAŞARILI':'BAŞARISIZ')+'</span><small>'+escapeHtml(securityDate(item.occurred_at))+'</small></div></div>').join(''):'<p class="security-empty">Henüz giriş hareketi kaydedilmedi.</p>';}catch(error){host.innerHTML='<p class="security-empty">'+escapeHtml(error.message)+'</p>';}}
+  async function loadSecuritySettings(){try{const data=await securityRequest('/api/security/settings'),settings=data.settings||{};if($('#security-login-limit'))$('#security-login-limit').value=String(settings.login_limit||5);if($('#security-session-ttl'))$('#security-session-ttl').value=String(settings.session_ttl_seconds||7200);}catch(error){toast('Güvenlik ayarları yüklenemedi: '+error.message,'error');}}
+  async function saveAdminPassword(event){event.preventDefault();const button=$('#security-password-save'),currentPassword=$('#security-current-password').value,newPassword=$('#security-new-password').value,confirmPassword=$('#security-confirm-password').value;if(newPassword.length<12){toast('Yeni şifre en az 12 karakter olmalı.','error');return;}if(newPassword!==confirmPassword){toast('Yeni şifre tekrarı eşleşmiyor.','error');return;}button.disabled=true;button.textContent='Şifre güncelleniyor…';try{const result=await securityRequest('/api/security/change-password',{method:'POST',body:JSON.stringify({currentPassword,newPassword,confirmPassword})});$('#admin-password-form').reset();toast(result.message||'Şifre değiştirildi. Yeniden giriş yapmalısın.','success');setTimeout(()=>window.location.reload(),1100);}catch(error){toast(error.message,'error');}finally{button.disabled=false;button.textContent='Şifreyi güvenli şekilde değiştir';}}
+  async function saveAdminSecuritySettings(event){event.preventDefault();try{const loginLimit=Number($('#security-login-limit').value),sessionTtlSeconds=Number($('#security-session-ttl').value);await securityRequest('/api/security/settings',{method:'PUT',body:JSON.stringify({loginLimit,sessionTtlSeconds})});toast('Güvenlik ayarları kaydedildi. Yeni oturumlar seçilen süreyi kullanacak.','success');}catch(error){toast(error.message,'error');}}
+  async function logoutAllSecuritySessions(){if(!window.confirm('Bütün cihazlardaki yönetici oturumları kapatılsın mı? Bu cihazdan da çıkış yapılacak.'))return;try{await securityRequest('/api/security/logout-all',{method:'POST',body:'{}'});toast('Bütün oturumlar sonlandırıldı.','success');window.location.reload();}catch(error){toast(error.message,'error');}}
+  async function revokeSecuritySession(sessionId){if(!window.confirm('Seçilen oturum sonlandırılsın mı?'))return;try{await securityRequest('/api/security/revoke-session',{method:'POST',body:JSON.stringify({sessionId})});toast('Oturum sonlandırıldı.','success');await loadSecuritySessions();}catch(error){toast(error.message,'error');}}
   function renderAdminProfile(){
     const profile=state.data?.adminProfile||{};
     const name=String(profile.name||'Yönetici').trim()||'Yönetici';
@@ -2141,6 +2150,7 @@
       if(selectedBackup)$('#restore-full-backup').disabled=!state.apiEnabled;
       renderWelcomePosters();
       await loadBrandIdentity();
+      await Promise.all([loadSecuritySessions(),loadSecurityHistory(),loadSecuritySettings()]);
       $('.environment').innerHTML='<i></i> KORUMALI YÖNETİM';
       // Render the catalog immediately after the data API succeeds. A secondary
       // session/profile endpoint must never prevent the catalog from appearing.
@@ -2212,6 +2222,13 @@
   $('#profile-change-button').addEventListener('click',()=>$('#profile-dialog').showModal());
   $('#admin-profile-form').addEventListener('submit',saveAdminProfile);
   $('#admin-username-form').addEventListener('submit',saveAdminUsername);
+  $('#admin-password-form')?.addEventListener('submit',saveAdminPassword);
+  $('#admin-security-settings-form')?.addEventListener('submit',saveAdminSecuritySettings);
+  $('#security-sessions-refresh')?.addEventListener('click',loadSecuritySessions);
+  $('#security-history-refresh')?.addEventListener('click',loadSecurityHistory);
+  $('#security-logout-all')?.addEventListener('click',logoutAllSecuritySessions);
+  $('#security-session-list')?.addEventListener('click',event=>{const button=event.target.closest('[data-security-revoke]');if(button)revokeSecuritySession(button.dataset.securityRevoke);});
+
   $('#profile-form').addEventListener('submit',saveProfilePhoto);
   $('#profile-close').addEventListener('click',()=>$('#profile-dialog').close());
   $('#profile-cancel').addEventListener('click',()=>$('#profile-dialog').close());
