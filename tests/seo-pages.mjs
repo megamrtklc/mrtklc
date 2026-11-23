@@ -26,11 +26,11 @@ try {
   const director = await readFile(path.join(outputPath,'yonetmen/onur-saylak.html'),'utf8');
   const sitemap = await readFile(path.join(outputPath,'sitemap.xml'),'utf8');
   const robots = await readFile(path.join(outputPath,'robots.txt'),'utf8');
-  const watch = await readFile(path.join(outputPath,'izle/sahsiyet.html'),'utf8');
+  const watch = await readFile(path.join(outputPath,'izle/sahsiyet-film-1.html'),'utf8');
   assert.match(film, /<title>Şahsiyet \(2018\) \| Perde<\/title>/);
   assert.match(film, /application\/ld\+json/);
   assert.equal((film.match(/class="person"/g) || []).length, 6, 'Yapım sayfasında en fazla 6 oyuncu görünmeli');
-  assert.match(film, /izle\\/sahsiyet\\.html/);
+  assert.match(film, /izle\\/sahsiyet-film-1\\.html/);
   assert.match(watch, /noindex,follow/);
   assert.match(watch, /window\\.location\\.replace/);
   assert.match(watch, /#\\/watch\\/film-1/);
