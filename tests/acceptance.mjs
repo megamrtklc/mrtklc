@@ -418,6 +418,14 @@ try {
         poster: document.querySelector('#mobile-hero-poster-preload')?.getAttribute('href') || ''
       }));
       assert.ok(mobileHeroPreloads.backdrop && mobileHeroPreloads.poster, 'Mobil ana sayfa manşet görselleri önceden yüklenmiyor');
+      const mobileHeroDotTargets = await mobilePage.locator('#mobileCinematicHero .cv-mhero-dot').evaluateAll(buttons =>
+        buttons.map(button => {
+          const rect = button.getBoundingClientRect();
+          return { width: Math.round(rect.width), height: Math.round(rect.height) };
+        })
+      );
+      assert.ok(mobileHeroDotTargets.length > 0 && mobileHeroDotTargets.every(target => target.width >= 24 && target.height >= 24),
+        'Mobil manşet geçiş noktalarının dokunma alanı en az 24x24 piksel olmalı: ' + JSON.stringify(mobileHeroDotTargets));
       await mobilePage.waitForFunction(() => {
         const image = document.querySelector('#mobileCinematicHero .cv-mhero-poster img');
         return image && image.complete && image.naturalWidth > 0;
