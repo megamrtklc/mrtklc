@@ -577,6 +577,7 @@ export default {
         } catch(error) { return json({error:error.message||"Marka ayarları kaydedilemedi."},400); }
       }
       if(request.method==="GET"&&path==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
+      if(path.startsWith("/api/security/"))return handleSecurityApi(request,env,auth,path);
       if(request.method==="GET"&&path==="/api/credentials") {
         const result={github:{configured:!!env.GITHUB_TOKEN},tmdb:{configured:!!env.TMDB_API_KEY}};
         if(env.GITHUB_TOKEN) {
@@ -659,7 +660,7 @@ export default {
       return json({error:"API endpoint bulunamadı."},404);
     })();
     const headers=new Headers(response.headers);
-    headers.set("set-cookie",auth.cookie);
+    if(auth.cookie)headers.append("set-cookie",auth.cookie);
     headers.set("cache-control","no-store");
     return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
   }
