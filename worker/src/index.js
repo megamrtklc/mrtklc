@@ -81,13 +81,13 @@ function loginPage(showError=false,brandConfig=BRAND_CONFIG_DEFAULTS) {
 html{min-height:100%;background:#090a0d}
 body{margin:0;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:28px 20px;background:#090a0d;color:#f5f1e8;color:#f5f1e8;font:15px Inter,system-ui,sans-serif}
 .ambient-icons{position:fixed;inset:0;overflow:hidden;pointer-events:none;color:rgba(215,181,109,.2)}
-.ambient-icon{position:absolute;width:clamp(30px,5vw,62px);height:clamp(30px,5vw,62px);stroke:currentColor;fill:none;stroke-width:1.25;filter:drop-shadow(0 0 16px rgba(215,181,109,.12));animation:drift 9s ease-in-out infinite}
+.ambient-icon{position:absolute;width:clamp(40px,6vw,76px);height:clamp(40px,6vw,76px);stroke:currentColor;fill:none;stroke-width:1.25;filter:drop-shadow(0 0 16px rgba(215,181,109,.12));animation:drift 9s ease-in-out infinite}
 .ambient-icon.gear{top:13%;left:13%;animation:drift 10s ease-in-out infinite,turn 28s linear infinite}
 .ambient-icon.pencil{top:21%;right:16%;animation:drift 8s ease-in-out -2s infinite}
 .ambient-icon.shield{top:66%;left:9%;animation:drift 11s ease-in-out -4s infinite}
 .ambient-icon.chart{top:72%;right:12%;animation:drift 9s ease-in-out -1s infinite}
-.ambient-icon.database{top:43%;left:5%;width:38px;height:38px;animation:drift 12s ease-in-out -3s infinite}
-.ambient-icon.clapper{top:42%;right:6%;width:44px;height:44px;animation:drift 10s ease-in-out -5s infinite}
+.ambient-icon.database{top:43%;left:5%;width:48px;height:48px;animation:drift 12s ease-in-out -3s infinite}
+.ambient-icon.clapper{top:42%;right:6%;width:54px;height:54px;animation:drift 10s ease-in-out -5s infinite}
 @keyframes drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-13px,0)}}
 @keyframes turn{to{rotate:360deg}}
 .login-shell{width:min(100%,460px);position:relative;z-index:1}
