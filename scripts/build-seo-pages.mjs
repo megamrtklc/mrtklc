@@ -31,11 +31,11 @@ const normalizePersonName = value => clean(value).toLocaleLowerCase('tr').replac
 
 async function resolveDirectorIds(items, directorMap) {
   const apiKey = process.env.SEO_TMDB_API_KEY;
-  if (!apiKey) return 0;
+  if (!apiKey) return { matched: 0, unresolved: [...directorMap.values()].map(person => person.name), ambiguous: [] };
   const candidates = [...new Map(items.filter(item => item.tmdbId && directorNames(item).length)
     .map(item => [(typeOf(item) === 'tv' ? 'tv' : 'movie') + '/' + item.tmdbId, item])).values()];
   let cursor = 0;
-  let matched = 0;
+  const matched = new Set();
   const worker = async () => {
     while (cursor < candidates.length) {
       const item = candidates[cursor++];
@@ -58,11 +58,12 @@ async function resolveDirectorIds(items, directorMap) {
             person.tmdbId = null;
             person.ambiguous = true;
             person.profile = '';
+            matched.delete(name.toLocaleLowerCase('tr'));
             continue;
           }
           person.tmdbId = id;
           person.profile = match.profile_path ? 'https://image.tmdb.org/t/p/w342' + match.profile_path : person.profile;
-          matched++;
+          matched.add(name.toLocaleLowerCase('tr'));
         }
       } catch (error) {
         console.warn('Yönetmen TMDB kimliği çözümlenemedi:', titleOf(item), error.message || error);
@@ -70,7 +71,11 @@ async function resolveDirectorIds(items, directorMap) {
     }
   };
   await Promise.all(Array.from({ length: 6 }, worker));
-  return matched;
+  return {
+    matched: [...directorMap.values()].filter(person => person.tmdbId && !person.ambiguous).length,
+    unresolved: [...directorMap.values()].filter(person => !person.tmdbId && !person.ambiguous).map(person => person.name).sort((a, b) => a.localeCompare(b, 'tr')),
+    ambiguous: [...directorMap.values()].filter(person => person.ambiguous).map(person => person.name).sort((a, b) => a.localeCompare(b, 'tr'))
+  };
 }
 const descriptionOf = item => clean(item?.desc || item?.tmdbOverview || item?.overview || '');
 const yearOf = item => clean(item?.year || item?.tmdbReleaseDate || item?.releaseDate).slice(0, 4);
@@ -182,7 +187,7 @@ for (const item of items) {
  // Diğer oyuncular için en az 2 farklı katalog yapımında görünme şartı korunur.
 const actors = [...actorMap.values()].filter(person => person.isLead || new Set(person.works.map(entry => itemId(entry.item))).size >= 2).sort((a,b)=>a.name.localeCompare(b.name,'tr'));
 const directors = [...directorMap.values()].sort((a,b)=>a.name.localeCompare(b.name,'tr'));
-const resolvedDirectorCount = await resolveDirectorIds(items, directorMap);
+const directorResolution = await resolveDirectorIds(items, directorMap);
 const actorSlugs = uniqueSlugs(actors, person => person.name, person => person.id);
 const directorSlugs = uniqueSlugs(directors, person => person.name, person => person.name);
 const itemPaths = new Map();
@@ -322,4 +327,6 @@ await writeFile(path.join(ROOT, 'sitemap.xml'), sitemap);
 await writeFile(path.join(ROOT, 'robots.txt'), 'User-agent: *\nAllow: /\nSitemap: ' + SITE_ROOT + 'sitemap.xml\n');
 await writeFile(MANIFEST, JSON.stringify(generated, null, 2) + '\n');
 
-console.log('SEO sayfalari olusturuldu: ' + items.length + ' film/dizi, ' + actors.length + ' oyuncu, ' + directors.length + ' yonetmen (' + resolvedDirectorCount + ' TMDB profil eslesmesi); toplam ' + generated.length + ' HTML sayfasi.');
+console.log('SEO sayfalari olusturuldu: ' + items.length + ' film/dizi, ' + actors.length + ' oyuncu, ' + directors.length + ' yonetmen (' + directorResolution.matched + ' benzersiz TMDB profil eslesmesi); toplam ' + generated.length + ' HTML sayfasi.');
+if (directorResolution.unresolved.length) console.warn('TMDB profili eslesmeyen yonetmenler:', directorResolution.unresolved.join(' | '));
+if (directorResolution.ambiguous.length) console.warn('Birden fazla TMDB kimligiyle celisen yonetmenler (guvenlik nedeniyle baglanti verilmedi):', directorResolution.ambiguous.join(' | '));
