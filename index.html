@@ -154,7 +154,7 @@
   var name=String(config.brandName||fallback.brandName),walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),nodes=[];
   while(walker.nextNode())nodes.push(walker.currentNode);
   nodes.forEach(function(node){var p=node.parentElement;if(!p||/^(SCRIPT|STYLE|TEXTAREA|INPUT|CODE|PRE)$/i.test(p.tagName))return;var next=node.nodeValue.replace(/CINE\s*VERSE|CINEVERSE/gi,name);if(next!==node.nodeValue)node.nodeValue=next;});
-  document.querySelectorAll("[title],[aria-label],[alt],[placeholder]").forEach(function(el){["title","aria-label","alt","placeholder"].forEach(function(attr){var value=el.getAttribute(attr);if(value){var next=value.replace(/CINE\\s*VERSE|CINEVERSE/gi,name);if(next!==value)el.setAttribute(attr,next);}});});
+  document.querySelectorAll("[title],[aria-label],[alt],[placeholder]").forEach(function(el){["title","aria-label","alt","placeholder"].forEach(function(attr){var value=el.getAttribute(attr);if(value){var next=value.replace(/CINE\s*VERSE|CINEVERSE/gi,name);if(next!==value)el.setAttribute(attr,next);}});});
   var short=String(config.shortName||''),primary=name,accent='';
   if(short&&name.toUpperCase().startsWith(short.toUpperCase())){primary=name.slice(0,short.length);accent=name.slice(short.length);}
   [['headerConfig.brandPrimary','headerConfig.brandAccent'],['footerConfig.brandPrimary','footerConfig.brandAccent']].forEach(function(pair){
