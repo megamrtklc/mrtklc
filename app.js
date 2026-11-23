@@ -788,7 +788,6 @@
                         this.heroCatalog = this.catalog;
                         // Mobil manşetin İngilizce adlarını katalog hazır olur olmaz yükle.
                         const loadEnglishTitlesWhenIdle = () => this.loadHeroEnglishTitles();
-                        const mobileDevice = window.matchMedia('(max-width: 767px)').matches;
                         const scheduleEnglishTitles = () => {
                             if ('requestIdleCallback' in window) {
                                 window.requestIdleCallback(loadEnglishTitlesWhenIdle, { timeout: 1800 });
@@ -797,8 +796,8 @@
                             }
                         };
                         const tvDevice = document.documentElement.classList.contains('cv-tv-mode');
-                        if (mobileDevice) loadEnglishTitlesWhenIdle();
-                        else if (!tvDevice) scheduleEnglishTitles();
+                        // İngilizce manşet başlıkları ilk ekran için kritik değil; mobilde de katalog ve görsellerin önceliğini koru.
+                        if (!tvDevice) scheduleEnglishTitles();
 
                         this.currentSlideIndex = 0;
                         this.startHeroAutoplay();
