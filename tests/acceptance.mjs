@@ -379,7 +379,7 @@ try {
   assert.ok(adaletId, 'Adalet 2 katalogda bulunamadı');
 
   await check('Ana sayfa açılıyor ve katalog yükleniyor', async () => {
-    assert.match(await page.title(), /CineVerse/i);
+    assert.match(await page.title(), /MRTSINEMA/i);
     assert.ok(await page.getByText('Tüm Yapımlar & Trendler', { exact: true }).count());
     const count = await page.evaluate(() => window.Alpine.$data(document.documentElement).catalog.length);
     assert.ok(count >= 140, `Katalog beklenen asgari kayıt sayısının altında: ${count}`);
