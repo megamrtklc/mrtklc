@@ -166,9 +166,19 @@ async function verifyPassword(password,credential){
     return constantTimeEqual(new TextEncoder().encode(candidate),new TextEncoder().encode(credential.password_hash));
   }catch{return false;}
 }
+async function getSessionSecret(env){
+  if(!env.SECURITY_DB)throw new Error("Güvenlik veritabanı bağlı değil.");
+  let row=await env.SECURITY_DB.prepare("SELECT secret_value FROM admin_app_secrets WHERE id=1").first();
+  if(row?.secret_value)return row.secret_value;
+  const secret=encodeBase64Url(crypto.getRandomValues(new Uint8Array(32)));
+  await env.SECURITY_DB.prepare("INSERT OR IGNORE INTO admin_app_secrets (id,secret_value,created_at) VALUES (1,?,?)").bind(secret,Math.floor(Date.now()/1000)).run();
+  row=await env.SECURITY_DB.prepare("SELECT secret_value FROM admin_app_secrets WHERE id=1").first();
+  if(!row?.secret_value)throw new Error("Oturum imzalama anahtarı oluşturulamadı.");
+  return row.secret_value;
+}
 async function requestIpHash(request,env){
   const ip=request.headers.get("cf-connecting-ip")||"unknown";
-  return encodeBase64Url(await hmac(env.SESSION_SECRET,ip));
+  return encodeBase64Url(await hmac(await getSessionSecret(env),ip));
 }
 function requestAgent(request){return String(request.headers.get("user-agent")||"").slice(0,240);}
 async function recordLogin(env,request,username,succeeded){
@@ -188,11 +198,10 @@ async function issueSession(request,env){
   await env.SECURITY_DB.prepare("INSERT INTO admin_sessions (session_id,created_at,last_seen_at,expires_at,user_agent,ip_hash,revoked_at) VALUES (?,?,?,?,?,?,NULL)")
     .bind(sid,now,now,expires,requestAgent(request),await requestIpHash(request,env)).run();
   const payload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",sid,iat:now,exp:expires})));
-  const signature=encodeBase64Url(await hmac(env.SESSION_SECRET,payload));
+  const signature=encodeBase64Url(await hmac(await getSessionSecret(env),payload));
   return {token:payload+"."+signature,ttl};
 }
 async function authorize(request,env){
-  if(!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32)return {ok:false,status:503,error:"Yönetici oturumu yapılandırılmamış."};
   if(!env.SECURITY_DB)return {ok:false,status:503,error:"Güvenlik veritabanı henüz bağlanmadı."};
   const token=getCookie(request,SESSION_COOKIE);
   if(!token)return {ok:false,status:401,error:"Yönetici oturumu gerekli."};
@@ -200,7 +209,7 @@ async function authorize(request,env){
     const parts=token.split(".");
     if(parts.length!==2)throw new Error("Invalid session");
     const payload=JSON.parse(new TextDecoder().decode(decodeBase64Url(parts[0])));
-    const expected=await hmac(env.SESSION_SECRET,parts[0]);
+    const expected=await hmac(await getSessionSecret(env),parts[0]);
     if(!constantTimeEqual(expected,decodeBase64Url(parts[1]))||payload.sub!=="admin"||typeof payload.exp!=="number"||payload.exp<=Math.floor(Date.now()/1000)||typeof payload.sid!=="string")throw new Error("Invalid session");
     const session=await env.SECURITY_DB.prepare("SELECT session_id,expires_at,revoked_at,last_seen_at FROM admin_sessions WHERE session_id=?").bind(payload.sid).first();
     const now=Math.floor(Date.now()/1000);
@@ -211,7 +220,7 @@ async function authorize(request,env){
 }
 async function handleLogin(request,env){
   if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
-  if(!env.SECURITY_DB||!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32)return json({error:"Yönetici güvenlik altyapısı henüz yapılandırılmamış."},503);
+  if(!env.SECURITY_DB)return json({error:"Yönetici güvenlik veritabanı henüz bağlanmadı."},503);
   const form=await request.formData();
   const username=String(form.get("username")||"").trim().toLowerCase();
   const password=String(form.get("password")||"");
