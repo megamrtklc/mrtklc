@@ -29,7 +29,7 @@ assert.match(html,/#\/actor\/77/);
 res = await get("/yonetmen/onur-saylak/");
 assert.equal(res.status,200);
 assert.match(await res.text(),/Nuri Bilge Ceylan|Onur Saylak/);
-res = await get("/film/sahsiyet.html");
+res = await get("/film/sahsiyet");\nassert.equal(res.status,308);\nassert.equal(res.headers.get("location"),"https://mrtsinema.test/film/sahsiyet/");\nres = await get("/film/sahsiyet.html");
 assert.equal(res.status,301);
 assert.equal(res.headers.get("location"),"https://mrtsinema.test/film/sahsiyet/");
 res = await get("/sitemap.xml");
