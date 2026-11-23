@@ -2022,7 +2022,8 @@
                 getItemRouteSlug(item) {
                     const titleSlug = entry => {
                         const aliases = this.getItemRouteAliases(entry);
-                        return aliases[0] || '';
+                        return aliases.find(alias => !/^\d+$/.test(alias)) ||
+                            this.getRouteSlug(entry?.title || entry?.tmdbTitle || entry?.name || '') || '';
                     };
                     const base = titleSlug(item) || 'isimsiz-yapim';
                     const type = item?.type === 'tv' || item?.type === 'series' ? 'tv' : 'movie';
