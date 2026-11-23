@@ -35,7 +35,7 @@ try {
   assert.match(sitemap, /https:\/\/example\.test\/perde\/film\/sahsiyet\.html/);
   assert.match(robots, /Sitemap: https:\/\/example\.test\/perde\/sitemap\.xml/);
   const manifest = JSON.parse(await readFile(path.join(outputPath,'.seo-generated-files.json'),'utf8'));
-  assert.equal(manifest.length, 5);
+  assert.equal(manifest.length, 6);
   console.log('PASS: SEO sayfa üretimi, slug çakışması, canonical, JSON-LD, sitemap ve robots.txt');
 } finally {
   await rm(temp, { recursive:true, force:true });
