@@ -310,6 +310,31 @@ export function validateCatalogData(data) {
   return true;
 }
 
+async function writeCatalog(env, data, expectedSha) {
+  if (!env.GITHUB_TOKEN) throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
+  validateCatalogData(data);
+
+  const current = await fetch(catalogUrl(env), { headers: githubHeaders(env) });
+  const currentPayload = await current.json();
+  if (!current.ok) throw new Error(currentPayload.message || "Güncel katalog SHA bilgisi alınamadı.");
+  if (currentPayload.sha !== expectedSha) return { conflict: true, sha: currentPayload.sha };
+
+  const encoded = bytesToBase64(new TextEncoder().encode(JSON.stringify(data, null, 2)));
+  const response = await fetch(catalogUrl(env).split("?")[0], {
+    method: "PUT",
+    headers: { ...githubHeaders(env), "content-type": "application/json" },
+    body: JSON.stringify({
+      message: "Update CineVerse catalog from admin",
+      content: encoded,
+      sha: expectedSha,
+      branch: env.GITHUB_BRANCH || "main"
+    })
+  });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.message || "Katalog GitHub'a kaydedilemedi.");
+  return { conflict: false, sha: result.content?.sha || null, commit: result.commit?.sha || null };
+}
+
 function brandConfigUrl(env,withRef=true){
  const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc");
  const base="https://api.github.com/repos/"+owner+"/"+repo+"/contents/brand-config.json";
@@ -338,30 +363,6 @@ async function writeBrandConfig(env,config,expectedSha){
  const response=await fetch(brandConfigUrl(env,false),{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Update brand identity settings",content,sha:currentSha||undefined,branch:env.GITHUB_BRANCH||"main"})});
  const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.message||"Marka ayarları kaydedilemedi.");
  return {conflict:false,sha:result.content?.sha||null,commit:result.commit?.sha||null,config:clean};
-}
-async function writeCatalog(env, data, expectedSha) {
-  if (!env.GITHUB_TOKEN) throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
-  validateCatalogData(data);
-
-  const current = await fetch(catalogUrl(env), { headers: githubHeaders(env) });
-  const currentPayload = await current.json();
-  if (!current.ok) throw new Error(currentPayload.message || "Güncel katalog SHA bilgisi alınamadı.");
-  if (currentPayload.sha !== expectedSha) return { conflict: true, sha: currentPayload.sha };
-
-  const encoded = bytesToBase64(new TextEncoder().encode(JSON.stringify(data, null, 2)));
-  const response = await fetch(catalogUrl(env).split("?")[0], {
-    method: "PUT",
-    headers: { ...githubHeaders(env), "content-type": "application/json" },
-    body: JSON.stringify({
-      message: "Update CineVerse catalog from admin",
-      content: encoded,
-      sha: expectedSha,
-      branch: env.GITHUB_BRANCH || "main"
-    })
-  });
-  const result = await response.json();
-  if (!response.ok) throw new Error(result.message || "Katalog GitHub'a kaydedilemedi.");
-  return { conflict: false, sha: result.content?.sha || null, commit: result.commit?.sha || null };
 }
 
 export default {
