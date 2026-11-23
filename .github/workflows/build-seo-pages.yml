@@ -8,6 +8,8 @@ on:
       - 'scripts/build-seo-pages.mjs'
       - 'tests/seo-pages.mjs'
       - '.github/workflows/build-seo-pages.yml'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -31,6 +33,7 @@ jobs:
       - name: Test SEO page generator
         run: node tests/seo-pages.mjs
       - name: Generate and publish static SEO pages
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
