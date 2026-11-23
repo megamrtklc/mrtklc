@@ -17,7 +17,7 @@ try {
   const result = spawnSync(process.execPath, ['scripts/build-seo-pages.mjs'], {
     cwd: process.cwd(),
     encoding: 'utf8',
-    env: { ...process.env, SEO_CATALOG_FILE:catalogPath, SEO_OUTPUT_DIR:outputPath, SEO_SITE_URL:'https://example.test', SEO_BASE_PATH:'/perde' }
+    env: { ...process.env, SEO_TMDB_API_KEY:'', SEO_CATALOG_FILE:catalogPath, SEO_OUTPUT_DIR:outputPath, SEO_SITE_URL:'https://example.test', SEO_BASE_PATH:'/perde' }
   });
   assert.equal(result.status, 0, result.stderr || result.stdout);
   const film = await readFile(path.join(outputPath,'film/sahsiyet.html'),'utf8');
@@ -44,6 +44,7 @@ try {
   assert.match(actor, /Haluk Bilginer/);
   assert.ok(actor.includes('/perde/#/actor/77'), 'Oyuncu profili uygulamadaki TMDB profil rotasına bağlanmalı');
   assert.match(director, /Nuri Bilge Ceylan|Onur Saylak/);
+  assert.doesNotMatch(director, /#\\/director\\//, 'TMDB kimliği doğrulanmadan uygulama profiline bağlantı eklenmemeli');
   assert.match(sitemap, /https:\/\/example\.test\/perde\/film\/sahsiyet\.html/);
   assert.match(robots, /Sitemap: https:\/\/example\.test\/perde\/sitemap\.xml/);
   const manifest = JSON.parse(await readFile(path.join(outputPath,'.seo-generated-files.json'),'utf8'));
