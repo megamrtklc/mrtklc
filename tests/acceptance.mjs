@@ -876,12 +876,23 @@ try {
       const app = window.Alpine?.$data(document.documentElement);
       return app && !app.catalogLoading && !!window.__cineverseHomeSectionObserver;
     }, null, { timeout: 15000 });
-    // Keep the user's saved homepage visibility preference intact; reveal and hydrate this section only in the test context.
-    await page.locator('#home-personalized-section').evaluate(element => {
-      element.style.setProperty('display', 'block', 'important');
+    // Enable the section only in this fresh test page and use the real observer/hydration path.
+    await page.evaluate(() => {
       const app = window.Alpine?.$data(document.documentElement);
-      app?.prepareHomePersonalizedVariant?.(element);
+      app.homepageConfig = app.homepageConfig || {};
+      app.homepageConfig.layout = app.homepageConfig.layout || {};
+      app.homepageConfig.layout.visibility = {
+        ...(app.homepageConfig.layout.visibility || {}),
+        personalized: true
+      };
+      app.initHomeSectionObserver();
+      document.getElementById('home-personalized-section')?.scrollIntoView({ block: 'center', behavior: 'auto' });
     });
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      return app?.homeSectionReady?.personalized &&
+        document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length > 1;
+    }, null, { timeout: 15000 });
     for (const viewport of [{ width: 360, height: 800 }, { width: 768, height: 1024 }]) {
       await page.setViewportSize(viewport);
       await page.locator('#home-catalog-section').evaluate(element =>
