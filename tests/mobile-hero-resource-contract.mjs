@@ -24,4 +24,10 @@ assert.match(acceptance, /hiddenMobileHeroSources/,
 assert.match(acceptance, /setViewportSize\(\{ width: 1440, height: 900 \}\)/,
   'Üretim tarayıcı testi mobil/masaüstü boyut değişimini doğrulamalı');
 
+const optimizedCatalogPosterMarkup = ":src=\"getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [154]).split(' ')[0] || item.poster || item.image || item.tmdbPoster || item.backdrop\" :srcset=\"getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [154, 185, 260, 312, 342])\" sizes=\"(max-width: 639px) 148px, 178px\"";
+assert.equal(html.split(optimizedCatalogPosterMarkup).length - 1, 4,
+  'Katalog kartlarının dört afiş şablonu küçük başlangıç kaynağı ve duyarlı boyut adaylarını kullanmalı');
+assert.match(acceptance, /Katalog afişinin başlangıç kaynağı gereğinden büyük/,
+  'Üretim tarayıcı testi katalog afişlerinin başlangıç kaynağını doğrulamalı');
+
 console.log('PASS: Mobil manşet görselleri yalnızca mobil görünümde kaynak alıyor; uygulama ve küçültülmüş dosya eşleşiyor.');
