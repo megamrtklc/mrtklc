@@ -112,13 +112,31 @@ try {
 
   await page.waitForTimeout(8500);
 
-  await check('Masaüstü manşet arka planı ekrana uygun TMDB boyutunu seçiyor', async () => {
-    await page.waitForFunction(() => {
+  await check('Masaüstü manşet arka planı ekran yoğunluğuna uygun TMDB boyutunu seçiyor', async () => {
+    await page.waitForTimeout(1200);
+    const diagnostic = await page.evaluate(() => {
       const image = document.querySelector('#desktopEditorialHero picture img');
-      return image?.complete && image.naturalWidth > 0 && String(image.currentSrc || image.src).includes('/w1024/');
-    }, null, { timeout: 15000 });
-    const source = await page.locator('#desktopEditorialHero picture img').evaluate(image => image.currentSrc || image.src);
-    assert.ok(source.includes('/w1024/'), '1440px / 1x masaüstü görünümünde gereğinden büyük manşet görseli seçildi: ' + source);
+      const section = document.querySelector('#desktopEditorialHero');
+      const app = window.Alpine?.$data(document.documentElement);
+      const targetWidth = Math.min(window.innerWidth, 1800) * 0.7 * (window.devicePixelRatio || 1) >= 1024 ? 1280 : 1024;
+      return {
+        viewport: window.innerWidth,
+        devicePixelRatio: window.devicePixelRatio,
+        targetWidth,
+        source: image?.currentSrc || image?.src || '',
+        srcAttribute: image?.getAttribute('src') || '',
+        pendingSource: image?.dataset.pendingHeroUrl || '',
+        loaded: !!image && image.complete && image.naturalWidth > 0,
+        naturalWidth: image?.naturalWidth || 0,
+        heroHydrated: section?.dataset.cvHeroHydrated || '',
+        heroIgnored: !!section?.hasAttribute('x-ignore'),
+        backdrop: app?.currentHero?.backdrop || ''
+      };
+    });
+    console.log('DESKTOP HERO SOURCE DIAGNOSTIC:', JSON.stringify(diagnostic));
+    assert.ok(diagnostic.source.includes('/w' + diagnostic.targetWidth + '/'),
+      'Masaüstü manşet görseli beklenen çözünürlüğü seçmedi: ' + JSON.stringify(diagnostic));
+    assert.ok(diagnostic.loaded, 'Masaüstü manşet görseli yüklenmedi: ' + JSON.stringify(diagnostic));
   });
 
   await check('Ana sayfa katalog afişleri küçük başlangıç kaynağı ve duyarlı adaylar kullanıyor', async () => {

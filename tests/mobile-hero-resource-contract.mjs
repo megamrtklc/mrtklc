@@ -30,9 +30,11 @@ assert.equal(html.split(optimizedCatalogPosterMarkup).length - 1, 4,
 assert.match(acceptance, /Katalog afişinin başlangıç kaynağı gereğinden büyük/,
   'Üretim tarayıcı testi katalog afişlerinin başlangıç kaynağını doğrulamalı');
 
+assert.ok(html.includes("source.replace(/\\/t\\/p\\/(?:w\\d+|original)\\//, '/t/p/w' + targetWidth + '/')"),
+  'Masaüstü manşet görseli mevcut TMDB boyutu ne olursa olsun hedef boyuta dönüştürülmeli');
 assert.ok(html.includes("const targetWidth = Math.min(window.innerWidth, 1800) * 0.7 * (window.devicePixelRatio || 1) >= 1024 ? 1280 : 1024;"),
   'Masaüstü manşet görseli ekran genişliği ve piksel yoğunluğuna göre boyut seçmeli');
-assert.ok(acceptance.includes('Masaüstü manşet arka planı ekrana uygun TMDB boyutunu seçiyor'),
+assert.ok(acceptance.includes('Masaüstü manşet arka planı ekran yoğunluğuna uygun TMDB boyutunu seçiyor'),
   'Üretim tarayıcı testi masaüstü manşet görselinin boyutunu doğrulamalı');
 
 console.log('PASS: Mobil manşet görselleri yalnızca mobil görünümde kaynak alıyor; uygulama ve küçültülmüş dosya eşleşiyor.');
