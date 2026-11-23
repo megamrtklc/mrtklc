@@ -42,6 +42,7 @@ try {
   assert.match(film, /https:\/\/example\.test\/perde\/film\/sahsiyet\.html/);
   assert.match(series, /TVSeries/);
   assert.match(actor, /Haluk Bilginer/);
+  assert.ok(actor.includes('/perde/#/actor/77'), 'Oyuncu profili uygulamadaki TMDB profil rotasına bağlanmalı');
   assert.match(director, /Nuri Bilge Ceylan|Onur Saylak/);
   assert.match(sitemap, /https:\/\/example\.test\/perde\/film\/sahsiyet\.html/);
   assert.match(robots, /Sitemap: https:\/\/example\.test\/perde\/sitemap\.xml/);
