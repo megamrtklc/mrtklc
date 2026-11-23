@@ -1,15 +1,15 @@
-/film/
- /dizi/
- /oyuncu/
- /yonetmen/
- /izle/
- /.seo-generated-files.json
- /sitemap.xml
- /robots.txt
- /.github/
- /scripts/
- /tests/
- /node_modules/
- /.git/
- /wrangler.jsonc
- /worker/
+/film/**
+/dizi/**
+/oyuncu/**
+/yonetmen/**
+/izle/**
+/.seo-generated-files.json
+/sitemap.xml
+/robots.txt
+/.github/**
+/scripts/**
+/tests/**
+/node_modules/**
+/.git/**
+/wrangler.jsonc
+/worker/**
