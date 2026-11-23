@@ -167,8 +167,9 @@
                             ? item.tmdbCast
                             : (Array.isArray(item.cast) ? item.cast : []);
                         cast.forEach(person => addPerson(person, item, 'Acting'));
-                        const directorName = item.tmdbDirector || item.director || '';
-                        if (directorName) addPerson({ name: directorName }, item, 'Directing');
+                        this.getDirectorNames(item.tmdbDirector || item.director).forEach(directorName => {
+                            addPerson({ name: directorName }, item, 'Directing');
+                        });
                     });
 
                     for (const person of people.values()) {
