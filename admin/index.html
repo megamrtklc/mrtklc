@@ -7,7 +7,7 @@
 <script>if(location.hostname.endsWith('github.io'))location.replace('https://cineverse-admin.megamrtklc.workers.dev/');</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="./fonts.css?v=20261117-inter-admin-v1">
-<link rel="stylesheet" href="./admin.css?v=20261124-neutral-admin-palette-v2">
+<link rel="stylesheet" href="./admin.css?v=20261124-account-access-v1">
 </head>
 <body>
 <div class="app-shell">
@@ -343,14 +343,42 @@
   <div class="analytics-detail-pagination"><span id="analytics-detail-page-info">—</span><div><button id="analytics-detail-prev" type="button" disabled>←</button><button id="analytics-detail-next" type="button" disabled>→</button></div></div>
  </div>
 </section>
-      <section class="view" id="view-users"><div class="page-heading"><div><div class="eyebrow">ACCESS / 05</div><h1>Kullanıcılar</h1><p>Yönetici profilini ve oturum güvenliğini yönet.</p></div></div>
-        <div class="users-profile-layout">
-          <article class="panel-card users-profile-card"><div class="panel-heading"><div><span class="section-index">05 / YÖNETİCİ PROFİLİ</span><h2>Yönetici hesabı</h2><p>Görünen adını değiştir; fotoğrafını ekle veya yenile.</p></div></div>
+      <section class="view" id="view-users">
+        <div class="page-heading"><div><div class="eyebrow">ACCOUNT &amp; ACCESS / 05</div><h1>Hesap &amp; Erişim</h1><p>Yönetici profilini, giriş güvenliğini ve oturum bilgilerini tek merkezden takip et.</p></div><span class="users-security-badge"><i></i> TEK YÖNETİCİ HESABI</span></div>
+        <div class="users-access-grid">
+          <article class="panel-card users-profile-card users-main-card">
+            <div class="users-card-kicker"><span class="users-card-icon">♙</span><span>01 / YÖNETİCİ PROFİLİ</span></div>
             <div class="users-profile-summary"><div class="profile-photo-large" id="profile-photo-large"><span>CV</span><img id="profile-photo-preview" alt="" hidden></div><div><b id="users-profile-name">Yönetici</b><small>Yönetim paneli yöneticisi</small><button class="text-button" id="profile-change-button" type="button">Fotoğraf ekle / değiştir ↗</button></div></div>
-            <form id="admin-profile-form" class="admin-profile-form"><label class="field"><span>Yönetici adı</span><input id="admin-name-input" type="text" maxlength="60" placeholder="Yönetici adı" required></label><button class="primary-button" type="submit">İsmi kaydet</button></form>
+            <form id="admin-profile-form" class="admin-profile-form"><label class="field"><span>Görünen yönetici adı</span><input id="admin-name-input" type="text" maxlength="60" placeholder="Yönetici adı" required></label><button class="primary-button" type="submit">İsmi kaydet</button></form>
+            <p class="users-card-footnote">Bu ad panelde görünür; giriş hesabını veya yetkileri değiştirmez.</p>
           </article>
-          <article class="panel-card access-card"><span class="mini-icon lilac">♙</span><h2>Hesap güvenliği</h2><p>Bu kurulumda yönetim tek bir sunucu tarafı şifresiyle korunuyor. Şifre GitHub deposunda tutulmaz; Cloudflare Worker gizli anahtarı olarak saklanır.</p><div class="setting-row"><span>Oturum süresi</span><b>12 saat hareketsizlik</b></div><div class="setting-row"><span>Oturum çerezi</span><b>HttpOnly · Secure · SameSite</b></div><div class="setting-row"><span>Giriş denemesi sınırı</span><b>5 deneme / dakika</b></div><p class="helper-text">Burada değiştirilen ad yalnızca panelde görünen yönetici adıdır; giriş şifresini veya sunucu erişim yetkisini değiştirmez.</p></article>
-        </div></section>
+          <article class="panel-card users-security-card">
+            <div class="users-card-kicker"><span class="users-card-icon">⌑</span><span>02 / ŞİFRE VE HESAP GÜVENLİĞİ</span></div>
+            <h2>Yönetici giriş şifresi</h2><p>Giriş ekranındaki şifre, Cloudflare Worker üzerinde gizli değişken olarak doğrulanır. GitHub deposunda veya tarayıcıda saklanmaz.</p>
+            <div class="users-info-row"><span>Şifre kaynağı</span><b>Cloudflare Worker Secret</b></div>
+            <div class="users-info-row"><span>Giriş koruması</span><b>5 deneme / dakika</b></div>
+            <div class="users-info-row"><span>Şifre değiştirme</span><b class="users-status-pending">Sunucu entegrasyonu gerekli</b></div>
+            <p class="users-card-footnote">Panelden şifre değiştirme işlemini etkinleştirmek için mevcut Worker gizli değişkenini güvenli biçimde güncelleyen bir sunucu bağlantısı gerekiyor. Bu bağlantı kurulmadan sahte bir şifre değiştirme formu göstermiyoruz.</p>
+          </article>
+          <article class="panel-card users-session-card">
+            <div class="users-card-kicker"><span class="users-card-icon">◷</span><span>03 / OTURUM YÖNETİMİ</span></div>
+            <h2>Oturum koruması</h2><p>Yönetim oturumu güvenli çerez üzerinden sürdürülür.</p>
+            <div class="users-info-row"><span>Oturum çerezi</span><b>HttpOnly · Secure</b></div>
+            <div class="users-info-row"><span>SameSite politikası</span><b>Strict</b></div>
+            <div class="users-info-row"><span>Oturum yenileme</span><b>Etkin kullanımda kayar süre</b></div>
+            <div class="users-info-row"><span>Çerez süresi</span><b>2 saat</b></div>
+            <p class="users-card-footnote">Çıkış düğmesi mevcut oturumu sonlandırır. Tüm cihazlardaki oturumları kapatma, ayrıca oturum iptal altyapısı gerektirir.</p>
+          </article>
+          <article class="panel-card users-history-card">
+            <div class="users-card-kicker"><span class="users-card-icon">⌁</span><span>04 / GİRİŞ GEÇMİŞİ VE ERİŞİM</span></div>
+            <h2>Erişim denetimi</h2><p>Giriş denemeleri sunucu tarafında sınırlandırılır. Ayrıntılı başarılı/başarısız giriş geçmişi henüz kalıcı olarak kaydedilmiyor.</p>
+            <div class="users-info-row"><span>Giriş denemesi sınırı</span><b>5 / dakika</b></div>
+            <div class="users-info-row"><span>Çoklu kullanıcı</span><b>Kapalı · Tek yönetici</b></div>
+            <div class="users-info-row"><span>İkinci doğrulama</span><b class="users-status-pending">Şimdilik devre dışı</b></div>
+            <p class="users-card-footnote">Giriş geçmişi ve tüm oturumları sonlandırma özellikleri için kalıcı güvenlik kayıt altyapısı gereklidir. İkinci doğrulama bu aşamada eklenmiyor.</p>
+          </article>
+        </div>
+      </section>
       <section class="view" id="view-personalized-section">
         <div class="page-heading"><div><div class="eyebrow">PERSONALIZED EXPERIENCE / 06</div><h1>İzleme Zevkine Göre</h1><p>Ana sayfadaki kişiselleştirilmiş öneri alanının görünürlüğünü ve metinlerini yönet.</p></div><button class="primary-button" type="submit" form="personalized-section-form">Değişiklikleri kontrol et</button></div>
         <form id="personalized-section-form" class="panel-card homepage-editor">
