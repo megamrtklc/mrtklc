@@ -1115,9 +1115,13 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 .editor-url-section .editor-section-icon{border-color:#816b49;background:#3b3429;color:#e0c58f}
 .editor-url-section .editor-section-copy>b{color:#e6d2aa}
 .editor-url-section .editor-section-tag{border-color:#8d744d;color:#e0c58f}
-.editor-watch-section{border-color:#52697d}
-.editor-watch-section>summary{background:linear-gradient(90deg,#6e8ca414,transparent 75%)}
-.editor-watch-section .editor-section-icon{border-color:#4d657b;background:#253647;color:#b6d0e5}
+.editor-watch-section{border-color:#8a454b;background:linear-gradient(145deg,#302226,#1b232c);box-shadow:0 0 0 1px #c65b6412,inset 0 1px #ffffff08}
+.editor-watch-section>summary{background:linear-gradient(90deg,#d94b551b,transparent 78%)}
+.editor-watch-section .editor-section-icon{border-color:#87464d;background:#40282d;color:#f0a0a4}
+.editor-watch-section .editor-section-copy>b{color:#f0c5c7}
+.editor-watch-section .editor-section-tag{border-color:#87464d;color:#e99a9f}
+.editor-watch-section .url-highlight-group{border-color:#87464d;border-left-color:#d66a72;background:linear-gradient(135deg,#302327,#1b232c)}
+.editor-watch-section .url-highlight-icon{background:#d65a6420;color:#f0a0a4}
 .editor-tv-section{border-color:#685b7e}
 .editor-tv-section>summary{background:linear-gradient(90deg,#82719b14,transparent 75%)}
 .editor-tv-section .editor-section-icon{border-color:#685b7e;background:#302a3a;color:#c7b8df}
