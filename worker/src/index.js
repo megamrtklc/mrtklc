@@ -212,14 +212,15 @@ async function authorize(request,env){
 async function handleLogin(request,env){
   if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
   if(!env.SECURITY_DB||!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32)return json({error:"Yönetici güvenlik altyapısı henüz yapılandırılmamış."},503);
-  if(env.LOGIN_LIMITER){
-    const ip=request.headers.get("cf-connecting-ip")||"unknown";
-    const limit=await env.LOGIN_LIMITER.limit({key:ip});
-    if(!limit.success)return new Response("Çok fazla giriş denemesi. Bir dakika sonra tekrar dene.",{status:429,headers:{"content-type":"text/plain; charset=utf-8","retry-after":"60","cache-control":"no-store"}});
-  }
   const form=await request.formData();
   const username=String(form.get("username")||"").trim().toLowerCase();
   const password=String(form.get("password")||"");
+  const ipHash=await requestIpHash(request,env);
+  const settings=await env.SECURITY_DB.prepare("SELECT login_limit,login_window_seconds FROM admin_security_settings WHERE id=1").first();
+  const attemptLimit=Math.max(3,Math.min(10,Number(settings?.login_limit)||5));
+  const windowSeconds=Math.max(30,Math.min(600,Number(settings?.login_window_seconds)||60));
+  const recent=await env.SECURITY_DB.prepare("SELECT COUNT(*) AS total FROM admin_login_events WHERE ip_hash=? AND occurred_at>?").bind(ipHash,Math.floor(Date.now()/1000)-windowSeconds).first();
+  if(Number(recent?.total||0)>=attemptLimit)return new Response("Çok fazla giriş denemesi. Bir süre sonra tekrar dene.",{status:429,headers:{"content-type":"text/plain; charset=utf-8","retry-after":String(windowSeconds),"cache-control":"no-store"}});
   let configuredUsername="admin";
   try{
     const catalog=await readCatalog(env);
