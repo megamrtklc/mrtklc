@@ -503,11 +503,11 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     </div>
     <div class="cv-mhero-artwork">
       <div class="cv-mhero-backdrop" aria-hidden="true">
-        <img x-show="currentHero.backdrop" :src="currentHero.backdrop || ''" alt="" width="780" height="270" fetchpriority="high" decoding="async" @error="handleImageError($event)">
+        <img x-show="currentHero.backdrop" :src="currentHero.backdrop || ''" :srcset="getTmdbImageSrcSet(currentHero.backdrop || '', [342, 500, 780])" sizes="(max-width: 767px) calc(100vw - 56px), 780px" alt="" width="780" height="439" fetchpriority="high" decoding="async" @error="handleImageError($event)">
       </div>
       <div class="cv-mhero-shade" aria-hidden="true"></div>
       <div class="cv-mhero-poster">
-        <img :src="currentHero.poster || currentHero.image || currentHero.tmdbPoster || ''" :alt="(currentHero.title || 'Yapım') + ' afişi'" width="172" height="258" fetchpriority="high" decoding="async" @error="handleImageError($event)">
+        <img :src="currentHero.poster || currentHero.image || currentHero.tmdbPoster || ''" :srcset="getTmdbImageSrcSet(currentHero.poster || currentHero.image || currentHero.tmdbPoster || '', [185, 342, 500])" sizes="(max-width: 767px) min(46vw, 172px), 172px" :alt="(currentHero.title || 'Yapım') + ' afişi'" width="172" height="258" fetchpriority="high" decoding="async" @error="handleImageError($event)">
       </div>
     </div>
     <div class="cv-mhero-details">
