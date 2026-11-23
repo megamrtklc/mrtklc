@@ -350,8 +350,9 @@ try {
       src: image.getAttribute('src') || '',
       srcset: image.getAttribute('srcset') || ''
     })));
-    assert.ok(hiddenMobileHeroSources.length >= 2 && hiddenMobileHeroSources.every(image => !image.src && !image.srcset),
-      'Masaüstünde gizli mobil manşet görselleri ağ isteği başlatmamalı: ' + JSON.stringify(hiddenMobileHeroSources));
+    assert.ok(hiddenMobileHeroSources.length >= 2 && hiddenMobileHeroSources.every(image =>
+      !image.srcset && (!image.src || image.src.startsWith('data:'))),
+      'Masaüstünde gizli mobil manşet görselleri harici görsel URLsi kullanmamalı: ' + JSON.stringify(hiddenMobileHeroSources));
     const preloadChecks = await page.evaluate(() => ({
       catalog: !!document.querySelector('link[rel="preload"][as="fetch"][href="./filmvediziler.json"]'),
       alpine: [...document.querySelectorAll('link[rel="preload"][as="script"]')].some(link => link.href.includes('alpinejs')),
@@ -526,7 +527,10 @@ try {
         const app = window.Alpine?.$data(document.documentElement);
         const images = [...document.querySelectorAll('#mobileCinematicHero img')];
         return app?.isMobileHeroViewport === false && images.length >= 2 &&
-          images.every(image => !image.getAttribute('src') && !image.getAttribute('srcset'));
+          images.every(image => {
+            const src = image.getAttribute('src') || '';
+            return !image.getAttribute('srcset') && (!src || src.startsWith('data:'));
+          });
       }, { timeout: 10000 });
       await mobilePage.setViewportSize({ width: 412, height: 823 });
       await mobilePage.waitForFunction(() => {
