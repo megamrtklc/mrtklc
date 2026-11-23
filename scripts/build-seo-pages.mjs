@@ -110,7 +110,7 @@ if (!Array.isArray(catalog)) throw new Error('filmvediziler.json içinde catalog
 const items = catalog.filter(item => item && itemId(item));
 const films = items.filter(item => typeOf(item) === 'movie');
 const series = items.filter(item => typeOf(item) === 'tv');
-const itemSlugs = uniqueSlugs(items, titleOf, itemId);
+const itemSlugs = new Map([...uniqueSlugs(films, titleOf, itemId), ...uniqueSlugs(series, titleOf, itemId)]);
 const actorMap = new Map();
 const directorMap = new Map();
 
@@ -146,7 +146,7 @@ for (const person of directors) directorPaths.set(person.name.toLocaleLowerCase(
 const previous = await readFile(MANIFEST, 'utf8').then(JSON.parse).catch(() => []);
 for (const relative of array(previous)) {
   const normalized = safeFile(relative);
-  if (!normalized || normalized.startsWith('..') || path.isAbsolute(normalized)) continue;
+  if (!normalized || normalized.split('/').includes('..') || path.isAbsolute(normalized)) continue;
   await rm(path.join(ROOT, normalized), { force: true });
 }
 const generated = [];
@@ -183,7 +183,7 @@ for (const item of items) {
       '<div><strong>' + esc(person.name) + '</strong><span>' + esc(person.character || 'Oyuncu') + '</span></div></a>';
   }).join('');
   const crumbs = '<nav class="crumb"><a href="' + esc(BASE_PATH + '/') + '">Ana sayfa</a> / ' +
-    '<a href="' + esc(BASE_PATH + (typeOf(item) === 'tv' ? '/diziler.html' : '/filmler.html')) + '">' + (typeOf(item) === 'tv' ? 'Diziler' : 'Filmler') + '</a> / ' + esc(title) + '</nav>';
+    '<span>' + (typeOf(item) === 'tv' ? 'Diziler' : 'Filmler') + '</span> / ' + esc(title) + '</nav>';
   const body = crumbs + '<section class="hero">' +
     (poster ? '<img class="poster" src="' + esc(poster) + '" alt="' + esc(title) + ' afişi">' : '<div class="poster-placeholder">Afiş bulunamadı</div>') +
     '<div><div class="eyebrow">' + (typeOf(item) === 'tv' ? 'Dizi' : 'Film') + ' detayları</div><h1>' + esc(title) + '</h1>' +
