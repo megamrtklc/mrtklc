@@ -1,5 +1,6 @@
 /* Admin UI bundle deployment sync: admin assets are packaged by Wrangler. */
 const API_VERSION = "2022-11-28";
+const BRAND_CONFIG_DEFAULTS = {"brandName":"CINEVERSE","shortName":"CINE","slogan":"Film ve dizi arşivinin kişisel merkezi","pageTitle":"CINEVERSE","metaDescription":"CINEVERSE ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.","copyright":"© 2026 CINEVERSE. Tüm hakları saklıdır.","adminSubtitle":"CONTROL ROOM","scopes":{"site":true,"admin":true,"login":true,"seo":true}};
 let cachedJwks = null;
 let cachedJwksAt = 0;
 
@@ -67,9 +68,13 @@ function sameOrigin(request) {
     return false;
   }
 }
-function loginPage(showError=false) {
+function escapeBrandHtml(value){return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
+function loginPage(showError=false,brandConfig=BRAND_CONFIG_DEFAULTS) {
+  const brandName=escapeBrandHtml(brandConfig?.brandName||BRAND_CONFIG_DEFAULTS.brandName);
+  const shortName=escapeBrandHtml(brandConfig?.shortName||BRAND_CONFIG_DEFAULTS.shortName);
+  const slogan=escapeBrandHtml(brandConfig?.slogan||BRAND_CONFIG_DEFAULTS.slogan);
   const error=showError?'<p class="error">Şifre doğru değil. Lütfen tekrar dene.</p>':"";
-  const html='<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>CineVerse Yönetici Girişi</title><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="/fonts.css?v=20261117-inter-admin-v1"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 0,#30251b 0,#17191f 48%,#101116 100%);color:#f4f1eb;font:15px Inter,system-ui,sans-serif}.panel{width:min(100%,420px);padding:38px;border:1px solid #ffffff18;border-radius:22px;background:#202127ef;box-shadow:0 24px 80px #0008}.mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#d6b36b,#8e632c);display:grid;place-items:center;color:#17191f;font-weight:900;font-size:20px}.eyebrow{margin:25px 0 8px;color:#c9a967;font-size:11px;letter-spacing:2px;font-weight:700}h1{margin:0;font-size:27px}p{color:#a8a8ae;line-height:1.6}.field{display:block;margin:26px 0 14px;color:#d9d5ce;font-size:13px}.field input{display:block;width:100%;margin-top:9px;padding:14px 15px;border:1px solid #ffffff24;border-radius:11px;background:#15161b;color:#fff;font:inherit;outline:none}.field input:focus{border-color:#c9a967;box-shadow:0 0 0 3px #c9a96722}button{width:100%;padding:14px;border:0;border-radius:11px;background:linear-gradient(110deg,#d6b36b,#b78a43);color:#17191f;font:700 14px Inter,system-ui,sans-serif;cursor:pointer}.error{margin:0 0 14px;padding:11px 13px;border-radius:9px;background:#7f292933;color:#ffaaaa;font-size:13px}.foot{margin-top:22px;text-align:center;font-size:11px;color:#777982}</style></head><body><main class="panel"><div class="mark">C</div><div class="eyebrow">CINEVERSE / MANAGEMENT STUDIO</div><h1>Yönetici girişi</h1><p>Yönetim merkezine devam etmek için erişim şifreni gir.</p>'+error+'<form method="post" action="/api/login"><label class="field">Yönetici şifresi<input type="password" name="password" autocomplete="current-password" required minlength="10" autofocus></label><button type="submit">Güvenli giriş yap</button></form><div class="foot">Yalnızca yetkili yönetici erişebilir.</div></main></body></html>';
+  const html='<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>'+brandName+' Yönetici Girişi</title><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="/fonts.css?v=20261117-inter-admin-v1"><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 0,#30251b 0,#17191f 48%,#101116 100%);color:#f4f1eb;font:15px Inter,system-ui,sans-serif}.panel{width:min(100%,420px);padding:38px;border:1px solid #ffffff18;border-radius:22px;background:#202127ef;box-shadow:0 24px 80px #0008}.mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#d6b36b,#8e632c);display:grid;place-items:center;color:#17191f;font-weight:900;font-size:20px}.eyebrow{margin:25px 0 8px;color:#c9a967;font-size:11px;letter-spacing:2px;font-weight:700}h1{margin:0;font-size:27px}p{color:#a8a8ae;line-height:1.6}.field{display:block;margin:26px 0 14px;color:#d9d5ce;font-size:13px}.field input{display:block;width:100%;margin-top:9px;padding:14px 15px;border:1px solid #ffffff24;border-radius:11px;background:#15161b;color:#fff;font:inherit;outline:none}.field input:focus{border-color:#c9a967;box-shadow:0 0 0 3px #c9a96722}button{width:100%;padding:14px;border:0;border-radius:11px;background:linear-gradient(110deg,#d6b36b,#b78a43);color:#17191f;font:700 14px Inter,system-ui,sans-serif;cursor:pointer}.error{margin:0 0 14px;padding:11px 13px;border-radius:9px;background:#7f292933;color:#ffaaaa;font-size:13px}.foot{margin-top:22px;text-align:center;font-size:11px;color:#777982}</style></head><body><main class="panel"><div class="mark">'+shortName.slice(0,1)+'</div><div class="eyebrow">'+brandName+' / MANAGEMENT STUDIO</div><h1>Yönetici girişi</h1><p>'+slogan+'. Yönetim merkezine devam etmek için erişim şifreni gir.</p>'+error+'<form method="post" action="/api/login"><label class="field">Yönetici şifresi<input type="password" name="password" autocomplete="current-password" required minlength="10" autofocus></label><button type="submit">Güvenli giriş yap</button></form><div class="foot">Yalnızca yetkili yönetici erişebilir.</div></main></body></html>';
   return new Response(html,{status:200,headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store","x-content-type-options":"nosniff","referrer-policy":"no-referrer"}});
 }
 async function authorize(request,env) {
@@ -100,7 +105,7 @@ async function handleLogin(request,env) {
   const password=String(form.get("password")||"");
   if(password.length<10||password.length>256)return loginPage(true);
   const [candidate,expected]=await Promise.all([hmac(env.SESSION_SECRET,password),hmac(env.SESSION_SECRET,env.ADMIN_PASSWORD)]);
-  if(!constantTimeEqual(candidate,expected))return new Response(loginPage(true).body,{status:401,headers:loginPage(true).headers});
+  if(!constantTimeEqual(candidate,expected)){let loginBrand=BRAND_CONFIG_DEFAULTS;try{const loaded=await readBrandConfig(env);if(loaded.config?.scopes?.login!==false)loginBrand=loaded.config;}catch(error){}const page=loginPage(true,loginBrand);return new Response(page.body,{status:401,headers:page.headers});}
   const now=Math.floor(Date.now()/1000);
   const payload=encodeBase64Url(new TextEncoder().encode(JSON.stringify({sub:"admin",iat:now,exp:now+300})));
   const signature=encodeBase64Url(await hmac(env.SESSION_SECRET,payload));
@@ -305,6 +310,35 @@ export function validateCatalogData(data) {
   return true;
 }
 
+function brandConfigUrl(env,withRef=true){
+ const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc");
+ const base="https://api.github.com/repos/"+owner+"/"+repo+"/contents/brand-config.json";
+ return withRef?base+"?ref="+encodeURIComponent(env.GITHUB_BRANCH||"main"):base;
+}
+async function readBrandConfig(env){
+ const headers=env.GITHUB_TOKEN?githubHeaders(env):{"accept":"application/vnd.github+json","x-github-api-version":API_VERSION,"user-agent":"CineVerse-Admin-Worker"};
+ const response=await fetch(brandConfigUrl(env),{headers});
+ if(response.status===404)return {config:BRAND_CONFIG_DEFAULTS,sha:null};
+ const payload=await response.json().catch(()=>({}));
+ if(!response.ok||!payload.content)throw new Error(payload.message||"Marka ayarları okunamadı.");
+ const bytes=Uint8Array.from(atob(String(payload.content).replace(/\s/g,"")),ch=>ch.charCodeAt(0));
+ const config=JSON.parse(new TextDecoder().decode(bytes));
+ return {config:{...BRAND_CONFIG_DEFAULTS,...config,scopes:{...BRAND_CONFIG_DEFAULTS.scopes,...(config.scopes||{})}},sha:payload.sha||null};
+}
+async function writeBrandConfig(env,config,expectedSha){
+ if(!env.GITHUB_TOKEN)throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
+ if(!config||typeof config!=="object"||Array.isArray(config))throw new Error("Marka ayarları geçersiz.");
+ const clean={brandName:String(config.brandName||"").trim().slice(0,40),shortName:String(config.shortName||"").trim().slice(0,16),slogan:String(config.slogan||"").trim().slice(0,100),pageTitle:String(config.pageTitle||"").trim().slice(0,80),metaDescription:String(config.metaDescription||"").trim().slice(0,240),copyright:String(config.copyright||"").trim().slice(0,120),adminSubtitle:String(config.adminSubtitle||"").trim().slice(0,48),scopes:{site:config.scopes?.site!==false,admin:config.scopes?.admin!==false,login:config.scopes?.login!==false,seo:config.scopes?.seo!==false}};
+ if(!clean.brandName||!clean.pageTitle)throw new Error("Ana marka adı ve sayfa başlığı zorunludur.");
+ const currentResponse=await fetch(brandConfigUrl(env),{headers:githubHeaders(env)});let currentSha=null;
+ if(currentResponse.ok){const current=await currentResponse.json();currentSha=current.sha||null;}
+ else if(currentResponse.status!==404){const error=await currentResponse.json().catch(()=>({}));throw new Error(error.message||"Mevcut marka ayarları kontrol edilemedi.");}
+ if(currentSha!==(expectedSha||null))return {conflict:true,sha:currentSha};
+ const content=bytesToBase64(new TextEncoder().encode(JSON.stringify(clean,null,2)));
+ const response=await fetch(brandConfigUrl(env,false),{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Update brand identity settings",content,sha:currentSha||undefined,branch:env.GITHUB_BRANCH||"main"})});
+ const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.message||"Marka ayarları kaydedilemedi.");
+ return {conflict:false,sha:result.content?.sha||null,commit:result.commit?.sha||null,config:clean};
+}
 async function writeCatalog(env, data, expectedSha) {
   if (!env.GITHUB_TOKEN) throw new Error("GITHUB_TOKEN secret tanımlanmamış.");
   validateCatalogData(data);
@@ -340,10 +374,23 @@ export default {
     const auth=await authorize(request,env);
     if(!auth.ok) {
       if(path.startsWith("/api/"))return json({error:auth.error},auth.status);
-      return loginPage();
+      let loginBrand=BRAND_CONFIG_DEFAULTS;
+      try{const loaded=await readBrandConfig(env);if(loaded.config?.scopes?.login!==false)loginBrand=loaded.config;}catch(error){}
+      return loginPage(false,loginBrand);
     }
     const response=await (async()=>{
       if(!path.startsWith("/api/"))return env.ASSETS.fetch(request);
+      if(request.method==="GET"&&path==="/api/brand-config") {
+        try { return json(await readBrandConfig(env)); }
+        catch(error) { return json({error:error.message||"Marka ayarları okunamadı."},502); }
+      }
+      if(request.method==="PUT"&&path==="/api/brand-config") {
+        if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+        try { const body=await request.json();const result=await writeBrandConfig(env,body?.config,body?.sha);
+          if(result.conflict)return json({error:"Marka ayarları başka bir işlemde güncellenmiş.",sha:result.sha},409);
+          return json({ok:true,sha:result.sha,commit:result.commit,config:result.config});
+        } catch(error) { return json({error:error.message||"Marka ayarları kaydedilemedi."},400); }
+      }
       if(request.method==="GET"&&path==="/api/session")return json({authenticated:true,email:auth.claims.email||"Yönetici"});
       if(request.method==="GET"&&path==="/api/credentials") {
         const result={github:{configured:!!env.GITHUB_TOKEN},tmdb:{configured:!!env.TMDB_API_KEY}};

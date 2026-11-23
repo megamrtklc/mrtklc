@@ -1,0 +1,15 @@
+{
+  "brandName": "CINEVERSE",
+  "shortName": "CINE",
+  "slogan": "Film ve dizi arşivinin kişisel merkezi",
+  "pageTitle": "CINEVERSE",
+  "metaDescription": "CINEVERSE ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.",
+  "copyright": "© 2026 CINEVERSE. Tüm hakları saklıdır.",
+  "adminSubtitle": "CONTROL ROOM",
+  "scopes": {
+    "site": true,
+    "admin": true,
+    "login": true,
+    "seo": true
+  }
+}
