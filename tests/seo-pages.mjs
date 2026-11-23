@@ -64,3 +64,10 @@ try {
 } finally {
   await rm(temp, { recursive:true, force:true });
 }
+
+const dynamicResult = spawnSync(process.execPath, ["tests/dynamic-routes.mjs"], {
+  cwd: process.cwd(),
+  encoding: "utf8"
+});
+assert.equal(dynamicResult.status, 0, dynamicResult.stderr || dynamicResult.stdout);
+console.log(dynamicResult.stdout.trim());
