@@ -1,11 +1,11 @@
 {
-  "brandName": "CINEVERSE",
-  "shortName": "CINE",
+  "brandName": "MRTSINEMA",
+  "shortName": "MRT",
   "slogan": "Film ve dizi arşivinin kişisel merkezi",
-  "pageTitle": "CINEVERSE",
+  "pageTitle": "MRTSINEMA",
   "metaDescription": "CINEVERSE ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.",
-  "copyright": "© 2026 CINEVERSE. Tüm hakları saklıdır.",
-  "adminSubtitle": "CONTROL ROOM",
+  "copyright": "© 2026 MRTSINEMA. Tüm hakları saklıdır.",
+  "adminSubtitle": "YONETIM PANELI",
   "scopes": {
     "site": true,
     "admin": true,
