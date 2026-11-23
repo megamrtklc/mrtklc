@@ -27,7 +27,7 @@ const directorNames = item => {
   if (!raw || raw.toLocaleLowerCase('tr') === 'bilinmiyor') return [];
   return raw.split(/\s*[,;|]\s*/).map(clean).filter(Boolean);
 };
-const normalizePersonName = value => clean(value).toLocaleLowerCase('tr').replace(/ı/g, 'i').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/[^\\p{L}\\p{N}]+/gu, ' ').trim();
+import { normalizePersonName } from './person-name.mjs';
 
 async function resolveDirectorIds(items, directorMap) {
   const apiKey = process.env.SEO_TMDB_API_KEY;
