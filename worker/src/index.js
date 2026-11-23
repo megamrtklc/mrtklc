@@ -81,15 +81,20 @@ function loginPage(showError=false,brandConfig=BRAND_CONFIG_DEFAULTS) {
 html{min-height:100%;background:#090a0d}
 body{margin:0;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:28px 20px;background:#090a0d;color:#f5f1e8;color:#f5f1e8;font:15px Inter,system-ui,sans-serif}
 .ambient-icons{position:fixed;inset:0;overflow:hidden;pointer-events:none;color:rgba(215,181,109,.2)}
-.ambient-icon{position:absolute;width:clamp(40px,6vw,76px);height:clamp(40px,6vw,76px);stroke:currentColor;fill:none;stroke-width:1.25;filter:drop-shadow(0 0 16px rgba(215,181,109,.12));animation:drift 9s ease-in-out infinite}
-.ambient-icon.gear{top:13%;left:13%;animation:drift 10s ease-in-out infinite,turn 28s linear infinite}
-.ambient-icon.pencil{top:21%;right:16%;animation:drift 8s ease-in-out -2s infinite}
-.ambient-icon.shield{top:66%;left:9%;animation:drift 11s ease-in-out -4s infinite}
-.ambient-icon.chart{top:72%;right:12%;animation:drift 9s ease-in-out -1s infinite}
-.ambient-icon.database{top:43%;left:5%;width:48px;height:48px;animation:drift 12s ease-in-out -3s infinite}
-.ambient-icon.clapper{top:42%;right:6%;width:54px;height:54px;animation:drift 10s ease-in-out -5s infinite}
-@keyframes drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-13px,0)}}
-@keyframes turn{to{rotate:360deg}}
+.ambient-icon{position:absolute;width:clamp(40px,6vw,76px);height:clamp(40px,6vw,76px);stroke:currentColor;fill:none;stroke-width:1.25;filter:drop-shadow(0 0 16px rgba(215,181,109,.12))}
+.ambient-icon.gear{top:13%;left:13%;transform-origin:center;animation:gear-spin 34s linear infinite}
+.ambient-icon.pencil{top:21%;right:16%;transform-origin:70% 75%;animation:pencil-tilt 6s ease-in-out infinite}
+.ambient-icon.shield{top:66%;left:9%;animation:shield-glow 5.5s ease-in-out infinite}
+.ambient-icon.chart{top:72%;right:12%}
+.ambient-icon.chart path:last-child{stroke-dasharray:34;stroke-dashoffset:34;animation:chart-draw 7s ease-in-out infinite}
+.ambient-icon.database{top:43%;left:5%;width:48px;height:48px;transform-origin:center;animation:database-pulse 5s ease-in-out infinite}
+.ambient-icon.clapper{top:42%;right:6%;width:54px;height:54px;transform-origin:15% 35%;animation:clapper-tap 4.8s ease-in-out infinite}
+@keyframes gear-spin{to{transform:rotate(360deg)}}
+@keyframes pencil-tilt{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(7deg)}}
+@keyframes shield-glow{0%,100%{filter:drop-shadow(0 0 7px rgba(215,181,109,.08));opacity:.68}50%{filter:drop-shadow(0 0 23px rgba(240,217,158,.42));opacity:1}}
+@keyframes chart-draw{0%,12%{stroke-dashoffset:34;opacity:.45}48%,75%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:-34;opacity:.45}}
+@keyframes database-pulse{0%,100%{transform:scale(.94);opacity:.65}50%{transform:scale(1.08);opacity:1}}
+@keyframes clapper-tap{0%,75%,100%{transform:rotate(0)}82%{transform:rotate(-7deg)}90%{transform:rotate(2deg)}}
 .login-shell{width:min(100%,460px);position:relative;z-index:1}
 .login-panel{position:relative;overflow:hidden;padding:clamp(28px,6vw,46px);border:1px solid rgba(215,181,109,.32);border-radius:26px;background:linear-gradient(145deg,rgba(23,24,29,.94),rgba(12,14,19,.92));-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);box-shadow:0 30px 100px rgba(0,0,0,.62),0 0 70px rgba(215,181,109,.08)}
 .login-panel:before{content:"";position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.8}
