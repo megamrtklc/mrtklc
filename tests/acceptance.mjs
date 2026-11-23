@@ -232,6 +232,9 @@ try {
       } catch {}
     });
     const mobileSession = await mobileContext.newCDPSession(mobilePage);
+    await mobileSession.send('Profiler.enable');
+    await mobileSession.send('Profiler.setSamplingInterval', { interval: 1000 });
+    await mobileSession.send('Profiler.start');
     await mobileSession.send('Network.enable');
     await mobileSession.send('Network.setCacheDisabled', { cacheDisabled: true });
     await mobileSession.send('Network.emulateNetworkConditions', {
@@ -245,8 +248,23 @@ try {
     await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
     await mobilePage.waitForFunction(() => window.Alpine && Array.isArray(window.Alpine.$data(document.documentElement)?.catalog) && window.Alpine.$data(document.documentElement).catalog.length >= 130, { timeout: 60000 });
     await mobilePage.waitForTimeout(6000);
+    const cpuProfileResult = await mobileSession.send('Profiler.stop');
+    await mobileSession.send('Profiler.disable');
+    const profileNodes = new Map(cpuProfileResult.profile.nodes.map(node => [node.id, node]));
+    const profileSelfTime = new Map();
+    for (let index = 0; index < (cpuProfileResult.profile.samples || []).length; index++) {
+      const nodeId = cpuProfileResult.profile.samples[index];
+      const delta = cpuProfileResult.profile.timeDeltas?.[index] || 0;
+      profileSelfTime.set(nodeId, (profileSelfTime.get(nodeId) || 0) + delta);
+    }
+    const cpuProfileHotspots = [...profileSelfTime.entries()].map(([nodeId, microseconds]) => {
+      const node = profileNodes.get(nodeId);
+      const fn = node?.callFrame || {};
+      return { function: fn.functionName || '(anonymous)', url: fn.url || '', line: fn.lineNumber ?? null, column: fn.columnNumber ?? null, selfTimeMs: Math.round(microseconds / 1000), hitCount: node?.hitCount || 0 };
+    }).sort((a, b) => b.selfTimeMs - a.selfTimeMs).slice(0, 30);
     const diagnostic = await mobilePage.evaluate(() => { const app = window.Alpine.$data(document.documentElement); const footer = document.querySelector('#cineverse-footer'); return { lcp: window.__mobileLcpEntries, shifts: window.__mobileShifts, longTasks: window.__mobileLongTasks, personalizedHeadingTimeline: window.__personalizedHeadingTimeline, personalizedHeadingMutations: window.__personalizedHeadingMutations, resources: performance.getEntriesByType('resource').filter(entry => /app\\.js|alpinejs|catalog-lite|hero-data|icons\.css|fonts\.css|fa-(?:solid-900|regular-400)|fonts\\.gstatic|fonts\\.googleapis/.test(entry.name)).map(entry => ({ name: entry.name.split('/').pop(), type: entry.initiatorType, startTime: Math.round(entry.startTime), duration: Math.round(entry.duration), transferSize: entry.transferSize || 0, responseStatus: entry.responseStatus || 0 })), longTaskSummary: { count: window.__mobileLongTasks.length, totalDuration: window.__mobileLongTasks.reduce((sum, task) => sum + task.duration, 0), longest: Math.max(0, ...window.__mobileLongTasks.map(task => task.duration)) }, homeSections: [...(document.querySelector('#home-page')?.children || [])].map(element => ({ id: element.id || '', section: element.dataset.homeSection || '', ignoreAttr: element.hasAttribute('x-ignore'), ignoreState: !!element._x_ignore, initialized: !!element._x_marker, descendants: element.querySelectorAll('*').length })), totalDomElements: document.querySelectorAll('*').length, catalogLoading: app.catalogLoading, footerEnabled: app.footerConfig?.enabled, footerReady: app.footerConfigReady, footerDisplay: footer ? getComputedStyle(footer).display : null, footerRect: footer?.getBoundingClientRect().toJSON() || null, heroTitle: app.currentHero?.title || '', mobileHeroVisible: !!document.querySelector('#mobileCinematicHero') && getComputedStyle(document.querySelector('#mobileCinematicHero')).display !== 'none' }; });
     console.log('MOBILE PERFORMANCE DIAGNOSTIC:', JSON.stringify(diagnostic));
+    console.log('MOBILE CPU PROFILE HOTSPOTS:', JSON.stringify({ sampledDurationMs: Math.round((cpuProfileResult.profile.endTime - cpuProfileResult.profile.startTime) / 1000), hotspots: cpuProfileHotspots }));
     await mobileContext.close();
   });
 
