@@ -40,7 +40,7 @@ jobs:
           for attempt in 1 2 3; do
             git fetch origin main
             git reset --hard origin/main
-            node scripts/build-seo-pages.mjs
+            SEO_TMDB_API_KEY="$(node -e \"const fs=require('node:fs');const s=fs.readFileSync('app.js','utf8');const m=s.match(/tmdbApiKey:\\s*['\\\"]([^'\\\"]+)['\\\"]/);if(m)process.stdout.write(m[1]);\")" node scripts/build-seo-pages.mjs
             git add film dizi oyuncu yonetmen sitemap.xml robots.txt .seo-generated-files.json
             if git diff --cached --quiet; then
               echo "SEO pages are already current."
