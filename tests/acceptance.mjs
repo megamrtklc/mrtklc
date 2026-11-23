@@ -112,6 +112,15 @@ try {
 
   await page.waitForTimeout(8500);
 
+  await check('Masaüstü manşet arka planı ekrana uygun TMDB boyutunu seçiyor', async () => {
+    await page.waitForFunction(() => {
+      const image = document.querySelector('#desktopEditorialHero picture img');
+      return image?.complete && image.naturalWidth > 0 && /\\/w1024\\//.test(image.currentSrc || image.src);
+    }, null, { timeout: 15000 });
+    const source = await page.locator('#desktopEditorialHero picture img').evaluate(image => image.currentSrc || image.src);
+    assert.match(source, /\\/w1024\\//, '1440px / 1x masaüstü görünümünde gereğinden büyük manşet görseli seçildi: ' + source);
+  });
+
   await check('Ana sayfa katalog afişleri küçük başlangıç kaynağı ve duyarlı adaylar kullanıyor', async () => {
     const catalogSection = page.locator('#home-catalog-section');
     await catalogSection.scrollIntoViewIfNeeded();
