@@ -10,7 +10,7 @@ try {
   const outputPath = path.join(temp, 'site');
   await mkdir(outputPath, { recursive: true });
   await writeFile(catalogPath, JSON.stringify({ catalog: [
-    { id:'film-1', title:'Şahsiyet', type:'movie', year:2018, desc:'Agâh Beyoğlu adında emekli bir adliye memurunun hikâyesi.', poster:'https://example.com/sahsiyet.jpg', tmdbId:123, tmdbGenres:'Suç / Dram', tmdbRating:'8.2', tmdbVoteCount:100, tmdbDirector:'Onur Saylak', tmdbCast:[{id:77,name:'Haluk Bilginer',character:'Agâh',profile:'https://example.com/haluk.jpg'}] },
+    { id:'film-1', title:'Şahsiyet', type:'movie', year:2018, desc:'Agâh Beyoğlu adında emekli bir adliye memurunun hikâyesi.', poster:'https://example.com/sahsiyet.jpg', tmdbId:123, tmdbGenres:'Suç / Dram', tmdbRating:'8.2', tmdbVoteCount:100, tmdbDirector:'Onur Saylak', tmdbCast:[{id:77,name:'Haluk Bilginer',character:'Agâh',profile:'https://example.com/haluk.jpg'},{id:88,name:'Tek Yapımlık Oyuncu',character:'Konuk'},{id:89,name:'Oyuncu Üç'},{id:90,name:'Oyuncu Dört'},{id:91,name:'Oyuncu Beş'},{id:92,name:'Oyuncu Altı'},{id:93,name:'Yedinci Oyuncu'}] },
     { id:'series-1', title:'Şahsiyet', type:'tv', year:2018, desc:'Bir mini dizi.', tmdbDirector:'Onur Saylak', tmdbCast:[{id:77,name:'Haluk Bilginer',character:'Agâh'}] },
     { id:'film-2', title:'Kış Uykusu', type:'movie', year:2014, desc:'Bir otel işletmecisinin hikâyesi.', tmdbDirector:'Nuri Bilge Ceylan', tmdbCast:[] }
   ] }, null, 2));
@@ -28,6 +28,10 @@ try {
   const robots = await readFile(path.join(outputPath,'robots.txt'),'utf8');
   assert.match(film, /<title>Şahsiyet \(2018\) \| Perde<\/title>/);
   assert.match(film, /application\/ld\+json/);
+  assert.equal((film.match(/class="person"/g) || []).length, 6, 'Yapım sayfasında en fazla 6 oyuncu görünmeli');
+  assert.match(film, /Tek Yapımlık Oyuncu/, 'Tek yapımlık oyuncu ilk 6 içindeyse kadroda görünmeli');
+  assert.doesNotMatch(film, /Yedinci Oyuncu/, 'Yedinci oyuncu gösterilmemeli');
+  await assert.rejects(readFile(path.join(outputPath,'oyuncu/tek-yapimlik-oyuncu.html'),'utf8'));
   assert.match(film, /https:\/\/example\.test\/perde\/film\/sahsiyet\.html/);
   assert.match(series, /TVSeries/);
   assert.match(actor, /Haluk Bilginer/);
