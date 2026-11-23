@@ -1,9 +1,14 @@
 import assert from 'node:assert/strict';
+import { normalizePersonName } from '../scripts/person-name.mjs';
 import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
+assert.equal(normalizePersonName('Abdullah Oğuz'), 'abdullah oguz');
+assert.equal(normalizePersonName('Onur Böber'), 'onur bober');
+assert.notEqual(normalizePersonName('Abdullah Oğuz'), normalizePersonName('Onur Böber'), 'Farklı Türkçe isimler aynı kişiye dönüşmemeli');
+assert.equal(normalizePersonName('Hwang Dong-hyuk'), 'hwang dong hyuk');
 const temp = await mkdtemp(path.join(os.tmpdir(), 'perde-seo-'));
 try {
   const catalogPath = path.join(temp, 'fixture.json');
