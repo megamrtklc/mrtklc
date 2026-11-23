@@ -37,8 +37,18 @@ jobs:
           fi
       - name: Deploy dynamic site to Cloudflare Workers
         if: ${{ env.CF_API_TOKEN != '' && env.CF_ACCOUNT_ID != '' }}
-        uses: cloudflare/wrangler-action@v3
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.166.0"
           command: deploy --config wrangler.jsonc
+      - name: Smoke-test deployed dynamic pages
+        if: ${{ env.CF_API_TOKEN != '' && env.CF_ACCOUNT_ID != '' }}
+        run: |
+          BASE="https://mrtsinema-dynamic.megamrtklc.workers.dev"
+          curl -fsS "$BASE/film/adalet-2/" | grep -q 'rel="canonical"'
+          curl -fsS "$BASE/oyuncu/haluk-bilginer/" | grep -q 'ProfilePage'
+          curl -fsS "$BASE/sitemap.xml" | grep -q '/film/adalet-2/'
+          STATUS=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/film/adalet-2.html")
+          test "$STATUS" = "301"
