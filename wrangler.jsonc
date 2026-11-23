@@ -3,6 +3,7 @@
   "name": "mrtsinema-dynamic",
   "main": "worker/index.mjs",
   "compatibility_date": "2026-11-23",
+  // Clean route handlers render SEO pages at request time; static catalog assets remain shared.
   "workers_dev": true,
   "preview_urls": true,
   "assets": {
