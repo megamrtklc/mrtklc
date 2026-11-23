@@ -103,6 +103,7 @@
                     image.src = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(placeholder);
                 },
                 currentPage: 'home',
+                isMobileHeroViewport: false,
                 activeHeaderMenu: 'home',
                 searchQuery: '',
                 searchOverlayOpen: false,
@@ -697,7 +698,9 @@
                     this.routeHistoryReady = false;
                     this.initDeferredChrome();
                     const heroViewportQuery = window.matchMedia('(max-width: 767px)');
+                    this.isMobileHeroViewport = heroViewportQuery.matches;
                     const hydrateActiveHeroOnResize = () => {
+                        this.isMobileHeroViewport = heroViewportQuery.matches;
                         const root = document.getElementById('home-page');
                         if (root && !root.hasAttribute('x-ignore')) this.prepareHomeHeroVariant(root);
                         const personalized = document.getElementById('home-personalized-section');
