@@ -3,6 +3,8 @@ name: Browser Acceptance Tests
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -10,7 +12,7 @@ permissions:
 
 jobs:
   browser-acceptance:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -32,8 +34,10 @@ jobs:
       - name: Run admin browser interaction tests
         run: node tests/admin-browser-interactions.mjs
       - name: Wait for Pages deployment
+        if: github.event_name != 'pull_request'
         run: sleep 90
       - name: Run production browser acceptance tests
+        if: github.event_name != 'pull_request'
         env:
           BASE_URL: https://megamrtklc.github.io/mrtklc/
         run: node tests/acceptance.mjs
