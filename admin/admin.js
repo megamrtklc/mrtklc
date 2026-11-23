@@ -799,16 +799,20 @@
   function normalizeAdminRouteSlug(value){
     return String(value||'').toLocaleLowerCase('tr-TR').replace(/ı/g,'i').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
   }
+  function automaticRouteSlugForAdmin(item){
+    const countries=[item?.country,item?.tmdbCountries,item?.productionCountries].flatMap(value=>Array.isArray(value)?value:[value]).filter(Boolean).join(' ').toLocaleLowerCase('tr-TR');
+    const isTurkish=/turkey|türkiye|turkiye|(^|[,;\s])tr($|[,;\s])/.test(countries)||String(item?.originalLanguage||item?.original_language||'').toLowerCase()==='tr';
+    const original=item?.tmdbOriginalTitle||item?.originalTitle||item?.original_title||item?.original_name||'';
+    const english=item?.tmdbEnglishTitle||item?.englishTitle||item?.english_title||'';
+    const chosen=isTurkish?(item?.title||item?.tmdbTitle||''):(/[a-zà-öø-ÿ]/i.test(original)?original:(english||original||item?.title||item?.tmdbTitle||''));
+    return normalizeAdminRouteSlug(chosen);
+  }
   function updateRouteSlugPreview(){
     const mode=$('#field-route-mode')?.value||'auto';
     const manual=mode==='manual';
     $('#route-slug-field').hidden=!manual;
-    const title=$('#field-title').value.trim();
-    const country=$('#field-country').value.trim().toLocaleLowerCase('tr-TR');
-    const original=state.tmdbSelected?.tmdbOriginalTitle||'';
-    const isTurkish=/turkey|türkiye|turkiye|(^|[,;\s])tr($|[,;\s])/.test(country);
-    const chosen=isTurkish?title:(/[a-zà-öø-ÿ]/i.test(original)?original:(title||original));
-    const slug=manual?normalizeAdminRouteSlug($('#field-route-slug').value):normalizeAdminRouteSlug(chosen);
+    const current={title:$('#field-title').value.trim(),country:$('#field-country').value.trim(),tmdbOriginalTitle:state.tmdbSelected?.tmdbOriginalTitle||'',tmdbEnglishTitle:state.tmdbSelected?.tmdbEnglishTitle||'',englishTitle:state.tmdbSelected?.englishTitle||'',originalLanguage:state.tmdbSelected?.originalLanguage||''};
+    const slug=manual?normalizeAdminRouteSlug($('#field-route-slug').value):automaticRouteSlugForAdmin(current);
     $('#route-url-preview-value').textContent=slug||'Yapım bilgileri girildiğinde oluşturulacak';
     $('#route-url-preview').querySelector('span').textContent=manual?'MANUEL URL ÖNİZLEMESİ':'OTOMATİK URL ÖNİZLEMESİ';
     $('#route-url-preview-note').textContent=manual?'Bu özel adres kaydedilir ve otomatik isimlendirme tarafından değiştirilmez.':'Otomatik sistem ülke ve orijinal ad bilgilerini kullanır.';
@@ -999,7 +1003,7 @@
     if($('#field-route-mode').value==='manual'){
       if(!record.routeSlug){toast('Manuel URL için geçerli bir adres adı gir.','warning');$('#field-route-slug').focus();return;}
       if(/^\d+$/.test(record.routeSlug)){toast('URL yalnızca rakamlardan oluşamaz.','warning');return;}
-      const routeConflict=state.catalog.find(item=>String(item.id)!==String(existing?.id||'')&&(isSeries(item)?'tv':'movie')===type&&item.routeSlug&&normalizeAdminRouteSlug(item.routeSlug)===record.routeSlug);
+      const routeConflict=state.catalog.find(item=>String(item.id)!==String(existing?.id||'')&&(isSeries(item)?'tv':'movie')===type&&(normalizeAdminRouteSlug(item.routeSlug||'')===record.routeSlug||(!item.routeSlug&&automaticRouteSlugForAdmin(item)===record.routeSlug)));
       if(routeConflict){toast('Bu özel URL başka bir yapımda kullanılıyor: '+titleOf(routeConflict),'error');return;}
     }else delete record.routeSlug;
     const duplicate=findDuplicateContent(record,existing?.id||'');
