@@ -810,9 +810,13 @@
   function updateRouteSlugPreview(){
     const mode=$('#field-route-mode')?.value||'auto';
     const manual=mode==='manual';
-    $('#route-slug-field').hidden=!manual;
+    const slugInput=$('#field-route-slug');
+    $('#route-slug-field').hidden=false;
+    slugInput.readOnly=!manual;
+    slugInput.setAttribute('aria-readonly',String(!manual));
     const current={title:$('#field-title').value.trim(),country:$('#field-country').value.trim(),tmdbOriginalTitle:state.tmdbSelected?.tmdbOriginalTitle||'',tmdbEnglishTitle:state.tmdbSelected?.tmdbEnglishTitle||'',englishTitle:state.tmdbSelected?.englishTitle||'',originalLanguage:state.tmdbSelected?.originalLanguage||''};
-    const slug=manual?normalizeAdminRouteSlug($('#field-route-slug').value):automaticRouteSlugForAdmin(current);
+    const slug=manual?normalizeAdminRouteSlug(slugInput.value):automaticRouteSlugForAdmin(current);
+    if(!manual)slugInput.value=slug;
     $('#route-url-preview-value').textContent=slug||'Yapım bilgileri girildiğinde oluşturulacak';
     $('#route-url-preview').querySelector('span').textContent=manual?'MANUEL URL ÖNİZLEMESİ':'OTOMATİK URL ÖNİZLEMESİ';
     $('#route-url-preview-note').textContent=manual?'Bu özel adres kaydedilir ve otomatik isimlendirme tarafından değiştirilmez.':'Otomatik sistem ülke ve orijinal ad bilgilerini kullanır.';
