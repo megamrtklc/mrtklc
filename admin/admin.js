@@ -2222,8 +2222,8 @@
   $('#profile-change-button').addEventListener('click',()=>$('#profile-dialog').showModal());
   $('#admin-profile-form').addEventListener('submit',saveAdminProfile);
   $('#admin-username-form').addEventListener('submit',saveAdminUsername);
-  $('#admin-password-form')?.addEventListener('submit',saveAdminPassword);
-  $('#admin-security-settings-form')?.addEventListener('submit',saveAdminSecuritySettings);
+  $('#admin-password-form').addEventListener('submit',saveAdminPassword);
+  $('#admin-security-settings-form').addEventListener('submit',saveAdminSecuritySettings);
   $('#security-sessions-refresh')?.addEventListener('click',loadSecuritySessions);
   $('#security-history-refresh')?.addEventListener('click',loadSecurityHistory);
   $('#security-logout-all')?.addEventListener('click',logoutAllSecuritySessions);
