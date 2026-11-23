@@ -1004,7 +1004,7 @@
     if($('#field-route-mode').value==='manual'){
       if(!record.routeSlug){toast('Manuel URL için geçerli bir adres adı gir.','warning');$('#field-route-slug').focus();return;}
       if(/^\d+$/.test(record.routeSlug)){toast('URL yalnızca rakamlardan oluşamaz.','warning');return;}
-      const routeConflict=state.catalog.find(item=>String(item.id)!==String(existing?.id||'')&&(isSeries(item)?'tv':'movie')===type&&(normalizeAdminRouteSlug(item.routeSlug||'')===record.routeSlug||(!item.routeSlug&&automaticRouteSlugForAdmin(item)===record.routeSlug)));
+      const routeConflict=state.catalog.find(item=>String(item.id)!==String(existing?.id||'')&&(normalizeAdminRouteSlug(item.routeSlug||'')===record.routeSlug||(!item.routeSlug&&automaticRouteSlugForAdmin(item)===record.routeSlug)));
       if(routeConflict){toast('Bu özel URL başka bir yapımda kullanılıyor: '+titleOf(routeConflict),'error');return;}
     }else delete record.routeSlug;
     const duplicate=findDuplicateContent(record,existing?.id||'');
