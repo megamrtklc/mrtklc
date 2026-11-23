@@ -1330,3 +1330,23 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
 .catalog-bulk-delete{border:1px solid #b94444;background:#a93636;color:#fff;font-weight:700}
 .catalog-bulk-delete:disabled{opacity:.45;cursor:not-allowed}
 @media(max-width:600px){.catalog-bulk-bar{align-items:flex-start;flex-direction:column}.catalog-bulk-bar>div{width:100%}.catalog-clear-selection,.catalog-bulk-delete{flex:1}}
+
+
+/* Account & Access refresh */
+.users-access-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;align-items:stretch}
+.users-access-grid>.panel-card{min-width:0;padding:21px;min-height:260px}
+.users-main-card{grid-row:span 1}
+.users-card-kicker{display:flex;align-items:center;gap:9px;margin-bottom:18px;color:var(--muted,#91a0ae);font-size:9px;font-weight:800;letter-spacing:1.35px}
+.users-card-icon{width:30px;height:30px;display:grid;place-items:center;border:1px solid rgba(211,174,100,.22);border-radius:9px;background:rgba(211,174,100,.08);color:var(--accent,#d6b36c);font-size:16px}
+.users-access-grid h2{margin:0 0 9px;font-size:15px;color:var(--text,#edf0f4)}
+.users-access-grid p{color:var(--muted,#91a0ae);font-size:11px;line-height:1.75}
+.users-profile-summary{margin:3px 0 17px}
+.users-info-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-soft,rgba(255,255,255,.07));font-size:10px}
+.users-info-row span{color:var(--muted,#91a0ae)}
+.users-info-row b{color:var(--text,#edf0f4);font-weight:650;text-align:right}
+.users-status-pending{color:#d9b66e!important}
+.users-card-footnote{margin:14px 0 0!important;padding-top:11px;border-top:1px solid var(--line-soft,rgba(255,255,255,.07));font-size:9px!important}
+.users-security-badge{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid var(--line-soft,rgba(255,255,255,.08));border-radius:999px;color:var(--muted,#91a0ae);font-size:9px;font-weight:750;letter-spacing:.7px;white-space:nowrap}
+.users-security-badge i{width:7px;height:7px;border-radius:50%;background:#d4ad60;box-shadow:0 0 10px rgba(212,173,96,.45)}
+@media(max-width:900px){.users-access-grid{grid-template-columns:1fr}.users-access-grid>.panel-card{min-height:0}}
+@media(max-width:560px){.users-access-grid>.panel-card{padding:16px}.users-info-row{font-size:9px}.users-security-badge{margin-top:12px}}
