@@ -183,7 +183,9 @@
   function renderAdminProfile(){
     const profile=state.data?.adminProfile||{};
     const name=String(profile.name||'Yönetici').trim()||'Yönetici';
+    const username=String(profile.username||'admin').trim().toLowerCase()||'admin';
     const input=$('#admin-name-input');if(input&&document.activeElement!==input)input.value=name;
+    const usernameInput=$('#admin-username-input');if(usernameInput&&document.activeElement!==usernameInput)usernameInput.value=username;
     const header=$('#admin-display-name');if(header)header.textContent=name;
     const summary=$('#users-profile-name');if(summary)summary.textContent=name;
   }
@@ -194,6 +196,17 @@
     if(name.length>60){toast('Yönetici adı en fazla 60 karakter olabilir.');return;}
     const nextData={...state.data,adminProfile:{...(state.data.adminProfile||{}),name}};
     const ok=await persist(nextData,'Yönetici adı güncellendi.');
+    if(ok)renderAdminProfile();
+  }
+  async function saveAdminUsername(event){
+    event.preventDefault();if(!canWrite())return;
+    const username=$('#admin-username-input').value.trim().toLowerCase();
+    if(!/^[a-z0-9._-]{3,32}$/.test(username)){
+      toast('Kullanıcı adı 3–32 karakter olmalı; yalnızca İngilizce harf, rakam, nokta, alt çizgi ve tire kullanılabilir.','error');
+      return;
+    }
+    const nextData={...state.data,adminProfile:{...(state.data.adminProfile||{}),username}};
+    const ok=await persist(nextData,'Yönetici giriş kullanıcı adı güncellendi.');
     if(ok)renderAdminProfile();
   }
   function renderWelcomePosters(){
@@ -2198,6 +2211,7 @@
   $('#profile-photo-button').addEventListener('click',()=>$('#profile-dialog').showModal());
   $('#profile-change-button').addEventListener('click',()=>$('#profile-dialog').showModal());
   $('#admin-profile-form').addEventListener('submit',saveAdminProfile);
+  $('#admin-username-form').addEventListener('submit',saveAdminUsername);
   $('#profile-form').addEventListener('submit',saveProfilePhoto);
   $('#profile-close').addEventListener('click',()=>$('#profile-dialog').close());
   $('#profile-cancel').addEventListener('click',()=>$('#profile-dialog').close());
