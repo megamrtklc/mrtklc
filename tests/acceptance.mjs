@@ -303,7 +303,7 @@ try {
     }));
     console.log('BROWSER LCP ELEMENTS:', JSON.stringify(lcpEntries));
     const compiledStyleCheck = await page.evaluate(() => ({
-      localStylesheet: [...document.styleSheets].some(sheet => sheet.href && sheet.href.endsWith('/tailwind.css')),
+      localStylesheet: [...document.styleSheets].some(sheet => sheet.href && new URL(sheet.href).pathname.endsWith('/tailwind.css')),
       gridDisplay: getComputedStyle(document.querySelector('.grid')).display,
       heroThumbDisplay: getComputedStyle(document.querySelector('#heroThumbContainer')).display,
       cdnRuntimeScripts: document.querySelectorAll('script[src*="cdn.tailwindcss.com"]').length
