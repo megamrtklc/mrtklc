@@ -47,6 +47,20 @@ async function resolveDirectorIds(items, directorMap) {
         if (!response.ok) throw new Error('TMDB HTTP ' + response.status);
         const credits = await response.json();
         const crew = array(credits.crew).filter(person => person?.id && person.job === 'Director');
+        // TMDB TV creators are stored on the series details endpoint, not always in aggregate crew credits.
+        if (media === 'tv') {
+          try {
+            const detailsUrl = new URL('https://api.themoviedb.org/3/tv/' + encodeURIComponent(item.tmdbId));
+            detailsUrl.searchParams.set('api_key', apiKey);
+            const detailsResponse = await fetch(detailsUrl, { headers: { accept: 'application/json' } });
+            if (detailsResponse.ok) {
+              const details = await detailsResponse.json();
+              crew.push(...array(details.created_by).filter(person => person?.id).map(person => ({ ...person, job: 'Creator' })));
+            }
+          } catch (error) {
+            console.warn('Dizi yaraticilari TMDB verisi alinamadi:', titleOf(item), error.message || error);
+          }
+        }
         for (const name of directorNames(item)) {
           const expected = normalizePersonName(name);
           const match = crew.find(person => normalizePersonName(person.name) === expected);
