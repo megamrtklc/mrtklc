@@ -1,0 +1,56 @@
+name: Build SEO pages and sitemap
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'filmvediziler.json'
+      - 'scripts/build-seo-pages.mjs'
+      - 'tests/seo-pages.mjs'
+      - '.github/workflows/build-seo-pages.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: perde-seo-pages
+  cancel-in-progress: false
+
+jobs:
+  build-seo-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test SEO page generator
+        run: node tests/seo-pages.mjs
+      - name: Generate and publish static SEO pages
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            node scripts/build-seo-pages.mjs
+            git add film dizi oyuncu yonetmen sitemap.xml robots.txt .seo-generated-files.json
+            if git diff --cached --quiet; then
+              echo "SEO pages are already current."
+              exit 0
+            fi
+            git commit -m "Generate SEO-friendly film, series and person pages"
+            if git push; then
+              exit 0
+            fi
+            echo "Concurrent push detected; retrying from latest main (attempt $attempt)."
+          done
+          echo "Could not publish SEO pages after three attempts."
+          exit 1
