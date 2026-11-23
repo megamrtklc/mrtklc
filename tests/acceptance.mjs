@@ -902,8 +902,11 @@ try {
         const app = window.Alpine?.$data(document.documentElement);
         const personalized = document.querySelector('#home-personalized-rail');
         const catalog = document.querySelector('#home-catalog-rail');
+        // Mobile recommendation cards use a separate compact layout and may not
+        // populate the desktop/tablet rail. This check targets the catalog rail's
+        // horizontal scrolling; recommendation variants are asserted above.
         return !app?.catalogLoading && app?.homeSectionReady?.catalog &&
-          personalized?.children.length > 1 && catalog?.children.length > 1;
+          catalog?.children.length > 1;
       }, null, { timeout: 15000 });
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
