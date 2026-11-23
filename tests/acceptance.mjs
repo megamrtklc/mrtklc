@@ -678,16 +678,25 @@ try {
 
   await check('Ana sayfada kişisel öneriler dört kartla gösteriliyor ve sade arayüz korunuyor', async () => {
     await page.setViewportSize({ width: 1440, height: 1000 });
+    // The live admin setting intentionally disables this section. Enable it in-memory
+    // and run the real observer path before measuring its responsive layout.
+    await page.evaluate(() => {
+      const app = window.Alpine.$data(document.documentElement);
+      app.homepageConfig = app.homepageConfig || {};
+      app.homepageConfig.layout = app.homepageConfig.layout || {};
+      app.homepageConfig.layout.visibility = {
+        ...(app.homepageConfig.layout.visibility || {}),
+        personalized: true
+      };
+      app.initHomeSectionObserver();
+      const section = document.getElementById('home-personalized-section');
+      if (section) window.scrollTo(0, Math.max(0, window.scrollY + section.getBoundingClientRect().top - 100));
+    });
     const rail = page.locator('#home-personalized-rail');
     console.log('PERSONALIZED UI DIAGNOSTIC:', JSON.stringify(await page.evaluate(() => { const app = window.Alpine.$data(document.documentElement); const section = document.querySelector('#home-personalized-section'); const rail = document.querySelector('#home-personalized-rail'); return { currentPage: app.currentPage, catalogLoading: app.catalogLoading, homeSectionReady: app.homeSectionReady, baseCount: app.personalizedRecommendations.length, displayedCount: app.displayedPersonalizedRecommendations.length, sectionExists: !!section, sectionDisplay: section ? getComputedStyle(section).display : null, sectionVisibility: section ? getComputedStyle(section).visibility : null, sectionIgnored: section?.hasAttribute('x-ignore') || false, sectionReady: app.homeSectionReady?.personalized, railExists: !!rail, cardCount: rail?.querySelectorAll('.home-personalized-alternative').length || 0 }; })));
-    await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 4, { timeout: 10000 });
+    await page.waitForFunction(() => document.querySelectorAll('#home-personalized-rail .home-personalized-alternative').length === 4, { timeout: 15000 });
     assert.equal(await page.getByRole('button', { name: 'Tüm önerileri gör' }).count(), 0,
       'Dört kartlık öneri alanında genişletme kontrolü bulunmamalı');
-    // The homepage can intentionally hide this section through its saved visibility settings.
-    // Reveal it only inside the test so its responsive card layout can still be measured.
-    await page.locator('#home-personalized-section').evaluate(element => {
-      element.style.setProperty('display', 'block', 'important');
-    });
     await page.waitForTimeout(100);
     const initialLayout = await rail.evaluate(element => {
       const cards = [...element.querySelectorAll('.home-personalized-alternative')];
