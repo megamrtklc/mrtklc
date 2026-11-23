@@ -80,7 +80,7 @@ try {
   await page.locator('#field-title').fill('Tarayıcı Test Filmi');
   await page.locator('#field-year').fill('2026');
   await page.locator('#save-content').click();
-  await page.waitForFunction(() => document.querySelector('#content-dialog')?.open === false);
+  await page.waitForFunction(() => !document.querySelector('#view-content-editor')?.classList.contains('active'));
   assert.equal(writes.length, 1, 'Yapım kaydı API PUT isteği üretmeli');
   assert.equal(data.catalog.length, 3);
   assert.equal(data.catalog.find(x => x.title === 'Tarayıcı Test Filmi')?.year, '2026');
@@ -91,7 +91,7 @@ try {
   assert.equal(await page.locator('#edit-id').inputValue(), createdId);
   await page.locator('#field-title').fill('Düzenlenmiş Test Filmi');
   await page.locator('#save-content').click();
-  await page.waitForFunction(() => document.querySelector('#content-dialog')?.open === false);
+  await page.waitForFunction(() => !document.querySelector('#view-content-editor')?.classList.contains('active'));
   assert.equal(writes.length, 2);
   assert.equal(data.catalog.find(x => String(x.id) === createdId)?.title, 'Düzenlenmiş Test Filmi');
 
@@ -101,7 +101,8 @@ try {
   await page.locator('#save-content').click();
   await page.waitForFunction(() => document.querySelector('#toast-message')?.textContent.includes('Yapım adı zorunludur.'));
   assert.equal(writes.length, 2, 'Boş/boşluk başlık API isteği üretmemeli');
-  assert.equal(await page.locator('#content-dialog').evaluate(el => el.open), true);
+  assert.equal(await page.locator('#view-content-editor').evaluate(el => el.classList.contains('active')), true);
+  page.once('dialog', dialog => dialog.accept());
   await page.locator('#cancel-editor').click();
 
   // API failure and 409 conflict must not close the editor or mutate local data.
@@ -110,18 +111,18 @@ try {
   putResponses.push({ status: 500, body: { error: 'Test sunucu hatası' } });
   await page.locator('#save-content').click();
   await page.waitForFunction(() => document.querySelector('#toast-message')?.textContent.includes('Test sunucu hatası'));
-  assert.equal(await page.locator('#content-dialog').evaluate(el => el.open), true);
+  assert.equal(await page.locator('#view-content-editor').evaluate(el => el.classList.contains('active')), true);
   assert.equal(data.catalog.find(x => String(x.id) === createdId)?.title, 'Düzenlenmiş Test Filmi');
 
   putResponses.push({ status: 409, body: { error: 'Çakışma' } });
   await page.locator('#save-content').click();
   await page.waitForFunction(() => document.querySelector('#toast-message')?.textContent.includes('Katalog başka bir işlemde güncellenmiş'));
-  assert.equal(await page.locator('#content-dialog').evaluate(el => el.open), true);
+  assert.equal(await page.locator('#view-content-editor').evaluate(el => el.classList.contains('active')), true);
   assert.equal(data.catalog.find(x => String(x.id) === createdId)?.title, 'Düzenlenmiş Test Filmi');
 
   // A successful retry proves the save lock is released after failed requests.
   await page.locator('#save-content').click();
-  await page.waitForFunction(() => document.querySelector('#content-dialog')?.open === false);
+  await page.waitForFunction(() => !document.querySelector('#view-content-editor')?.classList.contains('active'));
   assert.equal(data.catalog.find(x => String(x.id) === createdId)?.title, 'Sunucu Hatası Testi');
 
   // Create a collection and ensure it references the selected catalog record.
