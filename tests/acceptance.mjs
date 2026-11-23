@@ -154,6 +154,11 @@ try {
     }, { timeout: 30000 });
   });
 
+  // Önceki testler film/oyuncu/yönetmen rotalarını açtı; manşet kontrolü ana sayfada çalışmalı.
+  await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => window.Alpine?.$data(document.documentElement)?.currentPage === 'home', { timeout: 30000 });
+  await page.waitForTimeout(1200);
+
   await check('Masaüstü manşet arka planı ekran yoğunluğuna uygun TMDB boyutunu seçiyor', async () => {
     await page.waitForFunction(() => {
       const image = document.querySelector('#desktopEditorialHero picture img');
