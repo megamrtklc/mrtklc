@@ -413,6 +413,11 @@ try {
       });
       await mobileCdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
       await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      const mobileHeroPreloads = await mobilePage.evaluate(() => ({
+        backdrop: document.querySelector('#mobile-hero-backdrop-preload')?.getAttribute('href') || '',
+        poster: document.querySelector('#mobile-hero-poster-preload')?.getAttribute('href') || ''
+      }));
+      assert.ok(mobileHeroPreloads.backdrop && mobileHeroPreloads.poster, 'Mobil ana sayfa manşet görselleri önceden yüklenmiyor');
       await mobilePage.waitForFunction(() => {
         const image = document.querySelector('#mobileCinematicHero .cv-mhero-poster img');
         return image && image.complete && image.naturalWidth > 0;
@@ -493,7 +498,9 @@ try {
     const desktopState = await page.evaluate(() => ({
       mobileVisible: getComputedStyle(document.querySelector('#mobileCinematicHero')).display !== 'none',
       desktopVisible: getComputedStyle(document.querySelector('#desktopEditorialHero')).display !== 'none',
+      mobileHeroPreloads: document.querySelectorAll('#mobile-hero-backdrop-preload, #mobile-hero-poster-preload').length
     }));
+    assert.strictEqual(desktopState.mobileHeroPreloads, 0, 'Mobil manşet görselleri masaüstünde gereksiz ön yüklenmemeli');
     assert.ok(!desktopState.mobileVisible, 'Mobil manşet masaüstünde görünmemeli');
     assert.ok(desktopState.desktopVisible, 'Mevcut masaüstü manşeti görünmüyor');
   });
