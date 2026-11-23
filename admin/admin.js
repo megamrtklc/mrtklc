@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
+  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], selectedCatalogIds:new Set(), page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -258,7 +258,10 @@
     });
     const pages=Math.max(1,Math.ceil(state.filtered.length/state.pageSize));state.page=Math.min(state.page,pages);
     const rows=state.filtered.slice((state.page-1)*state.pageSize,state.page*state.pageSize);
-    $('#catalog-rows').innerHTML=rows.length?rows.map(item=>'<tr><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+escapeHtml(item.director||item.tmdbDirector||'Yönetmen bilgisi yok')+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><span class="score">★ '+escapeHtml(item.rating||item.tmdbRating||'—')+'</span></td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td class="row-actions"><button class="row-action" data-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-delete="'+escapeHtml(item.id)+'">Sil</button></td></tr>').join(''):'<tr><td colspan="6" class="empty-cell">Aramanızla eşleşen kayıt bulunamadı.</td></tr>';
+    $('#catalog-rows').innerHTML=rows.length?rows.map(item=>'<tr><td class="catalog-select-cell"><input class="catalog-row-check" type="checkbox" data-select-catalog="'+escapeHtml(item.id)+'" aria-label="'+escapeHtml(titleOf(item))+' seç" '+(state.selectedCatalogIds.has(String(item.id))?'checked':'')+'></td><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+escapeHtml(item.director||item.tmdbDirector||'Yönetmen bilgisi yok')+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><span class="score">★ '+escapeHtml(item.rating||item.tmdbRating||'—')+'</span></td><td>'+escapeHtml(item.tmdbId||'—')+'</td><td class="row-actions"><button class="row-action" data-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-delete="'+escapeHtml(item.id)+'">Sil</button></td></tr>').join(''):'<tr><td colspan="7" class="empty-cell">Aramanızla eşleşen kayıt bulunamadı.</td></tr>';
+    const pageIds=rows.map(x=>String(x.id)),pageSelected=pageIds.filter(id=>state.selectedCatalogIds.has(id)).length;
+    const selectPage=$('#catalog-select-page');if(selectPage){selectPage.checked=pageIds.length>0&&pageSelected===pageIds.length;selectPage.indeterminate=pageSelected>0&&pageSelected<pageIds.length;}
+    updateCatalogBulkBar();
     $('#result-count').textContent=state.filtered.length.toLocaleString('tr-TR')+' kayıt';
     $('#page-info').textContent='Sayfa '+state.page+' / '+pages;
     $('#prev-page').disabled=state.page<=1;$('#next-page').disabled=state.page>=pages;
@@ -1025,6 +1028,24 @@
     const ok=await persist(nextData,existing?'Yapım güncellendi.':'Yeni yapım kataloğa eklendi.');
     $('#save-content').disabled=false;$('#save-content').textContent='Kaydet ve yayınla';
     if(ok){contentEditorSnapshot=contentEditorFormSnapshot();navigate(contentEditorReturnView||'overview');}
+  }
+  function updateCatalogBulkBar(){
+    const count=state.selectedCatalogIds.size,bar=$('#catalog-bulk-bar'),label=$('#catalog-selected-count'),button=$('#catalog-bulk-delete');
+    if(label)label.textContent=count+' yapım seçildi';if(bar)bar.hidden=count===0;
+    if(button)button.disabled=count===0||count>=state.catalog.length;
+  }
+  async function deleteSelectedContent(){
+    if(!canWrite())return;
+    const ids=new Set([...state.selectedCatalogIds].filter(id=>state.catalog.some(item=>String(item.id)===id)));
+    if(!ids.size)return;if(ids.size>=state.catalog.length){toast('Katalogda en az bir yapım kalmalı.');return;}
+    const names=[...ids].map(id=>titleOf(state.catalog.find(item=>String(item.id)===id))).slice(0,5),more=ids.size>5?' ve '+(ids.size-5)+' yapım daha':'';
+    if(!confirm(ids.size+' yapımı katalogdan silmek istediğine emin misin?\n\n'+names.join(', ')+more+'\n\nBu işlem yayına yansır ve geri alınamaz.'))return;
+    const nextData={...state.data,catalog:state.catalog.filter(item=>!ids.has(String(item.id)))};
+    if(Array.isArray(nextData.collections))nextData.collections=nextData.collections.map(collection=>({...collection,items:(collection.items||[]).filter(id=>!ids.has(String(id)))}));
+    if(nextData.homepageConfig?.heroSlides)nextData.homepageConfig={...nextData.homepageConfig,heroSlides:nextData.homepageConfig.heroSlides.filter(slide=>!ids.has(String(slide.id)))};
+    state.selectedCatalogIds.clear();
+    const ok=await persist(nextData,ids.size+' yapım silindi; koleksiyon ve vitrin bağlantıları temizlendi.');
+    if(!ok)ids.forEach(id=>state.selectedCatalogIds.add(id));updateCatalogBulkBar();
   }
   async function deleteContent(id){
     if(!canWrite())return;
@@ -2187,6 +2208,19 @@
     reader.readAsDataURL(file);$('#profile-upload-status').textContent=file.name;
   });
   $('#logout-button')?.addEventListener('click',async()=>{try{await fetch('/api/logout',{method:'POST',credentials:'same-origin'});}finally{window.location.reload();}});
+  $('#catalog-select-page')?.addEventListener('change',event=>{
+    const visible=state.filtered.slice((state.page-1)*state.pageSize,state.page*state.pageSize);
+    visible.forEach(item=>{const id=String(item.id);if(event.target.checked)state.selectedCatalogIds.add(id);else state.selectedCatalogIds.delete(id);});renderCatalog();
+  });
+  $('#catalog-rows').addEventListener('change',event=>{
+    const checkbox=event.target.closest('[data-select-catalog]');if(!checkbox)return;
+    const id=String(checkbox.dataset.selectCatalog);if(checkbox.checked)state.selectedCatalogIds.add(id);else state.selectedCatalogIds.delete(id);
+    updateCatalogBulkBar();
+    const visible=state.filtered.slice((state.page-1)*state.pageSize,state.page*state.pageSize).map(item=>String(item.id)),selected=visible.filter(key=>state.selectedCatalogIds.has(key)).length,master=$('#catalog-select-page');
+    if(master){master.checked=visible.length>0&&selected===visible.length;master.indeterminate=selected>0&&selected<visible.length;}
+  });
+  $('#catalog-bulk-delete')?.addEventListener('click',deleteSelectedContent);
+  $('#catalog-clear-selection')?.addEventListener('click',()=>{state.selectedCatalogIds.clear();renderCatalog();});
   $('#catalog-search').addEventListener('input',()=>{state.page=1;renderCatalog();});
   $('#type-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
