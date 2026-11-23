@@ -136,7 +136,7 @@
     $$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
     $$('.nav-link').forEach(el=>{const active=el.dataset.view===view;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
     const active=$('.nav-link[data-view="'+view+'"]');
-    $('#crumb-current').textContent=view==='analytics-detail'?'İstatistikler / Detaylı Rapor':(active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış');
+    $('#crumb-current').textContent=view==='analytics-detail'?'İstatistikler / Detaylı Rapor':(view==='content-editor'?'Yapım Ekle / Düzenle':(active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış'));
     setMobileSidebar(false);
     if(view==='catalog')renderCatalog();
     if(view==='trailers-missing')renderMissingTrailers();
@@ -788,8 +788,40 @@
     const ok=await persist({...state.data,headerConfig:draft.header,footerConfig:draft.footer},'Header ve Footer ayarları kaydedildi.');
     if(ok)renderHeaderFooter();else updateHeaderFooterDraftState();
   }
+  let contentEditorReturnView='overview';
+  let contentEditorSnapshot='';
+  let contentEditorPreviousType='movie';
+  function contentEditorFormSnapshot(){return new URLSearchParams(new FormData($('#content-form'))).toString();}
+  function closeContentEditor(){
+    if(contentEditorSnapshot&&contentEditorFormSnapshot()!==contentEditorSnapshot&&!confirm('Kaydedilmemiş değişikliklerin var. Sayfadan çıkmak istiyor musun?'))return;
+    navigate(contentEditorReturnView||'overview');
+  }
+  function normalizeAdminRouteSlug(value){
+    return String(value||'').toLocaleLowerCase('tr-TR').replace(/ı/g,'i').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  }
+  function updateRouteSlugPreview(){
+    const mode=$('#field-route-mode')?.value||'auto';
+    const manual=mode==='manual';
+    $('#route-slug-field').hidden=!manual;
+    const title=$('#field-title').value.trim();
+    const country=$('#field-country').value.trim().toLocaleLowerCase('tr-TR');
+    const original=state.tmdbSelected?.tmdbOriginalTitle||'';
+    const isTurkish=/turkey|türkiye|turkiye|(^|[,;\s])tr($|[,;\s])/.test(country);
+    const chosen=isTurkish?title:(/[a-zà-öø-ÿ]/i.test(original)?original:(title||original));
+    const slug=manual?normalizeAdminRouteSlug($('#field-route-slug').value):normalizeAdminRouteSlug(chosen);
+    $('#route-url-preview-value').textContent=slug||'Yapım bilgileri girildiğinde oluşturulacak';
+    $('#route-url-preview').querySelector('span').textContent=manual?'MANUEL URL ÖNİZLEMESİ':'OTOMATİK URL ÖNİZLEMESİ';
+    $('#route-url-preview-note').textContent=manual?'Bu özel adres kaydedilir ve otomatik isimlendirme tarafından değiştirilmez.':'Otomatik sistem ülke ve orijinal ad bilgilerini kullanır.';
+  }
+  function syncContentTypeFields(){
+    const isTv=$('#field-type').value==='tv';
+    $('#section-tv-data').hidden=!isTv;
+    $('#field-episode-urls').closest('label').hidden=!isTv;
+    if(!isTv){$('#field-seasons').value='';$('#field-episodes').value='';$('#field-episode-urls').value='';}
+  }
   function setField(id,value){const el=$('#'+id);if(el)el.value=value??'';}
   function openEditor(item=null){
+    if(state.view!=='content-editor')contentEditorReturnView=state.view||'overview';
     // Formu salt-okunur durumda da aç: böylece kullanıcı içerik hazırlayabilir;
     // kaydetme sırasında canWrite() güvenlik kontrolü yine uygulanır.
     $('#content-form').reset();$('#edit-id').value=item?String(item.id??''):'';
@@ -808,10 +840,13 @@
     setField('field-image',item?.image||item?.poster||item?.tmdbPoster||'');setField('field-backdrop',item?.backdrop||item?.tmdbBackdrop||'');
     setField('field-trailer',item?.trailerUrl||item?.tmdbTrailerUrl||'');setField('field-trailer-provider',item?.trailerProvider||'auto');setField('field-seasons',item?.seasons||'');
     setField('field-episodes',item?.episodes||'');setField('field-desc',item?.desc||item?.tmdbOverview||'');
+    const hasManualSlug=!!String(item?.routeSlug||'').trim();
+    setField('field-route-mode',hasManualSlug?'manual':'auto');setField('field-route-slug',item?.routeSlug||'');
+    contentEditorPreviousType=isSeries(item)?'tv':'movie';syncContentTypeFields();updateRouteSlugPreview();
     $('#editor-status').textContent=!state.apiEnabled?'Önizleme ve manuel düzenleme açık. Kaydetmek için GitHub erişim anahtarı yenilenmeli.':(item?'Mevcut katalog kaydı düzenleniyor.':'Yeni katalog kaydı oluşturuluyor.');
     renderContentPreview();
-    const dialog=$('#content-dialog');
-    if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
+    navigate('content-editor');
+    contentEditorSnapshot=contentEditorFormSnapshot();
   }
   const TMDB_API_KEY='3108265ab3fdbf3af14175edf64a9c7f';
   const TMDB_IMAGE='https://image.tmdb.org/t/p/';
@@ -943,13 +978,13 @@
     const existingId=$('#edit-id').value,existing=existingId?state.catalog.find(x=>String(x.id)===existingId):null;
     const type=$('#field-type').value;
     let episodeWatchUrls={};
-    try{episodeWatchUrls=parseEpisodeWatchUrls($('#field-episode-urls').value);}catch(error){toast(error.message,'error');return;}
+    if(type==='tv'){try{episodeWatchUrls=parseEpisodeWatchUrls($('#field-episode-urls').value);}catch(error){toast(error.message,'error');return;}}
     const record={...(existing||{}),...(existing?{}:{addedAt:new Date().toISOString()}),id:existing?.id??('cv-'+Date.now()),title:$('#field-title').value.trim(),type,
       year:$('#field-year').value.trim(),rating:$('#field-rating').value.trim(),genre:$('#field-genre').value.trim(),
       category:$('#field-category').value.trim(),duration:$('#field-duration').value.trim(),country:$('#field-country').value.trim(),
       director:$('#field-director').value.trim(),platform:$('#field-platform').value.trim(),watchUrl:$('#field-watch').value.trim(),
       personalNote:$('#field-note').value.trim(),episodeWatchUrls: type==='tv'?episodeWatchUrls:{},tmdbId:$('#field-tmdb').value.trim()?Number($('#field-tmdb').value):null,
-      imdbId:$('#field-imdb').value.trim(),image:$('#field-image').value.trim(),
+      imdbId:$('#field-imdb').value.trim(),routeSlug:$('#field-route-mode').value==='manual'?normalizeAdminRouteSlug($('#field-route-slug').value):'',image:$('#field-image').value.trim(),
       backdrop:$('#field-backdrop').value.trim(),trailerUrl:$('#field-trailer').value.trim(),trailerProvider:$('#field-trailer-provider').value||'auto',desc:$('#field-desc').value.trim(),cast:$('#field-cast').value.split(',').map(x=>x.trim()).filter(Boolean)};
     if(state.tmdbSelected&&String(state.tmdbSelected.tmdbId||'')===String(record.tmdbId||'')){
       const source=state.tmdbSelected;
@@ -961,6 +996,12 @@
       if(selectedNames.toLocaleLowerCase('tr-TR')!==manualNames.toLocaleLowerCase('tr-TR'))delete record.tmdbCast;
     }
     if(!record.title){toast('Yapım adı zorunludur.');return;}
+    if($('#field-route-mode').value==='manual'){
+      if(!record.routeSlug){toast('Manuel URL için geçerli bir adres adı gir.','warning');$('#field-route-slug').focus();return;}
+      if(/^\d+$/.test(record.routeSlug)){toast('URL yalnızca rakamlardan oluşamaz.','warning');return;}
+      const routeConflict=state.catalog.find(item=>String(item.id)!==String(existing?.id||'')&&(isSeries(item)?'tv':'movie')===type&&item.routeSlug&&normalizeAdminRouteSlug(item.routeSlug)===record.routeSlug);
+      if(routeConflict){toast('Bu özel URL başka bir yapımda kullanılıyor: '+titleOf(routeConflict),'error');return;}
+    }else delete record.routeSlug;
     const duplicate=findDuplicateContent(record,existing?.id||'');
     if(duplicate){
       toast('Bu yapım katalogda zaten ekli: '+titleOf(duplicate));
@@ -974,7 +1015,7 @@
     $('#save-content').disabled=true;$('#save-content').textContent='Kaydediliyor…';
     const ok=await persist(nextData,existing?'Yapım güncellendi.':'Yeni yapım kataloğa eklendi.');
     $('#save-content').disabled=false;$('#save-content').textContent='Kaydet ve yayınla';
-    if(ok)$('#content-dialog').close();
+    if(ok){contentEditorSnapshot=contentEditorFormSnapshot();navigate(contentEditorReturnView||'overview');}
   }
   async function deleteContent(id){
     if(!canWrite())return;
@@ -2158,9 +2199,19 @@
   $('#content-form').addEventListener('submit',saveContent);
   $('#tmdb-search-input').addEventListener('input',event=>{clearTimeout(state.tmdbSearchTimer);const query=event.target.value.trim();state.tmdbSearchTimer=setTimeout(()=>searchTmdbTitles(query),320);});
   $('#tmdb-search-results').addEventListener('click',event=>{const result=event.target.closest('[data-tmdb-id]');if(result)selectTmdbTitle(result.dataset.tmdbId,result.dataset.tmdbType);});
-  $('#content-form').addEventListener('input',event=>{if(event.target.closest('.editor-grid'))renderContentPreview();});
-  $('#content-form').addEventListener('change',event=>{if(event.target.closest('.editor-grid'))renderContentPreview();});
-  $('#close-editor').addEventListener('click',()=>$('#content-dialog').close());$('#cancel-editor').addEventListener('click',()=>$('#content-dialog').close());
+  $('#content-form').addEventListener('input',event=>{if(event.target.closest('.editor-grid-inner'))renderContentPreview();if(['field-title','field-country','field-route-slug'].includes(event.target.id))updateRouteSlugPreview();});
+  $('#content-form').addEventListener('change',event=>{
+    if(event.target.id==='field-type'){
+      const nextType=event.target.value;
+      if(contentEditorPreviousType==='tv'&&nextType==='movie'&&($('#field-seasons').value||$('#field-episodes').value||$('#field-episode-urls').value.trim())){
+        if(!confirm('Bu dizide sezon veya bölüm bilgileri bulunuyor. Film türüne geçersen bu diziye özel alanlar kayıttan çıkarılacak. Devam edilsin mi?')){event.target.value='tv';return;}
+      }
+      contentEditorPreviousType=nextType;syncContentTypeFields();
+    }
+    if(event.target.closest('.editor-grid-inner'))renderContentPreview();
+    if(event.target.id==='field-route-mode'||event.target.id==='field-type')updateRouteSlugPreview();
+  });
+  $('#close-editor').addEventListener('click',closeContentEditor);$('#cancel-editor').addEventListener('click',closeContentEditor);
   // Koleksiyon ekleme düğmesi de üstteki delege edilmiş olay dinleyicisiyle yönetilir.
   $('#collection-form').addEventListener('submit',saveCollection);
   $('#collection-search').addEventListener('input',filterCollectionItems);
