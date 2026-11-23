@@ -62,3 +62,6 @@ jobs:
           grep -q '/film/adalet-2/' /tmp/mrtsinema-sitemap.xml
           STATUS=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/film/adalet-2.html")
           test "$STATUS" = "301"
+      - name: Crawl every sitemap page
+        if: ${{ env.CF_API_TOKEN != '' && env.CF_ACCOUNT_ID != '' }}
+        run: node tests/live-dynamic-routes.mjs
