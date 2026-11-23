@@ -344,39 +344,47 @@
  </div>
 </section>
       <section class="view" id="view-users">
-        <div class="page-heading"><div><div class="eyebrow">ACCOUNT &amp; ACCESS / 05</div><h1>Hesap &amp; Erişim</h1><p>Yönetici profilini, giriş güvenliğini ve oturum bilgilerini tek merkezden takip et.</p></div><span class="users-security-badge"><i></i> TEK YÖNETİCİ HESABI</span></div>
+        <div class="page-heading"><div><div class="eyebrow">ACCOUNT &amp; ACCESS / 05</div><h1>Hesap &amp; Erişim</h1><p>Hesabını, şifreni, açık oturumlarını ve giriş hareketlerini buradan yönet.</p></div><span class="users-security-badge"><i></i> KORUMALI YÖNETİCİ</span></div>
         <div class="users-access-grid">
           <article class="panel-card users-profile-card users-main-card">
-            <div class="users-card-kicker"><span class="users-card-icon">♙</span><span>01 / YÖNETİCİ PROFİLİ</span></div>
-            <div class="users-profile-summary"><div class="profile-photo-large" id="profile-photo-large"><span>CV</span><img id="profile-photo-preview" alt="" hidden></div><div><b id="users-profile-name">Yönetici</b><small>Yönetim paneli yöneticisi</small><button class="text-button" id="profile-change-button" type="button">Fotoğraf ekle / değiştir ↗</button></div></div>
-            <form id="admin-profile-form" class="admin-profile-form"><label class="field"><span>Görünen yönetici adı</span><input id="admin-name-input" type="text" maxlength="60" placeholder="Yönetici adı" required></label><button class="primary-button" type="submit">İsmi kaydet</button></form>
-            <form id="admin-username-form" class="admin-profile-form admin-username-form"><label class="field"><span>Yönetici giriş kullanıcı adı</span><input id="admin-username-input" type="text" maxlength="32" minlength="3" pattern="[A-Za-z0-9._-]{3,32}" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Örn. yonetici" required></label><button class="primary-button" type="submit">Kullanıcı adını kaydet</button></form>
-            <p class="users-card-footnote">Görünen ad profilinde kullanılır. Giriş kullanıcı adı ise yönetici giriş ekranında şifrenle birlikte doğrulanır.</p>
+            <div class="users-card-kicker"><span class="users-card-icon">♙</span><span>01 / HESAP BİLGİLERİ</span></div>
+            <div class="users-profile-summary"><div class="profile-photo-large" id="profile-photo-large"><span>CV</span><img id="profile-photo-preview" alt="" hidden></div><div><b id="users-profile-name">Yönetici</b><small>Yönetici hesabı</small><button class="text-button" id="profile-change-button" type="button">Fotoğraf ekle / değiştir ↗</button></div></div>
+            <form id="admin-profile-form" class="admin-profile-form"><label class="field"><span>Görünen ad</span><input id="admin-name-input" type="text" maxlength="60" placeholder="Yönetici adı" required></label><button class="primary-button" type="submit">İsmi kaydet</button></form>
+            <form id="admin-username-form" class="admin-profile-form admin-username-form"><label class="field"><span>Giriş kullanıcı adı</span><input id="admin-username-input" type="text" maxlength="32" minlength="3" pattern="[A-Za-z0-9._-]{3,32}" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Örn. yonetici" required></label><button class="primary-button" type="submit">Kullanıcı adını kaydet</button></form>
           </article>
           <article class="panel-card users-security-card">
-            <div class="users-card-kicker"><span class="users-card-icon">⌑</span><span>02 / ŞİFRE VE HESAP GÜVENLİĞİ</span></div>
-            <h2>Yönetici giriş şifresi</h2><p>Giriş ekranındaki şifre, Cloudflare Worker üzerinde gizli değişken olarak doğrulanır. GitHub deposunda veya tarayıcıda saklanmaz.</p>
-            <div class="users-info-row"><span>Şifre kaynağı</span><b>Cloudflare Worker Secret</b></div>
-            <div class="users-info-row"><span>Giriş koruması</span><b>5 deneme / dakika</b></div>
-            <div class="users-info-row"><span>Şifre değiştirme</span><b class="users-status-pending">Sunucu entegrasyonu gerekli</b></div>
-            <p class="users-card-footnote">Panelden şifre değiştirme işlemini etkinleştirmek için mevcut Worker gizli değişkenini güvenli biçimde güncelleyen bir sunucu bağlantısı gerekiyor. Bu bağlantı kurulmadan sahte bir şifre değiştirme formu göstermiyoruz.</p>
+            <div class="users-card-kicker"><span class="users-card-icon">⌑</span><span>02 / ŞİFRE DEĞİŞTİRME</span></div>
+            <h2>Yönetici şifresi</h2><p>Yeni şifren sunucuda tuzlanmış PBKDF2 özeti olarak saklanır. Şifren açık metin olarak kaydedilmez.</p>
+            <form id="admin-password-form" class="security-form">
+              <label class="field"><span>Mevcut şifre</span><input id="security-current-password" type="password" autocomplete="current-password" minlength="10" required></label>
+              <label class="field"><span>Yeni şifre (en az 12 karakter)</span><input id="security-new-password" type="password" autocomplete="new-password" minlength="12" maxlength="256" required></label>
+              <label class="field"><span>Yeni şifreyi tekrar gir</span><input id="security-confirm-password" type="password" autocomplete="new-password" minlength="12" maxlength="256" required></label>
+              <button class="primary-button" id="security-password-save" type="submit">Şifreyi güvenli şekilde değiştir</button>
+            </form>
+            <p class="users-card-footnote">Şifre değişince güvenlik için bütün açık oturumlar kapatılır ve yeniden giriş yapman gerekir.</p>
           </article>
           <article class="panel-card users-session-card">
-            <div class="users-card-kicker"><span class="users-card-icon">◷</span><span>03 / OTURUM YÖNETİMİ</span></div>
-            <h2>Oturum koruması</h2><p>Yönetim oturumu güvenli çerez üzerinden sürdürülür.</p>
-            <div class="users-info-row"><span>Oturum çerezi</span><b>HttpOnly · Secure</b></div>
-            <div class="users-info-row"><span>SameSite politikası</span><b>Strict</b></div>
-            <div class="users-info-row"><span>Oturum yenileme</span><b>Etkin kullanımda kayar süre</b></div>
-            <div class="users-info-row"><span>Çerez süresi</span><b>2 saat</b></div>
-            <p class="users-card-footnote">Çıkış düğmesi mevcut oturumu sonlandırır. Tüm cihazlardaki oturumları kapatma, ayrıca oturum iptal altyapısı gerektirir.</p>
+            <div class="users-card-kicker"><span class="users-card-icon">◷</span><span>03 / AÇIK OTURUMLAR</span></div>
+            <div class="security-card-heading"><div><h2>Oturumların</h2><p>Bu hesaba bağlı etkin girişler.</p></div><button class="text-button" id="security-sessions-refresh" type="button">Yenile ↻</button></div>
+            <div id="security-session-list" class="security-record-list"><p class="loading-line">Oturumlar yükleniyor…</p></div>
+            <button class="danger-button" id="security-logout-all" type="button">Tüm cihazlardan çıkış yap</button>
+            <p class="users-card-footnote">Tüm oturumları kapatırsan bu cihaz dâhil yeniden giriş yapman gerekir.</p>
           </article>
           <article class="panel-card users-history-card">
-            <div class="users-card-kicker"><span class="users-card-icon">⌁</span><span>04 / GİRİŞ GEÇMİŞİ VE ERİŞİM</span></div>
-            <h2>Erişim denetimi</h2><p>Giriş denemeleri sunucu tarafında sınırlandırılır. Ayrıntılı başarılı/başarısız giriş geçmişi henüz kalıcı olarak kaydedilmiyor.</p>
-            <div class="users-info-row"><span>Giriş denemesi sınırı</span><b>5 / dakika</b></div>
-            <div class="users-info-row"><span>Çoklu kullanıcı</span><b>Kapalı · Tek yönetici</b></div>
-            <div class="users-info-row"><span>İkinci doğrulama</span><b class="users-status-pending">Şimdilik devre dışı</b></div>
-            <p class="users-card-footnote">Giriş geçmişi ve tüm oturumları sonlandırma özellikleri için kalıcı güvenlik kayıt altyapısı gereklidir. İkinci doğrulama bu aşamada eklenmiyor.</p>
+            <div class="users-card-kicker"><span class="users-card-icon">⌁</span><span>04 / GİRİŞ GEÇMİŞİ</span></div>
+            <div class="security-card-heading"><div><h2>Son giriş hareketleri</h2><p>Başarılı ve başarısız denemeler.</p></div><button class="text-button" id="security-history-refresh" type="button">Yenile ↻</button></div>
+            <div id="security-login-history" class="security-record-list"><p class="loading-line">Giriş geçmişi yükleniyor…</p></div>
+          </article>
+          <article class="panel-card users-security-card security-settings-card">
+            <div class="users-card-kicker"><span class="users-card-icon">⚙</span><span>05 / GÜVENLİK AYARLARI</span></div>
+            <h2>Oturum ve giriş koruması</h2><p>Başarısız giriş sınırını ve oturumun geçerlilik süresini belirle.</p>
+            <form id="admin-security-settings-form" class="security-form">
+              <label class="field"><span>İzin verilen başarısız deneme</span><select id="security-login-limit"><option value="3">3 deneme</option><option value="4">4 deneme</option><option value="5">5 deneme</option><option value="6">6 deneme</option><option value="8">8 deneme</option><option value="10">10 deneme</option></select></label>
+              <label class="field"><span>Oturum süresi</span><select id="security-session-ttl"><option value="1800">30 dakika</option><option value="3600">1 saat</option><option value="7200">2 saat</option><option value="14400">4 saat</option><option value="28800">8 saat</option><option value="43200">12 saat</option><option value="86400">24 saat</option></select></label>
+              <button class="primary-button" type="submit">Güvenlik ayarlarını kaydet</button>
+            </form>
+            <div class="users-info-row"><span>Oturum çerezi</span><b>HttpOnly · Secure · Strict</b></div>
+            <div class="users-info-row"><span>İkinci doğrulama</span><b>Şimdilik devre dışı</b></div>
           </article>
         </div>
       </section>
