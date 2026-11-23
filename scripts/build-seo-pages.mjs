@@ -60,13 +60,13 @@ function uniqueSlugs(entries, getName, getStableId) {
   }));
 }
 
-function pageShell({ title, description, canonical, image, jsonLd, body, kind }) {
+function pageShell({ title, description, canonical, image, jsonLd, body, kind, robots = 'index,follow,max-image-preview:large' }) {
   const imageTag = image ? '<meta property="og:image" content="' + esc(image) + '">' : '';
   return '<!doctype html>\n<html lang="tr">\n<head>\n' +
     '  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n' +
     '  <title>' + esc(title) + '</title>\n' +
     '  <meta name="description" content="' + esc(description) + '">\n' +
-    '  <meta name="robots" content="index,follow,max-image-preview:large">\n' +
+    '  <meta name="robots" content="' + esc(robots) + '">\n' +
     '  <link rel="canonical" href="' + esc(canonical) + '">\n' +
     '  <meta property="og:type" content="website">\n  <meta property="og:site_name" content="Perde">\n' +
     '  <meta property="og:title" content="' + esc(title) + '">\n' +
@@ -89,6 +89,7 @@ function pageShell({ title, description, canonical, image, jsonLd, body, kind })
     '    .chips{display:flex;flex-wrap:wrap;gap:9px}.chip{display:inline-flex;padding:7px 11px;border:1px solid #484034;border-radius:999px;background:#211d17;font-size:13px}\n' +
     '    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:16px}.card{display:block;color:var(--text);min-width:0}.card img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:10px;background:#222}.card strong{display:block;margin-top:8px;font-size:14px;line-height:1.35}.card small{color:var(--muted)}\n' +
     '    .people{display:flex;flex-wrap:wrap;gap:12px}.person{display:flex;align-items:center;gap:10px;min-width:190px;padding:9px;border:1px solid var(--line);border-radius:12px;background:#111}.person img{width:48px;height:60px;object-fit:cover;border-radius:7px;background:#252525}.person span{display:block;color:var(--muted);font-size:12px}\n' +
+    '    .watch-cta{display:inline-flex;align-items:center;justify-content:center;margin-top:8px;padding:11px 18px;border-radius:999px;background:linear-gradient(135deg,#e5bd73,#b8873d);color:#17120b;font-weight:800;font-size:14px;box-shadow:0 8px 24px #0005}.watch-cta:hover{filter:brightness(1.08);text-decoration:none}\n' +
     '    footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:13px}.empty{color:var(--muted)}\n' +
     '    @media(max-width:650px){.wrap{width:min(100% - 26px,1100px)}.top{height:60px}.hero{grid-template-columns:112px 1fr;gap:16px}main{padding-top:24px}.summary{font-size:15px}.panel{padding:16px;margin-top:22px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.person{min-width:100%;}}\n' +
     '  </style>\n</head>\n<body data-page-kind="' + esc(kind) + '">\n' +
@@ -111,6 +112,7 @@ const items = catalog.filter(item => item && itemId(item));
 const films = items.filter(item => typeOf(item) === 'movie');
 const series = items.filter(item => typeOf(item) === 'tv');
 const itemSlugs = new Map([...uniqueSlugs(films, titleOf, itemId), ...uniqueSlugs(series, titleOf, itemId)]);
+const watchSlugs = uniqueSlugs(items, titleOf, itemId);
 const actorMap = new Map();
 const directorMap = new Map();
 
@@ -172,6 +174,8 @@ for (const item of items) {
   const desc = descriptionOf(item) || title + ' yapımının oyuncu kadrosunu, türünü ve yayın bilgilerini Perde üzerinde keşfedin.';
   const shortDesc = desc.length > 158 ? desc.slice(0,155).replace(/\s+\S*$/, '') + '…' : desc;
   const canonical = abs(itemPaths.get(item));
+  const watchPath = '/izle/' + watchSlugs.get(item) + '.html';
+  const appWatchUrl = BASE_PATH + '/#/watch/' + encodeURIComponent(itemId(item));
   const poster = posterOf(item);
   const directorsForItem = directorNames(item);
   const cast = array(item.tmdbCast).filter(person => person?.id && clean(person.name)).slice(0,6);
@@ -197,6 +201,7 @@ for (const item of items) {
     genres.map(g => '<span>' + esc(g) + '</span>').join('') +
     (item.duration || item.tmdbRuntime ? '<span>' + esc(item.duration || item.tmdbRuntime) + '</span>' : '') + '</div>' +
     '<p class="summary">' + esc(desc) + '</p>' +
+    '<a class="watch-cta" href="' + esc(BASE_PATH + watchPath) + '">▶ Perde uygulamasında izle</a>' +
     (directorsForItem.length ? '<div class="meta"><strong>Yönetmen:</strong> ' + peopleLinks + '</div>' : '') +
     '</div></section>' +
     (castLinks ? '<section class="panel"><h2>Oyuncular</h2><div class="people">' + castLinks + '</div></section>' : '') +
@@ -220,6 +225,8 @@ for (const item of items) {
   const html = pageShell({ title: title + (year ? ' (' + year + ')' : '') + ' | Perde', description: shortDesc, canonical, image: poster, jsonLd: schema, body, kind: typeOf(item) });
   const folder = typeOf(item) === 'tv' ? 'dizi' : 'film';
   await emit(folder + '/' + itemSlugs.get(item) + '.html', html);
+  const watchBody = '<section class="panel"><div class="eyebrow">Perde oynatıcı</div><h1>' + esc(title) + '</h1><p class="summary">Yapım Perde uygulamasında açılıyor. Otomatik yönlendirme başlamazsa aşağıdaki bağlantıyı kullan.</p><a class="watch-cta" href="' + esc(appWatchUrl) + '">İzlemeye geç →</a></section><script>window.location.replace(' + safeJson(appWatchUrl) + ');</script>';
+  await emit(watchPath.slice(1), pageShell({ title: title + ' | İzle | Perde', description: title + ' yapımını Perde oynatıcısında açın.', canonical, image: poster, jsonLd: schema, body: watchBody, kind: 'watch', robots: 'noindex,follow' }));
   sitemapUrls.add(canonical);
 }
 
