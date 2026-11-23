@@ -32,7 +32,7 @@ assert.match(acceptance, /Katalog afişinin başlangıç kaynağı gereğinden b
 
 assert.ok(html.includes("const targetWidth = Math.min(window.innerWidth, 1800) * 0.7 * (window.devicePixelRatio || 1) >= 1024 ? 1280 : 1024;"),
   'Masaüstü manşet görseli ekran genişliği ve piksel yoğunluğuna göre boyut seçmeli');
-assert.ok(acceptance.includes('Masaüstü manşet arka planı ekrana uygun TMDB boyutunu seçiyor'),
+assert.ok(acceptance.includes('Masaüstü manşet arka planı ekran yoğunluğuna uygun TMDB boyutunu seçiyor'),
   'Üretim tarayıcı testi masaüstü manşet görselinin boyutunu doğrulamalı');
 
 console.log('PASS: Mobil manşet görselleri yalnızca mobil görünümde kaynak alıyor; uygulama ve küçültülmüş dosya eşleşiyor.');
