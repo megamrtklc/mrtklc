@@ -1,4 +1,3 @@
-const ROOT = "/";
 const TYPE_PATHS = new Set(["film", "dizi", "oyuncu", "yonetmen", "izle"]);
 const esc = (value) => String(value == null ? "" : value).replace(/[&<>"']/g, (ch) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" })[ch]);
 const clean = (value) => String(value == null ? "" : value).replace(/\s+/g, " ").trim();
@@ -155,9 +154,9 @@ function sitemap(index, origin) {
 function response(body, type, status) { return new Response(body,{status:status || 200,headers:{"content-type":type,"cache-control":"public, max-age=300, s-maxage=900"}}); }
 export default {
   async fetch(request, env) {
-    const url = new URL(request.url), path = decodeURI(url.pathname);
+    const url = new URL(request.url), path = url.pathname;
     const segments = path.split("/").filter(Boolean);
-    if (segments.length === 2 && TYPE_PATHS.has(segments[0]) && segments[1].endsWith(".html")) {
+    if (segments.length === 2 && TYPE_PATHS.has(segments[0]) && !path.endsWith("/") && !segments[1].endsWith(".html")) {\n      return Response.redirect(new URL(path + "/" + url.search, url.origin), 308);\n    }\n    if (segments.length === 2 && TYPE_PATHS.has(segments[0]) && segments[1].endsWith(".html")) {
       const target = "/" + segments[0] + "/" + segments[1].slice(0,-5) + "/";
       return Response.redirect(new URL(target + url.search, url.origin), 301);
     }
