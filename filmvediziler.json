@@ -22396,6 +22396,208 @@
       "tmdbVoteCount": 16,
       "seasons": 1,
       "episodes": 8
+    },
+    {
+      "addedAt": "2026-11-23T20:45:41.623Z",
+      "id": "cv-1795466741631",
+      "title": "Dövüş Kulübü",
+      "type": "movie",
+      "year": "1999",
+      "rating": "8.4",
+      "genre": "Dram",
+      "category": "Dram / Gerilim",
+      "duration": "139 dk",
+      "country": "Germany, United States of America",
+      "director": "David Fincher",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 550,
+      "imdbId": "tt0137523",
+      "image": "https://image.tmdb.org/t/p/w500/yjMuqAyJUoQZGWsZ0vZuYj5inAR.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/c6OLXfKAk5BKeR6broC8pYiCquX.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=_8WFzt_tKAA",
+      "trailerProvider": "auto",
+      "desc": "Saatli bomba gibi patlamaya hazır, uykusuzluk çeken bir adam ile tekinsiz bir sabun satıcısı; ilkel erkek saldırganlığını şok edici yeni bir terapi yöntemine dönüştürür. Kurdukları bu fikir hızla yayılır ve her şehirde yeraltı \"dövüş kulüpleri\" kurulmaya başlar ta ki egzantrik biri yollarına çıkıp yok oluşa doğru giden, kontrolden çıkmış bir sarmalı tetikleyene kadar.",
+      "cast": [
+        "Edward Norton",
+        "Brad Pitt",
+        "Helena Bonham Carter",
+        "Meat Loaf",
+        "Jared Leto",
+        "Zach Grenier",
+        "Holt McCallany",
+        "Eion Bailey",
+        "Richmond Arquette",
+        "David Andrews",
+        "George Maguire",
+        "Eugenie Bondurant",
+        "Christina Cabot",
+        "Sydney 'Big Dawg' Colston",
+        "Rachel Singer",
+        "Christie Cronenweth",
+        "Tim DeZarn",
+        "Ezra Buzzington",
+        "Dierdre Downing-Jackson",
+        "Bob Stephenson"
+      ],
+      "tmdbTitle": "Dövüş Kulübü",
+      "tmdbOriginalTitle": "Fight Club",
+      "tmdbReleaseDate": "1999-10-15",
+      "tmdbGenres": "Dram / Gerilim",
+      "tmdbRuntime": "139 dk",
+      "tmdbCountries": "Germany, United States of America",
+      "tmdbDirector": "David Fincher",
+      "tmdbCast": [
+        {
+          "id": 819,
+          "name": "Edward Norton",
+          "character": "Narrator",
+          "profile": "https://image.tmdb.org/t/p/w185/8nytsqL59SFJTVYVrN72k6qkGgJ.jpg",
+          "order": 0
+        },
+        {
+          "id": 287,
+          "name": "Brad Pitt",
+          "character": "Tyler Durden",
+          "profile": "https://image.tmdb.org/t/p/w185/ajNaPmXVVMJFg9GWmu6MJzTaXdV.jpg",
+          "order": 1
+        },
+        {
+          "id": 1283,
+          "name": "Helena Bonham Carter",
+          "character": "Marla Singer",
+          "profile": "https://image.tmdb.org/t/p/w185/hJMbNSPJ2PCahsP3rNEU39C8GWU.jpg",
+          "order": 2
+        },
+        {
+          "id": 7470,
+          "name": "Meat Loaf",
+          "character": "Robert Paulson",
+          "profile": "https://image.tmdb.org/t/p/w185/1zkohpaG3my4qQAZGVgzgPuXwZ6.jpg",
+          "order": 3
+        },
+        {
+          "id": 7499,
+          "name": "Jared Leto",
+          "character": "Angel Face",
+          "profile": "https://image.tmdb.org/t/p/w185/ca3x0OfIKbJppZh8S1Alx3GfUZO.jpg",
+          "order": 4
+        },
+        {
+          "id": 7471,
+          "name": "Zach Grenier",
+          "character": "Richard Chesler (Regional Manager)",
+          "profile": "https://image.tmdb.org/t/p/w185/fSyQKZO39sUsqY283GXiScOg3Hi.jpg",
+          "order": 5
+        },
+        {
+          "id": 7497,
+          "name": "Holt McCallany",
+          "character": "The Mechanic",
+          "profile": "https://image.tmdb.org/t/p/w185/b1FEXFQ8ZnvXhVrMqCv5mTJ8aW3.jpg",
+          "order": 6
+        },
+        {
+          "id": 7498,
+          "name": "Eion Bailey",
+          "character": "Ricky",
+          "profile": "https://image.tmdb.org/t/p/w185/3DW13W47cKk4LQZwS4EvRaNBoVu.jpg",
+          "order": 7
+        },
+        {
+          "id": 7472,
+          "name": "Richmond Arquette",
+          "character": "Intern at Hospital",
+          "profile": "https://image.tmdb.org/t/p/w185/7byGiVac0GjBSVD1h6ylZlVXZK6.jpg",
+          "order": 8
+        },
+        {
+          "id": 7219,
+          "name": "David Andrews",
+          "character": "Thomas at Remaining Men Together",
+          "profile": "https://image.tmdb.org/t/p/w185/s5jEvhtGrYptw3Mmv7bejvcAKLv.jpg",
+          "order": 9
+        },
+        {
+          "id": 1129738,
+          "name": "George Maguire",
+          "character": "Group Leader at Remaining Men Together",
+          "profile": "https://image.tmdb.org/t/p/w185/pyKzJNkpjCA96ItVq93x1Y2YfYx.jpg",
+          "order": 10
+        },
+        {
+          "id": 1317693,
+          "name": "Eugenie Bondurant",
+          "character": "Weeping Woman - Onward and Upward",
+          "profile": "https://image.tmdb.org/t/p/w185/9ULAELEKNha7VCJhRWoer58NcJe.jpg",
+          "order": 11
+        },
+        {
+          "id": 68277,
+          "name": "Christina Cabot",
+          "character": "Group Leader - Partners in Positivity",
+          "profile": "https://image.tmdb.org/t/p/w185/h1vwbOfITSvDvDq8E9MVvWqMYSr.jpg",
+          "order": 12
+        },
+        {
+          "id": 202080,
+          "name": "Sydney 'Big Dawg' Colston",
+          "character": "Speaker - Free and Clear",
+          "profile": "https://image.tmdb.org/t/p/w185/tdzVh7pstj6rcppqbBOX0KA7mX9.jpg",
+          "order": 13
+        },
+        {
+          "id": 7473,
+          "name": "Rachel Singer",
+          "character": "Chloe",
+          "profile": "https://image.tmdb.org/t/p/w185/o4Hzvy1VRa3IILMrI45Ia08pstK.jpg",
+          "order": 14
+        },
+        {
+          "id": 1172435,
+          "name": "Christie Cronenweth",
+          "character": "Airline Check-In Attendant",
+          "profile": "https://image.tmdb.org/t/p/w185/m9S13jmuBO2VeY0ZspSS7DlAEU.jpg",
+          "order": 15
+        },
+        {
+          "id": 956719,
+          "name": "Tim DeZarn",
+          "character": "Federated Motor Co. - Inspector Bird",
+          "profile": "https://image.tmdb.org/t/p/w185/tduRqomAU3LARfuDa2OMKFAd1rR.jpg",
+          "order": 16
+        },
+        {
+          "id": 59285,
+          "name": "Ezra Buzzington",
+          "character": "Federated Motor Co. - Inspector Dent",
+          "profile": "https://image.tmdb.org/t/p/w185/vnkdumEom4lVAqdh7Odsf2nZpjB.jpg",
+          "order": 17
+        },
+        {
+          "id": 1705289,
+          "name": "Dierdre Downing-Jackson",
+          "character": "Business Woman on Plane",
+          "profile": "https://image.tmdb.org/t/p/w185/81NKNmWmruKfvN6ZTAJmUVgz2yR.jpg",
+          "order": 18
+        },
+        {
+          "id": 17449,
+          "name": "Bob Stephenson",
+          "character": "Airport Security Officer",
+          "profile": "https://image.tmdb.org/t/p/w185/6RICLz0vofoGkI339Pk5sVn1657.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Saatli bomba gibi patlamaya hazır, uykusuzluk çeken bir adam ile tekinsiz bir sabun satıcısı; ilkel erkek saldırganlığını şok edici yeni bir terapi yöntemine dönüştürür. Kurdukları bu fikir hızla yayılır ve her şehirde yeraltı \"dövüş kulüpleri\" kurulmaya başlar ta ki egzantrik biri yollarına çıkıp yok oluşa doğru giden, kontrolden çıkmış bir sarmalı tetikleyene kadar.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/yjMuqAyJUoQZGWsZ0vZuYj5inAR.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/c6OLXfKAk5BKeR6broC8pYiCquX.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=_8WFzt_tKAA",
+      "tmdbImdbId": "tt0137523",
+      "tmdbRating": "8.4",
+      "tmdbVoteCount": 33418
     }
   ],
   "collections": [],
