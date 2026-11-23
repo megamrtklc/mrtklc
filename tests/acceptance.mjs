@@ -113,10 +113,17 @@ try {
   await page.waitForTimeout(8500);
 
   await check('Ana sayfa katalog afişleri küçük başlangıç kaynağı ve duyarlı adaylar kullanıyor', async () => {
-    const posterImages = page.locator('main .home-rail-card img');
-    await posterImages.first().waitFor({ state: 'attached' });
+    const catalogSection = page.locator('#home-catalog-section');
+    await catalogSection.scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      return app?.homeSectionReady?.catalog === true &&
+        document.querySelectorAll('#home-catalog-section .home-rail-card img').length > 1;
+    }, { timeout: 15000 });
+    const posterImages = page.locator('#home-catalog-section .home-rail-card img');
     const samples = await posterImages.evaluateAll(images => images
       .filter(image => /image\\.tmdb\\.org/.test(image.getAttribute('srcset') || ''))
+      .filter(image => /\\/w260\\//.test(image.getAttribute('srcset') || ''))
       .slice(0, 12)
       .map(image => ({ src: image.getAttribute('src') || '', srcset: image.getAttribute('srcset') || '' })));
     assert.ok(samples.length > 0, 'Duyarlı katalog afişleri bulunamadı');
