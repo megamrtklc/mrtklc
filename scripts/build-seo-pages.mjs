@@ -62,8 +62,12 @@ async function resolveDirectorIds(items, directorMap) {
           }
         }
         for (const name of directorNames(item)) {
-          const expected = normalizePersonName(name);
-          const match = crew.find(person => normalizePersonName(person.name) === expected);
+          const aliases = {
+            'baik': ['Baek Jong-yeol', 'Jong-Yeol Baek'],
+            '李安': ['Ang Lee']
+          };
+          const expectedNames = new Set([name, ...(aliases[normalizePersonName(name)] || aliases[name] || [])].map(normalizePersonName));
+          const match = crew.find(person => expectedNames.has(normalizePersonName(person.name)));
           if (!match) continue;
           const person = directorMap.get(name.toLocaleLowerCase('tr'));
           if (!person || person.ambiguous) continue;
