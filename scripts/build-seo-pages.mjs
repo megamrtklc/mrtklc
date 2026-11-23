@@ -309,7 +309,16 @@ for (const person of actors) {
   const canonical = abs(relative);
   const works = [...new Map(person.works.map(entry => [itemId(entry.item), entry])).values()]
     .sort((a,b) => (Number(yearOf(b.item)) || 0) - (Number(yearOf(a.item)) || 0));
-  const cards = works.slice(0,48).map(entry => linkCard(entry.item, BASE_PATH + itemPaths.get(entry.item))).join('');
+  const cards = works.slice(0,48).map(entry => {
+    const item = entry.item;
+    const href = BASE_PATH + itemPaths.get(item);
+    const poster = posterOf(item);
+    return '<a class="card" href="' + esc(href) + '">' +
+      (poster ? '<img loading="lazy" src="' + esc(poster) + '" alt="' + esc(titleOf(item)) + ' afişi">' : '<div class="poster-placeholder">Afiş yok</div>') +
+      '<strong>' + esc(titleOf(item)) + '</strong><small>' + esc(yearOf(item)) + (typeOf(item) === 'tv' ? ' · Dizi' : ' · Film') + '</small>' +
+      (entry.character ? '<small class="credit-role">Canlandırdığı karakter: ' + esc(entry.character) + '</small>' : '') +
+      '</a>';
+  }).join('');
   const appProfileUrl = BASE_PATH + '/#/actor/' + encodeURIComponent(person.id);
   const body = '<nav class="crumb"><a href="' + esc(BASE_PATH + '/') + '">Ana sayfa</a> / Oyuncular / ' + esc(person.name) + '</nav>' +
     '<section class="hero">' + (person.profile ? '<img class="poster" src="' + esc(person.profile.replace('/w185/','/w342/')) + '" alt="' + esc(person.name) + '">' : '<div class="poster-placeholder">Profil fotoğrafı yok</div>') +
@@ -317,7 +326,31 @@ for (const person of actors) {
     '<a class="watch-cta" href="' + esc(appProfileUrl) + '">Perde uygulamasında oyuncu profilini aç →</a>' +
     '<div class="meta"><span>' + works.length + ' katalog yapımı</span></div></div></section>' +
     '<section class="panel"><h2>Perde kataloğundaki yapımları</h2>' + (cards ? '<div class="grid">' + cards + '</div>' : '<p class="empty">Henüz katalog yapımı bulunmuyor.</p>') + '</section>';
-  const schema = {'@context':'https://schema.org','@type':'Person','name':person.name,'url':canonical,'jobTitle':'Actor',...(person.profile?{image:person.profile}:{})};
+  const personId = canonical + '#person';
+  const profilePerson = {
+    '@id': personId,
+    '@type': 'Person',
+    name: person.name,
+    url: canonical,
+    jobTitle: 'Actor',
+    ...(person.profile ? { image: person.profile } : {}),
+    subjectOf: works.map(entry => ({
+      '@type': typeOf(entry.item) === 'tv' ? 'TVSeries' : 'Movie',
+      name: titleOf(entry.item),
+      url: abs(itemPaths.get(entry.item)),
+      actor: {
+        '@type': 'PerformanceRole',
+        actor: { '@id': personId },
+        ...(entry.character ? { characterName: entry.character } : {})
+      }
+    }))
+  };
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url: canonical,
+    mainEntity: profilePerson
+  };
   await emit('oyuncu/' + slug + '.html', pageShell({title:person.name+' | Oyuncu profili | Perde',description:person.name+' oyuncusunun Perde kataloğunda bulunan film ve dizileri.',canonical,image:person.profile,jsonLd:schema,body,kind:'person'}));
   sitemapUrls.add(canonical);
 }
