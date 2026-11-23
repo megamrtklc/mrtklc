@@ -27,6 +27,9 @@ jobs:
           node tests/admin-markup-validation.mjs
           node tests/admin-action-contracts.mjs
           node --check admin/admin.js
+          node --check app.js
+          node --check app.min.js
+          node tests/mobile-hero-resource-contract.mjs
       - name: Install Playwright
         run: npm install --no-save playwright
       - name: Install Chromium
