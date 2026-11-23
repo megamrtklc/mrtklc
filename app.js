@@ -2012,17 +2012,42 @@
 
                 getItemRouteAliases(item) {
                     return [...new Set([
-                        item?.englishTitle, item?.tmdbEnglishTitle, item?.english_title,
+                        item?.title, item?.tmdbTitle, item?.name,
                         item?.originalTitle, item?.tmdbOriginalTitle, item?.original_title,
                         item?.original_name, item?.tmdb?.original_title, item?.tmdb?.original_name,
-                        item?.title, item?.tmdbTitle, item?.name
+                        item?.englishTitle, item?.tmdbEnglishTitle, item?.english_title
                     ].map(value => this.getRouteSlug(value || '')).filter(Boolean))];
+                },
+
+                getItemRouteTitle(item) {
+                    if (!item) return '';
+                    const countryValues = [item.country, item.tmdbCountries, item.productionCountries, item.production_countries]
+                        .flatMap(value => Array.isArray(value) ? value : [value])
+                        .filter(Boolean)
+                        .map(value => typeof value === 'object' ? (value.iso_3166_1 || value.name || '') : String(value))
+                        .join(' ').toLocaleLowerCase('en-US');
+                    const isTurkishProduction = /(^|[\\s,;])tr([\\s,;]|$)/i.test(countryValues) ||
+                        /turkey|türkiye|turkiye/.test(countryValues) ||
+                        String(item.originalLanguage || item.original_language || '').toLowerCase() === 'tr';
+                    if (isTurkishProduction) {
+                        return item.title || item.tmdbTitle || item.name || item.originalTitle || item.tmdbOriginalTitle || '';
+                    }
+
+                    const original = item.originalTitle || item.tmdbOriginalTitle || item.original_title ||
+                        item.original_name || item.tmdb?.original_title || item.tmdb?.original_name || '';
+                    // Latin harfli özgün adları (La Casa de Papel gibi) İngilizce çeviriye tercih et.
+                    if (original && /[A-Za-zÀ-ÖØ-öø-ÿ]/.test(original)) return original;
+
+                    return item.englishTitle || item.tmdbEnglishTitle || item.english_title ||
+                        original || item.title || item.tmdbTitle || item.name || '';
                 },
 
                 getItemRouteSlug(item) {
                     const titleSlug = entry => {
+                        const preferred = this.getRouteSlug(this.getItemRouteTitle(entry));
+                        if (preferred && !/^\\d+$/.test(preferred)) return preferred;
                         const aliases = this.getItemRouteAliases(entry);
-                        return aliases.find(alias => !/^\d+$/.test(alias)) ||
+                        return aliases.find(alias => !/^\\d+$/.test(alias)) ||
                             this.getRouteSlug(entry?.title || entry?.tmdbTitle || entry?.name || '') || '';
                     };
                     const base = titleSlug(item) || 'isimsiz-yapim';
