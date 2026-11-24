@@ -1034,14 +1034,20 @@
                     if (!Array.isArray(configured) || !configured.length) return sourceCatalog;
                     const byId = new Map(sourceCatalog.map(item => [String(item.id), item]));
                     const selected = configured.filter(entry => entry && entry.active !== false)
-                        .map(entry => byId.get(String(entry.id))).filter(Boolean);
+                        .map(entry => byId.get(String(entry.id)))
+                        .filter(item => item && (item.backdrop || item.poster || item.image || item.tmdbPoster));
                     if (!selected.length) return sourceCatalog;
-                    if (!mobile) {
-                        const configuredCount = Number(this.homepageConfig?.settings?.desktopCount);
-                        const count = Math.max(5, Math.min(15, configuredCount || 10));
-                        return selected.slice(0, count);
-                    }
-                    return selected;
+                    const configuredCount = Number(this.homepageConfig?.settings?.[mobile ? 'mobileCount' : 'desktopCount']);
+                    const count = Math.max(1, Math.min(mobile ? 12 : 15, configuredCount || (mobile ? 6 : 10)));
+                    if (selected.length >= count) return selected.slice(0, count);
+                    // Yönetim panelinde seçili olup katalogdan silinmiş kayıtlar boş slayt oluşturmasın.
+                    // Seçilenlerin sırasını koru; eksik sayıyı görseli bulunan diğer katalog yapımlarıyla tamamla.
+                    const selectedIds = new Set(selected.map(item => String(item.id)));
+                    const fallbackSlides = sourceCatalog.filter(item =>
+                        item && !selectedIds.has(String(item.id)) &&
+                        (item.backdrop || item.poster || item.image || item.tmdbPoster)
+                    );
+                    return selected.concat(fallbackSlides.slice(0, count - selected.length));
                 },
 
                 get publishedCollections() {
