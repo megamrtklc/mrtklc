@@ -1270,17 +1270,17 @@
 
     <!-- Script Application Logic -->
 
-    <style id="cv-image-loading-indicator">.cv-image-loading-surface::before{content:"";position:absolute;z-index:40;inset:0;display:block;background:rgba(8,10,15,.48);pointer-events:none}.cv-image-loading-surface::after{content:"Yükleniyor...";position:absolute;z-index:41;inset:0;display:flex;align-items:center;justify-content:center;padding:8px;color:rgba(255,255,255,.94);font:600 11px/1.2 system-ui,sans-serif;letter-spacing:.025em;text-shadow:0 1px 5px rgba(0,0,0,.7);pointer-events:none;background:radial-gradient(circle at center,transparent 0 17px,rgba(8,10,15,.12) 18px,transparent 19px)}.cv-image-loading-surface>.cv-image-loading-spinner{position:absolute;z-index:42;top:50%;left:50%;width:18px;height:18px;margin:-17px 0 0 -9px;border:2px solid rgba(255,255,255,.28);border-top-color:#fbbf24;border-radius:50%;animation:cv-image-loading-spin .8s linear infinite;pointer-events:none}@keyframes cv-image-loading-spin{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){.cv-image-loading-surface>.cv-image-loading-spinner{animation:none;border-top-color:rgba(255,255,255,.9)}}</style>
+    
     <script src="./js/image-loading-indicator.js?v=20261124-image-loading-v1"></script>
 
     <!-- Görsel kopyalamayı zorlaştırır; görsel yükleme ve etkileşim akışına müdahale etmez. -->
-    <style id="cv-image-copy-guard">img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}</style>
+    
     <script src="./js/image-copy-guard.js?v=20261124-image-copy-guard-v1"></script>
 
-    <style id="cv-tv-performance-mode">html.cv-tv-mode{scroll-behavior:auto!important;-webkit-text-size-adjust:100%}html.cv-tv-mode *,html.cv-tv-mode ::after,html.cv-tv-mode ::before{scroll-behavior:auto!important;animation:none!important;transition:none!important;box-shadow:none!important;filter:none!important;-webkit-filter:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;will-change:auto!important;caret-color:transparent!important}html.cv-tv-mode .cv-image-loading-surface>.cv-image-loading-spinner{animation:none!important;border-top-color:rgba(255,255,255,.9)}html.cv-tv-mode [data-home-section=franchises],html.cv-tv-mode [data-home-section=genre-discovery],html.cv-tv-mode [data-home-section=personalized],html.cv-tv-mode [data-home-section=published-collections],html.cv-tv-mode [data-home-section=series-tracking],html.cv-tv-mode [data-home-section=watched]{display:none!important}html.cv-tv-mode .home-personalized-alternative:hover,html.cv-tv-mode .home-personalized-card:hover,html.cv-tv-mode .home-personalized-feature:hover .home-personalized-feature-image,html.cv-tv-mode .home-rail-card:hover{transform:none!important}</style>
+    
     <script src="./js/tv-remote-scroll.js?v=20261124-tv-remote-scroll-v1"></script>
 
-    <style id="cv-seek-hover-preview-style">[data-watch-card=player] .cv-player-seek-wrap{position:relative;overflow:visible}[data-watch-card=player] .cv-seek-hover-preview{position:absolute;z-index:40;bottom:calc(100% + 9px);width:132px;transform:translateX(-50%);pointer-events:none;opacity:0;visibility:hidden;transition:opacity .12s ease,visibility .12s ease}[data-watch-card=player] .cv-seek-hover-preview.is-visible{opacity:1;visibility:visible}[data-watch-card=player] .cv-seek-hover-preview-frame{width:132px;height:74px;overflow:hidden;border:1px solid rgba(255,255,255,.32);border-radius:8px;background:#090b0f;box-shadow:0 8px 24px rgba(0,0,0,.6)}[data-watch-card=player] .cv-seek-hover-preview-frame video{display:block;width:100%;height:100%;object-fit:cover;background:#090b0f}[data-watch-card=player] .cv-seek-hover-preview-time{display:block;margin:5px auto 0;width:max-content;max-width:100%;padding:2px 7px;border-radius:5px;background:rgba(0,0,0,.92);color:#fff;font:700 10px/1.4 ui-monospace,SFMono-Regular,monospace;box-shadow:0 2px 8px rgba(0,0,0,.4)}@media(max-width:520px){[data-watch-card=player] .cv-seek-hover-preview{width:108px;bottom:calc(100% + 7px)}[data-watch-card=player] .cv-seek-hover-preview-frame{width:108px;height:61px}}@media(prefers-reduced-motion:reduce){[data-watch-card=player] .cv-seek-hover-preview{transition:none}}</style>
+    
 
     <script src="./js/player-seek-preview.js?v=20261124-player-seek-preview-v2"></script>
 
