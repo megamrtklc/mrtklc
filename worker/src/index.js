@@ -138,10 +138,12 @@ body.keyboard-open{align-items:flex-start;padding-top:max(10px,env(safe-area-ins
 }
 const SESSION_COOKIE="cv_admin_session";
 const SESSION_DEFAULT_TTL=7200;
+const PASSWORD_HASH_ITERATIONS=100000;
 async function digestText(value){return new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(String(value))));}
-async function hashPassword(password,saltBytes){
+async function hashPassword(password,saltBytes,iterations=PASSWORD_HASH_ITERATIONS){
+  const safeIterations=Math.max(1,Math.min(PASSWORD_HASH_ITERATIONS,Number(iterations)||PASSWORD_HASH_ITERATIONS));
   const material=await crypto.subtle.importKey("raw",new TextEncoder().encode(password),"PBKDF2",false,["deriveBits"]);
-  const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:saltBytes,iterations:310000,hash:"SHA-256"},material,256);
+  const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:saltBytes,iterations:safeIterations,hash:"SHA-256"},material,256);
   return encodeBase64Url(new Uint8Array(bits));
 }
 function authSetupError(code,cause){
@@ -165,7 +167,7 @@ async function ensureCredential(env){
   try{hash=await hashPassword(env.ADMIN_PASSWORD,salt);}
   catch(error){throw authSetupError("PASSWORD_HASH_FAILED",error);}
   try{
-    await env.SECURITY_DB.prepare("INSERT OR IGNORE INTO admin_credentials (id,password_hash,password_salt,password_iterations,updated_at) VALUES (1,?,?,310000,?)").bind(hash,encodeBase64Url(salt),Math.floor(Date.now()/1000)).run();
+    await env.SECURITY_DB.prepare("INSERT OR IGNORE INTO admin_credentials (id,password_hash,password_salt,password_iterations,updated_at) VALUES (1,?,?,?,?,?)").bind(hash,encodeBase64Url(salt),PASSWORD_HASH_ITERATIONS,Math.floor(Date.now()/1000)).run();
   }catch(error){throw authSetupError("CREDENTIAL_WRITE_FAILED",error);}
   credential=await readCredential(env);
   if(!credential)throw authSetupError("CREDENTIAL_READBACK_EMPTY");
@@ -174,7 +176,7 @@ async function ensureCredential(env){
 async function verifyPassword(password,credential){
   try{
     const salt=decodeBase64Url(credential.password_salt);
-    const candidate=await hashPassword(password,salt);
+    const candidate=await hashPassword(password,salt,credential.password_iterations);
     return constantTimeEqual(new TextEncoder().encode(candidate),new TextEncoder().encode(credential.password_hash));
   }catch{return false;}
 }
