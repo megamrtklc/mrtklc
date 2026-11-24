@@ -156,4 +156,61 @@ toggleFullscreen() {
                     }, 380);
                     this.showPlayerControls();
                 }
+,
+    skipTime(seconds) {
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video || !Number.isFinite(video.duration)) return;
+                    video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
+                    this.showPlaybackFeedback(seconds < 0 ? 'backward' : 'forward', 850);
+                    this.showPlayerControls();
+                },
+    showPlaybackFeedback(type, duration = 5000) {
+                    this.playbackFeedback = type;
+                    this.playbackFeedbackVisible = true;
+                    if (this.playbackFeedbackTimer) clearTimeout(this.playbackFeedbackTimer);
+                    this.playbackFeedbackTimer = setTimeout(() => {
+                        this.playbackFeedbackVisible = false;
+                        this.playbackFeedbackTimer = null;
+                    }, duration);
+                },
+    togglePlay() {
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video) return;
+                    if (video.paused) {
+                        this.showPlaybackFeedback('play', 5000);
+                        this.startPlayback();
+                    } else {
+                        video.pause();
+                    }
+                },
+    schedulePlayerControlsHide() {
+                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
+                    if (!this.isPlaying) return;
+                    this.playerControlsTimer = setTimeout(() => {
+                        if (this.isPlaying) this.playerControlsVisible = false;
+                    }, 2200);
+                },
+    hidePlayerControlsOnLeave() {
+                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
+                    this.playerControlsVisible = !this.isPlaying;
+                },
+    toggleCinemaMode() {
+                    this.cinemaMode = !this.cinemaMode;
+                    document.body.style.overflow = this.cinemaMode ? 'hidden' : '';
+                    if (this.cinemaNoticeTimer) clearTimeout(this.cinemaNoticeTimer);
+                    this.cinemaNoticeVisible = this.cinemaMode;
+                    if (this.cinemaMode) {
+                        this.playerControlsVisible = true;
+                        this.showPlayerControls();
+                        this.cinemaNoticeTimer = setTimeout(() => {
+                            this.cinemaNoticeVisible = false;
+                            this.cinemaNoticeTimer = null;
+                        }, 5000);
+                    }
+                },
+    showPlayerControls() {
+                    this.playerControlsVisible = true;
+                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
+                    if (this.isPlaying) this.schedulePlayerControlsHide();
+                }
 };})();
