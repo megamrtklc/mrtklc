@@ -1562,7 +1562,7 @@ try {
 
   await check('Video bağlantıları sayfası ve detay oynatıcı açılıyor', async () => {
     await page.locator('header nav a').filter({ hasText: 'Video Bağlantıları' }).first().click();
-    await page.waitForURL(/#\/video-links$/);
+    await page.waitForURL(/#\/fragmanlar$/);
     await page.getByRole('heading', { name: 'Video İzleme Bağlantıları' }).waitFor({ state: 'visible' });
     const card = page.locator('main button').filter({ hasText: 'Adalet 2' }).first();
     await card.waitFor({ state: 'visible' });
@@ -1715,14 +1715,14 @@ try {
     }, adaletId);
     await page.getByRole('button', { name: 'Hesap menüsünü aç' }).click();
     await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name: /İzleme Listem/ }).click();
-    await page.waitForURL(/#\/watchlist$/);
+    await page.waitForURL(/#\/izleme-listem$/);
     await page.getByRole('heading', { name: 'Ana Profil - İzleme Listem' }).waitFor({ state: 'visible' });
     await page.getByText('Adalet 2', { exact: true }).waitFor({ state: 'visible' });
   });
 
   await check('Sayfa yenilenince detay rotası geri yükleniyor', async () => {
     await page.locator('header nav a').filter({ hasText: 'Video Bağlantıları' }).first().click();
-    await page.waitForURL(/#\/video-links$/);
+    await page.waitForURL(/#\/fragmanlar$/);
     await page.locator('main button').filter({ hasText: 'Adalet 2' }).first().click();
     const expectedAdaletRoute = await page.evaluate(expectedId => {
       const app = window.Alpine.$data(document.documentElement);
