@@ -3,6 +3,8 @@
             return {
                 ...window.PerdeImageHelpers,
                 currentPage: 'home',
+                mobileMenuOpen: false,
+                headerScrolled: window.scrollY > 40,
                 isMobileHeroViewport: false,
                 activeHeaderMenu: 'home',
                 searchQuery: '',
