@@ -503,87 +503,12 @@
   </div>
 </div>
        <!-- Kişiselleştirilmiş Öneriler -->
-                <section id="home-personalized-section" data-home-section="personalized" x-data="{ showAllPersonalized: false }" :style="{ display: isHomepageSectionVisible('personalized') ? 'block' : 'none' }" class="home-personalized-section w-full px-6 sm:px-12 space-y-4" style="visibility:hidden;min-height:0!important;height:auto!important;box-sizing:border-box" x-ignore>
-                    <div x-cloak x-show="homeSectionLoading.personalized" x-transition.opacity.duration.200ms class="cv-section-loading-overlay" role="status" aria-live="polite">
-                        <div class="cv-section-loading-content">
-                            <span class="cv-section-loading-mark" aria-hidden="true"><i class="fa-solid fa-clapperboard"></i></span>
-                            <strong>Öneriler hazırlanıyor</strong>
-                            <span>Sana uygun yapımları seçiyoruz. Biraz bekle…</span>
-                            <span class="cv-section-loading-track" aria-hidden="true"><span></span></span>
-                            <small>Görseller ve öneriler yükleniyor</small>
-                        </div>
+                <section id="home-personalized-section" data-home-section="personalized" x-data="{ showAllPersonalized: false }" :style="{ display: isHomepageSectionVisible('personalized') ? 'block' : 'none' }" class="home-personalized-section w-full px-6 sm:px-12 space-y-4" style="visibility:hidden;min-height:0!important;height:auto!important;box-sizing:border-box" data-home-fragment="./runtime-pages/home-personalized.html?v=20261124-home-personalized-v1" x-ignore>
+                    <!-- Sana Özel Öneriler: görünür alana yaklaşınca ayrı dosyadan yüklenir. -->
+                    <div class="home-catalog-loading" role="status" aria-live="polite" aria-label="Sana Özel Öneriler yükleniyor">
+                        <div class="home-catalog-loading-heading"><span></span><span></span></div>
+                        <div class="home-catalog-loading-grid"><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span></div>
                     </div>
-                    <div class="home-personalized-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3" style="height:auto!important;min-height:0!important;box-sizing:border-box">
-                        <div class="min-w-0">
-                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1"><span x-text="homepageConfig?.personalizedSection?.eyebrow || 'SANA ÖZEL'">SANA ÖZEL</span> • <span x-text="currentProfile.name"></span></p>
-                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white" x-text="homepageConfig?.personalizedSection?.title || 'İzleme Zevkine Göre'">İzleme Zevkine Göre</h2>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-text="homepageConfig?.personalizedSection?.description || 'İzleme alışkanlıklarından ilham alan, sana özel seçkiler'">İzleme alışkanlıklarından ilham alan, sana özel seçkiler</p>
-                        </div>
-                        <div class="home-personalized-toolbar shrink-0"><div class="home-personalized-modes" aria-label="Öneri keşif modu">
-<template x-for="mode in personalizedRecommendationModes" :key="mode.id"><button type="button" @click="setPersonalizedRecommendationMode(mode.id)" :class="recommendationMode === mode.id ? 'is-active' : ''" x-show="isPersonalizedModeEnabled(mode.id)" x-text="mode.label"></button></template>
-</div><button type="button" class="home-personalized-refresh" @click="refreshPersonalizedRecommendations()" title="Yeni öneriler getir"><i class="fa-solid fa-arrows-rotate"></i><span>Yenile</span></button></div>
-                    </div>
-                    <div class="home-personalized-showcase" :class="{ 'cv-personalized-showcase-pending': !homeSectionReady.personalized }" style="height:360px;min-height:360px;box-sizing:border-box">
-                        <template x-if="homeSectionReady.personalized && displayedPersonalizedRecommendations[0]">
-                            <div role="button" tabindex="0" @click="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.enter="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(displayedPersonalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer" x-ignore>
-                                <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500, 780])" sizes="(max-width: 900px) 100vw, 32vw" :alt="displayedPersonalizedRecommendations[0].title" loading="lazy" fetchpriority="low" decoding="async" class="home-personalized-feature-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
-                                <div class="home-personalized-feature-shade absolute inset-0"></div>
-                                <div class="home-personalized-feature-poster absolute z-[1] right-4 bottom-4 sm:right-5 sm:bottom-5 pointer-events-none">
-                                    <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [185, 342, 500])" sizes="(max-width: 639px) 88px, 112px" :alt="displayedPersonalizedRecommendations[0].title + ' afişi'" loading="lazy" decoding="async" class="w-full h-full object-cover rounded-xl">
-                                </div>
-
-                                <div class="home-personalized-feature-labels absolute left-4 top-4 z-[2] flex items-center gap-2">
-                                    <span class="rounded-md bg-rose-600 text-white px-2.5 py-1 text-[9px] font-black tracking-widest uppercase">SANA ÖZEL SEÇİM</span>
-                                    <span class="rounded-md bg-black/55 text-white/90 px-2.5 py-1 text-[9px] font-bold backdrop-blur-sm" x-text="displayedPersonalizedRecommendations[0].type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
-                                </div>
-                                <div class="relative z-[1] flex h-full min-h-[120px] sm:min-h-[132px] lg:min-h-[150px] flex-col justify-end p-4 sm:p-5 lg:p-6">
-                                    <h3 class="max-w-xl text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-white drop-shadow-lg" x-text="displayedPersonalizedRecommendations[0].title"></h3>
-                                    <div class="flex flex-wrap items-center gap-3 mt-3 text-xs font-semibold text-white/85"><span x-text="displayedPersonalizedRecommendations[0].year || '—'"></span><span class="text-white/40">•</span><span class="text-amber-300"><i class="fa-solid fa-star mr-1"></i><span x-text="(displayedPersonalizedRecommendations[0].rating ? Number(displayedPersonalizedRecommendations[0].rating).toFixed(1) : '—')"></span></span><span class="text-white/40">•</span><span class="line-clamp-1" x-text="displayedPersonalizedRecommendations[0].genre || displayedPersonalizedRecommendations[0].category || 'Önerilen yapım'"></span></div>
-                                    <p class="max-w-lg mt-3 text-xs sm:text-sm leading-relaxed text-white/80 line-clamp-2" x-text="displayedPersonalizedRecommendations[0].tmdbOverview || displayedPersonalizedRecommendations[0].desc || displayedPersonalizedRecommendations[0].recommendationReason"></p>
-                                    <div class="home-personalized-feature-ctas flex items-center gap-3 mt-5"><span class="inline-flex items-center gap-2 rounded-full bg-white text-gray-950 px-5 py-2.5 text-xs font-black group-hover:bg-rose-500 group-hover:text-white transition-colors"><i class="fa-solid fa-play"></i> Hemen keşfet</span><span class="text-[10px] font-bold text-white/75 home-personalized-feature-reason" x-text="displayedPersonalizedRecommendations[0].recommendationReason || 'İzleme profiline uygun'"></span><button type="button" @click.stop="refreshPersonalizedRecommendations()" class="home-personalized-mobile-next" aria-label="Başka Öner"><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div>
-                                </div>
-
-                            </div>
-                        </template>
-
-                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" style="display:block!important;height:auto!important;box-sizing:border-box!important;visibility:hidden" :style="{visibility:homeSectionReady.personalized && displayedPersonalizedRecommendations.length ? 'visible' : 'hidden'}" x-ignore>
-                            <div class="home-personalized-mobile-backdrop">
-                                <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500])" sizes="100vw" alt="" aria-hidden="true" loading="lazy" decoding="async">
-                                <div></div>
-                            </div>
-                            <div class="home-personalized-mobile-content">
-                                <div class="home-personalized-mobile-poster">
-                                    <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [185, 342, 500])" sizes="(orientation:landscape) 82px, 104px" :alt="displayedPersonalizedRecommendations[0].title + ' afişi'" loading="lazy" decoding="async">
-                                </div>
-                                <div class="home-personalized-mobile-details">
-                                    <div class="home-personalized-mobile-kicker"><span x-text="displayedPersonalizedRecommendations[0].type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></span><span x-text="displayedPersonalizedRecommendations[0].genre || displayedPersonalizedRecommendations[0].category || 'Özel seçki'"></span></div>
-                                    <h3 x-text="displayedPersonalizedRecommendations[0].title"></h3>
-                                    <div class="home-personalized-mobile-meta">
-                                        <span x-text="displayedPersonalizedRecommendations[0].year || '—'"></span>
-                                        <span class="home-personalized-mobile-imdb">IMDb <b x-text="displayedPersonalizedRecommendations[0].rating ? Number(displayedPersonalizedRecommendations[0].rating).toFixed(1) : '—'"></b></span>
-                                    </div>
-                                    <p x-text="displayedPersonalizedRecommendations[0].tmdbOverview || displayedPersonalizedRecommendations[0].overview || displayedPersonalizedRecommendations[0].plot || displayedPersonalizedRecommendations[0].synopsis || displayedPersonalizedRecommendations[0].summary || displayedPersonalizedRecommendations[0].description || displayedPersonalizedRecommendations[0].desc || 'Bu yapım için kısa konu bilgisi henüz bulunmuyor.'"></p>
-                                    <div class="home-personalized-mobile-actions">
-                                        <button type="button" class="home-personalized-mobile-watch" @click.stop="openWatchPage(displayedPersonalizedRecommendations[0])"><i class="fa-solid fa-play"></i> <span x-text="displayedPersonalizedRecommendations[0].type === 'tv' ? 'Diziyi İzle' : 'Filmi İzle'"></span></button>
-                                        <button type="button" class="home-personalized-mobile-shuffle" @click.stop="refreshPersonalizedRecommendations()"><i class="fa-solid fa-shuffle"></i> Başka Öner</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </article>
-                        <div id="home-personalized-rail" role="region" aria-label="Sana özel öneriler" class="home-personalized-alternatives" x-ref="rail" @scroll.passive="updateSlide()" aria-label="Sana özel öneriler, yatay kaydırılabilir" x-ignore>
-                            <template x-for="item in (homeSectionReady.personalized ? displayedPersonalizedRecommendations.slice(1, 5) : [])" :key="'personal-' + item.id">
-                                <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :data-recommendation-id="item.id" :class="getCardClass()" class="home-personalized-alternative group relative isolate overflow-hidden min-w-0 rounded-xl sm:rounded-2xl border text-left transition-all duration-300">
-                                    <img class="home-personalized-card-backdrop absolute inset-0 w-full h-full object-cover" @error="handleImageError($event)" :src="item.backdrop || item.poster || item.image" :srcset="getTmdbImageSrcSet(item.backdrop || item.poster || item.image, [342, 500])" sizes="(max-width: 767px) 330px, 342px" :alt="''" aria-hidden="true" loading="lazy" decoding="async">
-                                    <div class="home-personalized-card-shade absolute inset-0"></div>
-                                    <div class="home-personalized-poster relative z-[1] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-900 shadow-xl"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [154, 185, 342])" sizes="96px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/85 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="(item.rating ? Number(item.rating).toFixed(1) : '—')"></span></span></div>
-                                    <div class="home-personalized-copy relative z-[1] min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-300 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="item.title"></h3><p class="mt-1 text-[10px] text-white/75 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="home-personalized-plot" x-text="item.tmdbOverview || item.desc || item.recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p></div>
-
-                                </div>
-                            </template>
-                        </div>
-                                        </div>
-<p x-show="homeSectionReady.personalized && !displayedPersonalizedRecommendations.length" class="text-xs text-gray-500 dark:text-gray-400 py-5 text-center">Önerileri kişiselleştirmek için birkaç yapım izlemeye başlayabilir veya izleme listene ekleyebilirsin.</p>
                 </section>
 
                 <!-- İzlemeye Devam Et: beşli sinematik yatay kart şeridi -->
