@@ -44,5 +44,14 @@
                 right.forEach((id,index) => { const node=cards.get(id); if(node){node.hidden=hidden.includes(id);node.style.order=String(index);rightColumn.appendChild(node);} });
             });
         },
+        // Oyuncu ve benzer yapım şeritlerini yatay kaydırır.
+        scrollCast(direction) {
+            const container = document.getElementById('castContainer');
+            if (container) container.scrollBy({ left: 180 * direction, behavior: 'smooth' });
+        },
+        scrollSimilar(direction) {
+            const container = document.getElementById('similarContainer');
+            if (container) container.scrollBy({ left: 180 * direction, behavior: 'smooth' });
+        }
     };
 })();
