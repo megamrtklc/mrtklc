@@ -1,0 +1,34 @@
+<!--
+  Perde ana sayfa parçası: Türlere Göre Keşfet bölümünün HTML içeriği.
+  Ana kapsayıcı homepage.html içinde kalır; bu dosya görünür alana yaklaşınca yüklenir.
+-->
+
+                    <div class="home-genre-discovery-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
+                        <div class="min-w-0">
+                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1.5">YENİ HİKÂYELER KEŞFET</p>
+                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Türlere Göre Keşfet</h2>
+                            <p class="home-genre-discovery-subtitle mt-2">Sana uygun türü seç, keşfetmeye hemen başla.</p>
+                        </div>
+                    </div>
+                    <div class="home-genre-discovery-grid" :class="{ 'is-collapsed': !showAllGenres }">
+                        <template x-for="genre in (homeSectionReady['genre-discovery'] ? homeDiscoveryGenres : [])" :key="'home-genre-' + genre.name">
+                            <button type="button" @click="selectPersonalizedGenre(genre.name); navigateTo('explore')" class="home-genre-discovery-card group" :aria-label="genre.label + ' yapımlarını keşfet'">
+                                <span class="home-genre-discovery-icon">
+                                    <i :class="({'aksiyon':'fa-solid fa-bolt','macera':'fa-solid fa-compass','komedi':'fa-solid fa-face-laugh','dram':'fa-solid fa-masks-theater','korku':'fa-solid fa-ghost','gerilim':'fa-solid fa-eye','bilim kurgu':'fa-solid fa-rocket','romantik':'fa-solid fa-heart','animasyon':'fa-solid fa-wand-magic-sparkles','suc':'fa-solid fa-fingerprint','belgesel':'fa-solid fa-earth-europe','spor':'fa-solid fa-trophy','biyografi':'fa-solid fa-user-tie','aile':'fa-solid fa-people-roof','gizem':'fa-solid fa-magnifying-glass','tarih':'fa-solid fa-landmark','fantastik':'fa-solid fa-dragon','fantazi':'fa-solid fa-wand-sparkles','savas':'fa-solid fa-shield-halved','vahsi bati':'fa-solid fa-hat-cowboy','muzik':'fa-solid fa-music','politik':'fa-solid fa-scale-balanced'})[genre.name] || 'fa-solid fa-clapperboard'"></i>
+                                </span>
+                                <span class="home-genre-discovery-name" x-text="genre.label"></span>
+                            </button>
+                        </template>
+                    </div>
+                    <div class="flex justify-center pt-1 sm:hidden" x-show="homeSectionReady['genre-discovery'] && homeDiscoveryGenres.length > 6">
+                        <button type="button" @click="showAllGenres = !showAllGenres" class="home-genre-discovery-more" :aria-expanded="showAllGenres">
+                            <span x-text="showAllGenres ? 'Daha az göster' : 'Tümünü göster'"></span>
+                            <i class="fa-solid" :class="showAllGenres ? 'fa-chevron-up' : 'fa-chevron-down'" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="hidden justify-center pt-1 sm:flex" x-show="homeSectionReady['genre-discovery'] && homeDiscoveryGenres.length > 16">
+                        <button type="button" @click="showAllGenres = !showAllGenres" class="home-genre-discovery-more" :aria-expanded="showAllGenres">
+                            <span x-text="showAllGenres ? 'Daha az göster' : 'Tümünü göster'"></span>
+                            <i class="fa-solid" :class="showAllGenres ? 'fa-chevron-up' : 'fa-chevron-down'" aria-hidden="true"></i>
+                        </button>
+                    </div>
