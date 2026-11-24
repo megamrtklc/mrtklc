@@ -1347,18 +1347,269 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     <!-- Script Application Logic -->
 
     <style id="cv-image-loading-indicator">.cv-image-loading-surface::before{content:"";position:absolute;z-index:40;inset:0;display:block;background:rgba(8,10,15,.48);pointer-events:none}.cv-image-loading-surface::after{content:"Yükleniyor...";position:absolute;z-index:41;inset:0;display:flex;align-items:center;justify-content:center;padding:8px;color:rgba(255,255,255,.94);font:600 11px/1.2 system-ui,sans-serif;letter-spacing:.025em;text-shadow:0 1px 5px rgba(0,0,0,.7);pointer-events:none;background:radial-gradient(circle at center,transparent 0 17px,rgba(8,10,15,.12) 18px,transparent 19px)}.cv-image-loading-surface>.cv-image-loading-spinner{position:absolute;z-index:42;top:50%;left:50%;width:18px;height:18px;margin:-17px 0 0 -9px;border:2px solid rgba(255,255,255,.28);border-top-color:#fbbf24;border-radius:50%;animation:cv-image-loading-spin .8s linear infinite;pointer-events:none}@keyframes cv-image-loading-spin{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){.cv-image-loading-surface>.cv-image-loading-spinner{animation:none;border-top-color:rgba(255,255,255,.9)}}</style>
-    <script src="./js/image-loading-indicator.js?v=20261124-image-loading-v1"></script>
+    <script id="cv-image-loading-indicator-script">
+        (() => {
+            const timers = new WeakMap();
+            const eligible = (img) => {
+                if (!(img instanceof HTMLImageElement) || (!img.getAttribute('src') && !img.getAttribute('srcset'))) return false;
+                if (img.getAttribute('aria-hidden') === 'true' || !img.getAttribute('alt')?.trim()) return false;
+                if (/^(logo|icon)$/i.test(img.getAttribute('alt').trim())) return false;
+                return true;
+            };
+            const surfaceFor = (img) => {
+                const parent = img.parentElement;
+                return parent?.tagName === 'PICTURE' ? parent.parentElement : parent;
+            };
+            const updateSurface = (surface) => {
+                if (!surface) return;
+                const hasPending = surface.querySelector(':scope > img[data-cv-image-loading="true"], :scope > picture > img[data-cv-image-loading="true"]');
+                if (hasPending) {
+                    if (!surface.classList.contains('cv-image-loading-surface')) {
+                        if (getComputedStyle(surface).position === 'static') {
+                            surface.dataset.cvImageOriginalPosition = 'static';
+                            surface.style.position = 'relative';
+                        }
+                        surface.classList.add('cv-image-loading-surface');
+                    }
+                    if (!surface.querySelector(':scope > .cv-image-loading-spinner')) {
+                        const spinner = document.createElement('span');
+                        spinner.className = 'cv-image-loading-spinner';
+                        spinner.setAttribute('aria-hidden', 'true');
+                        surface.appendChild(spinner);
+                    }
+                } else {
+                    surface.classList.remove('cv-image-loading-surface');
+                    surface.querySelector(':scope > .cv-image-loading-spinner')?.remove();
+                    if (surface.dataset.cvImageOriginalPosition === 'static') {
+                        surface.style.position = '';
+                        delete surface.dataset.cvImageOriginalPosition;
+                    }
+                }
+            };
+            const finish = (img) => {
+                if (!(img instanceof HTMLImageElement)) return;
+                const timer = timers.get(img);
+                if (timer) clearTimeout(timer);
+                timers.delete(img);
+                img.removeAttribute('data-cv-image-loading');
+                img.removeAttribute('data-cv-image-waiting');
+                updateSurface(surfaceFor(img));
+                lazyObserver?.unobserve(img);
+            };
+            const begin = (img) => {
+                if (!eligible(img) || img.complete) {
+                    finish(img);
+                    return;
+                }
+                img.removeAttribute('data-cv-image-waiting');
+                img.setAttribute('data-cv-image-loading', 'true');
+                updateSurface(surfaceFor(img));
+                const timer = setTimeout(() => finish(img), 15000);
+                timers.set(img, timer);
+            };
+            const lazyObserver = 'IntersectionObserver' in window
+                ? new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) return;
+                        begin(entry.target);
+                        lazyObserver.unobserve(entry.target);
+                    });
+                }, { rootMargin: '120px 0px', threshold: 0.01 })
+                : null;
+            const inspect = (img) => {
+                if (!eligible(img)) {
+                    finish(img);
+                    return;
+                }
+                const oldTimer = timers.get(img);
+                if (oldTimer) clearTimeout(oldTimer);
+                timers.delete(img);
+                img.removeAttribute('data-cv-image-loading');
+                updateSurface(surfaceFor(img));
+                if (img.complete) {
+                    finish(img);
+                    return;
+                }
+                if (img.loading === 'lazy') {
+                    if (lazyObserver) {
+                        img.setAttribute('data-cv-image-waiting', 'true');
+                        lazyObserver.observe(img);
+                    }
+                    return;
+                }
+                begin(img);
+            };
+            document.addEventListener('load', event => finish(event.target), true);
+            document.addEventListener('error', event => finish(event.target), true);
+            const scan = (node) => {
+                if (!(node instanceof Element)) return;
+                if (node.matches('img')) inspect(node);
+                else if (node.matches('picture,source')) {
+                    const picture = node.tagName === 'PICTURE' ? node : node.parentElement;
+                    picture?.querySelectorAll('img').forEach(inspect);
+                }
+                node.querySelectorAll?.('img').forEach(inspect);
+            };
+            scan(document.documentElement);
+            const observer = new MutationObserver(records => {
+                records.forEach(record => {
+                    if (record.type === 'attributes') scan(record.target);
+                    else record.addedNodes.forEach(scan);
+                });
+            });
+            observer.observe(document.documentElement, {
+                subtree: true,
+                childList: true,
+                attributes: true,
+                attributeFilter: ['src', 'srcset']
+            });
+        })();
+    </script>
 
     <!-- Görsel kopyalamayı zorlaştırır; görsel yükleme ve etkileşim akışına müdahale etmez. -->
     <style id="cv-image-copy-guard">img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}</style>
-    <script src="./js/image-copy-guard.js?v=20261124-image-copy-guard-v1"></script>
+    <script id="cv-image-copy-guard-script">
+        (() => {
+            const isImageSurface = (target) => {
+                let element = target instanceof Element ? target : target?.parentElement;
+                for (let depth = 0; element && depth < 6; depth++, element = element.parentElement) {
+                    if (element.tagName === 'IMG' || element.tagName === 'PICTURE') return true;
+                    if (getComputedStyle(element).backgroundImage !== 'none') return true;
+                }
+                return false;
+            };
+
+            document.addEventListener('contextmenu', (event) => {
+                if (isImageSurface(event.target)) event.preventDefault();
+            }, true);
+
+            document.addEventListener('dragstart', (event) => {
+                const target = event.target;
+                if (target instanceof Element && (target.tagName === 'IMG' || target.closest('picture'))) {
+                    event.preventDefault();
+                }
+            }, true);
+        })();
+    </script>
 
     <style id="cv-tv-performance-mode">html.cv-tv-mode{scroll-behavior:auto!important;-webkit-text-size-adjust:100%}html.cv-tv-mode *,html.cv-tv-mode ::after,html.cv-tv-mode ::before{scroll-behavior:auto!important;animation:none!important;transition:none!important;box-shadow:none!important;filter:none!important;-webkit-filter:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;will-change:auto!important;caret-color:transparent!important}html.cv-tv-mode .cv-image-loading-surface>.cv-image-loading-spinner{animation:none!important;border-top-color:rgba(255,255,255,.9)}html.cv-tv-mode [data-home-section=franchises],html.cv-tv-mode [data-home-section=genre-discovery],html.cv-tv-mode [data-home-section=personalized],html.cv-tv-mode [data-home-section=published-collections],html.cv-tv-mode [data-home-section=series-tracking],html.cv-tv-mode [data-home-section=watched]{display:none!important}html.cv-tv-mode .home-personalized-alternative:hover,html.cv-tv-mode .home-personalized-card:hover,html.cv-tv-mode .home-personalized-feature:hover .home-personalized-feature-image,html.cv-tv-mode .home-rail-card:hover{transform:none!important}</style>
-    <script src="./js/tv-remote-scroll.js?v=20261124-tv-remote-scroll-v1"></script>
+    <script id="cv-tv-remote-vertical-scroll">
+      (() => {
+        if (document.documentElement.dataset.cvDeviceMode !== 'tv') return;
+        const isEditable = element => !!element?.closest('input,textarea,select,[contenteditable="true"],[role="textbox"],[role="combobox"]');
+        const isOverlayControl = element => !!element?.closest('[role="dialog"],[aria-modal="true"],.modal,.dropdown-menu,[data-tv-keep-focus]');
+        const getDirection = event => {
+          const key = event.key || event.code || '';
+          if (key === 'ArrowDown' || key === 'Down' || key === 'DPAD_DOWN' || event.keyCode === 40 || event.which === 40) return 1;
+          if (key === 'ArrowUp' || key === 'Up' || key === 'DPAD_UP' || event.keyCode === 38 || event.which === 38) return -1;
+          return 0;
+        };
+        document.addEventListener('keydown', event => {
+          const direction = getDirection(event);
+          if (!direction || event.altKey || event.ctrlKey || event.metaKey || isEditable(event.target) || isOverlayControl(event.target)) return;
+          if (!document.querySelector('#home-page')) return;
+          const focused = document.activeElement;
+          if (focused && focused !== document.body && focused !== document.documentElement) return;
+          const root = document.scrollingElement || document.documentElement;
+          const maxScroll = Math.max(0, root.scrollHeight - window.innerHeight);
+          if (maxScroll <= 0) return;
+          const current = Math.max(0, window.scrollY || root.scrollTop || 0);
+          const step = Math.max(180, Math.round(window.innerHeight * 0.48));
+          const next = Math.min(maxScroll, Math.max(0, current + direction * step));
+          if (next === current) return;
+          event.preventDefault();
+          window.scrollTo({ top: next, left: 0, behavior: 'auto' });
+        }, true);
+      })();
+    </script>
 
     <style id="cv-seek-hover-preview-style">[data-watch-card=player] .cv-player-seek-wrap{position:relative;overflow:visible}[data-watch-card=player] .cv-seek-hover-preview{position:absolute;z-index:40;bottom:calc(100% + 9px);width:132px;transform:translateX(-50%);pointer-events:none;opacity:0;visibility:hidden;transition:opacity .12s ease,visibility .12s ease}[data-watch-card=player] .cv-seek-hover-preview.is-visible{opacity:1;visibility:visible}[data-watch-card=player] .cv-seek-hover-preview-frame{width:132px;height:74px;overflow:hidden;border:1px solid rgba(255,255,255,.32);border-radius:8px;background:#090b0f;box-shadow:0 8px 24px rgba(0,0,0,.6)}[data-watch-card=player] .cv-seek-hover-preview-frame video{display:block;width:100%;height:100%;object-fit:cover;background:#090b0f}[data-watch-card=player] .cv-seek-hover-preview-time{display:block;margin:5px auto 0;width:max-content;max-width:100%;padding:2px 7px;border-radius:5px;background:rgba(0,0,0,.92);color:#fff;font:700 10px/1.4 ui-monospace,SFMono-Regular,monospace;box-shadow:0 2px 8px rgba(0,0,0,.4)}@media(max-width:520px){[data-watch-card=player] .cv-seek-hover-preview{width:108px;bottom:calc(100% + 7px)}[data-watch-card=player] .cv-seek-hover-preview-frame{width:108px;height:61px}}@media(prefers-reduced-motion:reduce){[data-watch-card=player] .cv-seek-hover-preview{transition:none}}</style>
 
-    <script src="./js/player-seek-preview.js?v=20261124-player-seek-preview-v2"></script>
+    <script id="cv-seek-hover-preview">
+      (() => {
+        if (window.__CV_SEEK_PREVIEW_BOUND__) return;
+        window.__CV_SEEK_PREVIEW_BOUND__ = true;
+        let hideTimer = 0;
+        const format = seconds => {
+          const n = Math.max(0, Math.floor(Number(seconds) || 0));
+          const h = Math.floor(n / 3600), m = Math.floor((n % 3600) / 60), s = n % 60;
+          return h ? [h,m,s].map(v => String(v).padStart(2,'0')).join(':') : [m,s].map(v => String(v).padStart(2,'0')).join(':');
+        };
+        const ensurePreview = wrap => {
+          let panel = wrap.querySelector('.cv-seek-hover-preview');
+          if (!panel) {
+            panel = document.createElement('div');
+            panel.className = 'cv-seek-hover-preview';
+            panel.innerHTML = '<div class="cv-seek-hover-preview-frame"><video muted playsinline preload="metadata" disablepictureinpicture aria-hidden="true"></video></div><span class="cv-seek-hover-preview-time">00:00</span>';
+            wrap.appendChild(panel);
+          }
+          return panel;
+        };
+        const updatePreview = event => {
+          const input = event.target.closest?.('.cv-player-seek');
+          if (!input) return;
+          const wrap = input.closest('.cv-player-seek-wrap');
+          const mainVideo = document.getElementById('customVideoPlayer');
+          if (!wrap || !mainVideo || !Number.isFinite(mainVideo.duration) || mainVideo.duration <= 0) return;
+          const rect = input.getBoundingClientRect();
+          if (!rect.width) return;
+          const ratio = Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width));
+          const seconds = ratio * mainVideo.duration;
+          const panel = ensurePreview(wrap);
+          const previewVideo = panel.querySelector('video');
+          const time = panel.querySelector('.cv-seek-hover-preview-time');
+          const url = mainVideo.currentSrc || mainVideo.src;
+          if (!url) return;
+          panel.style.left = Math.max(54,Math.min(rect.width-54,event.clientX-rect.left)) + 'px';
+          time.textContent = format(seconds);
+          panel.classList.add('is-visible');
+          if (hideTimer) { clearTimeout(hideTimer); hideTimer = 0; }
+          if (previewVideo.dataset.source !== url) {
+            previewVideo.pause();
+            previewVideo.dataset.source = url;
+            previewVideo.src = url;
+            previewVideo.load();
+            previewVideo.dataset.pendingTime = String(seconds);
+          } else {
+            previewVideo.dataset.pendingTime = String(seconds);
+          }
+          const seekToPending = () => {
+            if (!Number.isFinite(previewVideo.duration) || previewVideo.duration <= 0) return;
+            const target = Math.max(0,Math.min(previewVideo.duration-0.08,Number(previewVideo.dataset.pendingTime)||0));
+            if (Math.abs(previewVideo.currentTime-target) < 0.2 && previewVideo.readyState >= 2) return;
+            try { previewVideo.currentTime = target; } catch (_) {}
+          };
+          if (previewVideo.readyState >= 1) {
+            if (previewVideo._cvSeekTimer) clearTimeout(previewVideo._cvSeekTimer);
+            previewVideo._cvSeekTimer = setTimeout(seekToPending, event.pointerType === 'touch' ? 90 : 140);
+          } else if (!previewVideo._cvMetadataBound) {
+            previewVideo._cvMetadataBound = true;
+            previewVideo.addEventListener('loadedmetadata', () => {
+              if (previewVideo._cvSeekTimer) clearTimeout(previewVideo._cvSeekTimer);
+              previewVideo._cvSeekTimer = setTimeout(seekToPending, 40);
+            });
+          }
+        };
+        document.addEventListener('pointermove', updatePreview, {passive:true});
+        document.addEventListener('pointerdown', updatePreview, {passive:true});
+        document.addEventListener('pointerup', event => {
+          if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
+          const wrap = event.target.closest?.('.cv-player-seek-wrap');
+          if (!wrap) return;
+          if (hideTimer) clearTimeout(hideTimer);
+          hideTimer = setTimeout(() => wrap.querySelector('.cv-seek-hover-preview')?.classList.remove('is-visible'), 700);
+        }, {passive:true});
+        document.addEventListener('pointerout', event => {
+          const wrap = event.target.closest?.('.cv-player-seek-wrap');
+          if (!wrap || wrap.contains(event.relatedTarget) || event.pointerType === 'touch') return;
+          wrap.querySelector('.cv-seek-hover-preview')?.classList.remove('is-visible');
+        }, {passive:true});
+        document.addEventListener('focusout', event => {
+          const wrap = event.target.closest?.('.cv-player-seek-wrap');
+          if (wrap) wrap.querySelector('.cv-seek-hover-preview')?.classList.remove('is-visible');
+        }, true);
+      })();
+    </script>
 
     <style id="cv-personalized-mobile-landscape-single-card">@media (max-width:900px) and (orientation:landscape) and (max-height:520px){#home-personalized-section .home-personalized-heading{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;height:auto!important;min-height:0!important;padding-bottom:10px!important}#home-personalized-section .home-personalized-heading>div:first-child{flex:1 1 auto!important;min-width:0!important}#home-personalized-section .home-personalized-heading h2{font-size:clamp(14px,2vw,18px)!important;line-height:1.15!important}#home-personalized-section .home-personalized-heading>div:first-child>p:last-child{display:none!important}#home-personalized-section .home-personalized-toolbar{display:flex!important;flex:0 1 auto!important;min-width:0!important;width:auto!important;justify-content:flex-end!important;gap:6px!important}#home-personalized-section .home-personalized-modes{display:flex!important;flex:0 1 auto!important;min-width:0!important;max-width:min(54vw,440px)!important;overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;scrollbar-width:none!important}#home-personalized-section .home-personalized-modes::-webkit-scrollbar{display:none!important}#home-personalized-section .home-personalized-modes button{flex:0 0 auto!important;min-height:30px!important;padding:5px 8px!important;font-size:8px!important}#home-personalized-section .home-personalized-count{display:none!important}#home-personalized-section .home-personalized-refresh{flex:0 0 auto!important;min-height:30px!important;padding:5px 8px!important;font-size:9px!important}#home-personalized-section .home-personalized-showcase{display:block!important;width:100%!important;height:auto!important;min-height:0!important;margin-top:0!important}#home-personalized-section .home-personalized-alternatives,#home-personalized-section .home-personalized-feature{display:none!important}#home-personalized-section .home-personalized-mobile-card{display:block!important;position:relative!important;isolation:isolate!important;overflow:hidden!important;width:100%!important;height:auto!important;min-width:0!important;min-height:0!important;border:1px solid rgba(221,181,104,.48)!important;border-radius:13px!important;background:#10141c!important;box-shadow:0 12px 28px rgba(0,0,0,.28),0 0 18px rgba(221,181,104,.07)!important}#home-personalized-section .home-personalized-mobile-backdrop{position:absolute!important;inset:0!important;z-index:0!important;height:auto!important;overflow:hidden!important}#home-personalized-section .home-personalized-mobile-backdrop img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 35%!important;opacity:.36!important;filter:blur(1px) saturate(.8)!important;transform:scale(1.04)!important}#home-personalized-section .home-personalized-mobile-backdrop>div{position:absolute!important;inset:0!important;background:linear-gradient(90deg,rgba(8,11,17,.97),rgba(8,11,17,.85) 58%,rgba(8,11,17,.62))!important}#home-personalized-section .home-personalized-mobile-content{position:relative!important;z-index:1!important;display:grid!important;grid-template-columns:clamp(72px,10vw,90px) minmax(0,1fr)!important;gap:clamp(10px,1.7vw,15px)!important;align-items:center!important;width:100%!important;min-height:180px!important;height:auto!important;margin:0!important;padding:12px 14px!important;box-sizing:border-box!important}#home-personalized-section .home-personalized-mobile-poster{width:100%!important;max-width:90px!important;aspect-ratio:2/3!important;align-self:center!important}#home-personalized-section .home-personalized-mobile-details{min-width:0!important;padding:0!important;color:#f8fafc!important}#home-personalized-section .home-personalized-mobile-kicker{display:flex!important;flex-wrap:wrap!important;gap:4px 8px!important;font-size:8px!important;line-height:1.3!important}#home-personalized-section .home-personalized-mobile-details h3{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;margin-top:4px!important;font-size:clamp(16px,2.2vw,20px)!important;line-height:1.12!important;overflow-wrap:anywhere!important}#home-personalized-section .home-personalized-mobile-meta{gap:8px!important;margin-top:6px!important;font-size:9px!important}#home-personalized-section .home-personalized-mobile-details p{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;margin-top:6px!important;font-size:9px!important;line-height:1.4!important}#home-personalized-section .home-personalized-mobile-actions{display:flex!important;flex-wrap:wrap!important;gap:6px!important;margin-top:8px!important}#home-personalized-section .home-personalized-mobile-actions button{flex:0 1 auto!important;min-width:0!important;min-height:30px!important;padding:6px 9px!important;font-size:9px!important;white-space:nowrap!important}}</style>
 
