@@ -21085,6 +21085,90 @@
       "tmdbVoteCount": 566,
       "seasons": 3,
       "episodes": 24
+    },
+    {
+      "addedAt": "2026-11-24T14:49:34.852Z",
+      "id": "cv-1795531774852",
+      "title": "Ceza Kanunu",
+      "type": "tv",
+      "year": "2023",
+      "rating": "7.6",
+      "genre": "Dram",
+      "category": "Dram / Suç / Aksiyon & Macera",
+      "duration": "",
+      "country": "Brazil",
+      "director": "Heitor Dhalia, Pedro Morelli",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 235924,
+      "imdbId": "tt22459586",
+      "image": "https://image.tmdb.org/t/p/w500/cqg7OXDPSWSCsfAs9BuBp0r7kO3.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/x7J7YydPEnTZm6JoTqbKOYkVb8e.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Federal ajanların sıra dışı bir soyguna ilişkin soruşturmanın şifresini çözmek için yaratıcılıklarını sergilemeleri gerekir.",
+      "cast": [
+        "Maeve Jinkings",
+        "Rômulo Braga",
+        "Thomás Aquino",
+        "Alex Nader",
+        "Daniel Blanco"
+      ],
+      "tmdbTitle": "Ceza Kanunu",
+      "tmdbOriginalTitle": "DNA DO CRIME",
+      "tmdbReleaseDate": "2023-11-14",
+      "tmdbGenres": "Dram / Suç / Aksiyon & Macera",
+      "tmdbRuntime": "",
+      "tmdbCountries": "Brazil",
+      "tmdbDirector": "Heitor Dhalia, Pedro Morelli",
+      "tmdbCast": [
+        {
+          "id": 1016242,
+          "name": "Maeve Jinkings",
+          "character": "Suellen",
+          "profile": "https://image.tmdb.org/t/p/w185/s1pZd8CgUIll9ALVcgtUJhsB8uF.jpg",
+          "order": 0
+        },
+        {
+          "id": 1187238,
+          "name": "Rômulo Braga",
+          "character": "Benício",
+          "profile": "https://image.tmdb.org/t/p/w185/pN89wAhp0OZ6bL3yTyMm8iPUwBy.jpg",
+          "order": 1
+        },
+        {
+          "id": 2346576,
+          "name": "Thomás Aquino",
+          "character": "Sem Alma",
+          "profile": "https://image.tmdb.org/t/p/w185/cTtrEWKpRijXbnSsGzof0E6XBnP.jpg",
+          "order": 2
+        },
+        {
+          "id": 2014729,
+          "name": "Alex Nader",
+          "character": "Isaac",
+          "profile": "https://image.tmdb.org/t/p/w185/yF23drmg5wFlLFsw0JSyiymSgJD.jpg",
+          "order": 3
+        },
+        {
+          "id": 2091699,
+          "name": "Daniel Blanco",
+          "character": "Gabriel",
+          "profile": "https://image.tmdb.org/t/p/w185/pMQaQRTSfppd0XgzxBA4GrOX4RE.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Federal ajanların sıra dışı bir soyguna ilişkin soruşturmanın şifresini çözmek için yaratıcılıklarını sergilemeleri gerekir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/cqg7OXDPSWSCsfAs9BuBp0r7kO3.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/x7J7YydPEnTZm6JoTqbKOYkVb8e.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt22459586",
+      "tmdbRating": "7.6",
+      "tmdbVoteCount": 138,
+      "seasons": 2,
+      "episodes": 16
     }
   ],
   "collections": [],
