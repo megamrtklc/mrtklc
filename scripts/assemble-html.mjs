@@ -9,6 +9,10 @@ const shellPath = 'src/templates/index-shell.html';
 const partialPaths = {
   HOME: 'src/templates/homepage.html',
   HOME_CATALOG_CONTENT: 'src/templates/home-catalog-content.html',
+  HOME_CONTINUE_CONTENT: 'src/templates/home-continue-content.html',
+  HOME_WATCHLIST_CONTENT: 'src/templates/home-watchlist-content.html',
+  HOME_WATCHED_CONTENT: 'src/templates/home-watched-content.html',
+  HOME_NEW_ARRIVALS_CONTENT: 'src/templates/home-new-arrivals-content.html',
   WATCH: 'src/templates/watch-page.html',
   WATCH_LEFT: 'src/templates/watch-left-column.html',
   WATCH_RIGHT: 'src/templates/watch-right-column.html',
@@ -64,6 +68,31 @@ const homeCatalogPlaceholder = `
                 `.trim();
 const homeTemplate = partials.HOME.replace(homeCatalogMarker, homeCatalogPlaceholder);
 await writeFile('runtime-pages/home-catalog.html', partials.HOME_CATALOG_CONTENT.trimEnd());
+
+// Ana sayfanın kişisel rafları da görünür alana yaklaşınca ayrı HTML dosyalarından yüklenir.
+const homeFragments = [
+  {
+    "slug": "continue",
+    "partial": "HOME_CONTINUE_CONTENT"
+  },
+  {
+    "slug": "watchlist",
+    "partial": "HOME_WATCHLIST_CONTENT"
+  },
+  {
+    "slug": "watched",
+    "partial": "HOME_WATCHED_CONTENT"
+  },
+  {
+    "slug": "new-arrivals",
+    "partial": "HOME_NEW_ARRIVALS_CONTENT"
+  }
+];
+for (const fragment of homeFragments) {
+  const marker = `<!-- PERDE_TEMPLATE:${fragment.partial} -->`;
+  if (partials.HOME.split(marker).length - 1 !== 1) throw new Error(`Ana sayfa parçası tam bir kez bulunmalı: ${marker}`);
+  await writeFile(`runtime-pages/home-${fragment.slug}.html`, partials[fragment.partial].trimEnd());
+}
 for (const [key, config] of Object.entries(runtimePages)) {
   const pageHtml = replacePartialMarkers(partials[config.marker], config.nested, `runtime page ${key}`);
   if (/<!-- PERDE_TEMPLATE:[A-Z0-9_-]+ -->/.test(pageHtml)) throw new Error(`Runtime sayfada çözülmemiş şablon işareti kaldı: ${key}`);
