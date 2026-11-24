@@ -1153,7 +1153,14 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
             </div>
         </template>
 
-        <!-- ==================== WATCH / DETAIL PAGE ==================== -->
+        <!--
+  Perde İzleme / Yapım Detay görünümü
+  -----------------------------------
+  currentPage === 'watch' olduğunda gösterilen oynatıcı, izleme kontrolleri,
+  yapım bilgileri, oyuncu kadrosu ve benzer yapımlar alanını içerir.
+  Kök Alpine uygulamasının kapsamını kullanır; tek başına çalıştırılmaz.
+-->
+<!-- ==================== WATCH / DETAIL PAGE ==================== -->
         <template x-if="currentPage === 'watch'">
             <div class="w-full px-6 sm:px-12 pt-2 space-y-6 pb-16" x-data="{ trailerOpen: false }" @keydown.escape.window="cinemaMode = false; document.body.style.overflow = ''; trailerOpen = false" @keydown.window="handlePlayerKeydown($event)">
                 <div x-show="cinemaMode" x-transition.opacity @click="toggleCinemaMode()" class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-md"></div>
