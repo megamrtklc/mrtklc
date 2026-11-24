@@ -1295,65 +1295,29 @@
                     const eps = this.getEpisodesForSeason(this.selectedSeason);
                     return Math.ceil(eps.length / 8);
                 },
-
-                getEpisodeTracking() {
-                    const all = safeStorageRead('cine_episode_tracking_v1', {});
-                    if (!all || typeof all !== 'object' || Array.isArray(all)) return { watched: {}, last: null };
-                    const key = String(this.selectedItem?.id || '');
-                    const tracking = all[key];
-                    return tracking && typeof tracking === 'object' && !Array.isArray(tracking) ? { watched: tracking.watched && typeof tracking.watched === 'object' ? tracking.watched : {}, last: tracking.last ?? null } : { watched: {}, last: null };
+                getEpisodeTracking(...args) {
+                    return window.PerdePlayerControls?.getEpisodeTracking.apply(this, args);
                 },
-
-                saveEpisodeTracking(tracking) {
-                    const stored = safeStorageRead('cine_episode_tracking_v1', {});
-                    const all = stored && typeof stored === 'object' && !Array.isArray(stored) ? stored : {};
-                    const key = String(this.selectedItem?.id || '');
-                    if (!tracking || typeof tracking !== 'object' || Array.isArray(tracking)) return false;
-                    all[key] = tracking;
-                    return safeStorageWrite('cine_episode_tracking_v1', all);
+                saveEpisodeTracking(...args) {
+                    return window.PerdePlayerControls?.saveEpisodeTracking.apply(this, args);
                 },
-
-                isEpisodeWatched(seasonNum, epNum) {
-                    const tracking = this.getEpisodeTracking();
-                    return (tracking.watched?.[seasonNum] || []).includes(Number(epNum));
+                isEpisodeWatched(...args) {
+                    return window.PerdePlayerControls?.isEpisodeWatched.apply(this, args);
                 },
-
-                getWatchedEpisodeCount(seasonNum) {
-                    return (this.getEpisodeTracking().watched?.[seasonNum] || []).length;
+                getWatchedEpisodeCount(...args) {
+                    return window.PerdePlayerControls?.getWatchedEpisodeCount.apply(this, args);
                 },
-
-                getSeasonProgress(seasonNum) {
-                    const total = this.getEpisodesForSeason(seasonNum).length;
-                    return total ? Math.round(this.getWatchedEpisodeCount(seasonNum) / total * 100) : 0;
+                getSeasonProgress(...args) {
+                    return window.PerdePlayerControls?.getSeasonProgress.apply(this, args);
                 },
-
-                getLastWatchedEpisode() {
-                    return this.getEpisodeTracking().last;
+                getLastWatchedEpisode(...args) {
+                    return window.PerdePlayerControls?.getLastWatchedEpisode.apply(this, args);
                 },
-
-                toggleEpisodeWatched(epNum) {
-                    const tracking = this.getEpisodeTracking();
-                    if (!tracking.watched) tracking.watched = {};
-                    const seasonKey = String(this.selectedSeason);
-                    const watched = tracking.watched[seasonKey] || [];
-                    const index = watched.indexOf(Number(epNum));
-                    if (index >= 0) {
-                        watched.splice(index, 1);
-                        if (tracking.last?.season === Number(this.selectedSeason) && tracking.last?.episode === Number(epNum)) tracking.last = null;
-                    } else {
-                        watched.push(Number(epNum));
-                        tracking.last = { season: Number(this.selectedSeason), episode: Number(epNum), updatedAt: Date.now() };
-                    }
-                    tracking.watched[seasonKey] = watched;
-                    this.saveEpisodeTracking(tracking);
+                toggleEpisodeWatched(...args) {
+                    return window.PerdePlayerControls?.toggleEpisodeWatched.apply(this, args);
                 },
-
-                continueLastWatchedEpisode() {
-                    const last = this.getLastWatchedEpisode();
-                    if (!last) return;
-                    this.selectedSeason = Number(last.season);
-                    this.selectedEpisode = Number(last.episode);
-                    this.currentEpisodePage = Math.floor((Number(last.episode) - 1) / 8) + 1;
+                continueLastWatchedEpisode(...args) {
+                    return window.PerdePlayerControls?.continueLastWatchedEpisode.apply(this, args);
                 },
 
                 goToNextEpisode(...args) {
