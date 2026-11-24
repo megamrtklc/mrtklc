@@ -1442,23 +1442,16 @@
                     return window.PerdePlayerControls?.setPlaybackRate.call(this, rate);
                 },
 
-                applyPlaybackRate() {
-                    const video = document.getElementById('customVideoPlayer');
-                    if (video) video.playbackRate = this.playbackRate || 1;
+                applyPlaybackRate(...args) {
+                    return window.PerdePlayerControls?.applyPlaybackRate.apply(this, args);
                 },
 
-                toggleCaptions() {
-                    const tracks = document.getElementById('customVideoPlayer')?.textTracks;
-                    if (!tracks?.length) return;
-                    const showing = Array.from(tracks).findIndex(track => track.mode === 'showing');
-                    Array.from(tracks).forEach((track, index) => { track.mode = index === (showing < 0 ? 0 : -1) ? 'showing' : 'disabled'; });
+                toggleCaptions(...args) {
+                    return window.PerdePlayerControls?.toggleCaptions.apply(this, args);
                 },
 
-                cycleAudioTrack() {
-                    const tracks = document.getElementById('customVideoPlayer')?.audioTracks;
-                    if (!tracks?.length) return;
-                    let active = Array.from(tracks).findIndex(track => track.enabled);
-                    Array.from(tracks).forEach((track, index) => { track.enabled = index === ((active + 1) % tracks.length); });
+                cycleAudioTrack(...args) {
+                    return window.PerdePlayerControls?.cycleAudioTrack.apply(this, args);
                 },
 
                 handlePlayerKeydown(event) {
@@ -1477,19 +1470,12 @@
                     }
                 },
 
-                schedulePlayerSideControls() {
-                    this.playerSideControlsVisible = false;
-                    if (this.playerSideControlsTimer) clearTimeout(this.playerSideControlsTimer);
-                    this.playerSideControlsTimer = setTimeout(() => {
-                        this.playerSideControlsVisible = true;
-                        this.playerSideControlsTimer = null;
-                    }, 3000);
+                schedulePlayerSideControls(...args) {
+                    return window.PerdePlayerControls?.schedulePlayerSideControls.apply(this, args);
                 },
 
-                revealPlayerSideControls() {
-                    if (this.playerSideControlsTimer) clearTimeout(this.playerSideControlsTimer);
-                    this.playerSideControlsTimer = null;
-                    this.playerSideControlsVisible = true;
+                revealPlayerSideControls(...args) {
+                    return window.PerdePlayerControls?.revealPlayerSideControls.apply(this, args);
                 },
 
                 showPlayerControls() {
@@ -1589,52 +1575,24 @@
                     return window.PerdePlayerControls?.handleDoubleTapSeek.call(this, direction, event);
                 },
 
-                skipIntro() {
-                    const video = document.getElementById('customVideoPlayer');
-                    if (!video) return;
-                    video.currentTime += 85;
+                skipIntro(...args) {
+                    return window.PerdePlayerControls?.skipIntro.apply(this, args);
                 },
 
-                setVideoBrightness(value) {
-                    this.videoBrightness = Math.max(0.5, Math.min(1.5, Number(value) || 1));
+                setVideoBrightness(...args) {
+                    return window.PerdePlayerControls?.setVideoBrightness.apply(this, args);
                 },
 
-                setVideoVolume(value) {
-                    const video = document.getElementById('customVideoPlayer');
-                    const nextVolume = Math.max(0, Math.min(1, Number(value)));
-                    this.volumeLevel = nextVolume;
-                    if (nextVolume > 0) this.previousVolumeLevel = nextVolume;
-                    if (video) {
-                        video.volume = nextVolume;
-                        video.muted = nextVolume === 0;
-                    }
-                    this.isMuted = nextVolume === 0;
+                setVideoVolume(...args) {
+                    return window.PerdePlayerControls?.setVideoVolume.apply(this, args);
                 },
 
-                toggleMute() {
-                    const video = document.getElementById('customVideoPlayer');
-                    if (!video) return;
-                    if (video.muted || this.volumeLevel === 0) {
-                        const restoredVolume = this.previousVolumeLevel || 0.5;
-                        this.volumeLevel = restoredVolume;
-                        video.volume = restoredVolume;
-                        video.muted = false;
-                        this.isMuted = false;
-                    } else {
-                        this.previousVolumeLevel = this.volumeLevel;
-                        video.muted = true;
-                        this.isMuted = true;
-                    }
+                toggleMute(...args) {
+                    return window.PerdePlayerControls?.toggleMute.apply(this, args);
                 },
 
-                toggleFullscreen() {
-                    const playerContainer = document.getElementById('customVideoPlayer')?.parentElement;
-                    if (!playerContainer) return;
-                    if (!document.fullscreenElement) {
-                        playerContainer.requestFullscreen();
-                    } else {
-                        document.exitFullscreen();
-                    }
+                toggleFullscreen(...args) {
+                    return window.PerdePlayerControls?.toggleFullscreen.apply(this, args);
                 },
 
                 formatTime(seconds) {
