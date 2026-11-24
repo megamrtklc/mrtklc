@@ -957,7 +957,7 @@
                                     if (!section.isConnected) return;
                                     delete section.dataset.homeFragmentLoading;
                                     console.error('[Perde home fragment]', key, error);
-                                    section.innerHTML = '<div class="home-catalog-fragment-error"><p>Katalog bölümü şu anda yüklenemedi.</p><button type="button" data-home-fragment-retry>Yeniden dene</button></div>';
+                                    section.innerHTML = '<div class="home-catalog-fragment-error"><p>Bu ana sayfa bölümü şu anda yüklenemedi.</p><button type="button" data-home-fragment-retry>Yeniden dene</button></div>';
                                     section.querySelector('[data-home-fragment-retry]')?.addEventListener('click', () => {
                                         section.innerHTML = fragmentFallbacks.get(section) || '';
                                         hydrateSection(section);
