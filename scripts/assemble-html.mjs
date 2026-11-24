@@ -66,33 +66,30 @@ const homeCatalogPlaceholder = `
                         <div class="home-catalog-loading-grid">${Array.from({ length: 8 }, () => '<span class="home-catalog-loading-card"></span>').join('')}</div>
                     </div>
                 `.trim();
-const homeTemplate = partials.HOME.replace(homeCatalogMarker, homeCatalogPlaceholder);
-await writeFile('runtime-pages/home-catalog.html', partials.HOME_CATALOG_CONTENT.trimEnd());
 
 // Ana sayfanın kişisel rafları da görünür alana yaklaşınca ayrı HTML dosyalarından yüklenir.
 const homeFragments = [
-  {
-    "slug": "continue",
-    "partial": "HOME_CONTINUE_CONTENT"
-  },
-  {
-    "slug": "watchlist",
-    "partial": "HOME_WATCHLIST_CONTENT"
-  },
-  {
-    "slug": "watched",
-    "partial": "HOME_WATCHED_CONTENT"
-  },
-  {
-    "slug": "new-arrivals",
-    "partial": "HOME_NEW_ARRIVALS_CONTENT"
-  }
+  { slug: 'continue', partial: 'HOME_CONTINUE_CONTENT', label: 'İzlemeye Devam Et' },
+  { slug: 'watchlist', partial: 'HOME_WATCHLIST_CONTENT', label: 'İzleme Listem' },
+  { slug: 'watched', partial: 'HOME_WATCHED_CONTENT', label: 'İzlediklerim' },
+  { slug: 'new-arrivals', partial: 'HOME_NEW_ARRIVALS_CONTENT', label: 'Son Eklenenler' }
 ];
+let homeTemplate = partials.HOME.replace(homeCatalogMarker, homeCatalogPlaceholder);
 for (const fragment of homeFragments) {
   const marker = `<!-- PERDE_TEMPLATE:${fragment.partial} -->`;
   if (partials.HOME.split(marker).length - 1 !== 1) throw new Error(`Ana sayfa parçası tam bir kez bulunmalı: ${marker}`);
+  const placeholder = `
+                    <!-- ${fragment.label}: görünür alana yaklaşınca ayrı dosyadan yüklenir. -->
+                    <div class="home-catalog-loading" role="status" aria-live="polite" aria-label="${fragment.label} yükleniyor">
+                        <div class="home-catalog-loading-heading"><span></span><span></span></div>
+                        <div class="home-catalog-loading-grid">${Array.from({ length: 4 }, () => '<span class="home-catalog-loading-card"></span>').join('')}</div>
+                    </div>
+                `.trim();
+  homeTemplate = homeTemplate.replace(marker, placeholder);
   await writeFile(`runtime-pages/home-${fragment.slug}.html`, partials[fragment.partial].trimEnd());
 }
+await writeFile('runtime-pages/home-catalog.html', partials.HOME_CATALOG_CONTENT.trimEnd());
+
 for (const [key, config] of Object.entries(runtimePages)) {
   const pageHtml = replacePartialMarkers(partials[config.marker], config.nested, `runtime page ${key}`);
   if (/<!-- PERDE_TEMPLATE:[A-Z0-9_-]+ -->/.test(pageHtml)) throw new Error(`Runtime sayfada çözülmemiş şablon işareti kaldı: ${key}`);
