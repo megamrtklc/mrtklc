@@ -7,7 +7,7 @@
 import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 
-const [shell, homepage, watchPage, watchLeftColumn, watchRightColumn, watchTrailerModal, actorDirectorPage, explorePage, franchisesPage, watchlistPage, libraryPage, statsPage, videoLinksPage, header, searchOverlay, footer, output] = await Promise.all([
+const [shell, homepage, watchPage, watchLeftColumn, watchRightColumn, watchTrailerModal, actorDirectorPage, explorePage, franchisesPage, watchlistPage, watchlistConfirmModal, libraryPage, statsPage, videoLinksPage, header, searchOverlay, footer, output] = await Promise.all([
   readFile('src/templates/index-shell.html', 'utf8'),
   readFile('src/templates/homepage.html', 'utf8'),
   readFile('src/templates/watch-page.html', 'utf8'),
@@ -18,6 +18,7 @@ const [shell, homepage, watchPage, watchLeftColumn, watchRightColumn, watchTrail
   readFile('src/templates/explore-page.html', 'utf8'),
   readFile('src/templates/franchises-page.html', 'utf8'),
   readFile('src/templates/watchlist-page.html', 'utf8'),
+  readFile('src/templates/watchlist-confirm-modal.html', 'utf8'),
   readFile('src/templates/library-page.html', 'utf8'),
   readFile('src/templates/stats-page.html', 'utf8'),
   readFile('src/templates/video-links-page.html', 'utf8'),
@@ -38,6 +39,7 @@ assert.equal((shell.match(/<!-- PERDE_TEMPLATE:EXPLORE -->/g) || []).length, 1,
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:FRANCHISES -->/g) || []).length, 1,
   'Kaynak kabukta FRANCHISES işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:WATCHLIST -->/g) || []).length, 1, 'Kaynak kabukta WATCHLIST işareti tam bir kez bulunmalı.');
+assert.equal((shell.match(/<!-- PERDE_TEMPLATE:WATCHLIST_CONFIRM_MODAL -->/g) || []).length, 1, 'Kaynak kabukta WATCHLIST_CONFIRM_MODAL işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:LIBRARY -->/g) || []).length, 1, 'Kaynak kabukta LIBRARY işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:STATS -->/g) || []).length, 1, 'Kaynak kabukta STATS işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:VIDEO_LINKS -->/g) || []).length, 1, 'Kaynak kabukta VIDEO_LINKS işareti tam bir kez bulunmalı.');
@@ -47,6 +49,11 @@ assert.match(libraryPage, /PERSONAL WATCH CENTER/, 'Kütüphane partial dosyası
 assert.doesNotMatch(libraryPage, /WATCHING STATISTICS PAGE/, 'Kütüphane partial dosyası izleme istatistikleri sayfasını kapsamamalı.');
 assert.match(statsPage, /WATCHING STATISTICS PAGE/, 'İstatistik partial dosyası izleme istatistikleri sayfasını içermeli.');
 assert.match(statsPage, /currentPage === 'stats'/, 'İstatistik partial dosyası stats sayfa koşulunu içermeli.');
+assert.match(statsPage, /Kütüphane dağılımı/, 'İstatistik partial dosyası dağılım bölümünü de içermeli.');
+assert.match(statsPage, /viewingStats\.topGenres/, 'İstatistik partial dosyası tür dağılımını içermeli.');
+assert.match(statsPage, /<\/template>\s*$/, 'İstatistik partial dosyası tam kapanmış olmalı.');
+assert.match(watchlistConfirmModal, /watchlist-confirm\.window/, 'İzleme listesi onay penceresi olay dinleyicisini içermeli.');
+assert.match(watchlistConfirmModal, /watchlist-confirm-title/, 'İzleme listesi onay penceresi erişilebilir başlığı içermeli.');
 assert.doesNotMatch(statsPage, /CineVerse Responsive Footer/, 'İstatistik partial dosyası footer alanını kapsamamalı.');
 assert.match(videoLinksPage, /TEMPORARY VIDEO LINKS PAGE/, 'Video bağlantıları partial dosyası ilgili sayfayı içermeli.');
 assert.match(videoLinksPage, /currentPage === 'video-links'/, 'Video bağlantıları partial dosyası sayfa koşulunu içermeli.');
@@ -110,6 +117,7 @@ assert.match(output, /<template x-if="currentPage === 'explore'">/,
   'Üretilmiş index keşfet Alpine görünümünü içermeli.');
 
 assert.match(output, /<template x-if="currentPage === 'watchlist'">/, 'Üretilmiş index izleme listesi Alpine görünümünü içermeli.');
+assert.match(output, /watchlist-confirm\.window/, 'Üretilmiş index izleme listesi onay penceresini içermeli.');
 assert.match(output, /<template x-if="currentPage === 'library'">/, 'Üretilmiş index kişisel kütüphane Alpine görünümünü içermeli.');
 assert.match(output, /<template x-if="currentPage === 'stats'">/, 'Üretilmiş index istatistik Alpine görünümünü içermeli.');
 assert.match(output, /<template x-if="currentPage === 'video-links'">/, 'Üretilmiş index video bağlantıları Alpine görünümünü içermeli.');
