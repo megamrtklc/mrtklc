@@ -20869,6 +20869,130 @@
       "tmdbVoteCount": 72,
       "seasons": 2,
       "episodes": 14
+    },
+    {
+      "addedAt": "2026-11-24T14:47:58.896Z",
+      "id": "cv-1795531678896",
+      "title": "Maceracılar",
+      "type": "tv",
+      "year": "2024",
+      "rating": "7.3",
+      "genre": "Aksiyon & Macera",
+      "category": "Aksiyon & Macera",
+      "duration": "",
+      "country": "",
+      "director": "Pablo Tébar",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 241269,
+      "imdbId": "tt11262142",
+      "image": "https://image.tmdb.org/t/p/w500/9Sn1qNZJA0RLP73n6RwHKbUkrIW.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/atPVFcn6Wfp6nv4T6BxQwAAxKRV.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Yetenekli ancak uyumsuz tiplerden oluşan bir çete, gizli bir Maya hazinesini bulmak için maceraya atılır. Stratejileri belirsiz, araları pek iyi değil. Ama zeki oldukları kesin.",
+      "cast": [
+        "Alfonso Dosal",
+        "Ester Expósito",
+        "Mabel Cadena",
+        "Juan Pablo Medina",
+        "Ximena Lamadrid",
+        "Juan Pablo Fuentes",
+        "Andrea Chaparro",
+        "Nicolás Furtado",
+        "Pol Hermoso",
+        "Luis Vegas"
+      ],
+      "tmdbTitle": "Maceracılar",
+      "tmdbOriginalTitle": "Bandidos",
+      "tmdbReleaseDate": "2024-03-13",
+      "tmdbGenres": "Aksiyon & Macera",
+      "tmdbRuntime": "",
+      "tmdbCountries": "",
+      "tmdbDirector": "Pablo Tébar",
+      "tmdbCast": [
+        {
+          "id": 1149129,
+          "name": "Alfonso Dosal",
+          "character": "Miguel Morales",
+          "profile": "https://image.tmdb.org/t/p/w185/rU5OxxV1lsJuhUM1n5TSWdZSb8S.jpg",
+          "order": 0
+        },
+        {
+          "id": 2025252,
+          "name": "Ester Expósito",
+          "character": "Liliana \"Lilí\" Gómez Espinoza / Carlota Muñoz Hernández",
+          "profile": "https://image.tmdb.org/t/p/w185/xoktRKmZQbNokVRIk9Ff1XJXMEg.jpg",
+          "order": 1
+        },
+        {
+          "id": 2213811,
+          "name": "Mabel Cadena",
+          "character": "Inés Reyes Santiago",
+          "profile": "https://image.tmdb.org/t/p/w185/z0kAf1LBESLPj4zUaXSngKH7cwg.jpg",
+          "order": 2
+        },
+        {
+          "id": 1071844,
+          "name": "Juan Pablo Medina",
+          "character": "Wilson Morales",
+          "profile": "https://image.tmdb.org/t/p/w185/i5p0CRkTVePhDZk9lhOfYrIESap.jpg",
+          "order": 3
+        },
+        {
+          "id": 2747742,
+          "name": "Ximena Lamadrid",
+          "character": "Regina Valdés",
+          "profile": "https://image.tmdb.org/t/p/w185/6DvaoPkKnNprnuzsq6gEaH3TT2E.jpg",
+          "order": 4
+        },
+        {
+          "id": 4244398,
+          "name": "Juan Pablo Fuentes",
+          "character": "Lucas Montessori",
+          "profile": "https://image.tmdb.org/t/p/w185/eGEgDv4aOfSgwKT6a1YxbNwpqdG.jpg",
+          "order": 5
+        },
+        {
+          "id": 3105254,
+          "name": "Andrea Chaparro",
+          "character": "Citlalí Ekei Sama",
+          "profile": "https://image.tmdb.org/t/p/w185/hY4gbGUKMvGTwGjf8P16GFqAcPB.jpg",
+          "order": 6
+        },
+        {
+          "id": 1263585,
+          "name": "Nicolás Furtado",
+          "character": "Octavio",
+          "profile": "https://image.tmdb.org/t/p/w185/vouFucXEQuGXMXPzfqnShMU947W.jpg",
+          "order": 8
+        },
+        {
+          "id": 1589570,
+          "name": "Pol Hermoso",
+          "character": "Leo Bandolis",
+          "profile": "https://image.tmdb.org/t/p/w185/80mZzFLTSmWn3MUbVgD6n5woZzu.jpg",
+          "order": 9
+        },
+        {
+          "id": 3524224,
+          "name": "Luis Vegas",
+          "character": "Mano",
+          "profile": "https://image.tmdb.org/t/p/w185/myx2Bgq4HD2xNMEIKt8weFG18jI.jpg",
+          "order": 10
+        }
+      ],
+      "tmdbOverview": "Yetenekli ancak uyumsuz tiplerden oluşan bir çete, gizli bir Maya hazinesini bulmak için maceraya atılır. Stratejileri belirsiz, araları pek iyi değil. Ama zeki oldukları kesin.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/9Sn1qNZJA0RLP73n6RwHKbUkrIW.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/atPVFcn6Wfp6nv4T6BxQwAAxKRV.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt11262142",
+      "tmdbRating": "7.3",
+      "tmdbVoteCount": 157,
+      "seasons": 2,
+      "episodes": 14
     }
   ],
   "collections": [],
