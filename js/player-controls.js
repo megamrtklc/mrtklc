@@ -129,4 +129,31 @@ toggleFullscreen() {
                         this.showPlayerControls();
                     }
                 }
+,
+    getSelectedEpisodeWatchUrl() {
+                    if (!this.selectedItem || this.selectedItem.type !== 'tv') return '';
+                    const key = Number(this.selectedSeason) + ':' + Number(this.selectedEpisode);
+                    const url = this.selectedItem.episodeWatchUrls?.[key];
+                    return this.isDirectVideoUrl(url) ? url : '';
+                },
+    handleSeekTap(direction, event) {
+                    const now = Date.now();
+                    const point = event ? { x: event.clientX, y: event.clientY } : { x: 0, y: 0 };
+                    const previous = this.lastSeekTap;
+                    if (previous && previous.direction === direction && now - previous.time <= 360 &&
+                        Math.hypot(point.x - previous.x, point.y - previous.y) <= 64) {
+                        if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
+                        this.lastSeekTapTimer = null;
+                        this.lastSeekTap = null;
+                        this.handleDoubleTapSeek(direction, event);
+                        return;
+                    }
+                    this.lastSeekTap = { direction, time: now, x: point.x, y: point.y };
+                    if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
+                    this.lastSeekTapTimer = setTimeout(() => {
+                        this.lastSeekTap = null;
+                        this.lastSeekTapTimer = null;
+                    }, 380);
+                    this.showPlayerControls();
+                }
 };})();
