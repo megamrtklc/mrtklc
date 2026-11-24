@@ -20993,6 +20993,98 @@
       "tmdbVoteCount": 157,
       "seasons": 2,
       "episodes": 14
+    },
+    {
+      "addedAt": "2026-11-24T14:48:54.284Z",
+      "id": "cv-1795531734284",
+      "title": "Sky Rojo",
+      "type": "tv",
+      "year": "2021",
+      "rating": "7.5",
+      "genre": "Aksiyon & Macera",
+      "category": "Aksiyon & Macera / Suç / Dram",
+      "duration": "26 dk",
+      "country": "Spain",
+      "director": "Esther Martínez Lobato, Álex Pina",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 117023,
+      "imdbId": "tt8690776",
+      "image": "https://image.tmdb.org/t/p/w500/uTFX9V2dct1nKjG6zhNiThPm8Tp.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/jx8IkywRO8uLAz4r2C5rxGJHf4D.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=d0H9yCfvCvc",
+      "trailerProvider": "auto",
+      "desc": "Geçmiş travmaların izlerini taşıyan üç kadın, bir genelevdeki ölümcül olayların ardından muhabbet tellallarından ve onun adamlarından kaçarak çılgın bir maceraya atılır. (18 yaş ve üzeri için uygundur)",
+      "cast": [
+        "Verónica Sánchez",
+        "Lali Espósito",
+        "Yany Prado",
+        "Asier Etxeandia",
+        "Miguel Ángel Silvestre",
+        "Enric Auquer"
+      ],
+      "tmdbTitle": "Sky Rojo",
+      "tmdbOriginalTitle": "Sky Rojo",
+      "tmdbReleaseDate": "2021-03-19",
+      "tmdbGenres": "Aksiyon & Macera / Suç / Dram",
+      "tmdbRuntime": "26 dk",
+      "tmdbCountries": "Spain",
+      "tmdbDirector": "Esther Martínez Lobato, Álex Pina",
+      "tmdbCast": [
+        {
+          "id": 90773,
+          "name": "Verónica Sánchez",
+          "character": "Coral",
+          "profile": "https://image.tmdb.org/t/p/w185/4Z7OHkdHIQ9VPp3JBU8QPUzMewR.jpg",
+          "order": 0
+        },
+        {
+          "id": 1246184,
+          "name": "Lali Espósito",
+          "character": "Wendy",
+          "profile": "https://image.tmdb.org/t/p/w185/2UA9O29yhVXYCvv93QzK5UgMdXY.jpg",
+          "order": 1
+        },
+        {
+          "id": 2943316,
+          "name": "Yany Prado",
+          "character": "Gina",
+          "profile": "https://image.tmdb.org/t/p/w185/qgVcujSPqsZk5jMuewWAa3UpYk4.jpg",
+          "order": 2
+        },
+        {
+          "id": 102228,
+          "name": "Asier Etxeandia",
+          "character": "Romeo",
+          "profile": "https://image.tmdb.org/t/p/w185/pi0zU6nfgUk7tulpgZaVtVZqHBY.jpg",
+          "order": 3
+        },
+        {
+          "id": 121689,
+          "name": "Miguel Ángel Silvestre",
+          "character": "Moises",
+          "profile": "https://image.tmdb.org/t/p/w185/ft14HqAFsvk0o2m5rOXrfYUI4KA.jpg",
+          "order": 4
+        },
+        {
+          "id": 1436707,
+          "name": "Enric Auquer",
+          "character": "Christian",
+          "profile": "https://image.tmdb.org/t/p/w185/jozyRHQKdb8pfFmH2aM5cks3j8p.jpg",
+          "order": 5
+        }
+      ],
+      "tmdbOverview": "Geçmiş travmaların izlerini taşıyan üç kadın, bir genelevdeki ölümcül olayların ardından muhabbet tellallarından ve onun adamlarından kaçarak çılgın bir maceraya atılır. (18 yaş ve üzeri için uygundur)",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/uTFX9V2dct1nKjG6zhNiThPm8Tp.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/jx8IkywRO8uLAz4r2C5rxGJHf4D.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=d0H9yCfvCvc",
+      "tmdbImdbId": "tt8690776",
+      "tmdbRating": "7.5",
+      "tmdbVoteCount": 566,
+      "seasons": 3,
+      "episodes": 24
     }
   ],
   "collections": [],
