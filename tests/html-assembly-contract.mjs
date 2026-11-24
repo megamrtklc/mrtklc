@@ -7,7 +7,7 @@
 import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 
-const [shell, homepage, watchPage, explorePage, watchlistPage, libraryPage, statsPage, videoLinksPage, output] = await Promise.all([
+const [shell, homepage, watchPage, explorePage, watchlistPage, libraryPage, statsPage, videoLinksPage, header, searchOverlay, footer, output] = await Promise.all([
   readFile('src/templates/index-shell.html', 'utf8'),
   readFile('src/templates/homepage.html', 'utf8'),
   readFile('src/templates/watch-page.html', 'utf8'),
@@ -16,6 +16,9 @@ const [shell, homepage, watchPage, explorePage, watchlistPage, libraryPage, stat
   readFile('src/templates/library-page.html', 'utf8'),
   readFile('src/templates/stats-page.html', 'utf8'),
   readFile('src/templates/video-links-page.html', 'utf8'),
+  readFile('src/templates/header.html', 'utf8'),
+  readFile('src/templates/search-overlay.html', 'utf8'),
+  readFile('src/templates/footer.html', 'utf8'),
   readFile('index.html', 'utf8')
 ]);
 
@@ -53,6 +56,21 @@ assert.doesNotMatch(explorePage, /TEMPORARY VIDEO LINKS PAGE/,
   'Keşfet partial dosyası video bağlantıları sayfasını kapsamamalı.');
 assert.doesNotMatch(output, /<!-- PERDE_TEMPLATE:[A-Z0-9_-]+ -->/,
   'Yayın çıktısında çözülmemiş şablon işareti kalmamalı.');
+
+assert.equal((shell.match(/<!-- PERDE_TEMPLATE:HEADER -->/g) || []).length, 1, 'Kaynak kabukta HEADER işareti tam bir kez bulunmalı.');
+assert.equal((shell.match(/<!-- PERDE_TEMPLATE:SEARCH_OVERLAY -->/g) || []).length, 1, 'Kaynak kabukta SEARCH_OVERLAY işareti tam bir kez bulunmalı.');
+assert.equal((shell.match(/<!-- PERDE_TEMPLATE:FOOTER -->/g) || []).length, 1, 'Kaynak kabukta FOOTER işareti tam bir kez bulunmalı.');
+assert.match(header, /Header \/ Top Navbar/, 'Header partial dosyası üst gezinme alanını içermeli.');
+assert.match(header, /openProfileMenu/, 'Header partial dosyası profil menüsünü içermeli.');
+assert.doesNotMatch(header, /cineverse-search-dialog/, 'Header partial dosyası genel arama penceresini kapsamamalı.');
+assert.match(searchOverlay, /cineverse-search-dialog/, 'Arama partial dosyası arama penceresini içermeli.');
+assert.match(searchOverlay, /personSearchResults/, 'Arama partial dosyası kişi arama sonuçlarını içermeli.');
+assert.match(footer, /CineVerse Responsive Footer/, 'Footer partial dosyası alt bilgi alanını içermeli.');
+assert.match(footer, /footerConfig/, 'Footer partial dosyası yönetilebilir footer ayarlarını içermeli.');
+
+assert.match(output, /<header x-show="headerConfig.enabled !== false"/, 'Üretilmiş index header alanını içermeli.');
+assert.match(output, /cineverse-search-dialog/, 'Üretilmiş index genel arama penceresini içermeli.');
+assert.match(output, /<footer id="cineverse-footer"/, 'Üretilmiş index footer alanını içermeli.');
 assert.match(output, /<template x-if="currentPage === 'home'">/,
   'Üretilmiş index ana sayfa Alpine görünümünü içermeli.');
 assert.match(output, /<template x-if="currentPage === 'watch'">/,

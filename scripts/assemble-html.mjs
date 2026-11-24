@@ -20,7 +20,10 @@ const partials = {
   WATCHLIST: 'src/templates/watchlist-page.html',
   LIBRARY: 'src/templates/library-page.html',
   STATS: 'src/templates/stats-page.html',
-  VIDEO_LINKS: 'src/templates/video-links-page.html'
+  VIDEO_LINKS: 'src/templates/video-links-page.html',
+  HEADER: 'src/templates/header.html',
+  SEARCH_OVERLAY: 'src/templates/search-overlay.html',
+  FOOTER: 'src/templates/footer.html'
 };
 
 let html = await readFile(shellPath, 'utf8');
