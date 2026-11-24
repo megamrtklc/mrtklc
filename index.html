@@ -25,7 +25,7 @@
         document.documentElement.dataset.cvDeviceMode = 'tv';
       })();
     </script>
-<script id="cv-initial-route-marker">(function(){var h=window.location.hash||"";var home=!h||h==="#"||h==="#/"||h==="#home";document.documentElement.dataset.cvInitialHome=home?"true":"false"})();</script>
+<script id="cv-initial-route-marker">(function(){var h=window.location.hash||"";var home=!h||h==="#"||h==="#/"||h==="#home"||h==="#/home";var root=document.documentElement;root.dataset.cvInitialHome=home?"true":"false";if(!home)root.classList.add("has-initial-route")})();</script>
 <style id="cv-discovery-mobile-showcase">@media(max-width:767px){.cv-discovery-mobile-thumbs{scrollbar-width:thin;scrollbar-color:rgba(128,128,128,.35) transparent;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}.cv-discovery-mobile-thumbs::-webkit-scrollbar{height:4px}.cv-discovery-mobile-thumbs::-webkit-scrollbar-thumb{background:rgba(128,128,128,.35);border-radius:8px}}@media(max-width:900px) and (orientation:landscape){.cv-discovery-mobile-thumbs>button{width:96px!important}}</style>
 <style id="cv-initial-home-header-geometry">@media(min-width:768px){html[data-cv-initial-home=true] body>header{margin-bottom:-4rem}#home-page #desktopEditorialHero[x-cloak]{display:block!important;visibility:hidden!important;height:623px!important;min-height:623px!important}}</style>
 <style id="cv-personalized-loading-overlay-flow-fix">#home-page #home-personalized-section>.cv-section-loading-overlay{position:absolute!important;inset:0!important;min-height:100%!important;padding:24px!important;box-sizing:border-box!important;pointer-events:none}</style>
@@ -107,14 +107,7 @@
       })();
     </script>
     <style id="cv-theme-first-paint-style">[x-cloak]{display:none!important}html.dark,html.dark body{background-color:#0b0d11;color:#f1f5f9}html.theme-ivory,html.theme-ivory body{background-color:#fffdf9;color:#29261f}html.theme-slate,html.theme-slate body{background-color:#f4f5f7;color:#20242b}</style>
-    <script>
-        (() => {
-            const hash = window.location.hash || '';
-            if (hash && hash !== '#' && hash !== '#/' && hash !== '#/home') {
-                document.documentElement.classList.add('has-initial-route');
-            }
-        })();
-    </script>
+    <!-- Başlangıç rotası sınıfı cv-initial-route-marker içinde belirlenir. -->
     <script id="cv-desktop-font-loader">
       (function () {
         if (!window.matchMedia('(min-width: 768px)').matches || document.documentElement.dataset.cvDeviceMode === 'tv') return;
