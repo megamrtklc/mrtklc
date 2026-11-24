@@ -26,7 +26,7 @@
 
     // Keşfet algoritmalarını yalnızca ilgili rota açıldığında yükle.
     const pageScripts = {
-        explore: './js/discovery.js?v=20261124-discovery-v1'
+        explore: './js/discovery.min.js?v=20261124-discovery-min-v1'
     };
     const pageScriptCache = new Map();
 
