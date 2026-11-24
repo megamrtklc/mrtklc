@@ -15,7 +15,8 @@ const shellPath = 'src/templates/index-shell.html';
 const outputPath = 'index.html';
 const partials = {
   HOME: 'src/templates/homepage.html',
-  WATCH: 'src/templates/watch-page.html'
+  WATCH: 'src/templates/watch-page.html',
+  EXPLORE: 'src/templates/explore-page.html'
 };
 
 let html = await readFile(shellPath, 'utf8');
