@@ -7,7 +7,7 @@
 <script>if(location.hostname.endsWith('github.io'))location.replace('https://cineverse-admin.megamrtklc.workers.dev/');</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="./fonts.css?v=20261117-inter-admin-v1">
-<link rel="stylesheet" href="./admin.css?v=20261124-account-security-v2">
+<link rel="stylesheet" href="./admin.css?v=20261124-password-visibility-v1">
 </head>
 <body>
 <div class="app-shell">
@@ -356,9 +356,9 @@
             <div class="users-card-kicker"><span class="users-card-icon">⌑</span><span>02 / ŞİFRE DEĞİŞTİRME</span></div>
             <h2>Yönetici şifresi</h2><p>Yeni şifren sunucuda tuzlanmış PBKDF2 özeti olarak saklanır. Şifren açık metin olarak kaydedilmez.</p>
             <form id="admin-password-form" class="security-form">
-              <label class="field"><span>Mevcut şifre</span><input id="security-current-password" type="password" autocomplete="current-password" minlength="10" required></label>
+              <label class="field"><span>Mevcut şifre</span><div class="security-password-wrap"><input id="security-current-password" type="password" autocomplete="current-password" minlength="10" required><button class="security-password-toggle" type="button" data-password-target="security-current-password" aria-label="Mevcut şifreyi göster" aria-pressed="false">Göster</button></div></label>
               <label class="field"><span>Yeni şifre (en az 12 karakter)</span><input id="security-new-password" type="password" autocomplete="new-password" minlength="12" maxlength="256" required></label>
-              <label class="field"><span>Yeni şifreyi tekrar gir</span><input id="security-confirm-password" type="password" autocomplete="new-password" minlength="12" maxlength="256" required></label>
+              <label class="field"><span>Yeni şifreyi tekrar gir</span><div class="security-password-wrap"><input id="security-confirm-password" type="password" autocomplete="new-password" minlength="12" maxlength="256" required><button class="security-password-toggle" type="button" data-password-target="security-confirm-password" aria-label="Şifre tekrarını göster" aria-pressed="false">Göster</button></div></label>
               <button class="primary-button" id="security-password-save" type="submit">Şifreyi güvenli şekilde değiştir</button>
             </form>
             <p class="users-card-footnote">Şifre değişince güvenlik için bütün açık oturumlar kapatılır ve yeniden giriş yapman gerekir.</p>
