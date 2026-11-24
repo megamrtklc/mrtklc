@@ -29,7 +29,7 @@
         explore: './js/discovery.min.js?v=20261124-discovery-min-v1',
         people: './js/people.js?v=20261124-people-v1',
         'watch-recommendations': './js/watch-recommendations.js?v=20261124-watch-recommendations-v1',
-        player: './js/player-controls.js?v=20261125-player-controls-v5'
+        player: './js/player-controls.js?v=20261125-player-controls-v6'
     };
     const pageScriptRoutes = {
         watch: ['people', 'watch-recommendations', 'player'],
