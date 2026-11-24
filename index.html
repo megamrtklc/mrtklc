@@ -396,7 +396,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     </header>
 
     <!-- PERDE HİKÂYELERİ DEMO: header ile manşet arasında -->
-    <section id="perdeStoriesDemo" x-data="{
+    <section id="perdeStoriesDemo" :style="open ? 'position:relative;z-index:2147483647' : ''" x-data="{
       open:false, active:0, activeGroup:0,
       groups:[
         {name:'Yeni Yapımlar',cover:'https://image.tmdb.org/t/p/w185/arDhnrSib3xRUHw0rIqgt8qHNeC.jpg',stories:[
@@ -434,7 +434,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
           </button>
         </template>
       </div>
-      <template x-teleport="body"><div class="psd-viewer" x-show="open" x-transition.opacity @click.self="closeViewer()" role="dialog" aria-modal="true" aria-label="Perde hikâyeleri">
+      <div class="psd-viewer" x-show="open" x-transition.opacity @click.self="closeViewer()" role="dialog" aria-modal="true" aria-label="Perde hikâyeleri">
         <div class="psd-stage" @click.stop>
           <template x-if="currentStory.video"><iframe class="psd-video" :src="currentStory.video" title="Perde fragman videosu" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen @load="$el.contentWindow.postMessage(JSON.stringify({event:'command',func:'unMute',args:[]}),'*');$el.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[60]}),'*')"></iframe></template>
           <template x-if="!currentStory.video"><img class="psd-stage-bg" :src="currentStory.image" :alt="currentStory.title"></template>
@@ -443,7 +443,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
           <button class="psd-hit prev" type="button" aria-label="Önceki hikâye" @click="prevStory()"></button><button class="psd-hit next" type="button" aria-label="Sonraki hikâye" @click="nextStory()"></button>
           <button class="psd-arrow prev" type="button" aria-label="Önceki hikâye" @click="prevStory()"><i class="fa-solid fa-chevron-left"></i></button><button class="psd-arrow next" type="button" aria-label="Sonraki hikâye" @click="nextStory()"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
-      </div></template>
+      </div>
     </section>
     <!-- /PERDE HİKÂYELERİ DEMO -->
 
