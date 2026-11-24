@@ -1,0 +1,57 @@
+<!-- Genel arama penceresi: katalog yapımları ile oyuncu ve yönetmen sonuçlarını gösterir. -->
+    <template x-teleport="body">
+        <div x-cloak x-show="searchOverlayOpen" x-transition.opacity @click.self="closeSearchOverlay()" @keydown.escape.window="closeSearchOverlay()" class="cineverse-search-backdrop" role="dialog" aria-modal="true" aria-label="Film ve dizi ara">
+            <section class="cineverse-search-dialog" @click.stop>
+                <div class="cineverse-search-top">
+                    <div class="cineverse-search-field">
+                        <i class="fa-solid fa-magnifying-glass text-lg" aria-hidden="true"></i>
+                        <input x-ref="globalSearchInput" type="search" x-model.debounce.100ms="searchQuery" @input="schedulePersonSearch($event.target.value)" placeholder="Film, dizi, oyuncu veya yönetmen ara..." autocomplete="off" spellcheck="false" aria-label="Arama metni">
+                        <button type="button" x-show="searchQuery" @click="searchQuery = ''; $nextTick(() => $refs.globalSearchInput.focus())" aria-label="Aramayı temizle" class="text-slate-300 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <button type="button" @click="closeSearchOverlay()" aria-label="Aramayı kapat" class="cineverse-search-close"><i class="fa-solid fa-xmark text-lg"></i></button>
+                </div>
+                <div x-show="!searchQuery.trim()" class="cineverse-search-hint">
+                    <i class="fa-solid fa-sparkles mr-2 text-rose-300"></i>Aradığın yapımı bulmak için yazmaya başla.
+                </div>
+                <div x-show="searchQuery.trim()" class="cineverse-search-results">
+                    <div x-show="personSearchLoading" class="px-4 py-3 text-xs text-slate-400"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Oyuncu ve yönetmen aranıyor...</div>
+                                        <div x-show="personSearchResults.length" class="border-b border-white/10 px-3 py-3">
+                        <p class="mb-3 px-1 text-[10px] font-black uppercase tracking-[0.18em] text-rose-300">Perde kataloğundaki kişiler</p>
+                        <div class="space-y-4">
+                            <template x-for="person in personSearchResults" :key="'global-person-' + person.id + '-' + person.known_for_department">
+                                <section class="px-1">
+                                    <div class="flex items-center gap-3">
+                                        <img :src="person.profile || ''" :alt="person.name" @error="handleImageError($event)" loading="lazy" decoding="async" class="h-[76px] w-[58px] shrink-0 rounded-lg object-cover bg-white/10">
+                                        <span class="min-w-0 flex-1">
+                                            <span class="block text-sm font-extrabold text-white" x-text="person.name"></span>
+                                            <span class="mt-1 inline-flex rounded-full bg-rose-500/15 px-2 py-0.5 text-[10px] font-bold text-rose-200" x-text="person.known_for_department === 'Directing' ? 'Yönetmen' : 'Oyuncu'"></span>
+                                            <span class="mt-1 block text-[10px] text-slate-400" x-text="person.known_for.length + ' yapım Perde kataloğunda'"></span>
+                                        </span>
+                                    </div>
+                                </section>
+                            </template>
+                        </div>
+                    </div>
+                    <template x-for="item in quickSearchResults" :key="'global-search-' + item.id">
+                        <button type="button" @click="selectSearchResult(item)" class="cineverse-search-result">
+                            <img :src="item.poster || item.image || item.tmdbPoster" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async">
+                            <span class="cineverse-search-result-copy">
+                                <span class="cineverse-search-result-title" x-text="item.title"></span>
+                                <span class="cineverse-search-result-meta">
+                                    <span class="cineverse-search-result-type" x-text="item.type === 'tv' ? 'Dizi' : 'Film'"></span>
+                                    <span x-show="item.year" x-text="item.year"></span>
+                                    <span x-show="item.rating"><i class="fa-solid fa-star mr-1 text-amber-400"></i><span x-text="Number(item.rating).toFixed(1)"></span></span>
+                                    <span x-show="item.category || item.genre" x-text="item.category || item.genre"></span>
+                                </span>
+                                <span class="cineverse-search-result-desc" x-text="item.desc || item.overview || 'Bu yapım için kısa açıklama bulunmuyor.'"></span>
+                            </span>
+                        </button>
+                    </template>
+                    <div x-show="quickSearchResults.length === 0 && personSearchResults.length === 0 && !personSearchLoading" class="cineverse-search-empty">
+                        <i class="fa-solid fa-film mb-3 block text-2xl text-slate-500"></i>
+                        Bu aramayla eşleşen bir yapım bulunamadı.
+                    </div>
+                </div>
+            </section>
+        </div>
+    </template>
