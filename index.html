@@ -298,7 +298,40 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
 <style id="home-watchlist-mobile-refresh">@media(max-width:639px){#home-page #home-watchlist-section .home-watchlist-heading{gap:10px!important;padding-bottom:12px!important}#home-page #home-watchlist-section .home-watchlist-heading>div:last-child{width:100%!important;justify-content:flex-start!important;gap:8px!important}#home-page #home-watchlist-section .home-watchlist-rail{display:flex!important;gap:12px!important;padding:5px 3px 15px!important;overflow-x:auto!important;scroll-snap-type:x mandatory!important}#home-page #home-watchlist-section .home-watchlist-card{display:flex!important;flex:0 0 min(84%,340px)!important;width:min(84%,340px)!important;min-width:0!important;align-self:stretch!important;border-radius:16px!important;overflow:hidden!important;background:linear-gradient(145deg,rgba(127,127,127,.09),rgba(127,127,127,.025))!important;border:1px solid rgba(148,163,184,.24)!important;box-shadow:0 9px 26px -21px rgba(0,0,0,.62)!important;scroll-snap-align:start!important}#home-page #home-watchlist-section .home-watchlist-card:hover{border-color:rgba(225,29,72,.78)!important;transform:translateY(-2px)!important}#home-page #home-watchlist-section .home-watchlist-poster{display:block!important;position:relative!important;width:100%!important;aspect-ratio:16/9!important;flex:none!important;overflow:hidden!important;background:#080b12!important}#home-page #home-watchlist-section .home-watchlist-poster>img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}#home-page #home-watchlist-section .home-watchlist-poster>.absolute.inset-0{background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.02) 36%,rgba(0,0,0,.82))!important}#home-page #home-watchlist-section .home-watchlist-poster>span:last-child{font-size:13px!important;line-height:1.3!important;font-weight:900!important;letter-spacing:.005em!important;bottom:12px!important;left:13px!important;right:13px!important}#home-page #home-watchlist-section .home-watchlist-poster>span:first-child{top:10px!important;left:10px!important;padding:6px 9px!important;font-size:8px!important}#home-page #home-watchlist-section .home-watchlist-copy{display:flex!important;align-items:center!important;justify-content:flex-start!important;min-height:40px!important;padding:9px 12px!important}#home-page #home-watchlist-section .home-watchlist-copy:after{font-size:8px!important;letter-spacing:.13em!important}}@media(min-width:640px) and (max-width:767px){#home-page #home-watchlist-section .home-watchlist-card{flex-basis:44%!important;width:44%!important}}</style>
 
-<style id="perde-stories-demo-style">#perdeStoriesDemo{position:relative;z-index:5;padding:18px 0 8px;color:var(--cv-text,#f5f5f5)}#perdeStoriesDemo .psd-track{display:flex;gap:18px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:none;overscroll-behavior-x:contain}#perdeStoriesDemo .psd-track::-webkit-scrollbar{display:none}#perdeStoriesDemo .psd-item{flex:0 0 76px;width:76px;text-align:center;background:0 0;border:0;padding:0;color:inherit}#perdeStoriesDemo .psd-ring{width:70px;height:70px;margin:0 auto 7px;padding:3px;border-radius:50%;background:linear-gradient(135deg,#f6c453,#df476d,#8c55d8);box-shadow:0 4px 18px #0004}#perdeStoriesDemo .psd-ring>span{display:block;width:100%;height:100%;border:2px solid #111;border-radius:50%;background-size:cover;background-position:center}#perdeStoriesDemo .psd-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:650;letter-spacing:.01em;opacity:.9}#perdeStoriesDemo .psd-viewer{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.96);display:flex;align-items:center;justify-content:center;padding:16px}#perdeStoriesDemo .psd-stage{position:relative;width:min(430px,100%);height:min(min(88vh,820px),calc(100dvh - 32px));min-height:420px;overflow:hidden;border-radius:22px;background:#151515;box-shadow:0 25px 90px #000b}#perdeStoriesDemo .psd-stage:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55),transparent 24%,transparent 65%,rgba(0,0,0,.68));z-index:1;pointer-events:none}#perdeStoriesDemo .psd-stage-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#perdeStoriesDemo .psd-top{position:absolute;z-index:2;top:12px;left:12px;right:12px}#perdeStoriesDemo .psd-progress{display:flex;gap:4px;margin-bottom:13px}#perdeStoriesDemo .psd-progress span{height:3px;flex:1;border-radius:8px;background:#ffffff55}#perdeStoriesDemo .psd-progress span.active{background:#fff}#perdeStoriesDemo .psd-user{display:flex;align-items:center;gap:9px;color:#fff;font-size:13px;font-weight:700;text-shadow:0 1px 8px #000}#perdeStoriesDemo .psd-avatar{width:32px;height:32px;border-radius:50%;border:2px solid #fff;background:#222;object-fit:cover}#perdeStoriesDemo .psd-close{margin-left:auto;border:0;background:#0005;color:#fff;width:34px;height:34px;border-radius:50%;font-size:22px;line-height:1}#perdeStoriesDemo .psd-copy{position:absolute;z-index:2;left:24px;right:24px;bottom:42px;color:#fff;text-shadow:0 2px 16px #000;font-size:14px}#perdeStoriesDemo .psd-copy strong{display:block;font-size:25px;line-height:1.12;margin-bottom:9px}#perdeStoriesDemo .psd-hit{position:absolute;z-index:2;top:65px;bottom:90px;width:34%;border:0;background:0 0}#perdeStoriesDemo .psd-hit.prev{left:0}#perdeStoriesDemo .psd-hit.next{right:0}#perdeStoriesDemo .psd-arrow{position:absolute;z-index:3;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:#0005;color:#fff;border:1px solid #ffffff30;display:grid;place-items:center}#perdeStoriesDemo .psd-arrow.prev{left:10px}#perdeStoriesDemo .psd-arrow.next{right:10px}@media(min-width:768px){#perdeStoriesDemo{padding-top:20px;padding-bottom:12px}#perdeStoriesDemo .psd-track{gap:23px}#perdeStoriesDemo .psd-item{flex-basis:84px;width:84px}#perdeStoriesDemo .psd-ring{width:76px;height:76px}}@media(max-width:767px){#perdeStoriesDemo{padding:12px 0 4px}#perdeStoriesDemo .psd-track{gap:14px}#perdeStoriesDemo .psd-item{flex-basis:68px;width:68px}#perdeStoriesDemo .psd-ring{width:62px;height:62px}#perdeStoriesDemo .psd-viewer{padding:0}#perdeStoriesDemo .psd-stage{width:100%;height:100dvh;min-height:0;border-radius:0}}</style>
+
+
+<style id="perde-stories-demo-style">
+#perdeStoriesDemo{position:relative;z-index:8;padding:13px 0 11px;color:var(--cv-text,#f5f5f5)}
+#perdeStoriesDemo .psd-track{display:flex;gap:22px;overflow-x:auto;padding:5px 3px 9px;scrollbar-width:none;overscroll-behavior-x:contain}
+#perdeStoriesDemo .psd-track::-webkit-scrollbar{display:none}
+#perdeStoriesDemo .psd-item{flex:0 0 82px;width:82px;text-align:center;background:none;border:0;padding:0;color:inherit;cursor:pointer}
+#perdeStoriesDemo .psd-ring{width:72px;height:72px;margin:0 auto 7px;padding:3px;border-radius:50%;background:linear-gradient(135deg,#f8cf68,#e74d72,#8b55d8);box-shadow:0 4px 18px #0004;transition:transform .2s ease}
+#perdeStoriesDemo .psd-item:hover .psd-ring{transform:scale(1.06)}
+#perdeStoriesDemo .psd-ring>span{display:block;width:100%;height:100%;border:2px solid #111;border-radius:50%;background-size:cover;background-position:center}
+#perdeStoriesDemo .psd-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:650;opacity:.92}
+#perdeStoriesDemo .psd-viewer{position:fixed;inset:0;z-index:99999;background:rgba(4,5,8,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:18px}
+#perdeStoriesDemo .psd-stage{position:relative;width:min(390px,calc(100vw - 36px));height:min(740px,calc(100dvh - 44px));min-height:360px;overflow:hidden;border-radius:22px;background:#151515;box-shadow:0 25px 90px #000b;border:1px solid #ffffff24}
+#perdeStoriesDemo .psd-stage:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.58),transparent 25%,transparent 65%,rgba(0,0,0,.72));z-index:1;pointer-events:none}
+#perdeStoriesDemo .psd-stage-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#perdeStoriesDemo .psd-video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;object-fit:cover}
+#perdeStoriesDemo .psd-top{position:absolute;z-index:3;top:12px;left:12px;right:12px}
+#perdeStoriesDemo .psd-progress{display:flex;gap:4px;margin-bottom:13px}
+#perdeStoriesDemo .psd-progress span{height:3px;flex:1;border-radius:8px;background:#ffffff55}
+#perdeStoriesDemo .psd-progress span.active{background:#fff}
+#perdeStoriesDemo .psd-user{display:flex;align-items:center;gap:9px;color:white;font-size:13px;font-weight:700;text-shadow:0 1px 8px #000}
+#perdeStoriesDemo .psd-avatar{width:32px;height:32px;border-radius:50%;border:2px solid #fff;background:#222;object-fit:cover}
+#perdeStoriesDemo .psd-close{margin-left:auto;border:0;background:#0008;color:#fff;width:34px;height:34px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+#perdeStoriesDemo .psd-copy{position:absolute;z-index:3;left:22px;right:22px;bottom:26px;color:#fff;text-shadow:0 2px 16px #000;font-size:14px}
+#perdeStoriesDemo .psd-copy strong{display:block;font-size:25px;line-height:1.12;margin-bottom:8px}
+#perdeStoriesDemo .psd-cta{display:inline-flex;align-items:center;gap:9px;margin-top:15px;padding:11px 16px;border-radius:999px;background:linear-gradient(110deg,#f6c453,#e9a52f);color:#17120a;text-shadow:none;font-size:12px;font-weight:900;box-shadow:0 8px 24px #0005}
+#perdeStoriesDemo .psd-hit{position:absolute;z-index:2;top:65px;bottom:90px;width:34%;border:0;background:transparent;cursor:pointer}
+#perdeStoriesDemo .psd-hit.prev{left:0}#perdeStoriesDemo .psd-hit.next{right:0}
+#perdeStoriesDemo .psd-arrow{position:absolute;z-index:4;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:#0006;color:white;border:1px solid #ffffff35;display:grid;place-items:center}
+#perdeStoriesDemo .psd-arrow.prev{left:9px}#perdeStoriesDemo .psd-arrow.next{right:9px}
+@media(min-width:768px){#perdeStoriesDemo{padding:15px 0 13px}#perdeStoriesDemo .psd-track{gap:25px}#perdeStoriesDemo .psd-item{flex-basis:88px;width:88px}#perdeStoriesDemo .psd-ring{width:76px;height:76px}}
+@media(max-width:767px){#perdeStoriesDemo{padding:10px 0 7px}#perdeStoriesDemo .psd-track{gap:14px}#perdeStoriesDemo .psd-item{flex-basis:69px;width:69px}#perdeStoriesDemo .psd-ring{width:62px;height:62px}#perdeStoriesDemo .psd-viewer{padding:0;background:rgba(4,5,8,.76)}#perdeStoriesDemo .psd-stage{width:calc(100vw - 34px);height:calc(100dvh - 72px);max-height:690px;min-height:350px;border-radius:20px}#perdeStoriesDemo .psd-copy strong{font-size:23px}}
+@media(prefers-reduced-motion:reduce){#perdeStoriesDemo .psd-ring{transition:none}}
+</style>
 
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
@@ -392,6 +425,59 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
             </nav>
         </div>
     </header>
+
+    <!-- PERDE HİKÂYELERİ DEMO: header ile manşet arasında -->
+    <section id="perdeStoriesDemo" x-data="{
+      open:false, active:0, activeGroup:0,
+      groups:[
+        {name:'Yeni Yapımlar',cover:'https://image.tmdb.org/t/p/w185/arDhnrSib3xRUHw0rIqgt8qHNeC.jpg',stories:[
+          {title:'Yeni bir efsane başlıyor',copy:'Robin Hood: Yeni macerayı Perde arşivinde keşfet.',image:'https://image.tmdb.org/t/p/w1280/lh3BDkmWJh998n4fQcHYcVi7dpm.jpg',itemTitle:'Robin Hood\'un Ölümü'},
+          {title:'Gizem dolu yeni dizi',copy:'Yeni yapımları ve sezonları keşfet.',image:'https://image.tmdb.org/t/p/w1280/7ojpD6ARKYhRxnsjzMIrorOfj4T.jpg',itemTitle:'The Blue Road'}
+        ]},
+        {name:'Fragmanlar',cover:'https://image.tmdb.org/t/p/w185/3DeEAwO42j4VmRdI4KSSN1VloM.jpg',stories:[
+          {title:'Joker — Resmî fragman',copy:'Gotham’ın karanlık dünyasına göz at.',video:'https://www.youtube-nocookie.com/embed/t433PEQGErc?autoplay=1&mute=1&controls=1&rel=0',itemTitle:'Joker'},
+          {title:'Dövüş Kulübü',copy:'Kurallar basit. Birinci kural: Dövüş Kulübü hakkında konuşma.',video:'https://www.youtube-nocookie.com/embed/qtRKdVHc-cE?autoplay=1&mute=1&controls=1&rel=0',itemTitle:'Dövüş Kulübü'}
+        ]},
+        {name:'Film Önerileri',cover:'https://image.tmdb.org/t/p/w185/vpNOjiOZ9dSmj8COISLCQhWENnL.jpg',stories:[
+          {title:'Tek başına hayatta kalabilir mi?',copy:'Gerçek bir hayatta kalma mücadelesi: Diriliş.',image:'https://image.tmdb.org/t/p/w1280/hEQYZq2CDB2LSJVxxlazdBOKeyW.jpg',itemTitle:'Diriliş'},
+          {title:'Zekice kurgulanmış bir gerilim',copy:'Sürprizlerle dolu bir hikâye arıyorsan bu seçkiye göz at.',image:'https://image.tmdb.org/t/p/w1280/d7XExzHIjNgKPRAVv8YCiS0qVB7.jpg',itemTitle:'Ben Kimim?'}
+        ]},
+        {name:'Sinema Gündemi',cover:'https://image.tmdb.org/t/p/w185/xDSKdJ2cmh9tDX5B3w0dQ3RYqVo.jpg',stories:[
+          {title:'Sinemada suç ve komedi',copy:'Gerçek olaylardan esinlenen sıra dışı bir hikâye.',image:'https://image.tmdb.org/t/p/w1280/oNoprEND25zXR6Fns8cIZUkuoMc.jpg',itemTitle:'Vurguncular'},
+          {title:'Bu hafta Perde’de',copy:'Kütüphanedeki yapımları keşfetmeye devam et.',image:'https://image.tmdb.org/t/p/w1280/vr6n6ZFUZvedvIlhfYcbCWcaKyW.jpg',itemTitle:'Karayip Korsanları: Ölü Adam\'ın Sandığı'}
+        ]},
+        {name:'Perde’den',cover:'https://image.tmdb.org/t/p/w185/kbHReT65bMcy0jyz7tMUi9NMuOd.jpg',stories:[
+          {title:'Film gecesi başlasın!',copy:'Bu akşam için macera ve fantastik türünde bir önerimiz var.',image:'https://image.tmdb.org/t/p/w1280/vr6n6ZFUZvedvIlhfYcbCWcaKyW.jpg',itemTitle:'Karayip Korsanları: Ölü Adam\'ın Sandığı'},
+          {title:'Sıradaki favorini keşfet',copy:'Perde’de seni bekleyen daha çok hikâye var.',image:'https://image.tmdb.org/t/p/w1280/rlay2M5QYvi6igbGcFjq8jxeusY.jpg',itemTitle:'Joker'}
+        ]}
+      ],
+      get currentGroup(){return this.groups[this.activeGroup]},
+      get currentStory(){return this.currentGroup.stories[this.active]},
+      closeViewer(){this.open=false},
+      nextStory(){if(this.active<this.currentGroup.stories.length-1){this.active++}else{this.open=false}},
+      prevStory(){if(this.active>0){this.active--}}
+    }" @keydown.escape.window="closeViewer()" x-cloak>
+      <div class="flex items-center justify-between px-1 mb-1"><div><div class="text-[10px] font-black tracking-[.22em] text-amber-500">PERDE'DEN</div><h2 class="text-base md:text-lg font-extrabold tracking-tight">Hikâyeler</h2></div><span class="text-[10px] font-semibold tracking-wide opacity-45">KEŞFET</span></div>
+      <div class="psd-track">
+        <template x-for="(group,index) in groups" :key="group.name">
+          <button type="button" class="psd-item" @click="activeGroup=index;active=0;open=true" :aria-label="group.name+' hikâyelerini aç'">
+            <span class="psd-ring"><span :style="'background-image:url('+group.cover+')'"></span></span><span class="psd-name" x-text="group.name"></span>
+          </button>
+        </template>
+      </div>
+      <div class="psd-viewer" x-show="open" x-transition.opacity @click.self="closeViewer()" role="dialog" aria-modal="true" aria-label="Perde hikâyeleri">
+        <div class="psd-stage" @click.stop>
+          <template x-if="currentStory.video"><iframe class="psd-video" :src="currentStory.video" title="Perde fragman videosu" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></template>
+          <template x-if="!currentStory.video"><img class="psd-stage-bg" :src="currentStory.image" :alt="currentStory.title"></template>
+          <div class="psd-top"><div class="psd-progress"><template x-for="(story,index) in currentGroup.stories" :key="index"><span :class="{'active':index<=active}"></span></template></div><div class="psd-user"><img class="psd-avatar" :src="currentGroup.cover" alt=""><span x-text="currentGroup.name"></span><span class="text-white/60 text-[11px] font-medium">· Demo</span><button class="psd-close" type="button" aria-label="Kapat" @click="closeViewer()">×</button></div></div>
+          <div class="psd-copy"><strong x-text="currentStory.title"></strong><span x-text="currentStory.copy"></span><br><button class="psd-cta" type="button" @click="(() => { const item=(window.__CV_HERO_BOOTSTRAP__?.catalog||[]).find(x=>x.title===currentStory.itemTitle); if(item){closeViewer();openWatchPage(item)} })()"><i class="fa-solid fa-arrow-up-right-from-square"></i> Yapımı incele</button></div>
+          <button class="psd-hit prev" type="button" aria-label="Önceki hikâye" @click="prevStory()"></button><button class="psd-hit next" type="button" aria-label="Sonraki hikâye" @click="nextStory()"></button>
+          <button class="psd-arrow prev" type="button" aria-label="Önceki hikâye" @click="prevStory()"><i class="fa-solid fa-chevron-left"></i></button><button class="psd-arrow next" type="button" aria-label="Sonraki hikâye" @click="nextStory()"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </section>
+    <!-- /PERDE HİKÂYELERİ DEMO -->
+
 
     <template x-teleport="body">
         <div x-cloak x-show="searchOverlayOpen" x-transition.opacity @click.self="closeSearchOverlay()" @keydown.escape.window="closeSearchOverlay()" class="cineverse-search-backdrop" role="dialog" aria-modal="true" aria-label="Film ve dizi ara">
@@ -488,29 +574,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         <!-- ==================== HOME PAGE ==================== -->
         <template x-if="currentPage === 'home'">
             <div id="home-page" class="w-full space-y-8 pb-16">
-                <!-- PERDE HİKÂYELERİ DEMO: yalnızca ana sayfa önizlemesi -->
-                <section id="perdeStoriesDemo" x-data="{ open:false, active:0, stories:[
-                  {name:'Yeni Filmler',title:'Bu hafta ne izlesek?',copy:'Perde seçkisi: Kaçırmaman gereken hikâyeler ve unutulmaz filmler.',image:'https://image.tmdb.org/t/p/w1280/c6OLXfKAk5BKeR6broC8pYiCquX.jpg',avatar:'https://image.tmdb.org/t/p/w185/yjMuqAyJUoQZGWsZ0vZuYj5inAR.jpg'},
-                  {name:'Joker',title:'Gotham karanlığa bürünüyor',copy:'Joker ile psikolojik gerilimin sınırlarında bir yolculuk.',image:'https://image.tmdb.org/t/p/w1280/rlay2M5QYvi6igbGcFjq8jxeusY.jpg',avatar:'https://image.tmdb.org/t/p/w185/3DeEAwO42j4VmRdI4KSSN1VloM.jpg'},
-                  {name:'Macera',title:'Denizlerin efsanesi',copy:'Jack Sparrow ile macera hiç bitmez.',image:'https://image.tmdb.org/t/p/w1280/vr6n6ZFUZvedvIlhfYcbCWcaKyW.jpg',avatar:'https://image.tmdb.org/t/p/w185/kbHReT65bMcy0jyz7tMUi9NMuOd.jpg'},
-                  {name:'Dizi Gündemi',title:'Yeni bir gizem başlıyor',copy:'Yeni dizileri ve merak uyandıran hikâyeleri keşfet.',image:'https://image.tmdb.org/t/p/w1280/7ojpD6ARKYhRxnsjzMIrorOfj4T.jpg',avatar:'https://image.tmdb.org/t/p/w185/9mmOjx2bWuLd9NnVpC71OUEXBym.jpg'},
-                  {name:'Özel Seçki',title:'Hayatta kalma mücadelesi',copy:'Nefesini tutacağın filmler Perde seçkisinde.',image:'https://image.tmdb.org/t/p/w1280/4woSOUD0equAYzvwhWBHIJDCM88.jpg',avatar:'https://image.tmdb.org/t/p/w185/xEWikk4bTkcDOzvxFEqkJiGL7Cy.jpg'}
-                ] }" @keydown.escape.window="open=false" x-cloak>
-                  <div class="flex items-center justify-between px-1 mb-1"><div><div class="text-[11px] font-black tracking-[.22em] text-amber-500">PERDE'DEN</div><h2 class="text-base md:text-lg font-extrabold tracking-tight">Hikâyeler</h2></div><span class="text-[10px] font-semibold tracking-wide opacity-50">KEŞFET</span></div>
-                  <div class="psd-track">
-                    <template x-for="(story,index) in stories" :key="story.name"><button type="button" class="psd-item" @click="active=index;open=true" :aria-label="story.name+' hikâyesini aç'"><span class="psd-ring"><span :style="'background-image:url('+story.avatar+')'"></span></span><span class="psd-name" x-text="story.name"></span></button></template>
-                  </div>
-                  <div class="psd-viewer" x-show="open" x-transition.opacity @click.self="open=false" role="dialog" aria-modal="true" aria-label="Perde hikâye görüntüleyici">
-                    <div class="psd-stage" @click.stop>
-                      <img class="psd-stage-bg" :src="stories[active].image" :alt="stories[active].title">
-                      <div class="psd-top"><div class="psd-progress"><template x-for="(story,index) in stories" :key="index"><span :class="{'active':index<=active}"></span></template></div><div class="psd-user"><img class="psd-avatar" src="https://image.tmdb.org/t/p/w185/yjMuqAyJUoQZGWsZ0vZuYj5inAR.jpg" alt=""><span>PERDE</span><span class="text-white/60 text-[11px] font-medium">· Demo</span><button class="psd-close" type="button" aria-label="Kapat" @click="open=false">×</button></div></div>
-                      <div class="psd-copy"><strong x-text="stories[active].title"></strong><span x-text="stories[active].copy"></span></div>
-                      <button class="psd-hit prev" type="button" aria-label="Önceki hikâye" @click="active=(active-1+stories.length)%stories.length"></button><button class="psd-hit next" type="button" aria-label="Sonraki hikâye" @click="active=(active+1)%stories.length"></button>
-                      <button class="psd-arrow prev" type="button" aria-label="Önceki" @click="active=(active-1+stories.length)%stories.length"><i class="fa-solid fa-chevron-left"></i></button><button class="psd-arrow next" type="button" aria-label="Sonraki" @click="active=(active+1)%stories.length"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
-                  </div>
-                </section>
-                <!-- /PERDE HİKÂYELERİ DEMO -->
 
                 
 
