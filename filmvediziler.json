@@ -20808,7 +20808,7 @@
         "personalized": false,
         "published-collections": false,
         "series-tracking": false,
-        "genre-discovery": false
+        "genre-discovery": true
       },
       "labels": {}
     },
