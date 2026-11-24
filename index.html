@@ -1705,13 +1705,10 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         </template>
 
         <!--
-  Perde Keşfet görünümü
-  ---------------------
-  Tür, kategori, arama ve keşif filtrelerinin HTML görünümünü içerir.
-  Kök Alpine uygulamasının kapsamını kullanır; tek başına çalıştırılmaz.
+  Oyuncu ve yönetmen profil sayfası.
+  Profil bilgileri ve filmografi, kök Alpine uygulamasının verilerini kullanır.
 -->
-<!-- ==================== EXPLORE PAGE ==================== -->
-        <template x-if="currentPage === 'actor' || currentPage === 'director'">
+<template x-if="currentPage === 'actor' || currentPage === 'director'">
             <div class="w-full px-4 sm:px-8 lg:px-12 pt-5 sm:pt-8 pb-16 space-y-7">
                 <template x-if="selectedActor">
                     <section class="relative overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#151922] shadow-xl">
@@ -1840,8 +1837,14 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 <div x-show="!actorProfileLoading && selectedActor && selectedActor.filmography && !selectedActor.filmography.length" class="rounded-2xl border border-gray-200 dark:border-gray-800 p-8 text-center text-sm text-gray-500 dark:text-gray-400">Filmografi bilgisi bulunamadı.</div>
             </div>
         </template>
-
-        <template x-if="currentPage === 'explore'">
+    <!--
+  Perde Keşfet görünümü
+  ---------------------
+  Tür, kategori, arama ve keşif filtrelerinin HTML görünümünü içerir.
+  Kök Alpine uygulamasının kapsamını kullanır; tek başına çalıştırılmaz.
+-->
+<!-- ==================== EXPLORE PAGE ==================== -->
+<template x-if="currentPage === 'explore'">
             <div x-data="{ catalogPage: 1, filterKey: '', discoveryTrailerOpen: false, discoveryTrailerItem: null }" @keydown.escape.window="discoveryTrailerOpen = false; discoveryTrailerItem = null" x-effect="const key = [searchQuery, discoveryType, discoveryMood, discoveryGenre, discoveryCountry, discoveryPlatform, discoveryRating, discoveryYearFrom, discoveryYearTo, sortBy, discoveryDirector, quickFilter].join('|'); if (filterKey !== key) { filterKey = key; catalogPage = 1; initializeDiscovery() }" class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
                 <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
                     <div class="text-xs font-bold text-gray-500 dark:text-gray-400">
@@ -2046,8 +2049,11 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </div>
             </div>
         </template>
-
-        <template x-if="currentPage === 'franchises'">
+    <!--
+  Seri filmler rehberi ve seçilen serinin izleme sırası detay görünümü.
+  Kök Alpine uygulamasının franchise verilerini ve gezinme metotlarını kullanır.
+-->
+<template x-if="currentPage === 'franchises'">
             <div class="w-full px-6 sm:px-12 pt-8 space-y-7 pb-16">
                 <template x-if="!selectedFranchise">
                     <div class="space-y-7">
