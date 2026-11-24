@@ -20761,6 +20761,114 @@
       "tmdbVoteCount": 736,
       "seasons": 1,
       "episodes": 8
+    },
+    {
+      "addedAt": "2026-11-24T14:47:19.767Z",
+      "id": "cv-1795531639767",
+      "title": "Hırsızlar",
+      "type": "tv",
+      "year": "2024",
+      "rating": "6.9",
+      "genre": "Aksiyon & Macera",
+      "category": "Aksiyon & Macera / Dram / Suç",
+      "duration": "",
+      "country": "Germany",
+      "director": "Georg Lippert, Benjamin Hessler, Marvin Kren",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 246799,
+      "imdbId": "tt27054614",
+      "image": "https://image.tmdb.org/t/p/w500/8KkAi8uaCKainPE0OeBp6zHRWTa.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/uuTygXpNLEUhfies5ngOdT0cbQH.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Paha biçilmez bir madenî para, eski bir kasa hırsızı ile sıradan bir gangsteri iş birliğine itince ikili kendilerini cesur soygunların ve küresel çete rekabetlerinin içinde bulur.",
+      "cast": [
+        "Frederick Lau",
+        "Christoph Krutzler",
+        "Svenja Jung",
+        "Jonathan Tittel",
+        "Erdal Yıldız",
+        "Lukas Thomas Watzl",
+        "Karl Welunschek",
+        "Nima Yaghobi"
+      ],
+      "tmdbTitle": "Hırsızlar",
+      "tmdbOriginalTitle": "Crooks",
+      "tmdbReleaseDate": "2024-04-04",
+      "tmdbGenres": "Aksiyon & Macera / Dram / Suç",
+      "tmdbRuntime": "",
+      "tmdbCountries": "Germany",
+      "tmdbDirector": "Georg Lippert, Benjamin Hessler, Marvin Kren",
+      "tmdbCast": [
+        {
+          "id": 49767,
+          "name": "Frederick Lau",
+          "character": "Charly Markovic",
+          "profile": "https://image.tmdb.org/t/p/w185/4ukrX8OPPsD06YMFoTL00uZrwa4.jpg",
+          "order": 0
+        },
+        {
+          "id": 1497341,
+          "name": "Christoph Krutzler",
+          "character": "Joseph Muckstein",
+          "profile": "https://image.tmdb.org/t/p/w185/uZbgyG0CuMVBwSKRwR0l5i2UmF6.jpg",
+          "order": 1
+        },
+        {
+          "id": 1561755,
+          "name": "Svenja Jung",
+          "character": "Samira Treptow",
+          "profile": "https://image.tmdb.org/t/p/w185/j8x2jGFNf3gDDhIKqmrgAt4S6kH.jpg",
+          "order": 2
+        },
+        {
+          "id": 2755574,
+          "name": "Jonathan Tittel",
+          "character": "Jonas Markovic",
+          "profile": "https://image.tmdb.org/t/p/w185/6gTiZeZfH9nipkyuQBShouQutxf.jpg",
+          "order": 3
+        },
+        {
+          "id": 48510,
+          "name": "Erdal Yıldız",
+          "character": "Hassan Al-Walid",
+          "profile": "https://image.tmdb.org/t/p/w185/rtQMyTs3inUfeMU7Ke4HNYq1iyO.jpg",
+          "order": 4
+        },
+        {
+          "id": 1818270,
+          "name": "Lukas Thomas Watzl",
+          "character": "Rio Bachofner",
+          "profile": "https://image.tmdb.org/t/p/w185/b3xdI9RAKgw0aPMUEwRuCgxv4Zk.jpg",
+          "order": 5
+        },
+        {
+          "id": 2810194,
+          "name": "Karl Welunschek",
+          "character": "Franz Bachofner",
+          "profile": "",
+          "order": 6
+        },
+        {
+          "id": 4330884,
+          "name": "Nima Yaghobi",
+          "character": "Tarek Al-Walid",
+          "profile": "",
+          "order": 7
+        }
+      ],
+      "tmdbOverview": "Paha biçilmez bir madenî para, eski bir kasa hırsızı ile sıradan bir gangsteri iş birliğine itince ikili kendilerini cesur soygunların ve küresel çete rekabetlerinin içinde bulur.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/8KkAi8uaCKainPE0OeBp6zHRWTa.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/uuTygXpNLEUhfies5ngOdT0cbQH.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt27054614",
+      "tmdbRating": "6.9",
+      "tmdbVoteCount": 72,
+      "seasons": 2,
+      "episodes": 14
     }
   ],
   "collections": [],
