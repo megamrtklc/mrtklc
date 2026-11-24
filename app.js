@@ -1275,14 +1275,11 @@
                     const distance = Math.max(container.clientWidth * 0.88, 240);
                     container.scrollBy({ left: direction * distance, behavior: 'smooth' });
                 },
-
-                getSeasonOptions() {
-                    const count = Number(this.selectedItem?.seasons || 0);
-                    return Array.from({ length: Math.max(0, count) }, (_, index) => index + 1);
+                getSeasonOptions(...args) {
+                    return window.PerdePlayerControls?.getSeasonOptions.apply(this, args) || [];
                 },
-
-                getEpisodesForSeason(seasonNum) {
-                    return this.selectedItem?.tmdbEpisodesBySeason?.[seasonNum] || [];
+                getEpisodesForSeason(...args) {
+                    return window.PerdePlayerControls?.getEpisodesForSeason.apply(this, args) || [];
                 },
 
                 get paginatedEpisodes() {
