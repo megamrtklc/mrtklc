@@ -639,6 +639,9 @@
                         // Üretim sırasında HTML'e gömülen küçük manşet verisi ağ isteği beklemeden hazırdır.
                         // Yerel geliştirme/önbellek senaryolarında gömülü veri yoksa JSON dosyasına geri dön.
                         let heroData = window.__CV_HERO_BOOTSTRAP__ || null;
+                        if (!heroData && window.__CV_HERO_DATA_PROMISE__) {
+                            heroData = await window.__CV_HERO_DATA_PROMISE__;
+                        }
                         if (!heroData) {
                             const heroResponse = await fetch('./hero-data.json', { cache: 'no-cache' });
                             if (heroResponse.ok) heroData = await heroResponse.json();
