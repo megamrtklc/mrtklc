@@ -1356,21 +1356,8 @@
                     this.currentEpisodePage = Math.floor((Number(last.episode) - 1) / 8) + 1;
                 },
 
-                goToNextEpisode() {
-                    const episodes = this.getEpisodesForSeason(this.selectedSeason);
-                    const next = episodes.find(ep => ep.number > this.selectedEpisode);
-                    if (next) {
-                        this.currentEpisodePage = Math.floor((next.number - 1) / 8) + 1;
-                        this.selectEpisode(next.number);
-                    } else {
-                        const nextSeason = this.selectedSeason + 1;
-                        const nextSeasonEpisodes = this.getEpisodesForSeason(nextSeason);
-                        if (nextSeasonEpisodes.length) {
-                            this.selectedSeason = nextSeason;
-                            this.currentEpisodePage = 1;
-                            this.selectEpisode(nextSeasonEpisodes[0].number);
-                        }
-                    }
+                goToNextEpisode(...args) {
+                    return window.PerdePlayerControls?.goToNextEpisode.apply(this, args);
                 },
 
                 getSelectedEpisodeWatchUrl() {
@@ -1454,20 +1441,8 @@
                     return window.PerdePlayerControls?.cycleAudioTrack.apply(this, args);
                 },
 
-                handlePlayerKeydown(event) {
-                    if (this.currentPage !== 'watch' || !this.hasPlaybackStarted) return;
-                    if (event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT/.test(event.target?.tagName || '') || event.target?.isContentEditable || event.target?.closest?.('button,a,[role="button"]')) return;
-                    const key = event.key.toLowerCase();
-                    if (key === 'arrowleft' || key === 'arrowright' || key === ' ' || key === 'm' || key === 'f' || key === 'c') {
-                        event.preventDefault();
-                        if (key === 'arrowleft') this.skipTime(-10);
-                        else if (key === 'arrowright') this.skipTime(10);
-                        else if (key === ' ') this.togglePlay();
-                        else if (key === 'm') this.toggleMute();
-                        else if (key === 'f') this.toggleFullscreen();
-                        else if (key === 'c') this.toggleCinemaMode();
-                        this.showPlayerControls();
-                    }
+                handlePlayerKeydown(...args) {
+                    return window.PerdePlayerControls?.handlePlayerKeydown.apply(this, args);
                 },
 
                 schedulePlayerSideControls(...args) {
