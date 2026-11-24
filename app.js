@@ -950,7 +950,8 @@
                                 if (!section.isConnected) return;
                                 section.dataset.homeStylesReady = 'true';
                                 delete section.dataset.homeStylesLoading;
-                                hydrateSection(section);
+                                const hydrated = hydrateSection(section);
+                                if (hydrated !== false) window.__cineverseHomeSectionObserver?.unobserve(section);
                             });
                             return false;
                         }
