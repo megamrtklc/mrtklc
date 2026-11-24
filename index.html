@@ -352,7 +352,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         <img alt="Profil fotoğrafı" width="32" height="32" @error="handleImageError($event)" decoding="async" loading="eager" :src="currentProfile.avatar" class="cineverse-profile-avatar">
                         <i :class="openProfileMenu ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'" class="text-[10px] opacity-70" aria-hidden="true"></i>
                     </button>
-                    <div x-show="openProfileMenu" x-transition.origin.top.right @click.away="openProfileMenu = false" class="cineverse-header-dropdown cineverse-profile-dropdown absolute right-0 mt-2 w-72 rounded-xl border shadow-2xl py-2 z-50">
+                    <div x-cloak x-show="openProfileMenu" x-transition.origin.top.right @click.away="openProfileMenu = false" class="cineverse-header-dropdown cineverse-profile-dropdown absolute right-0 mt-2 w-72 rounded-xl border shadow-2xl py-2 z-50">
                         <div class="px-4 pt-2 pb-3">
                             <p class="text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Hesap</p>
                             <p class="mt-1 text-sm font-extrabold" x-text="currentProfile.name"></p>
@@ -389,7 +389,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </div>
             </div>
         </div>
-        <div x-show="headerConfig.showMobileMenu !== false && mobileMenuOpen" x-transition.origin.top.right @click.away="mobileMenuOpen = false" class="xl:hidden absolute top-full right-3 left-3 sm:left-auto sm:w-80 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl p-3 z-50">
+        <div x-cloak x-show="headerConfig.showMobileMenu !== false && mobileMenuOpen" x-transition.origin.top.right @click.away="mobileMenuOpen = false" class="xl:hidden absolute top-full right-3 left-3 sm:left-auto sm:w-80 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl p-3 z-50">
             <nav class="grid grid-cols-1 gap-1 text-sm font-bold text-gray-700 dark:text-gray-200">
                 <a x-show="headerConfig.showHome !== false" href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false"  :class="isHeaderMenuActive('home') ? 'is-active' : ''" class="rounded-lg px-3 py-3"><span x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</span></a>
                 <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false"  :class="isHeaderMenuActive('explore') ? 'is-active' : ''" class="rounded-lg px-3 py-3"><span x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</span></a>
