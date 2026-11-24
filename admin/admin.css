@@ -1380,3 +1380,6 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
 .danger-button:hover{background:rgba(160,50,45,.2)}
 .security-settings-card .users-info-row{margin-top:13px}
 @media(max-width:720px){.security-record{flex-direction:column}.security-record-actions{text-align:left;justify-items:start;width:100%}.security-card-heading{align-items:center}}
+
+/* Hesap & Erişim: şifre görünürlüğü */
+.security-password-wrap{position:relative;display:flex;align-items:center;min-width:0}.security-form .security-password-wrap input{padding-right:76px}.security-password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:6px 8px;border:1px solid #5b513d;border-radius:7px;background:#302c24;color:#e0c17c;font-size:10px;font-weight:700;cursor:pointer;transition:background .18s,border-color .18s,color .18s}.security-password-toggle:hover{background:#403724;border-color:#c7a85e;color:#ffe2a0}.security-password-toggle:focus-visible{outline:2px solid #d7b56d;outline-offset:2px}
