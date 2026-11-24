@@ -7,10 +7,13 @@
 import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 
-const [shell, homepage, watchPage, actorDirectorPage, explorePage, franchisesPage, watchlistPage, libraryPage, statsPage, videoLinksPage, header, searchOverlay, footer, output] = await Promise.all([
+const [shell, homepage, watchPage, watchLeftColumn, watchRightColumn, watchTrailerModal, actorDirectorPage, explorePage, franchisesPage, watchlistPage, libraryPage, statsPage, videoLinksPage, header, searchOverlay, footer, output] = await Promise.all([
   readFile('src/templates/index-shell.html', 'utf8'),
   readFile('src/templates/homepage.html', 'utf8'),
   readFile('src/templates/watch-page.html', 'utf8'),
+  readFile('src/templates/watch-left-column.html', 'utf8'),
+  readFile('src/templates/watch-right-column.html', 'utf8'),
+  readFile('src/templates/watch-trailer-modal.html', 'utf8'),
   readFile('src/templates/actor-director-page.html', 'utf8'),
   readFile('src/templates/explore-page.html', 'utf8'),
   readFile('src/templates/franchises-page.html', 'utf8'),
@@ -54,6 +57,12 @@ assert.doesNotMatch(homepage, /WATCH \/ DETAIL PAGE/,
   'Ana sayfa partial dosyası detay sayfasının içeriğini kapsamamalı.');
 assert.match(watchPage, /currentPage === "watch"|currentPage === 'watch'/,
   'İzleme partial dosyası watch sayfa koşulunu içermeli.');
+assert.match(watchPage, /PERDE_TEMPLATE:WATCH_LEFT/);
+assert.match(watchPage, /PERDE_TEMPLATE:WATCH_RIGHT/);
+assert.match(watchPage, /PERDE_TEMPLATE:WATCH_TRAILER_MODAL/);
+assert.match(watchLeftColumn, /customVideoPlayer/, 'Sol kolon video oynatıcıyı içermeli.');
+assert.match(watchRightColumn, /Benzer Yapımlar/, 'Sağ kolon benzer yapımları içermeli.');
+assert.match(watchTrailerModal, /x-show="trailerOpen"/, 'Fragman penceresi ayrı partial içinde bulunmalı.');
 assert.doesNotMatch(watchPage, /EXPLORE PAGE/,
   'İzleme partial dosyası keşfet sayfasının içeriğini kapsamamalı.');
 assert.match(actorDirectorPage, /currentPage === 'actor' \|\| currentPage === 'director'/,
