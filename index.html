@@ -1702,7 +1702,13 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
             </div>
         </template>
 
-        <!-- ==================== EXPLORE PAGE ==================== -->
+        <!--
+  Perde Keşfet görünümü
+  ---------------------
+  Tür, kategori, arama ve keşif filtrelerinin HTML görünümünü içerir.
+  Kök Alpine uygulamasının kapsamını kullanır; tek başına çalıştırılmaz.
+-->
+<!-- ==================== EXPLORE PAGE ==================== -->
         <template x-if="currentPage === 'actor' || currentPage === 'director'">
             <div class="w-full px-4 sm:px-8 lg:px-12 pt-5 sm:pt-8 pb-16 space-y-7">
                 <template x-if="selectedActor">
