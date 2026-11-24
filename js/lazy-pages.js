@@ -16,13 +16,40 @@
     };
     const pageCache = new Map();
     const pageStyleCache = new Map();
-    const buildVersion = '20261124-lazy-pages-v1';
+    const buildVersion = '20261124-lazy-pages-v2';
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
         watch: './css/perde-watch.css?v=20261124-watch-css-v1',
         explore: './css/perde-explore.css?v=20261124-explore-css-v1'
     };
+
+    // Keşfet algoritmalarını yalnızca ilgili rota açıldığında yükle.
+    const pageScripts = {
+        explore: './js/discovery.js?v=20261124-discovery-v1'
+    };
+    const pageScriptCache = new Map();
+
+    function ensurePageScripts(key) {
+        const src = pageScripts[key];
+        if (!src) return Promise.resolve();
+        if (pageScriptCache.has(key)) return pageScriptCache.get(key);
+
+        const request = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.dataset.perdePageScript = key;
+            script.onload = () => resolve();
+            script.onerror = () => {
+                pageScriptCache.delete(key);
+                script.remove();
+                reject(new Error('Sayfa betiği yüklenemedi: ' + key));
+            };
+            document.head.appendChild(script);
+        });
+        pageScriptCache.set(key, request);
+        return request;
+    }
 
     function ensurePageStyles(key) {
         const href = pageStyles[key];
@@ -50,6 +77,7 @@
     async function fetchPage(key) {
         // Sayfa önbellekte olsa bile önce rota stilinin yüklenmesini (ve hata sonrası yeniden denenmesini) sağla.
         await ensurePageStyles(key);
+        await ensurePageScripts(key);
         if (pageCache.has(key)) return pageCache.get(key);
         const request = fetch(`./runtime-pages/${key}.html?v=${buildVersion}`, { cache: 'default' })
             .then(response => {
