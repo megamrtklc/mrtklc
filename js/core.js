@@ -1,16 +1,24 @@
-function safeStorageRead(key, fallback = null) {
+/*
+ * PERDE — Çekirdek yardımcı modülü
+ * Görev: localStorage işlemlerini güvenli yürütmek, tema görünümünü uygulamak,
+ * eski profil/izleme kayıtlarını tek profil yapısına taşımak ve katalog verisini
+ * Alpine reactivity maliyetinden korumak.
+ * Yükleme: index.html içinde app.min.js dosyasından önce yüklenir.
+ */
+
+// [DEPOLAMA] Tarayıcı depolamasını hata toleranslı biçimde okur; JSON değilse ham değeri döndürür.\nfunction safeStorageRead(key, fallback = null) {
             try {
                 const raw = localStorage.getItem(key);
                 if (raw === null || raw === '') return fallback;
                 try { return JSON.parse(raw); } catch (_) { return raw; }
             } catch (error) { console.warn('Yerel kayıt okunamadı:', key, error); return fallback; }
         }
-        function safeStorageWrite(key, value) {
+        // [DEPOLAMA] Değerleri JSON olarak kaydeder; hata durumunda uygulamanın devam etmesini sağlar.\n        function safeStorageWrite(key, value) {
             try { localStorage.setItem(key, JSON.stringify(value)); return true; }
             catch (error) { console.warn('Yerel kayıt kaydedilemedi:', key, error); return false; }
         }
 
-        function applyPerdeTheme(theme) {
+        // [TEMA] Seçili temayı HTML, body ve tarayıcı tema renginde eşitler.\n        function applyPerdeTheme(theme) {
             const activeTheme = ['ivory', 'slate', 'dark'].includes(theme) ? theme : 'dark';
             const root = document.documentElement;
             root.classList.remove('dark', 'theme-ivory', 'theme-slate');
@@ -26,7 +34,7 @@ function safeStorageRead(key, fallback = null) {
             if (themeColor) themeColor.setAttribute('content', activeTheme === 'dark' ? '#0b0d11' : (activeTheme === 'ivory' ? '#fffdf9' : '#f4f5f7'));
         }
 
-        function migrateToSingleProfileStorage() {
+        // [VERİ GEÇİŞİ] Eski çoklu profil anahtarlarını yeni tek profil kayıtlarına dönüştürür.\n        function migrateToSingleProfileStorage() {
             const legacyProgress = safeStorageRead('perde_profile_player_progress_v1', null);
             if (safeStorageRead('cine_movie_progress_v1', null) === null && legacyProgress && typeof legacyProgress === 'object' && !Array.isArray(legacyProgress)) {
                 const mainProgress = legacyProgress.pro_1 && typeof legacyProgress.pro_1 === 'object' && !Array.isArray(legacyProgress.pro_1)
@@ -63,13 +71,13 @@ function safeStorageRead(key, fallback = null) {
             try { localStorage.removeItem('cine_active_profile'); } catch (_) {}
         }
 
-        migrateToSingleProfileStorage();
+        // Uygulama açılırken eski kayıtları bir kez yeni şemaya taşır.\n        migrateToSingleProfileStorage();
 
-        const personalizedRecommendationCache = new WeakMap();
+        // [ÖNERİ ÖNBELLEĞİ] Kişiselleştirilmiş öneri hesaplarında tekrar işlem maliyetini azaltır.\n        const personalizedRecommendationCache = new WeakMap();
         const recommendationPlotTermsCache = new WeakMap();
         const recommendationStopWords = new Set(['about','after','again','against','among','because','before','being','between','could','every','first','from','have','into','just','more','most','other','over','same','some','such','than','that','their','them','then','there','these','they','this','those','through','under','until','very','were','what','when','where','which','while','with','would','your','ancak','artık','bazen','belki','birçok','bütün','daha','diğer','eden','eder','edilir','etti','gibi','hem','her','hiç','için','ile','kadar','kendi','kez','ki','kim','nasıl','neden','nerede','olan','olarak','oldu','olduğu','olmak','olmuş','önce','sonra','şey','tüm','üzere','veya','yine']);
 
-        // Katalog kayıtları ana sitede salt-okunur; Vue/Alpine derin proxy maliyetini önle.
+        // [KATALOG PERFORMANSI] Katalog kayıtları ana sitede salt-okunur; Vue/Alpine derin proxy maliyetini önle.
         // __v_skip, Alpine'in kullandığı Vue reactivity katmanının standart raw işaretidir.
         function markStaticCatalog(value) {
             if (!value || typeof value !== 'object') return value;
