@@ -1555,7 +1555,7 @@ try {
     const statsFooterLink = page.locator('footer a').filter({ hasText: 'İstatistikler' }).first();
     await statsFooterLink.scrollIntoViewIfNeeded();
     await statsFooterLink.click();
-    await page.waitForURL(/#\/stats$/);
+    await page.waitForURL(/#\/istatistikler$/);
     await page.getByRole('heading', { name: 'İzleme İstatistikleri' }).waitFor({ state: 'visible' });
     assert.ok(await page.getByText('Tamamlanan filmler', { exact: true }).isVisible());
   });
