@@ -110,7 +110,34 @@
                         .slice(0, 10)
                         .map(entry => entry.item);
                 },
-                openSearchOverlay() {
+                // [ARAMA PENCERESİ] Büyük arama arayüzünü yalnızca ilk açılışta indirir ve Alpine kapsamına alır.
+                async ensureSearchOverlay() {
+                    if (this.searchOverlayLoaded) return true;
+                    if (this.searchOverlayPromise) return this.searchOverlayPromise;
+                    this.searchOverlayPromise = (async () => {
+                        try {
+                            const response = await fetch('./runtime-pages/search-overlay.html?v=20261124-search-overlay-v1', { cache: 'default' });
+                            if (!response.ok) throw new Error('Arama penceresi yüklenemedi (HTTP ' + response.status + ').');
+                            const html = await response.text();
+                            if (!html.trim()) throw new Error('Arama penceresi boş döndü.');
+                            const host = document.createElement('div');
+                            host.id = 'perde-search-overlay-host';
+                            host.innerHTML = html;
+                            document.body.appendChild(host);
+                            window.Alpine?.initTree?.(host);
+                            this.searchOverlayLoaded = true;
+                            return true;
+                        } catch (error) {
+                            console.error('[Perde search overlay]', error);
+                            return false;
+                        } finally {
+                            this.searchOverlayPromise = null;
+                        }
+                    })();
+                    return this.searchOverlayPromise;
+                },
+                async openSearchOverlay() {
+                    if (!await this.ensureSearchOverlay()) return;
                     this.searchPreviousOverflow = document.body.style.overflow;
                     this.searchOverlayOpen = true;
                     this.searchQuery = '';
