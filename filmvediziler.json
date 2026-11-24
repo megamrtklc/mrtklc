@@ -22598,6 +22598,208 @@
       "tmdbImdbId": "tt0137523",
       "tmdbRating": "8.4",
       "tmdbVoteCount": 33418
+    },
+    {
+      "addedAt": "2026-11-24T01:39:05.821Z",
+      "id": "cv-1795484345822",
+      "title": "Hababam Sınıfı",
+      "type": "movie",
+      "year": "1975",
+      "rating": "8.0",
+      "genre": "Komedi",
+      "category": "Komedi / Dram",
+      "duration": "88 dk",
+      "country": "Turkey",
+      "director": "Ertem Eğilmez",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 83651,
+      "imdbId": "tt0252487",
+      "image": "https://image.tmdb.org/t/p/w500/n58QmaMaw7kN3sg2EEV9HMq0jkR.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/9u9XcPaeOvPcelm8RmMarEgvIAk.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=3A-JM0LVYjs",
+      "trailerProvider": "auto",
+      "desc": "Özel Çamlıca Lisesi'ne yeni bir idareci atanır. Tarih hocası olan Kel Mahmut, haylaz öğrencilerle dolu Hababam Sınıfı'nı disiplin altına almak için çaba sarf etmektir. Ancak öğrencilerin de uslanmaya niyetleri yoktur. Kopya çekmeyi alışkanlık haline getiren, sigara içen ve sıkça okuldan kaçan öğrencilere, Mahmut Hoca'nın ilginç cezaları vardır. Yaşları bir hayli ilerlemiş ve bir türlü okulu bitirememiş olan Hababam Sınıfı öğrencilerinden Ferit'in bir de çocuğu vardır. Bir gün çocuğa bakacak kimse bulamayınca onu, okula getirmek zorunda kalır. Ancak bu durum, okul sahibinin hoşuna gitmeyecektir.",
+      "cast": [
+        "Münir Özkul",
+        "Tarık Akan",
+        "Kemal Sunal",
+        "Halit Akçatepe",
+        "Adile Naşit",
+        "Ahmet Arıman",
+        "Feridun Şavlı",
+        "Cengiz Nezir",
+        "Bülent İğdiroğlu",
+        "Cem Gürdap",
+        "Ayşen Gruda",
+        "Bilge Zobu",
+        "Ertuğrul Bilda",
+        "Sıtkı Akçatepe",
+        "Kemal Ergüvenç",
+        "Muharrem Gürses",
+        "Hayri Karabey",
+        "Akil Öztuna",
+        "Talat Dumanlı",
+        "Hüseyin Kaşif"
+      ],
+      "tmdbTitle": "Hababam Sınıfı",
+      "tmdbOriginalTitle": "Hababam Sınıfı",
+      "tmdbReleaseDate": "1975-04-01",
+      "tmdbGenres": "Komedi / Dram",
+      "tmdbRuntime": "88 dk",
+      "tmdbCountries": "Turkey",
+      "tmdbDirector": "Ertem Eğilmez",
+      "tmdbCast": [
+        {
+          "id": 556048,
+          "name": "Münir Özkul",
+          "character": "Kel Mahmut",
+          "profile": "https://image.tmdb.org/t/p/w185/tfjbFLo1RI6DeqB5SuKr1s2bdJ6.jpg",
+          "order": 0
+        },
+        {
+          "id": 142766,
+          "name": "Tarık Akan",
+          "character": "Damat Ferit",
+          "profile": "https://image.tmdb.org/t/p/w185/w2SYSwJlrNZESEbUijKtiKFneEw.jpg",
+          "order": 1
+        },
+        {
+          "id": 97272,
+          "name": "Kemal Sunal",
+          "character": "İnek Şaban",
+          "profile": "https://image.tmdb.org/t/p/w185/nT6zfupn0Q3oyCWHXCvyKS7CcLE.jpg",
+          "order": 2
+        },
+        {
+          "id": 556047,
+          "name": "Halit Akçatepe",
+          "character": "Güdük Necmi",
+          "profile": "https://image.tmdb.org/t/p/w185/90PHM0cqmhRyOc6HLL4kzS1ap7r.jpg",
+          "order": 3
+        },
+        {
+          "id": 97274,
+          "name": "Adile Naşit",
+          "character": "Hafize Ana",
+          "profile": "https://image.tmdb.org/t/p/w185/jJLjfIPCScGkdUhPVzPeFwCBRlt.jpg",
+          "order": 4
+        },
+        {
+          "id": 1762880,
+          "name": "Ahmet Arıman",
+          "character": "Hayta İsmail",
+          "profile": "https://image.tmdb.org/t/p/w185/5q3y3QXg2X0QvZMgMe6sOtpgasi.jpg",
+          "order": 5
+        },
+        {
+          "id": 1052881,
+          "name": "Feridun Şavlı",
+          "character": "Domdom Ali",
+          "profile": "https://image.tmdb.org/t/p/w185/b4jASkZJeOcdgC3V2dujlTX6lZn.jpg",
+          "order": 6
+        },
+        {
+          "id": 3194632,
+          "name": "Cengiz Nezir",
+          "character": "Bozum Cahit",
+          "profile": "https://image.tmdb.org/t/p/w185/kSMcUOObdDKwVtQwexqBZdfQZs3.jpg",
+          "order": 7
+        },
+        {
+          "id": 3194630,
+          "name": "Bülent İğdiroğlu",
+          "character": "Kalem Şakir",
+          "profile": "https://image.tmdb.org/t/p/w185/qdEisPST5ZG0lJWTtyQMhOkyotM.jpg",
+          "order": 8
+        },
+        {
+          "id": 930601,
+          "name": "Cem Gürdap",
+          "character": "Tulum Hayri",
+          "profile": "https://image.tmdb.org/t/p/w185/aur10uKuNL0GRIzkFh1SQXFktYN.jpg",
+          "order": 9
+        },
+        {
+          "id": 121423,
+          "name": "Ayşen Gruda",
+          "character": "Sunucu",
+          "profile": "https://image.tmdb.org/t/p/w185/vG4aQ683W8LkxB5yPylnMThNlnj.jpg",
+          "order": 10
+        },
+        {
+          "id": 102912,
+          "name": "Bilge Zobu",
+          "character": "Beden Eğitimi Öğretmeni",
+          "profile": "https://image.tmdb.org/t/p/w185/rf6BSwL7OjmRz6l5bMxIktSCCIe.jpg",
+          "order": 11
+        },
+        {
+          "id": 1362741,
+          "name": "Ertuğrul Bilda",
+          "character": "Külyutmaz Necmi/Biyoloji öğretmeni",
+          "profile": "https://image.tmdb.org/t/p/w185/aLY9b0sSDej9W4B9IQcm0A50tVz.jpg",
+          "order": 12
+        },
+        {
+          "id": 1052887,
+          "name": "Sıtkı Akçatepe",
+          "character": "Paşa Nuri/Fizik öğretmeni",
+          "profile": "https://image.tmdb.org/t/p/w185/uMibgyBYXfr0qdB2rvAT4ZpNPM8.jpg",
+          "order": 13
+        },
+        {
+          "id": 1324823,
+          "name": "Kemal Ergüvenç",
+          "character": "Kemal Hoca/Kimya öğretmeni",
+          "profile": "https://image.tmdb.org/t/p/w185/j2X7DPSM563d0JyFXNFedlt6cps.jpg",
+          "order": 14
+        },
+        {
+          "id": 1052880,
+          "name": "Muharrem Gürses",
+          "character": "Muharrem Gür/Okul müdürü",
+          "profile": "https://image.tmdb.org/t/p/w185/dLRiOI5FnLuLJQtNG8VIGvM8jhJ.jpg",
+          "order": 15
+        },
+        {
+          "id": 1202124,
+          "name": "Hayri Karabey",
+          "character": "Rıza Hoca/Coğrafya öğretmeni",
+          "profile": "https://image.tmdb.org/t/p/w185/cHvjsh3gjCnjEsClgNXNAAiGNw0.jpg",
+          "order": 16
+        },
+        {
+          "id": 3194634,
+          "name": "Akil Öztuna",
+          "character": "Akil Hoca/Felsefe öğretmeni",
+          "profile": "https://image.tmdb.org/t/p/w185/xvqqV571HwEm4EQrrnAMUGeSLBL.jpg",
+          "order": 17
+        },
+        {
+          "id": 1797951,
+          "name": "Talat Dumanlı",
+          "character": "Kürt Sıtkı/Matematik öğretmeni",
+          "profile": "https://image.tmdb.org/t/p/w185/6lIKNhSLB5O8clF4ZbF7cyTf1LB.jpg",
+          "order": 18
+        },
+        {
+          "id": 1202122,
+          "name": "Hüseyin Kaşif",
+          "character": "Profesör Kayhan Oğuz",
+          "profile": "https://image.tmdb.org/t/p/w185/5jGdMVT1pY48Wt45IcYPK79MIT9.jpg",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Özel Çamlıca Lisesi'ne yeni bir idareci atanır. Tarih hocası olan Kel Mahmut, haylaz öğrencilerle dolu Hababam Sınıfı'nı disiplin altına almak için çaba sarf etmektir. Ancak öğrencilerin de uslanmaya niyetleri yoktur. Kopya çekmeyi alışkanlık haline getiren, sigara içen ve sıkça okuldan kaçan öğrencilere, Mahmut Hoca'nın ilginç cezaları vardır. Yaşları bir hayli ilerlemiş ve bir türlü okulu bitirememiş olan Hababam Sınıfı öğrencilerinden Ferit'in bir de çocuğu vardır. Bir gün çocuğa bakacak kimse bulamayınca onu, okula getirmek zorunda kalır. Ancak bu durum, okul sahibinin hoşuna gitmeyecektir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/n58QmaMaw7kN3sg2EEV9HMq0jkR.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/9u9XcPaeOvPcelm8RmMarEgvIAk.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=3A-JM0LVYjs",
+      "tmdbImdbId": "tt0252487",
+      "tmdbRating": "8.0",
+      "tmdbVoteCount": 184
     }
   ],
   "collections": [],
