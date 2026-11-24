@@ -603,94 +603,12 @@
                         <div class="home-catalog-loading-heading"><span></span><span></span></div>
                         <div class="home-catalog-loading-grid"><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span></div>
                     </div></section>
-                <section id="home-favorites-section" data-home-section="favorites" x-data="{ favoriteFilter: 'all', favoriteSort: 'new', get filteredFavorites() { const items = this.favoriteItems.slice(); const isSeries = item => ['tv','series'].includes(String(item.type || '').toLowerCase()); const filtered = items.filter(item => this.favoriteFilter === 'all' || (this.favoriteFilter === 'series' ? isSeries(item) : !isSeries(item))); const sorters = { new: (a,b) => (Number(b._statusSavedAt)||0) - (Number(a._statusSavedAt)||0), old: (a,b) => (Number(a._statusSavedAt)||0) - (Number(b._statusSavedAt)||0), rating: (a,b) => (Number(b.rating || b.tmdbRating)||0) - (Number(a.rating || a.tmdbRating)||0), az: (a,b) => String(a.title||'').localeCompare(String(b.title||''),'tr'), year: (a,b) => String(b.year || b.tmdbReleaseDate || '').localeCompare(String(a.year || a.tmdbReleaseDate || '')) }; const sorted = filtered.sort(sorters[this.favoriteSort] || sorters.new); if (this.favoriteFilter !== 'all') return sorted; const films = sorted.filter(item => !isSeries(item)); const series = sorted.filter(isSeries); const mixed = []; while (films.length || series.length) { if (films.length) mixed.push(films.shift()); if (films.length) mixed.push(films.shift()); if (series.length) mixed.push(series.shift()); } return mixed; } }" x-cloak x-show="isHomepageSectionVisible('favorites') && favoriteItems.length > 0" class="w-full px-6 sm:px-12 space-y-5 !mt-8" x-ignore>
-                    <div class="home-new-arrivals-heading flex flex-col xl:flex-row xl:items-center gap-3 pb-4">
-                        <div class="min-w-0 shrink-0">
-                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Favorilerim</h2>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sevdiğin yapımları kendi düzenine göre keşfet</p>
-                        </div>
-                        <div class="flex flex-wrap xl:flex-nowrap items-center gap-2 xl:gap-3 xl:ml-auto">
-                        <div class="flex items-center gap-1 shrink-0 xl:ml-2 xl:mr-2" role="group" aria-label="Favori türü filtresi">
-                            <button type="button" @click="favoriteFilter='all'" :aria-pressed="favoriteFilter==='all'" :class="favoriteFilter==='all' ? 'bg-amber-400 text-gray-950 border-amber-400' : 'bg-transparent text-gray-500 border-gray-300 dark:border-gray-700 dark:text-gray-300'" class="rounded-md border px-2.5 sm:px-3 py-1.5 text-[10px] font-extrabold transition-colors">Tümü</button>
-                            <button type="button" @click="favoriteFilter='film'" :aria-pressed="favoriteFilter==='film'" :class="favoriteFilter==='film' ? 'bg-amber-400 text-gray-950 border-amber-400' : 'bg-transparent text-gray-500 border-gray-300 dark:border-gray-700 dark:text-gray-300'" class="rounded-md border px-2.5 sm:px-3 py-1.5 text-[10px] font-extrabold transition-colors">Filmler</button>
-                            <button type="button" @click="favoriteFilter='series'" :aria-pressed="favoriteFilter==='series'" :class="favoriteFilter==='series' ? 'bg-amber-400 text-gray-950 border-amber-400' : 'bg-transparent text-gray-500 border-gray-300 dark:border-gray-700 dark:text-gray-300'" class="rounded-md border px-2.5 sm:px-3 py-1.5 text-[10px] font-extrabold transition-colors">Diziler</button>
-                        </div>
-                            <div class="flex items-center gap-1 whitespace-nowrap text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-300">
-                                <span class="tabular-nums" x-text="filteredFavorites.length + ' favori yapım'"></span>
-                                <span class="text-gray-400">·</span>
-                                <button type="button" @click="navigateTo('library')" class="font-extrabold text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300">Tümünü gör <i class="fa-solid fa-arrow-right ml-0.5"></i></button>
-                            </div>
-                            <label class="flex items-center gap-1.5 shrink-0 text-[10px] font-bold text-gray-600 dark:text-gray-300">
-                                <span>Sırala</span>
-                                <span class="relative inline-flex">
-                                    <select x-model="favoriteSort" aria-label="Favorileri sırala" class="min-h-[36px] appearance-none rounded-lg border border-gray-300 bg-white px-3 pr-8 text-[11px] sm:text-xs font-bold text-gray-800 shadow-sm outline-none transition hover:border-amber-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100">
-                                        <option value="new">Son eklenenler</option>
-                                        <option value="old">İlk eklenenler</option>
-                                        <option value="rating">IMDb puanı</option>
-                                        <option value="az">İsim (A–Z)</option>
-                                        <option value="year">Yapım yılı</option>
-                                    </select>
-                                    <i class="fa-solid fa-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[9px] text-gray-500 dark:text-gray-300"></i>
-                                </span>
-                            </label>
-                            <div class="flex items-center gap-1.5 shrink-0">
-                                <button type="button" @click="scrollHomeCards('home-favorites-rail',-1)" aria-label="Önceki favori yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
-                                <button type="button" @click="scrollHomeCards('home-favorites-rail',1)" aria-label="Sonraki favori yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="home-favorites-rail" class="home-card-rail home-new-arrivals-rail">
-                        <template x-for="(item,index) in filteredFavorites.slice(0,12)" :key="'home-favorite-' + item.id">
-                            <div class="contents">
-                                <template x-if="index === 0">
-                                    <button type="button" @click="openWatchPage(item)" :class="getCardClass() + ' home-new-arrival-feature'" class="home-rail-card home-new-arrival-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
-                                        <div class="home-new-arrival-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                            <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" fetchpriority="auto" :src="item.backdrop || item.poster || item.image || item.tmdbPoster" :srcset="getTmdbImageSrcSet(item.backdrop || item.poster || item.image || item.tmdbPoster, [500, 780, 1280])" :sizes="'(max-width:639px) min(calc(82vw - 39px), 310px), (max-width:767px) calc(42vw - 40px), (max-width:1023px) calc(31vw - 30px), (max-width:1275px) 29vw, 370px'" class="w-full h-full object-cover transition-transform duration-700">
-                                            <div class="home-new-arrival-shade absolute inset-0"></div>
-                                            <span class="absolute top-3 left-3 z-[4] inline-flex items-center gap-1 rounded-md border border-amber-300/50 bg-black/80 px-2 py-1.5 text-[8px] font-black text-amber-300 shadow-lg"><i class="fa-solid fa-star"></i><span class="home-feature-rating-value" x-text="((item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—')"></span></span>
-                                            <div class="absolute top-3 right-3 flex max-w-[72%] items-center justify-end gap-1.5">
-                                                <span class="rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span><span class="rounded-md border border-white/15 bg-black/75 text-white/90 text-[8px] font-bold px-2 py-1.5 backdrop-blur-md" x-text="(item.category || item.genre || '').split(/[\\/,]/).map(g => g.trim()).filter(Boolean).slice(0,2).join(' • ') || 'TÜR'"></span>
-
-                                            </div>
-                                        </div>
-                                        <div class="home-new-arrival-copy p-3 space-y-2">
-                                            <img :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [92, 154, 185, 342])" sizes="(max-width: 639px) 88px, 108px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster">
-                                            <div class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
-                                                <h3 class="min-w-0 flex-1 text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" :style="'font-size:' + Math.max(8.5, Math.min(18, 18 - Math.max(0, (String(item.title || '').length - 16) * 0.32))) + 'px'" x-text="item.title"></h3>
-                                            </div>
-                                            <p x-text="(item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || 'Bu yapımın konu açıklaması henüz eklenmemiş.').trim().slice(0,180)"></p>
-                                            <div class="flex items-center justify-start gap-2 text-[9px] text-gray-500 dark:text-gray-400">
-                                                <span class="truncate" x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span><span class="opacity-60">•</span><span class="truncate" x-show="item.type === 'tv' || item.type === 'series'" x-text="(item.seasons ? item.seasons + ' Sezon' : '') + (item.seasons && item.episodes ? ' • ' : '') + (item.episodes ? item.episodes + ' Bölüm' : '')"></span><span class="truncate" x-show="item.type !== 'tv' && item.type !== 'series' && item.duration && item.duration !== 'Dizi' && item.duration !== 'Bilinmiyor'" x-text="item.duration"></span>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </template>
-                                <template x-if="index !== 0">
-                                    <div @click="openWatchPage(item)" :class="getCardClass()" class="home-rail-card home-new-arrival-card home-catalog-card group rounded-xl overflow-hidden border transition-all duration-300 cursor-pointer flex flex-col shadow-sm">
-                                        <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-<span class="absolute top-2 left-2 z-[3] inline-flex items-center gap-1 rounded-md border border-amber-300/35 bg-black/85 px-2 py-1 text-[9px] font-black text-amber-300 shadow-lg backdrop-blur-sm"><i class="fa-solid fa-star text-[8px]"></i><span x-text="(item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—'"></span></span>
-
-                                            <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [154]).split(' ')[0] || item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [154, 185, 260, 312, 342])" sizes="(max-width: 639px) 148px, 178px" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                            <span class="absolute top-2 right-2 rounded-md bg-black/80 px-2 py-1 text-[9px] font-black text-white" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
-
-                                        </div>
-                                        <div class="p-3 flex flex-col flex-grow justify-between space-y-1">
-                                            <div>
-                                                <span class="text-[9px] font-bold text-amber-600 dark:text-amber-400 uppercase" x-text="item.genre || item.category || item.tmdbGenres || 'GENEL'"></span>
-                                                <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1 group-hover:text-amber-500 transition-colors" x-text="item.title"></h3>
-                                            </div>
-                                            <div class="flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200 dark:border-gray-800/60">
-                                                <span x-text="item.year || item.tmdbReleaseDate?.slice(0,4) || '—'"></span>
-                                                <span x-text="item.duration || ''"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-                        </template>
-                    </div>
-                    <div x-show="filteredFavorites.length === 0" class="rounded-xl border border-dashed border-gray-300 p-5 text-center text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400">Bu filtrede henüz favori yapım bulunmuyor.</div>
-                </section>
+                <section id="home-favorites-section" data-home-section="favorites" x-data="{ favoriteFilter: 'all', favoriteSort: 'new', get filteredFavorites() { const items = this.favoriteItems.slice(); const isSeries = item => ['tv','series'].includes(String(item.type || '').toLowerCase()); const filtered = items.filter(item => this.favoriteFilter === 'all' || (this.favoriteFilter === 'series' ? isSeries(item) : !isSeries(item))); const sorters = { new: (a,b) => (Number(b._statusSavedAt)||0) - (Number(a._statusSavedAt)||0), old: (a,b) => (Number(a._statusSavedAt)||0) - (Number(b._statusSavedAt)||0), rating: (a,b) => (Number(b.rating || b.tmdbRating)||0) - (Number(a.rating || a.tmdbRating)||0), az: (a,b) => String(a.title||'').localeCompare(String(b.title||''),'tr'), year: (a,b) => String(b.year || b.tmdbReleaseDate || '').localeCompare(String(a.year || a.tmdbReleaseDate || '')) }; const sorted = filtered.sort(sorters[this.favoriteSort] || sorters.new); if (this.favoriteFilter !== 'all') return sorted; const films = sorted.filter(item => !isSeries(item)); const series = sorted.filter(isSeries); const mixed = []; while (films.length || series.length) { if (films.length) mixed.push(films.shift()); if (films.length) mixed.push(films.shift()); if (series.length) mixed.push(series.shift()); } return mixed; } }" x-cloak x-show="isHomepageSectionVisible('favorites') && favoriteItems.length > 0" class="w-full px-6 sm:px-12 space-y-5 !mt-8" x-ignore data-home-fragment="./runtime-pages/home-favorites.html?v=20261124-home-fragments-v2">
+                    <!-- Favorilerim: görünür alana yaklaşınca ayrı dosyadan yüklenir. -->
+                    <div class="home-catalog-loading" role="status" aria-live="polite" aria-label="Favorilerim yükleniyor">
+                        <div class="home-catalog-loading-heading"><span></span><span></span></div>
+                        <div class="home-catalog-loading-grid"><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span></div>
+                    </div></section>
 
                 <!-- Son eklenen yapımlar: admin kataloğuna eklenme sırası -->
                 <section id="home-new-arrivals-section" data-home-section="new-arrivals" x-cloak x-show="isHomepageSectionVisible('new-arrivals') && homeNewArrivals.length> 0" class="w-full px-6 sm:px-12 space-y-5 !mt-8" x-ignore data-home-fragment="./runtime-pages/home-new-arrivals.html?v=20261124-home-fragments-v1">
@@ -701,80 +619,20 @@
                     </div></section>
 
                 <!-- Aktif profilin bölüm takibi bulunan dizileri -->
-                <section id="home-series-tracking-section" data-home-section="series-tracking" x-cloak x-show="!catalogLoading && isHomepageSectionVisible('series-tracking') && librarySeriesEntries.length> 0" class="w-full px-6 sm:px-12 space-y-5" x-ignore>
-                    <div class="home-series-tracking-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
-                        <div>
-                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">BÖLÜM BÖLÜM • KALDIĞIN YERİ UNUTMA</p>
-                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Dizi Takibi</h2>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><span x-text="currentProfile.name"></span> profilinde takip ettiğin diziler ve bölüm ilerlemen</p>
-                        </div>
-                        <div class="flex items-center gap-2 shrink-0">
-                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="homeSectionReady['series-tracking'] ? librarySeriesEntries.length + ' takipteki dizi' : ''"></span>
-                            <button type="button" @click="scrollHomeCards('home-series-tracking-rail',-1)" aria-label="Önceki takip edilen diziler" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
-                            <button type="button" @click="scrollHomeCards('home-series-tracking-rail',1)" aria-label="Sonraki takip edilen diziler" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
-                            <button type="button" @click="navigateTo('library')" class="text-[10px] font-black text-rose-500 hover:text-rose-400 ml-1">Kütüphanem <i class="fa-solid fa-arrow-right ml-1"></i></button>
-                        </div>
-                    </div>
-                    <div id="home-series-tracking-rail" class="home-card-rail home-series-tracking-rail">
-                        <template x-for="entry in (homeSectionReady['series-tracking'] ? librarySeriesEntries.slice(0,12) : [])" :key="'series-tracking-' + entry.item.id">
-                            <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="home-rail-card home-series-tracking-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
-                                <div class="home-series-tracking-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                    <img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image || entry.item.tmdbPoster || entry.item.backdrop" :srcset="getTmdbImageSrcSet(entry.item.poster || entry.item.image || entry.item.tmdbPoster || entry.item.backdrop)" sizes="(max-width:639px) 46vw, (max-width:1023px) 24vw, 19vw" class="w-full h-full object-cover transition-transform duration-700">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10 pointer-events-none"></div>
-                                    <span class="absolute top-3 left-3 rounded-md bg-black/75 px-2 py-1.5 text-[8px] font-black uppercase tracking-wider text-white backdrop-blur">Dizi takibinde</span>
-                                    <span class="absolute bottom-3 right-3 rounded-md bg-black/75 px-2 py-1.5 text-[10px] font-black text-rose-300 backdrop-blur" x-text="entry.percent + '%'"></span>
-                                </div>
-                                <div class="p-3 space-y-2.5">
-                                    <h3 class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="entry.item.title"></h3>
-                                    <div class="flex items-center justify-between gap-2 text-[9px] text-gray-500 dark:text-gray-400">
-                                        <span class="truncate" x-text="entry.label"></span>
-                                        <span class="shrink-0 font-bold text-rose-500" x-text="entry.total ? entry.watchedCount + ' / ' + entry.total : entry.watchedCount + ' bölüm'"></span>
-                                    </div>
-                                    <div class="h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden">
-                                        <div class="home-series-tracking-progress h-full rounded-full transition-all duration-500" :style="'width:' + entry.percent + '%'"></div>
-                                    </div>
-                                    <div class="flex items-center justify-between text-[9px] text-gray-500 dark:text-gray-400">
-                                        <span x-text="entry.percent >= 100 ? 'Tüm bölümler tamamlandı' : 'İzlemeye devam et'"></span>
-                                        <i class="fa-solid fa-play text-rose-500"></i>
-                                    </div>
-                                </div>
-                            </button>
-                        </template>
-                    </div>
-                </section>
+                <section id="home-series-tracking-section" data-home-section="series-tracking" x-cloak x-show="!catalogLoading && isHomepageSectionVisible('series-tracking') && librarySeriesEntries.length> 0" class="w-full px-6 sm:px-12 space-y-5" x-ignore data-home-fragment="./runtime-pages/home-series-tracking.html?v=20261124-home-fragments-v2">
+                    <!-- Dizi Takibi: görünür alana yaklaşınca ayrı dosyadan yüklenir. -->
+                    <div class="home-catalog-loading" role="status" aria-live="polite" aria-label="Dizi Takibi yükleniyor">
+                        <div class="home-catalog-loading-heading"><span></span><span></span></div>
+                        <div class="home-catalog-loading-grid"><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span></div>
+                    </div></section>
 
                 <!-- Kişisel izleme geçmişine, yoksa katalog dağılımına göre tür keşfi -->
-                <section id="home-genre-discovery-section" data-home-section="genre-discovery" x-data="{ showAllGenres: false }" x-cloak x-show="isHomepageSectionVisible('genre-discovery') && (!homeSectionReady['genre-discovery'] || homeDiscoveryGenres.length> 0)" class="w-full px-6 sm:px-12 space-y-4" x-ignore>
-                    <div class="home-genre-discovery-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
-                        <div class="min-w-0">
-                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1.5">YENİ HİKÂYELER KEŞFET</p>
-                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Türlere Göre Keşfet</h2>
-                            <p class="home-genre-discovery-subtitle mt-2">Sana uygun türü seç, keşfetmeye hemen başla.</p>
-                        </div>
-                    </div>
-                    <div class="home-genre-discovery-grid" :class="{ 'is-collapsed': !showAllGenres }">
-                        <template x-for="genre in (homeSectionReady['genre-discovery'] ? homeDiscoveryGenres : [])" :key="'home-genre-' + genre.name">
-                            <button type="button" @click="selectPersonalizedGenre(genre.name); navigateTo('explore')" class="home-genre-discovery-card group" :aria-label="genre.label + ' yapımlarını keşfet'">
-                                <span class="home-genre-discovery-icon">
-                                    <i :class="({'aksiyon':'fa-solid fa-bolt','macera':'fa-solid fa-compass','komedi':'fa-solid fa-face-laugh','dram':'fa-solid fa-masks-theater','korku':'fa-solid fa-ghost','gerilim':'fa-solid fa-eye','bilim kurgu':'fa-solid fa-rocket','romantik':'fa-solid fa-heart','animasyon':'fa-solid fa-wand-magic-sparkles','suc':'fa-solid fa-fingerprint','belgesel':'fa-solid fa-earth-europe','spor':'fa-solid fa-trophy','biyografi':'fa-solid fa-user-tie','aile':'fa-solid fa-people-roof','gizem':'fa-solid fa-magnifying-glass','tarih':'fa-solid fa-landmark','fantastik':'fa-solid fa-dragon','fantazi':'fa-solid fa-wand-sparkles','savas':'fa-solid fa-shield-halved','vahsi bati':'fa-solid fa-hat-cowboy','muzik':'fa-solid fa-music','politik':'fa-solid fa-scale-balanced'})[genre.name] || 'fa-solid fa-clapperboard'"></i>
-                                </span>
-                                <span class="home-genre-discovery-name" x-text="genre.label"></span>
-                            </button>
-                        </template>
-                    </div>
-                    <div class="flex justify-center pt-1 sm:hidden" x-show="homeSectionReady['genre-discovery'] && homeDiscoveryGenres.length > 6">
-                        <button type="button" @click="showAllGenres = !showAllGenres" class="home-genre-discovery-more" :aria-expanded="showAllGenres">
-                            <span x-text="showAllGenres ? 'Daha az göster' : 'Tümünü göster'"></span>
-                            <i class="fa-solid" :class="showAllGenres ? 'fa-chevron-up' : 'fa-chevron-down'" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <div class="hidden justify-center pt-1 sm:flex" x-show="homeSectionReady['genre-discovery'] && homeDiscoveryGenres.length > 16">
-                        <button type="button" @click="showAllGenres = !showAllGenres" class="home-genre-discovery-more" :aria-expanded="showAllGenres">
-                            <span x-text="showAllGenres ? 'Daha az göster' : 'Tümünü göster'"></span>
-                            <i class="fa-solid" :class="showAllGenres ? 'fa-chevron-up' : 'fa-chevron-down'" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </section>
+                <section id="home-genre-discovery-section" data-home-section="genre-discovery" x-data="{ showAllGenres: false }" x-cloak x-show="isHomepageSectionVisible('genre-discovery') && (!homeSectionReady['genre-discovery'] || homeDiscoveryGenres.length> 0)" class="w-full px-6 sm:px-12 space-y-4" x-ignore data-home-fragment="./runtime-pages/home-genre-discovery.html?v=20261124-home-fragments-v2">
+                    <!-- Türlere Göre Keşfet: görünür alana yaklaşınca ayrı dosyadan yüklenir. -->
+                    <div class="home-catalog-loading" role="status" aria-live="polite" aria-label="Türlere Göre Keşfet yükleniyor">
+                        <div class="home-catalog-loading-heading"><span></span><span></span></div>
+                        <div class="home-catalog-loading-grid"><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span></div>
+                    </div></section>
 
                 <!-- Yönetim panelinden yayınlanan koleksiyonlar -->
                 <div data-home-section="published-collections" x-cloak x-show="isHomepageSectionVisible('published-collections') && (!homeSectionReady['published-collections'] || publishedCollections.length > 0)" style="min-height:1px" class="space-y-10" x-ignore>
@@ -815,20 +673,12 @@
                         <div class="home-catalog-loading-grid"><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span></div>
                     </div>
                 </section>
-                <section id="home-franchises-section" data-home-section="franchises" x-cloak x-show="currentPage === 'home' && isHomepageSectionVisible('franchises') && franchiseEntries.length> 0" class="w-full px-6 sm:px-12 space-y-4" x-ignore>
-                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 border-b border-gray-200/70 dark:border-white/10 pb-4">
-                        <div><p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-600 dark:text-rose-400 mb-1.5">BİRLİKTE İZLE, SERİYİ TAMAMLA</p><h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Seri Filmler</h2><p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Favori film serilerini tek yerde keşfet.</p></div>
-                        <button type="button" @click="navigateTo('franchises')" class="inline-flex items-center gap-2 self-start sm:self-auto text-xs font-bold text-rose-600 dark:text-rose-400 hover:gap-3 transition-all">Tüm serileri gör <i class="fa-solid fa-arrow-right"></i></button>
-                    </div>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                        <template x-for="franchise in (homeSectionReady.franchises ? featuredFranchises.slice(0, 8) : [])" :key="'home-franchise-'+franchise.id">
-                            <button type="button" @click="openFranchise(franchise)" class="group relative min-w-0 overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#151922] text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-xl">
-                                <div class="relative overflow-hidden bg-gray-900" style="aspect-ratio:16/6"><img :src="franchise.backdrop || franchise.poster" :srcset="getTmdbImageSrcSet(franchise.backdrop || franchise.poster, [342, 500, 780])" sizes="(max-width: 639px) 90vw, (max-width: 1023px) 45vw, 30vw" :alt="franchise.title" loading="lazy" decoding="async" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"><div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div><span class="hidden sm:inline-flex absolute left-3 top-3 rounded-full border border-white/20 bg-black/45 px-2.5 py-1 text-[9px] font-black uppercase tracking-wider text-white backdrop-blur">FİLM SERİSİ</span><div class="absolute inset-x-3 bottom-3 hidden sm:block"><h3 class="text-sm sm:text-base font-black text-white line-clamp-1" x-text="franchise.title"></h3><p class="mt-1 text-[10px] font-semibold text-white/75" x-text="franchise.count + ' film · ' + franchise.firstYear + (franchise.lastYear !== franchise.firstYear ? '–' + franchise.lastYear : '')"></p></div></div>
-                                <div class="hidden sm:flex items-center justify-between gap-2 px-3 py-2.5"><span class="truncate text-[10px] text-gray-500 dark:text-gray-400" x-text="franchise.description"></span><i class="fa-solid fa-arrow-right shrink-0 text-xs text-rose-500 transition-transform group-hover:translate-x-1"></i></div><div class="sm:hidden px-3 py-2.5"><h3 class="text-sm font-black text-gray-900 dark:text-white line-clamp-1" x-text="franchise.title"></h3><p class="mt-1 text-[10px] font-semibold text-gray-500 dark:text-gray-400" x-text="franchise.count + ' film · ' + franchise.firstYear + (franchise.lastYear !== franchise.firstYear ? '–' + franchise.lastYear : '')"></p></div>
-                            </button>
-                        </template>
-                    </div>
-                </section>
+                <section id="home-franchises-section" data-home-section="franchises" x-cloak x-show="currentPage === 'home' && isHomepageSectionVisible('franchises') && franchiseEntries.length> 0" class="w-full px-6 sm:px-12 space-y-4" x-ignore data-home-fragment="./runtime-pages/home-franchises.html?v=20261124-home-fragments-v2">
+                    <!-- Seri Filmler: görünür alana yaklaşınca ayrı dosyadan yüklenir. -->
+                    <div class="home-catalog-loading" role="status" aria-live="polite" aria-label="Seri Filmler yükleniyor">
+                        <div class="home-catalog-loading-heading"><span></span><span></span></div>
+                        <div class="home-catalog-loading-grid"><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span><span class="home-catalog-loading-card"></span></div>
+                    </div></section>
             </div>
         </template>
 
