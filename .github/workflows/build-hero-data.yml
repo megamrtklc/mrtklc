@@ -6,6 +6,8 @@ on:
     paths:
       - 'filmvediziler.json'
       - 'scripts/build-hero-data.mjs'
+      - 'scripts/assemble-html.mjs'
+      - 'src/templates/**'
       - '.github/workflows/build-hero-data.yml'
   workflow_dispatch:
 
@@ -30,6 +32,7 @@ jobs:
           for attempt in 1 2 3; do
             git fetch origin main
             git reset --hard origin/main
+            node scripts/assemble-html.mjs
             node scripts/build-hero-data.mjs
             git add hero-data.json catalog-lite.json catalog-cast.json index.html
             if git diff --cached --quiet; then
