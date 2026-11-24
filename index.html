@@ -608,7 +608,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     <div class="cv-mhero-controls" aria-label="Manşet geçişleri">
       <button type="button" class="cv-mhero-arrow" @click="navigateHeroSlide(-1)" aria-label="Önceki yapım"><i class="fa-solid fa-chevron-left text-[10px]"></i></button>
       <div class="cv-mhero-dots">
-        <template x-for="(item,index) in heroSlides" :key="'mobile-cinematic-dot-'+item.id">
+        <template x-for="(item,index) in heroSlides" :key="'mobile-cinematic-dot-'+index">
           <button type="button" class="cv-mhero-dot" :class="index === currentSlideIndex ? 'is-active' : ''" @click="selectHeroSlide(index)" :aria-label="item.title + ' yapımını göster'" :aria-current="index === currentSlideIndex ? 'true' : 'false'"></button>
         </template>
       </div>
