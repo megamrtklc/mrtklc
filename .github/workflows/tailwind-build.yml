@@ -10,6 +10,9 @@ on:
       - 'index.html'
       - 'app.js'
       - 'scripts/minify-inline-css.mjs'
+      - 'scripts/assemble-html.mjs'
+      - 'scripts/build-hero-data.mjs'
+      - 'src/templates/**'
   workflow_dispatch:
 
 permissions:
@@ -35,11 +38,13 @@ jobs:
           for attempt in 1 2 3; do
             git fetch origin main
             git reset --hard origin/main
+            node scripts/assemble-html.mjs
+            node scripts/build-hero-data.mjs
             node scripts/minify-inline-css.mjs
             npx tailwindcss -c tailwind.config.js -i ./src/tailwind.css -o ./tailwind.css --minify
             npx terser app.js --compress --mangle --output app.min.js
             wc -c tailwind.css app.js app.min.js
-            git add index.html tailwind.css app.min.js
+            git add index.html tailwind.css app.min.js hero-data.json catalog-lite.json catalog-cast.json
             if git diff --cached --quiet; then
               echo "Compiled assets are already current."
               exit 0
