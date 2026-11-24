@@ -634,13 +634,13 @@
                     });
                     // Manşet ayrı bootstrap verisiyle çizilir; ana katalog isteğini bekletmeden başlat.
                     // Düşük öncelik, ilk manşet görsellerinin ağ önceliğini korurken indirmeyi erkenden başlatır.
-                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261117-franchise-data-v1', { cache: 'default' });
+                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261117-franchise-data-v1', { cache: 'no-cache' });
                     try {
                         // Üretim sırasında HTML'e gömülen küçük manşet verisi ağ isteği beklemeden hazırdır.
                         // Yerel geliştirme/önbellek senaryolarında gömülü veri yoksa JSON dosyasına geri dön.
                         let heroData = window.__CV_HERO_BOOTSTRAP__ || null;
                         if (!heroData) {
-                            const heroResponse = await fetch('./hero-data.json', { cache: 'default' });
+                            const heroResponse = await fetch('./hero-data.json', { cache: 'no-cache' });
                             if (heroResponse.ok) heroData = await heroResponse.json();
                         }
                         const heroSource = Array.isArray(heroData?.catalog) ? heroData.catalog : [];
