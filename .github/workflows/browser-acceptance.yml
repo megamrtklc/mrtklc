@@ -31,6 +31,7 @@ jobs:
           node --check app.min.js
           node --check scripts/assemble-html.mjs
           node tests/mobile-hero-resource-contract.mjs
+          node scripts/assemble-html.mjs
           node tests/html-assembly-contract.mjs
           node --check tests/acceptance.mjs
       - name: Install Playwright
