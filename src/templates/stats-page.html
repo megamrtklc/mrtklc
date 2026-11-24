@@ -74,3 +74,55 @@
                                     <i class="fa-solid fa-chevron-right text-[10px] text-gray-400"></i>
                                 </button>
                             </template>
+                        </div>
+                        <div x-show="viewingStats.progressItems.length === 0" class="py-10 text-center">
+                            <i class="fa-solid fa-chart-line text-3xl text-gray-300 dark:text-gray-700"></i>
+                            <p class="mt-3 text-xs font-bold text-gray-700 dark:text-gray-200">Henüz izleme ilerlemesi yok</p>
+                            <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400">Doğrudan video oynatıp izlemeye başladığında ilerleme burada görünür.</p>
+                        </div>
+                    </section>
+
+                    <section :class="getCardClass()" class="xl:col-span-2 rounded-2xl border p-5 sm:p-6 shadow-sm space-y-4">
+                        <div class="border-b border-gray-200 dark:border-gray-800 pb-3">
+                            <h3 class="text-sm font-black text-gray-900 dark:text-white">En çok izlediğim türler</h3>
+                            <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">Tamamlanan filmlerin tür dağılımı</p>
+                        </div>
+                        <div x-show="viewingStats.topGenres.length" class="space-y-4">
+                            <template x-for="genre in viewingStats.topGenres" :key="genre.name">
+                                <div>
+                                    <div class="flex items-center justify-between text-[11px] mb-1.5"><span class="font-bold text-gray-800 dark:text-gray-200" x-text="genre.name"></span><span class="text-gray-500" x-text="genre.count"></span></div>
+                                    <div class="h-2 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden"><div class="h-full rounded-full bg-rose-600" :style="'width:' + genre.percent + '%'"></div></div>
+                                </div>
+                            </template>
+                        </div>
+                        <div x-show="viewingStats.topGenres.length === 0" class="py-8 text-center text-[11px] text-gray-500 dark:text-gray-400">Tür dağılımı oluşturmak için tamamlanmış film kaydı gerekli.</div>
+                    </section>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <section :class="getCardClass()" class="rounded-2xl border p-5 sm:p-6 shadow-sm space-y-4">
+                        <div class="border-b border-gray-200 dark:border-gray-800 pb-3"><h3 class="text-sm font-black text-gray-900 dark:text-white">Son 6 ayın hareketi</h3><p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">İzleme ilerlemesi veya bölüm takibi güncellenen yapımlar</p></div>
+                        <div class="flex items-end justify-between gap-2 h-32 pt-2">
+                            <template x-for="month in viewingStats.monthlyActivity" :key="month.label">
+                                <div class="flex-1 h-full flex flex-col items-center justify-end gap-2 min-w-0"><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400" x-text="month.count"></span><div class="w-full max-w-10 rounded-t-md bg-rose-600/85 transition-all" :style="'height:' + Math.max(month.count ? 8 : 2, month.percent) + '%'"></div><span class="text-[9px] font-semibold text-gray-500 dark:text-gray-400 capitalize" x-text="month.label"></span></div>
+                            </template>
+                        </div>
+                        <p x-show="!viewingStats.monthlyActivity.some(month => month.count)" class="text-[10px] text-center text-gray-500 dark:text-gray-400">Henüz aylık hareket kaydı bulunmuyor.</p>
+                    </section>
+                    <section :class="getCardClass()" class="rounded-2xl border p-5 sm:p-6 shadow-sm space-y-4">
+                        <div class="border-b border-gray-200 dark:border-gray-800 pb-3"><h3 class="text-sm font-black text-gray-900 dark:text-white">Kütüphane dağılımı</h3><p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1">İlerleme veya bölüm takibi bulunan yapımlar</p></div>
+                        <div class="space-y-4">
+                            <template x-for="entry in viewingStats.contentBreakdown" :key="entry.label">
+                                <div><div class="flex items-center justify-between text-[11px] mb-1.5"><span class="font-bold text-gray-800 dark:text-gray-200" x-text="entry.label"></span><span class="text-gray-500" x-text="entry.count"></span></div><div class="h-2 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden"><div class="h-full rounded-full bg-rose-600" :style="'width:' + (viewingStats.totalTracked ? entry.count / viewingStats.totalTracked * 100 : 0) + '%'"></div></div></div>
+                            </template>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-3 text-[11px]"><span class="text-gray-500 dark:text-gray-400">İzleme listendeki yapımlar</span><strong class="text-gray-900 dark:text-white" x-text="viewingStats.watchlistCount"></strong></div>
+                    </section>
+                </div>
+
+                <div :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <i class="fa-solid fa-circle-info text-rose-500 text-lg"></i>
+                    <p class="text-[10px] leading-relaxed text-gray-500 dark:text-gray-400">İstatistikler bu tarayıcıdaki yerel kayıtlarla ve aktif profile ait verilerle hesaplanır. Eski sürümden kalan ortak film ilerlemeleri yalnızca kaldığın yerden devam edebilmen için korunur; kişisel istatistiklere ve önerilere karıştırılmaz. Harici oynatıcı bağlantıları ve geçmişe dönük izleme kayıtları otomatik olarak ölçülemez.</p>
+                </div>
+            </div>
+        </template>
