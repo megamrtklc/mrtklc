@@ -59,8 +59,13 @@
         if (!isHome || document.documentElement.classList.contains('cv-tv-mode') || !window.matchMedia('(max-width: 767px)').matches) return;
         var bootstrap = window.__CV_HERO_BOOTSTRAP__;
         var slides = bootstrap && bootstrap.homepageConfig && bootstrap.homepageConfig.mobileHeroSlides;
-        var firstSlide = Array.isArray(slides) ? (slides.find(function (slide) { return slide && slide.active !== false; }) || slides[0]) : null;
         var catalog = bootstrap && Array.isArray(bootstrap.catalog) ? bootstrap.catalog : [];
+        var firstSlide = Array.isArray(slides) ? slides.find(function (slide) {
+          if (!slide || slide.active === false) return false;
+          return catalog.some(function (entry) {
+            return String(entry.id) === String(slide.id) && (entry.backdrop || entry.poster || entry.image || entry.tmdbPoster);
+          });
+        }) : null;
         var item = firstSlide ? catalog.find(function (entry) { return String(entry.id) === String(firstSlide.id); }) : null;
         if (!item) return;
         function preloadImage(id, url, widths, sizes, priority) {
