@@ -1169,6 +1169,11 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
+                    <!--
+  İzleme sayfasının sol kolonu: video oynatıcı, sezon/bölüm takibi,
+  yapım açıklaması, oyuncu kadrosu ve topluluk yorumlarını içerir.
+  Ana watch şablonunun Alpine kapsamını kullanır.
+-->
                     <!-- Left Section -->
                     <div id="watch-left-column" class="lg:col-span-8 flex flex-col space-y-6">
 
@@ -1553,6 +1558,10 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
                     </div>
 
+                    <!--
+  İzleme sayfasının sağ kolonu: yapım künyesi ve benzer yapımlar kartları.
+  Ana watch şablonunun Alpine kapsamını kullanır.
+-->
                     <!-- Right Section -->
                     <div id="watch-right-column" class="lg:col-span-4 flex flex-col space-y-6">
 
@@ -1677,7 +1686,12 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
                     </div>
                 </div>
+                </div>
 
+                <!--
+  İzleme sayfasının fragman penceresi. x-teleport ile body içine taşınır;
+  açma/kapama durumu ana watch şablonundaki trailerOpen değişkenini kullanır.
+-->
                 <template x-teleport="body">
                     <div x-cloak x-show="trailerOpen" x-transition.opacity @click.self="trailerOpen = false" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Yapım fragmanı">
                         <div x-show="trailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
