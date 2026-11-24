@@ -19,7 +19,8 @@ const partials = {
   EXPLORE: 'src/templates/explore-page.html',
   WATCHLIST: 'src/templates/watchlist-page.html',
   LIBRARY: 'src/templates/library-page.html',
-  STATS: 'src/templates/stats-page.html'
+  STATS: 'src/templates/stats-page.html',
+  VIDEO_LINKS: 'src/templates/video-links-page.html'
 };
 
 let html = await readFile(shellPath, 'utf8');
