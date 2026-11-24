@@ -111,15 +111,30 @@
                         .map(entry => entry.item);
                 },
                 // [ARAMA PENCERESİ] Büyük arama arayüzünü yalnızca ilk açılışta indirir ve Alpine kapsamına alır.
+                // Arama penceresinin HTML ve CSS dosyalarını yalnızca ilk kullanımda, paralel indirir.
                 async ensureSearchOverlay() {
                     if (this.searchOverlayLoaded) return true;
                     if (this.searchOverlayPromise) return this.searchOverlayPromise;
                     this.searchOverlayPromise = (async () => {
                         try {
+                            const stylePromise = new Promise(resolve => {
+                                const link = document.createElement('link');
+                                link.rel = 'stylesheet';
+                                link.href = './css/perde-search.css?v=20261124-search-css-v1';
+                                link.dataset.perdeSearchStyle = 'true';
+                                link.onload = () => resolve(true);
+                                link.onerror = () => {
+                                    console.warn('[Perde search overlay] Stil dosyası yüklenemedi.');
+                                    link.remove();
+                                    resolve(false);
+                                };
+                                document.head.appendChild(link);
+                            });
                             const response = await fetch('./runtime-pages/search-overlay.html?v=20261124-search-overlay-v1', { cache: 'default' });
                             if (!response.ok) throw new Error('Arama penceresi yüklenemedi (HTTP ' + response.status + ').');
                             const html = await response.text();
                             if (!html.trim()) throw new Error('Arama penceresi boş döndü.');
+                            await stylePromise;
                             const host = document.createElement('div');
                             host.id = 'perde-search-overlay-host';
                             host.innerHTML = html;
