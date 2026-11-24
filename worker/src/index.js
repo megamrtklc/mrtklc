@@ -144,19 +144,31 @@ async function hashPassword(password,saltBytes){
   const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt:saltBytes,iterations:310000,hash:"SHA-256"},material,256);
   return encodeBase64Url(new Uint8Array(bits));
 }
+function authSetupError(code,cause){
+  const error=new Error("Yönetici kimlik doğrulama kurulumu başarısız.");
+  error.code=code;
+  if(cause)console.error("Kimlik doğrulama kurulum ayrıntısı:",cause);
+  return error;
+}
 async function readCredential(env){
-  if(!env.SECURITY_DB)throw new Error("Yönetici güvenlik veritabanı bağlı değil.");
-  return await env.SECURITY_DB.prepare("SELECT password_hash,password_salt,password_iterations FROM admin_credentials WHERE id=1").first();
+  if(!env.SECURITY_DB)throw authSetupError("SECURITY_DB_UNBOUND");
+  try{
+    return await env.SECURITY_DB.prepare("SELECT password_hash,password_salt,password_iterations FROM admin_credentials WHERE id=1").first();
+  }catch(error){throw authSetupError("CREDENTIAL_READ_FAILED",error);}
 }
 async function ensureCredential(env){
   let credential=await readCredential(env);
   if(credential)return credential;
-  if(!env.ADMIN_PASSWORD||String(env.ADMIN_PASSWORD).length<10)throw new Error("İlk yönetici şifresi yapılandırılmamış.");
+  if(!env.ADMIN_PASSWORD||String(env.ADMIN_PASSWORD).length<10)throw authSetupError("ADMIN_PASSWORD_SECRET_MISSING");
   const salt=crypto.getRandomValues(new Uint8Array(16));
-  const hash=await hashPassword(env.ADMIN_PASSWORD,salt);
-  await env.SECURITY_DB.prepare("INSERT OR IGNORE INTO admin_credentials (id,password_hash,password_salt,password_iterations,updated_at) VALUES (1,?,?,310000,?)").bind(hash,encodeBase64Url(salt),Math.floor(Date.now()/1000)).run();
+  let hash;
+  try{hash=await hashPassword(env.ADMIN_PASSWORD,salt);}
+  catch(error){throw authSetupError("PASSWORD_HASH_FAILED",error);}
+  try{
+    await env.SECURITY_DB.prepare("INSERT OR IGNORE INTO admin_credentials (id,password_hash,password_salt,password_iterations,updated_at) VALUES (1,?,?,310000,?)").bind(hash,encodeBase64Url(salt),Math.floor(Date.now()/1000)).run();
+  }catch(error){throw authSetupError("CREDENTIAL_WRITE_FAILED",error);}
   credential=await readCredential(env);
-  if(!credential)throw new Error("Yönetici kimlik bilgisi oluşturulamadı.");
+  if(!credential)throw authSetupError("CREDENTIAL_READBACK_EMPTY");
   return credential;
 }
 async function verifyPassword(password,credential){
@@ -242,7 +254,7 @@ async function handleLogin(request,env){
   try{
     credential=await ensureCredential(env);
     valid=/^[a-z0-9._-]{3,32}$/.test(username)&&username===configuredUsername&&password.length>=10&&password.length<=256&&await verifyPassword(password,credential);
-  }catch(error){console.error("Giriş doğrulama altyapısı:",error);return json({error:"Güvenlik veritabanına erişilemiyor."},503);}
+  }catch(error){console.error("Giriş doğrulama altyapısı:",error);return json({error:"Güvenlik veritabanına erişilemiyor.",code:/^[A-Z_]{3,48}$/.test(String(error?.code||""))?error.code:"AUTH_SETUP_FAILED"},503);}
   await recordLogin(env,request,username,valid);
   if(!valid){
     let loginBrand=BRAND_CONFIG_DEFAULTS;try{const loaded=await readBrandConfig(env);if(loaded.config)loginBrand=loaded.config;}catch{}
