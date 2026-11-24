@@ -21,8 +21,9 @@ let html = await readFile(shellPath, 'utf8');
 
 for (const [name, path] of Object.entries(partials)) {
   const marker = `<!-- PERDE_TEMPLATE:${name} -->`;
-  if (!html.includes(marker)) {
-    throw new Error(`Şablon işareti bulunamadı: ${marker}`);
+  const occurrences = html.split(marker).length - 1;
+  if (occurrences !== 1) {
+    throw new Error(`Şablon işareti tam bir kez bulunmalı: ${marker} (bulunan: ${occurrences})`);
   }
   const partial = await readFile(path, 'utf8');
   html = html.replace(marker, partial.trimEnd());
