@@ -14,7 +14,8 @@ import { readFile, writeFile } from 'node:fs/promises';
 const shellPath = 'src/templates/index-shell.html';
 const outputPath = 'index.html';
 const partials = {
-  HOME: 'src/templates/homepage.html'
+  HOME: 'src/templates/homepage.html',
+  WATCH: 'src/templates/watch-page.html'
 };
 
 let html = await readFile(shellPath, 'utf8');
