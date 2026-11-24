@@ -48,8 +48,10 @@
     }
 
     async function fetchPage(key) {
+        // Sayfa önbellekte olsa bile önce rota stilinin yüklenmesini (ve hata sonrası yeniden denenmesini) sağla.
+        await ensurePageStyles(key);
         if (pageCache.has(key)) return pageCache.get(key);
-        const request = ensurePageStyles(key).then(() => fetch(`./runtime-pages/${key}.html?v=${buildVersion}`, { cache: 'default' }))
+        const request = fetch(`./runtime-pages/${key}.html?v=${buildVersion}`, { cache: 'default' })
             .then(response => {
                 if (!response.ok) throw new Error(`Sayfa dosyası yüklenemedi (HTTP ${response.status}).`);
                 return response.text();
