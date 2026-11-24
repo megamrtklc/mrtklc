@@ -2252,7 +2252,7 @@
 
                 async openActorProfile(actor, updateUrl = true) {
                     if (!actor || !actor.id) return;
-                    this.selectedActor = { ...actor, id: Number(actor.id) };
+                    this.selectedActor = { ...actor, id: Number(actor.id), awards: Array.isArray(actor.awards) ? actor.awards : [], filmography: Array.isArray(actor.filmography) ? actor.filmography : [] };
                     this.currentPage = 'actor';
                     this.actorProfileError = '';
                     if (updateUrl) this.syncRouteToUrl('actor', null);
@@ -2369,7 +2369,7 @@
                 async openDirectorProfile(actor, updateUrl = true) {
                     if (!actor || (!actor.id && !actor.name)) return;
                     actor = await this.resolveDirectorPerson(actor);
-                    this.selectedActor = { ...actor, id: actor.id ? Number(actor.id) : null };
+                    this.selectedActor = { ...actor, id: actor.id ? Number(actor.id) : null, awards: Array.isArray(actor.awards) ? actor.awards : [], filmography: Array.isArray(actor.filmography) ? actor.filmography : [] };
                     this.currentPage = 'director';
                     this.actorProfileError = '';
                     if (!actor.id) {
