@@ -1,7 +1,9 @@
 
-        // PERDE ANA UYGULAMASI: Alpine.js durumunu, sayfa gezinmesini ve ekran özelliklerini tanımlar.\n        function ultimateProApp() {
+        // PERDE ANA UYGULAMASI: Alpine.js durumunu, sayfa gezinmesini ve ekran özelliklerini tanımlar.
+        function ultimateProApp() {
             return {
-                // Görsel yardımcılarını ana Alpine kapsamına aktarır; işlevler şablonlardan this üzerinden çağrılabilir.\n                ...window.PerdeImageHelpers,
+                // Görsel yardımcılarını ana Alpine kapsamına aktarır; işlevler şablonlardan this üzerinden çağrılabilir.
+                ...window.PerdeImageHelpers,
                 currentPage: 'home',
                 mobileMenuOpen: false,
                 headerScrolled: window.scrollY > 40,
