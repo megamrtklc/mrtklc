@@ -183,34 +183,17 @@
  }).catch(function(){});
 })();
 </script>
+    <!-- Çekirdek yardımcıları: güvenli depolama, tema yönetimi ve eski profil verilerinin geçişi. -->
     <script defer src="./js/core.js?v=20261124-core-split-v1"></script>
-            <script defer src="./js/image-helpers.js?v=20261124-image-helpers-v1"></script>
-            <script defer fetchpriority="high" src="./app.min.js?v=20261124-modular-v1"></script>
+    <!-- Görsel yardımcıları: TMDB responsive srcset üretimi ve bozuk görseller için yedek görsel. -->
+    <script defer src="./js/image-helpers.js?v=20261124-image-helpers-v1"></script>
+    <!-- Ana Alpine uygulaması: sayfa durumları, gezinme ve uygulama özellikleri. -->
+    <script defer fetchpriority="high" src="./app.min.js?v=20261124-modular-v1"></script>
     <script defer fetchpriority="low" src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Modüler stil dosyası: daha önce sayfa içine dağılmış ortak ve sayfa özelindeki CSS kuralları. -->
     <link rel="stylesheet" href="./css/perde.css?v=20261124-css-split-v1">
 
-    
-
-    
-
-    
-
-    
-
- 
-    
-    
-
-
-    
     </style>
-
-    
-
-    
-
-
-
 
 <script>
 window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
@@ -258,56 +241,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 };
 </script>
 
-    
-
-
-
-
-
-    
-    
-
-    
-
-    
-
-    
     <!-- Mobil kaydırma akıcılığı: dekoratif blur/backdrop katmanlarını hafiflet. -->
-    
-    
-    
-
-    
-    
-    
-    
-
-
-
-    
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
-
-
-
-
-
-
-
-
 
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
@@ -323,7 +257,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     </div>
                     <span x-show="(headerConfig.brandPrimary || '').trim() || (headerConfig.brandAccent || '').trim()" class="text-xl font-black tracking-wider uppercase max-[360px]:hidden"><span x-show="(headerConfig.brandPrimary || '').trim()" x-text="headerConfig.brandPrimary"></span><span x-show="(headerConfig.brandAccent || '').trim()" class="text-rose-700 dark:text-rose-400" x-text="headerConfig.brandAccent"></span></span>
                 </a>
-                
+
                 <nav class="cv-desktop-nav hidden xl:flex items-center space-x-5 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     <a x-show="headerConfig.showHome !== false" href="#" @click.prevent="navigateTo('home')"  :class="isHeaderMenuActive('home') ? 'is-active' : ''" class="transition-colors" x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</a>
                     <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore')"  :class="isHeaderMenuActive('explore') ? 'is-active' : ''" class="transition-colors" x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</a>
@@ -337,7 +271,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                     </template>
                 </nav>
             </div>
-            
+
             <div class="flex items-center space-x-1 sm:space-x-4">
                 <button x-show="headerConfig.showMobileMenu !== false" @click="mobileMenuOpen = !mobileMenuOpen" :aria-expanded="mobileMenuOpen.toString()" aria-label="Menüyü aç veya kapat" class="xl:hidden w-9 h-9 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:text-rose-500 transition-colors">
                     <i :class="mobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
@@ -401,9 +335,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
             </nav>
         </div>
     </header>
-
-    
-
 
     <template x-teleport="body">
         <div x-cloak x-show="searchOverlayOpen" x-transition.opacity @click.self="closeSearchOverlay()" @keydown.escape.window="closeSearchOverlay()" class="cineverse-search-backdrop" role="dialog" aria-modal="true" aria-label="Film ve dizi ara">
@@ -471,7 +402,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
             </button>
         </div>
         <!-- Katalog yüklenene kadar yanlış yapım bilgisi göstermeyen nötr manşet iskeleti. -->
-        
+
         <!-- Masaüstü ilk boyamada gerçek manşet içeriğini gösterir; Alpine hazır olunca dinamik manşet devralır. -->
         <section id="hero-initial-shell-desktop" role="region" aria-label="Öne çıkan yapım" class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden min-h-[520px] overflow-hidden select-none bg-[#090a0d] text-white md:block">
             <!-- HERO_DESKTOP_SKELETON_ARTWORK: build script keeps this image in sync with the first active desktop slide. -->
@@ -501,11 +432,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         <template x-if="currentPage === 'home'">
             <div id="home-page" class="w-full space-y-8 pb-16">
 
-                
-
-
 <!-- PERDE ALTERNATIVE HERO: film deposundaki manşet kompozisyonunun bağımsız uyarlaması -->
-                
 
                                 <!-- DESKTOP EDITORIAL HERO: mobil manşetten bağımsız yeni masaüstü kompozisyonu -->
                 <section id="desktopEditorialHero" data-home-section="hero" x-cloak  x-data="{ trailerOpen: false, trailerItem: null }" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white" x-ignore>
@@ -668,10 +595,10 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <p class="max-w-lg mt-3 text-xs sm:text-sm leading-relaxed text-white/80 line-clamp-2" x-text="displayedPersonalizedRecommendations[0].tmdbOverview || displayedPersonalizedRecommendations[0].desc || displayedPersonalizedRecommendations[0].recommendationReason"></p>
                                     <div class="home-personalized-feature-ctas flex items-center gap-3 mt-5"><span class="inline-flex items-center gap-2 rounded-full bg-white text-gray-950 px-5 py-2.5 text-xs font-black group-hover:bg-rose-500 group-hover:text-white transition-colors"><i class="fa-solid fa-play"></i> Hemen keşfet</span><span class="text-[10px] font-bold text-white/75 home-personalized-feature-reason" x-text="displayedPersonalizedRecommendations[0].recommendationReason || 'İzleme profiline uygun'"></span><button type="button" @click.stop="refreshPersonalizedRecommendations()" class="home-personalized-mobile-next" aria-label="Başka Öner"><i class="fa-solid fa-shuffle"></i> Başka Öner</button></div>
                                 </div>
-                                
+
                             </div>
                         </template>
-                        
+
                         <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" style="display:block!important;height:auto!important;box-sizing:border-box!important;visibility:hidden" :style="{visibility:homeSectionReady.personalized && displayedPersonalizedRecommendations.length ? 'visible' : 'hidden'}" x-ignore>
                             <div class="home-personalized-mobile-backdrop">
                                 <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500])" sizes="100vw" alt="" aria-hidden="true" loading="lazy" decoding="async">
@@ -695,7 +622,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </article>
                         <div id="home-personalized-rail" role="region" aria-label="Sana özel öneriler" class="home-personalized-alternatives" x-ref="rail" @scroll.passive="updateSlide()" aria-label="Sana özel öneriler, yatay kaydırılabilir" x-ignore>
                             <template x-for="item in (homeSectionReady.personalized ? displayedPersonalizedRecommendations.slice(1, 5) : [])" :key="'personal-' + item.id">
@@ -704,7 +631,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <div class="home-personalized-card-shade absolute inset-0"></div>
                                     <div class="home-personalized-poster relative z-[1] shrink-0 aspect-[2/3] overflow-hidden rounded-lg bg-gray-900 shadow-xl"><img @error="handleImageError($event)" :src="item.poster || item.image" :srcset="getTmdbImageSrcSet(item.poster || item.image, [154, 185, 342])" sizes="96px" :alt="item.title" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"><span class="absolute bottom-1.5 right-1.5 rounded bg-black/85 px-1.5 py-1 text-[9px] font-black text-amber-300"><i class="fa-solid fa-star mr-0.5"></i><span x-text="(item.rating ? Number(item.rating).toFixed(1) : '—')"></span></span></div>
                                     <div class="home-personalized-copy relative z-[1] min-w-0 py-1"><p class="text-[9px] uppercase tracking-widest font-black text-rose-300 mb-1" x-text="item.type === 'tv' ? 'DİZİ ÖNERİSİ' : 'FİLM ÖNERİSİ'"></p><h3 class="text-xs sm:text-sm font-extrabold leading-snug text-white line-clamp-2 drop-shadow" x-text="item.title"></h3><p class="mt-1 text-[10px] text-white/75 line-clamp-1" x-text="(item.year || '') + (item.genre || item.category ? ' • ' + (item.genre || item.category) : '')"></p><p class="home-personalized-plot" x-text="item.tmdbOverview || item.desc || item.recommendationReason || 'İzleme zevkine uygun bir yapım.'"></p></div>
-                                    
+
                                 </div>
                             </template>
                         </div>
@@ -806,7 +733,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                             <span class="absolute top-3 left-3 z-[4] inline-flex items-center gap-1 rounded-md border border-amber-300/50 bg-black/80 px-2 py-1.5 text-[8px] font-black text-amber-300 shadow-lg"><i class="fa-solid fa-star"></i><span class="home-feature-rating-value" x-text="((item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—')"></span></span>
                                             <div class="absolute top-3 right-3 flex max-w-[72%] items-center justify-end gap-1.5">
                                                 <span class="rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span><span class="rounded-md border border-white/15 bg-black/75 text-white/90 text-[8px] font-bold px-2 py-1.5 backdrop-blur-md" x-text="(item.category || item.genre || '').split(/[\\/,]/).map(g => g.trim()).filter(Boolean).slice(0,2).join(' • ') || 'TÜR'"></span>
-                                                
+
                                             </div>
                                         </div>
                                         <div class="home-new-arrival-copy p-3 space-y-2">
@@ -826,10 +753,9 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                         <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
 <span class="absolute top-2 left-2 z-[3] inline-flex items-center gap-1 rounded-md border border-amber-300/35 bg-black/85 px-2 py-1 text-[9px] font-black text-amber-300 shadow-lg backdrop-blur-sm"><i class="fa-solid fa-star text-[8px]"></i><span x-text="(item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—'"></span></span>
 
-                                            
                                             <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [154]).split(' ')[0] || item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [154, 185, 260, 312, 342])" sizes="(max-width: 639px) 148px, 178px" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                             <span class="absolute top-2 right-2 rounded-md bg-black/80 px-2 py-1 text-[9px] font-black text-white" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
-                                            
+
                                         </div>
                                         <div class="p-3 flex flex-col flex-grow justify-between space-y-1">
                                             <div>
@@ -894,7 +820,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                             <span class="absolute top-3 left-3 z-[4] inline-flex items-center gap-1 rounded-md border border-amber-300/50 bg-black/80 px-2 py-1.5 text-[8px] font-black text-amber-300 shadow-lg"><i class="fa-solid fa-star"></i><span class="home-feature-rating-value" x-text="((item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—')"></span></span>
                                             <div class="absolute top-3 right-3 flex max-w-[72%] items-center justify-end gap-1.5">
                                                 <span class="rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span><span class="rounded-md border border-white/15 bg-black/75 text-white/90 text-[8px] font-bold px-2 py-1.5 backdrop-blur-md" x-text="(item.category || item.genre || '').split(/[\\/,]/).map(g => g.trim()).filter(Boolean).slice(0,2).join(' • ') || 'TÜR'"></span>
-                                                
+
                                             </div>
                                         </div>
                                         <div class="home-new-arrival-copy p-3 space-y-2">
@@ -914,10 +840,9 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                         <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
 <span class="absolute top-2 left-2 z-[3] inline-flex items-center gap-1 rounded-md border border-amber-300/35 bg-black/85 px-2 py-1 text-[9px] font-black text-amber-300 shadow-lg backdrop-blur-sm"><i class="fa-solid fa-star text-[8px]"></i><span x-text="(item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—'"></span></span>
 
-                                            
                                             <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [154]).split(' ')[0] || item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [154, 185, 260, 312, 342])" sizes="(max-width: 639px) 148px, 178px" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                             <span class="absolute top-2 right-2 rounded-md bg-black/80 px-2 py-1 text-[9px] font-black text-white" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span>
-                                            
+
                                         </div>
                                         <div class="p-3 flex flex-col flex-grow justify-between space-y-1">
                                             <div>
@@ -964,7 +889,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <span x-show="index !== 0" class="home-new-arrival-badge absolute top-3 left-3 rounded-md bg-rose-600 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 shadow-lg">YENİ EKLENDİ</span>
                                     <div class="absolute top-3 right-3 flex max-w-[72%] items-center justify-end gap-1.5">
                                         <span class="rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span><span class="rounded-md border border-white/15 bg-black/75 text-white/90 text-[8px] font-bold px-2 py-1.5 backdrop-blur-md" x-text="(item.category || item.genre || '').split(/[\\/,]/).map(g => g.trim()).filter(Boolean).slice(0,2).join(' • ') || 'TÜR'"></span>
-                                        
+
                                     </div>
                                     <span x-show="index !== 0" class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span class="home-feature-rating-value" x-text="((item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—')"></span></span>
                                 </div>
@@ -972,7 +897,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <img x-show="index === 0" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [92, 154, 185, 342])" sizes="(max-width: 639px) 88px, 108px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster">
                                     <div x-show="index === 0" class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
                                         <h3 class="min-w-0 flex-1 text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" :style="'font-size:' + Math.max(8.5, Math.min(18, 18 - Math.max(0, (String(item.title || '').length - 16) * 0.32))) + 'px'" x-text="item.title"></h3>
-                                        
+
                                     </div>
                                     <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
                                      <p x-show="index === 0" x-text="(item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || &quot;Bu yapımın konu açıklaması henüz eklenmemiş.&quot;).trim().slice(0,180)"></p>
@@ -1151,7 +1076,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <span x-show="index !== 0" class="home-new-arrival-badge absolute top-3 left-3 rounded-md bg-rose-600 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 shadow-lg">YENİ EKLENDİ</span>
                                     <div class="absolute top-3 right-3 flex max-w-[72%] items-center justify-end gap-1.5">
                                         <span class="rounded-md bg-black/75 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1.5 backdrop-blur-md" x-text="item.type === 'tv' || item.type === 'series' ? 'DİZİ' : 'FİLM'"></span><span class="rounded-md border border-white/15 bg-black/75 text-white/90 text-[8px] font-bold px-2 py-1.5 backdrop-blur-md" x-text="(item.category || item.genre || '').split(/[\\/,]/).map(g => g.trim()).filter(Boolean).slice(0,2).join(' • ') || 'TÜR'"></span>
-                                        
+
                                     </div>
                                     <span x-show="index !== 0" class="absolute bottom-3 right-3 rounded-md bg-black/75 text-amber-400 text-[10px] font-black px-2 py-1.5 backdrop-blur-md"><i class="fa-solid fa-star mr-1"></i><span class="home-feature-rating-value" x-text="((item.rating || item.tmdbRating) ? Number(item.rating || item.tmdbRating).toFixed(1) : '—')"></span></span>
                                 </div>
@@ -1159,7 +1084,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <img x-show="index === 0" :src="item.poster || item.image || item.tmdbPoster || item.backdrop" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.tmdbPoster || item.backdrop, [92, 154, 185, 342])" sizes="(max-width: 639px) 88px, 108px" :alt="item.title + ' afişi'" @error="handleImageError($event)" loading="lazy" decoding="async" class="home-new-arrival-feature-poster">
                                     <div x-show="index === 0" class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
                                         <h3 class="min-w-0 flex-1 text-[11px] sm:text-xs font-extrabold text-white line-clamp-2" :style="'font-size:' + Math.max(8.5, Math.min(18, 18 - Math.max(0, (String(item.title || '').length - 16) * 0.32))) + 'px'" x-text="item.title"></h3>
-                                        
+
                                     </div>
                                     <h3 x-show="index !== 0" class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
                                      <p x-show="index === 0" x-text="(item.desc || item.tmdbOverview || item.overview || item.plot || item.description || item.synopsis || item.summary || &quot;Bu yapımın konu açıklaması henüz eklenmemiş.&quot;).trim().slice(0,180)"></p>
@@ -1170,7 +1095,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </button>
                                     </div>
                                     <div class="home-new-arrival-copy p-3 space-y-2">
-                                        
 
                                         <div class="home-new-arrival-feature-title-row flex items-center gap-2 min-w-0">
                                             <h3 class="min-w-0 flex-1 text-xs sm:text-sm font-extrabold text-white line-clamp-2" x-text="item.title"></h3>
@@ -1228,10 +1152,10 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 <div x-show="cinemaMode" x-transition.opacity @click="toggleCinemaMode()" class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-md"></div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                    
+
                     <!-- Left Section -->
                     <div id="watch-left-column" class="lg:col-span-8 flex flex-col space-y-6">
-                        
+
                         <!-- Custom Video Player -->
                         <div data-watch-card="player" :style="cinemaMode ? 'position:fixed;left:50%;top:50%;right:auto;bottom:auto;margin:0;transform:translate3d(-50%,-50%,0);width:min(80vw,1400px);max-height:88vh;aspect-ratio:16/9;z-index:100;' : 'order: ' + getWatchCardOrder('player')" :class="cinemaMode ? 'rounded-xl border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.8)]' : 'relative w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl'" class="aspect-video overflow-hidden bg-black group select-none transition-all duration-300" @mouseenter="showPlayerControls()" @mousemove="showPlayerControls()" @mouseleave="hidePlayerControlsOnLeave()">
                             <div x-show="cinemaMode && cinemaNoticeVisible" x-transition.opacity.duration.500ms class="pointer-events-none absolute left-3 top-3 z-30 rounded-lg border border-amber-300/50 bg-black/75 px-3 py-1.5 text-[11px] font-extrabold tracking-wide text-amber-200 shadow-lg backdrop-blur-md" role="status" aria-live="polite">Sinema modu : Açık</div>
@@ -1253,7 +1177,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
                             <div x-cloak x-show="pauseNoticeVisible && isDirectVideoUrl(getPlaybackUrl())" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-10 bg-black/35" aria-hidden="true"></div>
-                            
+
                             <!-- YouTube-style double-tap seek zones -->
                             <div id="cvTapSeekZones" x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted" class="absolute inset-x-0 top-0 bottom-[76px] z-[11] grid grid-cols-3" style="touch-action:manipulation" aria-label="Çift dokunarak videoyu sar">
                                 <div @click="showPlayerControls()" @pointerup.stop="handleSeekTap('backward', $event)"></div>
@@ -1377,7 +1301,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                     <div class="flex items-center space-x-2">
                                         <span class="px-2.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase" x-text="selectedItem.title"></span>
                                         <span class="text-xs text-gray-300 font-semibold" x-show="selectedItem.type === 'tv'" x-text="'Sezon ' + selectedSeason + ' • Bölüm ' + selectedEpisode"></span>
-                                        
+
                                     </div>
                                     <button @click="skipIntro()" class="px-3 py-1 rounded bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold border border-white/30 transition-all flex items-center space-x-1.5">
                                         <i class="fa-solid fa-forward text-[10px]"></i>
@@ -1502,7 +1426,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" x-show="getEpisodesForSeason(selectedSeason).length > 0">
                                 <template x-for="ep in paginatedEpisodes" :key="ep.number">
-                                    <div @click="selectEpisode(ep.number)" 
+                                    <div @click="selectEpisode(ep.number)"
                                          :class="selectedEpisode === ep.number ? 'border-rose-600 bg-rose-600/10' : 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700'"
                                          class="p-2.5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all space-y-2 group">
                                         <div class="relative w-full aspect-video rounded-lg overflow-hidden bg-black border border-gray-200 dark:border-gray-800">
@@ -1528,9 +1452,9 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
                             <div class="flex items-center justify-center space-x-2 pt-3 border-t border-gray-200 dark:border-gray-800" x-show="getEpisodesForSeason(selectedSeason).length > 8">
                                 <template x-for="pageNum in totalEpisodePages" :key="pageNum">
-                                    <button @click="currentEpisodePage = pageNum" 
+                                    <button @click="currentEpisodePage = pageNum"
                                             :class="currentEpisodePage === pageNum ? 'bg-rose-600 text-white' : 'bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'"
-                                            class="w-8 h-8 rounded-lg text-xs font-bold transition-all border border-gray-200 dark:border-gray-800" 
+                                            class="w-8 h-8 rounded-lg text-xs font-bold transition-all border border-gray-200 dark:border-gray-800"
                                             x-text="pageNum">
                                     </button>
                                 </template>
@@ -1578,7 +1502,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                         <!-- Review Section -->
                         <div data-watch-card="reviews" :style="'order: ' + getWatchCardOrder('reviews')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
                             <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white">Yorum Yap & Değerlendir</h3>
-                            
+
                             <div class="flex items-center space-x-3">
                                 <span class="text-xs text-gray-500 dark:text-gray-400">Puanınız:</span>
                                 <div class="flex space-x-1 text-amber-400 text-sm cursor-pointer">
@@ -1615,7 +1539,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
                     <!-- Right Section -->
                     <div id="watch-right-column" class="lg:col-span-4 flex flex-col space-y-6">
-                        
+
                         <!-- Yapım Künyesi -->
                         <div data-watch-card="credits" :style="'order: ' + getWatchCardOrder('credits')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
                             <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
@@ -1823,7 +1747,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                         </div>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <p x-show="!actorProfileLoading && !selectedActor.biography" class="mt-5 text-sm text-gray-500 dark:text-gray-400">TMDB üzerinde bu kişi için biyografi bilgisi bulunmuyor.</p>
                             </div>
@@ -1923,7 +1847,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                                         <div x-transition:enter="transition-opacity ease-out duration-[500ms]" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-in duration-[260ms]" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0">
                                             <img :src="item.backdrop || item.poster || ''" :alt="item.title + ' kapak görseli'" loading="lazy" decoding="async" class="cv-discovery-expanded-image h-full w-full object-cover object-center">
                                             <div class="cv-discovery-expanded-shade absolute inset-0"></div>
-                                            
+
                                         </div>
                                     </template>
                                     <div x-show="activePanel === index" x-cloak x-transition:enter="transition-opacity ease-out duration-[340ms] delay-[90ms]" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-in duration-[180ms]" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="cv-discovery-expanded-copy absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 text-white" @click.stop>
@@ -2100,7 +2024,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </div>
             </div>
         </template>
-
 
         <template x-if="currentPage === 'franchises'">
             <div class="w-full px-6 sm:px-12 pt-8 space-y-7 pb-16">
@@ -2581,7 +2504,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
     </footer>
 
     <!-- Script Application Logic -->
-    
 
     <style id="cv-image-loading-indicator">.cv-image-loading-surface::before{content:"";position:absolute;z-index:40;inset:0;display:block;background:rgba(8,10,15,.48);pointer-events:none}.cv-image-loading-surface::after{content:"Yükleniyor...";position:absolute;z-index:41;inset:0;display:flex;align-items:center;justify-content:center;padding:8px;color:rgba(255,255,255,.94);font:600 11px/1.2 system-ui,sans-serif;letter-spacing:.025em;text-shadow:0 1px 5px rgba(0,0,0,.7);pointer-events:none;background:radial-gradient(circle at center,transparent 0 17px,rgba(8,10,15,.12) 18px,transparent 19px)}.cv-image-loading-surface>.cv-image-loading-spinner{position:absolute;z-index:42;top:50%;left:50%;width:18px;height:18px;margin:-17px 0 0 -9px;border:2px solid rgba(255,255,255,.28);border-top-color:#fbbf24;border-radius:50%;animation:cv-image-loading-spin .8s linear infinite;pointer-events:none}@keyframes cv-image-loading-spin{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){.cv-image-loading-surface>.cv-image-loading-spinner{animation:none;border-top-color:rgba(255,255,255,.9)}}</style>
     <script id="cv-image-loading-indicator-script">
@@ -2729,7 +2651,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         })();
     </script>
 
-
     <style id="cv-tv-performance-mode">html.cv-tv-mode{scroll-behavior:auto!important;-webkit-text-size-adjust:100%}html.cv-tv-mode *,html.cv-tv-mode ::after,html.cv-tv-mode ::before{scroll-behavior:auto!important;animation:none!important;transition:none!important;box-shadow:none!important;filter:none!important;-webkit-filter:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;will-change:auto!important;caret-color:transparent!important}html.cv-tv-mode .cv-image-loading-surface>.cv-image-loading-spinner{animation:none!important;border-top-color:rgba(255,255,255,.9)}html.cv-tv-mode [data-home-section=franchises],html.cv-tv-mode [data-home-section=genre-discovery],html.cv-tv-mode [data-home-section=personalized],html.cv-tv-mode [data-home-section=published-collections],html.cv-tv-mode [data-home-section=series-tracking],html.cv-tv-mode [data-home-section=watched]{display:none!important}html.cv-tv-mode .home-personalized-alternative:hover,html.cv-tv-mode .home-personalized-card:hover,html.cv-tv-mode .home-personalized-feature:hover .home-personalized-feature-image,html.cv-tv-mode .home-rail-card:hover{transform:none!important}</style>
     <script id="cv-tv-remote-vertical-scroll">
       (() => {
@@ -2854,7 +2775,6 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 <style id="home-continue-five-card-redesign">#home-continue-section .home-continue-heading{border-bottom:1px solid rgba(148,163,184,.2)}#home-continue-section .home-continue-rail{display:flex;gap:12px;padding:7px 3px 12px;align-items:stretch;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:thin}#home-continue-section .home-continue-card{flex:0 0 calc((100% - 24px)/ 3);width:calc((100% - 24px)/ 3);min-width:0;border-color:rgba(148,163,184,.23);background:rgba(127,127,127,.035);box-shadow:0 8px 24px -20px rgba(0,0,0,.55);scroll-snap-align:start}#home-continue-section .home-continue-card:hover{border-color:rgba(245,185,35,.82);box-shadow:0 15px 30px -20px rgba(180,130,25,.3);transform:translateY(-3px)}#home-continue-section .home-continue-poster{position:relative!important;display:block!important;width:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;height:auto!important;aspect-ratio:16/9!important;flex:0 0 auto!important;overflow:hidden!important;border-radius:9px 9px 0 0}#home-continue-section .home-continue-image{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important;object-position:center!important;backface-visibility:hidden}#home-continue-section .home-continue-card:hover .home-continue-image{transform:scale(1.045)}#home-continue-section .home-continue-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.16),transparent 38%,rgba(0,0,0,.48));pointer-events:none}#home-continue-section .home-continue-type{backdrop-filter:blur(7px)}#home-continue-section .home-continue-play{z-index:3;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;background:rgba(20,20,20,.72);border:1px solid rgba(255,255,255,.72);box-shadow:0 5px 18px rgba(0,0,0,.42);transition:background .25s,box-shadow .25s}#home-continue-section .home-continue-card:hover .home-continue-play{transform:translate(-50%,-50%) scale(1.08)!important;background:#d9a52b;box-shadow:0 6px 22px rgba(217,165,43,.38)}#home-continue-section .home-continue-original{font-style:italic;opacity:.88}#home-continue-section .home-continue-imdb{background:rgba(245,185,35,.12);letter-spacing:.02em}#home-continue-section .home-continue-copy{min-height:112px}#home-continue-section .home-continue-progress{background:rgba(148,163,184,.25)}#home-continue-section .home-continue-progress-fill{background:linear-gradient(90deg,#c18a18,#f5c451);box-shadow:0 0 9px rgba(217,165,43,.25)}#home-continue-section .home-continue-controls .home-rail-arrow{width:34px;height:34px;border-color:rgba(148,163,184,.3);background:rgba(127,127,127,.06)}#home-continue-section .home-continue-controls .home-rail-arrow:hover{background:#d9a52b;border-color:#d9a52b;color:#171717}#home-continue-section .home-continue-all{transition:color .2s ease}#home-continue-section .home-continue-all:hover{color:#d9a52b}@media(min-width:640px) and (max-width:1023px){#home-continue-section .home-continue-card{flex-basis:calc((100% - 12px)/ 2);width:calc((100% - 12px)/ 2)}}@media(max-width:639px){#home-continue-section{padding-left:12px;padding-right:12px}#home-continue-section .home-continue-rail{gap:10px;padding-left:1px;padding-right:1px}#home-continue-section .home-continue-card{flex:0 0 min(82vw,360px);width:min(82vw,360px);border-radius:10px}#home-continue-section .home-continue-copy{padding:10px;min-height:104px;gap:8px}#home-continue-section .home-continue-copy h3{font-size:13px;line-height:1.3}#home-continue-section .home-continue-label{font-size:10px;margin-top:4px}#home-continue-section .home-continue-progress{height:5px}#home-continue-section .home-continue-copy .text-\\[9px\\]{font-size:9px}#home-continue-section .home-continue-type{font-size:8px;padding:3px 6px;top:6px;left:6px}#home-continue-section .home-continue-play{width:30px;height:30px;right:7px;bottom:7px}#home-continue-section .home-continue-play i{font-size:9px}}@media(prefers-reduced-motion:reduce){#home-continue-section .home-continue-card,#home-continue-section .home-continue-image,#home-continue-section .home-continue-play{transition:none!important}}</style>
 
 <style id="home-feature-card-unified-content-v1">:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature{position:relative!important;isolation:isolate!important;overflow:hidden!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature .home-new-arrival-copy{position:absolute!important;inset:0!important;z-index:5!important;display:block!important;box-sizing:border-box!important;min-height:0!important;height:100%!important;padding:0!important;text-align:left!important;background:0 0!important;text-shadow:0 1px 5px rgba(0,0,0,.65)!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature .home-new-arrival-copy:before{content:none!important;display:none!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature .home-catalog-feature-label{display:none!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature-title-row{position:absolute!important;top:calc(100% - 144px)!important;left:16px!important;right:126px!important;height:22px!important;display:block!important;width:auto!important;max-width:none!important;min-width:0!important;margin:0!important;overflow:hidden!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature-title-row h3{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;overflow-wrap:normal!important;word-break:normal!important;line-height:1.18!important;font-weight:900!important;color:#fff!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature .home-new-arrival-copy>p{position:absolute!important;top:calc(100% - 116px)!important;left:16px!important;right:126px!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:4!important;overflow:hidden!important;width:auto!important;max-width:none!important;min-width:0!important;min-height:5.8em!important;height:5.8em!important;margin:0!important;font-size:11.5px!important;line-height:1.45!important;letter-spacing:0!important;color:rgba(255,255,255,.94)!important;text-shadow:0 1px 4px rgba(0,0,0,.8)!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature .home-new-arrival-copy>div{position:absolute!important;left:16px!important;right:126px!important;bottom:12px!important;display:flex!important;max-width:none!important;width:auto!important;min-width:0!important;margin:0!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature .home-new-arrival-copy .home-new-arrival-feature-poster{position:absolute!important;z-index:30!important;right:12px!important;bottom:12px!important;top:auto!important;left:auto!important;width:88px!important;height:132px!important;max-width:none!important;object-fit:cover!important;border-radius:9px!important}.home-feature-poster-badge{position:absolute!important;z-index:45!important;right:21px!important;bottom:145px!important;top:auto!important;left:auto!important;transform:none!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:20px!important;padding:5px 8px!important;border:1px solid rgba(255,255,255,.32)!important;border-radius:5px!important;background:rgba(8,11,17,.9)!important;color:#fff!important;font-size:8px!important;line-height:1!important;font-weight:900!important;letter-spacing:.08em!important;text-shadow:0 1px 3px rgba(0,0,0,.8)!important;box-shadow:0 3px 10px rgba(0,0,0,.35)!important;pointer-events:none!important}.home-feature-poster-badge--new{color:#fff!important;border-color:rgba(244,63,94,.7)!important;background:rgba(190,24,93,.94)!important}.home-feature-poster-badge--watched{color:#d1fae5!important;border-color:rgba(52,211,153,.65)!important;background:rgba(5,75,58,.96)!important}.home-feature-poster-badge--favorite{color:#fde68a!important;border-color:rgba(245,185,35,.7)!important;background:rgba(120,78,8,.96)!important}@media(max-width:639px){:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature-title-row{top:calc(100% - 127px)!important;left:12px!important;right:108px!important;height:19px!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature .home-new-arrival-copy>p{top:calc(100% - 103px)!important;left:12px!important;right:108px!important;font-size:10.5px!important;min-height:5.8em!important;height:5.8em!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature .home-new-arrival-copy>div{left:12px!important;right:98px!important;bottom:10px!important}:is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section,#home-watched-section) .home-new-arrival-feature .home-new-arrival-copy .home-new-arrival-feature-poster{right:10px!important;bottom:10px!important;width:78px!important;height:117px!important}.home-feature-poster-badge{right:16px!important;bottom:127px!important;font-size:7px!important;padding:4px 6px!important;min-height:17px!important}}.home-feature-rating-value{font-size:10px!important;line-height:1!important;font-weight:900!important}@media(prefers-reduced-motion:reduce){.home-feature-poster-badge{transition:none!important}}</style>
-
 
 </body>
 </html>
