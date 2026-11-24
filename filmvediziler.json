@@ -20661,6 +20661,106 @@
       "tmdbVoteCount": 16,
       "seasons": 1,
       "episodes": 8
+    },
+    {
+      "addedAt": "2026-11-24T14:46:23.970Z",
+      "id": "cv-1795531583972",
+      "title": "Berlin",
+      "type": "tv",
+      "year": "2023",
+      "rating": "7.5",
+      "genre": "Dram",
+      "category": "Dram / Aksiyon & Macera / Suç",
+      "duration": "",
+      "country": "Spain",
+      "director": "Álex Pina, Esther Martínez Lobato",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 146176,
+      "imdbId": "tt16288804",
+      "image": "https://image.tmdb.org/t/p/w500/fwbacx1BNH2O2LryLPV1jASfDAr.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/179sUCj5AcFKdQpvDhkIX15NRgy.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=FpxzNUr3f9o",
+      "trailerProvider": "auto",
+      "desc": "Altın çağını yaşayan Berlin en büyük planlarından birini hayata geçirerek bir gecede 44 milyon avro değerinde mücevher çalmak için Paris'te bir çeteyle bir araya gelir.",
+      "cast": [
+        "Pedro Alonso",
+        "Samantha Siqueiros",
+        "Tristán Ulloa",
+        "Michelle Jenner",
+        "Joel Sánchez",
+        "Begoña Vargas",
+        "Julio Peña"
+      ],
+      "tmdbTitle": "Berlin",
+      "tmdbOriginalTitle": "Berlín",
+      "tmdbReleaseDate": "2023-12-29",
+      "tmdbGenres": "Dram / Aksiyon & Macera / Suç",
+      "tmdbRuntime": "",
+      "tmdbCountries": "Spain",
+      "tmdbDirector": "Álex Pina, Esther Martínez Lobato",
+      "tmdbCast": [
+        {
+          "id": 1109836,
+          "name": "Pedro Alonso",
+          "character": "Andrés 'Berlín' de Fonollosa",
+          "profile": "https://image.tmdb.org/t/p/w185/38HeVKeOBztVYrLJOWzAtEZiB02.jpg",
+          "order": 0
+        },
+        {
+          "id": 2424419,
+          "name": "Samantha Siqueiros",
+          "character": "Camille Polignac",
+          "profile": "https://image.tmdb.org/t/p/w185/hX6AvkrZkKWXczm8LoiyAjVwXfH.jpg",
+          "order": 1
+        },
+        {
+          "id": 16441,
+          "name": "Tristán Ulloa",
+          "character": "Damián Vázquez",
+          "profile": "https://image.tmdb.org/t/p/w185/sglKcvdU3e8hTy1kOghEbT0GdHS.jpg",
+          "order": 2
+        },
+        {
+          "id": 114463,
+          "name": "Michelle Jenner",
+          "character": "Keila",
+          "profile": "https://image.tmdb.org/t/p/w185/g3JyHqwBcV7g1ds3dHtWkDXyXqb.jpg",
+          "order": 3
+        },
+        {
+          "id": 3726136,
+          "name": "Joel Sánchez",
+          "character": "Bruce",
+          "profile": "https://image.tmdb.org/t/p/w185/cwXIJIHnBqzwpwvl4Tie4mud02q.jpg",
+          "order": 4
+        },
+        {
+          "id": 2296607,
+          "name": "Begoña Vargas",
+          "character": "Cameron",
+          "profile": "https://image.tmdb.org/t/p/w185/zlPlxLsEgbGJwTJcDunqCqBVGVP.jpg",
+          "order": 5
+        },
+        {
+          "id": 2367724,
+          "name": "Julio Peña",
+          "character": "Roi",
+          "profile": "https://image.tmdb.org/t/p/w185/9kXGecZrQp5DKlok1p7N73CmiiB.jpg",
+          "order": 6
+        }
+      ],
+      "tmdbOverview": "Altın çağını yaşayan Berlin en büyük planlarından birini hayata geçirerek bir gecede 44 milyon avro değerinde mücevher çalmak için Paris'te bir çeteyle bir araya gelir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/fwbacx1BNH2O2LryLPV1jASfDAr.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/179sUCj5AcFKdQpvDhkIX15NRgy.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=FpxzNUr3f9o",
+      "tmdbImdbId": "tt16288804",
+      "tmdbRating": "7.5",
+      "tmdbVoteCount": 736,
+      "seasons": 1,
+      "episodes": 8
     }
   ],
   "collections": [],
