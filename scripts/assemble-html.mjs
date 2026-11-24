@@ -16,6 +16,9 @@ const outputPath = 'index.html';
 const partials = {
   HOME: 'src/templates/homepage.html',
   WATCH: 'src/templates/watch-page.html',
+  WATCH_LEFT: 'src/templates/watch-left-column.html',
+  WATCH_RIGHT: 'src/templates/watch-right-column.html',
+  WATCH_TRAILER_MODAL: 'src/templates/watch-trailer-modal.html',
   ACTOR_DIRECTOR: 'src/templates/actor-director-page.html',
   EXPLORE: 'src/templates/explore-page.html',
   FRANCHISES: 'src/templates/franchises-page.html',
