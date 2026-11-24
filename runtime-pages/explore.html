@@ -1,0 +1,212 @@
+<!--
+  Perde Keşfet görünümü
+  ---------------------
+  Tür, kategori, arama ve keşif filtrelerinin HTML görünümünü içerir.
+  Kök Alpine uygulamasının kapsamını kullanır; tek başına çalıştırılmaz.
+-->
+<!-- ==================== EXPLORE PAGE ==================== -->
+<template x-if="currentPage === 'explore'">
+            <div x-data="{ catalogPage: 1, filterKey: '', discoveryTrailerOpen: false, discoveryTrailerItem: null }" @keydown.escape.window="discoveryTrailerOpen = false; discoveryTrailerItem = null" x-effect="const key = [searchQuery, discoveryType, discoveryMood, discoveryGenre, discoveryCountry, discoveryPlatform, discoveryRating, discoveryYearFrom, discoveryYearTo, sortBy, discoveryDirector, quickFilter].join('|'); if (filterKey !== key) { filterKey = key; catalogPage = 1; initializeDiscovery() }" class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                    <div class="text-xs font-bold text-gray-500 dark:text-gray-400">
+                        <span class="text-rose-600 text-base" x-text="sortedFilteredCatalog.length"></span>
+                        <span x-text="' / ' + catalog.length + ' yapım'"></span>
+                    </div>
+                </div>
+
+                <section id="perde-discovery-showcase" :class="getCardClass()" class="relative overflow-hidden rounded-2xl border shadow-lg" x-data="{ activePanel: null }">
+                    <div class="relative overflow-hidden p-4 sm:p-5">
+                        <div class="relative z-10 mb-4 flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <span class="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[.22em] text-rose-500"><i class="fa-solid fa-wand-magic-sparkles"></i> Rastgele Yapım Keşfet</span>
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Afişlerin üzerine gel veya dokun, yeni hikâyeleri keşfet.</p>
+                            </div>
+                            <button type="button" @click="activePanel = null; refreshDiscoveryShowcase()" :disabled="sortedFilteredCatalog.length < 2" class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white/70 px-3 py-2 text-[11px] font-bold text-gray-800 transition hover:border-rose-500 hover:text-rose-600 disabled:opacity-40 dark:border-gray-600 dark:bg-gray-900/60 dark:text-gray-100"><i class="fa-solid fa-shuffle"></i> Başka Yapımlar Keşfet</button>
+                        </div>
+                        <div class="hidden md:flex h-[245px] sm:h-[310px] lg:h-[350px] items-stretch gap-1 sm:gap-1.5" @keydown.escape="activePanel = null">
+                            <template x-for="(item, index) in discoveryShowcaseItems" :key="'showcase-' + item.id">
+                                <article @mouseenter="if (window.matchMedia('(hover: hover)').matches) activePanel = index" @mouseleave="if (window.matchMedia('(hover: hover)').matches && activePanel === index) activePanel = null" @click="activePanel = activePanel === index ? null : index" :class="activePanel === index ? 'flex-[3.2] sm:flex-[3.5] z-20 opacity-100 shadow-[0_14px_34px_rgba(0,0,0,0.28)]' : 'flex-1 opacity-90'" class="relative isolate min-w-0 overflow-hidden cursor-pointer border border-black/[0.045] bg-[#f3f2ef] dark:border-white/[0.07] dark:bg-[#191a1e] transition-[flex,box-shadow,opacity] duration-[680ms] ease-[cubic-bezier(0.22,0.61,0.36,1)]">
+                                    <div class="cv-discovery-poster-bg absolute inset-0 flex items-center justify-center bg-[radial-gradient(ellipse_at_50%_46%,rgba(0,0,0,0.035)_0%,rgba(0,0,0,0.012)_48%,transparent_78%)] dark:bg-[radial-gradient(ellipse_at_50%_46%,rgba(255,255,255,0.075)_0%,rgba(255,255,255,0.025)_48%,transparent_78%)] transition-opacity duration-[440ms] ease-in-out" :class="activePanel === index ? 'opacity-0' : 'opacity-100'">
+                                        <img :src="item.poster || item.backdrop || ''" :alt="item.title + ' afişi'" loading="lazy" decoding="async" class="h-full w-full object-contain object-center p-1 sm:p-1.5 drop-shadow-[0_7px_13px_rgba(0,0,0,0.14)] dark:drop-shadow-[0_10px_18px_rgba(0,0,0,0.38)]">
+                                    </div>
+                                    <template x-if="activePanel === index">
+                                        <div x-transition:enter="transition-opacity ease-out duration-[500ms]" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-in duration-[260ms]" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0">
+                                            <img :src="item.backdrop || item.poster || ''" :alt="item.title + ' kapak görseli'" loading="lazy" decoding="async" class="cv-discovery-expanded-image h-full w-full object-cover object-center">
+                                            <div class="cv-discovery-expanded-shade absolute inset-0"></div>
+
+                                        </div>
+                                    </template>
+                                    <div x-show="activePanel === index" x-cloak x-transition:enter="transition-opacity ease-out duration-[340ms] delay-[90ms]" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-in duration-[180ms]" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="cv-discovery-expanded-copy absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 text-white" @click.stop>
+                                        <span class="text-[9px] font-black uppercase tracking-wider text-rose-300" x-text="(item.type === 'tv' ? 'DİZİ' : 'FİLM') + (item.year ? ' • ' + item.year : '')"></span>
+                                        <h3 class="mt-1 text-sm sm:text-lg font-black leading-tight line-clamp-2 break-words" x-text="item.title"></h3>
+                                        <p class="cv-discovery-original-title mt-0.5 text-[10px] sm:text-xs font-semibold leading-snug line-clamp-1 break-words" x-text="item.englishTitle || item.originalTitle || item.title"></p>
+                                        <div class="mt-1 flex flex-wrap items-center gap-2 text-[9px] sm:text-xs text-amber-300">
+                                            <span x-show="Number(item.rating) > 0"><i class="fa-solid fa-star"></i> <span x-text="Number(item.rating).toFixed(1)"></span></span>
+                                            <span class="text-white/80" x-text="item.genre || item.category || ''"></span>
+                                        </div>
+                                        <p class="mt-1.5 max-w-full text-[10px] sm:text-xs leading-relaxed text-white/90 line-clamp-3" x-text="item.desc || 'Bu yapımı keşfet ve yeni bir hikâyeye adım at.'"></p>
+                                        <div class="mt-2 flex flex-wrap gap-1.5">
+                                            <button type="button" @click.stop="openWatchPage(item)" class="rounded-md bg-rose-600 px-2.5 py-1.5 text-[9px] sm:text-[11px] font-black text-white hover:bg-rose-700"><i class="fa-solid fa-play mr-1"></i>Şimdi izle</button>
+                                            <button type="button" @click.stop="discoveryTrailerItem = item; discoveryTrailerOpen = true" class="cv-discovery-trailer-button rounded-md border border-white/50 bg-black/35 px-2.5 py-1.5 text-[9px] sm:text-[11px] font-bold text-white hover:bg-white/15"><i class="fa-solid fa-film mr-1"></i>Fragman</button>
+                                        </div>
+                                    </div>
+                                    <div class="absolute inset-x-0 bottom-2 z-20 flex justify-center pointer-events-none" aria-hidden="true"><span class="h-[3px] rounded-full transition-all duration-300 ease-out shadow-[0_1px_5px_rgba(0,0,0,0.35)]" :class="activePanel === index ? 'w-8 bg-rose-500' : 'w-3.5 bg-white/65'"></span></div>
+                                </article>
+                            </template>
+                        </div>
+                        <div class="md:hidden space-y-3" x-data="{ mobilePanel: 0 }">
+                            <template x-if="discoveryShowcaseItems.length">
+                                <div class="space-y-3">
+                                    <div class="flex gap-2.5 overflow-x-auto pb-2 cv-discovery-mobile-thumbs snap-x snap-mandatory" aria-label="Keşif önerileri">
+                                        <template x-for="(item, index) in discoveryShowcaseItems" :key="'mobile-showcase-' + item.id">
+                                            <button type="button" @click="mobilePanel = index" :aria-pressed="(mobilePanel === index).toString()" :class="mobilePanel === index ? 'ring-2 ring-rose-500 opacity-100' : 'opacity-75'" class="relative shrink-0 w-[108px] sm:w-[118px] overflow-hidden rounded-xl text-left transition duration-200 snap-start">
+                                                <div class="cv-discovery-mobile-thumb-bg relative aspect-[2/3] bg-gray-200 dark:bg-gray-800 bg-cover bg-center" :style="'background-image:linear-gradient(180deg,rgba(0,0,0,.04) 42%,' + (theme === 'dark' ? 'rgba(0,0,0,.88)' : 'rgba(255,255,255,.94)') + '),url(' + (item.poster || item.backdrop || '') + ')'">
+                                                    <span class="absolute right-1.5 top-1.5 rounded-md bg-black/75 px-1.5 py-1 text-[10px] font-black text-amber-400" x-show="Number(item.rating) > 0"><i class="fa-solid fa-star mr-0.5"></i><span x-text="Number(item.rating).toFixed(1)"></span></span>
+                                                    <span class="cv-discovery-mobile-thumb-title absolute inset-x-0 bottom-0 px-2.5 pb-2.5 pt-7 text-[11px] font-extrabold leading-tight text-white line-clamp-2" x-text="item.title"></span>
+                                                </div>
+                                            </button>
+                                        </template>
+                                    </div>
+                                    <div class="rounded-xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/20 p-3.5 sm:p-4">
+                                        <div class="flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-rose-500">
+                                            <span x-text="((discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0]).type === 'tv' ? 'DİZİ' : 'FİLM')"></span>
+                                            <span class="text-gray-400" x-show="(discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0]).year" x-text="'• ' + (discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0]).year"></span>
+                                            <span class="ml-auto text-amber-500" x-show="Number((discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0]).rating) > 0"><i class="fa-solid fa-star"></i> <span x-text="Number((discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0]).rating).toFixed(1)"></span></span>
+                                        </div>
+                                        <h3 class="mt-1.5 text-lg sm:text-xl font-black leading-tight text-gray-900 dark:text-white break-words" x-text="(discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0]).title"></h3>
+                                        <p class="mt-1 text-[11px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="(discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0]).genre || (discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0]).category || ''"></p>
+                                        <p class="mt-2 text-xs leading-relaxed text-gray-600 dark:text-gray-300 line-clamp-2" x-text="(discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0]).desc || 'Bu yapımı keşfet ve yeni bir hikâyeye adım at.'"></p>
+                                        <div class="mt-3">
+                                            <button type="button" @click="openWatchPage(discoveryShowcaseItems[mobilePanel] || discoveryShowcaseItems[0])" class="w-full rounded-lg bg-rose-600 px-3 py-2.5 text-xs font-black text-white hover:bg-rose-700"><i class="fa-solid fa-play mr-1.5"></i>Yapımı Aç</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </section>
+
+                <div x-show="discoveryTrailerOpen" x-cloak x-transition.opacity @click.self="discoveryTrailerOpen = false; discoveryTrailerItem = null" class="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" :aria-label="(discoveryTrailerItem?.title || 'Yapım') + ' fragmanı'">
+                    <div class="w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
+                        <div class="flex items-center justify-between gap-4 border-b border-white/10 p-4"><div class="min-w-0"><p class="text-[10px] font-black uppercase tracking-[.2em] text-rose-300">FRAGMAN</p><strong class="block truncate text-sm font-bold text-white" x-text="discoveryTrailerItem?.title || 'Fragman'"></strong></div><button type="button" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:bg-white/10" @click="discoveryTrailerOpen = false; discoveryTrailerItem = null" aria-label="Fragmanı kapat"><i class="fa-solid fa-xmark"></i></button></div>
+                        <div class="aspect-video bg-black"><iframe x-show="discoveryTrailerOpen && discoveryTrailerItem?.trailerUrl" :src="discoveryTrailerOpen && discoveryTrailerItem?.trailerUrl ? window.cineTrailerEmbedUrl(discoveryTrailerItem.trailerUrl) : 'about:blank'" class="h-full w-full" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="Yapım fragmanı"></iframe><div x-show="!discoveryTrailerItem?.trailerUrl" class="flex h-full min-h-[220px] flex-col items-center justify-center gap-2 p-8 text-center text-white/75"><i class="fa-solid fa-film text-2xl text-rose-300"></i><p class="text-sm font-bold text-white">Fragman bulunamadı</p><p class="max-w-md text-xs leading-5">Bu yapım için izlenebilir bir fragman bağlantısı bulunmuyor.</p></div></div>
+                    </div>
+                </div>
+
+                <section x-data="{ filtersExpanded: false }" :class="getCardClass()" class="rounded-2xl border p-4 sm:p-5 space-y-4 shadow-sm">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <h3 class="text-sm font-black text-gray-900 dark:text-white">Arama ve filtreler</h3>
+                            <p class="mt-1 text-[10px] text-gray-500 dark:text-gray-400">Yapımları başlık, tür, ülke, platform ve puana göre daralt.</p>
+                        </div>
+                        <button type="button" @click="filtersExpanded = !filtersExpanded" :aria-expanded="filtersExpanded.toString()" class="inline-flex shrink-0 items-center gap-2 rounded-lg border border-rose-500/25 bg-rose-500/5 px-3 py-2 text-[11px] font-bold text-rose-600 transition hover:bg-rose-500/10 dark:text-rose-400">
+                            <span x-text="filtersExpanded ? 'Gizle' : 'Göster'"></span>
+                            <i class="fa-solid" :class="filtersExpanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        </button>
+                    </div>
+                    <div x-show="filtersExpanded" x-cloak x-transition.opacity class="space-y-4">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input x-model="searchQuery" @keydown.escape="searchQuery = ''" type="search" placeholder="İsim, orijinal ad, oyuncu, yönetmen, konu ara..." :class="getSearchClass()" class="w-full border rounded-xl pl-10 pr-4 py-3 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-rose-600">
+                        </div>
+                        <button @click="resetDiscoveryFilters()" class="px-4 py-3 rounded-xl border text-xs font-bold uppercase tracking-wide text-gray-600 dark:text-gray-300 hover:border-rose-500 hover:text-rose-600 transition-colors">
+                            <i class="fa-solid fa-rotate-left mr-2"></i>Filtreleri Temizle
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Yapım türü</span>
+                            <select x-model="discoveryType" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="all">Film + Dizi</option><option value="movie">Filmler</option><option value="tv">Diziler</option>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Kategori / Tür</span>
+                            <select x-model="discoveryGenre" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="all">Tüm türler</option>
+                                <template x-for="genre in availableGenres" :key="genre"><option :value="genre" x-text="genre"></option></template>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Ülke</span>
+                            <select x-model="discoveryCountry" @change="discoveryCountryCode = ''" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="all">Tüm ülkeler</option>
+                                <template x-for="country in availableCountries" :key="country"><option :value="country" x-text="country"></option></template>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Platform</span>
+                            <select x-model="discoveryPlatform" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="all">Tüm platformlar</option>
+                                <template x-for="platform in availablePlatforms" :key="platform"><option :value="platform" x-text="platform"></option></template>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">En az puan</span>
+                            <select x-model="discoveryRating" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="0">Puan sınırı yok</option><option value="6">6.0 ve üzeri</option><option value="7">7.0 ve üzeri</option><option value="8">8.0 ve üzeri</option><option value="9">9.0 ve üzeri</option>
+                            </select>
+                        </label>
+                        <label class="space-y-1">
+                            <span class="block text-[10px] font-bold uppercase tracking-wider text-gray-500">Sıralama</span>
+                            <select x-model="sortBy" :class="getSearchClass()" class="w-full border rounded-lg px-3 py-2.5 text-xs text-gray-800 dark:text-gray-200">
+                                <option value="default">Karışık keşif</option><option value="newest">En son eklenenler</option><option value="rating">Puan: yüksekten düşüğe</option><option value="year">Yıl: yeniden eskiye</option><option value="oldest">Yıl: eskiden yeniye</option><option value="title">İsim: A–Z</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 pt-1 border-t border-gray-200 dark:border-gray-700/70">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">Yıl aralığı</span>
+                        <input type="number" min="1900" max="2100" x-model.number="discoveryYearFrom" placeholder="Başlangıç" :class="getSearchClass()" class="w-28 border rounded-lg px-3 py-2 text-xs text-gray-800 dark:text-gray-200">
+                        <span :class="getMutedTextClass()" class="text-xs">—</span>
+                        <input type="number" min="1900" max="2100" x-model.number="discoveryYearTo" placeholder="Bitiş" :class="getSearchClass()" class="w-28 border rounded-lg px-3 py-2 text-xs text-gray-800 dark:text-gray-200">
+                        <span :class="getMutedTextClass()" class="text-[10px]">Aralıkta olmayan yapımlar gösterilmez.</span>
+                    </div>
+                    </div>
+                </section>
+
+                <div x-show="discoveryDirector || discoveryGenre !== 'all' || discoveryCountry !== 'all'" class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-500/20 bg-rose-500/[.045] px-4 py-3">
+                    <div class="flex flex-wrap items-center gap-2 text-xs">
+                        <span class="font-black uppercase tracking-wider text-rose-500">Filtrelenen yapımlar</span>
+                        <span x-show="discoveryDirector" class="rounded-full border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 font-semibold text-gray-700 dark:text-gray-200"><i class="fa-solid fa-clapperboard mr-1.5 text-rose-500"></i><span x-text="discoveryDirector"></span></span>
+                        <span x-show="discoveryGenre !== 'all'" class="rounded-full border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 font-semibold text-gray-700 dark:text-gray-200"><i class="fa-solid fa-layer-group mr-1.5 text-rose-500"></i><span x-text="discoveryGenre"></span></span>
+                        <span x-show="discoveryCountry !== 'all'" class="rounded-full border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 font-semibold text-gray-700 dark:text-gray-200"><i class="fa-solid fa-globe mr-1.5 text-rose-500"></i><span x-text="discoveryCountry"></span></span>
+                        <span class="text-gray-500 dark:text-gray-400" x-text="sortedFilteredCatalog.length + ' yapım bulundu'"></span>
+                    </div>
+                    <button type="button" @click="resetDiscoveryFilters()" class="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-[11px] font-bold text-rose-600 hover:bg-rose-500/10 transition-colors"><i class="fa-solid fa-xmark"></i>Filtreyi kaldır</button>
+                </div>
+
+                <div x-show="discoveryListCatalog.length > 0" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-10 gap-3 sm:gap-4">
+                    <template x-for="item in discoveryListCatalog.slice((catalogPage - 1) * 20, catalogPage * 20)" :key="item.id">
+                        <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
+                            <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                <img @error="handleImageError($event)" decoding="async" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 15vw, 14.5vw" :alt="item.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute top-2 right-2 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[10px] font-bold text-amber-400">
+                                    <i class="fa-solid fa-star text-[8px]"></i><span x-text="item.rating ? Number(item.rating).toFixed(1) : '—'"></span>
+                                </div>
+                                <span class="absolute bottom-2 left-2 px-2 py-1 rounded bg-black/75 text-white text-[9px] font-bold" x-text="item.type === 'tv' ? 'DİZİ' : 'FİLM'"></span>
+                            </div>
+                            <div class="p-2.5 space-y-1 flex-1">
+                                <span class="text-[9px] font-bold text-rose-700 dark:text-rose-400 uppercase" x-text="item.genre"></span>
+                                <h3 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-2" x-text="item.title"></h3>
+                                <div class="flex justify-between gap-2 text-[10px] text-gray-500 dark:text-gray-400"><span x-text="item.year"></span><span x-text="item.duration"></span></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <nav x-show="sortedFilteredCatalog.length > 20" aria-label="Yapım sayfaları" class="flex flex-wrap items-center justify-center gap-2 pt-2">
+                    <button type="button" @click="catalogPage = Math.max(1, catalogPage - 1)" :disabled="catalogPage === 1" class="min-w-9 h-9 rounded-lg border px-3 text-xs font-bold text-gray-600 dark:text-gray-300 disabled:opacity-35 disabled:cursor-not-allowed hover:border-rose-500 hover:text-rose-500 transition-colors" aria-label="Önceki sayfa"><i class="fa-solid fa-chevron-left"></i></button>
+                    <template x-for="page in Array.from({ length: Math.ceil(discoveryListCatalog.length / 20) }, (_, index) => index + 1)" :key="'catalog-page-' + page">
+                        <button type="button" @click="catalogPage = page" :aria-current="catalogPage === page ? 'page' : null" :class="catalogPage === page ? 'bg-rose-600 border-rose-600 text-white shadow-sm' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-rose-500 hover:text-rose-500'" class="min-w-9 h-9 rounded-lg border px-3 text-xs font-bold transition-colors" x-text="page"></button>
+                    </template>
+                    <button type="button" @click="catalogPage = Math.min(Math.ceil(discoveryListCatalog.length / 20), catalogPage + 1)" :disabled="catalogPage >= Math.ceil(discoveryListCatalog.length / 20)" class="min-w-9 h-9 rounded-lg border px-3 text-xs font-bold text-gray-600 dark:text-gray-300 disabled:opacity-35 disabled:cursor-not-allowed hover:border-rose-500 hover:text-rose-500 transition-colors" aria-label="Sonraki sayfa"><i class="fa-solid fa-chevron-right"></i></button>
+                </nav>
+                <div x-show="sortedFilteredCatalog.length === 0" :class="getCardClass()" class="rounded-2xl border text-center py-14 px-5 space-y-3">
+                    <i class="fa-solid fa-filter-circle-xmark text-3xl text-gray-400"></i>
+                    <h3 class="font-bold text-gray-900 dark:text-white">Bu kriterlere uygun yapım bulunamadı</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Arama kelimeni veya filtrelerini değiştirerek yeniden deneyebilirsin.</p>
+                    <button @click="resetDiscoveryFilters()" class="px-5 py-2.5 rounded-lg bg-rose-600 text-white text-xs font-bold">Tüm filtreleri temizle</button>
+                </div>
+            </div>
+        </template>

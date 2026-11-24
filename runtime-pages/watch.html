@@ -1,0 +1,562 @@
+<!--
+  Perde İzleme / Yapım Detay görünümü
+  -----------------------------------
+  currentPage === 'watch' olduğunda gösterilen oynatıcı, izleme kontrolleri,
+  yapım bilgileri, oyuncu kadrosu ve benzer yapımlar alanını içerir.
+  Kök Alpine uygulamasının kapsamını kullanır; tek başına çalıştırılmaz.
+-->
+<!-- ==================== WATCH / DETAIL PAGE ==================== -->
+        <template x-if="currentPage === 'watch'">
+            <div class="w-full px-6 sm:px-12 pt-2 space-y-6 pb-16" x-data="{ trailerOpen: false }" @keydown.escape.window="cinemaMode = false; document.body.style.overflow = ''; trailerOpen = false" @keydown.window="handlePlayerKeydown($event)">
+                <div x-show="cinemaMode" x-transition.opacity @click="toggleCinemaMode()" class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-md"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+                    <!--
+  İzleme sayfasının sol kolonu: video oynatıcı, sezon/bölüm takibi,
+  yapım açıklaması, oyuncu kadrosu ve topluluk yorumlarını içerir.
+  Ana watch şablonunun Alpine kapsamını kullanır.
+-->
+                    <!-- Left Section -->
+                    <div id="watch-left-column" class="lg:col-span-8 flex flex-col space-y-6">
+
+                        <!-- Custom Video Player -->
+                        <div data-watch-card="player" :style="cinemaMode ? 'position:fixed;left:50%;top:50%;right:auto;bottom:auto;margin:0;transform:translate3d(-50%,-50%,0);width:min(80vw,1400px);max-height:88vh;aspect-ratio:16/9;z-index:100;' : 'order: ' + getWatchCardOrder('player')" :class="cinemaMode ? 'rounded-xl border border-white/15 shadow-[0_0_80px_rgba(0,0,0,0.8)]' : 'relative w-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl'" class="aspect-video overflow-hidden bg-black group select-none transition-all duration-300" @mouseenter="showPlayerControls()" @mousemove="showPlayerControls()" @mouseleave="hidePlayerControlsOnLeave()">
+                            <div x-show="cinemaMode && cinemaNoticeVisible" x-transition.opacity.duration.500ms class="pointer-events-none absolute left-3 top-3 z-30 rounded-lg border border-amber-300/50 bg-black/75 px-3 py-1.5 text-[11px] font-extrabold tracking-wide text-amber-200 shadow-lg backdrop-blur-md" role="status" aria-live="polite">Sinema modu : Açık</div>
+                            <video id="customVideoPlayer"
+                                   x-show="isDirectVideoUrl(getPlaybackUrl())"
+                                   class="w-full h-full object-contain [touch-action:manipulation]"
+                                   :src="getPlaybackUrl()"
+                                   :style="'filter: brightness(' + videoBrightness + ')'"
+                                   :poster="selectedItem.backdrop"
+                                   preload="metadata"
+                                   playsinline
+                                   @click="showPlayerControls()"
+                                   @loadedmetadata="updateVideoProgress(); applyPlaybackRate(); $event.target.volume = isMuted ? 0 : volumeLevel; $event.target.muted = isMuted"
+                                   @timeupdate="updateVideoProgress"
+                                   @play="pauseNoticeVisible = false; isPlaying = true; hasPlaybackStarted = true; schedulePlayerSideControls(); showPlaybackFeedback('play', 5000); schedulePlayerControlsHide()"
+                                   @pause="pauseNoticeVisible = !$event.target.ended && hasPlaybackStarted; isPlaying = false; revealPlayerSideControls(); showPlayerControls()"
+                                   @ended="videoEnded = true; pauseNoticeVisible = false; isPlaying = false; showPlayerControls()"
+                                   @error="playbackError = true">
+                                Tarayıcınız video etiketini desteklemiyor.
+                            </video>
+                            <div x-cloak x-show="pauseNoticeVisible && isDirectVideoUrl(getPlaybackUrl())" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-10 bg-black/35" aria-hidden="true"></div>
+
+                            <!-- YouTube-style double-tap seek zones -->
+                            <div id="cvTapSeekZones" x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted" class="absolute inset-x-0 top-0 bottom-[76px] z-[11] grid grid-cols-3" style="touch-action:manipulation" aria-label="Çift dokunarak videoyu sar">
+                                <div @click="showPlayerControls()" @pointerup.stop="handleSeekTap('backward', $event)"></div>
+                                <div @click="showPlayerControls()"></div>
+                                <div @click="showPlayerControls()" @pointerup.stop="handleSeekTap('forward', $event)"></div>
+                                <div x-cloak x-show="tapSeekSide !== ''" :class="tapSeekPulse ? 'cv-tap-seek-pop' : ''" :style="{ left: tapSeekX + 'px', top: tapSeekY + 'px' }" class="cv-tap-seek-feedback pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 text-center text-white">
+                                    <span class="cv-tap-seek-orbit"></span>
+                                    <span class="cv-tap-seek-core">
+                                        <i x-show="tapSeekSide === 'backward'" class="fa-solid fa-rotate-left"></i>
+                                        <i x-show="tapSeekSide === 'forward'" class="fa-solid fa-rotate-right"></i>
+                                    </span>
+                                    <span class="cv-tap-seek-label"><strong x-text="tapSeekAmount"></strong><span x-show="tapSeekSide === 'backward'"> saniye geri</span><span x-show="tapSeekSide === 'forward'"> saniye ileri</span></span>
+                                </div>
+                            </div>
+                            <div x-show="hasPlaybackStarted && playerControlsVisible && playerSideControlsVisible" x-transition.opacity x-data="{ brightnessOpen: false }" @mouseenter="brightnessOpen = true" @mouseleave="brightnessOpen = false" @click.stop class="absolute top-[45px] left-3 z-40">
+                                <button type="button" @click="brightnessOpen = true; showPlayerControls()" @focus="showPlayerControls()" aria-label="Video parlaklığını ayarla" title="Video parlaklığı" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300">
+                                    <i class="fa-solid fa-sun"></i>
+                                </button>
+                                <div x-show="brightnessOpen" x-transition.opacity @click.stop class="absolute left-0 top-12 flex min-w-[54px] flex-col items-center gap-2 rounded-xl border border-white/15 bg-[#10141d]/95 px-3 py-3 text-white shadow-2xl backdrop-blur-xl">
+                                    <span class="font-mono text-[10px] font-bold text-amber-200" x-text="Math.round(videoBrightness * 100) + '%'"></span>
+                                    <input type="range" min="0.5" max="1.5" step="0.05" :value="videoBrightness" @input="setVideoBrightness($event.target.value); showPlayerControls()" aria-label="Dikey video parlaklığı" title="Video parlaklığı" style="writing-mode:vertical-lr;direction:rtl; width:8px;height:96px; accent-color:#e7c477; touch-action:pan-y;" class="cursor-pointer">
+                                    <button type="button" @click="setVideoBrightness(1); showPlayerControls()" class="mt-1 rounded-lg bg-white/10 px-2 py-1 text-[10px] font-bold hover:bg-white/20" aria-label="Parlaklığı sıfırla">Sıfırla</button>
+                                </div>
+                            </div>
+                            <div x-show="hasPlaybackStarted && playerControlsVisible && playerSideControlsVisible" x-transition.opacity x-data="{ volumeOpen: false }" @mouseenter="volumeOpen = true" @mouseleave="volumeOpen = false" @click.stop class="absolute top-[45px] right-3 z-40">
+                                <button type="button" @click="volumeOpen = true; showPlayerControls()" @focus="showPlayerControls()" :aria-label="isMuted ? 'Sesi aç' : 'Ses seviyesini ayarla'" :title="isMuted ? 'Sesi Aç' : 'Ses Seviyesi'" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur-md transition hover:border-amber-300/60 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300">
+                                    <i :class="isMuted || volumeLevel === 0 ? 'fa-solid fa-volume-xmark' : volumeLevel < 0.5 ? 'fa-solid fa-volume-low' : 'fa-solid fa-volume-high'"></i>
+                                </button>
+                                <div x-show="volumeOpen" x-transition.opacity @click.stop class="absolute right-0 top-12 flex min-w-[54px] flex-col items-center gap-2 rounded-xl border border-white/15 bg-[#10141d]/95 px-3 py-3 text-white shadow-2xl backdrop-blur-xl">
+                                    <span class="font-mono text-[10px] font-bold text-amber-200" x-text="Math.round((isMuted ? 0 : volumeLevel) * 100) + '%'"></span>
+                                    <input type="range" min="0" max="1" step="0.01" :value="isMuted ? 0 : volumeLevel" @input="setVideoVolume($event.target.value); showPlayerControls()" aria-label="Dikey ses seviyesi" title="Ses seviyesi" style="writing-mode:vertical-lr;direction:rtl; width:8px;height:96px; accent-color:#e7c477; touch-action:pan-y;" class="cursor-pointer">
+                                    <button type="button" @click="toggleMute(); showPlayerControls()" class="mt-1 flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-xs hover:bg-white/20" :aria-label="isMuted ? 'Sesi aç' : 'Sesi kapat'">
+                                        <i :class="isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high'"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && !hasPlaybackStarted" class="absolute inset-0 z-10 flex items-center justify-center bg-black cursor-pointer" @click.stop="startPlayback()">
+                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 w-full h-full object-cover object-center">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/20"></div>
+                                <button type="button" @click.stop="trailerOpen = true" aria-label="Fragmanı izle" class="absolute right-3 bottom-3 sm:right-5 sm:bottom-5 z-30 inline-flex min-h-10 sm:min-h-11 items-center justify-center gap-2 sm:gap-2.5 whitespace-nowrap rounded-lg border border-rose-200/45 bg-gradient-to-r from-[#7f1d3d]/95 via-[#a34b35]/95 to-[#7c3f24]/95 px-3.5 sm:px-5 lg:px-6 py-2 sm:py-2.5 text-[11px] sm:text-sm font-semibold tracking-wide text-white shadow-xl shadow-black/35 backdrop-blur-md transition-all duration-200 hover:border-amber-200/80 hover:from-[#98264b] hover:via-[#b65b3d] hover:to-[#92502d] hover:text-amber-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300">
+                                    <i class="fa-solid fa-film shrink-0 text-[11px] sm:text-xs"></i>
+                                    <span class="whitespace-nowrap">Fragmanı izle</span>
+                                </button>
+                                <button type="button" @click.stop="startPlayback()" class="relative z-10 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/50 bg-rose-600/90 text-white shadow-2xl backdrop-blur-sm transition-all hover:scale-110 hover:bg-rose-500" :aria-label="selectedItem.title + ' filmini oynat'">
+                                    <i class="fa-solid fa-play text-2xl sm:text-3xl ml-1"></i>
+                                </button>
+                                <div class="absolute bottom-4 left-4 z-10 flex items-end gap-3 text-left text-white drop-shadow-lg sm:bottom-5 sm:left-5">
+                                    <img @error="handleImageError($event)" decoding="async" loading="eager" x-show="selectedItem.poster" :src="selectedItem.poster" :alt="selectedItem.title + ' afişi'" class="h-20 w-14 sm:h-24 sm:w-16 rounded-md object-cover shadow-xl ring-1 ring-white/40">
+                                    <div class="pb-1">
+                                        <div class="text-sm sm:text-base font-black" x-text="selectedItem.title"></div>
+                                        <div class="mt-1 text-[10px] sm:text-xs font-semibold tracking-wider text-white/85">OYNATMAK İÇİN TIKLA</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div x-show="!isDirectVideoUrl(getPlaybackUrl())" class="absolute inset-0 overflow-hidden bg-gray-950 text-white">
+                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="cv-no-url-backdrop absolute inset-0 h-full w-full object-contain opacity-55 blur-[1px]">
+                                <button x-show="!selectedItem.watchUrl" type="button" @click="trailerOpen = true" aria-label="Fragmanı izle" class="cv-no-url-trailer absolute right-3 bottom-3 sm:right-5 sm:bottom-5 z-30 inline-flex min-h-10 sm:min-h-11 items-center justify-center gap-2 sm:gap-2.5 whitespace-nowrap rounded-lg border border-rose-200/45 bg-gradient-to-r from-[#7f1d3d]/95 via-[#a34b35]/95 to-[#7c3f24]/95 px-3.5 sm:px-5 lg:px-6 py-2 sm:py-2.5 text-[11px] sm:text-sm font-semibold tracking-wide text-white shadow-xl shadow-black/35 backdrop-blur-md transition-all duration-200 hover:border-amber-200/80 hover:from-[#98264b] hover:via-[#b65b3d] hover:to-[#92502d] hover:text-amber-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300">
+                                    <i class="fa-solid fa-film shrink-0 text-[11px] sm:text-xs"></i>
+                                    <span class="whitespace-nowrap">Fragmanı izle</span>
+                                </button>
+                                <div class="absolute inset-0 bg-gradient-to-r from-gray-950/85 via-gray-950/60 to-gray-950/40"></div>
+                                <div class="cv-no-url-content relative z-10 flex h-full flex-col sm:flex-row items-center justify-center gap-5 p-5 sm:p-8 text-center sm:text-left">
+                                    <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="cv-no-url-poster h-44 sm:h-56 max-w-[38%] rounded-lg object-contain shadow-2xl ring-1 ring-white/15">
+                                    <div class="cv-no-url-info max-w-md space-y-3">
+                                        <div class="flex items-center justify-center sm:justify-start gap-2 text-rose-400">
+                                            <i class="fa-solid fa-film"></i>
+                                            <span class="text-[10px] font-black uppercase tracking-[0.2em]">CineVerse • Oynatıcı</span>
+                                        </div>
+                                        <h3 class="text-lg sm:text-xl font-black" x-text="selectedItem.title"></h3>
+                                        <p class="cv-no-url-description text-xs leading-relaxed text-gray-300" x-text="selectedItem.watchUrl ? 'Bu kaynak yerleşik oynatıcıda açılamıyor. Harici platformdan izlemek için bağlantıyı açabilirsin.' : 'Bu yapım için henüz bir izleme bağlantısı eklenmemiş. Afiş, oynatıcı alanında kapak görseli olarak gösteriliyor.'"></p>
+                                        <a x-show="selectedItem.watchUrl" :href="selectedItem.watchUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-white hover:bg-rose-700">Kaynağı Aç <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div x-show="playbackError && isDirectVideoUrl(getPlaybackUrl())" class="absolute inset-x-0 top-4 left-1/2 z-30 flex w-[min(92%,420px)] -translate-x-1/2 items-center justify-between gap-3 rounded-xl border border-red-400/25 bg-red-950/95 px-4 py-3 text-xs font-semibold text-white shadow-2xl">
+                                <span>Video yüklenemedi. Bağlantıyı kontrol edip yeniden deneyebilirsin.</span>
+                                <button type="button" @click="startPlayback()" class="shrink-0 rounded-lg bg-white/15 px-3 py-2 font-black hover:bg-white/25">Yeniden Dene</button>
+                            </div>
+                            <div x-show="videoEnded && selectedItem.type === 'tv'" class="absolute inset-0 z-30 flex items-center justify-center bg-black/65 p-4">
+                                <button type="button" @click="goToNextEpisode()" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#e7c477] to-[#b98b38] px-5 py-3 text-sm font-black text-black shadow-xl">
+                                    Sonraki Bölüm <i class="fa-solid fa-forward-step"></i>
+                                </button>
+                            </div>
+
+                            <!-- Centered transport controls with feedback anchored below each button -->
+                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted && (playerControlsVisible || !isPlaying)" x-transition.opacity @click.stop class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center gap-8 sm:gap-14">
+                                <div class="relative flex flex-col items-center">
+                                    <button type="button" @click="skipTime(-10); showPlayerControls()" aria-label="10 saniye geri sar" title="10 saniye geri" class="pointer-events-auto flex h-12 w-12 sm:h-16 sm:w-16 flex-col items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-md transition hover:scale-105 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
+                                        <i class="fa-solid fa-rotate-left text-lg sm:text-xl"></i><span class="mt-0.5 text-[9px] font-black">10 SN</span>
+                                    </button>
+                                    <div x-cloak x-show="playbackFeedbackVisible && playbackFeedback === 'backward'" x-transition.opacity.duration.150ms class="absolute left-1/2 top-full mt-3 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-black/75 px-3 py-1.5 text-[10px] font-black tracking-wider text-white shadow-lg backdrop-blur-md">
+                                        <i class="fa-solid fa-rotate-left mr-1 text-amber-300"></i>10 SN GERİ
+                                    </div>
+                                </div>
+                                <div class="relative flex flex-col items-center">
+                                    <button type="button" @click="togglePlay(); showPlayerControls()" :aria-label="isPlaying ? 'Duraklat' : 'Oynat'" class="pointer-events-auto flex h-14 w-14 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/25 bg-black/60 text-white shadow-2xl backdrop-blur-md transition hover:scale-105 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
+                                        <i :class="isPlaying ? 'fa-solid fa-pause text-xl sm:text-2xl' : 'fa-solid fa-play text-xl sm:text-2xl ml-1'"></i>
+                                    </button>
+                                    <div x-cloak x-show="pauseNoticeVisible || (playbackFeedbackVisible && playbackFeedback === 'play')" x-transition.opacity.duration.150ms class="absolute left-1/2 top-full mt-3 flex -translate-x-1/2 flex-col items-center gap-1.5 whitespace-nowrap rounded-xl border border-white/15 bg-black/80 px-3 py-2 text-white shadow-lg backdrop-blur-md">
+                                        <div class="text-[10px] font-black tracking-wider">
+                                            <i :class="pauseNoticeVisible ? 'fa-solid fa-pause' : 'fa-solid fa-play'" class="mr-1 text-amber-300"></i>
+                                            <span x-text="pauseNoticeVisible ? 'DURAKLATILDI' : 'OYNATILIYOR'"></span>
+                                        </div>
+                                        <span x-show="pauseNoticeVisible" class="text-[9px] font-medium tracking-normal text-white/75">Devam etmek için "Oynat" butonuna tıkla.</span>
+                                    </div>
+                                </div>
+                                <div class="relative flex flex-col items-center">
+                                    <button type="button" @click="skipTime(10); showPlayerControls()" aria-label="10 saniye ileri sar" title="10 saniye ileri" class="pointer-events-auto flex h-12 w-12 sm:h-16 sm:w-16 flex-col items-center justify-center rounded-full border border-white/20 bg-black/55 text-white shadow-xl backdrop-blur-md transition hover:scale-105 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-amber-300">
+                                        <i class="fa-solid fa-rotate-right text-lg sm:text-xl"></i><span class="mt-0.5 text-[9px] font-black">10 SN</span>
+                                    </button>
+                                    <div x-cloak x-show="playbackFeedbackVisible && playbackFeedback === 'forward'" x-transition.opacity.duration.150ms class="absolute left-1/2 top-full mt-3 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/15 bg-black/75 px-3 py-1.5 text-[10px] font-black tracking-wider text-white shadow-lg backdrop-blur-md">
+                                        <i class="fa-solid fa-rotate-right mr-1 text-amber-300"></i>10 SN İLERİ
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Overlay Controls -->
+                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted && (playerControlsVisible || !isPlaying)" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0 translate-y-2" @click.stop style="background:linear-gradient(to top, rgba(0,0,0,.96) 0%, rgba(0,0,0,.82) 38%, rgba(0,0,0,.48) 72%, rgba(0,0,0,0) 100%);padding-top:38px" class="absolute inset-x-0 bottom-0 px-4 pb-1 flex flex-col justify-end space-y-1">
+                                <div class="flex items-center justify-between mb-1">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="px-2.5 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase" x-text="selectedItem.title"></span>
+                                        <span class="text-xs text-gray-300 font-semibold" x-show="selectedItem.type === 'tv'" x-text="'Sezon ' + selectedSeason + ' • Bölüm ' + selectedEpisode"></span>
+
+                                    </div>
+                                    <button @click="skipIntro()" class="px-3 py-1 rounded bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-xs font-bold border border-white/30 transition-all flex items-center space-x-1.5">
+                                        <i class="fa-solid fa-forward text-[10px]"></i>
+                                        <span>Jeneriği Geç</span>
+                                    </button>
+                                </div>
+
+                                <!-- Premium seek bar: mouse, touch and remote friendly -->
+                                <div class="cv-player-seek-wrap" @click.stop>
+                                    <input
+                                        class="cv-player-seek"
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        step="0.1"
+                                        :value="videoProgress"
+                                        :style="'--cv-seek-progress:' + videoProgress + '%'"
+                                        @input="const v = document.getElementById('customVideoPlayer'); if (v && v.duration) { v.currentTime = (Number($event.target.value) / 100) * v.duration; }"
+                                        @change="showPlayerControls()"
+                                        @focus="showPlayerControls()"
+                                        @pointermove="const v = document.getElementById('customVideoPlayer'); const r = $event.currentTarget.getBoundingClientRect(); if (v && v.duration && r.width) $event.currentTarget.title = new Date((($event.clientX-r.left)/r.width)*v.duration*1000).toISOString().slice(14,19)"
+                                        aria-label="Video ilerleme çubuğu"
+                                        title="İleri veya geri sar">
+                                </div>
+
+                                <div class="flex items-center justify-between text-xs text-gray-200 pt-1">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="font-mono text-xs font-bold text-gray-300" x-text="currentTimeFormatted + ' / ' + durationFormatted"></span>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 sm:gap-3">
+                                        <div x-data="{ playerMenuOpen: false }" class="relative">
+                                            <button type="button" @click="playerMenuOpen = !playerMenuOpen" class="inline-flex h-8 items-center gap-1.5 rounded-lg bg-gray-800/80 px-2.5 text-white hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber-300" aria-label="Oynatma ayarları" title="Oynatma ayarları">
+                                                <i class="fa-solid fa-sliders text-xs"></i><span class="text-[10px] font-bold" x-text="playbackRate + 'x'"></span>
+                                            </button>
+                                            <div x-show="playerMenuOpen" x-transition @click.outside="playerMenuOpen = false" class="absolute bottom-11 right-0 z-50 min-w-40 rounded-xl border border-white/15 bg-[#11151d]/95 p-2 text-left shadow-2xl backdrop-blur-xl">
+                                                <p class="px-2 pb-1 text-[9px] font-black uppercase tracking-widest text-amber-200/80">Oynatma hızı</p>
+                                                <div class="grid grid-cols-3 gap-1">
+                                                    <template x-for="rate in [0.75,1,1.25,1.5,2]" :key="rate">
+                                                        <button type="button" @click="setPlaybackRate(rate); playerMenuOpen = false" class="rounded-md px-2 py-1.5 text-[10px] font-bold text-white hover:bg-white/10" :class="playbackRate === rate ? 'bg-amber-300/20 text-amber-200' : ''" x-text="rate + 'x'"></button>
+                                                    </template>
+                                                </div>
+                                                <div class="my-2 border-t border-white/10"></div>
+                                                <button type="button" @click="toggleCaptions(); playerMenuOpen = false" class="flex w-full items-center gap-2 rounded-md px-2 py-2 text-[10px] font-semibold text-white hover:bg-white/10" :disabled="!document.getElementById('customVideoPlayer')?.textTracks?.length">
+                                                    <i class="fa-solid fa-closed-captioning"></i> Altyazıyı Aç / Kapat
+                                                </button>
+                                                <button type="button" @click="cycleAudioTrack(); playerMenuOpen = false" x-show="document.getElementById('customVideoPlayer')?.audioTracks?.length > 1" class="flex w-full items-center gap-2 rounded-md px-2 py-2 text-[10px] font-semibold text-white hover:bg-white/10">
+                                                    <i class="fa-solid fa-language"></i> Ses kanalını değiştir
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <button type="button" @click="toggleCinemaMode()" class="w-8 h-8 rounded bg-gray-800/80 hover:bg-gray-700 text-white flex items-center justify-center transition-all" :title="cinemaMode ? 'Sinema modundan çık' : 'Sinema modu'">
+                                            <i :class="cinemaMode ? 'fa-solid fa-compress' : 'fa-solid fa-clapperboard' " class="text-xs"></i>
+                                        </button>
+                                        <button @click="toggleFullscreen()" class="w-8 h-8 rounded bg-gray-800/80 hover:bg-gray-700 text-white flex items-center justify-center transition-all" title="Tam ekran">
+                                            <i class="fa-solid fa-expand text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dizi Sezon Seçimi -->
+                        <div data-watch-card="season" :style="'order: ' + getWatchCardOrder('season')" x-show="selectedItem.type === 'tv'" :class="getCardClass()" class="p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-9 h-9 rounded-lg bg-rose-600/20 text-rose-500 flex items-center justify-center font-black text-sm">
+                                    <i class="fa-solid fa-tv"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white">Sezon Seçimi</h3>
+                                    <p class="text-[11px] text-gray-500 dark:text-gray-400">İzlemek istediğiniz sezonu belirleyin</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2 w-full sm:w-auto">
+                                <select x-model="selectedSeason" @change="selectedSeason = Number($event.target.value); loadSeasonEpisodes(selectedSeason)" :class="getCardClass()" class="border rounded-lg px-4 py-2 text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:border-rose-600">
+                                    <template x-for="s in getSeasonOptions()" :key="s">
+                                        <option :value="s" x-text="s + '. Sezon'"></option>
+                                    </template>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Sezon Bölümleri -->
+                        <div data-watch-card="episodes" :style="'order: ' + getWatchCardOrder('episodes')" x-show="selectedItem.type === 'tv'" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-film text-rose-600 text-xs"></i>
+                                    <span x-text="selectedSeason + '. Sezon Bölümleri'"></span>
+                                </h3>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold" x-text="'Toplam ' + (selectedItem.episodes || 0) + ' Bölüm'"></span>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl bg-rose-500/5 border border-rose-500/20 p-3">
+                                <div class="flex-1 space-y-1.5">
+                                    <div class="flex items-center justify-between text-[11px]">
+                                        <span class="font-bold text-gray-700 dark:text-gray-200">Bu sezon izleme ilerlemesi</span>
+                                        <span class="font-black text-rose-500" x-text="getSeasonProgress(selectedSeason) + '%'"></span>
+                                    </div>
+                                    <div class="h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden">
+                                        <div class="h-full rounded-full bg-rose-600 transition-all" :style="'width:' + getSeasonProgress(selectedSeason) + '%'"></div>
+                                    </div>
+                                    <p class="text-[10px] text-gray-500 dark:text-gray-400" x-text="getWatchedEpisodeCount(selectedSeason) + ' / ' + getEpisodesForSeason(selectedSeason).length + ' bölüm izlendi'"></p>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <button x-show="getLastWatchedEpisode()" @click="continueLastWatchedEpisode()" class="shrink-0 rounded-lg border border-rose-500/30 px-3 py-2 text-[10px] font-bold text-rose-500 hover:bg-rose-500/10">
+                                        <i class="fa-solid fa-play mr-1"></i> Son izlediğimden devam et
+                                    </button>
+                                    <button @click="goToNextEpisode()" :disabled="!getEpisodesForSeason(selectedSeason).length" class="shrink-0 rounded-lg bg-rose-600 px-3 py-2 text-[10px] font-bold text-white hover:bg-rose-700 disabled:opacity-40 disabled:cursor-not-allowed">
+                                        Sonraki bölüm <i class="fa-solid fa-chevron-right ml-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div x-show="(tmdbDetailsLoading || tmdbSeasonLoading) && getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
+                                <i class="fa-solid fa-spinner fa-spin text-2xl text-rose-500 mb-2"></i>
+                                <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Seçilen sezonun bölüm bilgileri yükleniyor...</p>
+                            </div>
+                            <div x-show="!tmdbDetailsLoading && !tmdbSeasonLoading && getEpisodesForSeason(selectedSeason).length === 0" class="rounded-xl border border-dashed border-gray-300 dark:border-gray-700 px-4 py-8 text-center">
+                                <i class="fa-solid fa-list-ul text-2xl text-gray-400 mb-2"></i>
+                                <p class="text-xs font-semibold text-gray-700 dark:text-gray-200">Bu sezon için TMDB bölüm bilgisi bulunamadı.</p>
+                                <p class="mt-1 text-[11px] text-gray-500 dark:text-gray-400">Sezon ve bölüm bilgileri TMDB kataloğunda mevcutsa burada listelenir. Bölüm kartları bilgi amaçlıdır; ayrıca bir izleme bağlantısı tanımlanmadıkça oynatmayı başlatmaz.</p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4" x-show="getEpisodesForSeason(selectedSeason).length > 0">
+                                <template x-for="ep in paginatedEpisodes" :key="ep.number">
+                                    <div @click="selectEpisode(ep.number)"
+                                         :class="selectedEpisode === ep.number ? 'border-rose-600 bg-rose-600/10' : 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 hover:border-gray-300 dark:hover:border-gray-700'"
+                                         class="p-2.5 rounded-xl border flex flex-col justify-between cursor-pointer transition-all space-y-2 group">
+                                        <div class="relative w-full aspect-video rounded-lg overflow-hidden bg-black border border-gray-200 dark:border-gray-800">
+                                            <img :alt="'Bölüm görseli'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="ep.still" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                            <span class="absolute bottom-1 right-1 bg-black/80 backdrop-blur px-1.5 py-0.5 rounded text-[9px] font-bold text-gray-300" x-text="ep.duration"></span>
+                                        </div>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center justify-between gap-2">
+                                                <h4 class="text-xs font-black text-gray-900 dark:text-white uppercase truncate" x-text="ep.number + '. ' + ep.title"></h4>
+                                                <button @click.stop="toggleEpisodeWatched(ep.number)" :title="isEpisodeWatched(selectedSeason, ep.number) ? 'İzlenmedi olarak işaretle' : 'İzlendi olarak işaretle'" :class="isEpisodeWatched(selectedSeason, ep.number) ? 'text-emerald-500' : 'text-gray-400 hover:text-emerald-500'" class="shrink-0 text-sm transition-colors">
+                                                    <i :class="isEpisodeWatched(selectedSeason, ep.number) ? 'fa-solid fa-circle-check' : 'fa-regular fa-circle'"></i>
+                                                </button>
+                                            </div>
+                                            <div class="flex items-center justify-between text-[9px]">
+                                                <span class="text-rose-500 dark:text-rose-400 font-bold" x-show="selectedEpisode === ep.number">Seçili bölüm</span>
+                                                <span class="text-emerald-500 font-bold" x-show="isEpisodeWatched(selectedSeason, ep.number)">İzlendi</span>
+                                            </div>
+                                            <p class="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed" x-text="ep.desc"></p>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="flex items-center justify-center space-x-2 pt-3 border-t border-gray-200 dark:border-gray-800" x-show="getEpisodesForSeason(selectedSeason).length > 8">
+                                <template x-for="pageNum in totalEpisodePages" :key="pageNum">
+                                    <button @click="currentEpisodePage = pageNum"
+                                            :class="currentEpisodePage === pageNum ? 'bg-rose-600 text-white' : 'bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'"
+                                            class="w-8 h-8 rounded-lg text-xs font-bold transition-all border border-gray-200 dark:border-gray-800"
+                                            x-text="pageNum">
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Synopsis Card -->
+                        <div x-data="{ synopsisOpen: false }" data-watch-card="synopsis" :style="'order: ' + getWatchCardOrder('synopsis')" :class="getCardClass()" class="p-5 sm:p-6 rounded-2xl border space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between gap-3">
+                                <h1 class="text-xl font-black text-gray-900 dark:text-white uppercase" x-text="selectedItem.title"></h1>
+                                <div class="flex shrink-0 items-center gap-2" role="group" aria-label="Kişisel kütüphane işlemleri">
+                                    <button type="button" @click="toggleWatchlist(selectedItem)" :title="isInWatchlist(selectedItem) ? 'Listemden çıkar' : 'Listeme ekle'" :aria-label="isInWatchlist(selectedItem) ? 'Listemden çıkar' : 'Listeme ekle'" :aria-pressed="isInWatchlist(selectedItem)" :class="isInWatchlist(selectedItem) ? 'border-rose-500 bg-rose-600 text-white shadow-md shadow-rose-950/15' : 'border-gray-300 bg-white/70 text-gray-700 hover:border-rose-500 hover:text-rose-600 dark:border-gray-700 dark:bg-white/5 dark:text-white'" class="watch-status-icon" :data-tooltip="isInWatchlist(selectedItem) ? 'Listemden çıkar' : 'Listeme ekle'"><i :class="isInWatchlist(selectedItem) ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'"></i></button>
+                                    <button type="button" @click="toggleWatched(selectedItem)" :aria-label="isWatched(selectedItem) ? 'İzledim kaydını kaldır' : 'İzledim'" :aria-pressed="isWatched(selectedItem)" :class="isWatched(selectedItem) ? 'border-emerald-500 bg-emerald-600 text-white shadow-md shadow-emerald-950/15' : 'border-gray-300 bg-white/70 text-gray-700 hover:border-emerald-500 hover:text-emerald-600 dark:border-gray-700 dark:bg-white/5 dark:text-white'" class="watch-status-icon watch-status-action"><i class="fa-solid fa-eye" aria-hidden="true"></i><span x-text="isWatched(selectedItem) ? 'İzlendi' : 'İzledim'"></span></button>
+                                    <button type="button" @click="toggleFavorite(selectedItem)" :title="isFavorite(selectedItem) ? 'Favorilerimden çıkar' : 'Favorilerime ekle'" :aria-label="isFavorite(selectedItem) ? 'Favorilerimden çıkar' : 'Favorilerime ekle'" :aria-pressed="isFavorite(selectedItem)" :class="isFavorite(selectedItem) ? 'border-amber-400 bg-amber-400 text-gray-950 shadow-md shadow-amber-950/15' : 'border-gray-300 bg-white/70 text-gray-700 hover:border-amber-400 hover:text-amber-500 dark:border-gray-700 dark:bg-white/5 dark:text-white'" class="watch-status-icon" :data-tooltip="isFavorite(selectedItem) ? 'Favorilerimden çıkar' : 'Favorilerime ekle'"><i :class="isFavorite(selectedItem) ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i></button>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-sm sm:text-[15px] text-gray-700 dark:text-gray-200 leading-7 tracking-[0.01em] line-clamp-5" x-text="selectedItem.desc"></p>
+                                <button type="button" x-show="(selectedItem.desc || '').length > 260" @click="synopsisOpen = true" class="mt-3 inline-flex items-center gap-2 text-sm font-extrabold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors group">
+                                    <span class="border-b-2 border-rose-500/60 pb-0.5 group-hover:border-rose-600">Tamamını oku</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[11px] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"></i>
+                                </button>
+                            </div>
+                            <template x-teleport="body">
+                                <div x-show="synopsisOpen" x-cloak x-transition.opacity class="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6" @keydown.escape.window="synopsisOpen = false">
+                                <button type="button" aria-label="Pencereyi kapat" @click="synopsisOpen = false" class="absolute inset-0 bg-black/75 backdrop-blur-sm"></button>
+                                <section role="dialog" aria-modal="true" aria-label="Yapım konusu" class="relative z-10 w-full max-w-2xl max-h-[85vh] overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#161922] shadow-2xl">
+                                    <div class="flex items-center justify-between gap-4 px-5 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                                        <div class="min-w-0">
+                                            <span class="text-[10px] font-black uppercase tracking-[0.18em] text-rose-600 dark:text-rose-400">Yapımın konusu</span>
+                                            <h2 class="mt-1 text-base sm:text-lg font-black text-gray-900 dark:text-white truncate" x-text="selectedItem.title"></h2>
+                                        </div>
+                                        <button type="button" @click="synopsisOpen = false" aria-label="Kapat" class="shrink-0 w-9 h-9 rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-200 hover:bg-rose-600 hover:text-white hover:border-rose-600 transition-colors">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="max-h-[calc(85vh-76px)] overflow-y-auto px-5 sm:px-6 py-5">
+                                        <p class="text-[15px] sm:text-base text-gray-700 dark:text-gray-200 leading-8 whitespace-pre-line" x-text="selectedItem.desc"></p>
+                                    </div>
+                                </section>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Review Section -->
+                        <div data-watch-card="reviews" :style="'order: ' + getWatchCardOrder('reviews')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white">Yorum Yap & Değerlendir</h3>
+
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xs text-gray-500 dark:text-gray-400">Puanınız:</span>
+                                <div class="flex space-x-1 text-amber-400 text-sm cursor-pointer">
+                                    <template x-for="star in [1,2,3,4,5,6,7,8,9,10]" :key="star">
+                                        <i @click="userRating = star" :class="userRating >= star ? 'fa-solid fa-star' : 'fa-regular fa-star'"></i>
+                                    </template>
+                                </div>
+                                <span class="text-xs font-bold text-amber-400" x-text="userRating + '/10'"></span>
+                            </div>
+
+                            <div class="space-y-3">
+                                <textarea x-model="userCommentText" placeholder="Görüşlerinizi paylaşın..." :class="getCardClass()" class="w-full border rounded-xl p-3 text-xs text-gray-800 dark:text-slate-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-rose-600 resize-none h-20"></textarea>
+                                <button @click="submitReview()" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold transition-all">Yorumu Gönder</button>
+                            </div>
+
+                            <div class="space-y-2 pt-2" x-show="getReviews(selectedItem.id).length > 0">
+                                <h4 class="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Topluluk Yorumları</h4>
+                                <template x-for="rev in getReviews(selectedItem.id)" :key="rev.date">
+                                    <div :class="getCardClass()" class="p-3 rounded-xl border text-xs space-y-1">
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-bold text-rose-500 dark:text-rose-400" x-text="rev.author"></span>
+                                            <div class="flex items-center space-x-1 text-amber-400 font-bold">
+                                                <i class="fa-solid fa-star text-[10px]"></i>
+                                                <span x-text="rev.rating + '/10'"></span>
+                                            </div>
+                                        </div>
+                                        <p class="text-gray-600 dark:text-gray-300" x-text="rev.comment"></p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!--
+  İzleme sayfasının sağ kolonu: yapım künyesi ve benzer yapımlar kartları.
+  Ana watch şablonunun Alpine kapsamını kullanır.
+-->
+                    <!-- Right Section -->
+                    <div id="watch-right-column" class="lg:col-span-4 flex flex-col space-y-6">
+
+                        <!-- Yapım Künyesi -->
+                        <div data-watch-card="credits" :style="'order: ' + getWatchCardOrder('credits')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-circle-info text-rose-600 text-xs"></i>
+                                    <span>Yapım Künyesi</span>
+                                </h3>
+
+                                <div :class="getCardClass()" class="px-2.5 py-1 rounded-lg border border-amber-400 text-amber-500 dark:text-amber-400 flex items-center gap-2 shadow-sm">
+                                    <i class="fa-solid fa-star text-sm"></i>
+                                    <span class="text-sm font-black" x-text="selectedItem.rating ? Number(selectedItem.rating).toFixed(1) : '—'"></span>
+                                    <span class="text-sm font-bold text-gray-500 dark:text-gray-300">/10</span>
+                                    <span class="rounded bg-[#f5c518] px-1.5 py-0.5 text-sm font-black leading-none text-black">IMDb</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-xs">
+                                <div class="flex items-start justify-between gap-3 pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="shrink-0 text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Orijinal İsim</span>
+                                    <div class="min-w-0 max-w-[72%] text-right font-semibold leading-relaxed break-words">
+                                        <span class="text-gray-800 dark:text-gray-200" x-text="selectedItem.originalTitle || selectedItem.title"></span>
+                                        <span x-show="selectedItem.englishTitle && selectedItem.englishTitle !== (selectedItem.originalTitle || selectedItem.title)" class="text-amber-600 dark:text-amber-300 font-extrabold">
+                                            <span class="mx-1 text-gray-400 dark:text-gray-500 font-medium">/</span><span x-text="selectedItem.englishTitle"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Yönetmen</span>
+                                    <div class="min-w-0 max-w-[72%] flex flex-wrap justify-end gap-x-2 gap-y-1 text-right">
+                                        <template x-for="directorName in getDirectorNames(selectedItem.director)" :key="directorName">
+                                            <button type="button" @click="openDirectorProfile({ id: getDirectorNames(selectedItem.director).length === 1 ? selectedItem.directorPersonId : null, name: directorName })" class="font-semibold text-gray-800 dark:text-gray-200 underline decoration-dotted underline-offset-4 decoration-rose-500/50 hover:text-rose-500 dark:hover:text-rose-400 hover:font-bold transition-all duration-200" x-text="directorName" title="Yönetmen biyografisini görüntüle"></button>
+                                        </template>
+                                        <span x-show="!getDirectorNames(selectedItem.director).length" class="text-gray-400">—</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Kategori</span>
+                                    <button type="button" @click="openRelatedDiscoveries('genre', selectedItem.category || selectedItem.genre)" :disabled="!(selectedItem.category || selectedItem.genre)" class="font-semibold text-rose-500 dark:text-rose-400 truncate max-w-[160px] text-right hover:underline underline-offset-4 disabled:cursor-default" x-text="selectedItem.category || selectedItem.genre" title="Bu kategorideki diğer yapımları keşfet"></button>
+                                </div>
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Yıl / Süre</span>
+                                    <span class="font-semibold text-gray-800 dark:text-gray-200" x-text="selectedItem.year + ' • ' + selectedItem.duration"></span>
+                                </div>
+                                <div class="flex justify-between items-start gap-3">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px] shrink-0">Ülke</span>
+                                    <div class="flex flex-wrap justify-end gap-x-3 gap-y-1 text-right">
+                                        <template x-for="country in getCountryEntries(selectedItem.country)" :key="country.code + '-' + country.name">
+                                            <button type="button" @click="openRelatedDiscoveries('country', country.name, country.code)" class="inline-flex items-center gap-1.5 font-semibold text-gray-800 dark:text-gray-200 hover:text-rose-500 hover:underline underline-offset-4 whitespace-nowrap" :title="country.name + ' yapımlarını keşfet'">
+                                                <img x-show="country.flagUrl" :src="country.flagUrl" :alt="country.name + ' bayrağı'" width="20" height="14" loading="lazy" class="h-3.5 w-5 rounded-[2px] border border-black/10 object-cover">
+                                                <span x-text="country.name"></span>
+                                            </button>
+                                        </template>
+                                        <span x-show="!getCountryEntries(selectedItem.country).length" class="font-semibold text-gray-500">—</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Oyuncu Kadrosu -->
+                        <div data-watch-card="cast" :style="'order: ' + getWatchCardOrder('cast')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm" x-show="selectedItem.tmdbCast && selectedItem.tmdbCast.length > 0">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-users text-rose-600 text-xs"></i>
+                                    <span>Oyuncu Kadrosu</span>
+                                </h3>
+                                <div class="flex space-x-1.5">
+                                    <button @click="scrollCast(-1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button @click="scrollCast(1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="castContainer" class="flex items-center space-x-3 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
+                                <template x-for="actor in (selectedItem.tmdbCast || []).slice(0, 6)" :key="actor.name">
+                                    <div @click="actor.id && openActorProfile(actor)" @keydown.enter.prevent="actor.id && openActorProfile(actor)" tabindex="0" role="button" :aria-label="actor.name + ' oyuncu profilini aç'" :class="getCardClass()" class="w-24 flex-shrink-0 p-2.5 rounded-xl border flex flex-col items-center text-center space-y-2 transition-all duration-300 hover:scale-110 hover:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer group">
+                                        <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-md ring-2 ring-gray-300 dark:ring-gray-700 group-hover:ring-rose-500 transition-all">
+                                            <img :alt="'Oyuncu fotoğrafı'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="actor.profile || 'https://placehold.co/150x150/161922/ffffff?text=Photo'" :srcset="getTmdbImageSrcSet(actor.profile, [45, 92])" sizes="48px" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="w-full">
+                                            <h4 class="font-bold text-[11px] text-gray-900 dark:text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="actor.name"></h4>
+                                            <p class="text-[9px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="actor.character"></p>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Benzer Yapımlar -->
+                        <div data-watch-card="similar" :style="'order: ' + getWatchCardOrder('similar')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-layer-group text-rose-600 text-xs"></i>
+                                    <span>Benzer Yapımlar</span>
+                                </h3>
+                                <div class="flex space-x-1.5">
+                                    <button @click="scrollSimilar(-1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button @click="scrollSimilar(1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="similarContainer" class="flex items-center space-x-3.5 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
+                                <template x-for="sim in getSimilarItems(selectedItem)" :key="sim.id">
+                                    <div @click="openWatchPage(sim)" :class="getCardClass()" class="w-28 flex-shrink-0 cursor-pointer p-2 rounded-xl border hover:border-gray-300 dark:hover:border-gray-700 transition-colors flex flex-col items-center text-center space-y-2 group">
+                                        <div class="w-24 aspect-[2/3] rounded-lg overflow-hidden bg-black shadow-md">
+                                            <img :alt="sim.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="sim.poster" :srcset="getTmdbImageSrcSet(sim.poster, [92, 154, 185])" sizes="96px" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                        </div>
+                                        <h5 class="font-bold text-[11px] text-gray-800 dark:text-white line-clamp-1 w-full group-hover:text-rose-500 transition-colors" x-text="sim.title"></h5>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+
+                <!--
+  İzleme sayfasının fragman penceresi. x-teleport ile body içine taşınır;
+  açma/kapama durumu ana watch şablonundaki trailerOpen değişkenini kullanır.
+-->
+                <template x-teleport="body">
+                    <div x-cloak x-show="trailerOpen" x-transition.opacity @click.self="trailerOpen = false" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Yapım fragmanı">
+                        <div x-show="trailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
+                            <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
+                                <div class="min-w-0 pr-4">
+                                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p>
+                                    <p class="truncate text-sm font-bold text-white" x-text="selectedItem.title"></p>
+                                </div>
+                                <button type="button" @click="trailerOpen = false" aria-label="Fragmanı kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <template x-if="trailerOpen && selectedItem.trailerUrl">
+                                <div class="aspect-video w-full bg-black">
+                                    <iframe :src="window.cineTrailerEmbedUrl(selectedItem.trailerUrl, selectedItem.trailerProvider)" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                </div>
+                            </template>
+                            <div x-show="!selectedItem.trailerUrl" class="flex min-h-[220px] flex-col items-center justify-center gap-3 px-6 py-10 text-center">
+                                <span class="flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/25 bg-amber-300/10 text-amber-300"><i class="fa-solid fa-film text-xl"></i></span>
+                                <p class="text-base font-bold text-white">Fragman bulunamadı</p>
+                                <p class="max-w-md text-sm leading-6 text-gray-400">Bu yapım için şu anda izlenebilir bir fragman bağlantısı bulunmuyor. Daha sonra tekrar kontrol edebilirsin.</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
