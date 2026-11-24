@@ -1,4 +1,4 @@
-/* Perde oynatıcı kontrolleri: yalnızca izleme rotasında yüklenen küçültülmüş video kontrol modülü. */(function(){'use strict';window.PerdePlayerControls={startPlayback(){const e=document.getElementById("customVideoPlayer"),t=this.getPlaybackUrl();if(this.playerControlsVisible=!0,!e||!t||!this.isDirectVideoUrl(t))return void(this.playbackError=!0);this.playbackError=!1,e.getAttribute("src")!==t&&(e.setAttribute("src",t),e.load());const i=e.play();i&&"function"==typeof i.catch&&i.catch(e=>{this.playbackError=!0,this.isPlaying=!1,console.warn("Video oynatma başlatılamadı:",e)})},selectEpisode(e){this.selectedEpisode=Number(e),this.playbackError=!1,this.videoEnded=!1,this.videoProgress=0;const t=document.getElementById("customVideoPlayer"),i=this.getPlaybackUrl();t&&i&&(t.pause(),t.src=i,t.load(),t.play().catch(()=>{this.playbackError=!0}))},handleDoubleTapSeek(e,t){const i=document.getElementById("cvTapSeekZones");if(i&&t){const e=i.getBoundingClientRect();this.tapSeekX=Math.max(62,Math.min(e.width-62,t.clientX-e.left)),this.tapSeekY=Math.max(68,Math.min(e.height-68,t.clientY-e.top))}const r="backward"===e?-10:10,a=document.getElementById("customVideoPlayer");a&&Number.isFinite(a.duration)&&(a.currentTime=Math.max(0,Math.min(a.duration,a.currentTime+r)),this.updateVideoProgress(),this.tapSeekAmount=this.tapSeekSide===e?this.tapSeekAmount+10:10,this.tapSeekSide=e,this.tapSeekPulse=!1,setTimeout(()=>{this.tapSeekPulse=!0},30),this.tapSeekTimer&&clearTimeout(this.tapSeekTimer),this.tapSeekTimer=setTimeout(()=>{this.tapSeekSide="",this.tapSeekAmount=0,this.tapSeekTimer=null},950),this.showPlayerControls())},setPlaybackRate(e){const t=Number(e);if(![.75,1,1.25,1.5,2].includes(t))return;this.playbackRate=t;const i=document.getElementById("customVideoPlayer");i&&(i.playbackRate=t)},seekVideo(e){const t=document.getElementById("customVideoPlayer");if(!t||!t.duration)return;const i=e.currentTarget.getBoundingClientRect(),r=(e.clientX-i.left)/i.width;t.currentTime=r*t.duration},
+/* Perde oynatıcı kontrolleri: yalnızca izleme rotasında yüklenen video ve bölüm gezinme modülü. */(function(){'use strict';window.PerdePlayerControls={startPlayback(){const e=document.getElementById("customVideoPlayer"),t=this.getPlaybackUrl();if(this.playerControlsVisible=!0,!e||!t||!this.isDirectVideoUrl(t))return void(this.playbackError=!0);this.playbackError=!1,e.getAttribute("src")!==t&&(e.setAttribute("src",t),e.load());const i=e.play();i&&"function"==typeof i.catch&&i.catch(e=>{this.playbackError=!0,this.isPlaying=!1,console.warn("Video oynatma başlatılamadı:",e)})},selectEpisode(e){this.selectedEpisode=Number(e),this.playbackError=!1,this.videoEnded=!1,this.videoProgress=0;const t=document.getElementById("customVideoPlayer"),i=this.getPlaybackUrl();t&&i&&(t.pause(),t.src=i,t.load(),t.play().catch(()=>{this.playbackError=!0}))},handleDoubleTapSeek(e,t){const i=document.getElementById("cvTapSeekZones");if(i&&t){const e=i.getBoundingClientRect();this.tapSeekX=Math.max(62,Math.min(e.width-62,t.clientX-e.left)),this.tapSeekY=Math.max(68,Math.min(e.height-68,t.clientY-e.top))}const r="backward"===e?-10:10,a=document.getElementById("customVideoPlayer");a&&Number.isFinite(a.duration)&&(a.currentTime=Math.max(0,Math.min(a.duration,a.currentTime+r)),this.updateVideoProgress(),this.tapSeekAmount=this.tapSeekSide===e?this.tapSeekAmount+10:10,this.tapSeekSide=e,this.tapSeekPulse=!1,setTimeout(()=>{this.tapSeekPulse=!0},30),this.tapSeekTimer&&clearTimeout(this.tapSeekTimer),this.tapSeekTimer=setTimeout(()=>{this.tapSeekSide="",this.tapSeekAmount=0,this.tapSeekTimer=null},950),this.showPlayerControls())},setPlaybackRate(e){const t=Number(e);if(![.75,1,1.25,1.5,2].includes(t))return;this.playbackRate=t;const i=document.getElementById("customVideoPlayer");i&&(i.playbackRate=t)},seekVideo(e){const t=document.getElementById("customVideoPlayer");if(!t||!t.duration)return;const i=e.currentTarget.getBoundingClientRect(),r=(e.clientX-i.left)/i.width;t.currentTime=r*t.duration},
 applyPlaybackRate() {
     const video = document.getElementById('customVideoPlayer');
     if (video) video.playbackRate = this.playbackRate || 1;
@@ -97,4 +97,36 @@ toggleFullscreen() {
             console.warn('Profil izleme ilerlemesi kaydedilemedi:', error);
         }
     }
+,
+    goToNextEpisode() {
+                    const episodes = this.getEpisodesForSeason(this.selectedSeason);
+                    const next = episodes.find(ep => ep.number > this.selectedEpisode);
+                    if (next) {
+                        this.currentEpisodePage = Math.floor((next.number - 1) / 8) + 1;
+                        this.selectEpisode(next.number);
+                    } else {
+                        const nextSeason = this.selectedSeason + 1;
+                        const nextSeasonEpisodes = this.getEpisodesForSeason(nextSeason);
+                        if (nextSeasonEpisodes.length) {
+                            this.selectedSeason = nextSeason;
+                            this.currentEpisodePage = 1;
+                            this.selectEpisode(nextSeasonEpisodes[0].number);
+                        }
+                    }
+                },
+    handlePlayerKeydown(event) {
+                    if (this.currentPage !== 'watch' || !this.hasPlaybackStarted) return;
+                    if (event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT/.test(event.target?.tagName || '') || event.target?.isContentEditable || event.target?.closest?.('button,a,[role="button"]')) return;
+                    const key = event.key.toLowerCase();
+                    if (key === 'arrowleft' || key === 'arrowright' || key === ' ' || key === 'm' || key === 'f' || key === 'c') {
+                        event.preventDefault();
+                        if (key === 'arrowleft') this.skipTime(-10);
+                        else if (key === 'arrowright') this.skipTime(10);
+                        else if (key === ' ') this.togglePlay();
+                        else if (key === 'm') this.toggleMute();
+                        else if (key === 'f') this.toggleFullscreen();
+                        else if (key === 'c') this.toggleCinemaMode();
+                        this.showPlayerControls();
+                    }
+                }
 };})();
