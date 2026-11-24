@@ -7,11 +7,13 @@
 import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 
-const [shell, homepage, watchPage, explorePage, watchlistPage, libraryPage, statsPage, videoLinksPage, header, searchOverlay, footer, output] = await Promise.all([
+const [shell, homepage, watchPage, actorDirectorPage, explorePage, franchisesPage, watchlistPage, libraryPage, statsPage, videoLinksPage, header, searchOverlay, footer, output] = await Promise.all([
   readFile('src/templates/index-shell.html', 'utf8'),
   readFile('src/templates/homepage.html', 'utf8'),
   readFile('src/templates/watch-page.html', 'utf8'),
+  readFile('src/templates/actor-director-page.html', 'utf8'),
   readFile('src/templates/explore-page.html', 'utf8'),
+  readFile('src/templates/franchises-page.html', 'utf8'),
   readFile('src/templates/watchlist-page.html', 'utf8'),
   readFile('src/templates/library-page.html', 'utf8'),
   readFile('src/templates/stats-page.html', 'utf8'),
@@ -26,8 +28,12 @@ assert.equal((shell.match(/<!-- PERDE_TEMPLATE:HOME -->/g) || []).length, 1,
   'Kaynak kabukta HOME işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:WATCH -->/g) || []).length, 1,
   'Kaynak kabukta WATCH işareti tam bir kez bulunmalı.');
+assert.equal((shell.match(/<!-- PERDE_TEMPLATE:ACTOR_DIRECTOR -->/g) || []).length, 1,
+  'Kaynak kabukta ACTOR_DIRECTOR işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:EXPLORE -->/g) || []).length, 1,
   'Kaynak kabukta EXPLORE işareti tam bir kez bulunmalı.');
+assert.equal((shell.match(/<!-- PERDE_TEMPLATE:FRANCHISES -->/g) || []).length, 1,
+  'Kaynak kabukta FRANCHISES işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:WATCHLIST -->/g) || []).length, 1, 'Kaynak kabukta WATCHLIST işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:LIBRARY -->/g) || []).length, 1, 'Kaynak kabukta LIBRARY işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:STATS -->/g) || []).length, 1, 'Kaynak kabukta STATS işareti tam bir kez bulunmalı.');
@@ -50,8 +56,22 @@ assert.match(watchPage, /currentPage === "watch"|currentPage === 'watch'/,
   'İzleme partial dosyası watch sayfa koşulunu içermeli.');
 assert.doesNotMatch(watchPage, /EXPLORE PAGE/,
   'İzleme partial dosyası keşfet sayfasının içeriğini kapsamamalı.');
+assert.match(actorDirectorPage, /currentPage === 'actor' \|\| currentPage === 'director'/,
+  'Oyuncu/yönetmen partial dosyası her iki profil sayfasını da içermeli.');
+assert.match(actorDirectorPage, /selectedActor\.filmography/,
+  'Oyuncu/yönetmen partial dosyası filmografi alanını içermeli.');
+assert.doesNotMatch(actorDirectorPage, /currentPage === 'explore'/,
+  'Oyuncu/yönetmen partial dosyası keşfet sayfasını kapsamamalı.');
 assert.match(explorePage, /EXPLORE PAGE/,
   'Keşfet partial dosyası keşfet görünümünü içermeli.');
+assert.match(explorePage, /currentPage === 'explore'/,
+  'Keşfet partial dosyası keşfet sayfa koşulunu içermeli.');
+assert.doesNotMatch(explorePage, /currentPage === 'franchises'/,
+  'Keşfet partial dosyası seri filmler görünümünü kapsamamalı.');
+assert.match(franchisesPage, /currentPage === 'franchises'/,
+  'Seri filmler partial dosyası seri rehberi görünümünü içermeli.');
+assert.match(franchisesPage, /selectedFranchise\.items/,
+  'Seri filmler partial dosyası seçilen serinin film sırasını içermeli.');
 assert.doesNotMatch(explorePage, /TEMPORARY VIDEO LINKS PAGE/,
   'Keşfet partial dosyası video bağlantıları sayfasını kapsamamalı.');
 assert.doesNotMatch(output, /<!-- PERDE_TEMPLATE:[A-Z0-9_-]+ -->/,
@@ -75,6 +95,8 @@ assert.match(output, /<template x-if="currentPage === 'home'">/,
   'Üretilmiş index ana sayfa Alpine görünümünü içermeli.');
 assert.match(output, /<template x-if="currentPage === 'watch'">/,
   'Üretilmiş index izleme Alpine görünümünü içermeli.');
+assert.match(output, /currentPage === 'actor' \|\| currentPage === 'director'/, 'Üretilmiş index oyuncu ve yönetmen profil görünümlerini içermeli.');
+assert.match(output, /<template x-if="currentPage === 'franchises'">/, 'Üretilmiş index seri filmler görünümünü içermeli.');
 assert.match(output, /<template x-if="currentPage === 'explore'">/,
   'Üretilmiş index keşfet Alpine görünümünü içermeli.');
 
