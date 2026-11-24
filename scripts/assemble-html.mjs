@@ -13,6 +13,10 @@ const partialPaths = {
   HOME_WATCHLIST_CONTENT: 'src/templates/home-watchlist-content.html',
   HOME_WATCHED_CONTENT: 'src/templates/home-watched-content.html',
   HOME_NEW_ARRIVALS_CONTENT: 'src/templates/home-new-arrivals-content.html',
+  HOME_FAVORITES_CONTENT: 'src/templates/home-favorites-content.html',
+  HOME_SERIES_TRACKING_CONTENT: 'src/templates/home-series-tracking-content.html',
+  HOME_GENRE_DISCOVERY_CONTENT: 'src/templates/home-genre-discovery-content.html',
+  HOME_FRANCHISES_CONTENT: 'src/templates/home-franchises-content.html',
   WATCH: 'src/templates/watch-page.html',
   WATCH_LEFT: 'src/templates/watch-left-column.html',
   WATCH_RIGHT: 'src/templates/watch-right-column.html',
@@ -72,7 +76,11 @@ const homeFragments = [
   { slug: 'continue', partial: 'HOME_CONTINUE_CONTENT', label: 'İzlemeye Devam Et' },
   { slug: 'watchlist', partial: 'HOME_WATCHLIST_CONTENT', label: 'İzleme Listem' },
   { slug: 'watched', partial: 'HOME_WATCHED_CONTENT', label: 'İzlediklerim' },
-  { slug: 'new-arrivals', partial: 'HOME_NEW_ARRIVALS_CONTENT', label: 'Son Eklenenler' }
+  { slug: 'new-arrivals', partial: 'HOME_NEW_ARRIVALS_CONTENT', label: 'Son Eklenenler' },
+  { slug: 'favorites', partial: 'HOME_FAVORITES_CONTENT', label: 'Favorilerim' },
+  { slug: 'series-tracking', partial: 'HOME_SERIES_TRACKING_CONTENT', label: 'Dizi Takibi' },
+  { slug: 'genre-discovery', partial: 'HOME_GENRE_DISCOVERY_CONTENT', label: 'Türlere Göre Keşfet' },
+  { slug: 'franchises', partial: 'HOME_FRANCHISES_CONTENT', label: 'Seri Filmler' }
 ];
 let homeTemplate = partials.HOME.replace(homeCatalogMarker, homeCatalogPlaceholder);
 for (const fragment of homeFragments) {
