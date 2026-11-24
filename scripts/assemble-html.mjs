@@ -124,6 +124,12 @@ for (const name of ['HOME', 'WATCHLIST_CONFIRM_MODAL', 'HEADER', 'SEARCH_OVERLAY
   const marker = `<!-- PERDE_TEMPLATE:${name} -->`;
   const occurrences = html.split(marker).length - 1;
   if (occurrences !== 1) throw new Error(`Şablon işareti tam bir kez bulunmalı: ${marker} (bulunan: ${occurrences})`);
+  if (name === 'SEARCH_OVERLAY') {
+    // Arama penceresi yalnızca kullanıcı ilk kez aramayı açtığında indirilir.
+    await writeFile('runtime-pages/search-overlay.html', partials.SEARCH_OVERLAY.trimEnd());
+    html = html.replace(marker, '<!-- Arama penceresi ilk kullanımda runtime-pages/search-overlay.html dosyasından yüklenir. -->');
+    continue;
+  }
   const content = name === 'HOME' ? homeTemplate : partials[name];
   html = html.replace(marker, content.trimEnd());
 }
