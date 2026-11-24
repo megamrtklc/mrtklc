@@ -1450,18 +1450,12 @@
                     return (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
                 },
 
-                scrollCast(direction) {
-                    const container = document.getElementById('castContainer');
-                    if (container) {
-                        container.scrollBy({ left: 180 * direction, behavior: 'smooth' });
-                    }
+                scrollCast(...args) {
+                    return window.PerdeWatchPage?.scrollCast.apply(this, args);
                 },
 
-                scrollSimilar(direction) {
-                    const container = document.getElementById('similarContainer');
-                    if (container) {
-                        container.scrollBy({ left: 180 * direction, behavior: 'smooth' });
-                    }
+                scrollSimilar(...args) {
+                    return window.PerdeWatchPage?.scrollSimilar.apply(this, args);
                 },
 
                 currentProfile: {
