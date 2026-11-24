@@ -34,7 +34,7 @@ jobs:
             git reset --hard origin/main
             node scripts/assemble-html.mjs
             node scripts/build-hero-data.mjs
-            git add hero-data.json catalog-lite.json catalog-cast.json index.html
+            git add hero-data.json catalog-lite.json catalog-cast.json index.html runtime-pages/*.html
             if git diff --cached --quiet; then
               echo "Hero feed is already current."
               exit 0

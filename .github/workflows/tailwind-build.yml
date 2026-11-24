@@ -44,7 +44,7 @@ jobs:
             npx tailwindcss -c tailwind.config.js -i ./src/tailwind.css -o ./tailwind.css --minify
             npx terser app.js --compress --mangle --output app.min.js
             wc -c tailwind.css app.js app.min.js
-            git add index.html tailwind.css app.min.js hero-data.json catalog-lite.json catalog-cast.json
+            git add index.html tailwind.css app.min.js hero-data.json catalog-lite.json catalog-cast.json runtime-pages/*.html
             if git diff --cached --quiet; then
               echo "Compiled assets are already current."
               exit 0

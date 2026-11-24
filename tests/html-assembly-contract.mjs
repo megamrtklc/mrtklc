@@ -109,19 +109,19 @@ assert.match(output, /cineverse-search-dialog/, 'Üretilmiş index genel arama p
 assert.match(output, /<footer id="cineverse-footer"/, 'Üretilmiş index footer alanını içermeli.');
 assert.match(output, /<template x-if="currentPage === 'home'">/,
   'Üretilmiş index ana sayfa görünümünü ilk HTML içinde tutmalı.');
-assert.match(output, /perdeLazyPage\\('watch'\\)/, 'İzleme sayfası gecikmeli yükleyiciye bağlanmalı.');
-assert.match(output, /perdeLazyPage\\('actor-director'\\)/, 'Oyuncu/yönetmen sayfası gecikmeli yükleyiciye bağlanmalı.');
-assert.match(output, /perdeLazyPage\\('explore'\\)/, 'Keşfet sayfası gecikmeli yükleyiciye bağlanmalı.');
-assert.match(output, /perdeLazyPage\\('franchises'\\)/, 'Seri rehberi gecikmeli yükleyiciye bağlanmalı.');
-assert.match(output, /perdeLazyPage\\('watchlist'\\)/, 'İzleme listesi gecikmeli yükleyiciye bağlanmalı.');
-assert.match(output, /perdeLazyPage\\('library'\\)/, 'Kütüphane gecikmeli yükleyiciye bağlanmalı.');
-assert.match(output, /perdeLazyPage\\('stats'\\)/, 'İstatistikler gecikmeli yükleyiciye bağlanmalı.');
-assert.match(output, /perdeLazyPage\\('video-links'\\)/, 'Video bağlantıları gecikmeli yükleyiciye bağlanmalı.');
+assert.match(output, /perdeLazyPage\('watch'\)/, 'İzleme sayfası gecikmeli yükleyiciye bağlanmalı.');
+assert.match(output, /perdeLazyPage\('actor-director'\)/, 'Oyuncu/yönetmen sayfası gecikmeli yükleyiciye bağlanmalı.');
+assert.match(output, /perdeLazyPage\('explore'\)/, 'Keşfet sayfası gecikmeli yükleyiciye bağlanmalı.');
+assert.match(output, /perdeLazyPage\('franchises'\)/, 'Seri rehberi gecikmeli yükleyiciye bağlanmalı.');
+assert.match(output, /perdeLazyPage\('watchlist'\)/, 'İzleme listesi gecikmeli yükleyiciye bağlanmalı.');
+assert.match(output, /perdeLazyPage\('library'\)/, 'Kütüphane gecikmeli yükleyiciye bağlanmalı.');
+assert.match(output, /perdeLazyPage\('stats'\)/, 'İstatistikler gecikmeli yükleyiciye bağlanmalı.');
+assert.match(output, /perdeLazyPage\('video-links'\)/, 'Video bağlantıları gecikmeli yükleyiciye bağlanmalı.');
 assert.doesNotMatch(output, /<template x-if="currentPage === 'watch'">/,
   'İzleme sayfası ilk HTML içine gömülmemeli.');
 assert.doesNotMatch(output, /<template x-if="currentPage === 'explore'">/,
   'Keşfet sayfası ilk HTML içine gömülmemeli.');
-assert.match(output, /watchlist-confirm\\.window/, 'Ortak izleme listesi onay penceresi ilk HTML içinde kalmalı.');
+assert.match(output, /watchlist-confirm\.window/, 'Ortak izleme listesi onay penceresi ilk HTML içinde kalmalı.');
 
 const runtimePages = await Promise.all([
   readFile('runtime-pages/watch.html', 'utf8'),
@@ -136,7 +136,7 @@ const runtimePages = await Promise.all([
 assert.match(runtimePages[0], /currentPage === 'watch'/, 'Runtime izleme dosyası watch görünümünü içermeli.');
 assert.match(runtimePages[0], /customVideoPlayer/, 'Runtime izleme dosyası oynatıcıyı içermeli.');
 assert.doesNotMatch(runtimePages[0], /PERDE_TEMPLATE:/, 'Runtime izleme dosyasında çözülmemiş iç içe işaret kalmamalı.');
-assert.match(runtimePages[1], /currentPage === 'actor' \\|\\| currentPage === 'director'/, 'Runtime profil dosyası oyuncu ve yönetmen görünümlerini içermeli.');
+assert.match(runtimePages[1], /currentPage === 'actor' \|\| currentPage === 'director'/, 'Runtime profil dosyası oyuncu ve yönetmen görünümlerini içermeli.');
 assert.match(runtimePages[2], /currentPage === 'explore'/, 'Runtime keşfet dosyası ilgili görünümü içermeli.');
 assert.match(runtimePages[3], /currentPage === 'franchises'/, 'Runtime seri rehberi dosyası ilgili görünümü içermeli.');
 assert.match(runtimePages[4], /currentPage === 'watchlist'/, 'Runtime izleme listesi dosyası ilgili görünümü içermeli.');
