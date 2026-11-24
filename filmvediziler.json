@@ -20725,7 +20725,7 @@
       }
     ],
     "desktopMode": "auto",
-    "desktopCategory": "new-arrivals",
+    "desktopCategory": "random",
     "desktopHeroSlides": [
       {
         "id": "cv-1795466741631",
@@ -20828,7 +20828,7 @@
       "description": "İzleme alışkanlıklarından ilham alan, sana özel seçkiler"
     },
     "mobileMode": "auto",
-    "mobileCategory": "new-arrivals",
+    "mobileCategory": "random",
     "mobileHeroSlides": [
       {
         "id": "cv-1795466741631",
