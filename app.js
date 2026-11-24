@@ -1423,19 +1423,8 @@
                 pauseNoticeVisible: false,
                 playbackFeedbackTimer: null,
 
-                toggleCinemaMode() {
-                    this.cinemaMode = !this.cinemaMode;
-                    document.body.style.overflow = this.cinemaMode ? 'hidden' : '';
-                    if (this.cinemaNoticeTimer) clearTimeout(this.cinemaNoticeTimer);
-                    this.cinemaNoticeVisible = this.cinemaMode;
-                    if (this.cinemaMode) {
-                        this.playerControlsVisible = true;
-                        this.showPlayerControls();
-                        this.cinemaNoticeTimer = setTimeout(() => {
-                            this.cinemaNoticeVisible = false;
-                            this.cinemaNoticeTimer = null;
-                        }, 5000);
-                    }
+                toggleCinemaMode(...args) {
+                    return window.PerdePlayerControls?.toggleCinemaMode.apply(this, args);
                 },
 
                 setPlaybackRate(rate) {
@@ -1492,23 +1481,16 @@
                     this.playerSideControlsVisible = true;
                 },
 
-                showPlayerControls() {
-                    this.playerControlsVisible = true;
-                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
-                    if (this.isPlaying) this.schedulePlayerControlsHide();
+                showPlayerControls(...args) {
+                    return window.PerdePlayerControls?.showPlayerControls.apply(this, args);
                 },
 
-                schedulePlayerControlsHide() {
-                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
-                    if (!this.isPlaying) return;
-                    this.playerControlsTimer = setTimeout(() => {
-                        if (this.isPlaying) this.playerControlsVisible = false;
-                    }, 2200);
+                schedulePlayerControlsHide(...args) {
+                    return window.PerdePlayerControls?.schedulePlayerControlsHide.apply(this, args);
                 },
 
-                hidePlayerControlsOnLeave() {
-                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
-                    this.playerControlsVisible = !this.isPlaying;
+                hidePlayerControlsOnLeave(...args) {
+                    return window.PerdePlayerControls?.hidePlayerControlsOnLeave.apply(this, args);
                 },
 
                 isDirectVideoUrl(url) {
@@ -1527,25 +1509,12 @@
                     return window.PerdePlayerControls?.startPlayback.call(this);
                 },
 
-                showPlaybackFeedback(type, duration = 5000) {
-                    this.playbackFeedback = type;
-                    this.playbackFeedbackVisible = true;
-                    if (this.playbackFeedbackTimer) clearTimeout(this.playbackFeedbackTimer);
-                    this.playbackFeedbackTimer = setTimeout(() => {
-                        this.playbackFeedbackVisible = false;
-                        this.playbackFeedbackTimer = null;
-                    }, duration);
+                showPlaybackFeedback(...args) {
+                    return window.PerdePlayerControls?.showPlaybackFeedback.apply(this, args);
                 },
 
-                togglePlay() {
-                    const video = document.getElementById('customVideoPlayer');
-                    if (!video) return;
-                    if (video.paused) {
-                        this.showPlaybackFeedback('play', 5000);
-                        this.startPlayback();
-                    } else {
-                        video.pause();
-                    }
+                togglePlay(...args) {
+                    return window.PerdePlayerControls?.togglePlay.apply(this, args);
                 },
 
                 updateVideoProgress() {
@@ -1556,33 +1525,12 @@
                     return window.PerdePlayerControls?.seekVideo.call(this, event);
                 },
 
-                skipTime(seconds) {
-                    const video = document.getElementById('customVideoPlayer');
-                    if (!video || !Number.isFinite(video.duration)) return;
-                    video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
-                    this.showPlaybackFeedback(seconds < 0 ? 'backward' : 'forward', 850);
-                    this.showPlayerControls();
+                skipTime(...args) {
+                    return window.PerdePlayerControls?.skipTime.apply(this, args);
                 },
 
-                handleSeekTap(direction, event) {
-                    const now = Date.now();
-                    const point = event ? { x: event.clientX, y: event.clientY } : { x: 0, y: 0 };
-                    const previous = this.lastSeekTap;
-                    if (previous && previous.direction === direction && now - previous.time <= 360 &&
-                        Math.hypot(point.x - previous.x, point.y - previous.y) <= 64) {
-                        if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
-                        this.lastSeekTapTimer = null;
-                        this.lastSeekTap = null;
-                        this.handleDoubleTapSeek(direction, event);
-                        return;
-                    }
-                    this.lastSeekTap = { direction, time: now, x: point.x, y: point.y };
-                    if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
-                    this.lastSeekTapTimer = setTimeout(() => {
-                        this.lastSeekTap = null;
-                        this.lastSeekTapTimer = null;
-                    }, 380);
-                    this.showPlayerControls();
+                handleSeekTap(...args) {
+                    return window.PerdePlayerControls?.handleSeekTap.apply(this, args);
                 },
 
                 handleDoubleTapSeek(direction, event) {
