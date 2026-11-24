@@ -426,7 +426,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
       nextStory(){if(this.active<this.currentGroup.stories.length-1){this.active++}else{this.open=false}},
       prevStory(){if(this.active>0){this.active--}}
     }" @keydown.escape.window="closeViewer()" x-cloak>
-      <div class="flex items-center justify-between px-1 mb-1"><div><div class="text-[10px] font-black tracking-[.22em] text-amber-500">PERDE'DEN</div><h2 class="text-base md:text-lg font-extrabold tracking-tight">Hikâyeler</h2></div><span class="text-[10px] font-semibold tracking-wide opacity-45">KEŞFET</span></div>
+      <div class="flex items-center justify-between px-1 mb-1"><div><div class="text-[10px] font-black tracking-[.22em] text-amber-500">PERDE'DEN</div><h2 class="text-base md:text-lg font-extrabold tracking-tight">Hikâyeler</h2></div></div>
       <div class="psd-track">
         <template x-for="(group,index) in groups" :key="group.name">
           <button type="button" class="psd-item" @click="activeGroup=index;active=0;open=true" :aria-label="group.name+' hikâyelerini aç'">
