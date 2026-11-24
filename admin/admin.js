@@ -2222,6 +2222,7 @@
   $('#profile-change-button').addEventListener('click',()=>$('#profile-dialog').showModal());
   $('#admin-profile-form').addEventListener('submit',saveAdminProfile);
   $('#admin-username-form').addEventListener('submit',saveAdminUsername);
+  document.addEventListener('click',event=>{const toggle=event.target.closest('[data-password-target]');if(!toggle)return;const input=document.getElementById(toggle.dataset.passwordTarget);if(!input)return;const visible=input.type==='password';input.type=visible?'text':'password';toggle.textContent=visible?'Gizle':'Göster';toggle.setAttribute('aria-pressed',String(visible));toggle.setAttribute('aria-label',visible?'Şifreyi gizle':'Şifreyi göster');input.focus();});
   $('#admin-password-form').addEventListener('submit',saveAdminPassword);
   $('#admin-security-settings-form').addEventListener('submit',saveAdminSecuritySettings);
   $('#security-sessions-refresh')?.addEventListener('click',loadSecuritySessions);
