@@ -1549,21 +1549,7 @@
                 },
 
                 updateVideoProgress() {
-                    const video = document.getElementById('customVideoPlayer');
-                    if (!video) return;
-                    if (video.duration) {
-                        this.videoProgress = (video.currentTime / video.duration) * 100;
-                        this.currentTimeFormatted = this.formatTime(video.currentTime);
-                        this.durationFormatted = this.formatTime(video.duration);
-
-                        if (this.selectedItem) {
-                            this.saveMovieProgress(this.getPlaybackProgressKey(), {
-                                time: video.currentTime,
-                                duration: video.duration,
-                                savedAt: Date.now()
-                            });
-                        }
-                    }
+                    return window.PerdePlayerControls?.updateVideoProgress.call(this);
                 },
 
                 seekVideo(event) {
@@ -1700,13 +1686,7 @@
                 },
 
                 saveMovieProgress(itemId, progress) {
-                    try {
-                        const all = this.profileMovieProgress;
-                        all[String(itemId)] = progress;
-                        safeStorageWrite('cine_movie_progress_v1', all);
-                    } catch (error) {
-                        console.warn('Profil izleme ilerlemesi kaydedilemedi:', error);
-                    }
+                    return window.PerdePlayerControls?.saveMovieProgress.call(this, itemId, progress);
                 },
 
 
