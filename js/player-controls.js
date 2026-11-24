@@ -212,7 +212,7 @@ toggleFullscreen() {
                     this.playerControlsVisible = true;
                     if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
                     if (this.isPlaying) this.schedulePlayerControlsHide();
-                }
+                },
     // Bölüm izleme durumunu yerel depoda tutan yardımcılar; yalnızca izleme rotasında yüklenir.
     getEpisodeTracking() {
         const all = safeStorageRead('cine_episode_tracking_v1', {});
