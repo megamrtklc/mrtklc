@@ -1,0 +1,128 @@
+<!--
+  İzleme sayfasının sağ kolonu: yapım künyesi ve benzer yapımlar kartları.
+  Ana watch şablonunun Alpine kapsamını kullanır.
+-->
+                    <!-- Right Section -->
+                    <div id="watch-right-column" class="lg:col-span-4 flex flex-col space-y-6">
+
+                        <!-- Yapım Künyesi -->
+                        <div data-watch-card="credits" :style="'order: ' + getWatchCardOrder('credits')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-circle-info text-rose-600 text-xs"></i>
+                                    <span>Yapım Künyesi</span>
+                                </h3>
+
+                                <div :class="getCardClass()" class="px-2.5 py-1 rounded-lg border border-amber-400 text-amber-500 dark:text-amber-400 flex items-center gap-2 shadow-sm">
+                                    <i class="fa-solid fa-star text-sm"></i>
+                                    <span class="text-sm font-black" x-text="selectedItem.rating ? Number(selectedItem.rating).toFixed(1) : '—'"></span>
+                                    <span class="text-sm font-bold text-gray-500 dark:text-gray-300">/10</span>
+                                    <span class="rounded bg-[#f5c518] px-1.5 py-0.5 text-sm font-black leading-none text-black">IMDb</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-xs">
+                                <div class="flex items-start justify-between gap-3 pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="shrink-0 text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Orijinal İsim</span>
+                                    <div class="min-w-0 max-w-[72%] text-right font-semibold leading-relaxed break-words">
+                                        <span class="text-gray-800 dark:text-gray-200" x-text="selectedItem.originalTitle || selectedItem.title"></span>
+                                        <span x-show="selectedItem.englishTitle && selectedItem.englishTitle !== (selectedItem.originalTitle || selectedItem.title)" class="text-amber-600 dark:text-amber-300 font-extrabold">
+                                            <span class="mx-1 text-gray-400 dark:text-gray-500 font-medium">/</span><span x-text="selectedItem.englishTitle"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Yönetmen</span>
+                                    <div class="min-w-0 max-w-[72%] flex flex-wrap justify-end gap-x-2 gap-y-1 text-right">
+                                        <template x-for="directorName in getDirectorNames(selectedItem.director)" :key="directorName">
+                                            <button type="button" @click="openDirectorProfile({ id: getDirectorNames(selectedItem.director).length === 1 ? selectedItem.directorPersonId : null, name: directorName })" class="font-semibold text-gray-800 dark:text-gray-200 underline decoration-dotted underline-offset-4 decoration-rose-500/50 hover:text-rose-500 dark:hover:text-rose-400 hover:font-bold transition-all duration-200" x-text="directorName" title="Yönetmen biyografisini görüntüle"></button>
+                                        </template>
+                                        <span x-show="!getDirectorNames(selectedItem.director).length" class="text-gray-400">—</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Kategori</span>
+                                    <button type="button" @click="openRelatedDiscoveries('genre', selectedItem.category || selectedItem.genre)" :disabled="!(selectedItem.category || selectedItem.genre)" class="font-semibold text-rose-500 dark:text-rose-400 truncate max-w-[160px] text-right hover:underline underline-offset-4 disabled:cursor-default" x-text="selectedItem.category || selectedItem.genre" title="Bu kategorideki diğer yapımları keşfet"></button>
+                                </div>
+                                <div class="flex justify-between pb-2 border-b border-gray-100 dark:border-gray-800/60">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px]">Yıl / Süre</span>
+                                    <span class="font-semibold text-gray-800 dark:text-gray-200" x-text="selectedItem.year + ' • ' + selectedItem.duration"></span>
+                                </div>
+                                <div class="flex justify-between items-start gap-3">
+                                    <span class="text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px] shrink-0">Ülke</span>
+                                    <div class="flex flex-wrap justify-end gap-x-3 gap-y-1 text-right">
+                                        <template x-for="country in getCountryEntries(selectedItem.country)" :key="country.code + '-' + country.name">
+                                            <button type="button" @click="openRelatedDiscoveries('country', country.name, country.code)" class="inline-flex items-center gap-1.5 font-semibold text-gray-800 dark:text-gray-200 hover:text-rose-500 hover:underline underline-offset-4 whitespace-nowrap" :title="country.name + ' yapımlarını keşfet'">
+                                                <img x-show="country.flagUrl" :src="country.flagUrl" :alt="country.name + ' bayrağı'" width="20" height="14" loading="lazy" class="h-3.5 w-5 rounded-[2px] border border-black/10 object-cover">
+                                                <span x-text="country.name"></span>
+                                            </button>
+                                        </template>
+                                        <span x-show="!getCountryEntries(selectedItem.country).length" class="font-semibold text-gray-500">—</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Oyuncu Kadrosu -->
+                        <div data-watch-card="cast" :style="'order: ' + getWatchCardOrder('cast')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm" x-show="selectedItem.tmdbCast && selectedItem.tmdbCast.length > 0">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-users text-rose-600 text-xs"></i>
+                                    <span>Oyuncu Kadrosu</span>
+                                </h3>
+                                <div class="flex space-x-1.5">
+                                    <button @click="scrollCast(-1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button @click="scrollCast(1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="castContainer" class="flex items-center space-x-3 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
+                                <template x-for="actor in (selectedItem.tmdbCast || []).slice(0, 6)" :key="actor.name">
+                                    <div @click="actor.id && openActorProfile(actor)" @keydown.enter.prevent="actor.id && openActorProfile(actor)" tabindex="0" role="button" :aria-label="actor.name + ' oyuncu profilini aç'" :class="getCardClass()" class="w-24 flex-shrink-0 p-2.5 rounded-xl border flex flex-col items-center text-center space-y-2 transition-all duration-300 hover:scale-110 hover:border-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer group">
+                                        <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden shadow-md ring-2 ring-gray-300 dark:ring-gray-700 group-hover:ring-rose-500 transition-all">
+                                            <img :alt="'Oyuncu fotoğrafı'" @error="handleImageError($event)" decoding="async" loading="lazy" :src="actor.profile || 'https://placehold.co/150x150/161922/ffffff?text=Photo'" :srcset="getTmdbImageSrcSet(actor.profile, [45, 92])" sizes="48px" class="w-full h-full object-cover">
+                                        </div>
+                                        <div class="w-full">
+                                            <h4 class="font-bold text-[11px] text-gray-900 dark:text-white line-clamp-1 group-hover:text-rose-500 transition-colors" x-text="actor.name"></h4>
+                                            <p class="text-[9px] text-gray-500 dark:text-gray-400 line-clamp-1" x-text="actor.character"></p>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Benzer Yapımlar -->
+                        <div data-watch-card="similar" :style="'order: ' + getWatchCardOrder('similar')" :class="getCardClass()" class="p-5 rounded-2xl border space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-3">
+                                <h3 class="text-xs font-black uppercase tracking-wider text-gray-900 dark:text-white flex items-center space-x-2">
+                                    <i class="fa-solid fa-layer-group text-rose-600 text-xs"></i>
+                                    <span>Benzer Yapımlar</span>
+                                </h3>
+                                <div class="flex space-x-1.5">
+                                    <button @click="scrollSimilar(-1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button @click="scrollSimilar(1)" :class="getCardClass()" class="w-7 h-7 rounded-lg border hover:opacity-80 text-gray-800 dark:text-white flex items-center justify-center text-xs transition-colors">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="similarContainer" class="flex items-center space-x-3.5 overflow-x-auto no-scrollbar pb-2 scroll-smooth">
+                                <template x-for="sim in getSimilarItems(selectedItem)" :key="sim.id">
+                                    <div @click="openWatchPage(sim)" :class="getCardClass()" class="w-28 flex-shrink-0 cursor-pointer p-2 rounded-xl border hover:border-gray-300 dark:hover:border-gray-700 transition-colors flex flex-col items-center text-center space-y-2 group">
+                                        <div class="w-24 aspect-[2/3] rounded-lg overflow-hidden bg-black shadow-md">
+                                            <img :alt="sim.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="sim.poster" :srcset="getTmdbImageSrcSet(sim.poster, [92, 154, 185])" sizes="96px" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                        </div>
+                                        <h5 class="font-bold text-[11px] text-gray-800 dark:text-white line-clamp-1 w-full group-hover:text-rose-500 transition-colors" x-text="sim.title"></h5>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
