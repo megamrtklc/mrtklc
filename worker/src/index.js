@@ -167,7 +167,7 @@ async function ensureCredential(env){
   try{hash=await hashPassword(env.ADMIN_PASSWORD,salt);}
   catch(error){throw authSetupError("PASSWORD_HASH_FAILED",error);}
   try{
-    await env.SECURITY_DB.prepare("INSERT OR IGNORE INTO admin_credentials (id,password_hash,password_salt,password_iterations,updated_at) VALUES (1,?,?,?,?,?)").bind(hash,encodeBase64Url(salt),PASSWORD_HASH_ITERATIONS,Math.floor(Date.now()/1000)).run();
+    await env.SECURITY_DB.prepare("INSERT OR IGNORE INTO admin_credentials (id,password_hash,password_salt,password_iterations,updated_at) VALUES (1,?,?,?,?)").bind(hash,encodeBase64Url(salt),PASSWORD_HASH_ITERATIONS,Math.floor(Date.now()/1000)).run();
   }catch(error){throw authSetupError("CREDENTIAL_WRITE_FAILED",error);}
   credential=await readCredential(env);
   if(!credential)throw authSetupError("CREDENTIAL_READBACK_EMPTY");
