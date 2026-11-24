@@ -7,13 +7,15 @@
  */
 /* Perde UI helpers: image URL generation and safe image fallback. */
 window.PerdeImageHelpers = {
-// [DUYARLI GÖRSEL] TMDB görseli için farklı ekran genişliklerine uygun srcset üretir.\ngetTmdbImageSrcSet(url, widths = [154, 185, 342, 500]) {
+// [DUYARLI GÖRSEL] TMDB görseli için farklı ekran genişliklerine uygun srcset üretir.
+getTmdbImageSrcSet(url, widths = [154, 185, 342, 500]) {
     if (typeof url !== 'string') return '';
     const match = url.match(/^(https:\/\/image\.tmdb\.org\/t\/p\/)(?:w\d+|original)(\/.*)$/);
     if (!match) return '';
     return widths.map(width => `${match[1]}w${width}${match[2]} ${width}w`).join(', ');
 },
-// [YEDEK GÖRSEL] Görsel yüklenemezse tekrar denemeyi durdurur ve yer tutucu gösterir.\nhandleImageError(event) {
+// [YEDEK GÖRSEL] Görsel yüklenemezse tekrar denemeyi durdurur ve yer tutucu gösterir.
+handleImageError(event) {
     const image = event && event.target;
     if (!image || image.dataset.perdeFallbackApplied) return;
     image.dataset.perdeFallbackApplied = 'true';
