@@ -267,7 +267,7 @@ toggleFullscreen() {
         this.selectedSeason = Number(last.season);
         this.selectedEpisode = Number(last.episode);
         this.currentEpisodePage = Math.floor((Number(last.episode) - 1) / 8) + 1;
-    }
+    },
     // Sezon ve bölüm verilerini seçili yapımdan okur; yalnızca izleme rotasında kullanılır.
     getSeasonOptions() {
                         const count = Number(this.selectedItem?.seasons || 0);
