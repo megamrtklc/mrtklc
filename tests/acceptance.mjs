@@ -68,7 +68,7 @@ const failedResources = [];
 const tmdbImageRequests = [];
 let adaletId = null;
 const results = [];
-page.on('pageerror', error => failures.push(error.message));
+page.on('pageerror', error => failures.push({ message: error.message, stack: error.stack, url: page.url() }));
 page.on('response', response => {
   if (response.status() >= 400) failedResources.push({ status: response.status(), url: response.url() });
 });
@@ -1735,6 +1735,7 @@ try {
   });
 
   await check('Tarayıcıda yakalanan JavaScript çalışma zamanı hatası yok', async () => {
+    if (failures.length) console.error('BROWSER RUNTIME ERROR DETAILS:', JSON.stringify(failures, null, 2));
     assert.deepEqual(failures, []);
     console.log('HTTP RESOURCE ERRORS:', JSON.stringify(failedResources.slice(0, 20)));
   });
