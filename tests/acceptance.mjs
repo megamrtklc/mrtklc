@@ -931,7 +931,7 @@ try {
       throw error;
     }
     await mobileMenu.getByRole('link', { name: 'Keşfet', exact: true }).click();
-    await page.waitForFunction(() => window.location.hash === '#/explore');
+    await page.waitForFunction(() => window.location.hash === '#/kesfet');
     assert.ok(await page.locator('#perde-discovery-showcase').isVisible(), 'Keşfet sayfasının rastgele yapım vitrini görünmeli');
   });
 
@@ -989,7 +989,7 @@ try {
     assert.equal(await page.getByRole('button', { name: 'Menüyü aç veya kapat' }).isVisible(), false,
       'TV geniş ekranında mobil menü düğmesi görünmemeli');
     await desktopNav.getByRole('link', { name: 'Keşfet', exact: true }).press('Enter');
-    await page.waitForFunction(() => window.location.hash === '#/explore');
+    await page.waitForFunction(() => window.location.hash === '#/kesfet');
     assert.ok(await page.locator('#perde-discovery-showcase').isVisible(),
       'TV klavyesiyle Keşfet sayfasına geçiş yapılamadı');
     await page.setViewportSize({ width: 1440, height: 1000 });
