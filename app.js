@@ -934,6 +934,26 @@
                     const hydrateSection = section => {
                         const key = section.dataset.homeSection;
                         if (!key) return true;
+                        // Ana sayfa alt bölümlerinin stillerini ilk ekran sonrasına, ilk bölüm etkinleşene kadar ertele.
+                        if (section.dataset.homeStylesReady !== 'true') {
+                            if (section.dataset.homeStylesLoading === 'true') return false;
+                            section.dataset.homeStylesLoading = 'true';
+                            const stylePromise = window.__perdeHomeSectionsCssPromise || (window.__perdeHomeSectionsCssPromise = new Promise(resolve => {
+                                const link = document.createElement('link');
+                                link.rel = 'stylesheet';
+                                link.href = './css/perde-home-sections.css?v=20261124-home-sections-css-v1';
+                                link.onload = () => resolve();
+                                link.onerror = () => { console.warn('[Perde home styles] Stil dosyası yüklenemedi.'); resolve(); };
+                                document.head.appendChild(link);
+                            }));
+                            stylePromise.then(() => {
+                                if (!section.isConnected) return;
+                                section.dataset.homeStylesReady = 'true';
+                                delete section.dataset.homeStylesLoading;
+                                hydrateSection(section);
+                            });
+                            return false;
+                        }
                         const fragmentUrl = section.dataset.homeFragment;
                         if (fragmentUrl && section.dataset.homeFragmentLoaded !== 'true') {
                             if (section.dataset.homeFragmentLoading === 'true') return false;
