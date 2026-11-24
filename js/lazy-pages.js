@@ -15,11 +15,41 @@
         'video-links': ['video-links']
     };
     const pageCache = new Map();
+    const pageStyleCache = new Map();
     const buildVersion = '20261124-lazy-pages-v1';
+
+    // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
+    const pageStyles = {
+        watch: './css/perde-watch.css?v=20261124-watch-css-v1',
+        explore: './css/perde-explore.css?v=20261124-explore-css-v1'
+    };
+
+    function ensurePageStyles(key) {
+        const href = pageStyles[key];
+        if (!href) return Promise.resolve();
+        if (pageStyleCache.has(key)) return pageStyleCache.get(key);
+
+        const request = new Promise(resolve => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            link.dataset.perdePageStyle = key;
+            link.onload = () => resolve();
+            link.onerror = () => {
+                console.warn('[Perde lazy styles] Stil dosyası yüklenemedi:', key);
+                pageStyleCache.delete(key);
+                link.remove();
+                resolve();
+            };
+            document.head.appendChild(link);
+        });
+        pageStyleCache.set(key, request);
+        return request;
+    }
 
     async function fetchPage(key) {
         if (pageCache.has(key)) return pageCache.get(key);
-        const request = fetch(`./runtime-pages/${key}.html?v=${buildVersion}`, { cache: 'default' })
+        const request = ensurePageStyles(key).then(() => fetch(`./runtime-pages/${key}.html?v=${buildVersion}`, { cache: 'default' }))
             .then(response => {
                 if (!response.ok) throw new Error(`Sayfa dosyası yüklenemedi (HTTP ${response.status}).`);
                 return response.text();
