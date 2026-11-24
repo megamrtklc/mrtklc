@@ -17,8 +17,8 @@ assert.equal((shell.match(/<!-- PERDE_TEMPLATE:HOME -->/g) || []).length, 1,
   'Kaynak kabukta HOME işareti tam bir kez bulunmalı.');
 assert.match(homepage, /HOME PAGE/,
   'Ana sayfa partial dosyası ana sayfa görünümünü içermeli.');
-assert.match(homepage, /WATCH \/ DETAIL PAGE/,
-  'Ana sayfa partial dosyası detay sayfasından önce bitmeli.');
+assert.doesNotMatch(homepage, /WATCH \/ DETAIL PAGE/,
+  'Ana sayfa partial dosyası detay sayfasının içeriğini kapsamamalı.');
 assert.doesNotMatch(output, /<!-- PERDE_TEMPLATE:[A-Z0-9_-]+ -->/,
   'Yayın çıktısında çözülmemiş şablon işareti kalmamalı.');
 assert.match(output, /<template x-if="currentPage === 'home'">/,
