@@ -1525,7 +1525,91 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 
     <style id="cv-seek-hover-preview-style">[data-watch-card=player] .cv-player-seek-wrap{position:relative;overflow:visible}[data-watch-card=player] .cv-seek-hover-preview{position:absolute;z-index:40;bottom:calc(100% + 9px);width:132px;transform:translateX(-50%);pointer-events:none;opacity:0;visibility:hidden;transition:opacity .12s ease,visibility .12s ease}[data-watch-card=player] .cv-seek-hover-preview.is-visible{opacity:1;visibility:visible}[data-watch-card=player] .cv-seek-hover-preview-frame{width:132px;height:74px;overflow:hidden;border:1px solid rgba(255,255,255,.32);border-radius:8px;background:#090b0f;box-shadow:0 8px 24px rgba(0,0,0,.6)}[data-watch-card=player] .cv-seek-hover-preview-frame video{display:block;width:100%;height:100%;object-fit:cover;background:#090b0f}[data-watch-card=player] .cv-seek-hover-preview-time{display:block;margin:5px auto 0;width:max-content;max-width:100%;padding:2px 7px;border-radius:5px;background:rgba(0,0,0,.92);color:#fff;font:700 10px/1.4 ui-monospace,SFMono-Regular,monospace;box-shadow:0 2px 8px rgba(0,0,0,.4)}@media(max-width:520px){[data-watch-card=player] .cv-seek-hover-preview{width:108px;bottom:calc(100% + 7px)}[data-watch-card=player] .cv-seek-hover-preview-frame{width:108px;height:61px}}@media(prefers-reduced-motion:reduce){[data-watch-card=player] .cv-seek-hover-preview{transition:none}}</style>
 
-    <script src="./js/player-seek-preview.js?v=20261124-player-seek-preview-v1"></script>
+    <script id="cv-seek-hover-preview">
+      (() => {
+        if (window.__CV_SEEK_PREVIEW_BOUND__) return;
+        window.__CV_SEEK_PREVIEW_BOUND__ = true;
+        let hideTimer = 0;
+        const format = seconds => {
+          const n = Math.max(0, Math.floor(Number(seconds) || 0));
+          const h = Math.floor(n / 3600), m = Math.floor((n % 3600) / 60), s = n % 60;
+          return h ? [h,m,s].map(v => String(v).padStart(2,'0')).join(':') : [m,s].map(v => String(v).padStart(2,'0')).join(':');
+        };
+        const ensurePreview = wrap => {
+          let panel = wrap.querySelector('.cv-seek-hover-preview');
+          if (!panel) {
+            panel = document.createElement('div');
+            panel.className = 'cv-seek-hover-preview';
+            panel.innerHTML = '<div class="cv-seek-hover-preview-frame"><video muted playsinline preload="metadata" disablepictureinpicture aria-hidden="true"></video></div><span class="cv-seek-hover-preview-time">00:00</span>';
+            wrap.appendChild(panel);
+          }
+          return panel;
+        };
+        const updatePreview = event => {
+          const input = event.target.closest?.('.cv-player-seek');
+          if (!input) return;
+          const wrap = input.closest('.cv-player-seek-wrap');
+          const mainVideo = document.getElementById('customVideoPlayer');
+          if (!wrap || !mainVideo || !Number.isFinite(mainVideo.duration) || mainVideo.duration <= 0) return;
+          const rect = input.getBoundingClientRect();
+          if (!rect.width) return;
+          const ratio = Math.max(0,Math.min(1,(event.clientX-rect.left)/rect.width));
+          const seconds = ratio * mainVideo.duration;
+          const panel = ensurePreview(wrap);
+          const previewVideo = panel.querySelector('video');
+          const time = panel.querySelector('.cv-seek-hover-preview-time');
+          const url = mainVideo.currentSrc || mainVideo.src;
+          if (!url) return;
+          panel.style.left = Math.max(54,Math.min(rect.width-54,event.clientX-rect.left)) + 'px';
+          time.textContent = format(seconds);
+          panel.classList.add('is-visible');
+          if (hideTimer) { clearTimeout(hideTimer); hideTimer = 0; }
+          if (previewVideo.dataset.source !== url) {
+            previewVideo.pause();
+            previewVideo.dataset.source = url;
+            previewVideo.src = url;
+            previewVideo.load();
+            previewVideo.dataset.pendingTime = String(seconds);
+          } else {
+            previewVideo.dataset.pendingTime = String(seconds);
+          }
+          const seekToPending = () => {
+            if (!Number.isFinite(previewVideo.duration) || previewVideo.duration <= 0) return;
+            const target = Math.max(0,Math.min(previewVideo.duration-0.08,Number(previewVideo.dataset.pendingTime)||0));
+            if (Math.abs(previewVideo.currentTime-target) < 0.2 && previewVideo.readyState >= 2) return;
+            try { previewVideo.currentTime = target; } catch (_) {}
+          };
+          if (previewVideo.readyState >= 1) {
+            if (previewVideo._cvSeekTimer) clearTimeout(previewVideo._cvSeekTimer);
+            previewVideo._cvSeekTimer = setTimeout(seekToPending, event.pointerType === 'touch' ? 90 : 140);
+          } else if (!previewVideo._cvMetadataBound) {
+            previewVideo._cvMetadataBound = true;
+            previewVideo.addEventListener('loadedmetadata', () => {
+              if (previewVideo._cvSeekTimer) clearTimeout(previewVideo._cvSeekTimer);
+              previewVideo._cvSeekTimer = setTimeout(seekToPending, 40);
+            });
+          }
+        };
+        document.addEventListener('pointermove', updatePreview, {passive:true});
+        document.addEventListener('pointerdown', updatePreview, {passive:true});
+        document.addEventListener('pointerup', event => {
+          if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
+          const wrap = event.target.closest?.('.cv-player-seek-wrap');
+          if (!wrap) return;
+          if (hideTimer) clearTimeout(hideTimer);
+          hideTimer = setTimeout(() => wrap.querySelector('.cv-seek-hover-preview')?.classList.remove('is-visible'), 700);
+        }, {passive:true});
+        document.addEventListener('pointerout', event => {
+          const wrap = event.target.closest?.('.cv-player-seek-wrap');
+          if (!wrap || wrap.contains(event.relatedTarget) || event.pointerType === 'touch') return;
+          wrap.querySelector('.cv-seek-hover-preview')?.classList.remove('is-visible');
+        }, {passive:true});
+        document.addEventListener('focusout', event => {
+          const wrap = event.target.closest?.('.cv-player-seek-wrap');
+          if (wrap) wrap.querySelector('.cv-seek-hover-preview')?.classList.remove('is-visible');
+        }, true);
+      })();
+    </script>
 
     <style id="cv-personalized-mobile-landscape-single-card">@media (max-width:900px) and (orientation:landscape) and (max-height:520px){#home-personalized-section .home-personalized-heading{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;height:auto!important;min-height:0!important;padding-bottom:10px!important}#home-personalized-section .home-personalized-heading>div:first-child{flex:1 1 auto!important;min-width:0!important}#home-personalized-section .home-personalized-heading h2{font-size:clamp(14px,2vw,18px)!important;line-height:1.15!important}#home-personalized-section .home-personalized-heading>div:first-child>p:last-child{display:none!important}#home-personalized-section .home-personalized-toolbar{display:flex!important;flex:0 1 auto!important;min-width:0!important;width:auto!important;justify-content:flex-end!important;gap:6px!important}#home-personalized-section .home-personalized-modes{display:flex!important;flex:0 1 auto!important;min-width:0!important;max-width:min(54vw,440px)!important;overflow-x:auto!important;overflow-y:hidden!important;white-space:nowrap!important;scrollbar-width:none!important}#home-personalized-section .home-personalized-modes::-webkit-scrollbar{display:none!important}#home-personalized-section .home-personalized-modes button{flex:0 0 auto!important;min-height:30px!important;padding:5px 8px!important;font-size:8px!important}#home-personalized-section .home-personalized-count{display:none!important}#home-personalized-section .home-personalized-refresh{flex:0 0 auto!important;min-height:30px!important;padding:5px 8px!important;font-size:9px!important}#home-personalized-section .home-personalized-showcase{display:block!important;width:100%!important;height:auto!important;min-height:0!important;margin-top:0!important}#home-personalized-section .home-personalized-alternatives,#home-personalized-section .home-personalized-feature{display:none!important}#home-personalized-section .home-personalized-mobile-card{display:block!important;position:relative!important;isolation:isolate!important;overflow:hidden!important;width:100%!important;height:auto!important;min-width:0!important;min-height:0!important;border:1px solid rgba(221,181,104,.48)!important;border-radius:13px!important;background:#10141c!important;box-shadow:0 12px 28px rgba(0,0,0,.28),0 0 18px rgba(221,181,104,.07)!important}#home-personalized-section .home-personalized-mobile-backdrop{position:absolute!important;inset:0!important;z-index:0!important;height:auto!important;overflow:hidden!important}#home-personalized-section .home-personalized-mobile-backdrop img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 35%!important;opacity:.36!important;filter:blur(1px) saturate(.8)!important;transform:scale(1.04)!important}#home-personalized-section .home-personalized-mobile-backdrop>div{position:absolute!important;inset:0!important;background:linear-gradient(90deg,rgba(8,11,17,.97),rgba(8,11,17,.85) 58%,rgba(8,11,17,.62))!important}#home-personalized-section .home-personalized-mobile-content{position:relative!important;z-index:1!important;display:grid!important;grid-template-columns:clamp(72px,10vw,90px) minmax(0,1fr)!important;gap:clamp(10px,1.7vw,15px)!important;align-items:center!important;width:100%!important;min-height:180px!important;height:auto!important;margin:0!important;padding:12px 14px!important;box-sizing:border-box!important}#home-personalized-section .home-personalized-mobile-poster{width:100%!important;max-width:90px!important;aspect-ratio:2/3!important;align-self:center!important}#home-personalized-section .home-personalized-mobile-details{min-width:0!important;padding:0!important;color:#f8fafc!important}#home-personalized-section .home-personalized-mobile-kicker{display:flex!important;flex-wrap:wrap!important;gap:4px 8px!important;font-size:8px!important;line-height:1.3!important}#home-personalized-section .home-personalized-mobile-details h3{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;margin-top:4px!important;font-size:clamp(16px,2.2vw,20px)!important;line-height:1.12!important;overflow-wrap:anywhere!important}#home-personalized-section .home-personalized-mobile-meta{gap:8px!important;margin-top:6px!important;font-size:9px!important}#home-personalized-section .home-personalized-mobile-details p{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;margin-top:6px!important;font-size:9px!important;line-height:1.4!important}#home-personalized-section .home-personalized-mobile-actions{display:flex!important;flex-wrap:wrap!important;gap:6px!important;margin-top:8px!important}#home-personalized-section .home-personalized-mobile-actions button{flex:0 1 auto!important;min-width:0!important;min-height:30px!important;padding:6px 9px!important;font-size:9px!important;white-space:nowrap!important}}</style>
 
