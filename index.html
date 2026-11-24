@@ -246,6 +246,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
 </head>
 <body :class="getBodyClass()" class="text-gray-900 dark:text-slate-100 font-sans min-h-screen flex flex-col selection:bg-rose-600 selection:text-white transition-colors duration-300">
 
+    <!-- Perde üst gezinme alanı: marka, masaüstü menüsü, profil ve mobil menü. -->
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
     <header x-show="headerConfig.enabled !== false" @scroll.window="headerScrolled = window.scrollY > 40" :class="'sticky top-0 z-50 ' + (currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass())" class="backdrop-blur-md border-b transition-colors duration-300">
         <div class="w-full px-4 sm:px-12 md:max-w-[1800px] md:mx-auto md:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between">
@@ -336,6 +337,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         </div>
     </header>
 
+    <!-- Genel arama penceresi: katalog yapımları ile oyuncu ve yönetmen sonuçlarını gösterir. -->
     <template x-teleport="body">
         <div x-cloak x-show="searchOverlayOpen" x-transition.opacity @click.self="closeSearchOverlay()" @keydown.escape.window="closeSearchOverlay()" class="cineverse-search-backdrop" role="dialog" aria-modal="true" aria-label="Film ve dizi ara">
             <section class="cineverse-search-dialog" @click.stop>
@@ -2493,6 +2495,7 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
         </div>
     </div>
 
+    <!-- Perde alt bilgi alanı: yönetilebilir marka bilgileri, hızlı bağlantılar ve alt gezinme. -->
     <!-- CineVerse Responsive Footer -->
     <footer id="cineverse-footer" style="display:none" x-ignore x-cloak x-show="footerConfigReady && footerConfig.enabled !== false" class="relative isolate mt-auto w-full overflow-hidden border-t border-gray-200/80 bg-gray-50 text-gray-600 transition-colors duration-300 dark:border-white/10 dark:bg-[#08090d] dark:text-gray-400">
         <div class="cineverse-footer-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
