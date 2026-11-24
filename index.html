@@ -2129,7 +2129,13 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
             </div>
         </template>
 
-        <!-- ==================== WATCHLIST PAGE ==================== -->
+        <!--
+  Perde İzleme Listesi görünümü
+  -----------------------------
+  Kullanıcının daha sonra izlemek üzere ayırdığı yapımları ve liste işlemlerini içerir.
+  Ana uygulamanın Alpine kapsamını kullanır; bağımsız sayfa olarak çalıştırılmaz.
+-->
+<!-- ==================== WATCHLIST PAGE ==================== -->
         <template x-if="currentPage === 'watchlist'">
             <div class="w-full px-6 sm:px-12 pt-8 space-y-6 pb-16">
                 <div>
@@ -2163,7 +2169,13 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
             </div>
         </template>
 
-        <!-- ==================== PERSONAL WATCH CENTER ==================== -->
+        <!--
+  Perde Kütüphanem / Kişisel İzleme Merkezi görünümü
+  -------------------------------------------------
+  Kullanıcının izleme geçmişi, devam eden yapımları ve kişisel arşiv alanlarını içerir.
+  Ana uygulamanın Alpine kapsamını kullanır; bağımsız sayfa olarak çalıştırılmaz.
+-->
+<!-- ==================== PERSONAL WATCH CENTER ==================== -->
         <template x-if="currentPage === 'library'">
             <div class="w-full px-6 sm:px-12 pt-8 space-y-8 pb-16">
                 <section class="relative overflow-hidden rounded-2xl border border-rose-500/20 bg-gradient-to-br from-gray-950 via-[#191923] to-[#2a1420] p-4 sm:p-5 text-white shadow-lg">
