@@ -9,6 +9,7 @@ const shellPath = 'src/templates/index-shell.html';
 const partialPaths = {
   HOME: 'src/templates/homepage.html',
   HOME_CATALOG_CONTENT: 'src/templates/home-catalog-content.html',
+  HOME_PERSONALIZED_CONTENT: 'src/templates/home-personalized-content.html',
   HOME_CONTINUE_CONTENT: 'src/templates/home-continue-content.html',
   HOME_WATCHLIST_CONTENT: 'src/templates/home-watchlist-content.html',
   HOME_WATCHED_CONTENT: 'src/templates/home-watched-content.html',
@@ -73,6 +74,7 @@ const homeCatalogPlaceholder = `
 
 // Ana sayfanın kişisel rafları da görünür alana yaklaşınca ayrı HTML dosyalarından yüklenir.
 const homeFragments = [
+  { slug: 'personalized', partial: 'HOME_PERSONALIZED_CONTENT', label: 'Sana Özel Öneriler' },
   { slug: 'continue', partial: 'HOME_CONTINUE_CONTENT', label: 'İzlemeye Devam Et' },
   { slug: 'watchlist', partial: 'HOME_WATCHLIST_CONTENT', label: 'İzleme Listem' },
   { slug: 'watched', partial: 'HOME_WATCHED_CONTENT', label: 'İzlediklerim' },
