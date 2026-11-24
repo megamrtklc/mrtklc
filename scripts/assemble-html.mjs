@@ -8,6 +8,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 const shellPath = 'src/templates/index-shell.html';
 const partialPaths = {
   HOME: 'src/templates/homepage.html',
+  HOME_CATALOG_CONTENT: 'src/templates/home-catalog-content.html',
   WATCH: 'src/templates/watch-page.html',
   WATCH_LEFT: 'src/templates/watch-left-column.html',
   WATCH_RIGHT: 'src/templates/watch-right-column.html',
@@ -51,6 +52,18 @@ const runtimePages = {
 };
 
 await mkdir('runtime-pages', { recursive: true });
+
+const homeCatalogMarker = '<!-- PERDE_TEMPLATE:HOME_CATALOG_CONTENT -->';
+if (partials.HOME.split(homeCatalogMarker).length - 1 !== 1) throw new Error('Ana sayfa katalog parçası tam bir kez bulunmalı.');
+const homeCatalogPlaceholder = `
+                    <!-- Katalog kartları görünür alana yaklaşınca ayrı dosyadan yüklenir. -->
+                    <div class="home-catalog-loading" role="status" aria-live="polite" aria-label="Katalog yükleniyor">
+                        <div class="home-catalog-loading-heading"><span></span><span></span></div>
+                        <div class="home-catalog-loading-grid">${Array.from({ length: 8 }, () => '<span class="home-catalog-loading-card"></span>').join('')}</div>
+                    </div>
+                `.trim();
+const homeTemplate = partials.HOME.replace(homeCatalogMarker, homeCatalogPlaceholder);
+await writeFile('runtime-pages/home-catalog.html', partials.HOME_CATALOG_CONTENT.trimEnd());
 for (const [key, config] of Object.entries(runtimePages)) {
   const pageHtml = replacePartialMarkers(partials[config.marker], config.nested, `runtime page ${key}`);
   if (/<!-- PERDE_TEMPLATE:[A-Z0-9_-]+ -->/.test(pageHtml)) throw new Error(`Runtime sayfada çözülmemiş şablon işareti kaldı: ${key}`);
@@ -75,7 +88,8 @@ for (const name of ['HOME', 'WATCHLIST_CONFIRM_MODAL', 'HEADER', 'SEARCH_OVERLAY
   const marker = `<!-- PERDE_TEMPLATE:${name} -->`;
   const occurrences = html.split(marker).length - 1;
   if (occurrences !== 1) throw new Error(`Şablon işareti tam bir kez bulunmalı: ${marker} (bulunan: ${occurrences})`);
-  html = html.replace(marker, partials[name].trimEnd());
+  const content = name === 'HOME' ? homeTemplate : partials[name];
+  html = html.replace(marker, content.trimEnd());
 }
 for (const [key, config] of Object.entries(runtimePages)) {
   const marker = `<!-- PERDE_TEMPLATE:${config.marker} -->`;
