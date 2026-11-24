@@ -48,46 +48,62 @@
             root.dataset.themeReady = 'true';
         })();
     </script>
+    <script id="cv-early-hero-data-request">
+      // Manşet verisini erkenden başlatır; uygulama ve mobil görsel ön yükleyici aynı isteği paylaşır.
+      window.__CV_HERO_DATA_PROMISE__ = fetch('./hero-data.json', { cache: 'no-cache', priority: 'high' })
+        .then(function (response) {
+          if (!response.ok) throw new Error('Manşet verisi yüklenemedi (HTTP ' + response.status + ')');
+          return response.json();
+        })
+        .catch(function (error) {
+          console.warn('Manşet verisi erken yüklenemedi:', error);
+          return null;
+        });
+    </script>
     <meta name="description" content="CineVerse ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23e50914%27/%3E%3Cpath d=%27M24 16v32l26-16z%27 fill=%27white%27/%3E%3C/svg%3E">
     <title>CineVerse Ultimate Pro</title>
     <!-- Manşet verisi hero-data.json dosyasından yüklenir; ilk HTML içinde tekrarlanmaz. -->
     <script id="cv-mobile-hero-preload">
+      // Mobil manşetin ilk arka plan ve afiş görsellerini ortak manşet isteği çözülür çözülmez önceden indirir.
       (function () {
         var hash = window.location.hash || '';
         var isHome = !hash || hash === '#' || hash === '#/' || hash === '#/home';
         if (!isHome || document.documentElement.classList.contains('cv-tv-mode') || !window.matchMedia('(max-width: 767px)').matches) return;
-        var bootstrap = window.__CV_HERO_BOOTSTRAP__;
-        var slides = bootstrap && bootstrap.homepageConfig && bootstrap.homepageConfig.mobileHeroSlides;
-        var catalog = bootstrap && Array.isArray(bootstrap.catalog) ? bootstrap.catalog : [];
-        var firstSlide = Array.isArray(slides) ? slides.find(function (slide) {
-          if (!slide || slide.active === false) return false;
-          return catalog.some(function (entry) {
-            return String(entry.id) === String(slide.id) && (entry.backdrop || entry.poster || entry.image || entry.tmdbPoster);
-          });
-        }) : null;
-        var item = firstSlide ? catalog.find(function (entry) { return String(entry.id) === String(firstSlide.id); }) : null;
-        if (!item) return;
-        function preloadImage(id, url, widths, sizes, priority) {
-          if (typeof url !== 'string') return;
-          var match = url.match(/^https:\/\/image\.tmdb\.org\/t\/p\/(?:w\d+|original)(\/.*)$/);
-          if (!match) return;
-          var candidates = widths.map(function (width) {
-            return 'https://image.tmdb.org/t/p/w' + width + match[1] + ' ' + width + 'w';
-          }).join(', ');
-          var link = document.createElement('link');
-          link.id = id;
-          link.rel = 'preload';
-          link.as = 'image';
-          link.href = 'https://image.tmdb.org/t/p/w' + widths[Math.min(1, widths.length - 1)] + match[1];
-          link.setAttribute('imagesrcset', candidates);
-          link.setAttribute('imagesizes', sizes);
-          link.setAttribute('fetchpriority', priority);
-          link.media = '(max-width: 767px)';
-          document.head.appendChild(link);
-        }
-        preloadImage('mobile-hero-backdrop-preload', item.backdrop, [342, 500, 780], '(max-width: 767px) calc(100vw - 56px), 780px', 'high');
-        preloadImage('mobile-hero-poster-preload', item.poster || item.image || item.tmdbPoster, [185, 342, 500], '(max-width: 767px) min(46vw, 172px), 172px', 'auto');
+        var heroPromise = window.__CV_HERO_DATA_PROMISE__;
+        if (!heroPromise) return;
+        heroPromise.then(function (bootstrap) {
+          var slides = bootstrap && bootstrap.homepageConfig && bootstrap.homepageConfig.mobileHeroSlides;
+          var catalog = bootstrap && Array.isArray(bootstrap.catalog) ? bootstrap.catalog : [];
+          var firstSlide = Array.isArray(slides) ? slides.find(function (slide) {
+            if (!slide || slide.active === false) return false;
+            return catalog.some(function (entry) {
+              return String(entry.id) === String(slide.id) && (entry.backdrop || entry.poster || entry.image || entry.tmdbPoster);
+            });
+          }) : null;
+          var item = firstSlide ? catalog.find(function (entry) { return String(entry.id) === String(firstSlide.id); }) : null;
+          if (!item) return;
+          function preloadImage(id, url, widths, sizes, priority) {
+            if (typeof url !== 'string') return;
+            var match = url.match(/^https:\/\/image\.tmdb\.org\/t\/p\/(?:w\d+|original)(\/.*)$/);
+            if (!match) return;
+            var candidates = widths.map(function (width) {
+              return 'https://image.tmdb.org/t/p/w' + width + match[1] + ' ' + width + 'w';
+            }).join(', ');
+            var link = document.createElement('link');
+            link.id = id;
+            link.rel = 'preload';
+            link.as = 'image';
+            link.href = 'https://image.tmdb.org/t/p/w' + widths[Math.min(1, widths.length - 1)] + match[1];
+            link.setAttribute('imagesrcset', candidates);
+            link.setAttribute('imagesizes', sizes);
+            link.setAttribute('fetchpriority', priority);
+            link.media = '(max-width: 767px)';
+            document.head.appendChild(link);
+          }
+          preloadImage('mobile-hero-backdrop-preload', item.backdrop, [342, 500, 780], '(max-width: 767px) calc(100vw - 56px), 780px', 'high');
+          preloadImage('mobile-hero-poster-preload', item.poster || item.image || item.tmdbPoster, [185, 342, 500], '(max-width: 767px) min(46vw, 172px), 172px', 'auto');
+        }).catch(function () {});
       })();
     </script>
     <style id="cv-theme-first-paint-style">[x-cloak]{display:none!important}html.dark,html.dark body{background-color:#0b0d11;color:#f1f5f9}html.theme-ivory,html.theme-ivory body{background-color:#fffdf9;color:#29261f}html.theme-slate,html.theme-slate body{background-color:#f4f5f7;color:#20242b}</style>
