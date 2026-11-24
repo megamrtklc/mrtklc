@@ -33,4 +33,4 @@ if (/<!-- PERDE_TEMPLATE:[A-Z0-9_-]+ -->/.test(html)) {
 }
 
 await writeFile(outputPath, html);
-console.log(`HTML birleştirildi: ${outputPath} (${html.split('\\n').length} satır)`);
+console.log(`HTML birleştirildi: ${outputPath} (${html.split(/\\n/).length} satır)`);
