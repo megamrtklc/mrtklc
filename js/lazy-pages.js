@@ -16,7 +16,7 @@
     };
     const pageCache = new Map();
     const pageStyleCache = new Map();
-    const buildVersion = '20261124-lazy-pages-v2';
+    const buildVersion = '20261124-lazy-pages-v3';
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
@@ -26,30 +26,31 @@
 
     // Keşfet algoritmalarını yalnızca ilgili rota açıldığında yükle.
     const pageScripts = {
-        explore: './js/discovery.min.js?v=20261124-discovery-min-v1'
+        explore: './js/discovery.min.js?v=20261124-discovery-min-v1',
+        people: './js/people.js?v=20261124-people-v1'
     };
+    const pageScriptRoutes = { watch: ['people'], 'actor-director': ['people'], explore: ['explore'] };
     const pageScriptCache = new Map();
-
     function ensurePageScripts(key) {
-        const src = pageScripts[key];
-        if (!src) return Promise.resolve();
-        if (pageScriptCache.has(key)) return pageScriptCache.get(key);
-
-        const request = new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.dataset.perdePageScript = key;
-            script.onload = () => resolve();
-            script.onerror = () => {
-                pageScriptCache.delete(key);
-                script.remove();
-                reject(new Error('Sayfa betiği yüklenemedi: ' + key));
-            };
-            document.head.appendChild(script);
-        });
-        pageScriptCache.set(key, request);
-        return request;
+        const scriptKeys = pageScriptRoutes[key] || (pageScripts[key] ? [key] : []);
+        return Promise.all(scriptKeys.map(scriptKey => {
+            const src = pageScripts[scriptKey];
+            if (!src) return Promise.resolve();
+            if (pageScriptCache.has(src)) return pageScriptCache.get(src);
+            const request = new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.dataset.perdePageScript = scriptKey;
+                script.onload = () => resolve();
+                script.onerror = () => { pageScriptCache.delete(src); script.remove(); reject(new Error('Sayfa betiği yüklenemedi: ' + scriptKey)); };
+                document.head.appendChild(script);
+            });
+            pageScriptCache.set(src, request);
+            return request;
+        }));
     }
+    // Derin bağlantılar da aynı önbellekli modül yükleyicisini kullanır.
+    window.perdeEnsurePageScript = ensurePageScripts;
 
     function ensurePageStyles(key) {
         const href = pageStyles[key];
