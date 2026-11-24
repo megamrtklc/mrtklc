@@ -2479,9 +2479,12 @@ window.cineTrailerEmbedUrl = function(rawUrl, preferredProvider) {
                 </div>
             </div>
         </template>
-
     </main>
 
+    <!--
+  İzleme listesine ekleme/çıkarma onay penceresi.
+  watchlist-confirm.window olayıyla açılır; ana uygulama kapsamındaki tema ve liste metotlarını kullanır.
+-->
     <!-- İzleme listesi onay penceresi -->
     <div x-data="{ open: false, item: null, action: 'add' }"
          @watchlist-confirm.window="item = $event.detail.item; action = $event.detail.action || 'add'; open = true"
