@@ -1,0 +1,56 @@
+<!-- Perde Hikâyeleri demo arşivi
+     Bu dosya ana sayfaya bağlı değildir. İleride geliştirme için saklanmıştır.
+-->
+<style id="perde-stories-demo-style">#perdeStoriesDemo{position:relative;z-index:8;overflow:visible;padding:18px 0 13px;color:var(--cv-text,#f5f5f5)}#perdeStoriesDemo .psd-track{display:flex;gap:22px;overflow-x:auto;overflow-y:hidden;align-items:flex-start;padding:12px 3px 14px;scrollbar-width:none;overscroll-behavior-x:contain}#perdeStoriesDemo .psd-track::-webkit-scrollbar{display:none}#perdeStoriesDemo .psd-item{flex:0 0 82px;width:82px;text-align:center;background:0 0;border:0;padding:0;color:inherit;cursor:pointer}#perdeStoriesDemo .psd-ring{display:block;box-sizing:border-box;flex:none;width:72px;height:72px;margin:0 auto 7px;padding:3px;border-radius:50%;background:linear-gradient(135deg,#f8cf68,#e74d72,#8b55d8);box-shadow:0 4px 18px #0004;transition:transform .2s ease}#perdeStoriesDemo .psd-item:hover .psd-ring{transform:scale(1.06)}#perdeStoriesDemo .psd-ring>span{display:block;width:100%;height:100%;border:2px solid #111;border-radius:50%;background-size:cover;background-position:center}#perdeStoriesDemo .psd-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:650;opacity:.92}#perdeStoriesDemo .psd-viewer{position:fixed;inset:0;z-index:2147483647;background:rgba(4,5,8,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:18px}#perdeStoriesDemo .psd-stage{position:relative;width:min(390px,calc(100vw - 36px));height:min(740px,calc(100dvh - 44px));min-height:360px;overflow:hidden;border-radius:22px;background:#151515;box-shadow:0 25px 90px #000b;border:1px solid #ffffff24}#perdeStoriesDemo .psd-stage:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.58),transparent 25%,transparent 65%,rgba(0,0,0,.72));z-index:1;pointer-events:none}#perdeStoriesDemo .psd-stage-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#perdeStoriesDemo .psd-video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;object-fit:cover}#perdeStoriesDemo .psd-top{position:absolute;z-index:3;top:12px;left:12px;right:12px}#perdeStoriesDemo .psd-progress{display:flex;gap:4px;margin-bottom:13px}#perdeStoriesDemo .psd-progress span{height:3px;flex:1;border-radius:8px;background:#ffffff55}#perdeStoriesDemo .psd-progress span.active{background:#fff}#perdeStoriesDemo .psd-user{display:flex;align-items:center;gap:9px;color:#fff;font-size:13px;font-weight:700;text-shadow:0 1px 8px #000}#perdeStoriesDemo .psd-avatar{width:32px;height:32px;border-radius:50%;border:2px solid #fff;background:#222;object-fit:cover}#perdeStoriesDemo .psd-close{margin-left:auto;border:0;background:#0008;color:#fff;width:34px;height:34px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}#perdeStoriesDemo .psd-copy{position:absolute;z-index:3;left:22px;right:22px;bottom:26px;color:#fff;text-shadow:0 2px 16px #000;font-size:14px}#perdeStoriesDemo .psd-copy strong{display:block;font-size:25px;line-height:1.12;margin-bottom:8px}#perdeStoriesDemo .psd-cta{display:inline-flex;align-items:center;gap:9px;margin-top:15px;padding:11px 16px;border-radius:999px;background:linear-gradient(110deg,#f6c453,#e9a52f);color:#17120a;text-shadow:none;font-size:12px;font-weight:900;box-shadow:0 8px 24px #0005}#perdeStoriesDemo .psd-hit{position:absolute;z-index:2;top:65px;bottom:90px;width:34%;border:0;background:0 0;cursor:pointer}#perdeStoriesDemo .psd-hit.prev{left:0}#perdeStoriesDemo .psd-hit.next{right:0}#perdeStoriesDemo .psd-arrow{position:absolute;z-index:4;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:#0006;color:#fff;border:1px solid #ffffff35;display:grid;place-items:center}#perdeStoriesDemo .psd-arrow.prev{left:9px}#perdeStoriesDemo .psd-arrow.next{right:9px}@media(min-width:768px){#perdeStoriesDemo{padding:15px 0 13px}#perdeStoriesDemo .psd-track{gap:25px}#perdeStoriesDemo .psd-item{flex-basis:88px;width:88px}#perdeStoriesDemo .psd-ring{width:76px;height:76px}}@media(max-width:767px){#perdeStoriesDemo{padding:10px 0 7px}#perdeStoriesDemo .psd-track{gap:14px}#perdeStoriesDemo .psd-item{flex-basis:69px;width:69px}#perdeStoriesDemo .psd-ring{width:62px;height:62px}#perdeStoriesDemo .psd-viewer{padding:max(18px,env(safe-area-inset-top)) 17px max(18px,env(safe-area-inset-bottom));background:rgba(4,5,8,.82)}#perdeStoriesDemo .psd-stage{width:min(390px,calc(100vw - 34px));height:min(690px,calc(100dvh - 110px));max-height:690px;min-height:320px;border-radius:20px}#perdeStoriesDemo .psd-copy strong{font-size:23px}}@media(prefers-reduced-motion:reduce){#perdeStoriesDemo .psd-ring{transition:none}}</style>
+
+<!-- PERDE HİKÂYELERİ DEMO: header ile manşet arasında -->
+    <section id="perdeStoriesDemo" :style="open ? 'position:relative;z-index:2147483647' : ''" x-data="{
+      open:false, active:0, activeGroup:0,
+      groups:[
+        {name:'Yeni Yapımlar',cover:'https://image.tmdb.org/t/p/w185/arDhnrSib3xRUHw0rIqgt8qHNeC.jpg',stories:[
+          {title:'Yeni bir efsane başlıyor',copy:'Robin Hood: Yeni macerayı Perde arşivinde keşfet.',image:'https://image.tmdb.org/t/p/w1280/lh3BDkmWJh998n4fQcHYcVi7dpm.jpg',itemTitle:'Robin Hood\'un Ölümü'},
+          {title:'Gizem dolu yeni dizi',copy:'Yeni yapımları ve sezonları keşfet.',image:'https://image.tmdb.org/t/p/w1280/7ojpD6ARKYhRxnsjzMIrorOfj4T.jpg',itemTitle:'The Blue Road'}
+        ]},
+        {name:'Fragmanlar',cover:'https://image.tmdb.org/t/p/w185/3DeEAwO42j4VmRdI4KSSN1VloM.jpg',stories:[
+          {title:'Joker — Resmî fragman',copy:'Gotham’ın karanlık dünyasına göz at.',video:'https://www.youtube-nocookie.com/embed/t433PEQGErc?autoplay=1&mute=0&controls=1&rel=0&enablejsapi=1',itemTitle:'Joker'},
+          {title:'Dövüş Kulübü',copy:'Kurallar basit. Birinci kural: Dövüş Kulübü hakkında konuşma.',video:'https://www.youtube-nocookie.com/embed/qtRKdVHc-cE?autoplay=1&mute=1&controls=1&rel=0',itemTitle:'Dövüş Kulübü'}
+        ]},
+        {name:'Film Önerileri',cover:'https://image.tmdb.org/t/p/w185/vpNOjiOZ9dSmj8COISLCQhWENnL.jpg',stories:[
+          {title:'Tek başına hayatta kalabilir mi?',copy:'Gerçek bir hayatta kalma mücadelesi: Diriliş.',image:'https://image.tmdb.org/t/p/w1280/hEQYZq2CDB2LSJVxxlazdBOKeyW.jpg',itemTitle:'Diriliş'},
+          {title:'Zekice kurgulanmış bir gerilim',copy:'Sürprizlerle dolu bir hikâye arıyorsan bu seçkiye göz at.',image:'https://image.tmdb.org/t/p/w1280/d7XExzHIjNgKPRAVv8YCiS0qVB7.jpg',itemTitle:'Ben Kimim?'}
+        ]},
+        {name:'Sinema Gündemi',cover:'https://image.tmdb.org/t/p/w185/xDSKdJ2cmh9tDX5B3w0dQ3RYqVo.jpg',stories:[
+          {title:'Sinemada suç ve komedi',copy:'Gerçek olaylardan esinlenen sıra dışı bir hikâye.',image:'https://image.tmdb.org/t/p/w1280/oNoprEND25zXR6Fns8cIZUkuoMc.jpg',itemTitle:'Vurguncular'},
+          {title:'Bu hafta Perde’de',copy:'Kütüphanedeki yapımları keşfetmeye devam et.',image:'https://image.tmdb.org/t/p/w1280/vr6n6ZFUZvedvIlhfYcbCWcaKyW.jpg',itemTitle:'Karayip Korsanları: Ölü Adam\'ın Sandığı'}
+        ]},
+        {name:'Perde’den',cover:'https://image.tmdb.org/t/p/w185/kbHReT65bMcy0jyz7tMUi9NMuOd.jpg',stories:[
+          {title:'Film gecesi başlasın!',copy:'Bu akşam için macera ve fantastik türünde bir önerimiz var.',image:'https://image.tmdb.org/t/p/w1280/vr6n6ZFUZvedvIlhfYcbCWcaKyW.jpg',itemTitle:'Karayip Korsanları: Ölü Adam\'ın Sandığı'},
+          {title:'Sıradaki favorini keşfet',copy:'Perde’de seni bekleyen daha çok hikâye var.',image:'https://image.tmdb.org/t/p/w1280/rlay2M5QYvi6igbGcFjq8jxeusY.jpg',itemTitle:'Joker'}
+        ]}
+      ],
+      get currentGroup(){return this.groups[this.activeGroup]},
+      get currentStory(){return this.currentGroup.stories[this.active]},
+      closeViewer(){this.open=false},
+      nextStory(){if(this.active<this.currentGroup.stories.length-1){this.active++}else{this.open=false}},
+      prevStory(){if(this.active>0){this.active--}}
+    }" @keydown.escape.window="closeViewer()" x-cloak>
+      <div class="flex items-center justify-between px-1 mb-1"><div><div class="text-[10px] font-black tracking-[.22em] text-amber-500">PERDE'DEN</div><h2 class="text-base md:text-lg font-extrabold tracking-tight">Hikâyeler</h2></div></div>
+      <div class="psd-track">
+        <template x-for="(group,index) in groups" :key="group.name">
+          <button type="button" class="psd-item" @click="activeGroup=index;active=0;open=true" :aria-label="group.name+' hikâyelerini aç'">
+            <span class="psd-ring"><span :style="'background-image:url('+group.cover+')'"></span></span><span class="psd-name" x-text="group.name"></span>
+          </button>
+        </template>
+      </div>
+      <div class="psd-viewer" x-show="open" x-transition.opacity @click.self="closeViewer()" role="dialog" aria-modal="true" aria-label="Perde hikâyeleri">
+        <div class="psd-stage" @click.stop>
+          <template x-if="currentStory.video"><iframe class="psd-video" :src="currentStory.video" title="Perde fragman videosu" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen @load="$el.contentWindow.postMessage(JSON.stringify({event:'command',func:'unMute',args:[]}),'*');$el.contentWindow.postMessage(JSON.stringify({event:'command',func:'setVolume',args:[60]}),'*')"></iframe></template>
+          <template x-if="!currentStory.video"><img class="psd-stage-bg" :src="currentStory.image" :alt="currentStory.title"></template>
+          <div class="psd-top"><div class="psd-progress"><template x-for="(story,index) in currentGroup.stories" :key="index"><span :class="{'active':index<=active}"></span></template></div><div class="psd-user"><img class="psd-avatar" :src="currentGroup.cover" alt=""><span x-text="currentGroup.name"></span><span class="text-white/60 text-[11px] font-medium">· Demo</span><button class="psd-close" type="button" aria-label="Kapat" @click="closeViewer()">×</button></div></div>
+          <div class="psd-copy"><strong x-text="currentStory.title"></strong><span x-text="currentStory.copy"></span><br><button class="psd-cta" type="button" @click="(() => { const item=(window.__CV_HERO_BOOTSTRAP__?.catalog||[]).find(x=>x.title===currentStory.itemTitle); if(item){closeViewer();openWatchPage(item)} })()"><i class="fa-solid fa-arrow-up-right-from-square"></i> Yapımı incele</button></div>
+          <button class="psd-hit prev" type="button" aria-label="Önceki hikâye" @click="prevStory()"></button><button class="psd-hit next" type="button" aria-label="Sonraki hikâye" @click="nextStory()"></button>
+          <button class="psd-arrow prev" type="button" aria-label="Önceki hikâye" @click="prevStory()"><i class="fa-solid fa-chevron-left"></i></button><button class="psd-arrow next" type="button" aria-label="Sonraki hikâye" @click="nextStory()"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </section>
+    <!-- /PERDE HİKÂYELERİ DEMO -->
