@@ -1,0 +1,45 @@
+<!--
+  Perde ana sayfa parçası: Dizi Takibi bölümünün HTML içeriği.
+  Ana kapsayıcı homepage.html içinde kalır; bu dosya görünür alana yaklaşınca yüklenir.
+-->
+
+                    <div class="home-series-tracking-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">BÖLÜM BÖLÜM • KALDIĞIN YERİ UNUTMA</p>
+                            <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white">Dizi Takibi</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><span x-text="currentProfile.name"></span> profilinde takip ettiğin diziler ve bölüm ilerlemen</p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-[10px] font-bold text-gray-500 dark:text-gray-400 tabular-nums" x-text="homeSectionReady['series-tracking'] ? librarySeriesEntries.length + ' takipteki dizi' : ''"></span>
+                            <button type="button" @click="scrollHomeCards('home-series-tracking-rail',-1)" aria-label="Önceki takip edilen diziler" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button type="button" @click="scrollHomeCards('home-series-tracking-rail',1)" aria-label="Sonraki takip edilen diziler" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button>
+                            <button type="button" @click="navigateTo('library')" class="text-[10px] font-black text-rose-500 hover:text-rose-400 ml-1">Kütüphanem <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                        </div>
+                    </div>
+                    <div id="home-series-tracking-rail" class="home-card-rail home-series-tracking-rail">
+                        <template x-for="entry in (homeSectionReady['series-tracking'] ? librarySeriesEntries.slice(0,12) : [])" :key="'series-tracking-' + entry.item.id">
+                            <button type="button" @click="resumeLibraryItem(entry)" :class="getCardClass()" class="home-rail-card home-series-tracking-card group min-w-0 text-left rounded-xl overflow-hidden border transition-all duration-300">
+                                <div class="home-series-tracking-poster relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <img :alt="entry.item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="entry.item.poster || entry.item.image || entry.item.tmdbPoster || entry.item.backdrop" :srcset="getTmdbImageSrcSet(entry.item.poster || entry.item.image || entry.item.tmdbPoster || entry.item.backdrop)" sizes="(max-width:639px) 46vw, (max-width:1023px) 24vw, 19vw" class="w-full h-full object-cover transition-transform duration-700">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10 pointer-events-none"></div>
+                                    <span class="absolute top-3 left-3 rounded-md bg-black/75 px-2 py-1.5 text-[8px] font-black uppercase tracking-wider text-white backdrop-blur">Dizi takibinde</span>
+                                    <span class="absolute bottom-3 right-3 rounded-md bg-black/75 px-2 py-1.5 text-[10px] font-black text-rose-300 backdrop-blur" x-text="entry.percent + '%'"></span>
+                                </div>
+                                <div class="p-3 space-y-2.5">
+                                    <h3 class="text-[11px] sm:text-xs font-extrabold text-gray-900 dark:text-white line-clamp-2" x-text="entry.item.title"></h3>
+                                    <div class="flex items-center justify-between gap-2 text-[9px] text-gray-500 dark:text-gray-400">
+                                        <span class="truncate" x-text="entry.label"></span>
+                                        <span class="shrink-0 font-bold text-rose-500" x-text="entry.total ? entry.watchedCount + ' / ' + entry.total : entry.watchedCount + ' bölüm'"></span>
+                                    </div>
+                                    <div class="h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden">
+                                        <div class="home-series-tracking-progress h-full rounded-full transition-all duration-500" :style="'width:' + entry.percent + '%'"></div>
+                                    </div>
+                                    <div class="flex items-center justify-between text-[9px] text-gray-500 dark:text-gray-400">
+                                        <span x-text="entry.percent >= 100 ? 'Tüm bölümler tamamlandı' : 'İzlemeye devam et'"></span>
+                                        <i class="fa-solid fa-play text-rose-500"></i>
+                                    </div>
+                                </div>
+                            </button>
+                        </template>
+                    </div>
+                
