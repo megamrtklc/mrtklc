@@ -20874,8 +20874,7 @@
       "player",
       "synopsis",
       "season",
-      "episodes",
-      "reviews"
+      "episodes"
     ],
     "right": [
       "credits",
@@ -20883,7 +20882,9 @@
       "similar"
     ],
     "hidden": [],
-    "removed": []
+    "removed": [
+      "reviews"
+    ]
   },
   "adminProfile": {
     "name": "Murat",
