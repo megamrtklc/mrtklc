@@ -903,9 +903,33 @@ try {
 
   await check('Mobil menü açılıyor ve sayfa geçişi yapıyor', async () => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.getByRole('button', { name: 'Menüyü aç veya kapat' }).click();
+    const menuButton = page.getByRole('button', { name: 'Menüyü aç veya kapat' });
+    await menuButton.click();
     const mobileMenu = page.locator('header div[x-show*="mobileMenuOpen"]');
-    await mobileMenu.waitFor({ state: 'visible' });
+    try {
+      await mobileMenu.waitFor({ state: 'visible', timeout: 5000 });
+    } catch (error) {
+      const diagnostic = await page.evaluate(() => {
+        const root = document.documentElement;
+        const data = window.Alpine?.$data(root);
+        const button = document.querySelector('header button[aria-label="Menüyü aç veya kapat"]');
+        const menu = document.querySelector('header div[x-show*="mobileMenuOpen"]');
+        return {
+          alpineStarted: !!window.Alpine,
+          rootHasData: !!data,
+          mobileMenuOpen: data?.mobileMenuOpen,
+          showMobileMenu: data?.headerConfig?.showMobileMenu,
+          buttonDisplay: button ? getComputedStyle(button).display : null,
+          buttonRect: button ? button.getBoundingClientRect().toJSON() : null,
+          menuDisplay: menu ? getComputedStyle(menu).display : null,
+          menuInlineStyle: menu?.getAttribute('style'),
+          menuExpression: menu?.getAttribute('x-show'),
+          headerXData: document.querySelector('header')?.getAttribute('x-data')
+        };
+      });
+      console.error('MOBILE MENU DIAGNOSTIC:', JSON.stringify(diagnostic));
+      throw error;
+    }
     await mobileMenu.getByRole('link', { name: 'Keşfet', exact: true }).click();
     await page.waitForFunction(() => window.location.hash === '#/explore');
     assert.ok(await page.locator('#perde-discovery-showcase').isVisible(), 'Keşfet sayfasının rastgele yapım vitrini görünmeli');
