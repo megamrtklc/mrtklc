@@ -1424,19 +1424,19 @@
                 playbackFeedbackTimer: null,
 
                 toggleCinemaMode() {
-                                    this.cinemaMode = !this.cinemaMode;
-                                    document.body.style.overflow = this.cinemaMode ? 'hidden' : '';
-                                    if (this.cinemaNoticeTimer) clearTimeout(this.cinemaNoticeTimer);
-                                    this.cinemaNoticeVisible = this.cinemaMode;
-                                    if (this.cinemaMode) {
-                                        this.playerControlsVisible = true;
-                                        this.showPlayerControls();
-                                        this.cinemaNoticeTimer = setTimeout(() => {
-                                            this.cinemaNoticeVisible = false;
-                                            this.cinemaNoticeTimer = null;
-                                        }, 5000);
-                                    }
-                                },
+                    this.cinemaMode = !this.cinemaMode;
+                    document.body.style.overflow = this.cinemaMode ? 'hidden' : '';
+                    if (this.cinemaNoticeTimer) clearTimeout(this.cinemaNoticeTimer);
+                    this.cinemaNoticeVisible = this.cinemaMode;
+                    if (this.cinemaMode) {
+                        this.playerControlsVisible = true;
+                        this.showPlayerControls();
+                        this.cinemaNoticeTimer = setTimeout(() => {
+                            this.cinemaNoticeVisible = false;
+                            this.cinemaNoticeTimer = null;
+                        }, 5000);
+                    }
+                },
 
                 setPlaybackRate(rate) {
                     return window.PerdePlayerControls?.setPlaybackRate.call(this, rate);
@@ -1493,23 +1493,23 @@
                 },
 
                 showPlayerControls() {
-                                    this.playerControlsVisible = true;
-                                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
-                                    if (this.isPlaying) this.schedulePlayerControlsHide();
-                                },
+                    this.playerControlsVisible = true;
+                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
+                    if (this.isPlaying) this.schedulePlayerControlsHide();
+                },
 
                 schedulePlayerControlsHide() {
-                                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
-                                    if (!this.isPlaying) return;
-                                    this.playerControlsTimer = setTimeout(() => {
-                                        if (this.isPlaying) this.playerControlsVisible = false;
-                                    }, 2200);
-                                },
+                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
+                    if (!this.isPlaying) return;
+                    this.playerControlsTimer = setTimeout(() => {
+                        if (this.isPlaying) this.playerControlsVisible = false;
+                    }, 2200);
+                },
 
                 hidePlayerControlsOnLeave() {
-                                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
-                                    this.playerControlsVisible = !this.isPlaying;
-                                },
+                    if (this.playerControlsTimer) clearTimeout(this.playerControlsTimer);
+                    this.playerControlsVisible = !this.isPlaying;
+                },
 
                 isDirectVideoUrl(url) {
                     return typeof url === 'string' && /\.mp4(?:$|[?#])/i.test(url);
@@ -1528,25 +1528,25 @@
                 },
 
                 showPlaybackFeedback(type, duration = 5000) {
-                                    this.playbackFeedback = type;
-                                    this.playbackFeedbackVisible = true;
-                                    if (this.playbackFeedbackTimer) clearTimeout(this.playbackFeedbackTimer);
-                                    this.playbackFeedbackTimer = setTimeout(() => {
-                                        this.playbackFeedbackVisible = false;
-                                        this.playbackFeedbackTimer = null;
-                                    }, duration);
-                                },
+                    this.playbackFeedback = type;
+                    this.playbackFeedbackVisible = true;
+                    if (this.playbackFeedbackTimer) clearTimeout(this.playbackFeedbackTimer);
+                    this.playbackFeedbackTimer = setTimeout(() => {
+                        this.playbackFeedbackVisible = false;
+                        this.playbackFeedbackTimer = null;
+                    }, duration);
+                },
 
                 togglePlay() {
-                                    const video = document.getElementById('customVideoPlayer');
-                                    if (!video) return;
-                                    if (video.paused) {
-                                        this.showPlaybackFeedback('play', 5000);
-                                        this.startPlayback();
-                                    } else {
-                                        video.pause();
-                                    }
-                                },
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video) return;
+                    if (video.paused) {
+                        this.showPlaybackFeedback('play', 5000);
+                        this.startPlayback();
+                    } else {
+                        video.pause();
+                    }
+                },
 
                 updateVideoProgress() {
                     return window.PerdePlayerControls?.updateVideoProgress.call(this);
@@ -1557,33 +1557,33 @@
                 },
 
                 skipTime(seconds) {
-                                    const video = document.getElementById('customVideoPlayer');
-                                    if (!video || !Number.isFinite(video.duration)) return;
-                                    video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
-                                    this.showPlaybackFeedback(seconds < 0 ? 'backward' : 'forward', 850);
-                                    this.showPlayerControls();
-                                },
+                    const video = document.getElementById('customVideoPlayer');
+                    if (!video || !Number.isFinite(video.duration)) return;
+                    video.currentTime = Math.max(0, Math.min(video.duration, video.currentTime + seconds));
+                    this.showPlaybackFeedback(seconds < 0 ? 'backward' : 'forward', 850);
+                    this.showPlayerControls();
+                },
 
                 handleSeekTap(direction, event) {
-                                    const now = Date.now();
-                                    const point = event ? { x: event.clientX, y: event.clientY } : { x: 0, y: 0 };
-                                    const previous = this.lastSeekTap;
-                                    if (previous && previous.direction === direction && now - previous.time <= 360 &&
-                                        Math.hypot(point.x - previous.x, point.y - previous.y) <= 64) {
-                                        if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
-                                        this.lastSeekTapTimer = null;
-                                        this.lastSeekTap = null;
-                                        this.handleDoubleTapSeek(direction, event);
-                                        return;
-                                    }
-                                    this.lastSeekTap = { direction, time: now, x: point.x, y: point.y };
-                                    if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
-                                    this.lastSeekTapTimer = setTimeout(() => {
-                                        this.lastSeekTap = null;
-                                        this.lastSeekTapTimer = null;
-                                    }, 380);
-                                    this.showPlayerControls();
-                                },
+                    const now = Date.now();
+                    const point = event ? { x: event.clientX, y: event.clientY } : { x: 0, y: 0 };
+                    const previous = this.lastSeekTap;
+                    if (previous && previous.direction === direction && now - previous.time <= 360 &&
+                        Math.hypot(point.x - previous.x, point.y - previous.y) <= 64) {
+                        if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
+                        this.lastSeekTapTimer = null;
+                        this.lastSeekTap = null;
+                        this.handleDoubleTapSeek(direction, event);
+                        return;
+                    }
+                    this.lastSeekTap = { direction, time: now, x: point.x, y: point.y };
+                    if (this.lastSeekTapTimer) clearTimeout(this.lastSeekTapTimer);
+                    this.lastSeekTapTimer = setTimeout(() => {
+                        this.lastSeekTap = null;
+                        this.lastSeekTapTimer = null;
+                    }, 380);
+                    this.showPlayerControls();
+                },
 
                 handleDoubleTapSeek(direction, event) {
                     return window.PerdePlayerControls?.handleDoubleTapSeek.call(this, direction, event);
