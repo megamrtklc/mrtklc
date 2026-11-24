@@ -21417,12 +21417,13 @@
     "right": [
       "credits",
       "cast",
-      "similar"
-    ],
-    "hidden": [],
-    "removed": [
+      "similar",
       "reviews"
-    ]
+    ],
+    "hidden": [
+      "reviews"
+    ],
+    "removed": []
   },
   "adminProfile": {
     "name": "Murat",
