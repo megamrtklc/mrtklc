@@ -636,8 +636,8 @@
                     // Düşük öncelik, ilk manşet görsellerinin ağ önceliğini korurken indirmeyi erkenden başlatır.
                     const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261117-franchise-data-v1', { cache: 'no-cache' });
                     try {
-                        // Üretim sırasında HTML'e gömülen küçük manşet verisi ağ isteği beklemeden hazırdır.
-                        // Yerel geliştirme/önbellek senaryolarında gömülü veri yoksa JSON dosyasına geri dön.
+                        // İlk açılışta başlatılan ortak JSON isteğini kullan; mobil görsel ön yükleyici de aynı yanıtı paylaşır.
+                        // Ortak istek yoksa JSON dosyasına doğrudan geri dön.
                         let heroData = window.__CV_HERO_BOOTSTRAP__ || null;
                         if (!heroData && window.__CV_HERO_DATA_PROMISE__) {
                             heroData = await window.__CV_HERO_DATA_PROMISE__;
@@ -929,9 +929,43 @@
                         element.hasAttribute('x-ignore')
                     );
 
+                    // Büyük katalog rafının HTML'ini yalnızca kullanıcı o bölüme yaklaşınca indir.
+                    const fragmentFallbacks = new WeakMap();
                     const hydrateSection = section => {
                         const key = section.dataset.homeSection;
-                        if (!key) return;
+                        if (!key) return true;
+                        const fragmentUrl = section.dataset.homeFragment;
+                        if (fragmentUrl && section.dataset.homeFragmentLoaded !== 'true') {
+                            if (section.dataset.homeFragmentLoading === 'true') return false;
+                            if (!fragmentFallbacks.has(section)) fragmentFallbacks.set(section, section.innerHTML);
+                            section.dataset.homeFragmentLoading = 'true';
+                            fetch(fragmentUrl, { cache: 'default' })
+                                .then(response => {
+                                    if (!response.ok) throw new Error('Bölüm dosyası yüklenemedi (HTTP ' + response.status + ')');
+                                    return response.text();
+                                })
+                                .then(html => {
+                                    if (!section.isConnected) return;
+                                    if (!html || !html.trim()) throw new Error('Bölüm dosyası boş döndü.');
+                                    section.innerHTML = html;
+                                    section.dataset.homeFragmentLoaded = 'true';
+                                    delete section.dataset.homeFragmentLoading;
+                                    hydrateSection(section);
+                                    window.__cineverseHomeSectionObserver?.unobserve(section);
+                                })
+                                .catch(error => {
+                                    if (!section.isConnected) return;
+                                    delete section.dataset.homeFragmentLoading;
+                                    console.error('[Perde home fragment]', key, error);
+                                    section.innerHTML = '<div class="home-catalog-fragment-error"><p>Katalog bölümü şu anda yüklenemedi.</p><button type="button" data-home-fragment-retry>Yeniden dene</button></div>';
+                                    section.querySelector('[data-home-fragment-retry]')?.addEventListener('click', () => {
+                                        section.innerHTML = fragmentFallbacks.get(section) || '';
+                                        hydrateSection(section);
+                                    });
+                                    section.style.removeProperty('visibility');
+                                });
+                            return false;
+                        }
                         if (key !== 'personalized') this.homeSectionReady[key] = true;
                         if (section.hasAttribute('x-ignore')) {
                             section.removeAttribute('x-ignore');
@@ -949,28 +983,18 @@
                                 this.$nextTick(() => {
                                     this.prepareHomePersonalizedVariant(section);
                                     this.homeSectionLoading.personalized = false;
-                                    if (section.isConnected && this.currentPage === 'home') {
-                                        section.style.removeProperty('visibility');
-                                    }
+                                    if (section.isConnected && this.currentPage === 'home') section.style.removeProperty('visibility');
                                 });
                             };
                             if (window.matchMedia('(max-width: 767px)').matches) {
-                                // Mobilde öneri puanlamasını ilk çizimden sonraya al.
                                 window.setTimeout(() => {
                                     if ('requestIdleCallback' in window) window.requestIdleCallback(activate, { timeout: 2200 });
                                     else window.setTimeout(activate, 0);
                                 }, 1400);
-                            } else {
-                                activate();
-                            }
+                            } else activate();
                         }
-                        // Kişiselleştirilmiş alan, öneriler hazır olana kadar gizli kalmalı.
-                        // Diğer raflarda ilk çizimden sonra görünürlüğü açmaya devam et.
-                        if (key !== 'personalized') {
-                            window.requestAnimationFrame(() => {
-                                section.style.removeProperty('visibility');
-                            });
-                        }
+                        if (key !== 'personalized') window.requestAnimationFrame(() => section.style.removeProperty('visibility'));
+                        return true;
                     };
 
                     // Yönetici tarafından kapatılan rafları hemen işle; görünür rafları ekrana yaklaşınca başlat.
@@ -985,7 +1009,8 @@
                         }
                         section.removeAttribute('x-cloak');
                         section.style.removeProperty('display');
-                        section.style.visibility = 'hidden';
+                        // Harici HTML parçası yüklenirken katalog iskeletini görünür tut.
+                        section.style.visibility = section.dataset.homeFragment ? 'visible' : 'hidden';
                     });
 
                     const pending = sections.filter(section =>
@@ -1007,8 +1032,8 @@
                             // Mobilde ağır öneri rafı ve Son Eklenenler, görünür alanın anlamlı kısmına gelmeden başlatılmasın.
                             const sectionKey = entry.target.dataset.homeSection;
                             if (mobileObserver && ['personalized', 'new-arrivals'].includes(sectionKey) && entry.intersectionRatio < 0.5) return;
-                            hydrateSection(entry.target);
-                            observer.unobserve(entry.target);
+                            const hydrated = hydrateSection(entry.target);
+                            if (hydrated !== false) observer.unobserve(entry.target);
                         });
                     }, { rootMargin: tvObserver ? '72px 0px' : (mobileObserver ? '100px 0px' : '180px 0px'), threshold: [0, 0.5] });
 
