@@ -23,6 +23,7 @@ const partials = {
   EXPLORE: 'src/templates/explore-page.html',
   FRANCHISES: 'src/templates/franchises-page.html',
   WATCHLIST: 'src/templates/watchlist-page.html',
+  WATCHLIST_CONFIRM_MODAL: 'src/templates/watchlist-confirm-modal.html',
   LIBRARY: 'src/templates/library-page.html',
   STATS: 'src/templates/stats-page.html',
   VIDEO_LINKS: 'src/templates/video-links-page.html',
