@@ -28,20 +28,6 @@
                             </video>
                             <div x-cloak x-show="pauseNoticeVisible && isDirectVideoUrl(getPlaybackUrl())" x-transition.opacity.duration.200ms class="pointer-events-none absolute inset-0 z-10 bg-black/35" aria-hidden="true"></div>
 
-                            <div x-cloak x-show="!hasPlaybackStarted" class="absolute left-3 top-3 z-30 flex w-[270px] max-w-[calc(100%_-_1.5rem)] flex-row items-center gap-2 rounded-xl border border-white/15 bg-gradient-to-r from-black/95 to-black/75 p-2 shadow-2xl shadow-black/60 backdrop-blur-md sm:left-5 sm:top-5 sm:w-40 sm:flex-col sm:gap-2 sm:bg-gradient-to-b sm:p-2" @click.stop>
-                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="h-24 w-16 shrink-0 rounded-md border border-white/20 object-cover shadow-lg sm:aspect-[2/3] sm:h-auto sm:w-full sm:rounded-lg">
-                                <div class="min-w-0 flex-1 space-y-2 sm:w-full">
-                                    <span class="block text-[9px] font-black uppercase tracking-[0.16em] text-amber-200 sm:text-center">Yapım fragmanı</span>
-                                    <button type="button"
-                                            @click.stop="watchTrailerOpen = true"
-                                            class="flex min-h-10 w-full items-center justify-center gap-1.5 rounded-lg border border-amber-300/55 bg-gradient-to-r from-amber-300 to-amber-500 px-2 py-2 text-[10px] font-black tracking-wide text-gray-950 shadow-md transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200"
-                                            :aria-label="selectedItem.title + ' fragmanını izle'">
-                                        <i class="fa-solid fa-circle-play text-xs"></i>
-                                        <span class="whitespace-nowrap">FRAGMANI İZLE</span>
-                                    </button>
-                                </div>
-                            </div>
-
                             <!-- YouTube-style double-tap seek zones -->
                             <div id="cvTapSeekZones" x-show="isDirectVideoUrl(getPlaybackUrl()) && hasPlaybackStarted" class="absolute inset-x-0 top-0 bottom-[76px] z-[11] grid grid-cols-3" style="touch-action:manipulation" aria-label="Çift dokunarak videoyu sar">
                                 <div @click="showPlayerControls()" @pointerup.stop="handleSeekTap('backward', $event)"></div>
@@ -78,33 +64,53 @@
                                     </button>
                                 </div>
                             </div>
-                            <div x-show="isDirectVideoUrl(getPlaybackUrl()) && !hasPlaybackStarted" class="absolute inset-0 z-10 flex items-center justify-center bg-black cursor-pointer" @click.stop="startPlayback()">
-                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 w-full h-full object-cover object-center">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/20"></div>
-                                <button type="button" @click.stop="startPlayback()" class="relative z-10 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full border border-white/50 bg-rose-600/90 text-white shadow-2xl backdrop-blur-sm transition-all hover:scale-110 hover:bg-rose-500" :aria-label="selectedItem.title + ' filmini oynat'">
-                                    <i class="fa-solid fa-play text-2xl sm:text-3xl ml-1"></i>
+                            <div x-cloak x-show="isDirectVideoUrl(getPlaybackUrl()) && !hasPlaybackStarted" class="absolute inset-0 z-10 cursor-pointer bg-black" @click.stop="startPlayback()">
+                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 h-full w-full object-cover object-center brightness-110 saturate-125">
+                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20"></div>
+
+                                <div class="pointer-events-none absolute left-3 top-3 z-20 flex max-w-[72%] items-start gap-2 rounded-xl border border-white/20 bg-black/55 p-1.5 shadow-xl backdrop-blur-md sm:left-5 sm:top-5 sm:gap-3 sm:p-2">
+                                    <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="h-[76px] w-[51px] shrink-0 rounded-md border border-amber-200/50 object-cover shadow-lg sm:h-[108px] sm:w-[72px] sm:rounded-lg">
+                                    <div class="min-w-0 pt-1">
+                                        <span class="block line-clamp-2 text-[11px] font-black leading-snug text-white drop-shadow sm:text-sm" x-text="selectedItem.title"></span>
+                                        <span class="mt-1 block text-[9px] font-bold uppercase tracking-wider text-amber-200 sm:text-[10px]">Şimdi izlemeye hazır</span>
+                                    </div>
+                                </div>
+
+                                <button type="button" @click.stop="startPlayback()" class="group absolute left-1/2 top-1/2 z-20 flex h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-amber-100/90 bg-gradient-to-br from-amber-200 to-amber-500 text-[#17130a] shadow-[0_0_30px_rgba(231,196,119,0.45)] transition duration-300 hover:scale-110 hover:shadow-[0_0_42px_rgba(231,196,119,0.7)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-200 sm:h-[88px] sm:w-[88px]" :aria-label="selectedItem.title + ' filmini oynat'">
+                                    <span class="pointer-events-none absolute inset-[-7px] rounded-full border border-amber-200/75 animate-pulse"></span>
+                                    <i class="fa-solid fa-play relative ml-1 text-2xl sm:text-3xl"></i>
+                                </button>
+
+                                <button type="button" @click.stop="watchTrailerOpen = true" class="absolute bottom-3 right-3 z-30 inline-flex min-h-9 items-center gap-2 rounded-lg border border-amber-200/35 bg-black/65 px-3 py-2 text-[11px] font-bold text-white shadow-lg backdrop-blur-md transition hover:border-amber-200/70 hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200 sm:bottom-5 sm:right-5 sm:px-4" :aria-label="selectedItem.title + ' fragmanı'">
+                                    <i class="fa-solid fa-clapperboard text-amber-200"></i>
+                                    <span>Fragman</span>
                                 </button>
                             </div>
-                            <div x-show="!isDirectVideoUrl(getPlaybackUrl())" class="absolute inset-0 overflow-hidden bg-gray-950 text-white">
-                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="cv-no-url-backdrop absolute inset-0 h-full w-full object-cover opacity-35 blur-[1px]">
-                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-gray-950/80 via-gray-950/55 to-gray-950/85"></div>
-                                <div class="relative z-10 flex h-full items-center justify-center sm:hidden">
-                                    <div class="flex flex-col items-center gap-2 rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-center backdrop-blur-sm">
-                                        <i class="fa-solid fa-film text-xl text-amber-200"></i>
-                                        <span class="text-[10px] font-black uppercase tracking-[0.18em] text-white/80">İzleme ekranı</span>
+                            <div x-cloak x-show="!isDirectVideoUrl(getPlaybackUrl())" class="absolute inset-0 overflow-hidden bg-gray-950 text-white">
+                                <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="cv-no-url-backdrop absolute inset-0 h-full w-full object-cover brightness-110 saturate-125 opacity-70">
+                                <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-gray-950/65 via-gray-950/25 to-gray-950/70"></div>
+
+                                <div class="pointer-events-none absolute left-3 top-3 z-10 flex max-w-[72%] items-start gap-2 rounded-xl border border-white/20 bg-black/60 p-1.5 shadow-xl backdrop-blur-md sm:left-5 sm:top-5 sm:gap-3 sm:p-2">
+                                    <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="h-[76px] w-[51px] shrink-0 rounded-md border border-amber-200/50 object-cover shadow-lg sm:h-[108px] sm:w-[72px] sm:rounded-lg">
+                                    <div class="min-w-0 pt-1">
+                                        <span class="block line-clamp-2 text-[11px] font-black leading-snug text-white drop-shadow sm:text-sm" x-text="selectedItem.title"></span>
+                                        <span class="mt-1 block text-[9px] font-bold uppercase tracking-wider text-amber-200 sm:text-[10px]">İzleme bilgisi</span>
                                     </div>
                                 </div>
-                                <div class="relative z-10 hidden h-full items-center justify-center p-8 text-center sm:flex">
-                                    <div class="max-w-md space-y-3 rounded-2xl border border-white/10 bg-black/45 p-6 shadow-2xl backdrop-blur-md">
-                                        <div class="flex items-center justify-center gap-2 text-rose-400">
-                                            <i class="fa-solid fa-film"></i>
-                                            <span class="text-[10px] font-black uppercase tracking-[0.2em]">CineVerse • Oynatıcı</span>
-                                        </div>
-                                        <h3 class="text-xl font-black text-white" x-text="selectedItem.title"></h3>
-                                        <p class="text-xs leading-relaxed text-gray-300" x-text="selectedItem.watchUrl ? 'Bu kaynak yerleşik oynatıcıda açılamıyor. Harici platformdan izlemek için bağlantıyı açabilirsin.' : 'Bu yapım için henüz bir izleme bağlantısı eklenmemiş.'"></p>
-                                        <a x-show="selectedItem.watchUrl" :href="selectedItem.watchUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg bg-rose-600 px-4 py-2 text-xs font-bold text-white hover:bg-rose-700">Kaynağı Aç <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+
+                                <div class="absolute left-1/2 top-[62%] z-10 w-[min(82%,460px)] -translate-x-1/2 -translate-y-1/2 rounded-xl border border-white/15 bg-black/55 px-3 py-2.5 text-center shadow-xl backdrop-blur-md sm:top-1/2 sm:px-5 sm:py-4">
+                                    <div class="mb-1 flex items-center justify-center gap-2 text-amber-200">
+                                        <i class="fa-solid fa-circle-info text-xs"></i>
+                                        <span class="text-[9px] font-black uppercase tracking-[0.16em] sm:text-[10px]">Oynatıcı bilgisi</span>
                                     </div>
+                                    <p class="text-[10px] leading-relaxed text-gray-100 sm:text-xs" x-text="selectedItem.watchUrl ? 'Bu kaynak yerleşik oynatıcıda açılamıyor. Harici platformdan izlemek için bağlantıyı açabilirsin.' : 'Bu yapım için henüz bir izleme bağlantısı eklenmemiş.'"></p>
+                                    <a x-show="selectedItem.watchUrl" :href="selectedItem.watchUrl" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 text-[10px] font-bold text-white transition hover:bg-white/20">Kaynağı Aç <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                                 </div>
+
+                                <button type="button" @click.stop="watchTrailerOpen = true" class="absolute bottom-3 right-3 z-20 inline-flex min-h-9 items-center gap-2 rounded-lg border border-amber-200/35 bg-black/70 px-3 py-2 text-[11px] font-bold text-white shadow-lg backdrop-blur-md transition hover:border-amber-200/70 hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200 sm:bottom-5 sm:right-5 sm:px-4" :aria-label="selectedItem.title + ' fragmanı'">
+                                    <i class="fa-solid fa-clapperboard text-amber-200"></i>
+                                    <span>Fragman</span>
+                                </button>
                             </div>
 
                             <div x-show="playbackError && isDirectVideoUrl(getPlaybackUrl())" class="absolute inset-x-0 top-4 left-1/2 z-30 flex w-[min(92%,420px)] -translate-x-1/2 items-center justify-between gap-3 rounded-xl border border-red-400/25 bg-red-950/95 px-4 py-3 text-xs font-semibold text-white shadow-2xl">
@@ -218,19 +224,6 @@
                             </div>
                         </div>
 
-                        <div x-show="!isDirectVideoUrl(getPlaybackUrl())" x-cloak class="sm:hidden -mt-3 rounded-xl border border-amber-300/20 bg-gradient-to-br from-[#171b24] to-[#10131a] p-4 shadow-lg">
-                            <div class="flex items-start gap-3">
-                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-300/10 text-amber-200">
-                                    <i class="fa-solid fa-circle-info"></i>
-                                </div>
-                                <div class="min-w-0 flex-1 space-y-1.5">
-                                    <span class="block text-[9px] font-black uppercase tracking-[0.18em] text-amber-200">Oynatıcı bilgisi</span>
-                                    <h3 class="text-sm font-extrabold text-white" x-text="selectedItem.title"></h3>
-                                    <p class="text-xs leading-relaxed text-gray-300" x-text="selectedItem.watchUrl ? 'Bu kaynak yerleşik oynatıcıda açılamıyor. Harici platformdan izlemek için bağlantıyı açabilirsin.' : 'Bu yapım için henüz bir izleme bağlantısı eklenmemiş.'"></p>
-                                    <a x-show="selectedItem.watchUrl" :href="selectedItem.watchUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-lg bg-rose-600 px-3 py-2 text-[11px] font-bold text-white hover:bg-rose-700">Kaynağı Aç <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                        </div>
                         <!-- Dizi Sezon Seçimi -->
                         <div data-watch-card="season" :style="'order: ' + getWatchCardOrder('season')" x-show="selectedItem.type === 'tv'" :class="getCardClass()" class="p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
                             <div class="flex items-center space-x-3">
