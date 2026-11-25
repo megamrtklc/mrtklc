@@ -169,7 +169,7 @@
     <!-- Görsel yardımcıları: TMDB responsive srcset üretimi ve bozuk görseller için yedek görsel. -->
     <script defer src="./js/image-helpers.js?v=20261124-image-helpers-v1"></script>
     <!-- Ana Alpine uygulaması: sayfa durumları, gezinme ve uygulama özellikleri. -->
-    <script defer src="./js/lazy-pages.js?v=20261125-lazy-pages-v36"></script>
+    <script defer src="./js/lazy-pages.js?v=20261125-lazy-pages-v37"></script>
     <script defer src="./js/trailer-embed-url.js?v=20261124-trailer-embed-v1"></script>
     <script defer src="./js/image-loading-indicator.js?v=20261124-image-loading-v1"></script>
     <script defer src="./js/image-copy-guard.js?v=20261124-image-copy-guard-v1"></script>
@@ -694,6 +694,29 @@
                         class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-4 text-xs font-bold transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500">
                     <i class="fa-solid fa-xmark"></i> Hayır
                 </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- İzleme sayfası fragman penceresi: ana Alpine kapsamındadır; gecikmeli sayfa DOM'undan bağımsız çalışır. -->
+    <div x-cloak x-show="watchTrailerOpen" x-transition.opacity
+         @click.self="watchTrailerOpen = false"
+         @keydown.escape.window="watchTrailerOpen = false"
+         class="fixed inset-0 z-[99999] flex items-center justify-center overflow-y-auto bg-black/90 p-4 backdrop-blur-md"
+         role="dialog" aria-modal="true" aria-label="Yapım fragmanı">
+        <div x-show="watchTrailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/70">
+            <div class="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-5">
+                <div class="min-w-0"><p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p><p class="truncate text-sm font-bold text-white" x-text="selectedItem?.title || 'Fragman'"></p></div>
+                <button type="button" @click="watchTrailerOpen = false" aria-label="Fragmanı kapat" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <template x-if="watchTrailerOpen && selectedItem && (selectedItem.trailerUrl || selectedItem.tmdbTrailerUrl)">
+                <div class="aspect-video w-full bg-black"><iframe :src="window.cineTrailerEmbedUrl(selectedItem.trailerUrl || selectedItem.tmdbTrailerUrl, selectedItem.trailerProvider)" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+            </template>
+            <div x-show="!selectedItem?.trailerUrl && !selectedItem?.tmdbTrailerUrl" class="flex min-h-[220px] flex-col items-center justify-center gap-3 px-6 py-10 text-center">
+                <span class="flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/25 bg-amber-300/10 text-amber-300"><i class="fa-solid fa-film text-xl"></i></span>
+                <p class="text-base font-bold text-white">Fragman bulunamadı</p>
+                <p class="max-w-md text-sm leading-6 text-gray-400">Bu yapım için şu anda izlenebilir bir fragman bağlantısı bulunmuyor.</p>
             </div>
         </div>
     </div>
