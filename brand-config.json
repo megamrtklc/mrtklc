@@ -1,10 +1,10 @@
 {
-  "brandName": "MRTSINEMA",
-  "shortName": "MRT",
+  "brandName": "Perde Film",
+  "shortName": "Perde",
   "slogan": "Film ve dizi arşivinin kişisel merkezi",
-  "pageTitle": "MRTSINEMA",
-  "metaDescription": "CINEVERSE ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.",
-  "copyright": "© 2026 MRTSINEMA. Tüm hakları saklıdır.",
+  "pageTitle": "Perde Film",
+  "metaDescription": "Perdefilm ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.",
+  "copyright": "© 2026 PERDEFILM. Tüm hakları saklıdır.",
   "adminSubtitle": "YONETIM PANELI",
   "scopes": {
     "site": true,
