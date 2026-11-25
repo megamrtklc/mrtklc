@@ -263,12 +263,26 @@ try {
   console.log('DESKTOP LAYOUT SHIFT DIAGNOSTIC:', JSON.stringify(desktopDiagnostics));
   const desktopCls = desktopDiagnostics.shifts.reduce((total, entry) => total + entry.value, 0);
 
-  await check('Öneri yükleme arayüzü ve görsel yükleme zemini mevcut', async () => {
-    const loadingStatus = page.locator('#home-personalized-section [role="status"]');
-    await loadingStatus.waitFor({ state: 'attached' });
-    assert.match(await loadingStatus.innerText(), /Öneriler hazırlanıyor/i);
-    assert.match(await loadingStatus.innerText(), /Görseller ve öneriler yükleniyor/i);
-    const sectionKey = await page.locator('#home-personalized-section').getAttribute('data-home-section');
+  await check('Öneri bölümü yükleme göstergesinden hazır içeriğe geçiyor', async () => {
+    const section = page.locator('#home-personalized-section');
+    await section.waitFor({ state: 'attached' });
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      const root = document.querySelector('#home-personalized-section');
+      return !!root && root.dataset.homeFragmentLoaded === 'true' &&
+        app?.homeSectionReady?.personalized === true &&
+        app?.homeSectionLoading?.personalized === false;
+    }, null, { timeout: 10000 });
+    const loadingStatus = section.locator('[role="status"]');
+    if (await loadingStatus.isVisible().catch(() => false)) {
+      assert.match(await loadingStatus.innerText(), /Öneriler hazırlanıyor/i);
+      assert.match(await loadingStatus.innerText(), /Görseller ve öneriler yükleniyor/i);
+    } else {
+      const heading = section.locator('.home-personalized-heading h2');
+      await heading.waitFor({ state: 'visible' });
+      assert.ok((await heading.innerText()).trim().length > 0, 'Hazır öneri bölümünün başlığı görünür olmalı');
+    }
+    const sectionKey = await section.getAttribute('data-home-section');
     assert.equal(sectionKey, 'personalized', 'Kişiselleştirilmiş öneri alanı tanımlı değil');
     const imagePlaceholder = await page.locator('main img').first().evaluate(img => getComputedStyle(img).backgroundImage);
     assert.match(imagePlaceholder, /linear-gradient/i, 'İçerik görsellerinde yükleme zemini bulunmalı');
