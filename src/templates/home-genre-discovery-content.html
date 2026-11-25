@@ -10,6 +10,11 @@
                             <p class="home-genre-discovery-subtitle mt-2">Sana uygun türü seç, keşfetmeye hemen başla.</p>
                         </div>
                     </div>
+                    <template x-if="homeSectionReady['genre-discovery'] && !homeDiscoveryGenres.length">
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-white/[0.025] px-5 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                            Keşif türleri şu anda hazırlanamadı. Sayfayı yenilediğinde yeniden deneyebilirsin.
+                        </div>
+                    </template>
                     <div class="home-genre-discovery-grid" :class="{ 'is-collapsed': !showAllGenres }">
                         <template x-for="genre in (homeSectionReady['genre-discovery'] ? homeDiscoveryGenres : [])" :key="'home-genre-' + genre.name">
                             <button type="button" @click="selectPersonalizedGenre(genre.name); navigateTo('explore')" class="home-genre-discovery-card group" :aria-label="genre.label + ' yapımlarını keşfet'">
