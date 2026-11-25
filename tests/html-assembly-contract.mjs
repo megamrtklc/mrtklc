@@ -65,7 +65,6 @@ assert.match(watchPage, /currentPage === "watch"|currentPage === 'watch'/,
   'İzleme partial dosyası watch sayfa koşulunu içermeli.');
 assert.match(watchPage, /PERDE_TEMPLATE:WATCH_LEFT/);
 assert.match(watchPage, /PERDE_TEMPLATE:WATCH_RIGHT/);
-assert.match(watchPage, /PERDE_TEMPLATE:WATCH_TRAILER_MODAL/);
 assert.match(watchLeftColumn, /customVideoPlayer/, 'Sol kolon video oynatıcıyı içermeli.');
 assert.match(watchRightColumn, /Benzer Yapımlar/, 'Sağ kolon benzer yapımları içermeli.');
 assert.match(shell, /x-show="watchTrailerOpen"/, 'Fragman penceresi kalıcı ana kabukta ve ana Alpine kapsamındaki durum değişkeniyle bulunmalı.');
