@@ -987,14 +987,19 @@
                         if (key === 'personalized') {
                             const activate = () => {
                                 if (!section.isConnected || this.currentPage !== 'home') return;
-                                // Öneri puanlaması tamamlanınca tüm alanı tek seferde aç.
-                                this.displayedPersonalizedRecommendations;
-                                this.homeSectionReady.personalized = true;
-                                this.$nextTick(() => {
-                                    this.prepareHomePersonalizedVariant(section);
-                                    this.homeSectionLoading.personalized = false;
-                                    if (section.isConnected && this.currentPage === 'home') section.style.removeProperty('visibility');
-                                });
+                                try {
+                                    // Öneri hesabı hata verse veya boş sonuç dönse bile yükleme göstergesi açık kalmasın.
+                                    this.displayedPersonalizedRecommendations;
+                                } catch (error) {
+                                    console.error('[Perde personalized recommendations]', error);
+                                } finally {
+                                    this.homeSectionReady.personalized = true;
+                                    this.$nextTick(() => {
+                                        this.prepareHomePersonalizedVariant(section);
+                                        this.homeSectionLoading.personalized = false;
+                                        if (section.isConnected && this.currentPage === 'home') section.style.removeProperty('visibility');
+                                    });
+                                }
                             };
                             if (window.matchMedia('(max-width: 767px)').matches) {
                                 window.setTimeout(() => {
