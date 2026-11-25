@@ -16,7 +16,7 @@
     };
     const pageCache = new Map();
     const pageStyleCache = new Map();
-    const buildVersion = '20261125-lazy-pages-v21';
+    const buildVersion = '20261125-lazy-pages-v22';
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
@@ -26,7 +26,7 @@
 
     // Keşfet algoritmalarını yalnızca ilgili rota açıldığında yükle.
     const pageScripts = {
-        explore: './js/discovery.min.js?v=20261124-discovery-min-v1',
+        explore: './js/discovery.min.js?v=20261124-discovery-min-v2',
         people: './js/people.js?v=20261125-people-v2',
         'watch-recommendations': './js/watch-recommendations.js?v=20261124-watch-recommendations-v1',
         'watch-page': './js/watch-page.js?v=20261125-watch-page-v4',
