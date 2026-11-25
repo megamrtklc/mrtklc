@@ -105,7 +105,8 @@ assert.match(footer, /CineVerse Responsive Footer/, 'Footer partial dosyası alt
 assert.match(footer, /footerConfig/, 'Footer partial dosyası yönetilebilir footer ayarlarını içermeli.');
 
 assert.match(output, /<header x-show="headerConfig.enabled !== false"/, 'Üretilmiş index header alanını içermeli.');
-assert.match(output, /cineverse-search-dialog/, 'Üretilmiş index genel arama penceresini içermeli.');
+const runtimeSearchOverlay = await readFile('runtime-pages/search-overlay.html', 'utf8');
+assert.match(runtimeSearchOverlay, /cineverse-search-dialog/, 'Gecikmeli arama penceresi runtime dosyasında bulunmalı.');
 assert.match(output, /<footer id="cineverse-footer"/, 'Üretilmiş index footer alanını içermeli.');
 assert.match(output, /<template x-if="currentPage === 'home'">/,
   'Üretilmiş index ana sayfa görünümünü ilk HTML içinde tutmalı.');
