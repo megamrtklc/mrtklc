@@ -1047,6 +1047,7 @@
                                 }, 1400);
                             } else activate();
                         }
+                        section.style.removeProperty('min-height');
                         if (key !== 'personalized') window.requestAnimationFrame(() => section.style.removeProperty('visibility'));
                         return true;
                     };
@@ -1063,8 +1064,10 @@
                         }
                         section.removeAttribute('x-cloak');
                         section.style.removeProperty('display');
-                        // Harici HTML parçası yüklenirken katalog iskeletini görünür tut.
+                        // Harici bölüm gelene kadar sıfır yükseklikli yer tutucuyu gözlemlenebilir tut.
                         section.style.visibility = section.dataset.homeFragment ? 'visible' : 'hidden';
+                        const rect = section.getBoundingClientRect();
+                        if (rect.width > 0 && rect.height === 0) section.style.setProperty('min-height', '1px', 'important');
                     });
 
                     const pending = sections.filter(section =>
@@ -1074,18 +1077,8 @@
 
                     if (!pending.length) return;
 
-                    // Boş HTML iskeletleri sıfır yükseklikte kaldığında IntersectionObserver bunları göremeyebilir.
-                    // Görünür ve genişliği olan sıfır-yükseklikli rafları doğrudan yükleyerek bölümlerin takılmasını önle.
-                    const zeroHeightPending = pending.filter(section => {
-                        const rect = section.getBoundingClientRect();
-                        return rect.width > 0 && rect.height === 0 && window.getComputedStyle(section).display !== 'none';
-                    });
-                    zeroHeightPending.forEach(hydrateSection);
-
-                    // Ana sayfanın küçük rafları eski düzende ilk yüklemede hazırdı.
-                    // Modüler HTML parçalarını da etkin olduklarında hemen yükle; yalnızca büyük katalog rafı gözlemciyle geciksin.
-                    pending.filter(section => section.dataset.homeSection !== 'catalog').forEach(hydrateSection);
-
+                    // Ana sayfa raflarını tek tek, kullanıcı görünür alana yaklaştığında yükle.
+                    // Böylece aşağıdaki bölümlerin aynı anda açılıp üstteki içeriği kaydırması önlenir.
                     if (!('IntersectionObserver' in window)) {
                         pending.forEach(hydrateSection);
                         return;
@@ -1094,15 +1087,16 @@
                     const mobileObserver = window.matchMedia('(max-width: 767px)').matches;
                     const tvObserver = document.documentElement.classList.contains('cv-tv-mode');
                     const observer = new IntersectionObserver(entries => {
-                        entries.forEach(entry => {
-                            if (!entry.isIntersecting) return;
-                            // Mobilde ağır öneri rafı ve Son Eklenenler, görünür alanın anlamlı kısmına gelmeden başlatılmasın.
-                            const sectionKey = entry.target.dataset.homeSection;
-                            if (mobileObserver && ['personalized', 'new-arrivals'].includes(sectionKey) && entry.intersectionRatio < 0.5) return;
-                            const hydrated = hydrateSection(entry.target);
-                            if (hydrated !== false) observer.unobserve(entry.target);
-                        });
-                    }, { rootMargin: tvObserver ? '72px 0px' : (mobileObserver ? '100px 0px' : '180px 0px'), threshold: [0, 0.5] });
+                        // Aynı anda görünen sıfır-yükseklikli yer tutucuların hepsini birden açma.
+                        // Bir bölüm açıldıktan sonra diğerlerinin yeni konumuna göre tekrar gözlem yap.
+                        const entry = entries.find(candidate => candidate.isIntersecting);
+                        if (!entry) return;
+                        // Mobilde ağır öneri rafı ve Son Eklenenler, görünür alanın anlamlı kısmına gelmeden başlatılmasın.
+                        const sectionKey = entry.target.dataset.homeSection;
+                        if (mobileObserver && ['personalized', 'new-arrivals'].includes(sectionKey) && entry.intersectionRatio < 0.5) return;
+                        const hydrated = hydrateSection(entry.target);
+                        if (hydrated !== false) observer.unobserve(entry.target);
+                    }, { rootMargin: tvObserver ? '72px 0px' : (mobileObserver ? '100px 0px' : '0px'), threshold: [0, 0.5] });
 
                     pending.forEach(section => observer.observe(section));
                     window.__cineverseHomeSectionObserver = observer;
