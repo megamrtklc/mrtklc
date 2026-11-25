@@ -17,6 +17,8 @@
             this.personSearchResults = [];
             this.personSearchLoading = false;
             if (query.length < 2 || !queryTokens.length) return;
+            // Yapım açıklamaları yalnızca kullanıcı gerçekten arama yaptığında indirilir.
+            this.loadCatalogDescriptionsData?.();
             // Oyuncu araması gerçek kullanıcı niyetidir; gerekiyorsa geniş kadro verisini şimdi getir.
             if (!window.__cvCatalogCastPromise) {
                 this.loadCatalogCastData().then(() => {
