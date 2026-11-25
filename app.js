@@ -2023,17 +2023,13 @@
                 async openDirectorProfile(actor, updateUrl = true) { await window.perdeEnsurePageScript?.('people'); return window.PerdePeople?.openDirectorProfile.call(this, actor, updateUrl); },
 
 
-                openActorCredit(item) {
-                    const match = this.catalog.find(entry => String(entry.tmdbId || '') === String(item.id) && entry.type === item.type);
-                    if (match) this.openWatchPage(match);
-                },
 
-                formatActorDate(value) {
-                    if (!value) return '';
-                    const parts = String(value).split('-');
-                    return parts.length === 3 ? parts[2] + '.' + parts[1] + '.' + parts[0] : value;
-                },
 
+
+
+                openActorCredit(...args) { return window.PerdePeople?.openActorCredit.apply(this, args); },
+                formatActorDate(...args) { return window.PerdePeople?.formatActorDate.apply(this, args) || ''; },
+                formatActorDeathInfo(...args) { return window.PerdePeople?.formatActorDeathInfo.apply(this, args) || ''; },
                 isEnglishBiography(text) {
                     const words = String(text || '').toLowerCase().match(/[a-z']+/g) || [];
                     if (words.length < 12) return false;
@@ -2044,17 +2040,7 @@
                 async translateSelectedBiography() { await window.perdeEnsurePageScript?.('people'); return window.PerdePeople?.translateSelectedBiography.call(this); },
 
 
-                formatActorDeathInfo(deathday, birthday) {
-                    if (!deathday) return '';
-                    const dateLabel = this.formatActorDate(deathday);
-                    if (!birthday) return dateLabel;
-                    const deathParts = String(deathday).split('-').map(Number);
-                    const birthParts = String(birthday).split('-').map(Number);
-                    if (deathParts.length !== 3 || birthParts.length !== 3 || [...deathParts, ...birthParts].some(part => !Number.isFinite(part) || part <= 0)) return dateLabel;
-                    let age = deathParts[0] - birthParts[0];
-                    if (deathParts[1] < birthParts[1] || (deathParts[1] === birthParts[1] && deathParts[2] < birthParts[2])) age--;
-                    return dateLabel + ' · ' + age + ' yaşında';
-                },
+
 
                 openWatchPage(item, updateUrl = true) {
                     this.selectedItem = item;
