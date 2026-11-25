@@ -44,10 +44,17 @@ if (!heroCatalog.length) throw new Error('Manşet listeleriyle eşleşen katalog
 const castData = {};
 const compactCatalog = catalog.map(item => {
   const key = String(item.id ?? item.tmdbId ?? item.title);
-  if (Array.isArray(item.tmdbCast) && item.tmdbCast.length) castData[key] = item.tmdbCast;
   const cast = Array.isArray(item.tmdbCast) && item.tmdbCast.length
     ? item.tmdbCast
     : (Array.isArray(item.cast) ? item.cast : []);
+  // Ayrıntılı kadroyu ana katalogdan çıkar; TMDB kadrosu yoksa mevcut isimleri de ayrı dosyada koru.
+  if (cast.length) {
+    castData[key] = cast
+      .map((person, index) => typeof person === 'string'
+        ? { name: person, character: '', profile: '', order: index }
+        : (person && typeof person === 'object' ? { ...person, order: person.order ?? index } : null))
+      .filter(person => person && (person.name || person.id));
+  }
   const compact = {
     ...item,
     id: item.id ?? item.tmdbId ?? item.title,
@@ -71,9 +78,10 @@ const compactCatalog = catalog.map(item => {
   };
   // Normalleştirilmiş alanlar yukarıda korunuyor; tekrar eden TMDB eş alanlarını ilk yükten çıkar.
   for (const field of [
-    'tmdbCast', 'tmdbOverview', 'tmdbPoster', 'tmdbBackdrop', 'tmdbTrailerUrl',
+    'cast', 'tmdbCast', 'tmdbOverview', 'tmdbPoster', 'tmdbBackdrop', 'tmdbTrailerUrl',
     'tmdbRuntime', 'tmdbSeasons', 'tmdbEpisodes', 'tmdbTitle', 'tmdbOriginalTitle',
-    'tmdbReleaseDate', 'tmdbGenres', 'tmdbCountries', 'tmdbDirector', 'image'
+    'tmdbReleaseDate', 'tmdbGenres', 'tmdbCountries', 'tmdbDirector', 'image',
+    'tmdbSyncedAt', 'ratingCount', 'tmdbVoteCount'
   ]) delete compact[field];
   return compact;
 });
