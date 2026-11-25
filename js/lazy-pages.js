@@ -16,7 +16,7 @@
     };
     const pageCache = new Map();
     const pageStyleCache = new Map();
-    const buildVersion = '20261125-lazy-pages-v24';
+    const buildVersion = '20261125-lazy-pages-v25';
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
@@ -35,7 +35,7 @@
         library: './js/library-page.js?v=20261125-library-page-v1'
     };
     const pageScriptRoutes = {
-        home: ['watch-recommendations'],
+        home: ['watch-recommendations', 'library'],
         watch: ['people', 'watch-recommendations', 'player', 'watch-page'],
         'actor-director': ['people'],
         explore: ['explore'],
