@@ -276,6 +276,8 @@
                 heroPaused: false,
                 catalogLoading: true,
                 catalogError: null,
+                catalogDetailsById: null,
+                catalogDetailsPromise: null,
                 homeSectionReady: {
                     personalized: false,
                     continue: false,
@@ -460,6 +462,9 @@
                     const cacheKey = item.type + ':' + item.tmdbId;
                     if (this.tmdbDetailsCache[cacheKey]) {
                         Object.assign(item, this.tmdbDetailsCache[cacheKey]);
+                        const localDescription = this.catalogDetailsById?.[String(item.id)]?.desc;
+                        if (localDescription) item.desc = localDescription;
+                        if (this.selectedItem && String(this.selectedItem.id) === String(item.id)) this.selectedItem.desc = item.desc;
                         this.updateSelectedWatchRoute(item);
                         if (item.type === 'tv') await this.loadSeasonEpisodes(this.selectedSeason || 1, item);
                         return;
@@ -495,7 +500,7 @@
                             poster,
                             image: poster,
                             backdrop,
-                            desc: details.overview || item.desc,
+                            desc: this.catalogDetailsById?.[String(item.id)]?.desc || details.overview || item.desc,
                             tmdbOverview: details.overview || item.tmdbOverview,
                             rating: String(details.vote_average ?? item.rating),
                             tmdbRating: String(details.vote_average ?? item.tmdbRating),
@@ -566,6 +571,33 @@
                         seasons: item.seasons ?? item.tmdbSeasons ?? null,
                         episodes: item.episodes ?? item.tmdbEpisodes ?? null
                     };
+                },
+
+                // Uzun yapım açıklamalarını yalnızca detay sayfası açıldığında indirir.
+                async loadCatalogDetailsData(itemId) {
+                    if (!this.catalogDetailsPromise) {
+                        this.catalogDetailsPromise = (async () => {
+                            const response = await fetch('./catalog-details.json?v=20261125-details-v1', { cache: 'default' });
+                            if (!response.ok) throw new Error('Yapım detayları yüklenemedi: HTTP ' + response.status);
+                            const data = await response.json();
+                            if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Yapım detay dosyası geçersiz.');
+                            this.catalogDetailsById = data;
+                            return data;
+                        })().catch(error => {
+                            this.catalogDetailsPromise = null;
+                            console.warn('Yapım açıklamaları yüklenemedi:', error);
+                            return null;
+                        });
+                    }
+                    const details = await this.catalogDetailsPromise;
+                    const description = details?.[String(itemId)]?.desc;
+                    if (typeof description !== 'string' || !description.trim()) return false;
+                    const catalogItem = (this.catalog || []).find(entry => String(entry.id) === String(itemId));
+                    if (catalogItem) catalogItem.desc = description;
+                    if (this.selectedItem && String(this.selectedItem.id) === String(itemId)) {
+                        this.selectedItem = { ...this.selectedItem, desc: description };
+                    }
+                    return true;
                 },
 
                 async loadCatalogCastData() {
@@ -642,7 +674,7 @@
                     });
                     // Manşet ayrı bootstrap verisiyle çizilir; ana katalog isteğini bekletmeden başlat.
                     // Düşük öncelik, ilk manşet görsellerinin ağ önceliğini korurken indirmeyi erkenden başlatır.
-                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261117-franchise-data-v1', { cache: 'no-cache' });
+                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261125-details-split-v1', { cache: 'no-cache' });
                     try {
                         // İlk açılışta başlatılan ortak JSON isteğini kullan; mobil görsel ön yükleyici de aynı yanıtı paylaşır.
                         // Ortak istek yoksa JSON dosyasına doğrudan geri dön.
@@ -2044,6 +2076,7 @@
 
                 openWatchPage(item, updateUrl = true) {
                     this.selectedItem = item;
+                    this.loadCatalogDetailsData(item.id);
                     this.selectedSeason = 1;
                     this.selectedEpisode = 1;
                     this.currentEpisodePage = 1;
