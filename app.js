@@ -501,8 +501,8 @@
                     };
                 },
 
-                // Uzun yapım açıklamalarını yalnızca detay sayfası açıldığında indirir.
-                async loadCatalogDetailsData(itemId) {
+                // Açıklama dosyasını yalnızca arama, keşif, görünür ana sayfa rafı veya detay sayfası istediğinde indir.
+                async loadCatalogDescriptionsData() {
                     if (!this.catalogDetailsPromise) {
                         this.catalogDetailsPromise = (async () => {
                             const response = await fetch('./catalog-details.json?v=20261125-details-v1', { cache: 'default' });
@@ -518,12 +518,28 @@
                         });
                     }
                     const details = await this.catalogDetailsPromise;
+                    if (!details) return null;
+                    const byId = new Map((this.catalog || []).map(item => [String(item.id), item]));
+                    Object.entries(details).forEach(([id, entry]) => {
+                        const description = entry?.desc;
+                        if (typeof description !== 'string' || !description.trim()) return;
+                        const item = byId.get(String(id));
+                        if (item && !item.desc) item.desc = description;
+                        if (this.selectedItem && String(this.selectedItem.id) === String(id) && this.selectedItem.desc !== description) {
+                            this.selectedItem = { ...this.selectedItem, desc: item?.desc || description };
+                        }
+                    });
+                    return details;
+                },
+
+                async loadCatalogDetailsData(itemId) {
+                    const details = await this.loadCatalogDescriptionsData();
                     const description = details?.[String(itemId)]?.desc;
                     if (typeof description !== 'string' || !description.trim()) return false;
                     const catalogItem = (this.catalog || []).find(entry => String(entry.id) === String(itemId));
-                    if (catalogItem) catalogItem.desc = description;
-                    if (this.selectedItem && String(this.selectedItem.id) === String(itemId)) {
-                        this.selectedItem = { ...this.selectedItem, desc: description };
+                    if (catalogItem && !catalogItem.desc) catalogItem.desc = description;
+                    if (this.selectedItem && String(this.selectedItem.id) === String(itemId) && this.selectedItem.desc !== description) {
+                        this.selectedItem = { ...this.selectedItem, desc: catalogItem?.desc || description };
                     }
                     return true;
                 },
@@ -596,6 +612,7 @@
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     });
                     this.$watch('currentPage', page => {
+                        if (['explore', 'movies', 'series', 'turkish', 'new-arrivals'].includes(page)) this.loadCatalogDescriptionsData();
                         if (page === 'home') this.$nextTick(async () => {
                             // x-if anasayfayı yeniden oluşturur; öneri algoritmasını bölümlerden önce yükle.
                             Object.keys(this.homeSectionReady).forEach(key => { this.homeSectionReady[key] = false; });
@@ -917,6 +934,28 @@
                         !(document.documentElement.classList.contains('cv-tv-mode') && element.dataset.homeSection === 'personalized') &&
                         element.hasAttribute('x-ignore')
                     );
+
+                    // Açıklamaları ilk katalog isteğine ekleme; ana sayfada açıklama kullanan raf görünür olunca yükle.
+                    window.__cineverseHomeDescriptionObserver?.disconnect();
+                    const descriptionSections = sections.filter(section =>
+                        ['personalized', 'new-arrivals', 'catalog'].includes(section.dataset.homeSection) &&
+                        this.isHomepageSectionVisible(section.dataset.homeSection)
+                    );
+                    if (descriptionSections.length && 'IntersectionObserver' in window) {
+                        const descriptionObserver = new IntersectionObserver(entries => {
+                            if (!entries.some(entry => entry.isIntersecting)) return;
+                            descriptionObserver.disconnect();
+                            window.__cineverseHomeDescriptionObserver = null;
+                            this.loadCatalogDescriptionsData();
+                        }, { rootMargin: '0px', threshold: 0.01 });
+                        descriptionSections.forEach(section => descriptionObserver.observe(section));
+                        window.__cineverseHomeDescriptionObserver = descriptionObserver;
+                    } else if (descriptionSections.some(section => {
+                        const rect = section.getBoundingClientRect();
+                        return rect.top < window.innerHeight && rect.bottom > 0;
+                    })) {
+                        this.loadCatalogDescriptionsData();
+                    }
 
                     // Büyük katalog rafının HTML'ini yalnızca kullanıcı o bölüme yaklaşınca indir.
                     const fragmentFallbacks = new WeakMap();
@@ -2186,6 +2225,7 @@
                     return currentId ? this.sortedFilteredCatalog.find(item => String(item.id ?? item.title ?? '') === currentId) || null : null;
                 },
                 initializeDiscovery() {
+                    this.loadCatalogDescriptionsData();
                     return window.PerdeDiscovery?.initializeDiscovery.call(this);
                 },
                 pickAnotherDiscovery() {
