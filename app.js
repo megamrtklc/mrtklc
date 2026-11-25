@@ -2156,6 +2156,16 @@
                 getSimilarItems(item) {
                     return window.PerdeWatchRecommendations?.getSimilarItems.call(this, item) || [];
                 },
+                // Öneri modülündeki getter'ları ana Alpine kapsamına bağla; modülerleştirme sonrası
+                // ana sayfa şablonlarının doğrudan kullandığı veri erişimini koru.
+                get personalizedRecommendations() {
+                    const module = window.PerdeWatchRecommendations;
+                    return module ? Object.getOwnPropertyDescriptor(module, 'personalizedRecommendations')?.get?.call(this) || [] : [];
+                },
+                get homeDiscoveryGenres() {
+                    const module = window.PerdeWatchRecommendations;
+                    return module ? Object.getOwnPropertyDescriptor(module, 'homeDiscoveryGenres')?.get?.call(this) || [] : [];
+                },
 
                 selectPersonalizedGenre(genre) {
                     this.searchQuery = '';
