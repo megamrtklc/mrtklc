@@ -2140,9 +2140,6 @@
                 pickAnotherDiscovery() {
                     return window.PerdeDiscovery?.pickAnotherDiscovery.call(this);
                 },
-                get watchableCatalog() {
-                    return this.catalog.filter(item => typeof item.watchUrl === 'string' && item.watchUrl.trim().length > 0);
-                },
 
                 get sortedFilteredCatalog() {
                     const query = this.normalizeSearchText(this.searchQuery);
