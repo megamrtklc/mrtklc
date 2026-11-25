@@ -5,6 +5,28 @@
 (function () {
     'use strict';
     window.PerdeWatchPage = {
+        // İzleme ekranındaki kartların tema renklerini belirler.
+        getCardClass() {
+            if (this.theme === 'ivory') return 'bg-ivory-card border-ivory-200';
+            if (this.theme === 'slate') return 'bg-slateLight-card border-slateLight-200';
+            return 'bg-[#161922] border-gray-800';
+        },
+        // İzleme ekranındaki kullanıcı yorumlarını okur ve kaydeder.
+        getReviews(itemId) {
+            return this.reviews[itemId] || [];
+        },
+        submitReview() {
+            if (!this.userCommentText.trim() || !this.selectedItem) return;
+            if (!Array.isArray(this.reviews[this.selectedItem.id])) this.reviews[this.selectedItem.id] = [];
+            this.reviews[this.selectedItem.id].unshift({
+                author: this.currentProfile.name,
+                rating: this.userRating,
+                comment: this.userCommentText,
+                date: new Date().toLocaleDateString()
+            });
+            safeStorageWrite('cine_reviews', this.reviews);
+            this.userCommentText = '';
+        },
         getWatchCardOrder(cardId) {
             const defaults = {
                 left: ['player','season','episodes','synopsis','reviews'],
