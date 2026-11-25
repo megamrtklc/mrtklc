@@ -21,7 +21,6 @@ const partialPaths = {
   WATCH: 'src/templates/watch-page.html',
   WATCH_LEFT: 'src/templates/watch-left-column.html',
   WATCH_RIGHT: 'src/templates/watch-right-column.html',
-  WATCH_TRAILER_MODAL: 'src/templates/watch-trailer-modal.html',
   ACTOR_DIRECTOR: 'src/templates/actor-director-page.html',
   EXPLORE: 'src/templates/explore-page.html',
   FRANCHISES: 'src/templates/franchises-page.html',
@@ -50,7 +49,7 @@ function replacePartialMarkers(source, names, context) {
 }
 
 const runtimePages = {
-  watch: { marker: 'WATCH', nested: ['WATCH_LEFT', 'WATCH_RIGHT', 'WATCH_TRAILER_MODAL'] },
+  watch: { marker: 'WATCH', nested: ['WATCH_LEFT', 'WATCH_RIGHT'] },
   'actor-director': { marker: 'ACTOR_DIRECTOR', nested: [] },
   explore: { marker: 'EXPLORE', nested: [] },
   franchises: { marker: 'FRANCHISES', nested: [] },
