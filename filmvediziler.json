@@ -21331,9 +21331,9 @@
       ],
       "visibility": {
         "watched": true,
-        "personalized": false,
-        "published-collections": false,
-        "series-tracking": false,
+        "personalized": true,
+        "published-collections": true,
+        "series-tracking": true,
         "genre-discovery": true
       },
       "labels": {}
