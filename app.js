@@ -935,28 +935,6 @@
                         element.hasAttribute('x-ignore')
                     );
 
-                    // Açıklamaları ilk katalog isteğine ekleme; ana sayfada açıklama kullanan raf görünür olunca yükle.
-                    window.__cineverseHomeDescriptionObserver?.disconnect();
-                    const descriptionSections = sections.filter(section =>
-                        ['personalized', 'new-arrivals', 'catalog'].includes(section.dataset.homeSection) &&
-                        this.isHomepageSectionVisible(section.dataset.homeSection)
-                    );
-                    if (descriptionSections.length && 'IntersectionObserver' in window) {
-                        const descriptionObserver = new IntersectionObserver(entries => {
-                            if (!entries.some(entry => entry.isIntersecting)) return;
-                            descriptionObserver.disconnect();
-                            window.__cineverseHomeDescriptionObserver = null;
-                            this.loadCatalogDescriptionsData();
-                        }, { rootMargin: '0px', threshold: 0.01 });
-                        descriptionSections.forEach(section => descriptionObserver.observe(section));
-                        window.__cineverseHomeDescriptionObserver = descriptionObserver;
-                    } else if (descriptionSections.some(section => {
-                        const rect = section.getBoundingClientRect();
-                        return rect.top < window.innerHeight && rect.bottom > 0;
-                    })) {
-                        this.loadCatalogDescriptionsData();
-                    }
-
                     // Büyük katalog rafının HTML'ini yalnızca kullanıcı o bölüme yaklaşınca indir.
                     const fragmentFallbacks = new WeakMap();
                     const hydrateSection = section => {
@@ -997,6 +975,7 @@
                                     if (!section.isConnected) return;
                                     if (!html || !html.trim()) throw new Error('Bölüm dosyası boş döndü.');
                                     section.innerHTML = html;
+                                    if (['personalized', 'new-arrivals', 'catalog'].includes(key)) this.loadCatalogDescriptionsData();
                                     section.dataset.homeFragmentLoaded = 'true';
                                     delete section.dataset.homeFragmentLoading;
                                     hydrateSection(section);
@@ -1089,11 +1068,12 @@
                     const observer = new IntersectionObserver(entries => {
                         // Aynı anda görünen sıfır-yükseklikli yer tutucuların hepsini birden açma.
                         // Bir bölüm açıldıktan sonra diğerlerinin yeni konumuna göre tekrar gözlem yap.
-                        const entry = entries.find(candidate => candidate.isIntersecting);
+                        const entry = entries.find(candidate => {
+                            if (!candidate.isIntersecting) return false;
+                            const key = candidate.target.dataset.homeSection;
+                            return !(mobileObserver && ['personalized', 'new-arrivals'].includes(key) && candidate.intersectionRatio < 0.5);
+                        });
                         if (!entry) return;
-                        // Mobilde ağır öneri rafı ve Son Eklenenler, görünür alanın anlamlı kısmına gelmeden başlatılmasın.
-                        const sectionKey = entry.target.dataset.homeSection;
-                        if (mobileObserver && ['personalized', 'new-arrivals'].includes(sectionKey) && entry.intersectionRatio < 0.5) return;
                         const hydrated = hydrateSection(entry.target);
                         if (hydrated !== false) observer.unobserve(entry.target);
                     }, { rootMargin: tvObserver ? '72px 0px' : (mobileObserver ? '100px 0px' : '0px'), threshold: [0, 0.5] });
