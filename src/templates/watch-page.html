@@ -7,7 +7,7 @@
 -->
 <!-- ==================== WATCH / DETAIL PAGE ==================== -->
         <template x-if="currentPage === 'watch'">
-            <div class="w-full px-6 sm:px-12 pt-2 space-y-6 pb-16" @keydown.escape.window="cinemaMode = false; document.body.style.overflow = ''; watchTrailerOpen = false" @keydown.window="handlePlayerKeydown($event)">
+            <div x-data="{ trailerOpen: false, trailerItem: null }" class="w-full px-6 sm:px-12 pt-2 space-y-6 pb-16" @keydown.escape.window="cinemaMode = false; document.body.style.overflow = ''; trailerOpen = false; trailerItem = null" @keydown.window="handlePlayerKeydown($event)">
                 <div x-show="cinemaMode" x-transition.opacity @click="toggleCinemaMode()" class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-md"></div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
