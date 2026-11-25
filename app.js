@@ -34,7 +34,7 @@
                             if (!window.PerdeSearchPeople) {
                                 await new Promise((resolve, reject) => {
                                     const script = document.createElement('script');
-                                    script.src = './js/search-people.js?v=20261125-search-people-v2';
+                                    script.src = './js/search-people.js?v=20261125-search-people-v3';
                                     script.onload = resolve;
                                     script.onerror = () => {
                                         script.remove();
