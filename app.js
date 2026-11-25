@@ -220,10 +220,8 @@
                     return 'bg-[#0f1115]/95 border-gray-800/80';
                 },
 
-                getCardClass() {
-                    if (this.theme === 'ivory') return 'bg-ivory-card border-ivory-200';
-                    if (this.theme === 'slate') return 'bg-slateLight-card border-slateLight-200';
-                    return 'bg-[#161922] border-gray-800';
+                getCardClass(...args) {
+                    return window.PerdeWatchPage?.getCardClass.apply(this, args) || 'bg-[#161922] border-gray-800';
                 },
 
                 getMutedTextClass() {
@@ -1687,21 +1685,12 @@
 
                 reviews: (() => { const value = safeStorageRead('cine_reviews', {}); return value && typeof value === 'object' && !Array.isArray(value) ? value : {}; })(),
 
-                getReviews(itemId) {
-                    return this.reviews[itemId] || [];
+                getReviews(...args) {
+                    return window.PerdeWatchPage?.getReviews.apply(this, args) || [];
                 },
 
-                submitReview() {
-                    if (!this.userCommentText.trim() || !this.selectedItem) return;
-                    if (!Array.isArray(this.reviews[this.selectedItem.id])) this.reviews[this.selectedItem.id] = [];
-                    this.reviews[this.selectedItem.id].unshift({
-                        author: this.currentProfile.name,
-                        rating: this.userRating,
-                        comment: this.userCommentText,
-                        date: new Date().toLocaleDateString()
-                    });
-                    safeStorageWrite('cine_reviews', this.reviews);
-                    this.userCommentText = '';
+                submitReview(...args) {
+                    return window.PerdeWatchPage?.submitReview.apply(this, args);
                 },
 
                 get franchiseEntries() {
