@@ -957,7 +957,10 @@
                                 section.dataset.homeStylesReady = 'true';
                                 delete section.dataset.homeStylesLoading;
                                 const hydrated = hydrateSection(section);
-                                if (hydrated !== false) window.__cineverseHomeSectionObserver?.unobserve(section);
+                                if (hydrated !== false) {
+                                    window.__cineverseHomeSectionObserver?.unobserve(section);
+                                    reobservePendingSections();
+                                }
                             });
                             return false;
                         }
@@ -980,6 +983,7 @@
                                     delete section.dataset.homeFragmentLoading;
                                     hydrateSection(section);
                                     window.__cineverseHomeSectionObserver?.unobserve(section);
+                                    reobservePendingSections();
                                 })
                                 .catch(error => {
                                     if (!section.isConnected) return;
@@ -991,6 +995,8 @@
                                         hydrateSection(section);
                                     });
                                     section.style.removeProperty('visibility');
+                                    window.__cineverseHomeSectionObserver?.unobserve(section);
+                                    reobservePendingSections();
                                 });
                             return false;
                         }
@@ -1056,6 +1062,21 @@
 
                     if (!pending.length) return;
 
+                    // Bir raf açıldığında kalan yer tutucuları yeni konumlarıyla yeniden gözlemle.
+                    const reobservePendingSections = () => {
+                        window.requestAnimationFrame(() => {
+                            const activeObserver = window.__cineverseHomeSectionObserver;
+                            if (!activeObserver) return;
+                            pending.forEach(section => {
+                                if (!section.isConnected || !section.hasAttribute('x-ignore') ||
+                                    section.dataset.homeFragmentLoading === 'true' ||
+                                    section.dataset.homeStylesLoading === 'true') return;
+                                activeObserver.unobserve(section);
+                                activeObserver.observe(section);
+                            });
+                        });
+                    };
+
                     // Ana sayfa raflarını tek tek, kullanıcı görünür alana yaklaştığında yükle.
                     // Böylece aşağıdaki bölümlerin aynı anda açılıp üstteki içeriği kaydırması önlenir.
                     if (!('IntersectionObserver' in window)) {
@@ -1075,7 +1096,10 @@
                         });
                         if (!entry) return;
                         const hydrated = hydrateSection(entry.target);
-                        if (hydrated !== false) observer.unobserve(entry.target);
+                        if (hydrated !== false) {
+                            observer.unobserve(entry.target);
+                            reobservePendingSections();
+                        }
                     }, { rootMargin: tvObserver ? '72px 0px' : (mobileObserver ? '100px 0px' : '0px'), threshold: [0, 0.5] });
 
                     pending.forEach(section => observer.observe(section));
