@@ -16,7 +16,7 @@
     };
     const pageCache = new Map();
     const pageStyleCache = new Map();
-    const buildVersion = '20261125-lazy-pages-v28';
+    const buildVersion = '20261125-lazy-pages-v29';
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
