@@ -78,7 +78,7 @@ const compactCatalog = catalog.map(item => {
   };
   // Normalleştirilmiş alanlar yukarıda korunuyor; tekrar eden TMDB eş alanlarını ilk yükten çıkar.
   for (const field of [
-    'cast', 'tmdbCast', 'tmdbOverview', 'tmdbPoster', 'tmdbBackdrop', 'tmdbTrailerUrl',
+    'desc', 'cast', 'tmdbCast', 'tmdbOverview', 'tmdbPoster', 'tmdbBackdrop', 'tmdbTrailerUrl',
     'tmdbRuntime', 'tmdbSeasons', 'tmdbEpisodes', 'tmdbTitle', 'tmdbOriginalTitle',
     'tmdbReleaseDate', 'tmdbGenres', 'tmdbCountries', 'tmdbDirector', 'image',
     'tmdbSyncedAt', 'ratingCount', 'tmdbVoteCount'
