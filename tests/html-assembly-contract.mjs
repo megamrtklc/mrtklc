@@ -69,7 +69,7 @@ assert.match(watchPage, /PERDE_TEMPLATE:WATCH_RIGHT/);
 assert.match(watchPage, /PERDE_TEMPLATE:WATCH_TRAILER_MODAL/);
 assert.match(watchLeftColumn, /customVideoPlayer/, 'Sol kolon video oynatıcıyı içermeli.');
 assert.match(watchRightColumn, /Benzer Yapımlar/, 'Sağ kolon benzer yapımları içermeli.');
-assert.match(watchTrailerModal, /x-show="trailerOpen"/, 'Fragman penceresi ayrı partial içinde bulunmalı.');
+assert.match(watchTrailerModal, /x-show="watchTrailerOpen"/, 'Fragman penceresi ana Alpine kapsamındaki durum değişkenini kullanmalı.');
 assert.doesNotMatch(watchPage, /EXPLORE PAGE/,
   'İzleme partial dosyası keşfet sayfasının içeriğini kapsamamalı.');
 assert.match(actorDirectorPage, /currentPage === 'actor' \|\| currentPage === 'director'/,
