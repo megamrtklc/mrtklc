@@ -1,7 +1,7 @@
 /**
  * Perde Benzer Yapım Önerileri
  * Seçilen film veya diziye tür, oyuncu, yönetmen ve katalog verileri üzerinden
- * benzer yapımları puanlayıp sıralar. Yalnızca izleme sayfasında yüklenir.
+ * benzer yapımları puanlayıp sıralar. Anasayfa önerileri ve izleme sayfasındaki benzer yapımlar için gerektiğinde yüklenir.
  */
 (function () {
     'use strict';
