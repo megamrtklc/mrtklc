@@ -74,12 +74,12 @@
                         return [...new Set([...tmdb, ...fallback].map(normalize).filter(Boolean))];
                     };
                     const plotTerms = item => {
-                        const cachedTerms = recommendationPlotTermsCache.get(item);
-                        if (cachedTerms) return cachedTerms;
                         const source = item?.tmdbOverview || item?.desc || '';
+                        const cachedTerms = recommendationPlotTermsCache.get(item);
+                        if (cachedTerms?.source === source) return cachedTerms.terms;
                         const terms = [...new Set(String(source).toLocaleLowerCase('tr').match(/[a-z0-9ğüşöçıİ]{4,}/gi) || [])]
                             .map(normalize).filter(word => word.length >= 4 && !recommendationStopWords.has(word)).slice(0, 40);
-                        recommendationPlotTermsCache.set(item, terms);
+                        recommendationPlotTermsCache.set(item, { source, terms });
                         return terms;
                     };
                     const history = new Map();
