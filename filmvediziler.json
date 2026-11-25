@@ -21412,17 +21412,15 @@
       "player",
       "synopsis",
       "season",
-      "episodes"
+      "episodes",
+      "cast"
     ],
     "right": [
       "credits",
-      "cast",
       "similar",
       "reviews"
     ],
-    "hidden": [
-      "reviews"
-    ],
+    "hidden": [],
     "removed": []
   },
   "adminProfile": {
