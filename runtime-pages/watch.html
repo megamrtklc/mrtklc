@@ -526,6 +526,40 @@
                 </div>
                 </div>
 
+                <div id="watch-trailer-modal"
+                     x-data="{ open: false, item: null }"
+                     @open-filmm-hero-trailer.window="item = $event.detail || null; open = true"
+                     @keydown.escape.window="open = false; item = null"
+                     x-show="open"
+                     x-cloak
+                     x-transition.opacity
+                     @click.self="open = false; item = null"
+                     class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
+                     role="dialog"
+                     aria-modal="true"
+                     aria-label="Fragman oynatıcı">
+                    <div class="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/70">
+                        <div class="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-5">
+                            <div class="min-w-0">
+                                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p>
+                                <p class="truncate text-sm font-bold text-white" x-text="item?.title || 'Fragman'"></p>
+                            </div>
+                            <button type="button" @click="open = false; item = null" aria-label="Fragmanı kapat" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <template x-if="open && item && item.trailerUrl && window.cineTrailerEmbedUrl(item.trailerUrl)">
+                            <div class="aspect-video w-full bg-black">
+                                <iframe :src="window.cineTrailerEmbedUrl(item.trailerUrl)" title="Yapım fragmanı" class="h-full w-full" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            </div>
+                        </template>
+                        <div x-show="!item?.trailerUrl" class="flex min-h-[220px] flex-col items-center justify-center gap-3 px-6 py-10 text-center">
+                            <span class="flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/25 bg-amber-300/10 text-amber-300"><i class="fa-solid fa-film text-xl"></i></span>
+                            <p class="text-base font-bold text-white">Fragman bulunamadı</p>
+                            <p class="max-w-md text-sm leading-6 text-gray-400">Bu yapım için şu anda izlenebilir bir fragman bağlantısı bulunmuyor.</p>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </template>
