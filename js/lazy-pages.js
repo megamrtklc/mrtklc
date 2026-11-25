@@ -29,7 +29,7 @@
         explore: './js/discovery.min.js?v=20261124-discovery-min-v1',
         people: './js/people.js?v=20261124-people-v1',
         'watch-recommendations': './js/watch-recommendations.js?v=20261124-watch-recommendations-v1',
-        'watch-page': './js/watch-page.js?v=20261125-watch-page-v2',
+        'watch-page': './js/watch-page.js?v=20261125-watch-page-v3',
         player: './js/player-controls.js?v=20261125-player-controls-v7'
     };
     const pageScriptRoutes = {
