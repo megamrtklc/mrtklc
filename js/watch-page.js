@@ -74,6 +74,33 @@
         scrollSimilar(direction) {
             const container = document.getElementById('similarContainer');
             if (container) container.scrollBy({ left: 180 * direction, behavior: 'smooth' });
-        }
+        },
+        // İzleme ekranındaki tür, ülke ve yönetmen bağlantılarını Keşfet filtresine dönüştürür.
+        openRelatedDiscoveries(kind, value, countryCode = '') {
+                    const selected = String(value || '').trim();
+                    if (!selected) return;
+                    this.searchQuery = '';
+                    this.discoveryType = 'all';
+                    this.discoveryMood = 'all';
+                    this.discoveryGenre = 'all';
+                    this.discoveryCountry = 'all';
+                    this.discoveryCountryCode = '';
+                    this.discoveryDirector = '';
+                    this.discoveryPlatform = 'all';
+                    this.discoveryRating = '0';
+                    this.discoveryYearFrom = '';
+                    this.discoveryYearTo = '';
+                    this.quickFilter = 'all';
+                    this.sortBy = 'default';
+                    if (kind === 'genre') this.discoveryGenre = selected;
+                    if (kind === 'country') {
+                        this.discoveryCountry = selected;
+                        this.discoveryCountryCode = countryCode;
+                    }
+                    if (kind === 'director') this.discoveryDirector = selected;
+                    this.currentPage = 'explore';
+                    this.syncRouteToUrl('explore', null);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
     };
 })();
