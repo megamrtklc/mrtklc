@@ -1043,6 +1043,10 @@
                     });
                     zeroHeightPending.forEach(hydrateSection);
 
+                    // Ana sayfanın küçük rafları eski düzende ilk yüklemede hazırdı.
+                    // Modüler HTML parçalarını da etkin olduklarında hemen yükle; yalnızca büyük katalog rafı gözlemciyle geciksin.
+                    pending.filter(section => section.dataset.homeSection !== 'catalog').forEach(hydrateSection);
+
                     if (!('IntersectionObserver' in window)) {
                         pending.forEach(hydrateSection);
                         return;
