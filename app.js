@@ -1029,6 +1029,15 @@
                     );
 
                     if (!pending.length) return;
+
+                    // Boş HTML iskeletleri sıfır yükseklikte kaldığında IntersectionObserver bunları göremeyebilir.
+                    // Görünür ve genişliği olan sıfır-yükseklikli rafları doğrudan yükleyerek bölümlerin takılmasını önle.
+                    const zeroHeightPending = pending.filter(section => {
+                        const rect = section.getBoundingClientRect();
+                        return rect.width > 0 && rect.height === 0 && window.getComputedStyle(section).display !== 'none';
+                    });
+                    zeroHeightPending.forEach(hydrateSection);
+
                     if (!('IntersectionObserver' in window)) {
                         pending.forEach(hydrateSection);
                         return;
