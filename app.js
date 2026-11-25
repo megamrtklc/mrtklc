@@ -2085,18 +2085,13 @@
                 },
 
                 get availableGenres() {
-                    const values = this.catalog.flatMap(item => this.getItemGenreNames(item));
-                    return [...new Set(values)].map(value => this.getGenreDisplayName(value)).sort((a, b) => a.localeCompare(b, 'tr'));
+                    return window.PerdeDiscovery?.getAvailableGenres.call(this) || [];
                 },
-
                 get availableCountries() {
-                    const values = this.catalog.flatMap(item => String(item.country || '').split(/[,\/;]/).map(value => value.trim()).filter(Boolean));
-                    return [...new Set(values)].sort((a, b) => a.localeCompare(b, 'tr'));
+                    return window.PerdeDiscovery?.getAvailableCountries.call(this) || [];
                 },
-
                 get availablePlatforms() {
-                    const values = this.catalog.flatMap(item => Array.isArray(item.platform) ? item.platform : (item.platform ? [item.platform] : []));
-                    return [...new Set(values.map(value => String(value).trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'tr'));
+                    return window.PerdeDiscovery?.getAvailablePlatforms.call(this) || [];
                 },
 
                 setDiscoveryMood(mood) {
@@ -2106,19 +2101,7 @@
                 },
 
                 resetDiscoveryFilters() {
-                    this.searchQuery = '';
-                    this.discoveryType = 'all';
-                    this.discoveryMood = 'all';
-                    this.discoveryGenre = 'all';
-                    this.discoveryCountry = 'all';
-                    this.discoveryCountryCode = '';
-                    this.discoveryDirector = '';
-                    this.discoveryPlatform = 'all';
-                    this.discoveryRating = '0';
-                    this.discoveryYearFrom = '';
-                    this.discoveryYearTo = '';
-                    this.quickFilter = 'all';
-                    this.sortBy = 'default';
+                    return window.PerdeDiscovery?.resetDiscoveryFilters.call(this);
                 },
 
                 get viewingStats() {
