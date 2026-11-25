@@ -68,13 +68,18 @@
                                 <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' kapak görseli'" class="absolute inset-0 h-full w-full object-cover object-center brightness-110 saturate-125">
                                 <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20"></div>
 
-                                <div class="pointer-events-none absolute bottom-3 left-3 z-20 sm:bottom-5 sm:left-5">
+                                <div class="pointer-events-none absolute bottom-3 left-3 z-20 flex flex-col items-start sm:bottom-5 sm:left-5">
+                                    <div x-show="selectedItem.rating !== undefined && selectedItem.rating !== null && selectedItem.rating !== '' && Number(selectedItem.rating) > 0" class="mb-1.5 inline-flex items-center gap-1.5 rounded-md border border-white/15 bg-black/75 px-2 py-1 text-[10px] font-extrabold leading-none text-white shadow-lg backdrop-blur-md sm:text-xs">
+                                        <span class="rounded-sm bg-[#f5c518] px-1 py-0.5 text-[9px] font-black text-black">IMDb</span>
+                                        <span x-text="Number(selectedItem.rating).toFixed(1)"></span>
+                                    </div>
                                     <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="h-[114px] w-[77px] rounded-lg border border-amber-200/60 object-cover shadow-2xl shadow-black/60 sm:h-[162px] sm:w-[108px] sm:rounded-xl">
                                 </div>
 
-                                <button type="button" @click.stop="startPlayback()" class="group absolute left-1/2 top-1/2 z-20 flex h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-amber-100/90 bg-gradient-to-br from-amber-200 to-amber-500 text-[#17130a] shadow-[0_0_30px_rgba(231,196,119,0.45)] transition duration-300 hover:scale-110 hover:shadow-[0_0_42px_rgba(231,196,119,0.7)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-200 sm:h-[88px] sm:w-[88px]" :aria-label="selectedItem.title + ' filmini oynat'">
-                                    <span class="pointer-events-none absolute inset-[-7px] rounded-full border border-amber-200/75 animate-pulse"></span>
-                                    <i class="fa-solid fa-play relative ml-1 text-2xl sm:text-3xl"></i>
+                                <button type="button" @click.stop="startPlayback()" class="group absolute left-1/2 top-1/2 z-20 flex h-[76px] w-[76px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-amber-100 bg-gradient-to-br from-[#fff0c2] via-[#e9c36f] to-[#b9822e] text-[#17130a] shadow-[0_0_24px_rgba(231,196,119,0.38),inset_0_1px_5px_rgba(255,255,255,0.65)] transition duration-500 hover:scale-110 hover:shadow-[0_0_38px_rgba(231,196,119,0.62)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-200 sm:h-[88px] sm:w-[88px]" :aria-label="selectedItem.title + ' filmini oynat'">
+                                    <span class="pointer-events-none absolute inset-[-10px] rounded-full border border-amber-200/55 animate-pulse"></span>
+                                    <span class="pointer-events-none absolute inset-[-4px] rounded-full border border-white/35"></span>
+                                    <i class="fa-solid fa-play relative ml-1 text-2xl drop-shadow-sm sm:text-3xl"></i>
                                 </button>
 
                                 <button type="button" @click.stop="watchTrailerOpen = true" class="absolute bottom-3 right-3 z-30 inline-flex min-h-9 items-center gap-2 rounded-lg border border-amber-200/40 bg-black/70 px-3 py-2 text-[11px] font-bold text-white shadow-lg shadow-amber-300/10 backdrop-blur-md transition duration-500 hover:scale-105 hover:border-amber-200/80 hover:bg-black/85 hover:shadow-[0_0_18px_rgba(231,196,119,0.22)] animate-pulse motion-reduce:animate-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200 sm:bottom-5 sm:right-5 sm:px-4" :aria-label="selectedItem.title + ' fragmanı'">
@@ -86,17 +91,21 @@
                                 <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.backdrop || selectedItem.poster" :alt="selectedItem.title + ' arka plan görseli'" class="cv-no-url-backdrop absolute inset-0 h-full w-full object-cover brightness-110 saturate-125 opacity-70">
                                 <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-gray-950/65 via-gray-950/25 to-gray-950/70"></div>
 
-                                <div class="pointer-events-none absolute bottom-3 left-3 z-10 sm:bottom-5 sm:left-5">
+                                <div class="pointer-events-none absolute bottom-3 left-3 z-20 flex flex-col items-start sm:bottom-5 sm:left-5">
+                                    <div x-show="selectedItem.rating !== undefined && selectedItem.rating !== null && selectedItem.rating !== '' && Number(selectedItem.rating) > 0" class="mb-1.5 inline-flex items-center gap-1.5 rounded-md border border-white/15 bg-black/75 px-2 py-1 text-[10px] font-extrabold leading-none text-white shadow-lg backdrop-blur-md sm:text-xs">
+                                        <span class="rounded-sm bg-[#f5c518] px-1 py-0.5 text-[9px] font-black text-black">IMDb</span>
+                                        <span x-text="Number(selectedItem.rating).toFixed(1)"></span>
+                                    </div>
                                     <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="h-[114px] w-[77px] rounded-lg border border-amber-200/60 object-cover shadow-2xl shadow-black/60 sm:h-[162px] sm:w-[108px] sm:rounded-xl">
                                 </div>
 
-                                <div class="absolute left-1/2 top-[62%] z-10 w-[min(82%,460px)] -translate-x-1/2 -translate-y-1/2 rounded-xl border border-white/15 bg-black/55 px-3 py-2.5 text-center shadow-xl backdrop-blur-md sm:top-1/2 sm:px-5 sm:py-4">
-                                    <div class="mb-1 flex items-center justify-center gap-2 text-amber-200">
-                                        <i class="fa-solid fa-circle-info text-xs"></i>
-                                        <span class="text-[9px] font-black uppercase tracking-[0.16em] sm:text-[10px]">Oynatıcı bilgisi</span>
+                                <div class="absolute left-[104px] right-3 bottom-[50px] z-10 rounded-lg border border-white/15 bg-black/55 px-3 py-2 text-left shadow-xl backdrop-blur-md sm:left-[140px] sm:right-5 sm:bottom-[62px] sm:rounded-xl sm:px-4 sm:py-3">
+                                    <div class="mb-1 flex items-center gap-1.5 text-amber-200">
+                                        <i class="fa-solid fa-circle-info text-[10px]"></i>
+                                        <span class="text-[9px] font-black uppercase tracking-[0.14em] sm:text-[10px]">Oynatıcı bilgisi</span>
                                     </div>
                                     <p class="text-[10px] leading-relaxed text-gray-100 sm:text-xs" x-text="selectedItem.watchUrl ? 'Bu kaynak yerleşik oynatıcıda açılamıyor. Harici platformdan izlemek için bağlantıyı açabilirsin.' : 'Bu yapım için henüz bir izleme bağlantısı eklenmemiş.'"></p>
-                                    <a x-show="selectedItem.watchUrl" :href="selectedItem.watchUrl" target="_blank" rel="noopener noreferrer" class="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 text-[10px] font-bold text-white transition hover:bg-white/20">Kaynağı Aç <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                    <a x-show="selectedItem.watchUrl" :href="selectedItem.watchUrl" target="_blank" rel="noopener noreferrer" class="mt-1.5 inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-2.5 py-1 text-[9px] font-bold text-white transition hover:bg-white/20 sm:mt-2 sm:px-3 sm:py-1.5 sm:text-[10px]">Kaynağı Aç <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                                 </div>
 
                                 <button type="button" @click.stop="watchTrailerOpen = true" class="absolute bottom-3 right-3 z-30 inline-flex min-h-9 items-center gap-2 rounded-lg border border-amber-200/40 bg-black/70 px-3 py-2 text-[11px] font-bold text-white shadow-lg shadow-amber-300/10 backdrop-blur-md transition duration-500 hover:scale-105 hover:border-amber-200/80 hover:bg-black/85 hover:shadow-[0_0_18px_rgba(231,196,119,0.22)] animate-pulse motion-reduce:animate-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-200 sm:bottom-5 sm:right-5 sm:px-4" :aria-label="selectedItem.title + ' fragmanı'">
