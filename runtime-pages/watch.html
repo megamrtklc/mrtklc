@@ -7,7 +7,7 @@
 -->
 <!-- ==================== WATCH / DETAIL PAGE ==================== -->
         <template x-if="currentPage === 'watch'">
-            <div class="w-full px-6 sm:px-12 pt-2 space-y-6 pb-16" @keydown.escape.window="cinemaMode = false; document.body.style.overflow = ''" @keydown.window="handlePlayerKeydown($event)">
+            <div class="w-full px-6 sm:px-12 pt-2 space-y-6 pb-16" x-data="{ trailerOpen: false }" @keydown.escape.window="cinemaMode = false; document.body.style.overflow = ''; trailerOpen = false" @keydown.window="handlePlayerKeydown($event)">
                 <div x-show="cinemaMode" x-transition.opacity @click="toggleCinemaMode()" class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-md"></div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -45,7 +45,7 @@
                             <div x-cloak x-show="!hasPlaybackStarted" class="absolute left-3 top-3 z-30 flex w-20 flex-col items-center gap-2 sm:left-5 sm:top-5 sm:w-24" @click.stop>
                                 <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="aspect-[2/3] w-full rounded-lg border border-white/20 object-cover shadow-2xl shadow-black/60">
                                 <button type="button"
-                                        @click.stop="$dispatch('open-filmm-hero-trailer', { title: selectedItem.title || '', trailerUrl: selectedItem.trailerUrl || selectedItem.tmdbTrailerUrl || '' })"
+                                        @click.stop="trailerOpen = true"
                                         class="flex min-h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-amber-300/45 bg-black/80 px-2 py-2 text-[9px] font-black tracking-wide text-amber-200 shadow-lg backdrop-blur-md transition hover:border-amber-200 hover:bg-amber-300 hover:text-black sm:text-[10px]"
                                         :aria-label="selectedItem.title + ' fragmanını izle'">
                                     <i class="fa-solid fa-circle-play text-xs"></i>
@@ -526,40 +526,31 @@
                 </div>
                 </div>
 
-                <div id="watch-trailer-modal"
-                     x-data="{ open: false, item: null }"
-                     @open-filmm-hero-trailer.window="item = $event.detail || null; open = true"
-                     @keydown.escape.window="open = false; item = null"
-                     x-show="open"
-                     x-cloak
-                     x-transition.opacity
-                     @click.self="open = false; item = null"
-                     class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
-                     role="dialog"
-                     aria-modal="true"
-                     aria-label="Fragman oynatıcı">
-                    <div class="relative w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/70">
-                        <div class="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-5">
-                            <div class="min-w-0">
-                                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p>
-                                <p class="truncate text-sm font-bold text-white" x-text="item?.title || 'Fragman'"></p>
+                <template x-teleport="body">
+                    <div x-cloak x-show="trailerOpen" x-transition.opacity @click.self="trailerOpen = false" class="fixed inset-0 z-[99999] flex items-center justify-center overflow-y-auto bg-black/90 p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-label="Yapım fragmanı">
+                        <div x-show="trailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/70">
+                            <div class="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-5">
+                                <div class="min-w-0">
+                                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p>
+                                    <p class="truncate text-sm font-bold text-white" x-text="selectedItem?.title || 'Fragman'"></p>
+                                </div>
+                                <button type="button" @click="trailerOpen = false" aria-label="Fragmanı kapat" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
                             </div>
-                            <button type="button" @click="open = false; item = null" aria-label="Fragmanı kapat" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                        </div>
-                        <template x-if="open && item && item.trailerUrl && window.cineTrailerEmbedUrl(item.trailerUrl)">
-                            <div class="aspect-video w-full bg-black">
-                                <iframe :src="window.cineTrailerEmbedUrl(item.trailerUrl)" title="Yapım fragmanı" class="h-full w-full" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            <template x-if="trailerOpen && selectedItem && (selectedItem.trailerUrl || selectedItem.tmdbTrailerUrl)">
+                                <div class="aspect-video w-full bg-black">
+                                    <iframe :src="window.cineTrailerEmbedUrl(selectedItem.trailerUrl || selectedItem.tmdbTrailerUrl, selectedItem.trailerProvider)" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                </div>
+                            </template>
+                            <div x-show="!selectedItem?.trailerUrl && !selectedItem?.tmdbTrailerUrl" class="flex min-h-[220px] flex-col items-center justify-center gap-3 px-6 py-10 text-center">
+                                <span class="flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/25 bg-amber-300/10 text-amber-300"><i class="fa-solid fa-film text-xl"></i></span>
+                                <p class="text-base font-bold text-white">Fragman bulunamadı</p>
+                                <p class="max-w-md text-sm leading-6 text-gray-400">Bu yapım için şu anda izlenebilir bir fragman bağlantısı bulunmuyor.</p>
                             </div>
-                        </template>
-                        <div x-show="!item?.trailerUrl" class="flex min-h-[220px] flex-col items-center justify-center gap-3 px-6 py-10 text-center">
-                            <span class="flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/25 bg-amber-300/10 text-amber-300"><i class="fa-solid fa-film text-xl"></i></span>
-                            <p class="text-base font-bold text-white">Fragman bulunamadı</p>
-                            <p class="max-w-md text-sm leading-6 text-gray-400">Bu yapım için şu anda izlenebilir bir fragman bağlantısı bulunmuyor.</p>
                         </div>
                     </div>
-                </div>
+                </template>
 
             </div>
         </template>
