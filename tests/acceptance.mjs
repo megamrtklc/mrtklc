@@ -275,8 +275,9 @@ try {
     }, null, { timeout: 10000 });
     const loadingStatus = section.locator('[role="status"]');
     if (await loadingStatus.isVisible().catch(() => false)) {
-      assert.match(await loadingStatus.innerText(), /Öneriler hazırlanıyor/i);
-      assert.match(await loadingStatus.innerText(), /Görseller ve öneriler yükleniyor/i);
+      const loadingText = (await loadingStatus.innerText()).toLocaleLowerCase('tr-TR');
+      assert.match(loadingText, /öneriler hazırlanıyor/);
+      assert.match(loadingText, /görseller ve öneriler yükleniyor/);
     } else {
       const heading = section.locator('.home-personalized-heading h2');
       await heading.waitFor({ state: 'visible' });
