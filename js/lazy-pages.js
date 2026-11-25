@@ -12,12 +12,11 @@
         franchises: ['franchises'],
         watchlist: ['watchlist'],
         library: ['library'],
-        stats: ['stats'],
         'video-links': ['video-links']
     };
     const pageCache = new Map();
     const pageStyleCache = new Map();
-    const buildVersion = '20261125-lazy-pages-v20';
+    const buildVersion = '20261125-lazy-pages-v21';
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
