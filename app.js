@@ -114,6 +114,8 @@
                 discoveryCurrentItemId: String(safeStorageRead('perde_discovery_current_v1', '') || ''),
                 discoverySeenIds: Array.isArray(safeStorageRead('perde_discovery_seen_v1', [])) ? safeStorageRead('perde_discovery_seen_v1', []) : [],
                 selectedItem: null,
+                // Fragman penceresi body içine taşındığında da ana Alpine kapsamından yönetilir.
+                watchTrailerOpen: false,
                 currentSlideIndex: 0,
                 userRating: 8,
                 userCommentText: '',
@@ -600,7 +602,7 @@
                     });
                     // Manşet ayrı bootstrap verisiyle çizilir; ana katalog isteğini bekletmeden başlat.
                     // Düşük öncelik, ilk manşet görsellerinin ağ önceliğini korurken indirmeyi erkenden başlatır.
-                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261125-meta-trim-v1', { cache: 'no-cache' });
+                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261125-meta-trim-v2', { cache: 'no-cache' });
                     try {
                         // İlk açılışta başlatılan ortak JSON isteğini kullan; mobil görsel ön yükleyici de aynı yanıtı paylaşır.
                         // Ortak istek yoksa JSON dosyasına doğrudan geri dön.
