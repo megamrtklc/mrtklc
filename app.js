@@ -573,6 +573,11 @@
 
                 async init() {
                     this.routeHistoryReady = false;
+                    // Anasayfa öneri ve tür keşif algoritmaları, izleme sayfası modülü içinden paylaşılır.
+                    // Ana sayfa bölümlerini başlatmadan önce ilgili modülün hazır olmasını bekle.
+                    const homeAlgorithmsPromise = this.currentPage === 'home' && window.perdeEnsurePageScript
+                        ? window.perdeEnsurePageScript('home')
+                        : Promise.resolve();
                     this.initDeferredChrome();
                     const heroViewportQuery = window.matchMedia('(max-width: 767px)');
                     this.isMobileHeroViewport = heroViewportQuery.matches;
@@ -591,10 +596,17 @@
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     });
                     this.$watch('currentPage', page => {
-                        if (page === 'home') this.$nextTick(() => {
-                            // x-if anasayfayı yeniden oluşturur; rafları yeniden sırala ve görünürlüklerini tembel yüklemeye hazırla.
+                        if (page === 'home') this.$nextTick(async () => {
+                            // x-if anasayfayı yeniden oluşturur; öneri algoritmasını bölümlerden önce yükle.
                             Object.keys(this.homeSectionReady).forEach(key => { this.homeSectionReady[key] = false; });
                             this.homeSectionLoading.personalized = true;
+                            try {
+                                await (window.perdeEnsurePageScript?.('home') || Promise.resolve());
+                            } catch (error) {
+                                console.error('[Perde home recommendations] Modül yüklenemedi:', error);
+                                this.homeSectionReady.personalized = true;
+                                this.homeSectionLoading.personalized = false;
+                            }
                             this.applyHomepageSectionOrder();
                             this.scheduleHomePageHydration();
                             this.initHomeSectionObserver();
@@ -627,7 +639,16 @@
                     } catch (heroError) {
                         console.warn('Hızlı manşet verisi yüklenemedi; ana katalog kullanılacak:', heroError);
                     }
-                    if (this.currentPage === 'home') this.scheduleHomePageHydration();
+                    if (this.currentPage === 'home') {
+                        try {
+                            await homeAlgorithmsPromise;
+                        } catch (error) {
+                            console.error('[Perde home recommendations] Modül yüklenemedi:', error);
+                            this.homeSectionReady.personalized = true;
+                            this.homeSectionLoading.personalized = false;
+                        }
+                        this.scheduleHomePageHydration();
+                    }
                     try {
                         const response = await catalogRequest;
                         if (!response.ok) {
