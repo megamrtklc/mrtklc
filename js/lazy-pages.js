@@ -28,7 +28,7 @@
     const pageScripts = {
         explore: './js/discovery.min.js?v=20261124-discovery-min-v2',
         people: './js/people.js?v=20261125-people-v2',
-        'watch-recommendations': './js/watch-recommendations.js?v=20261125-home-recommendations-v2',
+        'watch-recommendations': './js/watch-recommendations.js?v=20261125-home-recommendations-v3',
         'watch-page': './js/watch-page.js?v=20261125-watch-page-v4',
         player: './js/player-controls.js?v=20261125-player-controls-v7',
         stats: './js/stats.js?v=20261125-stats-v1',
