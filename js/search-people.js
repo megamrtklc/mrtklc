@@ -12,7 +12,7 @@
         async schedulePersonSearch(value) {
             if (this.personSearchTimer) clearTimeout(this.personSearchTimer);
             const query = String(value || '').trim();
-            const queryTokens = this.normalizeSearchText(query).split(/\\s+/).filter(Boolean);
+            const queryTokens = this.normalizeSearchText(query).split(/\s+/).filter(Boolean);
             const requestId = ++this.personSearchRequestId;
             this.personSearchResults = [];
             this.personSearchLoading = false;
@@ -26,7 +26,7 @@
             const people = new Map();
             const matchesName = name => {
                 const normalizedName = this.normalizeSearchText(name).trim();
-                const nameTokens = normalizedName.split(/\\s+/).filter(Boolean);
+                const nameTokens = normalizedName.split(/\s+/).filter(Boolean);
                 return queryTokens.length > 1
                     ? normalizedName.startsWith(queryTokens.join(' '))
                     : nameTokens.some(nameToken => nameToken.startsWith(queryTokens[0]));
