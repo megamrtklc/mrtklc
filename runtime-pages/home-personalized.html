@@ -20,7 +20,7 @@
                     </div>
                     <div class="home-personalized-showcase" :class="{ 'cv-personalized-showcase-pending': !homeSectionReady.personalized }" style="height:360px;min-height:360px;box-sizing:border-box">
                         <template x-if="homeSectionReady.personalized && displayedPersonalizedRecommendations[0]">
-                            <div role="button" tabindex="0" @click="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.enter="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(displayedPersonalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer" x-ignore>
+                            <div role="button" tabindex="0" @click="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.enter="openWatchPage(displayedPersonalizedRecommendations[0])" @keydown.space.prevent="openWatchPage(displayedPersonalizedRecommendations[0])" class="home-personalized-feature group relative min-w-0 overflow-hidden rounded-2xl sm:rounded-3xl text-left cursor-pointer">
                                 <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500, 780])" sizes="(max-width: 900px) 100vw, 32vw" :alt="displayedPersonalizedRecommendations[0].title" loading="lazy" fetchpriority="low" decoding="async" class="home-personalized-feature-image absolute inset-0 w-full h-full object-cover transition-transform duration-700">
                                 <div class="home-personalized-feature-shade absolute inset-0"></div>
                                 <div class="home-personalized-feature-poster absolute z-[1] right-4 bottom-4 sm:right-5 sm:bottom-5 pointer-events-none">
@@ -41,7 +41,7 @@
                             </div>
                         </template>
 
-                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" style="display:block!important;height:auto!important;box-sizing:border-box!important;visibility:hidden" :style="{visibility:homeSectionReady.personalized && displayedPersonalizedRecommendations.length ? 'visible' : 'hidden'}" x-ignore>
+                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" style="display:block!important;height:auto!important;box-sizing:border-box!important;visibility:hidden" :style="{visibility:homeSectionReady.personalized && displayedPersonalizedRecommendations.length ? 'visible' : 'hidden'}">
                             <div class="home-personalized-mobile-backdrop">
                                 <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500])" sizes="100vw" alt="" aria-hidden="true" loading="lazy" decoding="async">
                                 <div></div>
@@ -66,7 +66,7 @@
                             </div>
 
                         </article>
-                        <div id="home-personalized-rail" role="region" aria-label="Sana özel öneriler" class="home-personalized-alternatives" x-ref="rail" @scroll.passive="updateSlide()" aria-label="Sana özel öneriler, yatay kaydırılabilir" x-ignore>
+                        <div id="home-personalized-rail" role="region" aria-label="Sana özel öneriler" class="home-personalized-alternatives" x-ref="rail" @scroll.passive="updateSlide()" aria-label="Sana özel öneriler, yatay kaydırılabilir">
                             <template x-for="item in (homeSectionReady.personalized ? displayedPersonalizedRecommendations.slice(1, 5) : [])" :key="'personal-' + item.id">
                                 <div role="button" tabindex="0" @click="openWatchPage(item)" @keydown.enter="openWatchPage(item)" @keydown.space.prevent="openWatchPage(item)" :data-recommendation-type="item.type" :data-recommendation-id="item.id" :class="getCardClass()" class="home-personalized-alternative group relative isolate overflow-hidden min-w-0 rounded-xl sm:rounded-2xl border text-left transition-all duration-300">
                                     <img class="home-personalized-card-backdrop absolute inset-0 w-full h-full object-cover" @error="handleImageError($event)" :src="item.backdrop || item.poster || item.image" :srcset="getTmdbImageSrcSet(item.backdrop || item.poster || item.image, [342, 500])" sizes="(max-width: 767px) 330px, 342px" :alt="''" aria-hidden="true" loading="lazy" decoding="async">
