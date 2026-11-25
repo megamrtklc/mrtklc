@@ -93,13 +93,18 @@
                 const title = this.normalizeSearchText(item.title || '');
                 const original = this.normalizeSearchText(item.originalTitle || '');
                 const castNames = (item.tmdbCast || item.cast || []).map(person => typeof person === 'string' ? person : (person?.name || '')).join(' ');
-                const searchable = this.normalizeSearchText([item.title, item.originalTitle, item.genre, item.category, item.desc, item.director, item.starring, item.country, castNames].filter(Boolean).join(' '));
+                // Açıklamalar ilk katalogdan ayrıdır; arama eşleşmesinde detay dosyasını doğrudan kullan.
+                const description = item.desc || this.catalogDetailsById?.[String(item.id)]?.desc || '';
+                const searchable = this.normalizeSearchText([item.title, item.originalTitle, item.genre, item.category, description, item.director, item.starring, item.country, castNames].filter(Boolean).join(' '));
                 const score = title === query ? 100 : title.startsWith(query) ? 85 : original.startsWith(query) ? 75 : title.includes(query) ? 65 : searchable.includes(query) ? 35 : 0;
                 return { item, score };
             }).filter(entry => entry.score > 0)
                 .sort((a, b) => b.score - a.score || (Number.parseFloat(b.item.rating) || 0) - (Number.parseFloat(a.item.rating) || 0))
                 .slice(0, 10)
-                .map(entry => entry.item);
+                .map(entry => ({
+                    ...entry.item,
+                    desc: entry.item.desc || this.catalogDetailsById?.[String(entry.item.id)]?.desc || ''
+                }));
         }
     };
 })();
