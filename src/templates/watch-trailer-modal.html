@@ -2,7 +2,6 @@
   İzleme sayfasının fragman penceresi. x-teleport ile body içine taşınır;
   açma/kapama durumu ana watch şablonundaki watchTrailerOpen değişkenini kullanır.
 -->
-                <template x-teleport="body">
                     <div x-cloak x-show="watchTrailerOpen" x-transition.opacity @click.self="watchTrailerOpen = false" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Yapım fragmanı">
                         <div x-show="watchTrailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
                             <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
@@ -24,4 +23,3 @@
                             </div>
                         </div>
                     </div>
-                </template>
