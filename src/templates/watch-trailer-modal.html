@@ -1,22 +1,22 @@
 <!--
   İzleme sayfasının fragman penceresi. Watch sayfasının Alpine kapsamı içinde görüntülenir;
-  açma/kapama durumu ana watch şablonundaki watchTrailerOpen değişkenini kullanır.
+  açma/kapama durumu ana watch şablonundaki trailerOpen değişkenini kullanır.
 -->
-                    <div x-cloak x-show="watchTrailerOpen" x-transition.opacity @click.self="watchTrailerOpen = false" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Yapım fragmanı">
-                        <div x-show="watchTrailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
+                    <div x-cloak x-show="trailerOpen" x-transition.opacity @click.self="trailerOpen = false" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Yapım fragmanı">
+                        <div x-show="trailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
                             <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
                                 <div class="min-w-0 pr-4">
                                     <p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p>
-                                    <p class="truncate text-sm font-bold text-white" x-text="selectedItem.title"></p>
+                                    <p class="truncate text-sm font-bold text-white" x-text="trailerItem?.title || ''"></p>
                                 </div>
-                                <button type="button" @click="watchTrailerOpen = false" aria-label="Fragmanı kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
+                                <button type="button" @click="trailerOpen = false" aria-label="Fragmanı kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
                             </div>
-                            <template x-if="watchTrailerOpen && selectedItem.trailerUrl">
+                            <template x-if="trailerOpen && trailerItem?.trailerUrl">
                                 <div class="aspect-video w-full bg-black">
-                                    <iframe :src="window.cineTrailerEmbedUrl(selectedItem.trailerUrl, selectedItem.trailerProvider)" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                    <iframe :src="window.cineTrailerEmbedUrl(trailerItem.trailerUrl, trailerItem.trailerProvider)" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                 </div>
                             </template>
-                            <div x-show="!selectedItem.trailerUrl" class="flex min-h-[220px] flex-col items-center justify-center gap-3 px-6 py-10 text-center">
+                            <div x-show="!trailerItem?.trailerUrl" class="flex min-h-[220px] flex-col items-center justify-center gap-3 px-6 py-10 text-center">
                                 <span class="flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/25 bg-amber-300/10 text-amber-300"><i class="fa-solid fa-film text-xl"></i></span>
                                 <p class="text-base font-bold text-white">Fragman bulunamadı</p>
                                 <p class="max-w-md text-sm leading-6 text-gray-400">Bu yapım için şu anda izlenebilir bir fragman bağlantısı bulunmuyor. Daha sonra tekrar kontrol edebilirsin.</p>
