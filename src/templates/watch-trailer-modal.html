@@ -1,18 +1,18 @@
 <!--
   İzleme sayfasının fragman penceresi. x-teleport ile body içine taşınır;
-  açma/kapama durumu ana watch şablonundaki trailerOpen değişkenini kullanır.
+  açma/kapama durumu ana watch şablonundaki watchTrailerOpen değişkenini kullanır.
 -->
                 <template x-teleport="body">
-                    <div x-cloak x-show="trailerOpen" x-transition.opacity @click.self="trailerOpen = false" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Yapım fragmanı">
-                        <div x-show="trailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
+                    <div x-cloak x-show="watchTrailerOpen" x-transition.opacity @click.self="watchTrailerOpen = false" class="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Yapım fragmanı">
+                        <div x-show="watchTrailerOpen" x-transition.scale class="relative my-auto w-full max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-[#090a0d] shadow-2xl shadow-black/60">
                             <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
                                 <div class="min-w-0 pr-4">
                                     <p class="text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">FRAGMAN</p>
                                     <p class="truncate text-sm font-bold text-white" x-text="selectedItem.title"></p>
                                 </div>
-                                <button type="button" @click="trailerOpen = false" aria-label="Fragmanı kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
+                                <button type="button" @click="watchTrailerOpen = false" aria-label="Fragmanı kapat" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition hover:border-amber-300 hover:text-amber-300"><i class="fa-solid fa-xmark"></i></button>
                             </div>
-                            <template x-if="trailerOpen && selectedItem.trailerUrl">
+                            <template x-if="watchTrailerOpen && selectedItem.trailerUrl">
                                 <div class="aspect-video w-full bg-black">
                                     <iframe :src="window.cineTrailerEmbedUrl(selectedItem.trailerUrl, selectedItem.trailerProvider)" title="Yapım fragmanı" class="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                 </div>
