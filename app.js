@@ -674,7 +674,7 @@
                     });
                     // Manşet ayrı bootstrap verisiyle çizilir; ana katalog isteğini bekletmeden başlat.
                     // Düşük öncelik, ilk manşet görsellerinin ağ önceliğini korurken indirmeyi erkenden başlatır.
-                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261125-cast-split-v1', { cache: 'no-cache' });
+                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261125-meta-trim-v1', { cache: 'no-cache' });
                     try {
                         // İlk açılışta başlatılan ortak JSON isteğini kullan; mobil görsel ön yükleyici de aynı yanıtı paylaşır.
                         // Ortak istek yoksa JSON dosyasına doğrudan geri dön.
