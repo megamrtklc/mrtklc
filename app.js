@@ -674,7 +674,7 @@
                     });
                     // Manşet ayrı bootstrap verisiyle çizilir; ana katalog isteğini bekletmeden başlat.
                     // Düşük öncelik, ilk manşet görsellerinin ağ önceliğini korurken indirmeyi erkenden başlatır.
-                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261125-details-split-v1', { cache: 'no-cache' });
+                    const catalogRequest = window.__CV_CATALOG_PROMISE__ || fetch('./catalog-lite.json?v=20261125-cast-split-v1', { cache: 'no-cache' });
                     try {
                         // İlk açılışta başlatılan ortak JSON isteğini kullan; mobil görsel ön yükleyici de aynı yanıtı paylaşır.
                         // Ortak istek yoksa JSON dosyasına doğrudan geri dön.
@@ -774,7 +774,7 @@
                             if (this.currentPage !== 'home') this.removeHeroInitialShell();
                             this.initHomeSectionObserver();
                         });
-                        // 300 KB'lık kadro verisini ilk açılışın kritik yolundan çıkar.
+                        // Ayrıntılı kadro ayrı dosyada; ilk katalog yanıtında tekrar eden isim listelerini taşımıyoruz.
                         // Oyuncu araması daha erken yapılırsa schedulePersonSearch yüklemeyi hemen başlatır.
                         // TV arayüzünde kadro/kişi keşfi kullanılmadığından 290 KB'lık ek veriyi hiç indirme.
                         if (!document.documentElement.classList.contains('cv-tv-mode')) {
