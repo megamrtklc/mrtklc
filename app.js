@@ -1546,6 +1546,13 @@
                     const list = safeStorageRead('cine_watchlist_v1', []);
                     return Array.isArray(list) ? list.filter(item => item && typeof item === 'object' && item.id != null) : [];
                 },
+                // Video bağlantıları sayfası için yalnızca en az bir oynatma URL'si bulunan kayıtları listeler.
+                get watchableCatalog() {
+                    return this.catalog.filter(item => item && (
+                        String(item.watchUrl || '').trim() ||
+                        Object.values(item.episodeWatchUrls || {}).some(url => typeof url === 'string' && url.trim())
+                    ));
+                },
                 get currentWatchlist() {
                     this.watchlistRevision;
                     return this.watchlist;
