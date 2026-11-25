@@ -1487,20 +1487,13 @@
                     ].sort((a, b) => b.savedAt - a.savedAt);
                 },
 
+                // Kütüphane geçmişi ve devam işlemleri yalnızca Kütüphanem rotasında yüklenen modüle devredilir.
                 get libraryHistoryItems() {
-                    return [...this.libraryMovieEntries, ...this.librarySeriesEntries]
-                        .sort((a, b) => b.savedAt - a.savedAt)
-                        .slice(0, 24);
+                    return window.PerdeLibraryPage?.getLibraryHistoryItems.call(this) || [];
                 },
 
                 resumeLibraryItem(entry) {
-                    if (!entry?.item) return;
-                    this.openWatchPage(entry.item);
-                    if (entry.kind === 'series') {
-                        this.selectedSeason = entry.season;
-                        this.selectedEpisode = entry.episode;
-                        this.currentEpisodePage = Math.floor((entry.episode - 1) / 8) + 1;
-                    }
+                    return window.PerdeLibraryPage?.resumeLibraryItem.call(this, entry);
                 },
 
                 userStatusRevision: 0,
