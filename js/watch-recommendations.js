@@ -57,6 +57,7 @@
                         watchlist.map(item => String(item.id)),
                         watchedItems.map(item => String(item.id)),
                         favoriteItems.map(item => String(item.id)),
+                        this.catalogDetailsById ? 1 : 0
                     ]);
                     const cached = personalizedRecommendationCache.get(this);
                     if (cached && cached.catalog === catalog && cached.key === cacheKey) return cached.value;
