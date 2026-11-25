@@ -31,7 +31,7 @@
                             <div x-cloak x-show="!hasPlaybackStarted" class="absolute left-3 top-3 z-30 flex w-20 flex-col items-center gap-2 sm:left-5 sm:top-5 sm:w-24" @click.stop>
                                 <img @error="handleImageError($event)" decoding="async" loading="eager" :src="selectedItem.poster || selectedItem.backdrop" :alt="selectedItem.title + ' afişi'" class="aspect-[2/3] w-full rounded-lg border border-white/20 object-cover shadow-2xl shadow-black/60">
                                 <button type="button"
-                                        @click.stop="$dispatch('open-filmm-hero-trailer', { title: selectedItem.title || '', trailerUrl: selectedItem.trailerUrl || selectedItem.tmdbTrailerUrl || '' })"
+                                        @click.stop="trailerOpen = true"
                                         class="flex min-h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-amber-300/45 bg-black/80 px-2 py-2 text-[9px] font-black tracking-wide text-amber-200 shadow-lg backdrop-blur-md transition hover:border-amber-200 hover:bg-amber-300 hover:text-black sm:text-[10px]"
                                         :aria-label="selectedItem.title + ' fragmanını izle'">
                                     <i class="fa-solid fa-circle-play text-xs"></i>
