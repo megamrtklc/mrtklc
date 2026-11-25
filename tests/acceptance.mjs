@@ -193,6 +193,14 @@ try {
   });
 
   await check('Ana sayfa katalog afişleri küçük başlangıç kaynağı ve duyarlı adaylar kullanıyor', async () => {
+    // Katalog bölümüne kaydırmadan önce ekrandaki diğer ana sayfa parçalarının yerleşimi tamamlansın.
+    await page.waitForFunction(() => {
+      const app = window.Alpine?.$data(document.documentElement);
+      const sections = [...document.querySelectorAll('#home-page > [data-home-section]')]
+        .filter(section => section.dataset.homeSection && !['hero', 'catalog'].includes(section.dataset.homeSection))
+        .filter(section => app?.isHomepageSectionVisible?.(section.dataset.homeSection));
+      return sections.every(section => !section.hasAttribute('x-ignore'));
+    }, null, { timeout: 15000 });
     const catalogSection = page.locator('#home-catalog-section');
     await catalogSection.scrollIntoViewIfNeeded();
     await page.waitForFunction(() => {
