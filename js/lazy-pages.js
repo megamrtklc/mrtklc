@@ -16,11 +16,11 @@
     };
     const pageCache = new Map();
     const pageStyleCache = new Map();
-    const buildVersion = '20261127-lazy-pages-design-system-v39';
+    const buildVersion = '20261127-lazy-pages-design-system-v40';
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
-        watch: './css/perde-watch.css?v=20261127-watch-design-system-v2',
+        watch: './css/perde-watch.css?v=20261127-watch-design-system-v3',
         explore: './css/perde-explore.css?v=20261127-explore-design-system-v2'
     };
 
