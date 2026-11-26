@@ -195,7 +195,7 @@
         <div class="w-full px-4 sm:px-12 md:max-w-[1800px] md:mx-auto md:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 lg:space-x-6 xl:space-x-12">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-0.5 group">
-                    <img x-show="headerConfig.logoImage" :src="headerConfig.logoImage" alt="Logo" width="28" height="28" style="width:28px !important;height:28px !important;max-width:28px !important;max-height:28px !important;object-fit:contain;flex:0 0 28px" class="object-contain">
+                    <img x-show="headerConfig.logoImage" :src="headerConfig.logoImage" alt="Logo" :width="headerConfig.logoWidth || 32" :height="headerConfig.logoHeight || 32" :style="`width:${headerConfig.logoWidth || 32}px;height:${headerConfig.logoHeight || 32}px;max-width:100%;object-fit:contain;flex:0 0 auto`" class="object-contain">
                     <div x-show="!headerConfig.logoImage && headerConfig.showLogoIcon !== false" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-film text-white text-sm"></i>
                     </div>
@@ -732,7 +732,7 @@
             <div class="grid grid-cols-2 gap-x-6 gap-y-9 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr] lg:gap-12">
                 <div class="col-span-2 max-w-md lg:col-span-1">
                     <a href="#" @click.prevent="navigateTo('home')" class="inline-flex items-center gap-1.5 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-500">
-                        <img x-show="footerConfig.logoImage" :src="footerConfig.logoImage" alt="Logo" width="160" height="40" loading="lazy" decoding="async" fetchpriority="low" class="h-10 w-auto max-w-[160px] object-contain">
+                        <img x-show="footerConfig.logoImage" :src="footerConfig.logoImage" alt="Logo" :width="footerConfig.logoWidth || 160" :height="footerConfig.logoHeight || 40" :style="`width:${footerConfig.logoWidth || 160}px;height:${footerConfig.logoHeight || 40}px;max-width:100%;object-fit:contain`" loading="lazy" decoding="async" fetchpriority="low" class="object-contain">
                         <span x-show="!footerConfig.logoImage" class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-600 text-white shadow-lg shadow-rose-950/20"><i class="fa-solid fa-clapperboard text-lg"></i></span>
                         <span x-show="(footerConfig.brandPrimary || '').trim() || (footerConfig.brandAccent || '').trim()" class="text-xl font-black uppercase tracking-[0.13em] text-gray-950 dark:text-white"><span x-show="(footerConfig.brandPrimary || '').trim()" x-text="footerConfig.brandPrimary"></span><span x-show="(footerConfig.brandAccent || '').trim()" class="text-rose-600 dark:text-rose-400" x-text="footerConfig.brandAccent"></span></span>
                     </a>
