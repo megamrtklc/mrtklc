@@ -1810,3 +1810,116 @@ body.admin-theme-slate :is(.nav-group,.admin-theme-switch){
   background:var(--surface-2)!important;
   border-color:var(--line)!important;
 }
+
+
+/* Final light-theme correction: override legacy fixed dark surfaces */
+body.admin-theme-ivory,
+body.admin-theme-slate{
+  --admin-sidebar-bg:var(--surface);
+  --admin-topbar-bg:color-mix(in srgb,var(--surface) 96%,transparent);
+  --admin-card-bg:var(--surface);
+  --admin-card-alt:var(--surface-2);
+}
+body.admin-theme-ivory .sidebar,
+body.admin-theme-slate .sidebar{background:var(--admin-sidebar-bg)!important;border-color:var(--line)!important}
+body.admin-theme-ivory .topbar,
+body.admin-theme-slate .topbar{background:var(--admin-topbar-bg)!important;border-color:var(--line)!important}
+body.admin-theme-ivory .nav-group,
+body.admin-theme-slate .nav-group,
+body.admin-theme-ivory .sidebar-nav-groups,
+body.admin-theme-slate .sidebar-nav-groups{background:transparent!important;border-color:var(--line)!important}
+body.admin-theme-ivory .nav-group,
+body.admin-theme-slate .nav-group{background:var(--surface-2)!important}
+body.admin-theme-ivory .nav-group>summary,
+body.admin-theme-slate .nav-group>summary{color:var(--muted)!important}
+body.admin-theme-ivory .nav-group[open]>summary,
+body.admin-theme-slate .nav-group[open]>summary{border-color:var(--line)!important}
+body.admin-theme-ivory .nav-group .nav-link,
+body.admin-theme-slate .nav-group .nav-link{background:transparent!important;color:var(--muted)!important}
+body.admin-theme-ivory .nav-group .nav-link:hover,
+body.admin-theme-slate .nav-group .nav-link:hover{background:var(--surface-3)!important;color:var(--text)!important}
+body.admin-theme-ivory .nav-group .nav-link.active,
+body.admin-theme-slate .nav-group .nav-link.active{background:color-mix(in srgb,var(--accent) 13%,var(--surface))!important;border-color:color-mix(in srgb,var(--accent) 35%,var(--line))!important;color:var(--accent)!important}
+body.admin-theme-ivory .workspace-switch,
+body.admin-theme-slate .workspace-switch,
+body.admin-theme-ivory .sidebar-status,
+body.admin-theme-slate .sidebar-status,
+body.admin-theme-ivory .dashboard-insight-stats>div,
+body.admin-theme-slate .dashboard-insight-stats>div{background:var(--surface-2)!important;border-color:var(--line)!important}
+body.admin-theme-ivory .panel-card,
+body.admin-theme-slate .panel-card,
+body.admin-theme-ivory .dashboard-card,
+body.admin-theme-slate .dashboard-card,
+body.admin-theme-ivory .dashboard-metric,
+body.admin-theme-slate .dashboard-metric,
+body.admin-theme-ivory .catalog-card,
+body.admin-theme-slate .catalog-card,
+body.admin-theme-ivory .settings-card,
+body.admin-theme-slate .settings-card,
+body.admin-theme-ivory .stat-card,
+body.admin-theme-slate .stat-card,
+body.admin-theme-ivory .chart-card,
+body.admin-theme-slate .chart-card,
+body.admin-theme-ivory .form-card,
+body.admin-theme-slate .form-card,
+body.admin-theme-ivory .table-wrap,
+body.admin-theme-slate .table-wrap,
+body.admin-theme-ivory .modal-card,
+body.admin-theme-slate .modal-card,
+body.admin-theme-ivory .dialog-card,
+body.admin-theme-slate .dialog-card,
+body.admin-theme-ivory .content-card,
+body.admin-theme-slate .content-card,
+body.admin-theme-ivory .brand-manager-card,
+body.admin-theme-slate .brand-manager-card,
+body.admin-theme-ivory .credential-card,
+body.admin-theme-slate .credential-card,
+body.admin-theme-ivory .security-record,
+body.admin-theme-slate .security-record{
+  background:var(--admin-card-bg)!important;
+  background-image:none!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+  box-shadow:var(--shadow);
+}
+body.admin-theme-ivory .editor-accordion-section,
+body.admin-theme-slate .editor-accordion-section,
+body.admin-theme-ivory .editor-url-section,
+body.admin-theme-slate .editor-url-section,
+body.admin-theme-ivory .editor-watch-section,
+body.admin-theme-slate .editor-watch-section,
+body.admin-theme-ivory .editor-tv-section,
+body.admin-theme-slate .editor-tv-section,
+body.admin-theme-ivory .url-highlight-group,
+body.admin-theme-slate .url-highlight-group,
+body.admin-theme-ivory .brand-manager-actions,
+body.admin-theme-slate .brand-manager-actions,
+body.admin-theme-ivory .brand-scope,
+body.admin-theme-slate .brand-scope,
+body.admin-theme-ivory .brand-preview-sample,
+body.admin-theme-slate .brand-preview-sample,
+body.admin-theme-ivory .hf-tabs,
+body.admin-theme-slate .hf-tabs,
+body.admin-theme-ivory .hf-tab-panel>.hf-accordion,
+body.admin-theme-slate .hf-tab-panel>.hf-accordion{
+  background:var(--admin-card-alt)!important;
+  background-image:none!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory .topbar-crumb strong,
+body.admin-theme-slate .topbar-crumb strong,
+body.admin-theme-ivory .topbar-user,
+body.admin-theme-slate .topbar-user,
+body.admin-theme-ivory .dashboard-card,
+body.admin-theme-slate .dashboard-card,
+body.admin-theme-ivory .panel-card,
+body.admin-theme-slate .panel-card{color:var(--text)!important}
+body.admin-theme-ivory .dashboard-card p,
+body.admin-theme-slate .dashboard-card p,
+body.admin-theme-ivory .panel-card p,
+body.admin-theme-slate .panel-card p,
+body.admin-theme-ivory .brand-scope,
+body.admin-theme-slate .brand-scope{color:var(--muted)!important}
+body.admin-theme-ivory .mobile-menu,
+body.admin-theme-slate .mobile-menu{background:var(--surface)!important;border-color:var(--line)!important;color:var(--text)!important}
