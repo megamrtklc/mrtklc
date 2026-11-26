@@ -1527,3 +1527,6 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
  #view-header-footer .hf-color-swatch{height:28px}
  #view-header-footer .hf-color-dialog-actions{padding:12px 16px 15px}
 }
+
+#view-header-footer .hf-color-field-label{display:grid;gap:5px;flex:1;min-width:0;cursor:default}
+#view-header-footer .hf-color-field-label small{color:#8f9eae;font-size:9px;line-height:1.4}
