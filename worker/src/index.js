@@ -399,6 +399,45 @@ async function saveProfilePhoto(request,env) {
   return json({ok:true,url:"https://raw.githubusercontent.com/"+(env.GITHUB_OWNER||"megamrtklc")+"/"+(env.GITHUB_REPO||"mrtklc")+"/"+branch+"/admin/assets/admin-profile."+ext+"?v="+encodeURIComponent(result.content?.sha||Date.now())});
 }
 
+
+async function saveSiteLogo(request,env) {
+  if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
+  if(!env.GITHUB_TOKEN)return json({error:"GitHub yazma bağlantısı yapılandırılmamış."},503);
+  const length=Number(request.headers.get("content-length")||0);
+  if(length>2900000)return json({error:"Logo isteği 2 MB dosya sınırını aşıyor."},413);
+  const body=await request.json();
+  const kind=String(body?.kind||"");
+  if(!["header","footer"].includes(kind))return json({error:"Geçersiz logo alanı."},400);
+  const path="assets/logos/perde-"+kind+".png";
+  const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc");
+  const branch=env.GITHUB_BRANCH||"main";
+  const apiUrl=`https://api.github.com/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
+  const current=await fetch(apiUrl+"?ref="+encodeURIComponent(branch),{headers:githubHeaders(env)});
+  const currentData=current.ok?await current.json():{};
+  if(!current.ok&&current.status!==404)return json({error:"Mevcut logo dosyası kontrol edilemedi."},502);
+  if(body.remove===true){
+    if(!current.ok)return json({ok:true,removed:true});
+    const deleted=await fetch(apiUrl,{method:"DELETE",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Remove Perde "+kind+" logo",sha:currentData.sha,branch})});
+    const result=await deleted.json().catch(()=>({}));
+    if(!deleted.ok)return json({error:result.message||"Logo dosyası silinemedi."},502);
+    return json({ok:true,removed:true});
+  }
+  if(typeof body.base64!=="string"||body.base64.length>2800000)return json({error:"Yalnızca 2 MB altında PNG logo yükleyebilirsin."},400);
+  let bytes;
+  try{bytes=Uint8Array.from(atob(body.base64),ch=>ch.charCodeAt(0));}catch{return json({error:"PNG dosya verisi okunamadı."},400);}
+  const signature=[137,80,78,71,13,10,26,10];
+  if(bytes.length<24||bytes.length>2097152||signature.some((v,i)=>bytes[i]!==v))return json({error:"Dosya geçerli bir PNG değil veya 2 MB sınırını aşıyor."},400);
+  const width=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getUint32(16);
+  const height=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getUint32(20);
+  if(!width||!height||width>4096||height>4096)return json({error:"PNG çözünürlüğü 1–4096 px aralığında olmalı."},400);
+  const content=bytesToBase64(bytes);
+  const saved=await fetch(apiUrl,{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Upload Perde "+kind+" PNG logo",content,sha:currentData.sha,branch})});
+  const result=await saved.json().catch(()=>({}));
+  if(!saved.ok)return json({error:result.message||"PNG logo GitHub deposuna kaydedilemedi."},502);
+  const url="https://raw.githubusercontent.com/"+(env.GITHUB_OWNER||"megamrtklc")+"/"+(env.GITHUB_REPO||"mrtklc")+"/"+branch+"/"+path+"?v="+encodeURIComponent(result.content?.sha||Date.now());
+  return json({ok:true,url,width,height,path});
+}
+
 function catalogUrl(env) {
   const owner = encodeURIComponent(env.GITHUB_OWNER || "megamrtklc");
   const repo = encodeURIComponent(env.GITHUB_REPO || "mrtklc");
@@ -665,7 +704,7 @@ export default {
           return json({ok:true,sha:result.content?.sha||null,commit:result.commit?.sha||null});
         } catch(error){return json({error:error.message||"Kalite ölçümü kaydedilemedi."},502);}
       }
-      if(request.method==="GET"&&path==="/api/catalog") {
+      if(request.method==="POST"&&path==="/api/site-logo") {\n        try{return await saveSiteLogo(request,env);}\n        catch(error){return json({error:error.message||"Logo işlemi başarısız."},502);}\n      }\n      if(request.method==="GET"&&path==="/api/catalog") {
         try { return json(await readCatalog(env)); }
         catch(error) { return json({error:error.message||"Katalog okunamadı."},502); }
       }
