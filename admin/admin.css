@@ -1380,3 +1380,18 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
 
 /* Hesap & Erişim: şifre görünürlüğü */
 .security-password-wrap{position:relative;display:flex;align-items:center;min-width:0}.security-form .security-password-wrap input{padding-right:76px}.security-password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:6px 8px;border:1px solid #5b513d;border-radius:7px;background:#302c24;color:#e0c17c;font-size:10px;font-weight:700;cursor:pointer;transition:background .18s,border-color .18s,color .18s}.security-password-toggle:hover{background:#403724;border-color:#c7a85e;color:#ffe2a0}.security-password-toggle:focus-visible{outline:2px solid #d7b56d;outline-offset:2px}
+
+
+/* Header & Footer: premium brand color controls */
+.hf-color-field{display:flex;align-items:center;justify-content:space-between;gap:14px;min-width:0;padding:13px 14px;border:1px solid #344254;border-radius:12px;background:linear-gradient(135deg,rgba(33,44,58,.82),rgba(16,24,35,.88));box-shadow:inset 0 1px 0 rgba(255,255,255,.035);transition:border-color .18s,background .18s}
+.hf-color-field:focus-within{border-color:#c99a43;background:linear-gradient(135deg,rgba(50,48,39,.72),rgba(18,25,36,.92))}
+.hf-color-field>label{display:grid;gap:5px;min-width:0;cursor:pointer}
+.hf-color-title{color:#edf2f7;font-size:11px;font-weight:800;letter-spacing:.01em}
+.hf-color-field label small{color:#8f9eae;font-size:9px;line-height:1.4}
+.hf-color-control{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.hf-color-control input[type=color]{appearance:none;-webkit-appearance:none;width:42px;height:38px;padding:4px;border:1px solid #566579;border-radius:10px;background:#111923;cursor:pointer;overflow:hidden}
+.hf-color-control input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+.hf-color-control input[type=color]::-webkit-color-swatch{border:0;border-radius:6px}
+.hf-color-control input[type=color]::-moz-color-swatch{border:0;border-radius:6px}
+.hf-color-control output{min-width:72px;padding:7px 8px;border:1px solid #344254;border-radius:8px;background:rgba(4,9,15,.45);color:#dce5ed;font:700 10px ui-monospace,SFMono-Regular,monospace;text-align:center;letter-spacing:.04em}
+@media(max-width:650px){.hf-color-field{padding:12px}.hf-color-control input[type=color]{width:40px;height:36px}.hf-color-control output{min-width:66px}}
