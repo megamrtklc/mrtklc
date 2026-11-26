@@ -45,7 +45,7 @@ assert.match(adminJs, /faviconImage:state\.data\.headerConfig\?\.faviconImage/, 
 assert.match(html, /hf-favicon-width[\s\S]*hf-favicon-height/, 'Site ikonu için piksel ölçüsü alanları bulunmalı');
 assert.match(html, /hf-favicon-logo-file/, 'Admin panelinde site ikonu yükleme alanı bulunmalı');
 assert.match(workerJs, /\[\"header\",\"footer\",\"favicon\"\]/, 'Worker site ikonu PNG yüklemeyi desteklemeli');
-assert.match(readFileSync(resolve(root, 'index.html'), 'utf8'), /rel=\"icon\" type=\"image\\/png\"/, 'Ana site PNG favicon bağlantısını içermeli');
+assert.ok(readFileSync(resolve(root, 'index.html'), 'utf8').includes('rel="icon" type="image/png"'), 'Ana site PNG favicon bağlantısını içermeli');
 
 assert.match(html, /id="hf-header-live-preview"/, 'Header için bağımsız canlı önizleme alanı bulunmalı');
 assert.match(html, /id="hf-footer-live-preview"/, 'Footer için bağımsız canlı önizleme alanı bulunmalı');
