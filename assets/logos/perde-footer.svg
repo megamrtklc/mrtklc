@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="160" viewBox="0 0 640 160">
+  <defs><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF0B8"/><stop offset=".34" stop-color="#D9A441"/><stop offset=".68" stop-color="#F5D27A"/><stop offset="1" stop-color="#A96D1D"/></linearGradient></defs>
+  <text x="78" y="132" text-anchor="middle" font-family="Noto Serif, Georgia, serif" font-size="145" font-weight="700" fill="url(#gold)">P</text>
+  <path d="M24 130 C45 112 93 119 119 101 C135 90 142 78 137 64" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M166 27 V133" stroke="#C9973D" stroke-width="2" opacity=".7"/>
+  <text x="202" y="111" font-family="Noto Serif, Georgia, serif" font-size="75" letter-spacing="17" fill="url(#gold)">PERDE</text>
+</svg>
