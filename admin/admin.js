@@ -133,8 +133,8 @@
   function canWrite(){ if(!state.apiEnabled||!state.sha){toast('Katalog şu anda salt okunur. GitHub erişim bağlantısı doğrulanınca düzenleme açılacak.');return false;} return true; }
   function navigate(view){
     state.view=view;
-    $$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
-    $$('.nav-link').forEach(el=>{const active=el.dataset.view===view;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
+    $$$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
+    $$$('.nav-link').forEach(el=>{const active=el.dataset.view===view;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
     const active=$('.nav-link[data-view="'+view+'"]');
     $('#crumb-current').textContent=view==='analytics-detail'?'İstatistikler / Detaylı Rapor':(view==='content-editor'?'Yapım Ekle / Düzenle':(active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış'));
     setMobileSidebar(false);
@@ -287,8 +287,8 @@
     $('#result-count').textContent=state.filtered.length.toLocaleString('tr-TR')+' kayıt';
     $('#page-info').textContent='Sayfa '+state.page+' / '+pages;
     $('#prev-page').disabled=state.page<=1;$('#next-page').disabled=state.page>=pages;
-    $$('#catalog-rows [data-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.edit);if(item)openEditor(item);}));
-    $$('#catalog-rows [data-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteContent(btn.dataset.delete)));
+    $$$('#catalog-rows [data-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.edit);if(item)openEditor(item);}));
+    $$$('#catalog-rows [data-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteContent(btn.dataset.delete)));
   }
   function renderMissingTrailers(){
     const query=($('#missing-trailer-search')?.value||'').trim().toLocaleLowerCase('tr');
@@ -395,8 +395,8 @@
       const count=Array.isArray(item.items)?item.items.length:0;
       return '<article class="collection-card"><div class="collection-card-top"><span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Pasif':'Yayında')+'</span><span class="collection-id">'+escapeHtml(item.id||'')+'</span></div><h3>'+escapeHtml(item.title||item.name||'İsimsiz koleksiyon')+'</h3><p>'+escapeHtml(item.description||'Açıklama eklenmemiş')+'</p><strong>'+count+'</strong><small>İçerik kaydı</small><div class="collection-actions"><button class="row-action" data-collection-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-collection-delete="'+escapeHtml(item.id)+'">Sil</button></div></article>';
     }).join(''):'<article class="panel-card empty-state"><span>▧</span><h2>Henüz koleksiyon bulunamadı</h2><p>Yeni koleksiyon oluşturarak seçkilerini yönetebilirsin.</p></article>';
-    $$('#collection-grid [data-collection-edit]').forEach(btn=>btn.addEventListener('click',()=>openCollectionEditor(btn.dataset.collectionEdit)));
-    $$('#collection-grid [data-collection-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteCollection(btn.dataset.collectionDelete)));
+    $$$('#collection-grid [data-collection-edit]').forEach(btn=>btn.addEventListener('click',()=>openCollectionEditor(btn.dataset.collectionEdit)));
+    $$$('#collection-grid [data-collection-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteCollection(btn.dataset.collectionDelete)));
     updateMetrics();
   }
   function renderFranchises(){
@@ -405,8 +405,8 @@
       const count=Array.isArray(item.items)?item.items.length:0;
       return '<article class="collection-card"><div class="collection-card-top"><span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Pasif':'Yayında')+'</span><span class="collection-id">'+escapeHtml(item.id||'')+'</span></div><h3>'+escapeHtml(item.title||'İsimsiz seri')+'</h3><p>'+escapeHtml(item.description||'Açıklama eklenmemiş')+'</p><strong>'+count+'</strong><small>Film kaydı</small><div class="collection-actions"><button class="row-action" data-franchise-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-franchise-delete="'+escapeHtml(item.id)+'">Sil</button></div></article>';
     }).join(''):'<article class="panel-card empty-state"><span>▤</span><h2>Henüz film serisi bulunamadı</h2><p>Yeni seri oluşturarak mevcut filmleri bir araya getirebilirsin.</p></article>';
-    $$('#franchise-grid [data-franchise-edit]').forEach(btn=>btn.addEventListener('click',()=>openFranchiseEditor(btn.dataset.franchiseEdit)));
-    $$('#franchise-grid [data-franchise-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteFranchise(btn.dataset.franchiseDelete)));
+    $$$('#franchise-grid [data-franchise-edit]').forEach(btn=>btn.addEventListener('click',()=>openFranchiseEditor(btn.dataset.franchiseEdit)));
+    $$$('#franchise-grid [data-franchise-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteFranchise(btn.dataset.franchiseDelete)));
   }
   function openFranchiseEditor(id){
     if(!canWrite())return;
@@ -423,7 +423,7 @@
   }
   function filterFranchiseItems(){
     const q=$('#franchise-search').value.trim().toLocaleLowerCase('tr');
-    $$('#franchise-items .collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
+    $$$('#franchise-items .collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
   }
   async function saveFranchise(event){
     event.preventDefault();if(!canWrite())return;
@@ -799,7 +799,7 @@
       footerHost.innerHTML='<div class="hf-preview-stage hf-preview-footer-stage '+(desktopFooter?'is-desktop':'is-mobile')+'"><div class="hf-preview-browser"><span></span><span></span><span></span><small>FOOTER · TASLAK</small></div>'+
         (f.enabled?'<footer class="hf-preview-footer"><div class="hf-preview-footer-brand">'+brand(f,'footer')+'<p>'+escapeHtml(f.description||'Marka açıklaması burada görünür.')+'</p>'+(f.showBadges?'<div class="hf-preview-badges">'+[f.badgeOne,f.badgeTwo].filter(Boolean).map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</div>':'')+'</div><div class="hf-preview-footer-column"><b>'+escapeHtml(f.columnOneTitle||'Keşfet')+'</b>'+footerMain.map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</div><div class="hf-preview-footer-column"><b>'+escapeHtml(f.columnTwoTitle||'Hesabım')+'</b>'+footerSecond.concat(footerLinks).map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</div>'+(f.showCta?'<div class="hf-preview-cta"><b>'+escapeHtml(f.featureTitle||'Kendi listeni oluştur')+'</b><p>'+escapeHtml(f.featureDescription||'Favorilerini tek yerde topla.')+'</p>'+(f.showCta?'<span>'+escapeHtml(f.ctaLabel||'Kütüphaneme Git')+'</span>':'')+'</div>':'')+'<div class="hf-preview-copyright">'+escapeHtml(f.copyright||'')+(f.showBackToTop?' · ↑ Yukarı dön':'')+'</div></footer>':'<div class="hf-preview-hidden">Footer gizli</div>')+'</div>';
     }
-    $$('.hf-preview-device').forEach(button=>button.classList.toggle('active',button.dataset.device===headerFooterPreviewDevices[button.dataset.previewKind]));
+    $$$('.hf-preview-device').forEach(button=>button.classList.toggle('active',button.dataset.device===headerFooterPreviewDevices[button.dataset.previewKind]));
   }
   function collectHeaderFooterDraft(){
     headerFooterConfig();
@@ -1118,7 +1118,7 @@
   }
   function filterCollectionItems(){
     const q=$('#collection-search').value.trim().toLocaleLowerCase('tr');
-    $$('.collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
+    $$$('.collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
   }
   async function saveCollection(event){
     event.preventDefault();if(!canWrite())return;
@@ -1238,8 +1238,8 @@
     $('#watch-preview-meta').textContent=year+' · '+(isTv?'Dizi':'Film')+' · '+runtime+' · '+genre;
     $('#watch-preview-score').innerHTML='★ '+escapeHtml(rating)+' <small>/ 10</small>';
     $('#watch-preview-frame').classList.toggle('is-mobile',watchDemoViewport==='mobile');
-    $$('[data-demo-type]').forEach(button=>button.classList.toggle('active',button.dataset.demoType===watchDemoType));
-    $$('[data-demo-device]').forEach(button=>button.classList.toggle('active',button.dataset.demoDevice===watchDemoViewport));
+    $$$('[data-demo-type]').forEach(button=>button.classList.toggle('active',button.dataset.demoType===watchDemoType));
+    $$$('[data-demo-device]').forEach(button=>button.classList.toggle('active',button.dataset.demoDevice===watchDemoViewport));
   }
   function renderWatchLayout(){
     const config=watchLayoutConfig();
@@ -1413,7 +1413,7 @@
       return '<section class="homepage-draft-section"><div class="homepage-draft-section-head"><div><span>'+String(index+1).padStart(2,'0')+' / KEŞFET</span><b>'+escapeHtml(title)+'</b><small>'+escapeHtml(description)+'</small></div><em>TÜMÜNÜ GÖR →</em></div><div class="homepage-draft-posters"><i></i><i></i><i></i><i></i></div></section>';
     }).join('');
     canvas.innerHTML='<div class="homepage-draft-topbar"><b>PERDE<span>.</span></b><nav><i>Ana Sayfa</i><i>Keşfet</i><i>Kütüphanem</i></nav><span>⌕　☰</span></div>'+hero+'<div class="homepage-draft-content">'+(sections||'<p class="homepage-draft-empty">Gösterilecek açık bölüm bulunmuyor.</p>')+'</div><div class="homepage-draft-watermark">TASLAK ÖNİZLEMESİ · GERÇEK SİTE DEĞİL</div>';
-    $$('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
+    $$$('[data-home-preview-device]').forEach(button=>button.classList.toggle('is-active',button.dataset.homePreviewDevice===state.homepagePreviewDevice));
   }
   function moveHomepageSection(key,direction){
     const layout=homepageLayoutConfig();
@@ -1711,7 +1711,7 @@
     if(!document.documentElement.dataset.heroCategoryOutsideBound){
       document.addEventListener('click',event=>{
         if(event.target.closest('.hero-category-select'))return;
-        $$('.hero-category-select.is-open').forEach(shell=>{
+        $$$('.hero-category-select.is-open').forEach(shell=>{
           const menu=shell.querySelector('.hero-category-menu'),trigger=shell.querySelector('.hero-category-trigger');
           if(menu)menu.hidden=true;shell.classList.remove('is-open');trigger?.setAttribute('aria-expanded','false');
         });
@@ -1843,7 +1843,7 @@
         host.innerHTML='<div class="hero-preview-art" style="background-image:linear-gradient(90deg,rgba(5,7,12,.96),rgba(5,7,12,.62) 58%,rgba(5,7,12,.12)),url(\''+escapeHtml(item.backdrop||posterOf(item))+'\')"><div class="hero-preview-copy"><span class="hero-preview-kicker">● ÖNE ÇIKAN YAPIM</span><h3>'+escapeHtml(titleOf(item))+'</h3><div class="hero-preview-meta">★ '+escapeHtml(item.tmdbRating||item.rating||'—')+'　·　'+escapeHtml(yearOf(item))+'　·　'+(isSeries(item)?'DİZİ':'FİLM')+'</div><p>'+escapeHtml(excerpt)+'</p><small class="hero-preview-character-count">Metin: '+desc.length+' · Gösterilen: '+Math.min(desc.length,max)+' / '+max+' karakter</small></div></div>';
       };
       renderOrder();count();preview();
-      $$('#hero-'+device+'-slide-list input').forEach(input=>input.addEventListener('change',()=>{
+      $$$('#hero-'+device+'-slide-list input').forEach(input=>input.addEventListener('change',()=>{
         if(device==='desktop'&&input.checked){
           const checked=$$('#hero-desktop-slide-list input:checked');
           const max=Number($('#hero-desktop-count').value)||10;
@@ -1857,7 +1857,7 @@
       $('#hero-'+device+'-search').value='';
       $('#hero-'+device+'-search').oninput=event=>{
         const q=event.target.value.trim().toLocaleLowerCase('tr-TR');
-        $$('#hero-'+device+'-slide-list .hero-pick').forEach(row=>{row.hidden=!!q&&!row.dataset.search.includes(q);});
+        $$$('#hero-'+device+'-slide-list .hero-pick').forEach(row=>{row.hidden=!!q&&!row.dataset.search.includes(q);});
       };
       $('#hero-'+device+'-hint').textContent=mode==='auto'
         ?(personalCategory
@@ -2215,8 +2215,8 @@
     }
   }
   // Tema seçici kaldırıldı: yeni yönetim arayüzü tek ve tutarlı bir tasarım sistemidir.
-  $$('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
-  $$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
+  $$$('.nav-link').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.view)));
+  $$$('[data-go]').forEach(btn=>btn.addEventListener('click',()=>navigate(btn.dataset.go)));
   function setMobileSidebar(open){const sidebar=$('#sidebar'),toggle=$('#mobile-menu'),backdrop=$('#sidebar-backdrop');sidebar.classList.toggle('open',!!open);backdrop?.classList.toggle('visible',!!open);toggle?.setAttribute('aria-expanded',String(!!open));toggle?.setAttribute('aria-label',open?'Menüyü kapat':'Menüyü aç');document.body.classList.toggle('sidebar-menu-open',!!open);}
   $('#mobile-menu').addEventListener('click',()=>setMobileSidebar(!$('#sidebar').classList.contains('open')));
   $('#sidebar-close')?.addEventListener('click',()=>setMobileSidebar(false));
@@ -2329,7 +2329,7 @@
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
   $('#header-footer-form').addEventListener('input',event=>{if(event.target.id==='hf-favicon-width'||event.target.id==='hf-favicon-height')renderLogoPreview('favicon',state.data?.headerConfig?.faviconImage||'');updateHeaderFooterDraftState();});
   $('#header-footer-form').addEventListener('change',updateHeaderFooterDraftState);
-  $('.hf-preview-device').forEach(button=>button.addEventListener('click',()=>{const kind=button.dataset.previewKind;if(!kind)return;headerFooterPreviewDevices[kind]=button.dataset.device;renderHeaderFooterPreview();}));
+  $$('.hf-preview-device').forEach(button=>button.addEventListener('click',()=>{const kind=button.dataset.previewKind;if(!kind)return;headerFooterPreviewDevices[kind]=button.dataset.device;renderHeaderFooterPreview();}));
   $('#hf-reset')?.addEventListener('click',()=>{if(confirm('Header ve Footer ayarlarını varsayılan değerlere döndürmek istiyor musun? Bu işlem kaydetmeden canlı siteyi değiştirmez.'))resetHeaderFooterDraft(true);});
   $('#hf-discard')?.addEventListener('click',()=>{if(confirm('Kaydedilmemiş tüm Header ve Footer değişiklikleri geri alınsın mı?'))resetHeaderFooterDraft(false);});
   ['header','footer','favicon'].forEach(kind=>{
@@ -2388,7 +2388,7 @@
   $('#personalized-preview-modes')?.closest('.personalized-preview-card')?.addEventListener('click',event=>{
     const button=event.target.closest('[data-personalized-preview-device]');if(!button)return;
     const preview=$('#personalized-static-preview');if(!preview)return;preview.dataset.device=button.dataset.personalizedPreviewDevice;
-    $$('.personalized-preview-switch [data-personalized-preview-device]').forEach(item=>item.classList.toggle('active',item===button));
+    $$$('.personalized-preview-switch [data-personalized-preview-device]').forEach(item=>item.classList.toggle('active',item===button));
   });
   $('#personalized-labels-reset')?.addEventListener('click',()=>{
     ['taste','surprise','series','gems'].forEach(mode=>{const input=$('#personalized-label-'+mode);if(input)input.value=PERSONALIZED_MODE_META[mode].label;});
@@ -2499,14 +2499,14 @@
       event.preventDefault();
       event.dataTransfer.dropEffect='move';
       list.classList.add('is-drop-target');
-      $$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
+      $$$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
       const over=event.target.closest('[data-card]');
       if(over&&over.dataset.card!==draggedWatchCard.id)over.classList.add('drop-target');
     });
     list.addEventListener('dragleave',event=>{
       if(!list.contains(event.relatedTarget)){
         list.classList.remove('is-drop-target');
-        $$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
+        $$$('.watch-order-item',list).forEach(row=>row.classList.remove('drop-target'));
       }
     });
     list.addEventListener('drop',event=>{
@@ -2517,24 +2517,24 @@
       const destination=over?config[side].indexOf(over.dataset.card):config[side].length;
       moveWatchCard(draggedWatchCard.side,draggedWatchCard.id,side,destination);
       draggedWatchCard=null;
-      $$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
-      $$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
+      $$$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
+      $$$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
     });
     list.addEventListener('dragend',()=>{
       draggedWatchCard=null;
-      $$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
-      $$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
+      $$$('.watch-order-item').forEach(row=>row.classList.remove('is-dragging','drop-target'));
+      $$$('.watch-order-list').forEach(root=>root.classList.remove('is-drop-target'));
     });
   });
-  $$('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{
+  $$$('[data-demo-type]').forEach(button=>button.addEventListener('click',()=>{
     watchDemoType=button.dataset.demoType;
     renderWatchLayout();
   }));
-  $$('[data-demo-device]').forEach(button=>button.addEventListener('click',()=>{
+  $$$('[data-demo-device]').forEach(button=>button.addEventListener('click',()=>{
     watchDemoViewport=button.dataset.demoDevice;
     renderWatchLayout();
   }));
-  $$('input[name="panel-density"],input[name="panel-theme"],input[name="panel-sidebar"],input[name="panel-page-size"]').forEach(input=>input.addEventListener('change',renderPreferenceDraftStatus));
+  $$$('input[name="panel-density"],input[name="panel-theme"],input[name="panel-sidebar"],input[name="panel-page-size"]').forEach(input=>input.addEventListener('change',renderPreferenceDraftStatus));
   $('#panel-reduce-motion')?.addEventListener('change',renderPreferenceDraftStatus);
   $('#panel-notifications')?.addEventListener('change',renderPreferenceDraftStatus);
   document.addEventListener('click',event=>{const info=event.target.closest('[data-pref-info]');if(info)openPreferenceGuide(info.dataset.prefInfo);});
