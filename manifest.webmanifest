@@ -20,6 +20,12 @@
   ],
   "icons": [
     {
+      "src": "./assets/logos/perde-favicon.png?v=698c60c1e144e4dc9650b5d9dc67265e671541c7",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "./assets/logos/perde-app-icon.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
