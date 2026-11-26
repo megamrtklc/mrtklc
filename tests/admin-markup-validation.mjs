@@ -30,6 +30,12 @@ console.log('PASS: Admin CSS ve JS kaynakları mevcut');
 const adminJs = readFileSync(resolve(root, 'admin/admin.js'), 'utf8');
 const adminCss = readFileSync(resolve(root, 'admin/admin.css'), 'utf8');
 
+// Uploaded logos are capped at 320×107px: enough for a 160px footer logo at 2x density.
+assert.match(adminJs, /Math\.min\(1,320\/image\.width,107\/image\.height\)/,
+  'Yüklenen logolar 320×107px sınırında küçültülmeli');
+assert.match(adminJs, /toDataURL\('image\/webp',\.82\)/,
+  'Logo sıkıştırma WebP kalitesini korumalı');
+
 // Every sidebar destination must resolve to a real panel view.
 const views = [...html.matchAll(/data-view=["']([^"']+)["']/g)].map(match => match[1]);
 assert.ok(views.length > 0, 'Admin navigasyonunda en az bir bölüm bulunmalı');
