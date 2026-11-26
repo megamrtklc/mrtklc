@@ -20567,6 +20567,208 @@
       "tmdbVoteCount": 138,
       "seasons": 2,
       "episodes": 16
+    },
+    {
+      "addedAt": "2026-11-26T14:00:27.589Z",
+      "id": "cv-1795701627590",
+      "title": "Minyonlar ve Canavarlar",
+      "type": "movie",
+      "year": "2026",
+      "rating": "7.5",
+      "genre": "Macera",
+      "category": "Macera / Animasyon / Komedi / Aile / Fantastik",
+      "duration": "90 dk",
+      "country": "United States",
+      "director": "Pierre Coffin",
+      "platform": "",
+      "watchUrl": "https://s9.gelsistirire.top/d/yinjqgcmsk3rtzj5dtwu7xoslkhlphnouwlm2ygayt4wcyizzt7oirzkagp57ydfzvtiqqzn/Minions%20Monsters%202026%20WEB%20DL%201080p%20DUAL.mp4",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 1315772,
+      "imdbId": "tt32890033",
+      "image": "https://image.tmdb.org/t/p/w500/hNXw1I4GmLCbSdbnduoR7SVY8Jv.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/kkcwhgSFd81QDlXo8ytrpHPQjhy.jpg",
+      "trailerUrl": "https://www.youtube.com/watch?v=_f-gld1bIIs",
+      "trailerProvider": "auto",
+      "desc": "Bu film, minyonların Hollywood'u nasıl fethettiği, film yıldızı olup her şeylerini kaybettikleri, dünyaya canavar saldıktan sonra yarattıkları kaostan dünyayı kurtarmak için nasıl bir araya geldiklerinin çılgın, saçma ve tamamen gerçek hikayesidir.",
+      "cast": [
+        "Pierre Coffin",
+        "Trey Parker",
+        "Christoph Waltz",
+        "Allison Janney",
+        "Jesse Eisenberg",
+        "Jeff Bridges",
+        "Zoey Deutch",
+        "Bobby Moynihan",
+        "Phil LaMarr",
+        "George Lucas",
+        "Barbara Eve Harris",
+        "Eric Bauza",
+        "Aaron Hendry",
+        "Camden Brooks",
+        "JP Karliak",
+        "Ashly Burch",
+        "John Kassir",
+        "Rachel Butera",
+        "Arif S. Kinchen",
+        "Nia Castro"
+      ],
+      "tmdbTitle": "Minyonlar ve Canavarlar",
+      "tmdbOriginalTitle": "Minions & Monsters",
+      "tmdbReleaseDate": "2026-06-24",
+      "tmdbGenres": "Macera / Animasyon / Komedi / Aile / Fantastik",
+      "tmdbRuntime": "90 dk",
+      "tmdbCountries": "United States",
+      "tmdbDirector": "Pierre Coffin",
+      "tmdbCast": [
+        {
+          "id": 124747,
+          "name": "Pierre Coffin",
+          "character": "The Minions (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/eAA9uWRqHlm1LT3nZfXb7UuPfVb.jpg",
+          "order": 0
+        },
+        {
+          "id": 34517,
+          "name": "Trey Parker",
+          "character": "Goomi (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/3tJe8t90lrcQzXj9cRcpW9wmj2c.jpg",
+          "order": 1
+        },
+        {
+          "id": 27319,
+          "name": "Christoph Waltz",
+          "character": "Max (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/jMvLGCVXLaBqjRLf5olyvEucZob.jpg",
+          "order": 2
+        },
+        {
+          "id": 19,
+          "name": "Allison Janney",
+          "character": "Olivia (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/AnpevvFjyFPRL3vDGo7o1Woina1.jpg",
+          "order": 3
+        },
+        {
+          "id": 44735,
+          "name": "Jesse Eisenberg",
+          "character": "Dort (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/2ojZrkt5rdkUi857WSeCatxXdGS.jpg",
+          "order": 4
+        },
+        {
+          "id": 1229,
+          "name": "Jeff Bridges",
+          "character": "Frank / Elwood (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/xms1RAY6q7Lzp7wNeRCB0kzhucn.jpg",
+          "order": 5
+        },
+        {
+          "id": 1059597,
+          "name": "Zoey Deutch",
+          "character": "Debbie (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/cU124pdfKA84tDvoapECkJ57rR2.jpg",
+          "order": 6
+        },
+        {
+          "id": 452205,
+          "name": "Bobby Moynihan",
+          "character": "Phillips (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/gOvwNz5joi5yWJ7dAhuF8WA2aas.jpg",
+          "order": 7
+        },
+        {
+          "id": 31549,
+          "name": "Phil LaMarr",
+          "character": "Howard (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/xP2kNlsmXtzXq0geutflO4K9mSE.jpg",
+          "order": 8
+        },
+        {
+          "id": 1,
+          "name": "George Lucas",
+          "character": "George Lucas (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/mDLDvsx8PaZoEThkBdyaG1JxPdf.jpg",
+          "order": 9
+        },
+        {
+          "id": 157146,
+          "name": "Barbara Eve Harris",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/1WcoqAQn7KN0MadAWA5xebyt9bd.jpg",
+          "order": 10
+        },
+        {
+          "id": 89599,
+          "name": "Eric Bauza",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/lQl3CAkX5mY49bJUCGozO3wE6u1.jpg",
+          "order": 11
+        },
+        {
+          "id": 61536,
+          "name": "Aaron Hendry",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/lOA25S5b1fkBL6fnG3u33mFtTdE.jpg",
+          "order": 12
+        },
+        {
+          "id": 4663666,
+          "name": "Camden Brooks",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/ge9FgIjRERhyylebW2Np9YwkqqR.jpg",
+          "order": 13
+        },
+        {
+          "id": 1541380,
+          "name": "JP Karliak",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/7Rc3n8KmKUaztqfsIpddO1a2ggn.jpg",
+          "order": 14
+        },
+        {
+          "id": 1156183,
+          "name": "Ashly Burch",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/iINzNKiIGbjoee6tJKb8xMWog45.jpg",
+          "order": 15
+        },
+        {
+          "id": 31365,
+          "name": "John Kassir",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/byj6Px0tLcqRFWIJYUxstg25Qd2.jpg",
+          "order": 16
+        },
+        {
+          "id": 1573215,
+          "name": "Rachel Butera",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/j9PbEcUdFkInCdFjQAMNvctfF7j.jpg",
+          "order": 17
+        },
+        {
+          "id": 1217803,
+          "name": "Arif S. Kinchen",
+          "character": "Additional Voices (voice)",
+          "profile": "https://image.tmdb.org/t/p/w185/rY16iqdy5lJIyEMoL941NdzUlEr.jpg",
+          "order": 18
+        },
+        {
+          "id": 4328682,
+          "name": "Nia Castro",
+          "character": "Additional Voices (voice)",
+          "profile": "",
+          "order": 19
+        }
+      ],
+      "tmdbOverview": "Bu film, minyonların Hollywood'u nasıl fethettiği, film yıldızı olup her şeylerini kaybettikleri, dünyaya canavar saldıktan sonra yarattıkları kaostan dünyayı kurtarmak için nasıl bir araya geldiklerinin çılgın, saçma ve tamamen gerçek hikayesidir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/hNXw1I4GmLCbSdbnduoR7SVY8Jv.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/kkcwhgSFd81QDlXo8ytrpHPQjhy.jpg",
+      "tmdbTrailerUrl": "https://www.youtube.com/watch?v=_f-gld1bIIs",
+      "tmdbImdbId": "tt32890033",
+      "tmdbRating": "7.5",
+      "tmdbVoteCount": 1423
     }
   ],
   "collections": [],
