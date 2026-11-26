@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="tr" :class="theme === 'dark' ? 'dark' : (theme === 'ivory' ? 'theme-ivory' : 'theme-slate')" x-data="ultimateProApp()">
 <head x-ignore>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link id="desktop-hero-image-preload" rel="preload" as="image" href="https://image.tmdb.org/t/p/w780/d1Vu0DRCeJ43YX98UKMi9xJNwrR.jpg" fetchpriority="high" media="(min-width: 768px)">
@@ -157,7 +161,7 @@
     <!-- Mobilde ikon fontları ilk manşet yüklemesi tamamlanana kadar ertelenir. -->
     <link rel="stylesheet" href="./icons.css?v=20261120-continue-five-v2">
     <!-- Modüler stil dosyası: sayfa stillerini Tailwind ve ikon stillerinden sonra erken yükle. -->
-    <link rel="stylesheet" href="./css/perde.css?v=20261124-css-split-v5">
+    <link rel="stylesheet" href="./css/perde.css?v=20261127-global-typography-v1">
     <script src="./icons.js?v=20261120-continue-five-v2" defer></script>
     <!-- Mobilde sistem fontu kullanıldığı için Inter yalnızca masaüstünde yüklenir. -->
     <!-- Alpine.js -->
