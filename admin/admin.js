@@ -771,7 +771,7 @@
     };
     Object.entries(checks).forEach(([id,value])=>{const el=$('#'+id);if(el)el.checked=value;});
     renderCustomLinkRows('header',h.customLinks);renderCustomLinkRows('footer',f.customLinks);
-    renderLogoPreview('header',h.logoImage);renderLogoPreview('footer',f.logoImage);renderLogoPreview('favicon',h.faviconImage);$('#header-footer-form .hf-color-field').forEach(field=>{const input=field.querySelector('input[type="color"]');if(input)hfApplyColor(field,input.value);});
+    renderLogoPreview('header',h.logoImage);renderLogoPreview('footer',f.logoImage);renderLogoPreview('favicon',h.faviconImage);$('#header-footer-form').querySelectorAll('.hf-color-field').forEach(field=>{const input=field.querySelector('input[type="color"]');if(input)hfApplyColor(field,input.value);});
     headerFooterSavedSnapshot=JSON.stringify(collectHeaderFooterDraft());updateHeaderFooterDraftState();renderHeaderFooterPreview();
   }
 
