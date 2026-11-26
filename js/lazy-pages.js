@@ -31,12 +31,13 @@
         'watch-recommendations': './js/watch-recommendations.js?v=20261125-home-recommendations-v3',
         'watch-page': './js/watch-page.js?v=20261125-watch-page-v4',
         player: './js/player-controls.js?v=20261125-player-controls-v7',
+        'seek-preview': './js/player-seek-preview.js?v=20261126-seek-preview-v1',
         stats: './js/stats.js?v=20261125-stats-v1',
         library: './js/library-page.js?v=20261125-library-page-v1'
     };
     const pageScriptRoutes = {
         home: ['watch-recommendations'],
-        watch: ['people', 'watch-recommendations', 'player', 'watch-page'],
+        watch: ['people', 'watch-recommendations', 'player', 'seek-preview', 'watch-page'],
         'actor-director': ['people'],
         explore: ['explore'],
         library: ['library']
