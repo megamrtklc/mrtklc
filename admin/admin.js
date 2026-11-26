@@ -773,7 +773,7 @@
     const host=$('#hf-live-preview');if(!host||!state.data)return;
     const {header,footer}=collectHeaderFooterDraft();
     const h=header,f=footer;
-    const brand=(cfg,kind)=>{const logo=state.data[kind==='header'?'headerConfig':'footerConfig']?.logoImage||'';return (logo?'<img class="hf-preview-logo-image" src="'+escapeHtml(logo)+'" alt="">':'')+(cfg.showLogoIcon?'<span class="hf-preview-mark">✦</span>':'')+'<span class="hf-preview-brand"><b>'+escapeHtml(cfg.brandPrimary||'CINE')+'</b><i>'+escapeHtml(cfg.brandAccent||'VERSE')+'</i></span>';};
+     const brand=(cfg,kind)=>{const logo=state.data[kind==='header'?'headerConfig':'footerConfig']?.logoImage||'';const width=cfg.logoWidth||(kind==='header'?32:160),height=cfg.logoHeight||(kind==='header'?32:40);return (logo?'<img class="hf-preview-logo-image" style="width:'+width+'px;height:'+height+'px;object-fit:contain" src="'+escapeHtml(logo)+'" alt="">':'')+(cfg.showLogoIcon?'<span class="hf-preview-mark">✦</span>':'')+'<span class="hf-preview-brand"><b>'+escapeHtml(cfg.brandPrimary||'CINE')+'</b><i>'+escapeHtml(cfg.brandAccent||'VERSE')+'</i></span>';};
     const headerLinks=[h.showHome?h.homeLabel:null,h.showExplore?h.exploreLabel:null,h.showFranchises?h.franchisesLabel:null,h.showVideo?h.videoLabel:null].filter(Boolean).concat(h.customLinks.map(x=>x.label).filter(Boolean));
     const footerLinks=f.customLinks.map(x=>x.label).filter(Boolean);
     const footerMain=[f.homeLabel,f.exploreLabel,f.libraryLabel].filter(Boolean);
@@ -2324,9 +2324,11 @@
       try{const data=await uploadSiteLogo(kind,file);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage=data;renderLogoPreview(kind,data);updateHeaderFooterDraftState();toast('PNG logo GitHub deposuna yüklendi. Görünüm ayarlarını kaydet.');}
       catch(error){toast(error.message,'error');}finally{event.target.value='';}
     });
-    $('[data-remove-logo="'+kind+'"]')?.addEventListener('click',()=>{
-      state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');updateHeaderFooterDraftState();toast('Logo kaldırıldı. Değişikliği uygulamak için ayarları kaydet.');
-    });
+     $('[data-remove-logo="'+kind+'"]')?.addEventListener('click',async()=>{
+       if(!confirm('Bu alanın PNG logo dosyası GitHub deposundan silinsin mi?'))return;
+       try{await removeSiteLogo(kind);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');updateHeaderFooterDraftState();toast('Logo dosyası silindi. Değişikliği kaydet.');}
+       catch(error){toast(error.message,'error');}
+     });
   });
   $('#header-footer-form').addEventListener('click',event=>{
     const add=event.target.closest('[data-add-custom-link]');
