@@ -82,13 +82,18 @@ try {
     deviceScaleFactor: 2
   });
   const mobilePage = await mobile.newPage();
+  const mobileTvScriptRequests = [];
+  mobilePage.on('request', request => {
+    if (/tv-remote-scroll\\.js/i.test(request.url())) mobileTvScriptRequests.push(request.url());
+  });
   await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   const mobileMode = await mobilePage.evaluate(() => ({
     tvClass: document.documentElement.classList.contains('cv-tv-mode'),
     deviceMode: document.documentElement.dataset.cvDeviceMode || null
   }));
   assert.equal(mobileMode.tvClass, false, 'Android telefon yanlışlıkla TV olarak algılandı');
-  console.log('PASS: Android telefon TV moduna alınmadı', JSON.stringify(mobileMode));
+  assert.equal(mobileTvScriptRequests.length, 0, 'Android telefonda TV kumandası betiği gereksiz yere indirildi');
+  console.log('PASS: Android telefon TV moduna alınmadı ve TV betiği indirilmedi', JSON.stringify(mobileMode));
   await mobile.close();
 
   const desktop = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -98,6 +103,38 @@ try {
   assert.equal(desktopMode, false, 'Masaüstü tarayıcı yanlışlıkla TV olarak algılandı');
   console.log('PASS: Masaüstü görünümü TV modundan etkilenmedi');
   await desktop.close();
+
+  const tvUserAgents = [
+    ['Samsung Tizen', 'Mozilla/5.0 (SMART-TV; Linux; Tizen 6.0) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/2.1 TV Safari/537.36'],
+    ['LG webOS', 'Mozilla/5.0 (Web0S; Linux/SmartTV) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36'],
+    ['Amazon Fire TV', 'Mozilla/5.0 (Linux; Android 9; AFTMM) AppleWebKit/537.36 (KHTML, like Gecko) Silk/99.2.1 like Chrome/99.0.4844.88 Safari/537.36'],
+    ['Hisense VIDAA', 'Mozilla/5.0 (VIDAA; Linux; U) AppleWebKit/537.36 (KHTML, like Gecko) SmartTV Safari/537.36']
+  ];
+  for (const [label, userAgent] of tvUserAgents) {
+    const context = await browser.newContext({ viewport: { width: 1920, height: 1080 }, userAgent });
+    const testPage = await context.newPage();
+    await testPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    const detected = await testPage.evaluate(() => document.documentElement.dataset.cvDeviceMode === 'tv');
+    assert.equal(detected, true, label + ' TV olarak algılanmadı');
+    console.log('PASS: ' + label + ' TV algılandı');
+    await context.close();
+  }
+
+  const tablet = await browser.newContext({
+    viewport: { width: 1920, height: 1080 },
+    userAgent: 'Mozilla/5.0 (Linux; Android 14; Tablet) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+  });
+  const tabletPage = await tablet.newPage();
+  const tabletTvScriptRequests = [];
+  tabletPage.on('request', request => {
+    if (/tv-remote-scroll\\.js/i.test(request.url())) tabletTvScriptRequests.push(request.url());
+  });
+  await tabletPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  const tabletMode = await tabletPage.evaluate(() => document.documentElement.dataset.cvDeviceMode || null);
+  assert.equal(tabletMode, null, 'Büyük ekranlı Android tablet yanlışlıkla TV algılandı');
+  assert.equal(tabletTvScriptRequests.length, 0, 'Android tablette TV kumandası betiği indirildi');
+  console.log('PASS: Büyük ekranlı Android tablet TV olarak algılanmadı');
+  await tablet.close();
 } finally {
   await browser.close();
 }
