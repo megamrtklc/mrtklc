@@ -1395,3 +1395,48 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
 .hf-color-control input[type=color]::-moz-color-swatch{border:0;border-radius:6px}
 .hf-color-control output{min-width:72px;padding:7px 8px;border:1px solid #344254;border-radius:8px;background:rgba(4,9,15,.45);color:#dce5ed;font:700 10px ui-monospace,SFMono-Regular,monospace;text-align:center;letter-spacing:.04em}
 @media(max-width:650px){.hf-color-field{padding:12px}.hf-color-control input[type=color]{width:40px;height:36px}.hf-color-control output{min-width:66px}}
+
+
+/* Premium renk seçici: renk kuyusu + hazır ton paleti */
+.hf-color-field{align-items:flex-start;gap:18px;padding:16px 17px}
+.hf-color-picker{display:grid;gap:12px;min-width:190px;max-width:245px}
+.hf-color-control{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hf-color-well{position:relative;display:block;width:54px;height:42px;flex:0 0 54px;padding:4px;border:1px solid #786344;border-radius:12px;background:linear-gradient(135deg,#d9a441,#f5d27a 48%,#8f6b35);box-shadow:0 5px 15px #0005;cursor:pointer}
+.hf-color-well:after{content:"";position:absolute;inset:4px;border:1px solid #ffffff70;border-radius:8px;pointer-events:none}
+.hf-color-well input[type=color]{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);padding:0;border:0;border-radius:8px;opacity:0;cursor:pointer}
+.hf-color-control output{min-width:82px;padding:8px 10px;border:1px solid #66563b;border-radius:8px;background:#151a20;color:#f2d18b;font:800 11px ui-monospace,SFMono-Regular,monospace;text-align:center;letter-spacing:.05em}
+.hf-color-hint{color:#8492a2;font-size:9px}
+.hf-color-palette{display:grid;grid-template-columns:repeat(8,20px);gap:7px;align-items:center}
+.hf-color-swatch{position:relative;width:20px;height:20px;padding:0;border:2px solid #596273;border-radius:50%;background:var(--swatch);box-shadow:0 2px 7px #0005;transition:transform .16s,border-color .16s}
+.hf-color-swatch:hover{transform:scale(1.18);border-color:#fff}
+.hf-color-swatch.is-active{outline:2px solid #f3d28c;outline-offset:3px;border-color:#161a20}
+.hf-color-swatch.is-active:after{content:"";position:absolute;inset:5px;border:1px solid #17191f;border-radius:50%}
+@media(max-width:760px){.hf-color-field{align-items:stretch;flex-direction:column;gap:12px}.hf-color-picker{max-width:none}.hf-color-palette{grid-template-columns:repeat(8,minmax(20px,1fr));max-width:280px}}
+/* Tablet portrait: navigation drawer and fluid admin workspace */
+@media(min-width:701px) and (max-width:1024px){
+ .sidebar{width:min(300px,84vw);padding:64px 17px 18px;transform:translateX(-105%);transition:transform .24s ease;box-shadow:18px 0 48px #0008}
+ .sidebar.open{transform:translateX(0)}
+ .sidebar-close{position:absolute;top:15px;right:15px;z-index:2;width:34px;height:34px;display:grid!important;place-items:center;border:1px solid #3b4a5b;border-radius:9px;background:#292c35;color:#e6edf5;font:300 25px/1 Arial,sans-serif}
+ .sidebar-backdrop{position:fixed;inset:0;z-index:45;display:block!important;border:0;background:rgba(3,7,12,.62);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .24s ease,visibility .24s ease;backdrop-filter:blur(2px)}
+ .sidebar-backdrop.visible{opacity:1;visibility:visible;pointer-events:auto}
+ body.sidebar-menu-open{overflow:hidden}
+ .main-column{margin-left:0;min-width:0}
+ .mobile-menu{width:38px;height:38px;display:grid;align-content:center;justify-items:center;gap:5px;border:1px solid #39485a;border-radius:10px;background:#242730}
+ .mobile-menu span{width:16px;height:2px;border-radius:2px;background:#d9c18b}
+ .topbar{gap:12px;padding-inline:clamp(14px,2.5vw,28px)}
+ .topbar-left{display:flex;align-items:center;gap:12px;min-width:0}
+ .topbar-right{gap:10px;min-width:0}
+ .main-content{width:100%;max-width:none;padding:22px clamp(16px,2.6vw,28px) 56px}
+ .dashboard-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .dashboard-main-grid,.dashboard-bottom-grid{grid-template-columns:minmax(0,1fr)}
+ .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .panel-card,.dashboard-card{min-width:0}
+ .page-heading,.panel-heading{min-width:0}
+}
+@media(max-width:700px){
+ .main-content{padding-inline:14px}
+ .topbar{padding-inline:12px}
+ .topbar-right{gap:7px}
+ .topbar-date,.environment,.topbar-user{display:none}
+}
