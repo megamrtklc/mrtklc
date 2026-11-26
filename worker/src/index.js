@@ -704,7 +704,11 @@ export default {
           return json({ok:true,sha:result.content?.sha||null,commit:result.commit?.sha||null});
         } catch(error){return json({error:error.message||"Kalite ölçümü kaydedilemedi."},502);}
       }
-      if(request.method==="POST"&&path==="/api/site-logo") {\n        try{return await saveSiteLogo(request,env);}\n        catch(error){return json({error:error.message||"Logo işlemi başarısız."},502);}\n      }\n      if(request.method==="GET"&&path==="/api/catalog") {
+      if(request.method==="POST"&&path==="/api/site-logo") {
+        try{return await saveSiteLogo(request,env);}
+        catch(error){return json({error:error.message||"Logo işlemi başarısız."},502);}
+      }
+      if(request.method==="GET"&&path==="/api/catalog") {
         try { return json(await readCatalog(env)); }
         catch(error) { return json({error:error.message||"Katalog okunamadı."},502); }
       }
