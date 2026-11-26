@@ -2084,3 +2084,93 @@ body.admin-theme-ivory .view :is(h1,h2,h3,h4,label,.field>span,.field-label),
 body.admin-theme-slate .view :is(h1,h2,h3,h4,label,.field>span,.field-label){color:var(--text)}
 body.admin-theme-ivory .view :is(p,small,.helper-text,.field-hint,.muted),
 body.admin-theme-slate .view :is(p,small,.helper-text,.field-hint,.muted){color:var(--muted)}
+
+
+/* Comprehensive legacy-dark cleanup for light admin themes.
+   Generated from view-level fixed dark backgrounds and light foregrounds;
+   photographic previews, charts, status colors and primary actions are excluded. */
+body.admin-theme-ivory #view-overview .dashboard-welcome,body.admin-theme-slate #view-overview .dashboard-welcome{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-welcome:after,body.admin-theme-slate #view-overview .dashboard-welcome:after{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-welcome p,body.admin-theme-slate #view-overview .dashboard-welcome p{color:var(--text)!important}
+body.admin-theme-ivory #view-overview .dashboard-secondary,body.admin-theme-slate #view-overview .dashboard-secondary{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-overview .dashboard-art-disc,body.admin-theme-slate #view-overview .dashboard-art-disc{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-overview .dashboard-art-note,body.admin-theme-slate #view-overview .dashboard-art-note{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-metric,body.admin-theme-slate #view-overview .dashboard-metric{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-metric-icon,body.admin-theme-slate #view-overview .dashboard-metric-icon{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .metric-movies .dashboard-metric-icon,body.admin-theme-slate #view-overview .metric-movies .dashboard-metric-icon{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-overview .metric-series .dashboard-metric-icon,body.admin-theme-slate #view-overview .metric-series .dashboard-metric-icon{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .metric-collections .dashboard-metric-icon,body.admin-theme-slate #view-overview .metric-collections .dashboard-metric-icon{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-card,body.admin-theme-slate #view-overview .dashboard-card{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .shortcut-gold,body.admin-theme-slate #view-overview .shortcut-gold{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-insight-stats>div,body.admin-theme-slate #view-overview .dashboard-insight-stats>div{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-health-icon,body.admin-theme-slate #view-overview .dashboard-health-icon{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-balance,body.admin-theme-slate #view-overview .dashboard-balance{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview #overview-balance-movies,body.admin-theme-slate #view-overview #overview-balance-movies{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview #overview-balance-series,body.admin-theme-slate #view-overview #overview-balance-series{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .balance-legend,body.admin-theme-slate #view-overview .balance-legend{color:var(--text)!important}
+body.admin-theme-ivory #view-overview .balance-legend b,body.admin-theme-slate #view-overview .balance-legend b{color:var(--text)!important}
+body.admin-theme-ivory #view-overview .dashboard-quality-grid>div,body.admin-theme-slate #view-overview .dashboard-quality-grid>div{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-quality-grid span,body.admin-theme-slate #view-overview .dashboard-quality-grid span{color:var(--text)!important}
+body.admin-theme-ivory #view-quality .quality-summary-card,body.admin-theme-slate #view-quality .quality-summary-card{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-overview .dashboard-health-actions button,body.admin-theme-slate #view-overview .dashboard-health-actions button{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-overview .dashboard-health-actions button:hover,body.admin-theme-slate #view-overview .dashboard-health-actions button:hover{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .analytics-summary-card,body.admin-theme-slate #view-analytics .analytics-summary-card{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .analytics-summary-card>b,body.admin-theme-slate #view-analytics .analytics-summary-card>b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-card-head h2,body.admin-theme-slate #view-analytics .analytics-card-head h2{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-card-head p,body.admin-theme-slate #view-analytics .analytics-card-head p{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-report-card .bar-track,body.admin-theme-slate #view-analytics .analytics-report-card .bar-track{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .analytics-report-card .bar-row b,body.admin-theme-slate #view-analytics .analytics-report-card .bar-row b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-type-balance b,body.admin-theme-slate #view-analytics .analytics-type-balance b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-foot-card,body.admin-theme-slate #view-analytics .analytics-foot-card{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .analytics-foot-card h2,body.admin-theme-slate #view-analytics .analytics-foot-card h2{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .rating-results,body.admin-theme-slate #view-analytics .rating-results{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .rating-results-head b,body.admin-theme-slate #view-analytics .rating-results-head b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .rating-results-head small,body.admin-theme-slate #view-analytics .rating-results-head small{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .rating-results-close,body.admin-theme-slate #view-analytics .rating-results-close{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .rating-result-item,body.admin-theme-slate #view-analytics .rating-result-item{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .rating-result-item b,body.admin-theme-slate #view-analytics .rating-result-item b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .rating-result-item small,body.admin-theme-slate #view-analytics .rating-result-item small{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-more-button,#view-analytics .analytics-all-button,body.admin-theme-slate #view-analytics .analytics-more-button,#view-analytics .analytics-all-button{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .analytics-more-button:hover,#view-analytics .analytics-all-button:hover,body.admin-theme-slate #view-analytics .analytics-more-button:hover,#view-analytics .analytics-all-button:hover{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-quality .quality-list-row,body.admin-theme-slate #view-quality .quality-list-row{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-quality .quality-page-size-label select,body.admin-theme-slate #view-quality .quality-page-size-label select{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-field input,
+#view-homepage-layout .homepage-layout-field textarea,body.admin-theme-slate #view-homepage-layout .homepage-layout-field input,
+#view-homepage-layout .homepage-layout-field textarea{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-side-heading h2,body.admin-theme-slate #view-homepage-layout .homepage-layout-side-heading h2{color:var(--text)!important}
+body.admin-theme-ivory #view-personalized-section .personalized-admin-options .toggle-field b,body.admin-theme-slate #view-personalized-section .personalized-admin-options .toggle-field b{color:var(--text)!important}
+body.admin-theme-ivory /* Custom labels for personalized discovery buttons */
+#view-personalized-section .personalized-mode-label-input,body.admin-theme-slate /* Custom labels for personalized discovery buttons */
+#view-personalized-section .personalized-mode-label-input{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory /* Header & Footer draft workflow */
+#view-header-footer .hf-draft-toolbar,body.admin-theme-slate /* Header & Footer draft workflow */
+#view-header-footer .hf-draft-toolbar{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-personalized-section .personalized-rule-settings,body.admin-theme-slate #view-personalized-section .personalized-rule-settings{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-personalized-section .personalized-rule-settings:hover,body.admin-theme-slate #view-personalized-section .personalized-rule-settings:hover{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-header-footer .hf-hex-input,body.admin-theme-slate #view-header-footer .hf-hex-input{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-header-footer .hf-color-summary output,body.admin-theme-slate #view-header-footer .hf-color-summary output{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-header-footer .hf-color-dialog,body.admin-theme-slate #view-header-footer .hf-color-dialog{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-color-close,body.admin-theme-slate #view-header-footer .hf-color-close{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-hex-control>span,body.admin-theme-slate #view-header-footer .hf-hex-control>span{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-hex-input,body.admin-theme-slate #view-header-footer .hf-hex-input{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-header-footer .hf-palette-heading b,body.admin-theme-slate #view-header-footer .hf-palette-heading b{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-color-dialog-actions .secondary-button,body.admin-theme-slate #view-header-footer .hf-color-dialog-actions .secondary-button{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-tabs,body.admin-theme-slate #view-header-footer .hf-tabs{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-header-footer .hf-tab,body.admin-theme-slate #view-header-footer .hf-tab{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-tab:hover,body.admin-theme-slate #view-header-footer .hf-tab:hover{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-tab.is-active,body.admin-theme-slate #view-header-footer .hf-tab.is-active{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-header-footer .hf-tab-panel>.hf-accordion,body.admin-theme-slate #view-header-footer .hf-tab-panel>.hf-accordion{background:var(--surface-2)!important}
+body.admin-theme-ivory .view :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),select,textarea),
+body.admin-theme-slate .view :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),select,textarea){
+ background:var(--surface)!important;color:var(--text)!important;border-color:var(--line)!important;
+}
+body.admin-theme-ivory .view :is(button:not(.dashboard-primary):not(.primary-button):not(.danger-button):not(.catalog-bulk-delete):not(.hf-color-apply)),
+body.admin-theme-slate .view :is(button:not(.dashboard-primary):not(.primary-button):not(.danger-button):not(.catalog-bulk-delete):not(.hf-color-apply)){
+ color:var(--text);
+}
+body.admin-theme-ivory .view :is(.field,.form-field,.form-group) :is(label,span,small),
+body.admin-theme-slate .view :is(.field,.form-field,.form-group) :is(label,span,small){color:var(--muted)}
+body.admin-theme-ivory .view :is(.panel-card,.dashboard-card,.settings-card,.form-card,.table-wrap,.content-card,.editor-panel,.homepage-editor,.homepage-layout-panel),
+body.admin-theme-slate .view :is(.panel-card,.dashboard-card,.settings-card,.form-card,.table-wrap,.content-card,.editor-panel,.homepage-editor,.homepage-layout-panel){
+ background-color:var(--surface)!important;color:var(--text)!important;border-color:var(--line)!important;
+}
