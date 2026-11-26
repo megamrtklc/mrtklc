@@ -1725,3 +1725,88 @@ body.admin-theme-ivory #view-analytics .analytics-summary-card,body.admin-theme-
 body.admin-theme-ivory #view-analytics .analytics-summary-card>b,body.admin-theme-slate #view-analytics .analytics-summary-card>b,body.admin-theme-ivory #view-analytics .analytics-foot-card h2,body.admin-theme-slate #view-analytics .analytics-foot-card h2{color:var(--text)}
 body.admin-theme-ivory #view-analytics .analytics-summary-card>small,body.admin-theme-slate #view-analytics .analytics-summary-card>small,body.admin-theme-ivory #view-analytics .analytics-foot-card p,body.admin-theme-slate #view-analytics .analytics-foot-card p{color:var(--muted)}
 body.admin-theme-ivory .editor-back-button,body.admin-theme-slate .editor-back-button{background:var(--surface-2);border-color:var(--line);color:var(--text)}
+
+
+/* Unified light-theme surfaces: tables, form controls and editor fields */
+body.admin-theme-ivory,
+body.admin-theme-slate{
+  --admin-field-bg:var(--surface);
+  --admin-field-border:var(--line);
+  --admin-table-head:var(--surface-3);
+  --admin-table-row:var(--surface);
+  --admin-table-row-alt:var(--surface-2);
+  --admin-table-hover:color-mix(in srgb,var(--accent) 7%,var(--surface));
+  --admin-panel-bg:var(--surface);
+}
+body.admin-theme-ivory :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),select,textarea),
+body.admin-theme-slate :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),select,textarea){
+  background-color:var(--admin-field-bg)!important;
+  color:var(--text)!important;
+  border-color:var(--admin-field-border)!important;
+  box-shadow:none;
+}
+body.admin-theme-ivory :is(input,textarea)::placeholder,
+body.admin-theme-slate :is(input,textarea)::placeholder{color:var(--muted-2)!important;opacity:1}
+body.admin-theme-ivory select option,
+body.admin-theme-slate select option{background:var(--surface);color:var(--text)}
+body.admin-theme-ivory :is(.field,.form-field,.form-group) :is(label,.field-label),
+body.admin-theme-slate :is(.field,.form-field,.form-group) :is(label,.field-label){color:var(--muted)}
+body.admin-theme-ivory :is(table,.catalog-table,.data-table),
+body.admin-theme-slate :is(table,.catalog-table,.data-table){
+  background:var(--surface)!important;
+  color:var(--text)!important;
+}
+body.admin-theme-ivory :is(thead,th),
+body.admin-theme-slate :is(thead,th){
+  background:var(--admin-table-head)!important;
+  color:var(--muted)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory :is(tbody,tr),
+body.admin-theme-slate :is(tbody,tr){background:var(--admin-table-row)!important}
+body.admin-theme-ivory tbody tr:nth-child(even),
+body.admin-theme-slate tbody tr:nth-child(even){background:var(--admin-table-row-alt)!important}
+body.admin-theme-ivory tbody tr:hover,
+body.admin-theme-slate tbody tr:hover{background:var(--admin-table-hover)!important}
+body.admin-theme-ivory :is(td,th),
+body.admin-theme-slate :is(td,th){
+  color:var(--text);
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory :is(.catalog-table-wrap,.table-wrap,.table-container,.data-table-wrap,.table-scroll),
+body.admin-theme-slate :is(.catalog-table-wrap,.table-wrap,.table-container,.data-table-wrap,.table-scroll){
+  background:var(--surface)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory :is(.catalog-toolbar,.toolbar,.filter-bar,.search-box),
+body.admin-theme-slate :is(.catalog-toolbar,.toolbar,.filter-bar,.search-box){
+  background:var(--surface-2)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory :is(.panel-card,.dashboard-card,.editor-panel,.editor-dialog,.modal,.modal-content,.dialog,.form-card,.settings-card,.accordion-item,.accordion-content),
+body.admin-theme-slate :is(.panel-card,.dashboard-card,.editor-panel,.editor-dialog,.modal,.modal-content,.dialog,.form-card,.settings-card,.accordion-item,.accordion-content){
+  background-color:var(--surface)!important;
+  color:var(--text);
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory :is(.panel-card,.dashboard-card,.editor-panel,.editor-dialog,.modal,.modal-content,.dialog,.form-card,.settings-card,.accordion-item,.accordion-content) :is(h1,h2,h3,h4,label,.field-label),
+body.admin-theme-slate :is(.panel-card,.dashboard-card,.editor-panel,.editor-dialog,.modal,.modal-content,.dialog,.form-card,.settings-card,.accordion-item,.accordion-content) :is(h1,h2,h3,h4,label,.field-label){color:var(--text)}
+body.admin-theme-ivory :is(.panel-card,.dashboard-card,.editor-panel,.editor-dialog,.modal,.modal-content,.dialog,.form-card,.settings-card,.accordion-item,.accordion-content) :is(p,small,.helper-text,.muted),
+body.admin-theme-slate :is(.panel-card,.dashboard-card,.editor-panel,.editor-dialog,.modal,.modal-content,.dialog,.form-card,.settings-card,.accordion-item,.accordion-content) :is(p,small,.helper-text,.muted){color:var(--muted)}
+body.admin-theme-ivory :is(pre,code,.code-editor,.text-editor,.json-editor),
+body.admin-theme-slate :is(pre,code,.code-editor,.text-editor,.json-editor){
+  background:var(--surface-2)!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory :is(.row-action,.pagination button,.catalog-select-all-page,.catalog-clear-selection),
+body.admin-theme-slate :is(.row-action,.pagination button,.catalog-select-all-page,.catalog-clear-selection){
+  background:var(--surface-2)!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory :is(.nav-group,.admin-theme-switch),
+body.admin-theme-slate :is(.nav-group,.admin-theme-switch){
+  background:var(--surface-2)!important;
+  border-color:var(--line)!important;
+}
