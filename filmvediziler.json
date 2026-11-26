@@ -20805,14 +20805,16 @@
       "synopsis",
       "season",
       "episodes",
-      "cast"
+      "similar"
     ],
     "right": [
       "credits",
-      "similar",
+      "reviews",
+      "cast"
+    ],
+    "hidden": [
       "reviews"
     ],
-    "hidden": [],
     "removed": []
   },
   "adminProfile": {
@@ -20825,7 +20827,12 @@
     "showLogoIcon": false,
     "brandPrimary": "Perde",
     "brandAccent": "Film",
+    "brandPrimaryColor": "#D9A441",
+    "brandAccentColor": "#F5D27A",
     "logoImage": "./assets/logos/perde-header.png",
+    "faviconImage": "./assets/logos/perde-app-icon.svg",
+    "faviconWidth": 32,
+    "faviconHeight": 32,
     "showHome": true,
     "homeLabel": "Ana Sayfa",
     "showExplore": true,
@@ -20857,18 +20864,18 @@
       }
     ],
     "logoWidth": 32,
-    "logoHeight": 32,
-    "faviconImage": "./assets/logos/perde-app-icon.svg",
-    "faviconWidth": 32,
-    "faviconHeight": 32,
-    "brandPrimaryColor": "#D9A441",
-    "brandAccentColor": "#F5D27A"
+    "logoHeight": 32
   },
   "footerConfig": {
     "enabled": true,
+    "customLinks": [],
     "brandPrimary": "Perde",
     "brandAccent": "Film",
+    "brandPrimaryColor": "#D9A441",
+    "brandAccentColor": "#F5D27A",
     "logoImage": "./assets/logos/perde-mark.svg",
+    "logoWidth": 40,
+    "logoHeight": 40,
     "description": "Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.",
     "showBadges": true,
     "badgeOne": "KİŞİSEL KÜTÜPHANE",
@@ -20885,12 +20892,7 @@
     "ctaLabel": "Kütüphaneme Git",
     "showCta": true,
     "copyright": "© 2026 Perde. Tüm hakları saklıdır.",
-    "showBackToTop": true,
-    "customLinks": [],
-    "logoWidth": 40,
-    "logoHeight": 40,
-    "brandPrimaryColor": "#D9A441",
-    "brandAccentColor": "#F5D27A"
+    "showBackToTop": true
   },
   "franchises": [
     {
