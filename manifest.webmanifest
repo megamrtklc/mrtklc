@@ -20,8 +20,8 @@
   ],
   "icons": [
     {
-      "src": "./assets/logos/perde-favicon.png?v=698c60c1e144e4dc9650b5d9dc67265e671541c7",
-      "sizes": "512x512",
+      "src": "./assets/logos/perde-favicon.png?v=e2b349ffd5c72030cf3e8d5f9c17148028d90f4a",
+      "sizes": "1200x1200",
       "type": "image/png",
       "purpose": "any maskable"
     },
