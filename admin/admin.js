@@ -2328,6 +2328,13 @@
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
   $('#header-footer-form').addEventListener('input',event=>{if(event.target.id==='hf-favicon-width'||event.target.id==='hf-favicon-height')renderLogoPreview('favicon',state.data?.headerConfig?.faviconImage||'');updateHeaderFooterDraftState();});
+  function setHeaderFooterTab(name){
+    const active=name==='footer'?'footer':'header';
+    $('[data-hf-tab]').forEach(button=>{const selected=button.dataset.hfTab===active;button.classList.toggle('is-active',selected);button.setAttribute('aria-selected',String(selected));});
+    $('[data-hf-panel]').forEach(panel=>{panel.hidden=panel.dataset.hfPanel!==active;});
+  }
+  $('[data-hf-tab]').forEach(button=>button.addEventListener('click',()=>setHeaderFooterTab(button.dataset.hfTab)));
+  setHeaderFooterTab('header');
   
   function hfHexToRgb(hex){const value=String(hex||'').replace('#','');if(!/^(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(value))return null;const full=value.length===3?value.split('').map(x=>x+x).join(''):value;return {r:parseInt(full.slice(0,2),16),g:parseInt(full.slice(2,4),16),b:parseInt(full.slice(4,6),16)};}
   function hfRgbToHex({r,g,b}){return '#'+[r,g,b].map(x=>Math.round(x).toString(16).padStart(2,'0')).join('').toUpperCase();}

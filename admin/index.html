@@ -236,13 +236,14 @@
  
 
  <form id="header-footer-form" class="panel-card hf-editor">
-  <details class="hf-accordion" open>
-   <summary><span class="hf-accordion-index">01</span><span class="hf-accordion-copy"><b>Header · Üst menü</b><small>Logo, ana menü bağlantıları ve görünürlük ayarları</small></span><span class="hf-accordion-state">Düzenle</span></summary>
-   <section class="hf-preview-panel hf-preview-panel-header" aria-label="Header canlı önizlemesi">
-    <div class="hf-preview-heading"><div><span class="section-index">HEADER / CANLI TASLAK</span><h3>Yalnızca üst menü</h3><p>Header ayarlarının görünümü. Sayfa içeriği ve footer gösterilmez.</p></div><div class="hf-preview-devices"><button type="button" class="hf-preview-device active" data-preview-kind="header" data-device="desktop">Masaüstü</button><button type="button" class="hf-preview-device" data-preview-kind="header" data-device="mobile">Mobil</button></div></div>
-    <div id="hf-header-live-preview" class="hf-live-preview" data-device="desktop"><div class="hf-preview-empty">Header önizlemesi hazırlanıyor…</div></div>
-   </section>
-  <div class="hf-grid">
+
+  <div class="hf-tabs" role="tablist" aria-label="Site görünümü ayarları">
+   <button type="button" class="hf-tab is-active" role="tab" id="hf-tab-header" aria-selected="true" aria-controls="hf-panel-header" data-hf-tab="header"><span class="hf-tab-icon" aria-hidden="true">▤</span><span><b>Header</b><small>Üst menü ve logo</small></span></button>
+   <button type="button" class="hf-tab" role="tab" id="hf-tab-footer" aria-selected="false" aria-controls="hf-panel-footer" data-hf-tab="footer"><span class="hf-tab-icon" aria-hidden="true">▥</span><span><b>Footer</b><small>Alt alan ve bağlantılar</small></span></button>
+  </div>
+  <section class="hf-tab-panel" id="hf-panel-header" role="tabpanel" aria-labelledby="hf-tab-header" data-hf-panel="header">
+   <section class="hf-tab-section hf-tab-header" aria-label="Header ayarları">
+   <div class="hf-grid">
    <label class="field"><span>Logo ana metni</span><input id="hf-header-primary" maxlength="24"></label>
     <label class="field"><span>Logo genişliği · en fazla (px)</span><input id="hf-header-logo-width" type="number" min="12" max="256" step="1" value="32"></label>
     <label class="field"><span>Logo yüksekliği · en fazla (px)</span><input id="hf-header-logo-height" type="number" min="12" max="256" step="1" value="32"></label>
@@ -309,14 +310,27 @@
   <div class="hf-nav-row"><label class="field"><span>Seri Filmler menü adı</span><input id="hf-header-franchises-label" maxlength="32"></label><label class="toggle-field"><input id="hf-header-franchises" type="checkbox"><span>Göster</span></label></div>
   <div class="hf-nav-row"><label class="field"><span>Video bağlantıları menü adı</span><input id="hf-header-video-label" maxlength="40"></label><label class="toggle-field"><input id="hf-header-video" type="checkbox"><span>Göster</span></label></div>
   <div class="hf-custom-links"><div class="hf-subhead"><h3>Ek menüler</h3><span>İstediğin kadar özel menü ekleyebilirsin.</span></div><div id="hf-header-custom-links" class="hf-custom-link-list"></div><button type="button" class="secondary-button hf-add-link" data-add-custom-link="header">+ Header menüsü ekle</button></div>
+  </section>
+   <details class="hf-accordion">
+   <summary><span class="hf-accordion-index">03</span><span class="hf-accordion-copy"><b>Site İkonu · Favicon</b><small>Tarayıcı sekmesi, yer imleri ve mobil kısayol görseli</small></span><span class="hf-accordion-state">Düzenle</span></summary>
+   <div class="hf-grid">
+    <label class="field"><span>İkon genişliği · önizleme (px)</span><input id="hf-favicon-width" type="number" min="16" max="256" step="1" value="64"></label>
+    <label class="field"><span>İkon yüksekliği · önizleme (px)</span><input id="hf-favicon-height" type="number" min="16" max="256" step="1" value="64"></label>
+    <p class="hf-logo-note wide">PNG dosyası assets/logos/ klasöründe ayrı saklanır. En fazla 2 MB. Önerilen kaynak görsel: kare PNG.</p>
+    <div class="hf-logo-upload wide" data-logo-upload="favicon">
+     <div class="hf-logo-copy"><b>Site ikonu önizlemesi</b><span>Tarayıcı sekmesi ve destekleyen mobil kısayollar için kullanılır.</span><div class="hf-logo-preview" id="hf-favicon-logo-preview"><span>İkon yüklenmedi</span></div></div>
+     <div class="hf-logo-actions"><label class="secondary-button hf-upload-button" for="hf-favicon-logo-file">İkon yükle</label><input id="hf-favicon-logo-file" type="file" accept="image/png" hidden><button type="button" class="hf-remove-logo" data-remove-logo="favicon">İkonu sil</button></div>
+    </div>
+   </div>
   </details>
-  <details class="hf-accordion">
-   <summary><span class="hf-accordion-index">02</span><span class="hf-accordion-copy"><b>Footer · Alt alan</b><small>Marka açıklaması, bağlantı sütunları ve telif satırı</small></span><span class="hf-accordion-state">Düzenle</span></summary>
-   <section class="hf-preview-panel hf-preview-panel-footer" aria-label="Footer canlı önizlemesi">
-    <div class="hf-preview-heading"><div><span class="section-index">FOOTER / CANLI TASLAK</span><h3>Yalnızca alt alan</h3><p>Footer ayarlarının görünümü. Header ve sayfa içeriği gösterilmez.</p></div><div class="hf-preview-devices"><button type="button" class="hf-preview-device active" data-preview-kind="footer" data-device="desktop">Masaüstü</button><button type="button" class="hf-preview-device" data-preview-kind="footer" data-device="mobile">Mobil</button></div></div>
-    <div id="hf-footer-live-preview" class="hf-live-preview" data-device="desktop"><div class="hf-preview-empty">Footer önizlemesi hazırlanıyor…</div></div>
+   <section class="hf-preview-panel hf-preview-panel-header" aria-label="Header canlı önizlemesi">
+    <div class="hf-preview-heading"><div><span class="section-index">HEADER / CANLI TASLAK</span><h3>Yalnızca üst menü</h3><p>Header ayarlarının görünümü. Sayfa içeriği ve footer gösterilmez.</p></div><div class="hf-preview-devices"><button type="button" class="hf-preview-device active" data-preview-kind="header" data-device="desktop">Masaüstü</button><button type="button" class="hf-preview-device" data-preview-kind="header" data-device="mobile">Mobil</button></div></div>
+    <div id="hf-header-live-preview" class="hf-live-preview" data-device="desktop"><div class="hf-preview-empty">Header önizlemesi hazırlanıyor…</div></div>
    </section>
-  <div class="hf-grid">
+  </section>
+  <section class="hf-tab-panel" id="hf-panel-footer" role="tabpanel" aria-labelledby="hf-tab-footer" data-hf-panel="footer" hidden>
+   <section class="hf-tab-section hf-tab-footer" aria-label="Footer ayarları">
+   <div class="hf-grid">
    <label class="field"><span>Logo ana metni</span><input id="hf-footer-primary" maxlength="24"></label>
     <label class="field"><span>Logo genişliği (px)</span><input id="hf-footer-logo-width" type="number" min="24" max="640" step="1" value="160"></label>
     <label class="field"><span>Logo yüksekliği (px)</span><input id="hf-footer-logo-height" type="number" min="16" max="240" step="1" value="40"></label>
@@ -396,20 +410,13 @@
    <label class="toggle-field"><input id="hf-footer-backtop" type="checkbox"><span>Yukarı dön bağlantısını göster</span></label>
   </div>
   <div class="hf-custom-links"><div class="hf-subhead"><h3>Ek footer menüleri</h3><span>Footer bağlantılarına özel menüler ekle.</span></div><div id="hf-footer-custom-links" class="hf-custom-link-list"></div><button type="button" class="secondary-button hf-add-link" data-add-custom-link="footer">+ Footer menüsü ekle</button></div>
-    </details>
-  <details class="hf-accordion">
-   <summary><span class="hf-accordion-index">03</span><span class="hf-accordion-copy"><b>Site İkonu · Favicon</b><small>Tarayıcı sekmesi, yer imleri ve mobil kısayol görseli</small></span><span class="hf-accordion-state">Düzenle</span></summary>
-   <div class="hf-grid">
-    <label class="field"><span>İkon genişliği · önizleme (px)</span><input id="hf-favicon-width" type="number" min="16" max="256" step="1" value="64"></label>
-    <label class="field"><span>İkon yüksekliği · önizleme (px)</span><input id="hf-favicon-height" type="number" min="16" max="256" step="1" value="64"></label>
-    <p class="hf-logo-note wide">PNG dosyası assets/logos/ klasöründe ayrı saklanır. En fazla 2 MB. Önerilen kaynak görsel: kare PNG.</p>
-    <div class="hf-logo-upload wide" data-logo-upload="favicon">
-     <div class="hf-logo-copy"><b>Site ikonu önizlemesi</b><span>Tarayıcı sekmesi ve destekleyen mobil kısayollar için kullanılır.</span><div class="hf-logo-preview" id="hf-favicon-logo-preview"><span>İkon yüklenmedi</span></div></div>
-     <div class="hf-logo-actions"><label class="secondary-button hf-upload-button" for="hf-favicon-logo-file">İkon yükle</label><input id="hf-favicon-logo-file" type="file" accept="image/png" hidden><button type="button" class="hf-remove-logo" data-remove-logo="favicon">İkonu sil</button></div>
-    </div>
-   </div>
-  </details>
-  <div class="hf-save-row"><p>Kaydettiğinde ayarlar katalog yapılandırmasına yazılır ve site yenilendiğinde uygulanır.</p><span id="hf-save-hint">Henüz kaydedilmemiş değişiklik yok.</span></div>
+    </section>
+   <section class="hf-preview-panel hf-preview-panel-footer" aria-label="Footer canlı önizlemesi">
+    <div class="hf-preview-heading"><div><span class="section-index">FOOTER / CANLI TASLAK</span><h3>Yalnızca alt alan</h3><p>Footer ayarlarının görünümü. Header ve sayfa içeriği gösterilmez.</p></div><div class="hf-preview-devices"><button type="button" class="hf-preview-device active" data-preview-kind="footer" data-device="desktop">Masaüstü</button><button type="button" class="hf-preview-device" data-preview-kind="footer" data-device="mobile">Mobil</button></div></div>
+    <div id="hf-footer-live-preview" class="hf-live-preview" data-device="desktop"><div class="hf-preview-empty">Footer önizlemesi hazırlanıyor…</div></div>
+   </section>
+  </section>
+<div class="hf-save-row"><p>Kaydettiğinde ayarlar katalog yapılandırmasına yazılır ve site yenilendiğinde uygulanır.</p><span id="hf-save-hint">Henüz kaydedilmemiş değişiklik yok.</span></div>
  </form>
 </section>
 <section class="view" id="view-brand-identity"><div class="page-heading"><div><div class="eyebrow">BRAND IDENTITY / 14</div><h1>Marka ve Kimlik Yönetimi</h1><p>Marka adını ve temel metinlerini tek merkezden yönet.</p></div></div>
