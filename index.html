@@ -170,7 +170,7 @@
     </script>
 <script defer src="./js/brand-identity-runtime.js?v=20261124-brand-identity-v2"></script>
     <!-- Çekirdek yardımcıları: güvenli depolama, tema yönetimi ve eski profil verilerinin geçişi. -->
-    <script defer src="./js/core.js?v=20261124-core-split-v1"></script>
+    <script defer src="./js/core.js?v=20261126-admin-experience-lock-v1"></script>
     <!-- Görsel yardımcıları: TMDB responsive srcset üretimi ve bozuk görseller için yedek görsel. -->
     <script defer src="./js/image-helpers.js?v=20261124-image-helpers-v1"></script>
     <!-- Ana Alpine uygulaması: sayfa durumları, gezinme ve uygulama özellikleri. -->
@@ -187,7 +187,7 @@
         document.head.appendChild(tvScrollScript);
       }
     </script>
-    <script defer fetchpriority="high" src="./app.min.js?v=20261125-modular-v33"></script>
+    <script defer fetchpriority="high" src="./app.min.js?v=20261126-admin-experience-lock-v1"></script>
     <script defer fetchpriority="low" src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
@@ -256,7 +256,7 @@
                             <i class="fa-solid fa-chart-simple w-4 text-center text-rose-500"></i><span class="flex-1">İstatistikler</span>
                         </button>
                         <div class="cineverse-dropdown-divider my-2"></div>
-                        <p class="px-4 pb-1 text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Görünüm teması</p>
+                        <div id="perde-theme-picker" hidden><p class="px-4 pb-1 text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Görünüm teması</p>
                         <button type="button" @click="setTheme('ivory'); openProfileMenu = false;" class="cineverse-dropdown-item">
                             <i class="fa-solid fa-sun w-4 text-center text-amber-500"></i><span class="flex-1">Fil Dişi (Sıcak Krem)</span><i x-show="theme === 'ivory'" class="fa-solid fa-check ml-auto text-rose-500"></i>
                         </button>
@@ -265,7 +265,7 @@
                         </button>
                         <button type="button" @click="setTheme('dark'); openProfileMenu = false;" class="cineverse-dropdown-item">
                             <i class="fa-solid fa-moon w-4 text-center text-indigo-400"></i><span class="flex-1">Karanlık Mod</span><i x-show="theme === 'dark'" class="fa-solid fa-check ml-auto text-rose-500"></i>
-                        </button>
+                        </button></div>
                         <div x-data="{ canInstall: false }" x-init="window.addEventListener('perde-pwa-install-available', () => canInstall = true); window.addEventListener('perde-pwa-installed', () => canInstall = false)" x-show="canInstall" class="px-2">
                             <button type="button" @click="window.__PERDE_INSTALL_PROMPT__ && window.__PERDE_INSTALL_PROMPT__.prompt(); window.__PERDE_INSTALL_PROMPT__ = null; canInstall = false" class="cineverse-dropdown-item w-full">
                                 <i class="fa-solid fa-download w-4 text-center text-amber-500"></i><span class="flex-1">Perde uygulamasını yükle</span>
