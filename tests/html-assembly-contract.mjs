@@ -102,7 +102,7 @@ assert.match(searchOverlay, /personSearchResults/, 'Arama partial dosyası kişi
 assert.match(footer, /CineVerse Responsive Footer/, 'Footer partial dosyası alt bilgi alanını içermeli.');
 assert.match(footer, /footerConfig/, 'Footer partial dosyası yönetilebilir footer ayarlarını içermeli.');
 
-assert.match(output, /<header x-show="headerConfig.enabled !== false"/, 'Üretilmiş index header alanını içermeli.');
+assert.match(output, /<header x-cloak x-show="headerConfigReady && headerConfig.enabled !== false"/, 'Üretilmiş index header alanını içermeli.');
 const runtimeSearchOverlay = await readFile('runtime-pages/search-overlay.html', 'utf8');
 assert.match(runtimeSearchOverlay, /cineverse-search-dialog/, 'Gecikmeli arama penceresi runtime dosyasında bulunmalı.');
 assert.match(output, /<footer id="cineverse-footer"/, 'Üretilmiş index footer alanını içermeli.');
