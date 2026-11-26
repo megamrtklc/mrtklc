@@ -730,7 +730,7 @@
     if(file.size>4*1024*1024)throw new Error('Logo dosyası 4 MB sınırını aşamaz.');
     const source=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Logo dosyası okunamadı.'));reader.readAsDataURL(file);});
     const image=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Görsel açılamadı.'));img.src=source;});
-    const scale=Math.min(1,480/image.width,160/image.height),canvas=document.createElement('canvas');
+    const scale=Math.min(1,320/image.width,107/image.height),canvas=document.createElement('canvas');
     canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));
     canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
     return canvas.toDataURL('image/webp',.82);
