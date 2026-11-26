@@ -1783,3 +1783,44 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
   #view-catalog .catalog-table td:nth-child(4):before,
   #view-catalog .catalog-table td:nth-child(5):before{font-size:7px}
 }
+
+
+/* Perde admin typography and compact action controls */
+body,.admin-shell,button,input,select,textarea{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.main-content{font-size:14px}
+.main-content h1,.main-content h2,.main-content h3,.panel-card h2,.panel-card h3,.section-heading h2,.page-heading h1{line-height:1.28;letter-spacing:-.025em;overflow-wrap:anywhere}
+.main-content h1,.page-heading h1{font-size:clamp(24px,2vw,28px);font-weight:750}
+.main-content h2,.panel-card h2,.section-heading h2{font-size:19px;font-weight:700}
+.main-content h3,.panel-card h3{font-size:16px;font-weight:650}
+.main-content p,.main-content label,.main-content td,.main-content th,.main-content input,.main-content select,.main-content textarea{font-size:14px}
+.main-content small,.main-content .field-hint,.main-content .help-text,.main-content .muted{font-size:13px;line-height:1.5}
+.main-content button{font-size:13px;font-weight:600;line-height:1.35}
+.main-content input,.main-content select,.main-content textarea{min-height:40px;line-height:1.45}
+.main-content textarea{min-height:90px}
+.main-content th{font-weight:650}
+.main-content td{line-height:1.45}
+.homepage-layout-actions,.watch-order-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.homepage-layout-actions button,.watch-order-actions button,.watch-order-visibility,.watch-order-move,.watch-order-transfer,.watch-order-remove,.homepage-layout-toggle{
+  min-width:34px;min-height:34px;padding:0 9px;display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  border:1px solid #414653;border-radius:9px;background:#292d37;color:#d9dee8;
+  font-size:13px;font-weight:650;line-height:1;box-shadow:none;transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease
+}
+.watch-order-move,.watch-order-visibility,.watch-order-remove,.homepage-layout-toggle{width:34px;padding:0;font-size:15px}
+.watch-order-transfer{padding:0 10px;font-size:12px}
+.homepage-layout-actions button:hover,.watch-order-actions button:hover,.homepage-layout-toggle:hover{
+  background:#353b47;border-color:#b99a65;color:#f0d8a7;transform:translateY(-1px)
+}
+.homepage-layout-actions button:disabled,.watch-order-actions button:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.watch-order-visibility[aria-label*="göster"],.homepage-layout-toggle[aria-label*="göster"]{color:#a8d4bd}
+.watch-order-remove{color:#d7a5a5}
+.watch-order-remove:hover{border-color:#a85f66;background:#38282d;color:#ffd5d5}
+@media(max-width:700px){
+ .main-content{font-size:14px}
+ .main-content h1,.page-heading h1{font-size:23px}
+ .main-content h2,.panel-card h2,.section-heading h2{font-size:18px}
+ .main-content p,.main-content label,.main-content td,.main-content th{font-size:14px}
+ .main-content small,.main-content .field-hint,.main-content .help-text,.main-content .muted{font-size:12.5px}
+ .homepage-layout-actions,.watch-order-actions{gap:5px}
+ .homepage-layout-actions button,.watch-order-actions button,.homepage-layout-toggle{min-width:32px;min-height:32px}
+}
