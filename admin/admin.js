@@ -18,31 +18,13 @@
     'published-collections':{title:'Yayınlanan Koleksiyonlar',description:'Admin panelinde hazırlanan özel seçkiler',icon:'▧'},
     catalog:{title:'Tüm Yapımlar & Trendler',description:'Katalogdan seçilen genel yapım rafı',icon:'▥'}
   };
-  const ADMIN_THEME_KEY='cv-admin-theme-v1';
-  function applyAdminTheme(theme){
-    const allowed=['ivory','slate','dark'];
-    let active=theme;
-    if(!allowed.includes(active)){try{active=localStorage.getItem(ADMIN_THEME_KEY)||'dark';}catch(error){active='dark';}}
-    if(!allowed.includes(active))active='dark';
-    document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark');
-    document.body.classList.add('admin-theme-'+active);
-    document.documentElement.style.colorScheme=active==='dark'?'dark':'light';
- document.documentElement.style.backgroundColor=active==='ivory'?'#f5f1e8':(active==='slate'?'#edf1f5':'#17191f');
-    const meta=document.querySelector('meta[name="theme-color"]');
-    if(meta)meta.content=active==='ivory'?'#f5f1e8':(active==='slate'?'#edf1f5':'#17191f');
-    document.querySelectorAll('[data-admin-theme]').forEach(button=>{
-      const selected=button.dataset.adminTheme===active;
-      button.classList.toggle('active',selected);
-      button.setAttribute('aria-pressed',selected?'true':'false');
-    });
-    try{localStorage.setItem(ADMIN_THEME_KEY,active);}catch(error){}
-    return active;
-  }
   function initAdminThemePicker(){
-    applyAdminTheme();
-    document.querySelectorAll('[data-admin-theme]').forEach(button=>{
-      button.addEventListener('click',()=>applyAdminTheme(button.dataset.adminTheme));
-    });
+    document.body.classList.remove('admin-theme-ivory','admin-theme-slate');
+    document.body.classList.add('admin-theme-dark');
+    document.documentElement.style.colorScheme='dark';
+    document.documentElement.style.backgroundColor='#17191f';
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.content='#17191f';
   }
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const titleOf = item => item.title || item.tmdbTitle || item.originalTitle || item.tmdbOriginalTitle || 'Başlıksız yapım';
