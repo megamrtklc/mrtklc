@@ -430,7 +430,13 @@ async function syncPwaIconFiles(env,iconSha,width,height) {
   if(!indexRead.ok)throw new Error("Ana sayfa ikon bağlantıları okunamadı.");
   let html=await indexRead.text();
   const iconHref="./assets/logos/perde-favicon.png?v="+encodeURIComponent(iconSha);
-  html=html.replace(/<link[^>]*>/gi,tag=>/\brel=["\'](?:icon|shortcut icon|apple-touch-icon)["\']/.test(tag)?tag.replace(/href=["\'][^"\']*["\']/,"href=\""+iconHref+"\""):tag);
+  const iconLink='<link rel="icon" type="image/png" sizes="'+width+"x"+height+'" href="'+iconHref+'">';
+  let iconInserted=false;
+  html=html.replace(/<link[^>]*>/gi,tag=>{
+    if(/\brel=["']icon["']/.test(tag)){if(iconInserted)return "";iconInserted=true;return iconLink;}
+    if(/\brel=["'](?:shortcut icon|apple-touch-icon)["']/.test(tag))return tag.replace(/href=["'][^"']*["']/,'href="'+iconHref+'"');
+    return tag;
+  });
   await writePublicRepoFile(env,"index.html",html,"Refresh site favicon links");
   const swRead=await fetch(raw+"sw.js?"+Date.now(),{headers:{"cache-control":"no-cache"}});
   if(!swRead.ok)throw new Error("Service Worker dosyası okunamadı.");
