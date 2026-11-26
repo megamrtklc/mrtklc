@@ -722,7 +722,7 @@
   const pendingLogoRemovals=new Set();
   function renderLogoPreview(kind,src){
     const preview=$('#hf-'+kind+'-logo-preview');if(!preview)return;
-    preview.innerHTML=src?'<img src="'+src+'" alt="'+kind+' logo önizlemesi">':'<span>Logo yüklenmedi</span>';
+    const width=kind==='favicon'?Math.max(16,Math.min(256,Number($('#hf-favicon-width')?.value)||64)):null;const height=kind==='favicon'?Math.max(16,Math.min(256,Number($('#hf-favicon-height')?.value)||64)):null;preview.innerHTML=src?'<img src="'+src+'" alt="'+kind+' görsel önizlemesi" '+(kind==='favicon'?'style="width:'+width+'px;height:'+height+'px;max-width:100%;object-fit:contain"':'')+'>':'<span>Görsel yüklenmedi</span>';
     const remove=$('[data-remove-logo="'+kind+'"]');if(remove)remove.disabled=!src;
   }
   async function readLogoFile(file){
@@ -2315,7 +2315,7 @@
   $('#franchise-cancel').addEventListener('click',()=>$('#franchise-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
-  $('#header-footer-form').addEventListener('input',updateHeaderFooterDraftState);
+  $('#header-footer-form').addEventListener('input',event=>{if(event.target.id==='hf-favicon-width'||event.target.id==='hf-favicon-height')renderLogoPreview('favicon',state.data?.headerConfig?.faviconImage||'');updateHeaderFooterDraftState();});
   $('#header-footer-form').addEventListener('change',updateHeaderFooterDraftState);
   $$('.hf-preview-device').forEach(button=>button.addEventListener('click',()=>{headerFooterPreviewDevice=button.dataset.device;$$('.hf-preview-device').forEach(item=>item.classList.toggle('active',item===button));renderHeaderFooterPreview();}));
   $('#hf-reset')?.addEventListener('click',()=>{if(confirm('Header ve Footer ayarlarını varsayılan değerlere döndürmek istiyor musun? Bu işlem kaydetmeden canlı siteyi değiştirmez.'))resetHeaderFooterDraft(true);});
