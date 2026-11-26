@@ -724,17 +724,27 @@
     preview.innerHTML=src?'<img src="'+src+'" alt="'+kind+' logo önizlemesi">':'<span>Logo yüklenmedi</span>';
     const remove=$('[data-remove-logo="'+kind+'"]');if(remove)remove.disabled=!src;
   }
-  async function readLogoFile(file,kind){
+  async function readLogoFile(file){
     if(!file)return '';
-    if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw new Error('Yalnızca PNG, JPG veya WebP dosyası yükleyebilirsin.');
-    if(file.size>4*1024*1024)throw new Error('Logo dosyası 4 MB sınırını aşamaz.');
-    const source=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Logo dosyası okunamadı.'));reader.readAsDataURL(file);});
-    const image=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Görsel açılamadı.'));img.src=source;});
-    const maxWidth=kind==='header'?84:320,maxHeight=kind==='header'?28:107;
-    const scale=Math.min(1,maxWidth/image.width,maxHeight/image.height),canvas=document.createElement('canvas');
-    canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));
-    canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
-    return canvas.toDataURL('image/webp',.82);
+    if(file.type!=='image/png')throw new Error('Logo yalnızca PNG formatında yüklenebilir.');
+    if(file.size>2*1024*1024)throw new Error('Logo dosyası 2 MB sınırını aşamaz.');
+    const bytes=new Uint8Array(await file.arrayBuffer());
+    const signature=[137,80,78,71,13,10,26,10];
+    if(signature.some((value,index)=>bytes[index]!==value))throw new Error('Dosya geçerli bir PNG görseli değil.');
+    let binary='';for(let offset=0;offset<bytes.length;offset+=0x8000)binary+=String.fromCharCode(...bytes.subarray(offset,offset+0x8000));
+    return btoa(binary);
+  }
+  async function uploadSiteLogo(kind,file){
+    const base64=await readLogoFile(file);
+    const response=await fetch('/api/site-logo',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind,base64})});
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok||!result.url)throw new Error(result.error||'Logo GitHub deposuna kaydedilemedi.');
+    return result.url;
+  }
+  async function removeSiteLogo(kind){
+    const response=await fetch('/api/site-logo',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind,remove:true})});
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok)throw new Error(result.error||'Logo dosyası silinemedi.');
   }
   function renderHeaderFooter(){
     if(!state.data)return;
