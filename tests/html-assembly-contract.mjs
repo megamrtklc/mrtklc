@@ -29,6 +29,10 @@ const [shell, homepage, watchPage, watchLeftColumn, watchRightColumn, actorDirec
 
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:HOME -->/g) || []).length, 1,
   'Kaynak kabukta HOME işareti tam bir kez bulunmalı.');
+assert.match(shell, /id="cv-early-tv-detection"/, 'TV algılama kodu ilk HTML içinde erken çalışmalı.');
+assert.match(shell, /Tizen|webOS|NetCast|BRAVIA|AFT\[A-Z0-9\]\*|HbbTV|Viera|Roku/, 'TV algılama yaygın üretici ve işletim sistemi belirteçlerini kapsamalı.');
+assert.doesNotMatch(shell, /remoteFirstAndroid|width >= 960/, 'Ekran boyutuna göre Android cihazı TV sayan riskli kestirme kullanılmamalı.');
+assert.match(shell, /dataset\.cvDeviceMode === 'tv'/, 'TV kumandası betiği yalnızca TV algılandığında yüklenmeli.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:WATCH -->/g) || []).length, 1,
   'Kaynak kabukta WATCH işareti tam bir kez bulunmalı.');
 assert.equal((shell.match(/<!-- PERDE_TEMPLATE:ACTOR_DIRECTOR -->/g) || []).length, 1,
