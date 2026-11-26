@@ -2344,6 +2344,12 @@
      });
   });
   $('#header-footer-form').addEventListener('click',event=>{
+    const preset=event.target.closest('[data-color-preset]');
+    if(preset){
+      const input=preset.closest('.hf-color-field')?.querySelector('input[type="color"]');
+      if(input){input.value=preset.dataset.colorPreset;input.dispatchEvent(new Event('input',{bubbles:true}));}
+      return;
+    }
     const add=event.target.closest('[data-add-custom-link]');
     if(add){const kind=add.dataset.addCustomLink;const root=$('#hf-'+kind+'-custom-links');const current=readCustomLinkRows(kind);current.push({label:'',page:'home'});renderCustomLinkRows(kind,current);const inputs=root.querySelectorAll('[data-custom-link-label]');if(inputs.length)inputs[inputs.length-1].focus();updateHeaderFooterDraftState();return;}
     const remove=event.target.closest('[data-remove-custom-link]');
