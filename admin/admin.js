@@ -816,7 +816,7 @@
     }else if(savedBaseline){
       const saved=JSON.parse(savedBaseline);state.data.headerConfig=saved.header;state.data.footerConfig=saved.footer;
     }
-    renderHeaderFooter();
+    pendingLogoRemovals.clear();renderHeaderFooter();
     if(useDefaults){headerFooterSavedSnapshot=savedBaseline;updateHeaderFooterDraftState();}
   }
   async function saveHeaderFooter(event){
@@ -2327,7 +2327,7 @@
       catch(error){toast(error.message,'error');}finally{event.target.value='';}
     });
      $('[data-remove-logo="'+kind+'"]')?.addEventListener('click',async()=>{
-       if(!confirm('Bu alanın PNG logo dosyası GitHub deposundan silinsin mi?'))return;
+       if(!confirm('Bu alanın logosu kaldırılıp kaydedilsin mi?'))return;
        pendingLogoRemovals.add(kind);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');updateHeaderFooterDraftState();toast('Logo kaldırma taslağa alındı. Kalıcı olması için ayarları kaydet.');
      });
   });
