@@ -753,7 +753,7 @@
     const {header:h,footer:f}=headerFooterConfig();
     const fields={
       'hf-header-primary':h.brandPrimary,'hf-header-accent':h.brandAccent,'hf-header-logo-width':h.logoWidth||32,'hf-header-logo-height':h.logoHeight||32,'hf-header-home-label':h.homeLabel,'hf-header-explore-label':h.exploreLabel,'hf-header-franchises-label':h.franchisesLabel||'Seri Filmler','hf-header-video-label':h.videoLabel,
-      'hf-footer-primary':f.brandPrimary,'hf-footer-accent':f.brandAccent,'hf-footer-logo-width':f.logoWidth||160,'hf-footer-logo-height':f.logoHeight||40,'hf-footer-description':f.description,'hf-footer-badge-one':f.badgeOne,'hf-footer-badge-two':f.badgeTwo,
+      'hf-favicon-width':h.faviconWidth||64,'hf-favicon-height':h.faviconHeight||64,'hf-footer-primary':f.brandPrimary,'hf-footer-accent':f.brandAccent,'hf-footer-logo-width':f.logoWidth||160,'hf-footer-logo-height':f.logoHeight||40,'hf-footer-description':f.description,'hf-footer-badge-one':f.badgeOne,'hf-footer-badge-two':f.badgeTwo,
       'hf-footer-col-one':f.columnOneTitle,'hf-footer-home-label':f.homeLabel,'hf-footer-explore-label':f.exploreLabel,'hf-footer-library-label':f.libraryLabel,
       'hf-footer-col-two':f.columnTwoTitle,'hf-footer-watchlist-label':f.watchlistLabel,'hf-footer-stats-label':f.statsLabel,'hf-footer-feature-title':f.featureTitle,
       'hf-footer-feature-description':f.featureDescription,'hf-footer-cta-label':f.ctaLabel,'hf-footer-copyright':f.copyright
@@ -766,7 +766,7 @@
     };
     Object.entries(checks).forEach(([id,value])=>{const el=$('#'+id);if(el)el.checked=value;});
     renderCustomLinkRows('header',h.customLinks);renderCustomLinkRows('footer',f.customLinks);
-    renderLogoPreview('header',h.logoImage);renderLogoPreview('footer',f.logoImage);
+    renderLogoPreview('header',h.logoImage);renderLogoPreview('footer',f.logoImage);renderLogoPreview('favicon',h.faviconImage);
     headerFooterSavedSnapshot=JSON.stringify(collectHeaderFooterDraft());updateHeaderFooterDraftState();renderHeaderFooterPreview();
   }
 
@@ -792,7 +792,7 @@
   function collectHeaderFooterDraft(){
     headerFooterConfig();
     const value=id=>String($('#'+id)?.value||'').trim(),checked=id=>!!$('#'+id)?.checked;
-    const header={enabled:checked('hf-header-enabled'),sticky:checked('hf-header-sticky'),showLogoIcon:checked('hf-header-logo-icon'),brandPrimary:value('hf-header-primary'),brandAccent:value('hf-header-accent'),logoImage:state.data.headerConfig?.logoImage||'',logoWidth:Math.max(12,Math.min(256,Number(value('hf-header-logo-width'))||32)),logoHeight:Math.max(12,Math.min(256,Number(value('hf-header-logo-height'))||32)),showHome:checked('hf-header-home'),homeLabel:value('hf-header-home-label')||'Ana Sayfa',showExplore:checked('hf-header-explore'),exploreLabel:value('hf-header-explore-label')||'Keşfet',showFranchises:checked('hf-header-franchises'),franchisesLabel:value('hf-header-franchises-label')||'Seri Filmler',showVideo:checked('hf-header-video'),videoLabel:value('hf-header-video-label')||'Video Bağlantıları',showSearch:checked('hf-header-search'),showProfile:checked('hf-header-profile'),showMobileMenu:checked('hf-header-mobile'),catalogMenusInitialized:true,customLinks:readCustomLinkRows('header')};
+    const header={enabled:checked('hf-header-enabled'),sticky:checked('hf-header-sticky'),showLogoIcon:checked('hf-header-logo-icon'),brandPrimary:value('hf-header-primary'),brandAccent:value('hf-header-accent'),logoImage:state.data.headerConfig?.logoImage||'',faviconImage:state.data.headerConfig?.faviconImage||'',faviconWidth:Math.max(16,Math.min(256,Number(value('hf-favicon-width'))||64)),faviconHeight:Math.max(16,Math.min(256,Number(value('hf-favicon-height'))||64)),logoWidth:Math.max(12,Math.min(256,Number(value('hf-header-logo-width'))||32)),logoHeight:Math.max(12,Math.min(256,Number(value('hf-header-logo-height'))||32)),showHome:checked('hf-header-home'),homeLabel:value('hf-header-home-label')||'Ana Sayfa',showExplore:checked('hf-header-explore'),exploreLabel:value('hf-header-explore-label')||'Keşfet',showFranchises:checked('hf-header-franchises'),franchisesLabel:value('hf-header-franchises-label')||'Seri Filmler',showVideo:checked('hf-header-video'),videoLabel:value('hf-header-video-label')||'Video Bağlantıları',showSearch:checked('hf-header-search'),showProfile:checked('hf-header-profile'),showMobileMenu:checked('hf-header-mobile'),catalogMenusInitialized:true,customLinks:readCustomLinkRows('header')};
     const footer={enabled:checked('hf-footer-enabled'),brandPrimary:value('hf-footer-primary'),brandAccent:value('hf-footer-accent'),logoImage:state.data.footerConfig?.logoImage||'',logoWidth:Math.max(24,Math.min(640,Number(value('hf-footer-logo-width'))||160)),logoHeight:Math.max(16,Math.min(240,Number(value('hf-footer-logo-height'))||40)),description:value('hf-footer-description'),showBadges:checked('hf-footer-badges'),badgeOne:value('hf-footer-badge-one'),badgeTwo:value('hf-footer-badge-two'),columnOneTitle:value('hf-footer-col-one'),homeLabel:value('hf-footer-home-label'),exploreLabel:value('hf-footer-explore-label'),libraryLabel:value('hf-footer-library-label'),columnTwoTitle:value('hf-footer-col-two'),watchlistLabel:value('hf-footer-watchlist-label'),statsLabel:value('hf-footer-stats-label'),featureTitle:value('hf-footer-feature-title'),featureDescription:value('hf-footer-feature-description'),ctaLabel:value('hf-footer-cta-label'),showCta:checked('hf-footer-cta'),copyright:value('hf-footer-copyright'),showBackToTop:checked('hf-footer-backtop'),customLinks:readCustomLinkRows('footer')};
     return {header,footer};
   }
@@ -2320,15 +2320,15 @@
   $$('.hf-preview-device').forEach(button=>button.addEventListener('click',()=>{headerFooterPreviewDevice=button.dataset.device;$$('.hf-preview-device').forEach(item=>item.classList.toggle('active',item===button));renderHeaderFooterPreview();}));
   $('#hf-reset')?.addEventListener('click',()=>{if(confirm('Header ve Footer ayarlarını varsayılan değerlere döndürmek istiyor musun? Bu işlem kaydetmeden canlı siteyi değiştirmez.'))resetHeaderFooterDraft(true);});
   $('#hf-discard')?.addEventListener('click',()=>{if(confirm('Kaydedilmemiş tüm Header ve Footer değişiklikleri geri alınsın mı?'))resetHeaderFooterDraft(false);});
-  ['header','footer'].forEach(kind=>{
+  ['header','footer','favicon'].forEach(kind=>{
     $('#hf-'+kind+'-logo-file')?.addEventListener('change',async event=>{
       const file=event.target.files?.[0];if(!file)return;
-      try{const data=await uploadSiteLogo(kind,file);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage=data;renderLogoPreview(kind,data);updateHeaderFooterDraftState();toast('PNG logo GitHub deposuna yüklendi. Görünüm ayarlarını kaydet.');}
+      try{const data=await uploadSiteLogo(kind,file);state.data[kind==='footer'?'footerConfig':'headerConfig'][kind==='favicon'?'faviconImage':'logoImage']=data;renderLogoPreview(kind,data);updateHeaderFooterDraftState();toast((kind==='favicon'?'PNG site ikonu':'PNG logo')+' GitHub deposuna yüklendi. Görünüm ayarlarını kaydet.');}
       catch(error){toast(error.message,'error');}finally{event.target.value='';}
     });
      $('[data-remove-logo="'+kind+'"]')?.addEventListener('click',async()=>{
        if(!confirm('Bu alanın logosu kaldırılıp kaydedilsin mi?'))return;
-       pendingLogoRemovals.add(kind);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');updateHeaderFooterDraftState();toast('Logo kaldırma taslağa alındı. Kalıcı olması için ayarları kaydet.');
+       pendingLogoRemovals.add(kind);state.data[kind==='footer'?'footerConfig':'headerConfig'][kind==='favicon'?'faviconImage':'logoImage']='';renderLogoPreview(kind,'');updateHeaderFooterDraftState();toast('Görsel kaldırma taslağa alındı. Kalıcı olması için ayarları kaydet.');
      });
   });
   $('#header-footer-form').addEventListener('click',event=>{
