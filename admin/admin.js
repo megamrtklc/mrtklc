@@ -724,13 +724,14 @@
     preview.innerHTML=src?'<img src="'+src+'" alt="'+kind+' logo önizlemesi">':'<span>Logo yüklenmedi</span>';
     const remove=$('[data-remove-logo="'+kind+'"]');if(remove)remove.disabled=!src;
   }
-  async function readLogoFile(file){
+  async function readLogoFile(file,kind){
     if(!file)return '';
     if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw new Error('Yalnızca PNG, JPG veya WebP dosyası yükleyebilirsin.');
     if(file.size>4*1024*1024)throw new Error('Logo dosyası 4 MB sınırını aşamaz.');
     const source=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Logo dosyası okunamadı.'));reader.readAsDataURL(file);});
     const image=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Görsel açılamadı.'));img.src=source;});
-    const scale=Math.min(1,320/image.width,107/image.height),canvas=document.createElement('canvas');
+    const maxWidth=kind==='header'?84:320,maxHeight=kind==='header'?28:107;
+    const scale=Math.min(1,maxWidth/image.width,maxHeight/image.height),canvas=document.createElement('canvas');
     canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));
     canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
     return canvas.toDataURL('image/webp',.82);
@@ -2310,7 +2311,7 @@
   ['header','footer'].forEach(kind=>{
     $('#hf-'+kind+'-logo-file')?.addEventListener('change',async event=>{
       const file=event.target.files?.[0];if(!file)return;
-      try{const data=await readLogoFile(file);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage=data;renderLogoPreview(kind,data);updateHeaderFooterDraftState();toast('Logo yüklendi. Değişikliği uygulamak için ayarları kaydet.');}
+      try{const data=await readLogoFile(file,kind);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage=data;renderLogoPreview(kind,data);updateHeaderFooterDraftState();toast('Logo yüklendi. Değişikliği uygulamak için ayarları kaydet.');}
       catch(error){toast(error.message,'error');}finally{event.target.value='';}
     });
     $('[data-remove-logo="'+kind+'"]')?.addEventListener('click',()=>{
