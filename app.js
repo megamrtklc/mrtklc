@@ -196,7 +196,7 @@
                 selectedFranchiseId: null,
                 homepageConfig: window.__CV_HERO_BOOTSTRAP__?.homepageConfig || null,
                 headerConfigReady: false,
-                headerConfig: { enabled:true, sticky:true, showLogoIcon:false, brandPrimary:'Perde', brandAccent:'Film', brandPrimaryColor:'#D9A441', brandAccentColor:'#F5D27A', logoImage:'./assets/logos/perde-header.png', faviconImage:'./assets/logos/perde-favicon-32.png', faviconWidth:32, faviconHeight:32, showHome:true, homeLabel:'Ana Sayfa', showExplore:true, exploreLabel:'Keşfet', showVideo:true, videoLabel:'Video Bağlantıları', showSearch:true, showProfile:true, showMobileMenu:true, catalogMenusInitialized:false, customLinks:[] },
+                headerConfig: { enabled:true, sticky:true, showLogoIcon:false, brandPrimary:'Perde', brandAccent:'Film', brandPrimaryColor:'#D9A441', brandAccentColor:'#F5D27A', logoImage:'./assets/logos/perde-header.png', faviconImage:'./assets/logos/perde-app-icon.svg', faviconWidth:32, faviconHeight:32, showHome:true, homeLabel:'Ana Sayfa', showExplore:true, exploreLabel:'Keşfet', showVideo:true, videoLabel:'Video Bağlantıları', showSearch:true, showProfile:true, showMobileMenu:true, catalogMenusInitialized:false, customLinks:[] },
                 footerConfigReady: false,
                 footerConfig: { enabled:true, customLinks:[], brandPrimary:'', brandAccent:'', brandPrimaryColor:'#D9A441', brandAccentColor:'#F5D27A', logoImage:'./assets/logos/perde-footer.svg', logoWidth:160, logoHeight:40, description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.', showBadges:true, badgeOne:'KİŞİSEL KÜTÜPHANE', badgeTwo:'DİZİ TAKİBİ', columnOneTitle:'Perde', homeLabel:'Ana Sayfa', exploreLabel:'Keşfet', libraryLabel:'Kütüphanem', columnTwoTitle:'İzleme Alanım', watchlistLabel:'İzleme Listem', statsLabel:'İstatistikler', featureTitle:'İzleme keyfini kişiselleştir', featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.', ctaLabel:'Kütüphaneme Git', showCta:true, copyright:'© 2026 Perde. Tüm hakları saklıdır.', showBackToTop:true },
                 watchPageConfig: null,
@@ -677,8 +677,15 @@
                         this.headerConfig = { ...this.headerConfig, ...(data?.headerConfig || {}) };
                         this.headerConfig.logoImage = (this.headerConfig.logoImage || './assets/logos/perde-header.png').replace(/^\/assets\//, './assets/');
                         this.headerConfig.faviconImage = (this.headerConfig.faviconImage || './assets/logos/perde-favicon-32.png').replace(/^\/assets\//, './assets/');
-                        const faviconHref = new URL(this.headerConfig.faviconImage + (this.headerConfig.faviconImage.includes('?') ? '&' : '?') + 'v=20261126-perde-pwa-v1', document.baseURI).href;
-                        document.querySelectorAll('link[rel~="icon"]:not([type="image/svg+xml"]), link[rel="apple-touch-icon"]').forEach(link => { link.href = faviconHref; });
+                        const faviconIsSvg = /\.svg(?:[?#]|$)/i.test(this.headerConfig.faviconImage);
+                        const faviconHref = new URL(this.headerConfig.faviconImage + (this.headerConfig.faviconImage.includes('?') ? '&' : '?') + 'v=20261126-perde-pwa-v2', document.baseURI).href;
+                        document.querySelectorAll('link[rel~="icon"]').forEach(link => {
+                            link.href = faviconHref;
+                            link.type = faviconIsSvg ? 'image/svg+xml' : 'image/png';
+                            if (faviconIsSvg) link.sizes = 'any';
+                            else link.removeAttribute('sizes');
+                        });
+                        if (!faviconIsSvg) document.querySelectorAll('link[rel="apple-touch-icon"]').forEach(link => { link.href = faviconHref; });
                         this.headerConfigReady = true;
                         if (!this.headerConfig.catalogMenusInitialized) {
                             const requiredCatalogMenus = [{label:'Filmler',page:'movies'},{label:'Diziler',page:'series'},{label:'Yerli Yapımlar',page:'turkish'}];
