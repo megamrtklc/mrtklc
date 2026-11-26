@@ -921,7 +921,7 @@ try {
     await page.setViewportSize({ width: 1440, height: 1000 });
   });
 
-  await check('Mobil başlıkta MRTSINEMA marka yazısı görünür ve taşma yapmaz', async () => {
+  await check('Mobil başlıkta Perde marka yazısı görünür ve taşma yapmaz', async () => {
     for (const width of [320, 360, 390, 430]) {
       await page.setViewportSize({ width, height: 844 });
       const brand = page.locator('header > div:first-child > div:first-child > a > span').first();
@@ -934,8 +934,8 @@ try {
         visible: getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().width > 0,
         overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
       }));
-      assert.ok(state.visible, `MRTKLC marka yazısı ${width}px ekranda görünmeli`);
-      assert.match(state.text, /MRTSINEMA/i, `MRTSINEMA yazısı ${width}px ekranda okunmalı`);
+      assert.ok(state.visible, `Perde marka yazısı ${width}px ekranda görünmeli`);
+      assert.match(state.text, /Perde/i, `Perde yazısı ${width}px ekranda okunmalı`);
       assert.equal(state.overflow, false, `${width}px ekranda yatay taşma olmamalı`);
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
