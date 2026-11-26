@@ -20860,13 +20860,15 @@
     "logoHeight": 32,
     "faviconImage": "./assets/logos/perde-favicon-32.png",
     "faviconWidth": 32,
-    "faviconHeight": 32
+    "faviconHeight": 32,
+    "brandPrimaryColor": "#D9A441",
+    "brandAccentColor": "#F5D27A"
   },
   "footerConfig": {
     "enabled": true,
     "brandPrimary": "",
     "brandAccent": "",
-    "logoImage": "./assets/logos/perde-footer.png",
+    "logoImage": "./assets/logos/perde-footer.svg",
     "description": "Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.",
     "showBadges": true,
     "badgeOne": "KİŞİSEL KÜTÜPHANE",
@@ -20886,7 +20888,9 @@
     "showBackToTop": true,
     "customLinks": [],
     "logoWidth": 160,
-    "logoHeight": 40
+    "logoHeight": 40,
+    "brandPrimaryColor": "#D9A441",
+    "brandAccentColor": "#F5D27A"
   },
   "franchises": [
     {
