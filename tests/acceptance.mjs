@@ -1762,7 +1762,7 @@ try {
     await page.locator('header .cineverse-profile-dropdown').getByRole('button', { name: /İzleme Listem/ }).click();
     await page.waitForURL(/#\/izleme-listem$/);
     await page.getByRole('heading', { name: 'Ana Profil - İzleme Listem' }).waitFor({ state: 'visible' });
-    await page.getByText('Adalet 2', { exact: true }).waitFor({ state: 'visible' });
+    await page.locator('main').getByRole('heading', { name: 'Adalet 2', exact: true }).waitFor({ state: 'visible' });
   });
 
   await check('Sayfa yenilenince detay rotası geri yükleniyor', async () => {
