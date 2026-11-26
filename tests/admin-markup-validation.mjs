@@ -30,9 +30,11 @@ console.log('PASS: Admin CSS ve JS kaynakları mevcut');
 const adminJs = readFileSync(resolve(root, 'admin/admin.js'), 'utf8');
 const adminCss = readFileSync(resolve(root, 'admin/admin.css'), 'utf8');
 
-// Uploaded logos are capped at 320×107px: enough for a 160px footer logo at 2x density.
-assert.match(adminJs, /Math\.min\(1,320\/image\.width,107\/image\.height\)/,
-  'Yüklenen logolar 320×107px sınırında küçültülmeli');
+// Header is displayed at 28px, so 84×28 keeps up to 3x density; footer remains 2x for 160×40.
+assert.match(adminJs, /kind==='header'\?84:320,maxHeight=kind==='header'\?28:107/,
+  'Header logoları 84×28px, footer logoları 320×107px sınırında küçültülmeli');
+assert.match(adminJs, /readLogoFile\(file,kind\)/,
+  'Logo yükleyici hangi alan için dosya seçildiğini almalı');
 assert.match(adminJs, /toDataURL\('image\/webp',\.82\)/,
   'Logo sıkıştırma WebP kalitesini korumalı');
 
