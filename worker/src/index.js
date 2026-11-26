@@ -481,9 +481,16 @@ async function saveSiteLogo(request,env) {
   const result=await saved.json().catch(()=>({}));
   if(!saved.ok)return json({error:result.message||"PNG logo GitHub deposuna kaydedilemedi."},502);
   const iconSha=result.content?.sha||Date.now();
+  // Logo dosyalarını içerik SHA'sına göre değişmez bir URL'de de yayımla.
+  // Böylece tarayıcı / Service Worker aynı dosya yolundaki eski görseli gösteremez.
+  const versionedPath="assets/logos/perde-"+kind+"-"+String(iconSha).slice(0,16)+".png";
+  const versionedUrl="https://api.github.com/repos/"+owner+"/"+repo+"/contents/"+versionedPath.split("/").map(encodeURIComponent).join("/");
+  const versionedWrite=await fetch(versionedUrl,{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Publish versioned Perde "+kind+" logo",content:body.base64,branch})});
+  const versionedResult=await versionedWrite.json().catch(()=>({}));
+  if(!versionedWrite.ok && versionedWrite.status!==422)throw new Error(versionedResult.message||"Sürümlenmiş logo dosyası yayımlanamadı.");
   if(kind==="favicon")await syncPwaIconFiles(env,iconSha,width,height);
-  const url="https://raw.githubusercontent.com/"+(env.GITHUB_OWNER||"megamrtklc")+"/"+(env.GITHUB_REPO||"mrtklc")+"/"+branch+"/"+path+"?v="+encodeURIComponent(iconSha);
-  return json({ok:true,url,width,height,path,manifestUpdated:kind==="favicon",cacheVersion:kind==="favicon"?String(iconSha).slice(0,12):null});
+  const url="https://raw.githubusercontent.com/"+(env.GITHUB_OWNER||"megamrtklc")+"/"+(env.GITHUB_REPO||"mrtklc")+"/"+branch+"/"+versionedPath;
+  return json({ok:true,url,width,height,path:versionedPath,manifestUpdated:kind==="favicon",cacheVersion:String(iconSha).slice(0,16)});
 }
 
 function catalogUrl(env) {
