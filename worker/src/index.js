@@ -400,6 +400,45 @@ async function saveProfilePhoto(request,env) {
 }
 
 
+async function writePublicRepoFile(env,path,content,message) {
+  const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc");
+  const branch=env.GITHUB_BRANCH||"main";
+  const apiUrl="https://api.github.com/repos/"+owner+"/"+repo+"/contents/"+path.split("/").map(encodeURIComponent).join("/");
+  const current=await fetch(apiUrl+"?ref="+encodeURIComponent(branch),{headers:githubHeaders(env)});
+  const currentData=current.ok?await current.json():{};
+  if(!current.ok&&current.status!==404)throw new Error(path+" dosyasının mevcut sürümü okunamadı.");
+  const encoded=bytesToBase64(new TextEncoder().encode(content));
+  const response=await fetch(apiUrl,{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message,content:encoded,sha:currentData.sha,branch})});
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(result.message||path+" güncellenemedi.");
+  return result.content?.sha||null;
+}
+
+async function syncPwaIconFiles(env,iconSha,width,height) {
+  const owner=env.GITHUB_OWNER||"megamrtklc",repo=env.GITHUB_REPO||"mrtklc",branch=env.GITHUB_BRANCH||"main";
+  const raw="https://raw.githubusercontent.com/"+owner+"/"+repo+"/"+branch+"/";
+  const iconPath="./assets/logos/perde-favicon.png?v="+encodeURIComponent(iconSha);
+  const manifestRead=await fetch(raw+"manifest.webmanifest?"+Date.now(),{headers:{"cache-control":"no-cache"}});
+  if(!manifestRead.ok)throw new Error("PWA manifest dosyası okunamadı.");
+  const manifest=await manifestRead.json();
+  const icons=Array.isArray(manifest.icons)?manifest.icons:[];
+  const filtered=icons.filter(icon=>!String(icon.src||"").includes("perde-favicon.png"));
+  filtered.unshift({src:iconPath,sizes:String(width)+"x"+String(height),type:"image/png",purpose:"any maskable"});
+  manifest.icons=filtered;
+  await writePublicRepoFile(env,"manifest.webmanifest",JSON.stringify(manifest,null,2)+"\n","Update PWA application icon");
+  const indexRead=await fetch(raw+"index.html?"+Date.now(),{headers:{"cache-control":"no-cache"}});
+  if(!indexRead.ok)throw new Error("Ana sayfa ikon bağlantıları okunamadı.");
+  let html=await indexRead.text();
+  const iconHref="./assets/logos/perde-favicon.png?v="+encodeURIComponent(iconSha);
+  html=html.replace(/(<link\\b(?=[^>]*\\brel=[\"'](?:icon|shortcut icon|apple-touch-icon)[\"'])[^>]*?\\bhref=[\"'])[^\"']*([\"'][^>]*>)/gi,"$1"+iconHref+"$2");
+  await writePublicRepoFile(env,"index.html",html,"Refresh site favicon links");
+  const swRead=await fetch(raw+"sw.js?"+Date.now(),{headers:{"cache-control":"no-cache"}});
+  if(!swRead.ok)throw new Error("Service Worker dosyası okunamadı.");
+  let sw=await swRead.text();
+  sw=sw.replace(/const CACHE_NAME = [\"'][^\"']+[\"'];/,"const CACHE_NAME = \\\"perde-shell-"+String(iconSha).slice(0,12)+"\\\";");
+  if(!sw.includes(iconPath))sw=sw.replace(/(const PRECACHE_URLS = \\[)/,"$1\\n  "+JSON.stringify(iconPath)+",");
+  await writePublicRepoFile(env,"sw.js",sw,"Refresh PWA icon cache version");
+}
 async function saveSiteLogo(request,env) {
   if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
   if(!env.GITHUB_TOKEN)return json({error:"GitHub yazma bağlantısı yapılandırılmamış."},503);
@@ -430,12 +469,15 @@ async function saveSiteLogo(request,env) {
   const width=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getUint32(16);
   const height=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getUint32(20);
   if(!width||!height||width>4096||height>4096)return json({error:"PNG çözünürlüğü 1–4096 px aralığında olmalı."},400);
+  if(kind==="favicon"&&(width!==height||width<192))return json({error:"PWA uygulama ikonu kare olmalı ve en az 192 × 192 px çözünürlükte hazırlanmalı. En iyi sonuç için 512 × 512 px PNG kullan."},400);
   const content=bytesToBase64(bytes);
   const saved=await fetch(apiUrl,{method:"PUT",headers:{...githubHeaders(env),"content-type":"application/json"},body:JSON.stringify({message:"Upload Perde "+kind+" PNG logo",content,sha:currentData.sha,branch})});
   const result=await saved.json().catch(()=>({}));
   if(!saved.ok)return json({error:result.message||"PNG logo GitHub deposuna kaydedilemedi."},502);
-  const url="https://raw.githubusercontent.com/"+(env.GITHUB_OWNER||"megamrtklc")+"/"+(env.GITHUB_REPO||"mrtklc")+"/"+branch+"/"+path+"?v="+encodeURIComponent(result.content?.sha||Date.now());
-  return json({ok:true,url,width,height,path});
+  const iconSha=result.content?.sha||Date.now();
+  if(kind==="favicon")await syncPwaIconFiles(env,iconSha,width,height);
+  const url="https://raw.githubusercontent.com/"+(env.GITHUB_OWNER||"megamrtklc")+"/"+(env.GITHUB_REPO||"mrtklc")+"/"+branch+"/"+path+"?v="+encodeURIComponent(iconSha);
+  return json({ok:true,url,width,height,path,manifestUpdated:kind==="favicon",cacheVersion:kind==="favicon"?String(iconSha).slice(0,12):null});
 }
 
 function catalogUrl(env) {
