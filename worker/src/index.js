@@ -430,13 +430,13 @@ async function syncPwaIconFiles(env,iconSha,width,height) {
   if(!indexRead.ok)throw new Error("Ana sayfa ikon bağlantıları okunamadı.");
   let html=await indexRead.text();
   const iconHref="./assets/logos/perde-favicon.png?v="+encodeURIComponent(iconSha);
-  html=html.replace(/(<link\\b(?=[^>]*\\brel=[\"'](?:icon|shortcut icon|apple-touch-icon)[\"'])[^>]*?\\bhref=[\"'])[^\"']*([\"'][^>]*>)/gi,"$1"+iconHref+"$2");
+  html=html.replace(/(<link\b(?=[^>]*\brel=[\"'](?:icon|shortcut icon|apple-touch-icon)[\"'])[^>]*?\bhref=[\"'])[^\"']*([\"'][^>]*>)/gi,"$1"+iconHref+"$2");
   await writePublicRepoFile(env,"index.html",html,"Refresh site favicon links");
   const swRead=await fetch(raw+"sw.js?"+Date.now(),{headers:{"cache-control":"no-cache"}});
   if(!swRead.ok)throw new Error("Service Worker dosyası okunamadı.");
   let sw=await swRead.text();
   sw=sw.replace(/const CACHE_NAME = [\"'][^\"']+[\"'];/,"const CACHE_NAME = \"perde-shell-"+String(iconSha).slice(0,12)+"\";");
-  if(!sw.includes(iconPath))sw=sw.replace(/(const PRECACHE_URLS = \\[)/,"$1\\n  "+JSON.stringify(iconPath)+",");
+  if(!sw.includes(iconPath))sw=sw.replace(/(const PRECACHE_URLS = \[)/,"$1\n  "+JSON.stringify(iconPath)+",");
   await writePublicRepoFile(env,"sw.js",sw,"Refresh PWA icon cache version");
 }
 async function saveSiteLogo(request,env) {
