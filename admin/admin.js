@@ -719,6 +719,7 @@
     return $$('#hf-'+kind+'-custom-links [data-custom-link-row]').map(row=>({label:row.querySelector('[data-custom-link-label]').value.trim(),page:row.querySelector('[data-custom-link-page]').value})).filter(link=>link.label);
   }
 
+  const pendingLogoRemovals=new Set();
   function renderLogoPreview(kind,src){
     const preview=$('#hf-'+kind+'-logo-preview');if(!preview)return;
     preview.innerHTML=src?'<img src="'+src+'" alt="'+kind+' logo önizlemesi">':'<span>Logo yüklenmedi</span>';
@@ -739,6 +740,7 @@
     const response=await fetch('/api/site-logo',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({kind,base64})});
     const result=await response.json().catch(()=>({}));
     if(!response.ok||!result.url)throw new Error(result.error||'Logo GitHub deposuna kaydedilemedi.');
+    pendingLogoRemovals.delete(kind);
     return result.url;
   }
   async function removeSiteLogo(kind){
@@ -2326,8 +2328,7 @@
     });
      $('[data-remove-logo="'+kind+'"]')?.addEventListener('click',async()=>{
        if(!confirm('Bu alanın PNG logo dosyası GitHub deposundan silinsin mi?'))return;
-       try{await removeSiteLogo(kind);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');updateHeaderFooterDraftState();toast('Logo dosyası silindi. Değişikliği kaydet.');}
-       catch(error){toast(error.message,'error');}
+       pendingLogoRemovals.add(kind);state.data[kind==='header'?'headerConfig':'footerConfig'].logoImage='';renderLogoPreview(kind,'');updateHeaderFooterDraftState();toast('Logo kaldırma taslağa alındı. Kalıcı olması için ayarları kaydet.');
      });
   });
   $('#header-footer-form').addEventListener('click',event=>{
