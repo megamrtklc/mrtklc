@@ -29,8 +29,23 @@
 <style id="cv-personalized-loading-overlay-flow-fix">#home-page #home-personalized-section>.cv-section-loading-overlay{position:absolute!important;inset:0!important;min-height:100%!important;padding:24px!important;box-sizing:border-box!important;pointer-events:none}</style>
 <style id="cv-personalized-heading-space">#home-personalized-section{min-height:560px!important;box-sizing:border-box}@media(max-width:900px){#home-personalized-section{min-height:480px!important}}#home-personalized-section .home-personalized-heading{height:173px!important;min-height:173px!important;box-sizing:border-box!important}#home-personalized-section .home-personalized-showcase{height:360px!important;min-height:360px!important;box-sizing:border-box!important}@media(max-width:900px){#home-personalized-section .home-personalized-showcase{height:auto!important;min-height:228px!important}}@media(min-width:901px){#home-personalized-section .home-personalized-showcase{height:360px!important;min-height:360px!important}}@media(max-width:639px){#home-personalized-section .home-personalized-mobile-card{display:block!important;min-height:192px!important;box-sizing:border-box!important}}@media (max-width:767px) and (orientation:portrait){#home-personalized-section .home-personalized-heading{height:auto!important;min-height:0!important;padding-bottom:8px!important;gap:8px!important}#home-personalized-section .home-personalized-heading>div:first-child>p:first-child{display:none!important}#home-personalized-section .home-personalized-showcase{margin-top:0!important}#home-personalized-section .home-personalized-refresh{display:none!important}}</style>
     <script id="cv-theme-first-paint">
-(function(){var root=document.documentElement;root.classList.remove('theme-ivory','theme-slate');root.classList.add('dark');root.dataset.theme='dark';root.style.colorScheme='dark';root.dataset.themeReady='true';})();
-</script>
+        (function () {
+            var theme = 'dark';
+            try {
+                var saved = localStorage.getItem('cine_theme_v3');
+                if (saved !== null) {
+                    try { saved = JSON.parse(saved); } catch (_) {}
+                    if (saved === 'dark' || saved === 'ivory' || saved === 'slate') theme = saved;
+                }
+            } catch (_) {}
+            var root = document.documentElement;
+            root.classList.remove('dark', 'theme-ivory', 'theme-slate');
+            root.classList.add(theme === 'dark' ? 'dark' : (theme === 'ivory' ? 'theme-ivory' : 'theme-slate'));
+            root.dataset.theme = theme;
+            root.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
+            root.dataset.themeReady = 'true';
+        })();
+    </script>
     <script id="cv-early-hero-data-request">
       // Manşet verisini erkenden başlatır; uygulama ve mobil görsel ön yükleyici aynı isteği paylaşır.
       window.__CV_HERO_DATA_PROMISE__ = fetch('./hero-data.json', { cache: 'no-cache', priority: 'high' })
@@ -155,7 +170,7 @@
     </script>
 <script defer src="./js/brand-identity-runtime.js?v=20261124-brand-identity-v2"></script>
     <!-- Çekirdek yardımcıları: güvenli depolama, tema yönetimi ve eski profil verilerinin geçişi. -->
-    <script defer src="./js/core.js?v=20261126-admin-experience-lock-v1"></script>
+    <script defer src="./js/core.js?v=20261124-core-split-v1"></script>
     <!-- Görsel yardımcıları: TMDB responsive srcset üretimi ve bozuk görseller için yedek görsel. -->
     <script defer src="./js/image-helpers.js?v=20261124-image-helpers-v1"></script>
     <!-- Ana Alpine uygulaması: sayfa durumları, gezinme ve uygulama özellikleri. -->
@@ -172,7 +187,7 @@
         document.head.appendChild(tvScrollScript);
       }
     </script>
-    <script defer fetchpriority="high" src="./app.min.js?v=20261126-admin-experience-lock-v1"></script>
+    <script defer fetchpriority="high" src="./app.min.js?v=20261125-modular-v33"></script>
     <script defer fetchpriority="low" src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
@@ -241,7 +256,7 @@
                             <i class="fa-solid fa-chart-simple w-4 text-center text-rose-500"></i><span class="flex-1">İstatistikler</span>
                         </button>
                         <div class="cineverse-dropdown-divider my-2"></div>
-                        <div id="perde-theme-picker" hidden><p class="px-4 pb-1 text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Görünüm teması</p>
+                        <p class="px-4 pb-1 text-[10px] font-extrabold uppercase tracking-[.16em] opacity-55">Görünüm teması</p>
                         <button type="button" @click="setTheme('ivory'); openProfileMenu = false;" class="cineverse-dropdown-item">
                             <i class="fa-solid fa-sun w-4 text-center text-amber-500"></i><span class="flex-1">Fil Dişi (Sıcak Krem)</span><i x-show="theme === 'ivory'" class="fa-solid fa-check ml-auto text-rose-500"></i>
                         </button>
@@ -250,7 +265,7 @@
                         </button>
                         <button type="button" @click="setTheme('dark'); openProfileMenu = false;" class="cineverse-dropdown-item">
                             <i class="fa-solid fa-moon w-4 text-center text-indigo-400"></i><span class="flex-1">Karanlık Mod</span><i x-show="theme === 'dark'" class="fa-solid fa-check ml-auto text-rose-500"></i>
-                        </button></div>
+                        </button>
                         <div x-data="{ canInstall: false }" x-init="window.addEventListener('perde-pwa-install-available', () => canInstall = true); window.addEventListener('perde-pwa-installed', () => canInstall = false)" x-show="canInstall" class="px-2">
                             <button type="button" @click="window.__PERDE_INSTALL_PROMPT__ && window.__PERDE_INSTALL_PROMPT__.prompt(); window.__PERDE_INSTALL_PROMPT__ = null; canInstall = false" class="cineverse-dropdown-item w-full">
                                 <i class="fa-solid fa-download w-4 text-center text-amber-500"></i><span class="flex-1">Perde uygulamasını yükle</span>
