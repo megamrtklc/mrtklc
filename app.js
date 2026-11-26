@@ -198,7 +198,7 @@
                 headerConfigReady: false,
                 headerConfig: { enabled:true, sticky:true, showLogoIcon:false, brandPrimary:'Perde', brandAccent:'Film', brandPrimaryColor:'#D9A441', brandAccentColor:'#F5D27A', logoImage:'./assets/logos/perde-header.png', faviconImage:'./assets/logos/perde-app-icon.svg', faviconWidth:32, faviconHeight:32, showHome:true, homeLabel:'Ana Sayfa', showExplore:true, exploreLabel:'Keşfet', showVideo:true, videoLabel:'Video Bağlantıları', showSearch:true, showProfile:true, showMobileMenu:true, catalogMenusInitialized:false, customLinks:[] },
                 footerConfigReady: false,
-                footerConfig: { enabled:true, customLinks:[], brandPrimary:'', brandAccent:'', brandPrimaryColor:'#D9A441', brandAccentColor:'#F5D27A', logoImage:'./assets/logos/perde-footer.svg', logoWidth:160, logoHeight:40, description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.', showBadges:true, badgeOne:'KİŞİSEL KÜTÜPHANE', badgeTwo:'DİZİ TAKİBİ', columnOneTitle:'Perde', homeLabel:'Ana Sayfa', exploreLabel:'Keşfet', libraryLabel:'Kütüphanem', columnTwoTitle:'İzleme Alanım', watchlistLabel:'İzleme Listem', statsLabel:'İstatistikler', featureTitle:'İzleme keyfini kişiselleştir', featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.', ctaLabel:'Kütüphaneme Git', showCta:true, copyright:'© 2026 Perde. Tüm hakları saklıdır.', showBackToTop:true },
+                footerConfig: { enabled:true, customLinks:[], brandPrimary:'Perde', brandAccent:'Film', brandPrimaryColor:'#D9A441', brandAccentColor:'#F5D27A', logoImage:'./assets/logos/perde-mark.svg', logoWidth:40, logoHeight:40, description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.', showBadges:true, badgeOne:'KİŞİSEL KÜTÜPHANE', badgeTwo:'DİZİ TAKİBİ', columnOneTitle:'Perde', homeLabel:'Ana Sayfa', exploreLabel:'Keşfet', libraryLabel:'Kütüphanem', columnTwoTitle:'İzleme Alanım', watchlistLabel:'İzleme Listem', statsLabel:'İstatistikler', featureTitle:'İzleme keyfini kişiselleştir', featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.', ctaLabel:'Kütüphaneme Git', showCta:true, copyright:'© 2026 Perde. Tüm hakları saklıdır.', showBackToTop:true },
                 watchPageConfig: null,
                 heroAutoplayTimer: null,
                 heroPaused: false,
@@ -695,7 +695,7 @@
                             this.headerConfig.catalogMenusInitialized = true;
                         }
                         this.footerConfig = { ...this.footerConfig, ...(data?.footerConfig || {}) };
-                        this.footerConfig.logoImage = (this.footerConfig.logoImage || './assets/logos/perde-footer.svg').replace(/^\/assets\//, './assets/');
+                        this.footerConfig.logoImage = (this.footerConfig.logoImage || './assets/logos/perde-mark.svg').replace(/^\/assets\//, './assets/');
                         this.collections = Array.isArray(data?.collections) ? data.collections : [];
                         this.franchises = Array.isArray(data?.franchises) ? data.franchises : [];
                         this.watchPageConfig = data && typeof data === 'object' ? (data.watchPageConfig || null) : null;
