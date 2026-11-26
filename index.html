@@ -59,7 +59,8 @@
         });
     </script>
     <meta name="description" content="CineVerse ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23e50914%27/%3E%3Cpath d=%27M24 16v32l26-16z%27 fill=%27white%27/%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/logos/perde-favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/logos/perde-favicon-16.png">
     <title>CineVerse Ultimate Pro</title>
     <!-- Manşet verisi hero-data.json dosyasından yüklenir; ilk HTML içinde tekrarlanmaz. -->
     <script id="cv-mobile-hero-preload">
@@ -199,7 +200,7 @@
                     <div x-show="!headerConfig.logoImage && headerConfig.showLogoIcon !== false" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-film text-white text-sm"></i>
                     </div>
-                    <span x-show="(headerConfig.brandPrimary || '').trim() || (headerConfig.brandAccent || '').trim()" class="text-xl font-black tracking-wider uppercase max-[360px]:hidden"><span x-show="(headerConfig.brandPrimary || '').trim()" x-text="headerConfig.brandPrimary"></span><span x-show="(headerConfig.brandAccent || '').trim()" class="text-rose-700 dark:text-rose-400" x-text="headerConfig.brandAccent"></span></span>
+                    <span x-show="!headerConfig.logoImage && ((headerConfig.brandPrimary || '').trim() || (headerConfig.brandAccent || '').trim())" class="text-xl font-black tracking-wider uppercase max-[360px]:hidden"><span x-show="(headerConfig.brandPrimary || '').trim()" x-text="headerConfig.brandPrimary"></span><span x-show="(headerConfig.brandAccent || '').trim()" class="text-rose-700 dark:text-rose-400" x-text="headerConfig.brandAccent"></span></span>
                 </a>
 
                 <nav class="cv-desktop-nav hidden xl:flex items-center space-x-5 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
@@ -734,7 +735,7 @@
                     <a href="#" @click.prevent="navigateTo('home')" class="inline-flex items-center gap-1.5 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-rose-500">
                         <img x-show="footerConfig.logoImage" :src="footerConfig.logoImage" alt="Logo" :width="footerConfig.logoWidth || 160" :height="footerConfig.logoHeight || 40" :style="`width:auto;height:auto;max-width:${footerConfig.logoWidth || 160}px;max-height:${footerConfig.logoHeight || 40}px;object-fit:contain`" loading="lazy" decoding="async" fetchpriority="low" class="object-contain">
                         <span x-show="!footerConfig.logoImage" class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-600 text-white shadow-lg shadow-rose-950/20"><i class="fa-solid fa-clapperboard text-lg"></i></span>
-                        <span x-show="(footerConfig.brandPrimary || '').trim() || (footerConfig.brandAccent || '').trim()" class="text-xl font-black uppercase tracking-[0.13em] text-gray-950 dark:text-white"><span x-show="(footerConfig.brandPrimary || '').trim()" x-text="footerConfig.brandPrimary"></span><span x-show="(footerConfig.brandAccent || '').trim()" class="text-rose-600 dark:text-rose-400" x-text="footerConfig.brandAccent"></span></span>
+                        <span x-show="!footerConfig.logoImage && ((footerConfig.brandPrimary || '').trim() || (footerConfig.brandAccent || '').trim())" class="text-xl font-black uppercase tracking-[0.13em] text-gray-950 dark:text-white"><span x-show="(footerConfig.brandPrimary || '').trim()" x-text="footerConfig.brandPrimary"></span><span x-show="(footerConfig.brandAccent || '').trim()" class="text-rose-600 dark:text-rose-400" x-text="footerConfig.brandAccent"></span></span>
                     </a>
                     <p class="mt-4 max-w-sm text-xs leading-6 text-gray-500 dark:text-gray-400 sm:text-sm" x-text="footerConfig.description || 'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.'">Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.</p>
                     <div x-show="footerConfig.showBadges !== false" class="mt-5 flex flex-wrap gap-2">
