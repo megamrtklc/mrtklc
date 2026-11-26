@@ -1,6 +1,5 @@
 const CACHE_NAME = "perde-shell-v1";
 const PRECACHE_URLS = [
-  "./",
   "./index.html",
   "./manifest.webmanifest",
   "./assets/logos/perde-app-icon.svg",
