@@ -675,8 +675,8 @@
                         const data = await response.json();
                         this.homepageConfig = data && typeof data === 'object' ? (data.homepageConfig || null) : null;
                         this.headerConfig = { ...this.headerConfig, ...(data?.headerConfig || {}) };
-                        this.headerConfig.logoImage = this.headerConfig.logoImage || '/assets/logos/perde-header.png';
-                        this.headerConfig.faviconImage = this.headerConfig.faviconImage || '/assets/logos/perde-favicon-32.png';
+                        this.headerConfig.logoImage = (this.headerConfig.logoImage || './assets/logos/perde-header.png').replace(/^\/assets\//, './assets/');
+                        this.headerConfig.faviconImage = (this.headerConfig.faviconImage || './assets/logos/perde-favicon-32.png').replace(/^\/assets\//, './assets/');
                         this.headerConfigReady = true;
                         if (!this.headerConfig.catalogMenusInitialized) {
                             const requiredCatalogMenus = [{label:'Filmler',page:'movies'},{label:'Diziler',page:'series'},{label:'Yerli Yapımlar',page:'turkish'}];
@@ -686,7 +686,7 @@
                             this.headerConfig.catalogMenusInitialized = true;
                         }
                         this.footerConfig = { ...this.footerConfig, ...(data?.footerConfig || {}) };
-                        this.footerConfig.logoImage = this.footerConfig.logoImage || '/assets/logos/perde-footer.png';
+                        this.footerConfig.logoImage = (this.footerConfig.logoImage || './assets/logos/perde-footer.png').replace(/^\/assets\//, './assets/');
                         this.collections = Array.isArray(data?.collections) ? data.collections : [];
                         this.franchises = Array.isArray(data?.franchises) ? data.franchises : [];
                         this.watchPageConfig = data && typeof data === 'object' ? (data.watchPageConfig || null) : null;
