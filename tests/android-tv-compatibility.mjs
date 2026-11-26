@@ -84,7 +84,7 @@ try {
   const mobilePage = await mobile.newPage();
   const mobileTvScriptRequests = [];
   mobilePage.on('request', request => {
-    if (/tv-remote-scroll\\.js/i.test(request.url())) mobileTvScriptRequests.push(request.url());
+    if (/tv-remote-scroll\.js/i.test(request.url())) mobileTvScriptRequests.push(request.url());
   });
   await mobilePage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   const mobileMode = await mobilePage.evaluate(() => ({
@@ -127,7 +127,7 @@ try {
   const tabletPage = await tablet.newPage();
   const tabletTvScriptRequests = [];
   tabletPage.on('request', request => {
-    if (/tv-remote-scroll\\.js/i.test(request.url())) tabletTvScriptRequests.push(request.url());
+    if (/tv-remote-scroll\.js/i.test(request.url())) tabletTvScriptRequests.push(request.url());
   });
   await tabletPage.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
   const tabletMode = await tabletPage.evaluate(() => document.documentElement.dataset.cvDeviceMode || null);
