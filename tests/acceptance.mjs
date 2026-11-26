@@ -1678,6 +1678,8 @@ try {
   });
 
   await check('Oyuncu ve benzer yapımlar şeritleri kaydırılabiliyor', async () => {
+    const originalCarouselViewport = page.viewportSize();
+    await page.setViewportSize({ width: 390, height: 844 });
     const castCard = page.locator('[data-watch-card="cast"]');
     await castCard.waitFor({ state: 'visible' });
     const cast = castCard.locator('#castContainer');
@@ -1728,6 +1730,7 @@ try {
       }
     }
     assert.ok(similarMoved, 'Benzer yapımlar ok kontrolleri şeridi kaydırmadı');
+    if (originalCarouselViewport) await page.setViewportSize(originalCarouselViewport);
 
   });
 
