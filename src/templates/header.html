@@ -4,7 +4,7 @@
         <div class="w-full px-4 sm:px-12 md:max-w-[1800px] md:mx-auto md:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 lg:space-x-6 xl:space-x-12">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-0.5 group">
-                    <img x-show="headerConfig.logoImage" :src="headerConfig.logoImage" alt="Logo" width="28" height="28" style="width:28px !important;height:28px !important;max-width:28px !important;max-height:28px !important;object-fit:contain;flex:0 0 28px" class="object-contain">
+                    <img x-show="headerConfig.logoImage" :src="headerConfig.logoImage" alt="Logo" :width="headerConfig.logoWidth || 32" :height="headerConfig.logoHeight || 32" :style="`width:${headerConfig.logoWidth || 32}px;height:${headerConfig.logoHeight || 32}px;max-width:100%;object-fit:contain;flex:0 0 auto`" class="object-contain">
                     <div x-show="!headerConfig.logoImage && headerConfig.showLogoIcon !== false" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-film text-white text-sm"></i>
                     </div>
