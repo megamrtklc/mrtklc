@@ -200,7 +200,7 @@
                     <div x-show="!headerConfig.logoImage && headerConfig.showLogoIcon !== false" class="w-9 h-9 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:scale-105 transition-transform">
                         <i class="fa-solid fa-film text-white text-sm"></i>
                     </div>
-                    <span x-show="!headerConfig.logoImage && ((headerConfig.brandPrimary || '').trim() || (headerConfig.brandAccent || '').trim())" class="text-xl font-black tracking-wider uppercase max-[360px]:hidden"><span x-show="(headerConfig.brandPrimary || '').trim()" x-text="headerConfig.brandPrimary"></span><span x-show="(headerConfig.brandAccent || '').trim()" class="text-rose-700 dark:text-rose-400" x-text="headerConfig.brandAccent"></span></span>
+                    <span x-show="((headerConfig.brandPrimary || '').trim() || (headerConfig.brandAccent || '').trim())" class="text-xl font-black tracking-wider uppercase max-[360px]:hidden"><span x-show="(headerConfig.brandPrimary || '').trim()" x-text="headerConfig.brandPrimary"></span><span x-show="(headerConfig.brandAccent || '').trim()" class="text-rose-700 dark:text-rose-400" x-text="headerConfig.brandAccent"></span></span>
                 </a>
 
                 <nav class="cv-desktop-nav hidden xl:flex items-center space-x-5 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
