@@ -17,7 +17,7 @@
         var ua = navigator.userAgent || '';
         var platform = navigator.platform || '';
         var deviceInfo = ua + ' ' + platform;
-        var tvToken = /Android\s?TV|Google\s?TV|GoogleTV|Smart[- ]?TV|SMART[- ]?TV|Tizen|webOS(?:\.TV)?|NetCast|BRAVIA|MiTV|AFT[A-Z0-9]*|Fire\s?TV|SHIELD\s+Android\s+TV|HbbTV|Viera|Roku|AppleTV|TV;|\bTV\s+Build/i.test(deviceInfo);
+        var tvToken = /Android\s?TV|Google\s?TV|GoogleTV|Smart[- ]?TV|SMART[- ]?TV|Tizen|web[O0]S(?:\.TV)?|NetCast|VIDAA|Hisense.*TV|Philips.*TV|Toshiba.*TV|TCL.*TV|BRAVIA|MiTV|AFT[A-Z0-9]*|Fire\s?TV|SHIELD\s+Android\s+TV|HbbTV|Viera|Roku|AppleTV|TV;|\bTV\s+Build/i.test(deviceInfo);
         if (!tvToken) return;
         document.documentElement.classList.add('cv-tv-mode');
         document.documentElement.dataset.cvDeviceMode = 'tv';
