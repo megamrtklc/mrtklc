@@ -1011,6 +1011,9 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #view-header-footer .hf-preview-device.active{border-color:#c7a45c;color:#f0d18d;background:#3a3020}
 #view-header-footer .hf-preview-stage{max-width:100%;margin:auto;overflow:hidden;border:1px solid #3b4654;border-radius:12px;background:#101722;color:#e9edf3;box-shadow:0 12px 30px #0003}
 #view-header-footer .hf-preview-stage.is-mobile{max-width:390px}
+#view-header-footer .hf-preview-header-stage{width:100%}
+#view-header-footer .hf-preview-footer-stage.is-mobile{max-width:390px}
+#view-header-footer .hf-preview-footer-stage .hf-preview-footer{min-height:150px}
 #view-header-footer .hf-preview-browser{height:25px;display:flex;align-items:center;gap:5px;padding:0 10px;background:#292c35;border-bottom:1px solid #354150}
 #view-header-footer .hf-preview-browser>span{width:6px;height:6px;border-radius:50%;background:#68788a}
 #view-header-footer .hf-preview-browser small{margin-left:auto;color:#8e9aaa;font-size:8px;letter-spacing:.1em}
@@ -1023,12 +1026,6 @@ body.admin-reduce-motion .view,body.admin-reduce-motion .sidebar,body.admin-redu
 #view-header-footer .hf-preview-header nav{display:flex;align-items:center;justify-content:flex-end;gap:clamp(8px,1.8vw,22px);margin-left:auto;min-width:0}
 #view-header-footer .hf-preview-header nav span{color:#c0cad6;font-size:10px;white-space:nowrap}
 #view-header-footer .hf-preview-mobile-actions{margin-left:auto;color:#d7bd86;letter-spacing:.35em}
-#view-header-footer .hf-preview-content{min-height:105px;padding:24px 20px;background:radial-gradient(ellipse at 20% 0%,#26364a,#292c35 70%)}
-#view-header-footer .hf-preview-content>span{display:block;color:#d0ad65;font-size:8px;letter-spacing:.15em}
-#view-header-footer .hf-preview-content>b{display:block;margin-top:7px;font-size:18px}
-#view-header-footer .hf-preview-content>i{display:block;margin-top:4px;color:#93a0af;font-size:10px;font-style:normal}
-#view-header-footer .hf-preview-content>div{display:flex;gap:7px;margin-top:16px}
-#view-header-footer .hf-preview-content>div span{width:55px;height:26px;border-radius:5px;background:#30333d}
 #view-header-footer .hf-preview-footer{display:grid;grid-template-columns:1.3fr .8fr .8fr 1.1fr;gap:18px;padding:20px;border-top:1px solid #303b49;background:#0d141e}
 #view-header-footer .hf-preview-footer-brand p,.hf-preview-cta p{color:#9ba8b8;font-size:9px;line-height:1.5}
 #view-header-footer .hf-preview-footer-column{display:grid;align-content:start;gap:7px}
