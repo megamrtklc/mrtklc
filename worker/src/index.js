@@ -404,10 +404,10 @@ async function saveSiteLogo(request,env) {
   if(!sameOrigin(request))return json({error:"Geçersiz istek kaynağı."},403);
   if(!env.GITHUB_TOKEN)return json({error:"GitHub yazma bağlantısı yapılandırılmamış."},503);
   const length=Number(request.headers.get("content-length")||0);
-  if(length>2900000)return json({error:"Logo isteği 2 MB dosya sınırını aşıyor."},413);
+  if(length>2900000)return json({error:"Görsel isteği 2 MB dosya sınırını aşıyor."},413);
   const body=await request.json();
   const kind=String(body?.kind||"");
-  if(!["header","footer"].includes(kind))return json({error:"Geçersiz logo alanı."},400);
+  if(!["header","footer","favicon"].includes(kind))return json({error:"Geçersiz görsel alanı."},400);
   const path="assets/logos/perde-"+kind+".png";
   const owner=encodeURIComponent(env.GITHUB_OWNER||"megamrtklc"),repo=encodeURIComponent(env.GITHUB_REPO||"mrtklc");
   const branch=env.GITHUB_BRANCH||"main";
