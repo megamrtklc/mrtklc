@@ -2088,92 +2088,337 @@ body.admin-theme-slate .view :is(p,small,.helper-text,.field-hint,.muted){color:
 
 
 
-/* Comprehensive legacy-dark cleanup for light admin themes.
-   Fixed dark view surfaces and pale text are mapped to the active light palette. */
-body.admin-theme-ivory #view-overview .dashboard-welcome,body.admin-theme-slate #view-overview .dashboard-welcome{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-welcome:after,body.admin-theme-slate #view-overview .dashboard-welcome:after{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-welcome p,body.admin-theme-slate #view-overview .dashboard-welcome p{color:var(--text)!important}
-body.admin-theme-ivory #view-overview .dashboard-secondary,body.admin-theme-slate #view-overview .dashboard-secondary{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory #view-overview .dashboard-art-disc,body.admin-theme-slate #view-overview .dashboard-art-disc{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory #view-overview .dashboard-art-note,body.admin-theme-slate #view-overview .dashboard-art-note{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-metric,body.admin-theme-slate #view-overview .dashboard-metric{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-metric-icon,body.admin-theme-slate #view-overview .dashboard-metric-icon{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .metric-movies .dashboard-metric-icon,body.admin-theme-slate #view-overview .metric-movies .dashboard-metric-icon{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory #view-overview .metric-series .dashboard-metric-icon,body.admin-theme-slate #view-overview .metric-series .dashboard-metric-icon{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .metric-collections .dashboard-metric-icon,body.admin-theme-slate #view-overview .metric-collections .dashboard-metric-icon{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-card,body.admin-theme-slate #view-overview .dashboard-card{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .shortcut-gold,body.admin-theme-slate #view-overview .shortcut-gold{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-insight-stats>div,body.admin-theme-slate #view-overview .dashboard-insight-stats>div{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-health-icon,body.admin-theme-slate #view-overview .dashboard-health-icon{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-balance,body.admin-theme-slate #view-overview .dashboard-balance{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview #overview-balance-movies,body.admin-theme-slate #view-overview #overview-balance-movies{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview #overview-balance-series,body.admin-theme-slate #view-overview #overview-balance-series{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .balance-legend,body.admin-theme-slate #view-overview .balance-legend{color:var(--text)!important}
-body.admin-theme-ivory #view-overview .balance-legend b,body.admin-theme-slate #view-overview .balance-legend b{color:var(--text)!important}
-body.admin-theme-ivory #view-overview .dashboard-quality-grid>div,body.admin-theme-slate #view-overview .dashboard-quality-grid>div{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-quality-grid span,body.admin-theme-slate #view-overview .dashboard-quality-grid span{color:var(--text)!important}
-body.admin-theme-ivory #view-quality .quality-summary-card,body.admin-theme-slate #view-quality .quality-summary-card{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-overview .dashboard-health-actions button,body.admin-theme-slate #view-overview .dashboard-health-actions button{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory #view-overview .dashboard-health-actions button:hover,body.admin-theme-slate #view-overview .dashboard-health-actions button:hover{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .analytics-summary-card,body.admin-theme-slate #view-analytics .analytics-summary-card{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .analytics-summary-card>b,body.admin-theme-slate #view-analytics .analytics-summary-card>b{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .analytics-card-head h2,body.admin-theme-slate #view-analytics .analytics-card-head h2{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .analytics-card-head p,body.admin-theme-slate #view-analytics .analytics-card-head p{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .analytics-report-card .bar-track,body.admin-theme-slate #view-analytics .analytics-report-card .bar-track{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .analytics-report-card .bar-row b,body.admin-theme-slate #view-analytics .analytics-report-card .bar-row b{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .analytics-type-balance b,body.admin-theme-slate #view-analytics .analytics-type-balance b{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .analytics-foot-card,body.admin-theme-slate #view-analytics .analytics-foot-card{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .analytics-foot-card h2,body.admin-theme-slate #view-analytics .analytics-foot-card h2{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .rating-results,body.admin-theme-slate #view-analytics .rating-results{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .rating-results-head b,body.admin-theme-slate #view-analytics .rating-results-head b{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .rating-results-head small,body.admin-theme-slate #view-analytics .rating-results-head small{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .rating-results-close,body.admin-theme-slate #view-analytics .rating-results-close{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .rating-result-item,body.admin-theme-slate #view-analytics .rating-result-item{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .rating-result-item img,body.admin-theme-slate #view-analytics .rating-result-item img{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .rating-result-item b,body.admin-theme-slate #view-analytics .rating-result-item b{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .rating-result-item small,body.admin-theme-slate #view-analytics .rating-result-item small{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .analytics-more-button,body.admin-theme-slate #view-analytics .analytics-more-button{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .analytics-all-button,body.admin-theme-slate #view-analytics .analytics-all-button{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .analytics-more-button:hover,body.admin-theme-slate #view-analytics .analytics-more-button:hover{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .analytics-all-button:hover,body.admin-theme-slate #view-analytics .analytics-all-button:hover{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-quality .quality-list-row,body.admin-theme-slate #view-quality .quality-list-row{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-quality .quality-page-size-label select,body.admin-theme-slate #view-quality .quality-page-size-label select{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-homepage-layout .homepage-layout-field input,body.admin-theme-slate #view-homepage-layout .homepage-layout-field input{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory #view-homepage-layout .homepage-layout-field textarea,body.admin-theme-slate #view-homepage-layout .homepage-layout-field textarea{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory #view-homepage-layout .homepage-layout-side-heading h2,body.admin-theme-slate #view-homepage-layout .homepage-layout-side-heading h2{color:var(--text)!important}
-body.admin-theme-ivory #view-personalized-section .personalized-admin-options .toggle-field b,body.admin-theme-slate #view-personalized-section .personalized-admin-options .toggle-field b{color:var(--text)!important}
-body.admin-theme-ivory /* Custom labels for personalized discovery buttons */
-#view-personalized-section .personalized-mode-label-input,body.admin-theme-slate /* Custom labels for personalized discovery buttons */
-#view-personalized-section .personalized-mode-label-input{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory /* Header & Footer draft workflow */
-#view-header-footer .hf-draft-toolbar,body.admin-theme-slate /* Header & Footer draft workflow */
-#view-header-footer .hf-draft-toolbar{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-personalized-section .personalized-rule-settings,body.admin-theme-slate #view-personalized-section .personalized-rule-settings{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-personalized-section .personalized-rule-settings:hover,body.admin-theme-slate #view-personalized-section .personalized-rule-settings:hover{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-header-footer .hf-hex-input,body.admin-theme-slate #view-header-footer .hf-hex-input{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-header-footer .hf-color-summary output,body.admin-theme-slate #view-header-footer .hf-color-summary output{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-header-footer .hf-color-dialog,body.admin-theme-slate #view-header-footer .hf-color-dialog{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory #view-header-footer .hf-color-close,body.admin-theme-slate #view-header-footer .hf-color-close{color:var(--text)!important}
-body.admin-theme-ivory #view-header-footer .hf-hex-control>span,body.admin-theme-slate #view-header-footer .hf-hex-control>span{color:var(--text)!important}
-body.admin-theme-ivory #view-header-footer .hf-hex-input,body.admin-theme-slate #view-header-footer .hf-hex-input{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-header-footer .hf-palette-heading b,body.admin-theme-slate #view-header-footer .hf-palette-heading b{color:var(--text)!important}
-body.admin-theme-ivory #view-header-footer .hf-color-dialog-actions .secondary-button,body.admin-theme-slate #view-header-footer .hf-color-dialog-actions .secondary-button{color:var(--text)!important}
-body.admin-theme-ivory #view-header-footer .hf-tabs,body.admin-theme-slate #view-header-footer .hf-tabs{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-header-footer .hf-tab,body.admin-theme-slate #view-header-footer .hf-tab{color:var(--text)!important}
-body.admin-theme-ivory #view-header-footer .hf-tab:hover,body.admin-theme-slate #view-header-footer .hf-tab:hover{background:var(--surface-2)!important;color:var(--text)!important}
-body.admin-theme-ivory #view-header-footer .hf-tab.is-active,body.admin-theme-slate #view-header-footer .hf-tab.is-active{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-header-footer .hf-tab-panel>.hf-accordion,body.admin-theme-slate #view-header-footer .hf-tab-panel>.hf-accordion{background:var(--surface-2)!important}
+
+
+/* Comprehensive theme audit v7: legacy dark surfaces and pale text.
+   Media previews, poster artwork, charts and semantic status colours are intentionally preserved. */
+body.admin-theme-ivory,body.admin-theme-slate{
+  color-scheme:light;
+  background:var(--bg)!important;
+  color:var(--text)!important;
+}
+body.admin-theme-ivory .main-column,body.admin-theme-slate .main-column,
+body.admin-theme-ivory .main-content,body.admin-theme-slate .main-content,
+body.admin-theme-ivory .view,body.admin-theme-slate .view{
+  background-color:var(--bg);
+  color:var(--text);
+}
+body.admin-theme-ivory .sidebar,body.admin-theme-slate .sidebar,
+body.admin-theme-ivory .topbar,body.admin-theme-slate .topbar,
+body.admin-theme-ivory .nav-group,body.admin-theme-slate .nav-group,
+body.admin-theme-ivory .admin-theme-switch,body.admin-theme-slate .admin-theme-switch{
+  background:var(--surface)!important;
+  background-image:none!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory .view :is(.panel-card,.dashboard-card,.dashboard-metric,.settings-card,.form-card,.table-wrap,.content-card,.editor-panel,.editor-dialog,.modal-card,.dialog-card,.brand-manager-card,.credential-card,.security-record,.homepage-editor,.homepage-layout-panel),
+body.admin-theme-slate .view :is(.panel-card,.dashboard-card,.dashboard-metric,.settings-card,.form-card,.table-wrap,.content-card,.editor-panel,.editor-dialog,.modal-card,.dialog-card,.brand-manager-card,.credential-card,.security-record,.homepage-editor,.homepage-layout-panel){
+  background:var(--surface)!important;
+  background-image:none!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
 body.admin-theme-ivory .view :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),select,textarea),
 body.admin-theme-slate .view :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),select,textarea){
- background:var(--surface)!important;color:var(--text)!important;border-color:var(--line)!important;
+  background:var(--surface)!important;color:var(--text)!important;border-color:var(--line)!important;
 }
-body.admin-theme-ivory .view :is(button:not(.dashboard-primary):not(.primary-button):not(.danger-button):not(.catalog-bulk-delete):not(.hf-color-apply)),
-body.admin-theme-slate .view :is(button:not(.dashboard-primary):not(.primary-button):not(.danger-button):not(.catalog-bulk-delete):not(.hf-color-apply)){
- color:var(--text);
+body.admin-theme-ivory .view :is(input,textarea)::placeholder,
+body.admin-theme-slate .view :is(input,textarea)::placeholder{color:var(--muted-2)!important;opacity:1}
+body.admin-theme-ivory .view :is(select option),
+body.admin-theme-slate .view :is(select option){background:var(--surface);color:var(--text)}
+body.admin-theme-ivory .view :is(.secondary-button,.dashboard-secondary,.toolbar-button,.filter-button,.icon-button,.action-button,.row-action,.pagination button,.catalog-select-all-page,.catalog-clear-selection,.editor-back-button),
+body.admin-theme-slate .view :is(.secondary-button,.dashboard-secondary,.toolbar-button,.filter-button,.icon-button,.action-button,.row-action,.pagination button,.catalog-select-all-page,.catalog-clear-selection,.editor-back-button){
+  background:var(--surface-2)!important;color:var(--text)!important;border-color:var(--line)!important;
 }
-body.admin-theme-ivory .view :is(.field,.form-field,.form-group) :is(label,span,small),
-body.admin-theme-slate .view :is(.field,.form-field,.form-group) :is(label,span,small){color:var(--muted)}
-body.admin-theme-ivory .view :is(.panel-card,.dashboard-card,.settings-card,.form-card,.table-wrap,.content-card,.editor-panel,.homepage-editor,.homepage-layout-panel),
-body.admin-theme-slate .view :is(.panel-card,.dashboard-card,.settings-card,.form-card,.table-wrap,.content-card,.editor-panel,.homepage-editor,.homepage-layout-panel){
- background-color:var(--surface)!important;color:var(--text)!important;border-color:var(--line)!important;
-}
+body.admin-theme-ivory .view :is(h1,h2,h3,h4,.panel-heading,.dashboard-card-heading),
+body.admin-theme-slate .view :is(h1,h2,h3,h4,.panel-heading,.dashboard-card-heading){color:var(--text)}
+body.admin-theme-ivory .view :is(p,small,.helper-text,.field-hint,.muted,.page-heading p),
+body.admin-theme-slate .view :is(p,small,.helper-text,.field-hint,.muted,.page-heading p){color:var(--muted)}
+body.admin-theme-ivory .sidebar,body.admin-theme-slate .sidebar{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .brand-symbol,body.admin-theme-slate .brand-symbol{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .workspace-switch,body.admin-theme-slate .workspace-switch{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .nav-link:hover,body.admin-theme-slate .nav-link:hover{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .nav-link.active,body.admin-theme-slate .nav-link.active{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .nav-link em,body.admin-theme-slate .nav-link em{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .topbar,body.admin-theme-slate .topbar{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .topbar-crumb strong,body.admin-theme-slate .topbar-crumb strong{color:var(--text)!important}
+body.admin-theme-ivory .topbar-user,body.admin-theme-slate .topbar-user{color:var(--text)!important}
+body.admin-theme-ivory .notice,body.admin-theme-slate .notice{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .notice-icon,body.admin-theme-slate .notice-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .notice b,body.admin-theme-slate .notice b{color:var(--text)!important}
+body.admin-theme-ivory .secondary-button,body.admin-theme-slate .secondary-button{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .dashboard-secondary,body.admin-theme-slate .dashboard-secondary{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .panel-card,body.admin-theme-slate .panel-card{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .dashboard-card,body.admin-theme-slate .dashboard-card{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .toggle-field,body.admin-theme-slate .toggle-field{color:var(--text)!important}
+body.admin-theme-ivory .mini-icon,body.admin-theme-slate .mini-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .dashboard-welcome,body.admin-theme-slate .dashboard-welcome{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .dashboard-welcome:after,body.admin-theme-slate .dashboard-welcome:after{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .dashboard-metric,body.admin-theme-slate .dashboard-metric{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .dashboard-metric-icon,body.admin-theme-slate .dashboard-metric-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .metric-movies .dashboard-metric-icon,body.admin-theme-slate .metric-movies .dashboard-metric-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .metric-series .dashboard-metric-icon,body.admin-theme-slate .metric-series .dashboard-metric-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .metric-collections .dashboard-metric-icon,body.admin-theme-slate .metric-collections .dashboard-metric-icon{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .shortcut-lilac,body.admin-theme-slate .shortcut-lilac{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .shortcut-peach,body.admin-theme-slate .shortcut-peach{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .shortcut-mint,body.admin-theme-slate .shortcut-mint{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .shortcut-gold,body.admin-theme-slate .shortcut-gold{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .dashboard-insight-stats>div,body.admin-theme-slate .dashboard-insight-stats>div{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .dashboard-health-icon,body.admin-theme-slate .dashboard-health-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .dashboard-health-row b,body.admin-theme-slate .dashboard-health-row b{color:var(--text)!important}
+body.admin-theme-ivory .setting-row b,body.admin-theme-slate .setting-row b{color:var(--text)!important}
+body.admin-theme-ivory .dashboard-health-foot span,body.admin-theme-slate .dashboard-health-foot span{color:var(--text)!important}
+body.admin-theme-ivory .catalog-toolbar,body.admin-theme-slate .catalog-toolbar{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .catalog-table-wrap,body.admin-theme-slate .catalog-table-wrap{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .catalog-table th,body.admin-theme-slate .catalog-table th{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .catalog-table td,body.admin-theme-slate .catalog-table td{color:var(--text)!important}
+body.admin-theme-ivory .catalog-title img,body.admin-theme-slate .catalog-title img{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .catalog-title b,body.admin-theme-slate .catalog-title b{color:var(--text)!important}
+body.admin-theme-ivory .row-action,body.admin-theme-slate .row-action{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .pagination button,body.admin-theme-slate .pagination button{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .collection-card,body.admin-theme-slate .collection-card{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-settings,body.admin-theme-slate .homepage-settings{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hero-device-panel,body.admin-theme-slate .hero-device-panel{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-slide-head>span,body.admin-theme-slate .homepage-slide-head>span{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hero-pick,body.admin-theme-slate .hero-pick{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hero-pick img,body.admin-theme-slate .hero-pick img{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .config-details,body.admin-theme-slate .config-details{color:var(--text)!important}
+body.admin-theme-ivory .config-details pre,body.admin-theme-slate .config-details pre{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .bar-row,body.admin-theme-slate .bar-row{color:var(--text)!important}
+body.admin-theme-ivory .bar-track,body.admin-theme-slate .bar-track{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .bar-row b,body.admin-theme-slate .bar-row b{color:var(--text)!important}
+body.admin-theme-ivory .users-profile-summary,body.admin-theme-slate .users-profile-summary{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .profile-photo-large,body.admin-theme-slate .profile-photo-large{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .watch-order-item,body.admin-theme-slate .watch-order-item{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .watch-order-number,body.admin-theme-slate .watch-order-number{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .watch-order-actions button,body.admin-theme-slate .watch-order-actions button{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .watch-available-item,body.admin-theme-slate .watch-available-item{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .watch-available-actions button,body.admin-theme-slate .watch-available-actions button{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .watch-demo-switch,body.admin-theme-slate .watch-demo-switch{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .watch-demo-switch button.active,body.admin-theme-slate .watch-demo-switch button.active{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .editor-dialog,body.admin-theme-slate .editor-dialog{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .dialog-close,body.admin-theme-slate .dialog-close{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .url-highlight-group,body.admin-theme-slate .url-highlight-group{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .media-url-group,body.admin-theme-slate .media-url-group{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .media-url-group .url-highlight-icon,body.admin-theme-slate .media-url-group .url-highlight-icon{color:var(--text)!important}
+body.admin-theme-ivory .url-highlight-heading b,body.admin-theme-slate .url-highlight-heading b{color:var(--text)!important}
+body.admin-theme-ivory .media-url-group .url-highlight-heading b,body.admin-theme-slate .media-url-group .url-highlight-heading b{color:var(--text)!important}
+body.admin-theme-ivory .url-highlight-tag,body.admin-theme-slate .url-highlight-tag{color:var(--text)!important}
+body.admin-theme-ivory .media-url-group .url-highlight-tag,body.admin-theme-slate .media-url-group .url-highlight-tag{color:var(--text)!important}
+body.admin-theme-ivory .url-highlight-group .field input,body.admin-theme-slate .url-highlight-group .field input{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .url-highlight-group .field select,body.admin-theme-slate .url-highlight-group .field select{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .url-highlight-group .field textarea,body.admin-theme-slate .url-highlight-group .field textarea{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .media-url-group .field input,body.admin-theme-slate .media-url-group .field input{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .media-url-group .field select,body.admin-theme-slate .media-url-group .field select{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .collection-items label,body.admin-theme-slate .collection-items label{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .mobile-menu,body.admin-theme-slate .mobile-menu{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .catalog-table tr,body.admin-theme-slate .catalog-table tr{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .sidebar-close,body.admin-theme-slate .sidebar-close{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-intro,body.admin-theme-slate .homepage-layout-intro{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-layout-intro-icon,body.admin-theme-slate .homepage-layout-intro-icon{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-intro>div b,body.admin-theme-slate .homepage-layout-intro>div b{color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-panel .panel-heading h2,body.admin-theme-slate .homepage-layout-panel .panel-heading h2{color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-side h2,body.admin-theme-slate .homepage-layout-side h2{color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-live,body.admin-theme-slate .homepage-layout-live{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-layout-row,body.admin-theme-slate .homepage-layout-row{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-layout-row:hover,body.admin-theme-slate .homepage-layout-row:hover{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-layout-row-icon,body.admin-theme-slate .homepage-layout-row-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-layout-row-copy b,body.admin-theme-slate .homepage-layout-row-copy b{color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-actions button,body.admin-theme-slate .homepage-layout-actions button{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-actions button:hover:not(:disabled),body.admin-theme-slate .homepage-layout-actions button:hover:not(:disabled){background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-layout-note b,body.admin-theme-slate .homepage-layout-note b{color:var(--text)!important}
+body.admin-theme-ivory .hf-section-head h2,body.admin-theme-slate .hf-section-head h2{color:var(--text)!important}
+body.admin-theme-ivory .hf-subhead h3,body.admin-theme-slate .hf-subhead h3{color:var(--text)!important}
+body.admin-theme-ivory .hf-custom-links,body.admin-theme-slate .hf-custom-links{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hf-custom-link-row,body.admin-theme-slate .hf-custom-link-row{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hf-custom-link-row .field span,body.admin-theme-slate .hf-custom-link-row .field span{color:var(--text)!important}
+body.admin-theme-ivory .hf-custom-link-row input,body.admin-theme-slate .hf-custom-link-row input{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .hf-custom-link-row select,body.admin-theme-slate .hf-custom-link-row select{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .content-search-studio,body.admin-theme-slate .content-search-studio{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-search-intro b,body.admin-theme-slate .content-search-intro b{color:var(--text)!important}
+body.admin-theme-ivory .content-search-input,body.admin-theme-slate .content-search-input{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-search-input input,body.admin-theme-slate .content-search-input input{color:var(--text)!important}
+body.admin-theme-ivory .tmdb-result,body.admin-theme-slate .tmdb-result{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .tmdb-result:hover,body.admin-theme-slate .tmdb-result:hover{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .tmdb-result-copy small,body.admin-theme-slate .tmdb-result-copy small{color:var(--text)!important}
+body.admin-theme-ivory .tmdb-result.is-added,body.admin-theme-slate .tmdb-result.is-added{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .catalog-toolbar select,body.admin-theme-slate .catalog-toolbar select{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .result-count,body.admin-theme-slate .result-count{color:var(--text)!important}
+body.admin-theme-ivory .hf-logo-upload,body.admin-theme-slate .hf-logo-upload{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hf-logo-copy>b,body.admin-theme-slate .hf-logo-copy>b{color:var(--text)!important}
+body.admin-theme-ivory .hf-remove-logo,body.admin-theme-slate .hf-remove-logo{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hf-logo-note,body.admin-theme-slate .hf-logo-note{color:var(--text)!important}
+body.admin-theme-ivory .hf-accordion>summary,body.admin-theme-slate .hf-accordion>summary{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hf-accordion>summary:after,body.admin-theme-slate .hf-accordion>summary:after{color:var(--text)!important}
+body.admin-theme-ivory .hf-accordion-copy b,body.admin-theme-slate .hf-accordion-copy b{color:var(--text)!important}
+body.admin-theme-ivory .hf-accordion-state,body.admin-theme-slate .hf-accordion-state{color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-field input,body.admin-theme-slate .homepage-layout-field input{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .personalized-admin-options,body.admin-theme-slate .personalized-admin-options{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .dashboard-welcome,body.admin-theme-slate #view-overview .dashboard-welcome{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .dashboard-welcome:after,body.admin-theme-slate #view-overview .dashboard-welcome:after{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .dashboard-welcome p,body.admin-theme-slate #view-overview .dashboard-welcome p{color:var(--text)!important}
+body.admin-theme-ivory #view-overview .dashboard-secondary,body.admin-theme-slate #view-overview .dashboard-secondary{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #view-overview .dashboard-metric,body.admin-theme-slate #view-overview .dashboard-metric{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .dashboard-metric-icon,body.admin-theme-slate #view-overview .dashboard-metric-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .metric-movies .dashboard-metric-icon,body.admin-theme-slate #view-overview .metric-movies .dashboard-metric-icon{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #view-overview .metric-series .dashboard-metric-icon,body.admin-theme-slate #view-overview .metric-series .dashboard-metric-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .metric-collections .dashboard-metric-icon,body.admin-theme-slate #view-overview .metric-collections .dashboard-metric-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .dashboard-card,body.admin-theme-slate #view-overview .dashboard-card{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .shortcut-gold,body.admin-theme-slate #view-overview .shortcut-gold{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .dashboard-insight-stats>div,body.admin-theme-slate #view-overview .dashboard-insight-stats>div{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .dashboard-health-icon,body.admin-theme-slate #view-overview .dashboard-health-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .dashboard-balance,body.admin-theme-slate #view-overview .dashboard-balance{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview #overview-balance-movies,body.admin-theme-slate #view-overview #overview-balance-movies{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview #overview-balance-series,body.admin-theme-slate #view-overview #overview-balance-series{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .balance-legend b,body.admin-theme-slate #view-overview .balance-legend b{color:var(--text)!important}
+body.admin-theme-ivory #view-overview .dashboard-quality-grid>div,body.admin-theme-slate #view-overview .dashboard-quality-grid>div{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-quality .quality-summary-card,body.admin-theme-slate #view-quality .quality-summary-card{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-layout-draft,body.admin-theme-slate .homepage-layout-draft{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-draft[data-state=draft],body.admin-theme-slate .homepage-layout-draft[data-state=draft]{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .system-health-card strong,body.admin-theme-slate .system-health-card strong{color:var(--text)!important}
+body.admin-theme-ivory .system-health-card strong[data-state=good],body.admin-theme-slate .system-health-card strong[data-state=good]{color:var(--text)!important}
+body.admin-theme-ivory #view-overview .dashboard-health-actions button,body.admin-theme-slate #view-overview .dashboard-health-actions button{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-overview .dashboard-health-actions button:hover,body.admin-theme-slate #view-overview .dashboard-health-actions button:hover{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .analytics-summary-card,body.admin-theme-slate #view-analytics .analytics-summary-card{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .analytics-summary-card>b,body.admin-theme-slate #view-analytics .analytics-summary-card>b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-card-head h2,body.admin-theme-slate #view-analytics .analytics-card-head h2{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-report-card .bar-track,body.admin-theme-slate #view-analytics .analytics-report-card .bar-track{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .analytics-report-card .bar-row b,body.admin-theme-slate #view-analytics .analytics-report-card .bar-row b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-type-balance b,body.admin-theme-slate #view-analytics .analytics-type-balance b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-foot-card,body.admin-theme-slate #view-analytics .analytics-foot-card{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .analytics-foot-card h2,body.admin-theme-slate #view-analytics .analytics-foot-card h2{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .rating-results,body.admin-theme-slate #view-analytics .rating-results{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .rating-results-head b,body.admin-theme-slate #view-analytics .rating-results-head b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .rating-results-close,body.admin-theme-slate #view-analytics .rating-results-close{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .rating-result-item,body.admin-theme-slate #view-analytics .rating-result-item{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .rating-result-item img,body.admin-theme-slate #view-analytics .rating-result-item img{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .rating-result-item b,body.admin-theme-slate #view-analytics .rating-result-item b{color:var(--text)!important}
+body.admin-theme-ivory #view-analytics .analytics-more-button,body.admin-theme-slate #view-analytics .analytics-more-button{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .analytics-all-button,body.admin-theme-slate #view-analytics .analytics-all-button{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .analytics-more-button:hover,body.admin-theme-slate #view-analytics .analytics-more-button:hover{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-analytics .analytics-all-button:hover,body.admin-theme-slate #view-analytics .analytics-all-button:hover{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .quality-trend-panel,body.admin-theme-slate .quality-trend-panel{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .quality-history-track i,body.admin-theme-slate .quality-history-track i{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-quality .quality-list-row,body.admin-theme-slate #view-quality .quality-list-row{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-quality .quality-page-size-label select,body.admin-theme-slate #view-quality .quality-page-size-label select{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-field input,body.admin-theme-slate #view-homepage-layout .homepage-layout-field input{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-field textarea,body.admin-theme-slate #view-homepage-layout .homepage-layout-field textarea{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .homepage-publish-check,body.admin-theme-slate .homepage-publish-check{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-publish-check-head h2,body.admin-theme-slate .homepage-publish-check-head h2{color:var(--text)!important}
+body.admin-theme-ivory .homepage-publish-change-count,body.admin-theme-slate .homepage-publish-change-count{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .homepage-publish-change,body.admin-theme-slate .homepage-publish-change{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .homepage-publish-change b,body.admin-theme-slate .homepage-publish-change b{color:var(--text)!important}
+body.admin-theme-ivory .homepage-publish-change span,body.admin-theme-slate .homepage-publish-change span{color:var(--text)!important}
+body.admin-theme-ivory .homepage-publish-confirm p,body.admin-theme-slate .homepage-publish-confirm p{color:var(--text)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-side-heading h2,body.admin-theme-slate #view-homepage-layout .homepage-layout-side-heading h2{color:var(--text)!important}
+body.admin-theme-ivory .hero-order-panel,body.admin-theme-slate .hero-order-panel{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hero-order-row,body.admin-theme-slate .hero-order-row{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hero-order-row>img,body.admin-theme-slate .hero-order-row>img{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hero-order-title b,body.admin-theme-slate .hero-order-title b{color:var(--text)!important}
+body.admin-theme-ivory .hero-order-actions button,body.admin-theme-slate .hero-order-actions button{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #view-personalized-section .personalized-admin-options .toggle-field b,body.admin-theme-slate #view-personalized-section .personalized-admin-options .toggle-field b{color:var(--text)!important}
+body.admin-theme-ivory .personalized-subheading b,body.admin-theme-slate .personalized-subheading b{color:var(--text)!important}
+body.admin-theme-ivory .personalized-order-row,body.admin-theme-slate .personalized-order-row{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .personalized-order-number,body.admin-theme-slate .personalized-order-number{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .personalized-order-row b,body.admin-theme-slate .personalized-order-row b{color:var(--text)!important}
+body.admin-theme-ivory .personalized-publish-check,body.admin-theme-slate .personalized-publish-check{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .personalized-publish-check h2,body.admin-theme-slate .personalized-publish-check h2{color:var(--text)!important}
+body.admin-theme-ivory .personalized-publish-check p,body.admin-theme-slate .personalized-publish-check p{color:var(--text)!important}
+body.admin-theme-ivory #view-personalized-section .personalized-mode-label-input,body.admin-theme-slate #view-personalized-section .personalized-mode-label-input{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-draft-toolbar,body.admin-theme-slate #view-header-footer .hf-draft-toolbar{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-personalized-section .personalized-rule-settings,body.admin-theme-slate #view-personalized-section .personalized-rule-settings{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-personalized-section .personalized-rule-settings:hover,body.admin-theme-slate #view-personalized-section .personalized-rule-settings:hover{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .personalized-rules-dialog,body.admin-theme-slate .personalized-rules-dialog{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .personalized-rule-field,body.admin-theme-slate .personalized-rule-field{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .personalized-rule-field .field span,body.admin-theme-slate .personalized-rule-field .field span{color:var(--text)!important}
+body.admin-theme-ivory .personalized-rule-field input,body.admin-theme-slate .personalized-rule-field input{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .personalized-rule-field select,body.admin-theme-slate .personalized-rule-field select{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #personalized-publish-check,body.admin-theme-slate #personalized-publish-check{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .personalized-rules-actions,body.admin-theme-slate .personalized-rules-actions{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .system-action-strip b,body.admin-theme-slate .system-action-strip b{color:var(--text)!important}
+body.admin-theme-ivory .credential-card,body.admin-theme-slate .credential-card{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .credential-symbol,body.admin-theme-slate .credential-symbol{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .credential-card h3,body.admin-theme-slate .credential-card h3{color:var(--text)!important}
+body.admin-theme-ivory .credential-identity,body.admin-theme-slate .credential-identity{color:var(--text)!important}
+body.admin-theme-ivory .credential-meta b,body.admin-theme-slate .credential-meta b{color:var(--text)!important}
+body.admin-theme-ivory .brand-manager-intro b,body.admin-theme-slate .brand-manager-intro b{color:var(--text)!important}
+body.admin-theme-ivory .brand-scope,body.admin-theme-slate .brand-scope{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .brand-scope b,body.admin-theme-slate .brand-scope b{color:var(--text)!important}
+body.admin-theme-ivory .brand-manager-actions,body.admin-theme-slate .brand-manager-actions{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .editor-back-button,body.admin-theme-slate .editor-back-button{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .editor-back-button:hover,body.admin-theme-slate .editor-back-button:hover{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .editor-accordion-section,body.admin-theme-slate .editor-accordion-section{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .editor-section-icon,body.admin-theme-slate .editor-section-icon{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .editor-section-copy>b,body.admin-theme-slate .editor-section-copy>b{color:var(--text)!important}
+body.admin-theme-ivory .editor-section-tag,body.admin-theme-slate .editor-section-tag{color:var(--text)!important}
+body.admin-theme-ivory .editor-url-section,body.admin-theme-slate .editor-url-section{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .editor-url-section .editor-section-icon,body.admin-theme-slate .editor-url-section .editor-section-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .editor-url-section .editor-section-copy>b,body.admin-theme-slate .editor-url-section .editor-section-copy>b{color:var(--text)!important}
+body.admin-theme-ivory .editor-watch-section,body.admin-theme-slate .editor-watch-section{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .editor-watch-section .editor-section-icon,body.admin-theme-slate .editor-watch-section .editor-section-icon{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .editor-watch-section .editor-section-copy>b,body.admin-theme-slate .editor-watch-section .editor-section-copy>b{color:var(--text)!important}
+body.admin-theme-ivory .editor-watch-section .url-highlight-group,body.admin-theme-slate .editor-watch-section .url-highlight-group{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .editor-tv-section .editor-section-icon,body.admin-theme-slate .editor-tv-section .editor-section-icon{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .url-highlight-group,body.admin-theme-slate .content-editor-view .url-highlight-group{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .media-url-group,body.admin-theme-slate .content-editor-view .media-url-group{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .url-highlight-heading b,body.admin-theme-slate .content-editor-view .url-highlight-heading b{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .media-url-group .url-highlight-heading b,body.admin-theme-slate .content-editor-view .media-url-group .url-highlight-heading b{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .url-highlight-icon,body.admin-theme-slate .content-editor-view .url-highlight-icon{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .media-url-group .url-highlight-icon,body.admin-theme-slate .content-editor-view .media-url-group .url-highlight-icon{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .editor-footer,body.admin-theme-slate .content-editor-view .editor-footer{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .editor-url-section,body.admin-theme-slate .content-editor-view .editor-url-section{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .editor-url-section .editor-section-icon,body.admin-theme-slate .content-editor-view .editor-url-section .editor-section-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .editor-url-section .editor-section-copy>b,body.admin-theme-slate .content-editor-view .editor-url-section .editor-section-copy>b{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .editor-watch-section,body.admin-theme-slate .content-editor-view .editor-watch-section{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .editor-watch-section .editor-section-icon,body.admin-theme-slate .content-editor-view .editor-watch-section .editor-section-icon{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .editor-watch-section .editor-section-copy>b,body.admin-theme-slate .content-editor-view .editor-watch-section .editor-section-copy>b{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .editor-tv-section,body.admin-theme-slate .content-editor-view .editor-tv-section{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .editor-tv-section .editor-section-icon,body.admin-theme-slate .content-editor-view .editor-tv-section .editor-section-icon{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .editor-tv-section .editor-section-copy>b,body.admin-theme-slate .content-editor-view .editor-tv-section .editor-section-copy>b{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .editor-tv-section .editor-section-tag,body.admin-theme-slate .content-editor-view .editor-tv-section .editor-section-tag{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .editor-url-section .url-highlight-group,body.admin-theme-slate .content-editor-view .editor-url-section .url-highlight-group{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group),body.admin-theme-slate .content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group){background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .editor-url-section .url-highlight-heading b,body.admin-theme-slate .content-editor-view .editor-url-section .url-highlight-heading b{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group) .url-highlight-heading b,body.admin-theme-slate .content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group) .url-highlight-heading b{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .editor-watch-section .url-highlight-group,body.admin-theme-slate .content-editor-view .editor-watch-section .url-highlight-group{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .playback-url-group,body.admin-theme-slate .content-editor-view .playback-url-group{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .content-editor-view .editor-watch-section .url-highlight-heading b,body.admin-theme-slate .content-editor-view .editor-watch-section .url-highlight-heading b{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .playback-url-group .url-highlight-heading b,body.admin-theme-slate .content-editor-view .playback-url-group .url-highlight-heading b{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .media-url-group .url-highlight-tag,body.admin-theme-slate .content-editor-view .media-url-group .url-highlight-tag{color:var(--text)!important}
+body.admin-theme-ivory input,body.admin-theme-slate input{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory select,body.admin-theme-slate select{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory textarea,body.admin-theme-slate textarea{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .field input,body.admin-theme-slate .field input{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .field select,body.admin-theme-slate .field select{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .field textarea,body.admin-theme-slate .field textarea{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .catalog-toolbar input,body.admin-theme-slate .catalog-toolbar input{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .toolbar-button,body.admin-theme-slate .toolbar-button{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .filter-button,body.admin-theme-slate .filter-button{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .catalog-bulk-bar,body.admin-theme-slate .catalog-bulk-bar{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .catalog-clear-selection,body.admin-theme-slate .catalog-clear-selection{color:var(--text)!important}
+body.admin-theme-ivory .users-access-grid h2,body.admin-theme-slate .users-access-grid h2{color:var(--text)!important}
+body.admin-theme-ivory .users-info-row b,body.admin-theme-slate .users-info-row b{color:var(--text)!important}
+body.admin-theme-ivory .security-form input,body.admin-theme-slate .security-form input{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .security-form select,body.admin-theme-slate .security-form select{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .security-password-toggle,body.admin-theme-slate .security-password-toggle{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .security-password-toggle:hover,body.admin-theme-slate .security-password-toggle:hover{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hf-color-field,body.admin-theme-slate .hf-color-field{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hf-color-field:focus-within,body.admin-theme-slate .hf-color-field:focus-within{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hf-color-title,body.admin-theme-slate .hf-color-title{color:var(--text)!important}
+body.admin-theme-ivory .hf-color-control input[type=color],body.admin-theme-slate .hf-color-control input[type=color]{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .hf-color-control output,body.admin-theme-slate .hf-color-control output{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-hex-input,body.admin-theme-slate #view-header-footer .hf-hex-input{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-header-footer .hf-color-summary output,body.admin-theme-slate #view-header-footer .hf-color-summary output{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-header-footer .hf-color-dialog,body.admin-theme-slate #view-header-footer .hf-color-dialog{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-color-close,body.admin-theme-slate #view-header-footer .hf-color-close{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-hex-control>span,body.admin-theme-slate #view-header-footer .hf-hex-control>span{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-palette-heading b,body.admin-theme-slate #view-header-footer .hf-palette-heading b{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-color-dialog-actions .secondary-button,body.admin-theme-slate #view-header-footer .hf-color-dialog-actions .secondary-button{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-color-apply,body.admin-theme-slate #view-header-footer .hf-color-apply{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-header-footer .hf-tabs,body.admin-theme-slate #view-header-footer .hf-tabs{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory #view-header-footer .hf-tab,body.admin-theme-slate #view-header-footer .hf-tab{color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-tab:hover,body.admin-theme-slate #view-header-footer .hf-tab:hover{background-color:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory #view-header-footer .hf-tab-panel>.hf-accordion,body.admin-theme-slate #view-header-footer .hf-tab-panel>.hf-accordion{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .nav-group,body.admin-theme-slate .nav-group{background-color:var(--surface-2)!important;background-image:none!important}
+body.admin-theme-ivory .nav-group .nav-link.active,body.admin-theme-slate .nav-group .nav-link.active{background-color:var(--surface-2)!important;background-image:none!important}
