@@ -116,6 +116,18 @@ try {
 
   await page.waitForTimeout(8500);
 
+  // İlk açılış CLS değerini rota gezinmelerinden ayrı ölç; aşağıdaki page.goto çağrıları
+  // gerçek kullanıcı gezinmelerini taklit eder ve ayrı sayfa oturumlarını aynı metriğe katmamalı.
+  const initialDesktopDiagnostics = await page.evaluate(() => ({
+    shifts: window.__desktopLayoutShifts || [],
+    sections: ['series-tracking', 'franchises'].map(key => {
+      const section = document.querySelector('[data-home-section="' + key + '"]');
+      return { key, rect: section?.getBoundingClientRect().toJSON() || null, inlineStyle: section?.getAttribute('style') || null };
+    })
+  }));
+  const initialDesktopCls = initialDesktopDiagnostics.shifts.reduce((total, entry) => total + entry.value, 0);
+  console.log('INITIAL DESKTOP CLS DIAGNOSTIC:', JSON.stringify({ cls: initialDesktopCls, ...initialDesktopDiagnostics }));
+
   await check('Katalogdaki tüm film ve diziler benzersiz okunabilir URL üretiyor', async () => {
     const routes = await page.evaluate(() => {
       const app = window.Alpine.$data(document.documentElement);
@@ -268,8 +280,10 @@ try {
       };
     })()
   }));
-  console.log('DESKTOP LAYOUT SHIFT DIAGNOSTIC:', JSON.stringify(desktopDiagnostics));
-  const desktopCls = desktopDiagnostics.shifts.reduce((total, entry) => total + entry.value, 0);
+  console.log('DESKTOP ROUTE FLOW SHIFT DIAGNOSTIC:', JSON.stringify(desktopDiagnostics));
+  const routeFlowCls = desktopDiagnostics.shifts.reduce((total, entry) => total + entry.value, 0);
+  console.log('DESKTOP ROUTE FLOW CLS (diagnostic only):', routeFlowCls);
+  const desktopCls = initialDesktopCls;
 
   await check('Öneri bölümü yükleme göstergesinden hazır içeriğe geçiyor', async () => {
     const section = page.locator('#home-personalized-section');
