@@ -30,13 +30,12 @@ console.log('PASS: Admin CSS ve JS kaynakları mevcut');
 const adminJs = readFileSync(resolve(root, 'admin/admin.js'), 'utf8');
 const adminCss = readFileSync(resolve(root, 'admin/admin.css'), 'utf8');
 
-// Header is displayed at 28px, so 84×28 keeps up to 3x density; footer remains 2x for 160×40.
-assert.match(adminJs, /kind==='header'\?84:320,maxHeight=kind==='header'\?28:107/,
-  'Header logoları 84×28px, footer logoları 320×107px sınırında küçültülmeli');
-assert.match(adminJs, /readLogoFile\(file,kind\)/,
-  'Logo yükleyici hangi alan için dosya seçildiğini almalı');
-assert.match(adminJs, /toDataURL\('image\/webp',\.82\)/,
-  'Logo sıkıştırma WebP kalitesini korumalı');
+// Logos are stored as standalone PNG assets; display dimensions are independently configurable.
+assert.match(adminJs, /async function uploadSiteLogo\(kind,file\)/, 'Logo PNG dosyası ayrı endpoint üzerinden yüklenmeli');
+assert.match(adminJs, /2\*1024\*1024/, 'Logo yükleme sınırı 2 MB olmalı');
+assert.match(adminJs, /logoWidth:[\s\S]*logoHeight:/, 'Header ve footer logo ölçüleri yapılandırmaya kaydedilmeli');
+assert.match(html, /hf-header-logo-width[\s\S]*hf-header-logo-height/, 'Header logo genişlik ve yükseklik alanları bulunmalı');
+assert.match(html, /hf-footer-logo-width[\s\S]*hf-footer-logo-height/, 'Footer logo genişlik ve yükseklik alanları bulunmalı');
 
 // Every sidebar destination must resolve to a real panel view.
 const views = [...html.matchAll(/data-view=["']([^"']+)["']/g)].map(match => match[1]);
