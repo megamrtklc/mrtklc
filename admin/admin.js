@@ -38,7 +38,7 @@
     return active;
   }
   function initAdminThemePicker(){
-    initAdminThemePicker();
+    applyAdminTheme();
     document.querySelectorAll('[data-admin-theme]').forEach(button=>{
       button.addEventListener('click',()=>applyAdminTheme(button.dataset.adminTheme));
     });
@@ -2121,7 +2121,7 @@
     refreshBackupSummary();
   }
   async function init(){
-    applyAdminTheme();
+    initAdminThemePicker();
     const formattedDate=new Intl.DateTimeFormat('tr-TR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());$('#today-date').textContent=formattedDate;
     $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
     try{
