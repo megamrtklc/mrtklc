@@ -691,7 +691,7 @@
   $('#brand-identity-form').addEventListener('input',()=>{const v=collectBrandDraft();$('#brand-preview-name').textContent=v.brandName;$('#brand-preview-slogan').textContent=v.slogan;$('#brand-preview-copyright').textContent=v.copyright;});
   let headerFooterSavedSnapshot=null;
   function headerFooterDefaults(){
-    const logoRoot='/assets/logos/';
+    const logoRoot='./assets/logos/';
     return {
       header:{enabled:true,sticky:true,showLogoIcon:false,brandPrimary:'',brandAccent:'',logoImage:logoRoot+'perde-header.png',faviconImage:logoRoot+'perde-favicon-32.png',faviconWidth:32,faviconHeight:32,showHome:true,homeLabel:'Ana Sayfa',showExplore:true,exploreLabel:'Keşfet',showFranchises:true,franchisesLabel:'Seri Filmler',showVideo:true,videoLabel:'Video Bağlantıları',showSearch:true,showProfile:true,showMobileMenu:true,catalogMenusInitialized:false,customLinks:[]},
       footer:{enabled:true,customLinks:[],brandPrimary:'',brandAccent:'',logoImage:logoRoot+'perde-footer.png',logoWidth:160,logoHeight:40,description:'Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.',showBadges:true,badgeOne:'KİŞİSEL KÜTÜPHANE',badgeTwo:'DİZİ TAKİBİ',columnOneTitle:'Perde',homeLabel:'Ana Sayfa',exploreLabel:'Keşfet',libraryLabel:'Kütüphanem',columnTwoTitle:'İzleme Alanım',watchlistLabel:'İzleme Listem',statsLabel:'İstatistikler',featureTitle:'İzleme keyfini kişiselleştir',featureDescription:'Listeni oluştur, kaldığın yerden devam et ve izleme geçmişini tek yerde düzenle.',ctaLabel:'Kütüphaneme Git',showCta:true,copyright:'© 2026 Perde. Tüm hakları saklıdır.',showBackToTop:true}
@@ -700,10 +700,10 @@
   function headerFooterConfig(){
     const defaults=headerFooterDefaults();
     state.data.headerConfig={...defaults.header,...(state.data.headerConfig||{})};
-    state.data.headerConfig.logoImage=state.data.headerConfig.logoImage||defaults.header.logoImage;
-    state.data.headerConfig.faviconImage=state.data.headerConfig.faviconImage||defaults.header.faviconImage;
+    state.data.headerConfig.logoImage=(state.data.headerConfig.logoImage||defaults.header.logoImage).replace(/^\/assets\//,'./assets/');
+    state.data.headerConfig.faviconImage=(state.data.headerConfig.faviconImage||defaults.header.faviconImage).replace(/^\/assets\//,'./assets/');
     state.data.footerConfig={...defaults.footer,...(state.data.footerConfig||{})};
-    state.data.footerConfig.logoImage=state.data.footerConfig.logoImage||defaults.footer.logoImage;
+    state.data.footerConfig.logoImage=(state.data.footerConfig.logoImage||defaults.footer.logoImage).replace(/^\/assets\//,'./assets/');
     if(!state.data.headerConfig.catalogMenusInitialized){
       const required=[{label:'Filmler',page:'movies'},{label:'Diziler',page:'series'},{label:'Yerli Yapımlar',page:'turkish'}];
       const links=Array.isArray(state.data.headerConfig.customLinks)?state.data.headerConfig.customLinks:[];
