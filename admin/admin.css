@@ -2422,3 +2422,122 @@ body.admin-theme-ivory #view-header-footer .hf-tab:hover,body.admin-theme-slate 
 body.admin-theme-ivory #view-header-footer .hf-tab-panel>.hf-accordion,body.admin-theme-slate #view-header-footer .hf-tab-panel>.hf-accordion{background-color:var(--surface-2)!important;background-image:none!important}
 body.admin-theme-ivory .nav-group,body.admin-theme-slate .nav-group{background-color:var(--surface-2)!important;background-image:none!important}
 body.admin-theme-ivory .nav-group .nav-link.active,body.admin-theme-slate .nav-group .nav-link.active{background-color:var(--surface-2)!important;background-image:none!important}
+
+
+/* Light theme: second-pass component surfaces and nested controls */
+body.admin-theme-ivory .panel-card,
+body.admin-theme-ivory .dashboard-card,
+body.admin-theme-slate .panel-card,
+body.admin-theme-slate .dashboard-card{background:var(--surface)!important;background-image:none!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory .field input,
+body.admin-theme-ivory .field select,
+body.admin-theme-ivory .field textarea,
+body.admin-theme-ivory .catalog-toolbar input,
+body.admin-theme-ivory .catalog-toolbar select,
+body.admin-theme-ivory .collection-picker-head input,
+body.admin-theme-slate .field input,
+body.admin-theme-slate .field select,
+body.admin-theme-slate .field textarea,
+body.admin-theme-slate .catalog-toolbar input,
+body.admin-theme-slate .catalog-toolbar select,
+body.admin-theme-slate .collection-picker-head input{background:var(--admin-field-bg,var(--surface-2))!important;background-image:none!important;color:var(--text)!important;border-color:var(--admin-field-border,var(--line))!important}
+body.admin-theme-ivory .url-highlight-group .field input,
+body.admin-theme-ivory .url-highlight-group .field select,
+body.admin-theme-ivory .url-highlight-group .field textarea,
+body.admin-theme-ivory .media-url-group .field input,
+body.admin-theme-ivory .media-url-group .field select,
+body.admin-theme-slate .url-highlight-group .field input,
+body.admin-theme-slate .url-highlight-group .field select,
+body.admin-theme-slate .url-highlight-group .field textarea,
+body.admin-theme-slate .media-url-group .field input,
+body.admin-theme-slate .media-url-group .field select{background:var(--surface)!important;background-image:none!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory .url-highlight-group,
+body.admin-theme-ivory .media-url-group,
+body.admin-theme-ivory .content-editor-view .editor-url-section .url-highlight-group,
+body.admin-theme-ivory .content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group),
+body.admin-theme-ivory .content-editor-view .editor-watch-section .url-highlight-group,
+body.admin-theme-ivory .content-editor-view .playback-url-group,
+body.admin-theme-slate .url-highlight-group,
+body.admin-theme-slate .media-url-group,
+body.admin-theme-slate .content-editor-view .editor-url-section .url-highlight-group,
+body.admin-theme-slate .content-editor-view .url-highlight-group:not(.playback-url-group):not(.media-url-group),
+body.admin-theme-slate .content-editor-view .editor-watch-section .url-highlight-group,
+body.admin-theme-slate .content-editor-view .playback-url-group{background:var(--surface-2)!important;background-image:none!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory .secondary-button,
+body.admin-theme-ivory .dashboard-secondary,
+body.admin-theme-ivory .toolbar-button,
+body.admin-theme-ivory .filter-button,
+body.admin-theme-ivory .watch-order-actions button,
+body.admin-theme-ivory .watch-available-actions button,
+body.admin-theme-slate .secondary-button,
+body.admin-theme-slate .dashboard-secondary,
+body.admin-theme-slate .toolbar-button,
+body.admin-theme-slate .filter-button,
+body.admin-theme-slate .watch-order-actions button,
+body.admin-theme-slate .watch-available-actions button{background:var(--surface-2)!important;background-image:none!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory .homepage-layout-field input,
+body.admin-theme-ivory .homepage-layout-field textarea,
+body.admin-theme-ivory .personalized-rule-field input,
+body.admin-theme-ivory .personalized-rule-field select,
+body.admin-theme-ivory .hf-custom-link-row input,
+body.admin-theme-ivory .hf-custom-link-row select,
+body.admin-theme-slate .homepage-layout-field input,
+body.admin-theme-slate .homepage-layout-field textarea,
+body.admin-theme-slate .personalized-rule-field input,
+body.admin-theme-slate .personalized-rule-field select,
+body.admin-theme-slate .hf-custom-link-row input,
+body.admin-theme-slate .hf-custom-link-row select{background:var(--surface-2)!important;background-image:none!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-state,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-state{background:var(--surface-2)!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory #view-overview .balance-track,
+body.admin-theme-slate #view-overview .balance-track{background:var(--surface-3)!important}
+body.admin-theme-ivory #view-analytics .analytics-more-button,
+body.admin-theme-ivory #view-analytics .analytics-all-button,
+body.admin-theme-ivory #view-analytics .analytics-more-button:hover,
+body.admin-theme-ivory #view-analytics .analytics-all-button:hover,
+body.admin-theme-slate #view-analytics .analytics-more-button,
+body.admin-theme-slate #view-analytics .analytics-all-button,
+body.admin-theme-slate #view-analytics .analytics-more-button:hover,
+body.admin-theme-slate #view-analytics .analytics-all-button:hover{background:var(--surface-2)!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory .content-editor-view .editor-url-section,
+body.admin-theme-ivory .content-editor-view .editor-watch-section,
+body.admin-theme-ivory .content-editor-view .editor-tv-section,
+body.admin-theme-slate .content-editor-view .editor-url-section,
+body.admin-theme-slate .content-editor-view .editor-watch-section,
+body.admin-theme-slate .content-editor-view .editor-tv-section{background:var(--surface)!important;background-image:none!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory .content-editor-view .editor-url-section>summary,
+body.admin-theme-ivory .content-editor-view .editor-watch-section>summary,
+body.admin-theme-slate .content-editor-view .editor-url-section>summary,
+body.admin-theme-slate .content-editor-view .editor-watch-section>summary{background:var(--surface-2)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .editor-section-copy,
+body.admin-theme-ivory .content-editor-view .editor-section-copy *,
+body.admin-theme-ivory .content-editor-view .url-highlight-heading,
+body.admin-theme-ivory .content-editor-view .url-highlight-heading *,
+body.admin-theme-slate .content-editor-view .editor-section-copy,
+body.admin-theme-slate .content-editor-view .editor-section-copy *,
+body.admin-theme-slate .content-editor-view .url-highlight-heading,
+body.admin-theme-slate .content-editor-view .url-highlight-heading *{color:var(--text)!important}
+body.admin-theme-ivory .content-editor-view .editor-section-tag,
+body.admin-theme-ivory .content-editor-view .url-highlight-tag,
+body.admin-theme-slate .content-editor-view .editor-section-tag,
+body.admin-theme-slate .content-editor-view .url-highlight-tag{background:var(--surface-3)!important;color:var(--muted)!important;border-color:var(--line)!important}
+body.admin-theme-ivory #view-header-footer .hf-open-color-picker,
+body.admin-theme-ivory #view-header-footer .hf-open-color-picker:hover,
+body.admin-theme-slate #view-header-footer .hf-open-color-picker,
+body.admin-theme-slate #view-header-footer .hf-open-color-picker:hover{background:var(--surface-2)!important;background-image:none!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory #view-header-footer .hf-tab.is-active,
+body.admin-theme-slate #view-header-footer .hf-tab.is-active{background:var(--surface-3)!important;background-image:none!important;color:var(--text)!important}
+body.admin-theme-ivory .homepage-layout-state.is-active,
+body.admin-theme-slate .homepage-layout-state.is-active{border-color:var(--green)!important}
+body.admin-theme-ivory .homepage-layout-state.is-hidden,
+body.admin-theme-slate .homepage-layout-state.is-hidden{border-color:var(--danger)!important}
+body.admin-theme-ivory .homepage-layout-state.is-locked,
+body.admin-theme-slate .homepage-layout-state.is-locked{border-color:var(--line)!important}
+body.admin-theme-ivory .field input::placeholder,
+body.admin-theme-ivory .field textarea::placeholder,
+body.admin-theme-ivory input::placeholder,
+body.admin-theme-ivory textarea::placeholder,
+body.admin-theme-slate .field input::placeholder,
+body.admin-theme-slate .field textarea::placeholder,
+body.admin-theme-slate input::placeholder,
+body.admin-theme-slate textarea::placeholder{color:var(--muted-2)!important;opacity:1}
