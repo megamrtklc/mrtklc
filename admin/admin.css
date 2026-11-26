@@ -2086,9 +2086,10 @@ body.admin-theme-ivory .view :is(p,small,.helper-text,.field-hint,.muted),
 body.admin-theme-slate .view :is(p,small,.helper-text,.field-hint,.muted){color:var(--muted)}
 
 
+
+
 /* Comprehensive legacy-dark cleanup for light admin themes.
-   Generated from view-level fixed dark backgrounds and light foregrounds;
-   photographic previews, charts, status colors and primary actions are excluded. */
+   Fixed dark view surfaces and pale text are mapped to the active light palette. */
 body.admin-theme-ivory #view-overview .dashboard-welcome,body.admin-theme-slate #view-overview .dashboard-welcome{background:var(--surface-2)!important}
 body.admin-theme-ivory #view-overview .dashboard-welcome:after,body.admin-theme-slate #view-overview .dashboard-welcome:after{background:var(--surface-2)!important}
 body.admin-theme-ivory #view-overview .dashboard-welcome p,body.admin-theme-slate #view-overview .dashboard-welcome p{color:var(--text)!important}
@@ -2128,15 +2129,17 @@ body.admin-theme-ivory #view-analytics .rating-results-head b,body.admin-theme-s
 body.admin-theme-ivory #view-analytics .rating-results-head small,body.admin-theme-slate #view-analytics .rating-results-head small{color:var(--text)!important}
 body.admin-theme-ivory #view-analytics .rating-results-close,body.admin-theme-slate #view-analytics .rating-results-close{background:var(--surface-2)!important;color:var(--text)!important}
 body.admin-theme-ivory #view-analytics .rating-result-item,body.admin-theme-slate #view-analytics .rating-result-item{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .rating-result-item img,body.admin-theme-slate #view-analytics .rating-result-item img{background:var(--surface-2)!important}
 body.admin-theme-ivory #view-analytics .rating-result-item b,body.admin-theme-slate #view-analytics .rating-result-item b{color:var(--text)!important}
 body.admin-theme-ivory #view-analytics .rating-result-item small,body.admin-theme-slate #view-analytics .rating-result-item small{color:var(--text)!important}
-body.admin-theme-ivory #view-analytics .analytics-more-button,#view-analytics .analytics-all-button,body.admin-theme-slate #view-analytics .analytics-more-button,#view-analytics .analytics-all-button{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-analytics .analytics-more-button:hover,#view-analytics .analytics-all-button:hover,body.admin-theme-slate #view-analytics .analytics-more-button:hover,#view-analytics .analytics-all-button:hover{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .analytics-more-button,body.admin-theme-slate #view-analytics .analytics-more-button{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .analytics-all-button,body.admin-theme-slate #view-analytics .analytics-all-button{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .analytics-more-button:hover,body.admin-theme-slate #view-analytics .analytics-more-button:hover{background:var(--surface-2)!important}
+body.admin-theme-ivory #view-analytics .analytics-all-button:hover,body.admin-theme-slate #view-analytics .analytics-all-button:hover{background:var(--surface-2)!important}
 body.admin-theme-ivory #view-quality .quality-list-row,body.admin-theme-slate #view-quality .quality-list-row{background:var(--surface-2)!important}
 body.admin-theme-ivory #view-quality .quality-page-size-label select,body.admin-theme-slate #view-quality .quality-page-size-label select{background:var(--surface-2)!important}
-body.admin-theme-ivory #view-homepage-layout .homepage-layout-field input,
-#view-homepage-layout .homepage-layout-field textarea,body.admin-theme-slate #view-homepage-layout .homepage-layout-field input,
-#view-homepage-layout .homepage-layout-field textarea{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-field input,body.admin-theme-slate #view-homepage-layout .homepage-layout-field input{background:var(--surface-2)!important;color:var(--text)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-field textarea,body.admin-theme-slate #view-homepage-layout .homepage-layout-field textarea{background:var(--surface-2)!important;color:var(--text)!important}
 body.admin-theme-ivory #view-homepage-layout .homepage-layout-side-heading h2,body.admin-theme-slate #view-homepage-layout .homepage-layout-side-heading h2{color:var(--text)!important}
 body.admin-theme-ivory #view-personalized-section .personalized-admin-options .toggle-field b,body.admin-theme-slate #view-personalized-section .personalized-admin-options .toggle-field b{color:var(--text)!important}
 body.admin-theme-ivory /* Custom labels for personalized discovery buttons */
