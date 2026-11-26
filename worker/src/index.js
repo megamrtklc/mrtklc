@@ -435,7 +435,7 @@ async function syncPwaIconFiles(env,iconSha,width,height) {
   const swRead=await fetch(raw+"sw.js?"+Date.now(),{headers:{"cache-control":"no-cache"}});
   if(!swRead.ok)throw new Error("Service Worker dosyası okunamadı.");
   let sw=await swRead.text();
-  sw=sw.replace(/const CACHE_NAME = [\"'][^\"']+[\"'];/,"const CACHE_NAME = \\\"perde-shell-"+String(iconSha).slice(0,12)+"\\\";");
+  sw=sw.replace(/const CACHE_NAME = [\"'][^\"']+[\"'];/,"const CACHE_NAME = \"perde-shell-"+String(iconSha).slice(0,12)+"\";");
   if(!sw.includes(iconPath))sw=sw.replace(/(const PRECACHE_URLS = \\[)/,"$1\\n  "+JSON.stringify(iconPath)+",");
   await writePublicRepoFile(env,"sw.js",sw,"Refresh PWA icon cache version");
 }
