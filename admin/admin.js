@@ -72,7 +72,7 @@
     $$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
     $$('.nav-link').forEach(el=>{const active=el.dataset.view===view;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});
     const active=$('.nav-link[data-view="'+view+'"]');
-    if(active){const group=active.closest('.nav-group');if(group){$('.nav-group').forEach(item=>{item.open=item===group;});}}
+    if(active){const group=active.closest('.nav-group');if(group){$$('.nav-group').forEach(item=>{item.open=item===group;});}}
     $('#crumb-current').textContent=view==='analytics-detail'?'İstatistikler / Detaylı Rapor':(view==='content-editor'?'Yapım Ekle / Düzenle':(active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış'));
     setMobileSidebar(false);
     if(view==='catalog')renderCatalog();
