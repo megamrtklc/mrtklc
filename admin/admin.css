@@ -1923,3 +1923,164 @@ body.admin-theme-ivory .brand-scope,
 body.admin-theme-slate .brand-scope{color:var(--muted)!important}
 body.admin-theme-ivory .mobile-menu,
 body.admin-theme-slate .mobile-menu{background:var(--surface)!important;border-color:var(--line)!important;color:var(--text)!important}
+
+
+/* Full light-theme component treatment: headline and homepage management */
+body.admin-theme-ivory #view-homepage,
+body.admin-theme-slate #view-homepage,
+body.admin-theme-ivory #view-homepage-layout,
+body.admin-theme-slate #view-homepage-layout{
+  color:var(--text)!important;
+}
+body.admin-theme-ivory #view-homepage .homepage-editor,
+body.admin-theme-slate #view-homepage .homepage-editor,
+body.admin-theme-ivory #view-homepage .hero-device-panel,
+body.admin-theme-slate #view-homepage .hero-device-panel,
+body.admin-theme-ivory #view-homepage .hero-order-panel,
+body.admin-theme-slate #view-homepage .hero-order-panel,
+body.admin-theme-ivory #view-homepage .hero-preview-wrap,
+body.admin-theme-slate #view-homepage .hero-preview-wrap,
+body.admin-theme-ivory #view-homepage .hero-preview-heading,
+body.admin-theme-slate #view-homepage .hero-preview-heading,
+body.admin-theme-ivory #view-homepage .homepage-settings,
+body.admin-theme-slate #view-homepage .homepage-settings,
+body.admin-theme-ivory #view-homepage .hero-slide-list,
+body.admin-theme-slate #view-homepage .hero-slide-list,
+body.admin-theme-ivory #view-homepage .hero-order-list,
+body.admin-theme-slate #view-homepage .hero-order-list{
+  background:var(--surface)!important;
+  background-image:none!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory #view-homepage .homepage-slide-head h2,
+body.admin-theme-slate #view-homepage .homepage-slide-head h2,
+body.admin-theme-ivory #view-homepage .hero-order-heading b,
+body.admin-theme-slate #view-homepage .hero-order-heading b,
+body.admin-theme-ivory #view-homepage .hero-preview-heading b,
+body.admin-theme-slate #view-homepage .hero-preview-heading b,
+body.admin-theme-ivory #view-homepage .field>span,
+body.admin-theme-slate #view-homepage .field>span,
+body.admin-theme-ivory #view-homepage .toggle-field,
+body.admin-theme-slate #view-homepage .toggle-field{
+  color:var(--text)!important;
+}
+body.admin-theme-ivory #view-homepage .homepage-slide-head p,
+body.admin-theme-slate #view-homepage .homepage-slide-head p,
+body.admin-theme-ivory #view-homepage .hero-order-heading span,
+body.admin-theme-slate #view-homepage .hero-order-heading span,
+body.admin-theme-ivory #view-homepage .hero-preview-heading span,
+body.admin-theme-slate #view-homepage .hero-preview-heading span,
+body.admin-theme-ivory #view-homepage .hero-mode-hint,
+body.admin-theme-slate #view-homepage .hero-mode-hint,
+body.admin-theme-ivory #view-homepage .field small,
+body.admin-theme-slate #view-homepage .field small{
+  color:var(--muted)!important;
+}
+body.admin-theme-ivory #view-homepage .hero-device-panel *,
+body.admin-theme-slate #view-homepage .hero-device-panel *{
+  border-color:var(--line);
+}
+body.admin-theme-ivory #view-homepage .hero-slide-card,
+body.admin-theme-slate #view-homepage .hero-slide-card,
+body.admin-theme-ivory #view-homepage .hero-order-item,
+body.admin-theme-slate #view-homepage .hero-order-item,
+body.admin-theme-ivory #view-homepage .hero-slide-item,
+body.admin-theme-slate #view-homepage .hero-slide-item,
+body.admin-theme-ivory #view-homepage .hero-search-result,
+body.admin-theme-slate #view-homepage .hero-search-result{
+  background:var(--surface-2)!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory #view-homepage .hero-preview,
+body.admin-theme-slate #view-homepage .hero-preview{
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory #view-homepage .hero-preview-copy h3,
+body.admin-theme-slate #view-homepage .hero-preview-copy h3{color:#fff!important;text-shadow:0 2px 12px #000a}
+body.admin-theme-ivory #view-homepage .hero-preview-copy p,
+body.admin-theme-slate #view-homepage .hero-preview-copy p,
+body.admin-theme-ivory #view-homepage .hero-preview-meta,
+body.admin-theme-slate #view-homepage .hero-preview-meta{color:#f5f7fa!important;text-shadow:0 1px 8px #000b}
+body.admin-theme-ivory #view-homepage .hero-preview-empty,
+body.admin-theme-slate #view-homepage .hero-preview-empty{color:var(--muted)!important}
+body.admin-theme-ivory #view-homepage .hero-controls .field,
+body.admin-theme-slate #view-homepage .hero-controls .field{color:var(--text)!important}
+body.admin-theme-ivory #view-homepage .homepage-save,
+body.admin-theme-slate #view-homepage .homepage-save{border-color:var(--line)!important}
+body.admin-theme-ivory #view-homepage .homepage-save .primary-button,
+body.admin-theme-slate #view-homepage .homepage-save .primary-button,
+body.admin-theme-ivory #view-homepage .primary-button,
+body.admin-theme-slate #view-homepage .primary-button{color:#fff!important}
+body.admin-theme-ivory #view-homepage .secondary-button,
+body.admin-theme-slate #view-homepage .secondary-button{background:var(--surface-2)!important;color:var(--text)!important;border-color:var(--line)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-intro,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-intro,
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-panel,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-panel,
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-side,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-side,
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-preview-panel,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-preview-panel,
+body.admin-theme-ivory #view-homepage-layout .homepage-publish-check,
+body.admin-theme-slate #view-homepage-layout .homepage-publish-check{
+  background:var(--surface)!important;
+  background-image:none!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory #view-homepage-layout :is(h1,h2,h3,b,strong),
+body.admin-theme-slate #view-homepage-layout :is(h1,h2,h3,b,strong){color:var(--text)!important}
+body.admin-theme-ivory #view-homepage-layout :is(p,small,.homepage-layout-draft,.homepage-preview-disclaimer),
+body.admin-theme-slate #view-homepage-layout :is(p,small,.homepage-layout-draft,.homepage-preview-disclaimer){color:var(--muted)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-note,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-note,
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-row,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-row,
+body.admin-theme-ivory #view-homepage-layout .homepage-publish-change,
+body.admin-theme-slate #view-homepage-layout .homepage-publish-change{
+  background:var(--surface-2)!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-note b,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-note b,
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-panel .panel-heading h2,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-panel .panel-heading h2,
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-side h2,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-side h2,
+body.admin-theme-ivory #view-homepage-layout .homepage-publish-check-head h2,
+body.admin-theme-slate #view-homepage-layout .homepage-publish-check-head h2{color:var(--text)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-note p,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-note p,
+body.admin-theme-ivory #view-homepage-layout .homepage-layout-panel .panel-heading p,
+body.admin-theme-slate #view-homepage-layout .homepage-layout-panel .panel-heading p,
+body.admin-theme-ivory #view-homepage-layout .homepage-publish-check-head p,
+body.admin-theme-slate #view-homepage-layout .homepage-publish-check-head p{color:var(--muted)!important}
+body.admin-theme-ivory #view-homepage-layout .homepage-preview-switch,
+body.admin-theme-slate #view-homepage-layout .homepage-preview-switch,
+body.admin-theme-ivory #view-homepage-layout .homepage-preview-switch button,
+body.admin-theme-slate #view-homepage-layout .homepage-preview-switch button{
+  background:var(--surface-2)!important;color:var(--text)!important;border-color:var(--line)!important
+}
+body.admin-theme-ivory #view-homepage-layout .homepage-preview-switch button.is-active,
+body.admin-theme-slate #view-homepage-layout .homepage-preview-switch button.is-active{
+  background:color-mix(in srgb,var(--accent) 14%,var(--surface))!important;color:var(--accent)!important
+}
+
+/* Shared button and text contrast correction for all admin sections in light themes */
+body.admin-theme-ivory .view :is(.secondary-button,.dashboard-secondary,.toolbar-button,.filter-button,.icon-button,.action-button),
+body.admin-theme-slate .view :is(.secondary-button,.dashboard-secondary,.toolbar-button,.filter-button,.icon-button,.action-button){
+  background:var(--surface-2)!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+body.admin-theme-ivory .view :is(.secondary-button,.dashboard-secondary,.toolbar-button,.filter-button,.icon-button,.action-button):hover,
+body.admin-theme-slate .view :is(.secondary-button,.dashboard-secondary,.toolbar-button,.filter-button,.icon-button,.action-button):hover{
+  background:var(--surface-3)!important;color:var(--text)!important
+}
+body.admin-theme-ivory .view :is(h1,h2,h3,h4,label,.field>span,.field-label),
+body.admin-theme-slate .view :is(h1,h2,h3,h4,label,.field>span,.field-label){color:var(--text)}
+body.admin-theme-ivory .view :is(p,small,.helper-text,.field-hint,.muted),
+body.admin-theme-slate .view :is(p,small,.helper-text,.field-hint,.muted){color:var(--muted)}
