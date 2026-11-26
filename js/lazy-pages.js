@@ -35,7 +35,7 @@
         library: './js/library-page.js?v=20261125-library-page-v1'
     };
     const pageScriptRoutes = {
-        home: ['watch-recommendations', 'library'],
+        home: ['watch-recommendations'],
         watch: ['people', 'watch-recommendations', 'player', 'watch-page'],
         'actor-director': ['people'],
         explore: ['explore'],
