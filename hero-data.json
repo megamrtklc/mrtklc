@@ -90,7 +90,31 @@
         "active": true
       }
     ],
-    "heroStyle": "perde"
+    "heroStyle": "perde",
+    "layout": {
+      "order": [
+        "hero",
+        "personalized",
+        "new-arrivals",
+        "favorites",
+        "watched",
+        "published-collections",
+        "catalog",
+        "watchlist",
+        "series-tracking",
+        "continue",
+        "franchises",
+        "genre-discovery"
+      ],
+      "visibility": {
+        "watched": true,
+        "personalized": true,
+        "published-collections": true,
+        "series-tracking": true,
+        "genre-discovery": true
+      },
+      "labels": {}
+    }
   },
   "catalog": [
     {
