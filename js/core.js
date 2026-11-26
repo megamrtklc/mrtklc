@@ -94,3 +94,28 @@ function safeStorageRead(key, fallback = null) {
             }
             return value;
         }
+
+/* PERDE — Yönetici kontrollü platform deneyimi */
+window.PERDE_EXPERIENCE_DEFAULTS={theme:'dark',accent:'#D5B66B',cardStyle:'soft',density:'comfortable',motion:true,quality:'auto',resume:true,next:true,autoplay:false,theater:true,language:'tr',size:100,subColor:'#FFFFFF',subBg:'dark',subPosition:'bottom'};
+window.PERDE_EXPERIENCE_LOCKED=true;
+window.applyPerdeExperienceConfig=function(config){
+ const c={...window.PERDE_EXPERIENCE_DEFAULTS,...(config||{})},root=document.documentElement;
+ const theme=c.theme==='light'?'ivory':'dark';
+ window.PERDE_EXPERIENCE_LOCKED=true;
+ try{localStorage.removeItem('cine_theme_v3')}catch(_){}
+ if(typeof applyPerdeTheme==='function')applyPerdeTheme(theme);
+ root.dataset.perdeCardStyle=c.cardStyle||'soft';root.dataset.perdeCardDensity=c.density||'comfortable';
+ root.style.setProperty('--perde-accent',c.accent||'#D5B66B');
+ root.style.setProperty('--perde-accent-rgb',(c.accent||'#D5B66B').match(/[A-Fa-f0-9]{2}/g)?.map(x=>parseInt(x,16)).join(',')||'213,182,107');
+ root.dataset.perdeMotion=c.motion?'on':'off';
+ root.dataset.perdeTheater=c.theater?'on':'off';
+ root.dataset.perdeSubtitleLanguage=c.language||'tr';
+ root.dataset.perdeSubtitleSize=String(c.size||100);
+ root.dataset.perdeSubtitleColor=c.subColor||'#FFFFFF';
+ root.dataset.perdeSubtitleBackground=c.subBg||'dark';
+ root.dataset.perdeSubtitlePosition=c.subPosition||'bottom';
+ const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=theme==='dark'?'#0b0d11':'#fffdf9';
+ document.querySelectorAll('[data-perde-user-theme],#perde-theme-picker').forEach(el=>el.hidden=true);
+ window.dispatchEvent(new CustomEvent('perde-experience-updated',{detail:c}));
+ return c;
+};
