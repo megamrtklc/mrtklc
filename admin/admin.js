@@ -27,6 +27,7 @@
     document.body.classList.remove('admin-theme-ivory','admin-theme-slate','admin-theme-dark');
     document.body.classList.add('admin-theme-'+active);
     document.documentElement.style.colorScheme=active==='dark'?'dark':'light';
+ document.documentElement.style.backgroundColor=active==='ivory'?'#f5f1e8':(active==='slate'?'#edf1f5':'#17191f');
     const meta=document.querySelector('meta[name="theme-color"]');
     if(meta)meta.content=active==='ivory'?'#f5f1e8':(active==='slate'?'#edf1f5':'#17191f');
     document.querySelectorAll('[data-admin-theme]').forEach(button=>{
