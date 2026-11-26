@@ -824,7 +824,7 @@
     const draft=collectHeaderFooterDraft();
     if(JSON.stringify(draft)===headerFooterSavedSnapshot){updateHeaderFooterDraftState();return;}
     const ok=await persist({...state.data,headerConfig:draft.header,footerConfig:draft.footer},'Header ve Footer ayarları kaydedildi.');
-    if(ok)renderHeaderFooter();else updateHeaderFooterDraftState();
+    if(ok){for(const kind of [...pendingLogoRemovals]){try{await removeSiteLogo(kind);pendingLogoRemovals.delete(kind);}catch(error){toast('Logo ayarı kaydedildi ancak eski PNG dosyası temizlenemedi: '+error.message,'error');}}renderHeaderFooter();}else updateHeaderFooterDraftState();
   }
   let contentEditorReturnView='overview';
   let contentEditorSnapshot='';
