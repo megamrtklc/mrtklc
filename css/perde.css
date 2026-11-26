@@ -154,3 +154,13 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* PERDE DESIGN SYSTEM — ana sayfa kart standardı */
+#home-page :is(#home-continue-section .home-continue-card,#home-genre-discovery-section .home-genre-discovery-card,#home-personalized-section .home-personalized-alternative,#home-personalized-section .home-personalized-card,#home-personalized-section .home-personalized-feature,#home-series-tracking-section .home-series-tracking-card,#home-watchlist-section .home-watchlist-card,#home-catalog-section .home-catalog-card,#home-new-arrivals-section .home-catalog-card,#home-new-arrivals-section .home-new-arrival-card,#home-favorites-section .home-new-arrival-card){
+  border-radius:var(--perde-radius-card);
+  transition-duration:var(--perde-motion-standard);
+}
+@media(max-width:639px){
+  #home-page :is(#home-continue-section .home-continue-card,#home-genre-discovery-section .home-genre-discovery-card,#home-personalized-section .home-personalized-alternative,#home-personalized-section .home-personalized-card,#home-series-tracking-section .home-series-tracking-card,#home-watchlist-section .home-watchlist-card,#home-catalog-section .home-catalog-card,#home-new-arrivals-section .home-catalog-card,#home-new-arrivals-section .home-new-arrival-card,#home-favorites-section .home-new-arrival-card){border-radius:14px}
+}
