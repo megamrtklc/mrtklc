@@ -111,3 +111,46 @@ button:focus-visible,[role="button"]:focus-visible{
   p{line-height:1.55}
   button,[role="button"]{font-size:13px}
 }
+
+
+/* PERDE DESIGN SYSTEM — ortak ölçü, yüzey ve etkileşim token'ları */
+:root{
+  --perde-font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --perde-text-xs:12px;
+  --perde-text-sm:13px;
+  --perde-text-md:14px;
+  --perde-text-base:15px;
+  --perde-text-lg:18px;
+  --perde-text-xl:22px;
+  --perde-radius-sm:8px;
+  --perde-radius-md:12px;
+  --perde-radius-card:16px;
+  --perde-radius-panel:20px;
+  --perde-space-1:4px;
+  --perde-space-2:8px;
+  --perde-space-3:12px;
+  --perde-space-4:16px;
+  --perde-space-5:20px;
+  --perde-space-6:24px;
+  --perde-control-height:40px;
+  --perde-motion-fast:160ms ease;
+  --perde-motion-standard:220ms ease;
+  --perde-focus-ring:0 0 0 3px rgba(214,173,99,.28);
+  --perde-card-border:rgba(148,163,184,.22);
+  --perde-card-shadow:0 8px 24px -18px rgba(0,0,0,.58);
+}
+html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
+:where(button,[role="button"],a,input,select,textarea):focus-visible{
+  outline:2px solid var(--accent,#d6ad63);
+  outline-offset:3px;
+}
+:where(input,select,textarea){
+  border-radius:var(--perde-radius-sm);
+  transition:border-color var(--perde-motion-fast),box-shadow var(--perde-motion-fast),background-color var(--perde-motion-fast);
+}
+:where(.home-rail-arrow,.cv-mhero-arrow,.cv-back-button){
+  transition:background-color var(--perde-motion-fast),border-color var(--perde-motion-fast),color var(--perde-motion-fast),transform var(--perde-motion-fast),opacity var(--perde-motion-fast);
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
