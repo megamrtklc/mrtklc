@@ -21032,15 +21032,17 @@
   "headerConfig": {
     "enabled": true,
     "sticky": true,
-    "showLogoIcon": false,
+    "showLogoIcon": true,
     "brandPrimary": "Perde",
     "brandAccent": "Film",
-    "brandPrimaryColor": "#D9A441",
-    "brandAccentColor": "#F5D27A",
-    "logoImage": "./assets/logos/perde-header.png",
-    "faviconImage": "./assets/logos/perde-app-icon.svg",
+    "brandPrimaryColor": "#d9a441",
+    "brandAccentColor": "#f5d27a",
+    "logoImage": "https://raw.githubusercontent.com/megamrtklc/mrtklc/main/assets/logos/perde-header.png?v=e283feeb2a2b2034b4b09d436bde4db457403210",
+    "faviconImage": "https://raw.githubusercontent.com/megamrtklc/mrtklc/main/assets/logos/perde-favicon.png?v=698c60c1e144e4dc9650b5d9dc67265e671541c7",
     "faviconWidth": 32,
     "faviconHeight": 32,
+    "logoWidth": 32,
+    "logoHeight": 32,
     "showHome": true,
     "homeLabel": "Ana Sayfa",
     "showExplore": true,
@@ -21070,18 +21072,15 @@
         "label": "Seri Filmler",
         "page": "franchises"
       }
-    ],
-    "logoWidth": 32,
-    "logoHeight": 32
+    ]
   },
   "footerConfig": {
     "enabled": true,
-    "customLinks": [],
     "brandPrimary": "Perde",
     "brandAccent": "Film",
-    "brandPrimaryColor": "#D9A441",
-    "brandAccentColor": "#F5D27A",
-    "logoImage": "./assets/logos/perde-mark.svg",
+    "brandPrimaryColor": "#d9a441",
+    "brandAccentColor": "#f5d27a",
+    "logoImage": "https://raw.githubusercontent.com/megamrtklc/mrtklc/main/assets/logos/perde-footer.png?v=698c60c1e144e4dc9650b5d9dc67265e671541c7",
     "logoWidth": 40,
     "logoHeight": 40,
     "description": "Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.",
@@ -21100,7 +21099,8 @@
     "ctaLabel": "Kütüphaneme Git",
     "showCta": true,
     "copyright": "© 2026 Perde. Tüm hakları saklıdır.",
-    "showBackToTop": true
+    "showBackToTop": true,
+    "customLinks": []
   },
   "franchises": [
     {
