@@ -421,15 +421,13 @@ async function syncPwaIconFiles(env,iconSha,width,height) {
   const manifestRead=await fetch(raw+"manifest.webmanifest?"+Date.now(),{headers:{"cache-control":"no-cache"}});
   if(!manifestRead.ok)throw new Error("PWA manifest dosyası okunamadı.");
   const manifest=await manifestRead.json();
-  const icons=Array.isArray(manifest.icons)?manifest.icons:[];
-  const filtered=icons.filter(icon=>!String(icon.src||"").includes("perde-favicon.png"));
-  filtered.unshift({src:iconPath,sizes:String(width)+"x"+String(height),type:"image/png",purpose:"any maskable"});
-  manifest.icons=filtered;
+  // Uygulama kurulurken eski SVG/PNG alternatifleri seçilmesin: tek kaynak yüklenen kare PNG olsun.
+  manifest.icons=[{src:iconPath,sizes:String(width)+"x"+String(height),type:"image/png",purpose:"any"}];
   await writePublicRepoFile(env,"manifest.webmanifest",JSON.stringify(manifest,null,2)+"\n","Update PWA application icon");
   const indexRead=await fetch(raw+"index.html?"+Date.now(),{headers:{"cache-control":"no-cache"}});
   if(!indexRead.ok)throw new Error("Ana sayfa ikon bağlantıları okunamadı.");
   let html=await indexRead.text();
-  const iconHref="./assets/logos/perde-favicon.png?v="+encodeURIComponent(iconSha);
+  const iconHref=iconPath;
   const iconLink='<link rel="icon" type="image/png" sizes="'+width+"x"+height+'" href="'+iconHref+'">';
   let iconInserted=false;
   html=html.replace(/<link[^>]*>/gi,tag=>{
@@ -441,7 +439,7 @@ async function syncPwaIconFiles(env,iconSha,width,height) {
   const swRead=await fetch(raw+"sw.js?"+Date.now(),{headers:{"cache-control":"no-cache"}});
   if(!swRead.ok)throw new Error("Service Worker dosyası okunamadı.");
   let sw=await swRead.text();
-  sw=sw.replace(/const CACHE_NAME = [\"'][^\"']+[\"'];/,"const CACHE_NAME = \"perde-shell-"+String(iconSha).slice(0,12)+"\";");
+  sw=sw.replace(/const CACHE_NAME = ["'][^"']+["'];/,"const CACHE_NAME = \"perde-shell-"+String(iconSha).slice(0,12)+"\";");
   if(!sw.includes(iconPath))sw=sw.replace(/(const PRECACHE_URLS = \[)/,"$1\n  "+JSON.stringify(iconPath)+",");
   await writePublicRepoFile(env,"sw.js",sw,"Refresh PWA icon cache version");
 }
