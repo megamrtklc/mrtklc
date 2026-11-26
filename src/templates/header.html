@@ -1,6 +1,6 @@
 <!-- Perde üst gezinme alanı: marka, masaüstü menüsü, profil ve mobil menü. -->
     <!-- Header / Top Navbar (Full Width) — responsive and contrast verified -->
-    <header x-show="headerConfig.enabled !== false" @scroll.window="headerScrolled = window.scrollY > 40" :class="'sticky top-0 z-50 ' + (currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass())" class="backdrop-blur-md border-b transition-colors duration-300">
+    <header x-cloak x-show="headerConfigReady && headerConfig.enabled !== false" @scroll.window="headerScrolled = window.scrollY > 40" :class="'sticky top-0 z-50 ' + (currentPage === 'home' && !headerScrolled ? 'home-hero-overlay' : getHeaderClass())" class="backdrop-blur-md border-b transition-colors duration-300">
         <div class="w-full px-4 sm:px-12 md:max-w-[1800px] md:mx-auto md:px-8 lg:px-12 xl:px-16 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 lg:space-x-6 xl:space-x-12">
                 <a href="#" @click.prevent="navigateTo('home')" class="flex items-center space-x-0.5 group">
