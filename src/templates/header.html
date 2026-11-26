@@ -66,6 +66,11 @@
                         <button type="button" @click="setTheme('dark'); openProfileMenu = false;" class="cineverse-dropdown-item">
                             <i class="fa-solid fa-moon w-4 text-center text-indigo-400"></i><span class="flex-1">Karanlık Mod</span><i x-show="theme === 'dark'" class="fa-solid fa-check ml-auto text-rose-500"></i>
                         </button>
+                        <div x-data="{ canInstall: false }" x-init="window.addEventListener('perde-pwa-install-available', () => canInstall = true); window.addEventListener('perde-pwa-installed', () => canInstall = false)" x-show="canInstall" class="px-2">
+                            <button type="button" @click="window.__PERDE_INSTALL_PROMPT__ && window.__PERDE_INSTALL_PROMPT__.prompt(); window.__PERDE_INSTALL_PROMPT__ = null; canInstall = false" class="cineverse-dropdown-item w-full">
+                                <i class="fa-solid fa-download w-4 text-center text-amber-500"></i><span class="flex-1">Perde uygulamasını yükle</span>
+                            </button>
+                        </div>
                         <div class="cineverse-dropdown-divider my-2"></div>
                         <a href="admin/" class="cineverse-admin-shortcut">
                             <span class="cineverse-admin-icon"><i class="fa-solid fa-shield-halved"></i></span>
