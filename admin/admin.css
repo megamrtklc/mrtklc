@@ -2756,3 +2756,135 @@ body.admin-theme-ivory #view-header-footer .hf-color-dialog-actions .secondary-b
 body.admin-theme-slate #view-header-footer .hf-color-dialog-actions .secondary-button{background:var(--surface-2)!important;color:var(--text)!important;border-color:var(--line)!important}
 body.admin-theme-ivory #view-header-footer .hf-color-apply,
 body.admin-theme-slate #view-header-footer .hf-color-apply{background:#e9dfc9!important;color:#5d4a2b!important;border-color:#d9c69f!important}
+
+
+/* Mobile catalog lists — compact horizontal rows, not stacked cards */
+@media(max-width:700px){
+  #view-catalog .catalog-table-wrap,
+  #view-trailers-missing .catalog-table-wrap{overflow:visible}
+  #view-catalog .catalog-table,
+  #view-trailers-missing .catalog-table{display:block;width:100%;border-collapse:separate;border-spacing:0}
+  #view-catalog .catalog-table tbody,
+  #view-trailers-missing .catalog-table tbody{display:grid;gap:7px}
+  #view-catalog .catalog-table tr,
+  #view-trailers-missing .catalog-table tr{
+    display:grid;align-items:center;gap:5px 9px;
+    padding:9px 10px;border:1px solid var(--line-soft,#dce2e8);
+    border-radius:11px;background:var(--surface)!important;
+    box-shadow:0 2px 7px rgba(25,35,48,.045);
+  }
+  #view-catalog .catalog-table tr{
+    grid-template-columns:18px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+  }
+  #view-catalog .catalog-table td{
+    display:block;min-width:0;padding:0;border:0;
+    background:transparent!important;font-size:10px;line-height:1.25;
+  }
+  #view-catalog .catalog-table td.catalog-select-cell{
+    grid-column:1;grid-row:1 / span 2;align-self:center;
+  }
+  #view-catalog .catalog-table td.catalog-select-cell input{
+    width:15px;height:15px;margin:0;accent-color:var(--accent);
+  }
+  #view-catalog .catalog-table td:nth-child(2){
+    grid-column:2 / 5;grid-row:1;min-width:0;
+  }
+  #view-catalog .catalog-title{
+    display:flex;align-items:center;gap:9px;min-width:0;
+  }
+  #view-catalog .catalog-title img{
+    flex:0 0 35px;width:35px;height:47px;object-fit:cover;
+    border-radius:5px;box-shadow:none;
+  }
+  #view-catalog .catalog-title>div{display:grid;gap:3px;min-width:0}
+  #view-catalog .catalog-title b{
+    display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+    color:var(--text)!important;font-size:11px;line-height:1.3;font-weight:750;
+  }
+  #view-catalog .catalog-title small{
+    display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    margin:0;color:var(--muted)!important;font-size:9px;line-height:1.25;
+  }
+  #view-catalog .catalog-table td:nth-child(3){grid-column:2;grid-row:2}
+  #view-catalog .catalog-table td:nth-child(4){grid-column:3;grid-row:2}
+  #view-catalog .catalog-table td:nth-child(5){grid-column:4;grid-row:2}
+  #view-catalog .catalog-table td:nth-child(3):before,
+  #view-catalog .catalog-table td:nth-child(4):before,
+  #view-catalog .catalog-table td:nth-child(5):before{
+    display:inline;margin:0 4px 0 0;color:var(--muted)!important;
+    font-size:8px;letter-spacing:.02em;font-weight:600;
+  }
+  #view-catalog .catalog-table td:nth-child(3):before{content:"Tür"}
+  #view-catalog .catalog-table td:nth-child(4):before{content:"Yıl"}
+  #view-catalog .catalog-table td:nth-child(5):before{content:"IMDb"}
+  #view-catalog .type-chip{padding:2px 5px;font-size:9px}
+  #view-catalog .score{font-size:10px}
+  #view-catalog .catalog-table td:nth-child(6){display:none}
+  #view-catalog .catalog-table td.row-actions{
+    grid-column:2 / 5;grid-row:3;display:flex;justify-content:flex-end;gap:6px;
+    padding-top:6px;border-top:1px solid var(--line-soft);
+  }
+  #view-catalog .row-action{min-height:27px;padding:5px 9px;font-size:9px}
+  #view-catalog .catalog-table td.empty-cell{
+    grid-column:1 / -1;padding:20px!important;text-align:center;
+  }
+
+  #view-trailers-missing .catalog-table tr{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);
+  }
+  #view-trailers-missing .catalog-table td{
+    display:block;min-width:0;padding:0;border:0;
+    background:transparent!important;font-size:10px;line-height:1.25;
+  }
+  #view-trailers-missing .catalog-table td:first-child{
+    grid-column:1 / 4;grid-row:1;min-width:0;
+  }
+  #view-trailers-missing .catalog-title{
+    display:flex;align-items:center;gap:9px;min-width:0;
+  }
+  #view-trailers-missing .catalog-title img{
+    flex:0 0 35px;width:35px;height:47px;object-fit:cover;
+    border-radius:5px;box-shadow:none;
+  }
+  #view-trailers-missing .catalog-title>div{display:grid;gap:3px;min-width:0}
+  #view-trailers-missing .catalog-title b{
+    display:-webkit-box;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+    color:var(--text)!important;font-size:11px;line-height:1.3;
+  }
+  #view-trailers-missing .catalog-title small{
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    margin:0;color:var(--muted)!important;font-size:9px;
+  }
+  #view-trailers-missing .catalog-table td:nth-child(2){grid-column:1;grid-row:2}
+  #view-trailers-missing .catalog-table td:nth-child(3){grid-column:2;grid-row:2}
+  #view-trailers-missing .catalog-table td:nth-child(4){grid-column:3;grid-row:2}
+  #view-trailers-missing .catalog-table td:nth-child(2):before,
+  #view-trailers-missing .catalog-table td:nth-child(3):before,
+  #view-trailers-missing .catalog-table td:nth-child(4):before{
+    display:block;margin-bottom:3px;color:var(--muted)!important;
+    font-size:8px;letter-spacing:.02em;font-weight:600;
+  }
+  #view-trailers-missing .catalog-table td:nth-child(2):before{content:"Tür"}
+  #view-trailers-missing .catalog-table td:nth-child(3):before{content:"Yıl"}
+  #view-trailers-missing .catalog-table td:nth-child(4):before{content:"Durum"}
+  #view-trailers-missing .type-chip,
+  #view-trailers-missing .trailer-missing-status{padding:3px 6px;font-size:9px}
+  #view-trailers-missing .catalog-table td.row-actions{
+    grid-column:1 / 4;grid-row:3;display:flex;justify-content:flex-end;
+    padding-top:6px;border-top:1px solid var(--line-soft);
+  }
+  #view-trailers-missing .row-action{min-height:27px;padding:5px 10px;font-size:9px}
+  #view-trailers-missing .catalog-table td.empty-cell{
+    grid-column:1 / -1;padding:20px!important;text-align:center;
+  }
+}
+@media(max-width:390px){
+  #view-catalog .catalog-table tr{gap:5px 7px;padding:8px}
+  #view-catalog .catalog-title img,
+  #view-trailers-missing .catalog-title img{flex-basis:32px;width:32px;height:44px}
+  #view-catalog .catalog-title b,
+  #view-trailers-missing .catalog-title b{font-size:10px}
+  #view-catalog .catalog-table td:nth-child(3):before,
+  #view-catalog .catalog-table td:nth-child(4):before,
+  #view-catalog .catalog-table td:nth-child(5):before{font-size:7px}
+}
