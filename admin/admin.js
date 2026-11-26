@@ -132,19 +132,6 @@
   });
   function canWrite(){ if(!state.apiEnabled||!state.sha){toast('Katalog şu anda salt okunur. GitHub erişim bağlantısı doğrulanınca düzenleme açılacak.');return false;} return true; }
 
-  const EXP_DEFAULTS={theme:'dark',accent:'#D5B66B',cardStyle:'soft',density:'comfortable',motion:true,quality:'auto',resume:true,next:true,autoplay:false,theater:true,language:'tr',size:100,subColor:'#FFFFFF',subBg:'dark',subPosition:'bottom'};
-  let expSaved=null;
-  function expRead(){return {theme:$('#exp-theme').value,accent:$('#exp-color-hex').value.trim().toUpperCase(),cardStyle:$('#exp-card-style').value,density:$('#exp-density').value,motion:$('#exp-motion').checked,quality:$('#exp-quality').value,resume:$('#exp-resume').checked,next:$('#exp-next').checked,autoplay:$('#exp-autoplay').checked,theater:$('#exp-theater').checked,language:$('#exp-language').value,size:Number($('#exp-size').value),subColor:$('#exp-sub-color').value,subBg:$('#exp-sub-bg').value,subPosition:$('#exp-sub-position').value};}
-  function expPreview(v=expRead()){const p=$('#exp-preview');p.dataset.theme=v.theme;p.style.setProperty('--exp-accent',v.accent);$('#exp-size-value').textContent=v.size+'%';const s=$('#exp-subtitle-sample');s.style.fontSize=v.size/100+'em';s.style.color=v.subColor;s.style.background=v.subBg==='none'?'transparent':v.subBg==='solid'?'#000':'#0009';s.style.bottom=v.subPosition==='higher'?'30px':v.subPosition==='lower'?'12px':'3px';}
-  function expDirty(){const v=expRead(),dirty=JSON.stringify(v)!==JSON.stringify(expSaved);$('#perde-experience-status').textContent=dirty?'● Kaydedilmemiş değişiklik var':'● Kayıtlı ayarlar';$('#perde-experience-save').disabled=!dirty;$('#perde-experience-discard').disabled=!dirty;expPreview(v);}
-  function renderPerdeExperience(){const v={...EXP_DEFAULTS,...(state.data?.perdeExperienceConfig||{})};expSaved={...v};$('#exp-theme').value=v.theme;$('#exp-color').value=v.accent;$('#exp-color-hex').value=v.accent;$('#exp-card-style').value=v.cardStyle;$('#exp-density').value=v.density;$('#exp-motion').checked=v.motion;$('#exp-quality').value=v.quality;$('#exp-resume').checked=v.resume;$('#exp-next').checked=v.next;$('#exp-autoplay').checked=v.autoplay;$('#exp-theater').checked=v.theater;$('#exp-language').value=v.language;$('#exp-size').value=v.size;$('#exp-sub-color').value=v.subColor;$('#exp-sub-bg').value=v.subBg;$('#exp-sub-position').value=v.subPosition;expDirty();}
-  async function savePerdeExperience(){const v=expRead();if(!/^#[0-9A-F]{6}$/i.test(v.accent)){toast('HEX renk kodu #RRGGBB biçiminde olmalı.','error');return;}if(await persist({...state.data,perdeExperienceConfig:v},'Perde Deneyimi ayarları kaydedildi.')){expSaved={...v};expDirty();}}
-  function discardPerdeExperience(){const v={...expSaved};for(const [id,value] of Object.entries({'exp-theme':v.theme,'exp-color':v.accent,'exp-color-hex':v.accent,'exp-card-style':v.cardStyle,'exp-density':v.density,'exp-quality':v.quality,'exp-language':v.language,'exp-size':v.size,'exp-sub-color':v.subColor,'exp-sub-bg':v.subBg,'exp-sub-position':v.subPosition}))$('#'+id).value=value;for(const [id,value] of Object.entries({'exp-motion':v.motion,'exp-resume':v.resume,'exp-next':v.next,'exp-autoplay':v.autoplay,'exp-theater':v.theater}))$('#'+id).checked=value;expDirty();}
-  function resetPerdeExperience(){const v={...EXP_DEFAULTS};for(const [id,value] of Object.entries({'exp-theme':v.theme,'exp-color':v.accent,'exp-color-hex':v.accent,'exp-card-style':v.cardStyle,'exp-density':v.density,'exp-quality':v.quality,'exp-language':v.language,'exp-size':v.size,'exp-sub-color':v.subColor,'exp-sub-bg':v.subBg,'exp-sub-position':v.subPosition}))$('#'+id).value=value;for(const [id,value] of Object.entries({'exp-motion':v.motion,'exp-resume':v.resume,'exp-next':v.next,'exp-autoplay':v.autoplay,'exp-theater':v.theater}))$('#'+id).checked=value;expDirty();}
-  document.addEventListener('input',e=>{if(e.target.closest?.('#view-perde-experience')){if(e.target.id==='exp-color')$('#exp-color-hex').value=e.target.value;if(e.target.id==='exp-color-hex'&&/^#[0-9A-F]{6}$/i.test(e.target.value))$('#exp-color').value=e.target.value;expDirty();}});
-  document.addEventListener('change',e=>{if(e.target.closest?.('#view-perde-experience'))expDirty();});
-  document.addEventListener('click',e=>{const sw=e.target.closest?.('[data-exp-color]');if(sw){$('#exp-color').value=sw.dataset.expColor;$('#exp-color-hex').value=sw.dataset.expColor;expDirty();}if(e.target.closest?.('#perde-experience-save'))savePerdeExperience();if(e.target.closest?.('#perde-experience-discard'))discardPerdeExperience();if(e.target.closest?.('#perde-experience-reset'))resetPerdeExperience();});
-
   function navigate(view){
     state.view=view;
     $$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+view));
@@ -161,7 +148,6 @@
     if(view==='homepage-layout')renderHomepageLayout();
     if(view==='personalized-section')renderPersonalizedSection();
     if(view==='watch-layout')renderWatchLayout();
-    if(view==='perde-experience')renderPerdeExperience();
     if(view==='header-footer')renderHeaderFooter();
     if(view==='backup')refreshBackupSummary();
     if(view==='system'){refreshSystemDiagnostics();refreshCredentialStatus();}
