@@ -19,7 +19,6 @@
     catalog:{title:'Tüm Yapımlar & Trendler',description:'Katalogdan seçilen genel yapım rafı',icon:'▥'}
   };
   function initAdminThemePicker(){
-    document.body.classList.remove('admin-theme-ivory','admin-theme-slate');
     document.body.classList.add('admin-theme-dark');
     document.documentElement.style.colorScheme='dark';
     document.documentElement.style.backgroundColor='#17191f';
