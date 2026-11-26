@@ -1,5 +1,6 @@
-const CACHE_NAME = "perde-shell-v1";
+const CACHE_NAME = "perde-shell-698c60c1e144";
 const PRECACHE_URLS = [
+  "./assets/logos/perde-favicon.png?v=698c60c1e144e4dc9650b5d9dc67265e671541c7",
   "./index.html",
   "./manifest.webmanifest",
   "./assets/logos/perde-app-icon.svg",
