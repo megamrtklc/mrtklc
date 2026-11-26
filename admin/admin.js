@@ -770,24 +770,31 @@
     headerFooterSavedSnapshot=JSON.stringify(collectHeaderFooterDraft());updateHeaderFooterDraftState();renderHeaderFooterPreview();
   }
 
-  let headerFooterPreviewDevice='desktop';
+  const headerFooterPreviewDevices={header:'desktop',footer:'desktop'};
   function renderHeaderFooterPreview(){
-    const host=$('#hf-live-preview');if(!host||!state.data)return;
+    if(!state.data)return;
     const {header,footer}=collectHeaderFooterDraft();
     const h=header,f=footer;
-     const brand=(cfg,kind)=>{const logo=state.data[kind==='header'?'headerConfig':'footerConfig']?.logoImage||'';const width=cfg.logoWidth||(kind==='header'?32:160),height=cfg.logoHeight||(kind==='header'?32:40);return (logo?'<img class="hf-preview-logo-image" style="width:'+width+'px;height:'+height+'px;object-fit:contain" src="'+escapeHtml(logo)+'" alt="">':'')+(cfg.showLogoIcon?'<span class="hf-preview-mark">✦</span>':'')+'<span class="hf-preview-brand"><b>'+escapeHtml(cfg.brandPrimary||'CINE')+'</b><i>'+escapeHtml(cfg.brandAccent||'VERSE')+'</i></span>';};
-    const headerLinks=[h.showHome?h.homeLabel:null,h.showExplore?h.exploreLabel:null,h.showFranchises?h.franchisesLabel:null,h.showVideo?h.videoLabel:null].filter(Boolean).concat(h.customLinks.map(x=>x.label).filter(Boolean));
-    const footerLinks=f.customLinks.map(x=>x.label).filter(Boolean);
-    const footerMain=[f.homeLabel,f.exploreLabel,f.libraryLabel].filter(Boolean);
-    const footerSecond=[f.watchlistLabel,f.statsLabel].filter(Boolean);
-    const desktop=headerFooterPreviewDevice==='desktop';
-    host.dataset.device=headerFooterPreviewDevice;
-    host.innerHTML='<div class="hf-preview-stage '+(desktop?'is-desktop':'is-mobile')+'">'+
-      '<div class="hf-preview-browser"><span></span><span></span><span></span><small>CANLI ÖNİZLEME · TASLAK</small></div>'+
-      (h.enabled?'<header class="hf-preview-header">'+brand(h,'header')+(desktop?'<nav>'+headerLinks.map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</nav>':'<span class="hf-preview-mobile-actions">'+(h.showSearch?'⌕ ':'')+(h.showProfile?'◉ ':'')+(h.showMobileMenu?'☰':'')+'</span>')+'</header>':'<div class="hf-preview-hidden">Header gizli</div>')+
-      '<div class="hf-preview-content"><span>ÖRNEK SAYFA İÇERİĞİ</span><b>Keşfetmeye devam et</b><i>Bu alan yalnızca yerleşimi göstermek için hazırlanmış statik bir taslaktır.</i><div><span></span><span></span><span></span></div></div>'+
-      (f.enabled?'<footer class="hf-preview-footer"><div class="hf-preview-footer-brand">'+brand(f,'footer')+'<p>'+escapeHtml(f.description||'Marka açıklaması burada görünür.')+'</p>'+(f.showBadges?'<div class="hf-preview-badges">'+[f.badgeOne,f.badgeTwo].filter(Boolean).map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</div>':'')+'</div><div class="hf-preview-footer-column"><b>'+escapeHtml(f.columnOneTitle||'Keşfet')+'</b>'+footerMain.map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</div><div class="hf-preview-footer-column"><b>'+escapeHtml(f.columnTwoTitle||'Hesabım')+'</b>'+footerSecond.concat(footerLinks).map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</div>'+(f.showCta?'<div class="hf-preview-cta"><b>'+escapeHtml(f.featureTitle||'Kendi listeni oluştur')+'</b><p>'+escapeHtml(f.featureDescription||'Favorilerini tek yerde topla.')+'</p><span>'+escapeHtml(f.ctaLabel||'Kütüphaneme Git')+'</span></div>':'')+'<div class="hf-preview-copyright">'+escapeHtml(f.copyright||'')+(f.showBackToTop?' · ↑ Yukarı dön':'')+'</div></footer>':'<div class="hf-preview-hidden">Footer gizli</div>')+
-      '</div>';
+    const brand=(cfg,kind)=>{const logo=cfg.logoImage||'',width=cfg.logoWidth||(kind==='header'?32:160),height=cfg.logoHeight||(kind==='header'?32:40);return (logo?'<img class="hf-preview-logo-image" style="width:auto;height:auto;max-width:'+width+'px;max-height:'+height+'px;object-fit:contain" src="'+escapeHtml(logo)+'" alt="">':'')+(cfg.showLogoIcon?'<span class="hf-preview-mark">✦</span>':'')+'<span class="hf-preview-brand"><b>'+escapeHtml(cfg.brandPrimary||'CINE')+'</b><i>'+escapeHtml(cfg.brandAccent||'VERSE')+'</i></span>';};
+    const headerLinks=[h.showHome?h.homeLabel:null,h.showExplore?h.exploreLabel:null,h.showFranchises?h.franchisesLabel:null,h.showVideo?h.videoLabel:null].filter(Boolean).concat((h.customLinks||[]).map(x=>x.label).filter(Boolean));
+    const headerHost=$('#hf-header-live-preview');
+    if(headerHost){
+      const desktop=headerFooterPreviewDevices.header==='desktop';
+      headerHost.dataset.device=headerFooterPreviewDevices.header;
+      headerHost.innerHTML='<div class="hf-preview-stage hf-preview-header-stage '+(desktop?'is-desktop':'is-mobile')+'"><div class="hf-preview-browser"><span></span><span></span><span></span><small>HEADER · TASLAK</small></div>'+
+        (h.enabled?'<header class="hf-preview-header">'+brand(h,'header')+(desktop?'<nav>'+headerLinks.map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</nav>':'<span class="hf-preview-mobile-actions">'+(h.showSearch?'⌕ ':'')+(h.showProfile?'◉ ':'')+(h.showMobileMenu?'☰':'')+'</span>')+'</header>':'<div class="hf-preview-hidden">Header gizli</div>')+'</div>';
+    }
+    const footerHost=$('#hf-footer-live-preview');
+    if(footerHost){
+      const desktopFooter=headerFooterPreviewDevices.footer==='desktop';
+      const footerMain=[f.homeLabel,f.exploreLabel,f.libraryLabel].filter(Boolean);
+      const footerSecond=[f.watchlistLabel,f.statsLabel].filter(Boolean);
+      const footerLinks=(f.customLinks||[]).map(x=>x.label).filter(Boolean);
+      footerHost.dataset.device=headerFooterPreviewDevices.footer;
+      footerHost.innerHTML='<div class="hf-preview-stage hf-preview-footer-stage '+(desktopFooter?'is-desktop':'is-mobile')+'"><div class="hf-preview-browser"><span></span><span></span><span></span><small>FOOTER · TASLAK</small></div>'+
+        (f.enabled?'<footer class="hf-preview-footer"><div class="hf-preview-footer-brand">'+brand(f,'footer')+'<p>'+escapeHtml(f.description||'Marka açıklaması burada görünür.')+'</p>'+(f.showBadges?'<div class="hf-preview-badges">'+[f.badgeOne,f.badgeTwo].filter(Boolean).map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</div>':'')+'</div><div class="hf-preview-footer-column"><b>'+escapeHtml(f.columnOneTitle||'Keşfet')+'</b>'+footerMain.map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</div><div class="hf-preview-footer-column"><b>'+escapeHtml(f.columnTwoTitle||'Hesabım')+'</b>'+footerSecond.concat(footerLinks).map(x=>'<span>'+escapeHtml(x)+'</span>').join('')+'</div>'+(f.showCta?'<div class="hf-preview-cta"><b>'+escapeHtml(f.featureTitle||'Kendi listeni oluştur')+'</b><p>'+escapeHtml(f.featureDescription||'Favorilerini tek yerde topla.')+'</p>'+(f.showCta?'<span>'+escapeHtml(f.ctaLabel||'Kütüphaneme Git')+'</span>':'')+'</div>':'')+'<div class="hf-preview-copyright">'+escapeHtml(f.copyright||'')+(f.showBackToTop?' · ↑ Yukarı dön':'')+'</div></footer>':'<div class="hf-preview-hidden">Footer gizli</div>')+'</div>';
+    }
+    $$('.hf-preview-device').forEach(button=>button.classList.toggle('active',button.dataset.device===headerFooterPreviewDevices[button.dataset.previewKind]));
   }
   function collectHeaderFooterDraft(){
     headerFooterConfig();
@@ -2317,7 +2324,7 @@
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
   $('#header-footer-form').addEventListener('input',event=>{if(event.target.id==='hf-favicon-width'||event.target.id==='hf-favicon-height')renderLogoPreview('favicon',state.data?.headerConfig?.faviconImage||'');updateHeaderFooterDraftState();});
   $('#header-footer-form').addEventListener('change',updateHeaderFooterDraftState);
-  $$('.hf-preview-device').forEach(button=>button.addEventListener('click',()=>{headerFooterPreviewDevice=button.dataset.device;$$('.hf-preview-device').forEach(item=>item.classList.toggle('active',item===button));renderHeaderFooterPreview();}));
+  $('.hf-preview-device').forEach(button=>button.addEventListener('click',()=>{const kind=button.dataset.previewKind;if(!kind)return;headerFooterPreviewDevices[kind]=button.dataset.device;renderHeaderFooterPreview();}));
   $('#hf-reset')?.addEventListener('click',()=>{if(confirm('Header ve Footer ayarlarını varsayılan değerlere döndürmek istiyor musun? Bu işlem kaydetmeden canlı siteyi değiştirmez.'))resetHeaderFooterDraft(true);});
   $('#hf-discard')?.addEventListener('click',()=>{if(confirm('Kaydedilmemiş tüm Header ve Footer değişiklikleri geri alınsın mı?'))resetHeaderFooterDraft(false);});
   ['header','footer','favicon'].forEach(kind=>{
