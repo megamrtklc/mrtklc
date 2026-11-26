@@ -38,7 +38,7 @@ assert.match(adminJs, /logoWidth:[\s\S]*logoHeight:/, 'Header ve footer logo öl
 assert.match(html, /hf-header-logo-width[\s\S]*hf-header-logo-height/, 'Header logo genişlik ve yükseklik alanları bulunmalı');
 assert.match(html, /hf-footer-logo-width[\s\S]*hf-footer-logo-height/, 'Footer logo genişlik ve yükseklik alanları bulunmalı');
 assert.match(workerJs, /path==="\/api\/site-logo"/, 'Worker logo yükleme API rotası bulunmalı');
-assert.match(workerJs, /assets\\/logos\\/perde-"\\+kind\\+"\\.png"/, 'Logo dosyaları assets/logos altında ayrı PNG olarak saklanmalı');
+assert.match(workerJs, /assets\/logos\/perde-"\+kind\+"\.png"/, 'Logo dosyaları assets/logos altında ayrı PNG olarak saklanmalı');
 assert.match(workerJs, /bytes\.length>2097152/, 'Worker tarafında da 2 MB sınırı doğrulanmalı');
 
 assert.match(adminJs, /faviconImage:state\.data\.headerConfig\?\.faviconImage/, 'Site ikonu adresi header yapılandırmasında saklanmalı');
