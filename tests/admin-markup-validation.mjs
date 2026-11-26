@@ -29,6 +29,7 @@ console.log('PASS: Admin CSS ve JS kaynakları mevcut');
 
 const adminJs = readFileSync(resolve(root, 'admin/admin.js'), 'utf8');
 const adminCss = readFileSync(resolve(root, 'admin/admin.css'), 'utf8');
+const workerJs = readFileSync(resolve(root, 'worker/src/index.js'), 'utf8');
 
 // Logos are stored as standalone PNG assets; display dimensions are independently configurable.
 assert.match(adminJs, /async function uploadSiteLogo\(kind,file\)/, 'Logo PNG dosyası ayrı endpoint üzerinden yüklenmeli');
@@ -36,6 +37,9 @@ assert.match(adminJs, /2\*1024\*1024/, 'Logo yükleme sınırı 2 MB olmalı');
 assert.match(adminJs, /logoWidth:[\s\S]*logoHeight:/, 'Header ve footer logo ölçüleri yapılandırmaya kaydedilmeli');
 assert.match(html, /hf-header-logo-width[\s\S]*hf-header-logo-height/, 'Header logo genişlik ve yükseklik alanları bulunmalı');
 assert.match(html, /hf-footer-logo-width[\s\S]*hf-footer-logo-height/, 'Footer logo genişlik ve yükseklik alanları bulunmalı');
+assert.match(workerJs, /path==="\/api\/site-logo"/, 'Worker logo yükleme API rotası bulunmalı');
+assert.match(workerJs, /assets\/logos\/perde-\+kind\+"\.png"/, 'Logo dosyaları assets/logos altında ayrı PNG olarak saklanmalı');
+assert.match(workerJs, /bytes\.length>2097152/, 'Worker tarafında da 2 MB sınırı doğrulanmalı');
 
 // Every sidebar destination must resolve to a real panel view.
 const views = [...html.matchAll(/data-view=["']([^"']+)["']/g)].map(match => match[1]);
