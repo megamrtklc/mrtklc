@@ -2327,7 +2327,7 @@
   $('#franchise-cancel').addEventListener('click',()=>$('#franchise-dialog').close());
   $('#homepage-form').addEventListener('submit',saveHomepage);
   $('#header-footer-form').addEventListener('submit',saveHeaderFooter);
-  $('#header-footer-form').addEventListener('input',event=>{if(event.target.id==='hf-favicon-width'||event.target.id==='hf-favicon-height')renderLogoPreview('favicon',state.data?.headerConfig?.faviconImage||'');updateHeaderFooterDraftState();});
+  $('#header-footer-form').addEventListener('input',event=>{if(event.target.type==='color'&&event.target.id){const output=$('#'+event.target.id+'-value');if(output)output.textContent=event.target.value.toUpperCase();}if(event.target.id==='hf-favicon-width'||event.target.id==='hf-favicon-height')renderLogoPreview('favicon',state.data?.headerConfig?.faviconImage||'');updateHeaderFooterDraftState();});
   $('#header-footer-form').addEventListener('change',updateHeaderFooterDraftState);
   $$('.hf-preview-device').forEach(button=>button.addEventListener('click',()=>{const kind=button.dataset.previewKind;if(!kind)return;headerFooterPreviewDevices[kind]=button.dataset.device;renderHeaderFooterPreview();}));
   $('#hf-reset')?.addEventListener('click',()=>{if(confirm('Header ve Footer ayarlarını varsayılan değerlere döndürmek istiyor musun? Bu işlem kaydetmeden canlı siteyi değiştirmez.'))resetHeaderFooterDraft(true);});
