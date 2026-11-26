@@ -234,13 +234,13 @@
   <div class="hf-draft-actions"><button type="button" class="secondary-button" id="hf-discard" disabled>Değişiklikleri geri al</button><button type="button" class="secondary-button" id="hf-reset">Varsayılanlara dön</button><button type="submit" form="header-footer-form" class="primary-button" id="hf-save" disabled>Ayarları kaydet</button></div>
  </div>
  
- <section class="panel-card hf-preview-panel">
-  <div class="hf-preview-heading"><div><span class="section-index">ÖNİZLEME / TASLAK</span><h2>Header &amp; Footer görünümü</h2><p>Yaptığın değişiklikleri kaydetmeden önce burada kontrol et. Bu önizleme gerçek siteyi veya dış kaynağı yüklemez.</p></div><div class="hf-preview-devices"><button type="button" class="hf-preview-device active" data-device="desktop">Masaüstü</button><button type="button" class="hf-preview-device" data-device="mobile">Mobil</button></div></div>
-  <div id="hf-live-preview" class="hf-live-preview" data-device="desktop"><div class="hf-preview-empty">Önizleme hazırlanıyor…</div></div>
- </section>
 \n <form id="header-footer-form" class="panel-card hf-editor">
   <details class="hf-accordion" open>
    <summary><span class="hf-accordion-index">01</span><span class="hf-accordion-copy"><b>Header · Üst menü</b><small>Logo, ana menü bağlantıları ve görünürlük ayarları</small></span><span class="hf-accordion-state">Düzenle</span></summary>
+   <section class="hf-preview-panel hf-preview-panel-header" aria-label="Header canlı önizlemesi">
+    <div class="hf-preview-heading"><div><span class="section-index">HEADER / CANLI TASLAK</span><h3>Yalnızca üst menü</h3><p>Header ayarlarının görünümü. Sayfa içeriği ve footer gösterilmez.</p></div><div class="hf-preview-devices"><button type="button" class="hf-preview-device active" data-preview-kind="header" data-device="desktop">Masaüstü</button><button type="button" class="hf-preview-device" data-preview-kind="header" data-device="mobile">Mobil</button></div></div>
+    <div id="hf-header-live-preview" class="hf-live-preview" data-device="desktop"><div class="hf-preview-empty">Header önizlemesi hazırlanıyor…</div></div>
+   </section>
   <div class="hf-grid">
    <label class="field"><span>Logo ana metni</span><input id="hf-header-primary" maxlength="24"></label>
     <label class="field"><span>Logo genişliği · en fazla (px)</span><input id="hf-header-logo-width" type="number" min="12" max="256" step="1" value="32"></label>
@@ -267,6 +267,10 @@
   </details>
   <details class="hf-accordion">
    <summary><span class="hf-accordion-index">02</span><span class="hf-accordion-copy"><b>Footer · Alt alan</b><small>Marka açıklaması, bağlantı sütunları ve telif satırı</small></span><span class="hf-accordion-state">Düzenle</span></summary>
+   <section class="hf-preview-panel hf-preview-panel-footer" aria-label="Footer canlı önizlemesi">
+    <div class="hf-preview-heading"><div><span class="section-index">FOOTER / CANLI TASLAK</span><h3>Yalnızca alt alan</h3><p>Footer ayarlarının görünümü. Header ve sayfa içeriği gösterilmez.</p></div><div class="hf-preview-devices"><button type="button" class="hf-preview-device active" data-preview-kind="footer" data-device="desktop">Masaüstü</button><button type="button" class="hf-preview-device" data-preview-kind="footer" data-device="mobile">Mobil</button></div></div>
+    <div id="hf-footer-live-preview" class="hf-live-preview" data-device="desktop"><div class="hf-preview-empty">Footer önizlemesi hazırlanıyor…</div></div>
+   </section>
   <div class="hf-grid">
    <label class="field"><span>Logo ana metni</span><input id="hf-footer-primary" maxlength="24"></label>
     <label class="field"><span>Logo genişliği (px)</span><input id="hf-footer-logo-width" type="number" min="24" max="640" step="1" value="160"></label>
