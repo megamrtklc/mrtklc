@@ -1640,3 +1640,62 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
 .nav-group .nav-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
 .nav-group .nav-link.active{background:linear-gradient(100deg,#303c2b,#252f2a);border-color:#45523d}
 @media(max-width:700px){.sidebar-nav-groups{gap:8px}.nav-group>summary{height:41px}.nav-group .nav-link{height:40px}}
+
+
+/* Admin theme selector and Perde's three matching theme families */
+.admin-theme-switch{display:flex;align-items:center;gap:4px;padding:4px;border:1px solid #343a45;border-radius:12px;background:#20232b;flex:0 0 auto}
+.admin-theme-option{min-width:68px;display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 9px;border:1px solid transparent;border-radius:8px;background:transparent;color:#aab4c2;font-size:9px;font-weight:650;white-space:nowrap;transition:background .18s,border-color .18s,color .18s}
+.admin-theme-option svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.admin-theme-option:hover{background:#303642;color:#fff}
+.admin-theme-option.active{border-color:#9d814c;background:#3b3325;color:#f0d18b;box-shadow:0 2px 9px #0002}
+.admin-theme-option:focus-visible{outline:2px solid #c7a45c;outline-offset:2px}
+@media(max-width:1100px){.admin-theme-option{min-width:34px;padding:8px}.admin-theme-option span{display:none}}
+@media(max-width:700px){.admin-theme-switch{gap:2px;padding:3px}.admin-theme-option{min-width:31px;padding:7px}.topbar{gap:8px;padding:0 12px}.topbar-right{gap:8px}.topbar-date{display:none}}
+body.admin-theme-ivory{
+ color-scheme:light;--bg:#f5f1e8;--surface:#fffdf8;--surface-2:#f7f2e8;--surface-3:#eee7d9;--line:#e6ddcc;--line-soft:#eee7da;--text:#292d35;--muted:#737985;--muted-2:#9297a0;--accent:#bd8a42;--accent-ink:#fffdf8;--blue:#6686b1;--coral:#c8785f;--green:#4f9a77;--danger:#c75e5e;--shadow:0 16px 42px #65583d18;
+ background:var(--bg);color:var(--text)
+}
+body.admin-theme-slate{
+ color-scheme:light;--bg:#edf1f5;--surface:#ffffff;--surface-2:#f5f7fa;--surface-3:#e8edf3;--line:#dce3eb;--line-soft:#e5eaf0;--text:#263342;--muted:#68788a;--muted-2:#8a98a8;--accent:#6485a9;--accent-ink:#fff;--blue:#587fb8;--coral:#c77b69;--green:#4d967c;--danger:#c65f68;--shadow:0 16px 42px #34465b12;
+ background:var(--bg);color:var(--text)
+}
+body.admin-theme-ivory .sidebar,body.admin-theme-slate .sidebar{background:var(--surface);border-color:var(--line)}
+body.admin-theme-ivory .brand,body.admin-theme-slate .brand{border-color:var(--line)}
+body.admin-theme-ivory .brand b,body.admin-theme-slate .brand b,body.admin-theme-ivory .workspace-switch b,body.admin-theme-slate .workspace-switch b{color:var(--text)}
+body.admin-theme-ivory .brand small,body.admin-theme-slate .brand small{color:var(--muted-2)}
+body.admin-theme-ivory .brand-symbol,body.admin-theme-slate .brand-symbol{background:var(--surface-2);border-color:var(--line)}
+body.admin-theme-ivory .workspace-switch,body.admin-theme-slate .workspace-switch{background:var(--surface-2);border-color:var(--line)}
+body.admin-theme-ivory .workspace-avatar,body.admin-theme-slate .workspace-avatar{background:var(--surface-3);color:var(--accent)}
+body.admin-theme-ivory .nav-link,body.admin-theme-slate .nav-link{color:var(--muted)}
+body.admin-theme-ivory .nav-link:hover,body.admin-theme-slate .nav-link:hover{background:var(--surface-2);color:var(--text)}
+body.admin-theme-ivory .nav-link.active,body.admin-theme-slate .nav-link.active{background:color-mix(in srgb,var(--accent) 12%,var(--surface));border-color:color-mix(in srgb,var(--accent) 34%,var(--line));color:var(--accent)}
+body.admin-theme-ivory .nav-link.active .nav-icon,body.admin-theme-slate .nav-link.active .nav-icon{color:var(--accent)}
+body.admin-theme-ivory .nav-group summary,body.admin-theme-slate .nav-group summary{color:var(--muted)}
+body.admin-theme-ivory .sidebar-status,body.admin-theme-slate .sidebar-status{background:var(--surface-2);border-color:var(--line)}
+body.admin-theme-ivory .sidebar-status b,body.admin-theme-slate .sidebar-status b{color:var(--text)}
+body.admin-theme-ivory .sidebar-site-link,body.admin-theme-slate .sidebar-site-link{color:var(--muted)}
+body.admin-theme-ivory .sidebar-foot,body.admin-theme-slate .sidebar-foot{border-color:var(--line);color:var(--muted-2)}
+body.admin-theme-ivory .main-column,body.admin-theme-slate .main-column{background:var(--bg)}
+body.admin-theme-ivory .topbar,body.admin-theme-slate .topbar{background:color-mix(in srgb,var(--surface) 94%,transparent);border-color:var(--line)}
+body.admin-theme-ivory .topbar-crumb strong,body.admin-theme-slate .topbar-crumb strong{color:var(--text)}
+body.admin-theme-ivory .topbar-crumb,body.admin-theme-slate .topbar-crumb,body.admin-theme-ivory .topbar-date,body.admin-theme-slate .topbar-date{color:var(--muted)}
+body.admin-theme-ivory .topbar-user,body.admin-theme-slate .topbar-user{color:var(--text)}
+body.admin-theme-ivory .logout-button,body.admin-theme-slate .logout-button{border-color:var(--line);color:var(--muted)}
+body.admin-theme-ivory .admin-theme-switch,body.admin-theme-slate .admin-theme-switch{background:var(--surface-2);border-color:var(--line)}
+body.admin-theme-ivory .admin-theme-option,body.admin-theme-slate .admin-theme-option{color:var(--muted)}
+body.admin-theme-ivory .admin-theme-option:hover,body.admin-theme-slate .admin-theme-option:hover{background:var(--surface-3);color:var(--text)}
+body.admin-theme-ivory .admin-theme-option.active,body.admin-theme-slate .admin-theme-option.active{background:color-mix(in srgb,var(--accent) 13%,var(--surface));border-color:color-mix(in srgb,var(--accent) 48%,var(--line));color:var(--accent)}
+body.admin-theme-ivory .panel-card,body.admin-theme-slate .panel-card,body.admin-theme-ivory .dashboard-card,body.admin-theme-slate .dashboard-card,body.admin-theme-ivory .dashboard-metric,body.admin-theme-slate .dashboard-metric,body.admin-theme-ivory .metric-card,body.admin-theme-slate .metric-card,body.admin-theme-ivory .editor-panel,body.admin-theme-slate .editor-panel,body.admin-theme-ivory .table-wrap,body.admin-theme-slate .table-wrap{background:var(--surface);border-color:var(--line);box-shadow:var(--shadow)}
+body.admin-theme-ivory .panel-card h2,body.admin-theme-slate .panel-card h2,body.admin-theme-ivory .page-heading h1,body.admin-theme-slate .page-heading h1,body.admin-theme-ivory h2,body.admin-theme-slate h2,body.admin-theme-ivory h3,body.admin-theme-slate h3{color:var(--text)}
+body.admin-theme-ivory .page-heading p,body.admin-theme-slate .page-heading p,body.admin-theme-ivory .panel-card p,body.admin-theme-slate .panel-card p{color:var(--muted)}
+body.admin-theme-ivory input,body.admin-theme-ivory select,body.admin-theme-ivory textarea,body.admin-theme-slate input,body.admin-theme-slate select,body.admin-theme-slate textarea{background:var(--surface);border-color:var(--line);color:var(--text)}
+body.admin-theme-ivory input::placeholder,body.admin-theme-slate input::placeholder,body.admin-theme-ivory textarea::placeholder,body.admin-theme-slate textarea::placeholder{color:var(--muted-2)}
+body.admin-theme-ivory table,body.admin-theme-slate table{color:var(--text)}
+body.admin-theme-ivory th,body.admin-theme-slate th{background:var(--surface-2);color:var(--muted);border-color:var(--line)}
+body.admin-theme-ivory td,body.admin-theme-slate td{border-color:var(--line);color:var(--text)}
+body.admin-theme-ivory .secondary-button,body.admin-theme-slate .secondary-button,body.admin-theme-ivory .dashboard-secondary,body.admin-theme-slate .dashboard-secondary{background:var(--surface-2);border-color:var(--line);color:var(--text)}
+body.admin-theme-ivory .notice,body.admin-theme-slate .notice{background:color-mix(in srgb,var(--green) 8%,var(--surface));border-color:color-mix(in srgb,var(--green) 25%,var(--line))}
+body.admin-theme-ivory .notice b,body.admin-theme-slate .notice b{color:var(--green)}
+body.admin-theme-ivory .notice p,body.admin-theme-slate .notice p{color:var(--muted)}
+body.admin-theme-ivory .page-heading .eyebrow,body.admin-theme-slate .page-heading .eyebrow,body.admin-theme-ivory .dashboard-eyebrow,body.admin-theme-slate .dashboard-eyebrow{color:var(--accent)}
+body.admin-theme-ivory .topbar-avatar,body.admin-theme-slate .topbar-avatar{background:var(--surface-2);border-color:var(--line);color:var(--accent)}
