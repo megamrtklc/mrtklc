@@ -59,9 +59,16 @@
         });
     </script>
     <meta name="description" content="CineVerse ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.">
-    <link rel="icon" type="image/png" sizes="32x32" href="./assets/logos/perde-favicon-32.png?v=20261126-perde">
-    <link rel="icon" type="image/png" sizes="16x16" href="./assets/logos/perde-favicon-16.png?v=20261126-perde">
-    <link rel="apple-touch-icon" href="./assets/logos/perde-favicon-32.png?v=20261126-perde">
+    <link rel="icon" type="image/svg+xml" href="./assets/logos/perde-app-icon.svg?v=20261126-perde-pwa-v1">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/logos/perde-favicon-32.png?v=20261126-perde-pwa-v1">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/logos/perde-favicon-16.png?v=20261126-perde-pwa-v1">
+    <link rel="shortcut icon" href="./assets/logos/perde-favicon-32.png?v=20261126-perde-pwa-v1">
+    <link rel="apple-touch-icon" href="./assets/logos/perde-favicon-32.png?v=20261126-perde-pwa-v1">
+    <link rel="manifest" href="./manifest.webmanifest?v=20261126-perde-pwa-v1">
+    <meta name="theme-color" content="#08090d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Perde">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Perde Film</title>
     <!-- Manşet verisi hero-data.json dosyasından yüklenir; ilk HTML içinde tekrarlanmaz. -->
     <script id="cv-mobile-hero-preload">
@@ -297,6 +304,16 @@
 
     <script id="perde-pwa-register">
       (function(){
+        window.__PERDE_INSTALL_PROMPT__ = null;
+        window.addEventListener("beforeinstallprompt", function(event){
+          event.preventDefault();
+          window.__PERDE_INSTALL_PROMPT__ = event;
+          window.dispatchEvent(new Event("perde-pwa-install-available"));
+        });
+        window.addEventListener("appinstalled", function(){
+          window.__PERDE_INSTALL_PROMPT__ = null;
+          window.dispatchEvent(new Event("perde-pwa-installed"));
+        });
         if (!("serviceWorker" in navigator) || document.documentElement.classList.contains("cv-tv-mode")) return;
         window.addEventListener("load", function(){
           navigator.serviceWorker.register("./sw.js", {scope:"./"}).catch(function(error){ console.warn("[Perde PWA] Service worker kaydedilemedi:", error); });
