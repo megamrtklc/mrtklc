@@ -47,6 +47,14 @@ assert.match(html, /hf-favicon-logo-file/, 'Admin panelinde site ikonu yükleme 
 assert.match(workerJs, /\[\"header\",\"footer\",\"favicon\"\]/, 'Worker site ikonu PNG yüklemeyi desteklemeli');
 assert.match(readFileSync(resolve(root, 'index.html'), 'utf8'), /rel=\"icon\" type=\"image\\/png\"/, 'Ana site PNG favicon bağlantısını içermeli');
 
+assert.match(html, /id="hf-header-live-preview"/, 'Header için bağımsız canlı önizleme alanı bulunmalı');
+assert.match(html, /id="hf-footer-live-preview"/, 'Footer için bağımsız canlı önizleme alanı bulunmalı');
+assert.doesNotMatch(html, /id="hf-live-preview"/, 'Birleşik tam sayfa Header & Footer önizlemesi bulunmamalı');
+assert.match(adminJs, /headerFooterPreviewDevices=\{header:'desktop',footer:'desktop'\}/, 'Header ve footer önizleme cihazları bağımsız tutulmalı');
+assert.match(adminJs, /\$\('#hf-header-live-preview'\)/, 'Header önizlemesi yalnızca header alanına çizilmeli');
+assert.match(adminJs, /\$\('#hf-footer-live-preview'\)/, 'Footer önizlemesi yalnızca footer alanına çizilmeli');
+assert.doesNotMatch(adminJs, /hf-preview-content/, 'Tam sayfa örnek içerik önizleme fonksiyonu kaldırılmalı');
+
 // Every sidebar destination must resolve to a real panel view.
 const views = [...html.matchAll(/data-view=["']([^"']+)["']/g)].map(match => match[1]);
 assert.ok(views.length > 0, 'Admin navigasyonunda en az bir bölüm bulunmalı');
