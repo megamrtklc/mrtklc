@@ -20866,9 +20866,9 @@
   },
   "footerConfig": {
     "enabled": true,
-    "brandPrimary": "",
-    "brandAccent": "",
-    "logoImage": "./assets/logos/perde-footer.svg",
+    "brandPrimary": "Perde",
+    "brandAccent": "Film",
+    "logoImage": "./assets/logos/perde-mark.svg",
     "description": "Filmlerini keşfet, dizilerini takip et, izleme yolculuğunu kendi kütüphanende biriktir.",
     "showBadges": true,
     "badgeOne": "KİŞİSEL KÜTÜPHANE",
@@ -20887,7 +20887,7 @@
     "copyright": "© 2026 Perde. Tüm hakları saklıdır.",
     "showBackToTop": true,
     "customLinks": [],
-    "logoWidth": 160,
+    "logoWidth": 40,
     "logoHeight": 40,
     "brandPrimaryColor": "#D9A441",
     "brandAccentColor": "#F5D27A"
