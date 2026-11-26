@@ -41,6 +41,12 @@ assert.match(workerJs, /path==="\/api\/site-logo"/, 'Worker logo yükleme API ro
 assert.match(workerJs, /assets\/logos\/perde-\+kind\+"\.png"/, 'Logo dosyaları assets/logos altında ayrı PNG olarak saklanmalı');
 assert.match(workerJs, /bytes\.length>2097152/, 'Worker tarafında da 2 MB sınırı doğrulanmalı');
 
+assert.match(adminJs, /faviconImage:state\.data\.headerConfig\?\.faviconImage/, 'Site ikonu adresi header yapılandırmasında saklanmalı');
+assert.match(html, /hf-favicon-width[\\s\\S]*hf-favicon-height/, 'Site ikonu için piksel ölçüsü alanları bulunmalı');
+assert.match(html, /hf-favicon-logo-file/, 'Admin panelinde site ikonu yükleme alanı bulunmalı');
+assert.match(workerJs, /\[\"header\",\"footer\",\"favicon\"\]/, 'Worker site ikonu PNG yüklemeyi desteklemeli');
+assert.match(readFileSync(resolve(root, 'index.html'), 'utf8'), /rel=\"icon\" type=\"image\\/png\"/, 'Ana site PNG favicon bağlantısını içermeli');
+
 // Every sidebar destination must resolve to a real panel view.
 const views = [...html.matchAll(/data-view=["']([^"']+)["']/g)].map(match => match[1]);
 assert.ok(views.length > 0, 'Admin navigasyonunda en az bir bölüm bulunmalı');
