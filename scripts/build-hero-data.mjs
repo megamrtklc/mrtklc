@@ -103,7 +103,9 @@ const output = {
     settings: config.settings || {},
     desktopHeroSlides: desktopSlides.map(({ id, active }) => ({ id, active })),
     mobileHeroSlides: mobileSlides.map(({ id, active }) => ({ id, active })),
-    heroStyle: config.heroStyle || 'current'
+    heroStyle: config.heroStyle || 'current',
+    // İlk boyamada bölüm sırası ve görünürlük ayarları hazır olsun; katalog yanıtını beklerken DOM yeniden sıralanmasın.
+    layout: config.layout || {}
   },
   catalog: heroCatalog
 };
