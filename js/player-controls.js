@@ -175,20 +175,41 @@ toggleFullscreen() {
         }
     }
 ,
+    hasNextEpisode() {
+                    const currentSeason = Number(this.selectedSeason) || 1;
+                    const currentEpisode = Number(this.selectedEpisode) || 0;
+                    const currentEpisodes = this.getEpisodesForSeason(currentSeason);
+                    if (currentEpisodes.some(ep => Number(ep.number) > currentEpisode)) return true;
+                    return this.getSeasonOptions()
+                        .map(Number)
+                        .filter(season => season > currentSeason)
+                        .sort((a, b) => a - b)
+                        .some(season => this.getEpisodesForSeason(season).length > 0);
+                },
     goToNextEpisode() {
-                    const episodes = this.getEpisodesForSeason(this.selectedSeason);
-                    const next = episodes.find(ep => ep.number > this.selectedEpisode);
+                    const currentSeason = Number(this.selectedSeason) || 1;
+                    const currentEpisode = Number(this.selectedEpisode) || 0;
+                    const episodes = this.getEpisodesForSeason(currentSeason)
+                        .slice()
+                        .sort((a, b) => Number(a.number) - Number(b.number));
+                    const next = episodes.find(ep => Number(ep.number) > currentEpisode);
                     if (next) {
-                        this.currentEpisodePage = Math.floor((next.number - 1) / 8) + 1;
-                        this.selectEpisode(next.number);
-                    } else {
-                        const nextSeason = this.selectedSeason + 1;
-                        const nextSeasonEpisodes = this.getEpisodesForSeason(nextSeason);
-                        if (nextSeasonEpisodes.length) {
-                            this.selectedSeason = nextSeason;
-                            this.currentEpisodePage = 1;
-                            this.selectEpisode(nextSeasonEpisodes[0].number);
-                        }
+                        this.currentEpisodePage = Math.floor((Number(next.number) - 1) / 8) + 1;
+                        this.selectEpisode(Number(next.number));
+                        return;
+                    }
+                    const nextSeason = this.getSeasonOptions()
+                        .map(Number)
+                        .filter(season => season > currentSeason)
+                        .sort((a, b) => a - b)
+                        .find(season => this.getEpisodesForSeason(season).length > 0);
+                    if (nextSeason) {
+                        const nextSeasonEpisodes = this.getEpisodesForSeason(nextSeason)
+                            .slice()
+                            .sort((a, b) => Number(a.number) - Number(b.number));
+                        this.selectedSeason = nextSeason;
+                        this.currentEpisodePage = 1;
+                        this.selectEpisode(Number(nextSeasonEpisodes[0].number));
                     }
                 },
     handlePlayerKeydown(event) {
