@@ -32,6 +32,21 @@
   const yearOf = item => Number(item.year || item.releaseYear || (item.tmdbReleaseDate || '').slice(0,4)) || '—';
   const collectionList = () => Array.isArray(state.data?.collections) ? state.data.collections : [];
   const franchiseList = () => Array.isArray(state.data?.franchises) ? state.data.franchises : [];
+  function countDuplicateContentGroups(catalog){
+    const groups=new Map();
+    (Array.isArray(catalog)?catalog:[]).forEach(item=>{
+      if(!item||typeof item!=='object'||Array.isArray(item))return;
+      const tmdbId=String(item.tmdbId||'').trim();
+      const imdbId=String(item.imdbId||item.tmdbImdbId||'').trim().toLowerCase();
+      const title=normalizeContentTitle(titleOf(item));
+      const type=(isSeries(item)||item.media_type==='tv')?'tv':'movie';
+      const year=String(item.year||item.releaseYear||(item.tmdbReleaseDate||item.release_date||item.first_air_date||'').slice(0,4)||'').trim();
+      const key=tmdbId?'tmdb:'+type+':'+tmdbId:(imdbId?'imdb:'+type+':'+imdbId:(title&&year?'title:'+type+':'+title+':'+year:''));
+      if(!key)return;
+      groups.set(key,(groups.get(key)||0)+1);
+    });
+    return [...groups.values()].filter(count=>count>1).length;
+  }
   const toast = (message,type='warning') => { const el=$('#toast'); if(!el)return; const title=$('#toast-title'),body=$('#toast-message'),icon=el.querySelector('.toast-icon'); const safeType=['success','warning','error','info'].includes(type)?type:'warning'; const config={success:{title:'İŞLEM BAŞARILI',icon:'✓',duration:2600,role:'status'},warning:{title:'İŞLEM BAŞARISIZ',icon:'!',duration:4800,role:'alert'},error:{title:'SİSTEM HATASI',icon:'×',duration:5200,role:'alert'},info:{title:'BİLGİLENDİRME',icon:'i',duration:3800,role:'status'}}[safeType]; if(title)title.textContent=config.title; if(body)body.textContent=String(message||''); if(icon)icon.textContent=config.icon; el.dataset.type=safeType; el.setAttribute('role',config.role); el.setAttribute('aria-live',config.role==='alert'?'assertive':'polite'); document.body.classList.add('has-admin-toast'); el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.classList.remove('show');document.body.classList.remove('has-admin-toast');},config.duration); };
   async function fetchWithTimeout(url,options={},timeoutMs=15000){
     const controller=new AbortController();
@@ -1933,19 +1948,22 @@
       const valid=catalog.filter(item=>item&&typeof item==='object'&&!Array.isArray(item));
       const ids=valid.map(item=>String(item.id??item.tmdbId??'').trim()).filter(Boolean);
       const duplicateCount=new Set(ids.filter((id,index)=>ids.indexOf(id)!==index)).size;
+      const duplicateContentCount=countDuplicateContentGroups(valid);
       const missingTitle=valid.filter(item=>!String(item.title??item.name??'').trim()).length;
       const missingId=valid.filter(item=>!String(item.id??item.tmdbId??'').trim()).length;
       const jsonBytes=new Blob([JSON.stringify(payload.data)]).size;
-      const clean=valid.length===catalog.length&&duplicateCount===0&&missingTitle===0&&missingId===0;
+      const clean=valid.length===catalog.length&&duplicateCount===0&&duplicateContentCount===0&&missingTitle===0&&missingId===0;
       setSystemStatus('system-api-status','system-api-detail','Bağlandı','/api/catalog yanıt süresi: '+elapsed+' ms.','good');
       $('#system-catalog-count').textContent=catalog.length+' yapım';
       $('#system-valid-count').textContent=valid.length+' kayıt';
       $('#system-duplicate-count').textContent=duplicateCount+' kimlik';
+      $('#system-duplicate-content-count').textContent=duplicateContentCount+' grup';
       $('#system-missing-title').textContent=missingTitle+' yapım';
       $('#system-missing-id').textContent=missingId+' yapım';
       $('#system-json-size').textContent=jsonBytes<1024*1024?(jsonBytes/1024).toLocaleString('tr-TR',{maximumFractionDigits:1})+' KB':(jsonBytes/1024/1024).toLocaleString('tr-TR',{maximumFractionDigits:2})+' MB';
       $('#system-data-version').textContent=String(payload.data.version??'Belirtilmemiş');
       $('#system-json-status').textContent=clean?'Kontrol temiz':'İnceleme gerekli';
+      if(duplicateContentCount>0&&note)note.textContent=duplicateContentCount+' olası mükerrer yapım grubu bulundu. Kayıtlar otomatik birleştirilmedi; manuel inceleme gerekiyor.';
       $('#system-json-status').className=clean?'state-ready':'state-warning';
       setSystemStatus('system-write-status','system-write-detail',payload.writable===false?'Salt okunur':'Yazma erişimi mevcut',payload.readOnlyReason|| (payload.writable===false?'Sunucu yazma izni vermiyor.':'Katalog API yazılabilir olarak bildirildi.'),payload.writable===false?'warn':'good');
     }catch(error){
