@@ -61,7 +61,8 @@
                             const monthlyActivity = monthKeys.map(entry => ({label:entry.label,count:activityCounts.get(entry.key)||0}));
                             const maxActivity = Math.max(1,...monthlyActivity.map(entry => entry.count));
                             monthlyActivity.forEach(entry => entry.percent = entry.count/maxActivity*100);
-                            const trackedSeries = seriesItems.length;\n                            const completedSeries = seriesItems.filter(entry => entry.completed).length;
+                            const trackedSeries = seriesItems.length;
+                            const completedSeries = seriesItems.filter(entry => entry.completed).length;
                             const totalTracked = progressItems.length + trackedSeries;
                             return {
                                 completedMovies:completed.length,inProgressMovies:inProgress.length,completedSeries,watchedEpisodes,savedTimeLabel,
