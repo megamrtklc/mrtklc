@@ -2,6 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+  const catalogSearchCache = new WeakMap();
   const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], selectedCatalogIds:new Set(), page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbDetailRequest:0, tmdbController:null, tmdbSelected:null, securityLoaded:false };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
@@ -223,14 +224,20 @@
     const recent=[...state.catalog].slice(-5).reverse();
     $('#recent-list').innerHTML=recent.length?recent.map(item=>'<div class="recent-item"><img class="poster-thumb" loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt="" onerror="this.style.visibility=\'hidden\'"><div class="recent-meta"><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(yearOf(item))+'</small></div><span class="rating-pill">★ '+escapeHtml(item.rating||item.tmdbRating||'—')+'</span></div>').join(''):'<div class="loading-line">Katalogda içerik bulunamadı.</div>';
   }
+  function catalogSearchText(item){
+    let cached=catalogSearchCache.get(item);
+    if(cached!==undefined)return cached;
+    const cast=[...(item.cast||[]),...(item.tmdbCast||[])].map(x=>typeof x==='string'?x:(x?.name||''));
+    cached=[titleOf(item),item.director,item.tmdbDirector,...cast].join(' ').toLocaleLowerCase('tr');
+    catalogSearchCache.set(item,cached);
+    return cached;
+  }
   function renderCatalog(){
     const query=$('#catalog-search').value.trim().toLocaleLowerCase('tr');
     const type=$('#type-filter').value, year=$('#year-filter').value;
-    state.filtered=state.catalog.filter(item=>{
-      const cast=[...(item.cast||[]),...(item.tmdbCast||[])].map(x=>typeof x==='string'?x:(x?.name||''));
-      const searchable=[titleOf(item),item.director,item.tmdbDirector,...cast].join(' ').toLocaleLowerCase('tr');
-      return (!query||searchable.includes(query))&&(type==='all'||(type==='tv'?isSeries(item):!isSeries(item)))&&(year==='all'||String(yearOf(item))===year);
-    });
+    state.filtered=state.catalog.filter(item=>
+      (!query||catalogSearchText(item).includes(query))&&(type==='all'||(type==='tv'?isSeries(item):!isSeries(item)))&&(year==='all'||String(yearOf(item))===year)
+    );
     const sort=$('#catalog-sort')?.value||'newest';
     if(sort==='newest')state.filtered.reverse();
     else if(sort==='rating')state.filtered.sort((a,b)=>{
