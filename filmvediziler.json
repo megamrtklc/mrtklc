@@ -20769,6 +20769,122 @@
       "tmdbImdbId": "tt32890033",
       "tmdbRating": "7.5",
       "tmdbVoteCount": 1423
+    },
+    {
+      "addedAt": "2026-11-27T15:30:12.659Z",
+      "id": "cv-1795793412660",
+      "title": "The Fall",
+      "type": "tv",
+      "year": "2013",
+      "rating": "7.7",
+      "genre": "Dram",
+      "category": "Dram / Suç",
+      "duration": "57 dk",
+      "country": "Ireland, United Kingdom",
+      "director": "Allan Cubitt",
+      "platform": "",
+      "watchUrl": "",
+      "personalNote": "",
+      "episodeWatchUrls": {},
+      "tmdbId": 49010,
+      "imdbId": "tt2294189",
+      "image": "https://image.tmdb.org/t/p/w500/fm7nN3nUADA7JGgnFNlOWpXn1tf.jpg",
+      "backdrop": "https://image.tmdb.org/t/p/w1280/vunaJ5k1cG8T4ROUGDZ05IhNXkP.jpg",
+      "trailerUrl": "",
+      "trailerProvider": "auto",
+      "desc": "Belfast polisinin bir seri cinayet soruşturması durdurulunca, bu durumu araştırmak için Dedektif Şefi Stella Gibson göreve getirilir.",
+      "cast": [
+        "Gillian Anderson",
+        "Jamie Dornan",
+        "Niamh McGrady",
+        "John Lynch",
+        "Colin Morgan",
+        "Stuart Graham",
+        "Valene Kane",
+        "Bronagh Waugh",
+        "Aisling Franciosi"
+      ],
+      "tmdbTitle": "The Fall",
+      "tmdbOriginalTitle": "The Fall",
+      "tmdbReleaseDate": "2013-05-12",
+      "tmdbGenres": "Dram / Suç",
+      "tmdbRuntime": "57 dk",
+      "tmdbCountries": "Ireland, United Kingdom",
+      "tmdbDirector": "Allan Cubitt",
+      "tmdbCast": [
+        {
+          "id": 12214,
+          "name": "Gillian Anderson",
+          "character": "Stella Gibson",
+          "profile": "https://image.tmdb.org/t/p/w185/3Ny8ZYahb33vpqNEPNCE2IOXPew.jpg",
+          "order": 0
+        },
+        {
+          "id": 1254583,
+          "name": "Jamie Dornan",
+          "character": "Paul Spector",
+          "profile": "https://image.tmdb.org/t/p/w185/qmTiAm3LII5moykSriVkJCeysKC.jpg",
+          "order": 1
+        },
+        {
+          "id": 1634607,
+          "name": "Niamh McGrady",
+          "character": "Danielle \"Dani\" Ferrington",
+          "profile": "https://image.tmdb.org/t/p/w185/gUxoWtwyPOZlEuTR92qRIB7pkCX.jpg",
+          "order": 3
+        },
+        {
+          "id": 28743,
+          "name": "John Lynch",
+          "character": "Jim Burns",
+          "profile": "https://image.tmdb.org/t/p/w185/4TG8HYZ5SEFh1Yk5CCG4fXD55j9.jpg",
+          "order": 5
+        },
+        {
+          "id": 228866,
+          "name": "Colin Morgan",
+          "character": "Tom Anderson",
+          "profile": "https://image.tmdb.org/t/p/w185/jeSLhhfUIZR3UQGGhtYTk0J2I5.jpg",
+          "order": 6
+        },
+        {
+          "id": 18993,
+          "name": "Stuart Graham",
+          "character": "Matthew \"Matt\" Eastwood",
+          "profile": "https://image.tmdb.org/t/p/w185/kLmI6avVGCNGXeW7M7o1lT5fAyD.jpg",
+          "order": 8
+        },
+        {
+          "id": 583815,
+          "name": "Valene Kane",
+          "character": "Rose Stagg",
+          "profile": "https://image.tmdb.org/t/p/w185/lv87wv8MwtuD3vrj7iPc5Fsgckp.jpg",
+          "order": 9
+        },
+        {
+          "id": 1541262,
+          "name": "Bronagh Waugh",
+          "character": "Sally Ann Spector",
+          "profile": "https://image.tmdb.org/t/p/w185/oMpBW59gmv1VFEOr3fzkadJ0SWo.jpg",
+          "order": 12
+        },
+        {
+          "id": 1323109,
+          "name": "Aisling Franciosi",
+          "character": "Katie Benedetto",
+          "profile": "https://image.tmdb.org/t/p/w185/g6qewxM4EEg02HUTLUw9KGkLdNj.jpg",
+          "order": 16
+        }
+      ],
+      "tmdbOverview": "Belfast polisinin bir seri cinayet soruşturması durdurulunca, bu durumu araştırmak için Dedektif Şefi Stella Gibson göreve getirilir.",
+      "tmdbPoster": "https://image.tmdb.org/t/p/w500/fm7nN3nUADA7JGgnFNlOWpXn1tf.jpg",
+      "tmdbBackdrop": "https://image.tmdb.org/t/p/w1280/vunaJ5k1cG8T4ROUGDZ05IhNXkP.jpg",
+      "tmdbTrailerUrl": "",
+      "tmdbImdbId": "tt2294189",
+      "tmdbRating": "7.7",
+      "tmdbVoteCount": 1033,
+      "seasons": 3,
+      "episodes": 17
     }
   ],
   "collections": [],
