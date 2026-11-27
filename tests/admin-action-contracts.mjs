@@ -81,6 +81,8 @@ assert.match(js,/async function restoreFullBackup\(\)\s*\{\s*if\(backupRestoreIn
   'Yedek geri yükleme aynı anda iki kez çalıştırılamamalı ve kilit serbest bırakılmalı');
 assert.match(js,/restoreMainSitePersonalStorage\(previousBrowserData\)/,
   'Site kataloğu geri yüklenemezse kişisel tarayıcı verileri geri alınmalı');
+assert.match(js,/rollbackWarning=' Ayrıca kişisel kayıtların otomatik geri alınması da başarısız oldu[\s\S]*?toast\(\(error\.message\|\|'Geri yükleme tamamlanamadı\.'\)\+rollbackWarning,'error'\)/,
+  'Otomatik geri alma başarısızsa kullanıcıya açık uyarı gösterilmeli');
 assert.match(js,/#catalog-select-all-page'\)\?\.addEventListener\('click'/,
   'Tümünü seç kontrolü yalnızca görünür sayfadaki kayıtları seçmeli');
 
