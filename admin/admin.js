@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], selectedCatalogIds:new Set(), page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null, securityLoaded:false };
+  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], selectedCatalogIds:new Set(), page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbDetailRequest:0, tmdbController:null, tmdbSelected:null, securityLoaded:false };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -860,8 +860,8 @@
   }
   const TMDB_API_KEY='3108265ab3fdbf3af14175edf64a9c7f';
   const TMDB_IMAGE='https://image.tmdb.org/t/p/';
-  async function tmdbRequest(path){
-    const response=await fetch('https://api.themoviedb.org/3/'+path+(path.includes('?')?'&':'?')+'api_key='+TMDB_API_KEY+'&language=tr-TR');
+  async function tmdbRequest(path,signal){
+    const response=await fetch('https://api.themoviedb.org/3/'+path+(path.includes('?')?'&':'?')+'api_key='+TMDB_API_KEY+'&language=tr-TR',{signal});
     if(!response.ok)throw new Error('TMDB yanıt vermedi (HTTP '+response.status+').');
     return response.json();
   }
@@ -898,25 +898,30 @@
     }).join('');
     host.hidden=!results.length;
   }
-  async function searchTmdbTitles(query){
-    const request=++state.tmdbSearchRequest;
+  async function searchTmdbTitles(query,request){
+    if(request!==state.tmdbSearchRequest)return;
+    const controller=new AbortController();state.tmdbController=controller;
     const host=$('#tmdb-search-results'),status=$('#tmdb-search-status');
     if(query.length<2){host.hidden=true;host.innerHTML='';status.textContent='En az iki karakter yaz. Manuel giriş de her zaman açık.';return;}
     status.textContent='TMDB kataloğunda aranıyor…';host.hidden=true;
     try{
-      const data=await tmdbRequest('search/multi?query='+encodeURIComponent(query)+'&include_adult=false&page=1');
+      const data=await tmdbRequest('search/multi?query='+encodeURIComponent(query)+'&include_adult=false&page=1',controller.signal);
       if(request!==state.tmdbSearchRequest)return;
       const results=(data.results||[]).filter(x=>['movie','tv'].includes(x.media_type)).slice(0,8);
       if(!results.length){status.textContent='Eşleşme bulunamadı. Başlığı manuel girebilirsin.';return;}
       status.textContent=results.length+' eşleşme bulundu. Bilgilerini almak için bir yapım seç.';
       renderTmdbResults(results);
-    }catch(error){if(request!==state.tmdbSearchRequest)return;status.textContent='TMDB araması yapılamadı. Bilgileri manuel girebilirsin.';toast(error.message,'error');}
+    }catch(error){if(request!==state.tmdbSearchRequest||error?.name==='AbortError')return;status.textContent='TMDB araması yapılamadı. Bilgileri manuel girebilirsin.';toast(error.message,'error');}finally{if(state.tmdbController===controller)state.tmdbController=null;}
   }
   async function selectTmdbTitle(id,type){
+    clearTimeout(state.tmdbSearchTimer);state.tmdbSearchRequest++;
+    state.tmdbController?.abort();
+    const request=++state.tmdbDetailRequest,controller=new AbortController();state.tmdbController=controller;
     const status=$('#tmdb-search-status'),host=$('#tmdb-search-results');
     host.hidden=true;status.textContent='Yapım bilgileri, oyuncular ve görseller alınıyor…';
     try{
-      const detail=await tmdbRequest((type==='tv'?'tv/':'movie/')+id+'?append_to_response=credits,videos,external_ids');
+      const detail=await tmdbRequest((type==='tv'?'tv/':'movie/')+id+'?append_to_response=credits,videos,external_ids',controller.signal);
+      if(request!==state.tmdbDetailRequest)return;
       const isTv=type==='tv',title=detail.title||detail.name||'';
       const release=detail.release_date||detail.first_air_date||'';
       const genres=(detail.genres||[]).map(x=>x.name).filter(Boolean);
@@ -948,7 +953,7 @@
       status.textContent='✓ '+title+' bilgileri alındı. Alanları düzenleyebilir veya eksik bilgileri manuel tamamlayabilirsin.';
       renderContentPreview();
       updateRouteSlugPreview();syncContentTypeFields();
-    }catch(error){status.textContent='Yapım bilgileri alınamadı. Alanları manuel doldurabilirsin.';toast(error.message,'error');}
+    }catch(error){if(request!==state.tmdbDetailRequest||error?.name==='AbortError')return;status.textContent='Yapım bilgileri alınamadı. Alanları manuel doldurabilirsin.';toast(error.message,'error');}finally{if(state.tmdbController===controller)state.tmdbController=null;}
   }
   function renderContentPreview(){
     const value=id=>String($('#'+id)?.value||'').trim();
@@ -2298,7 +2303,7 @@
   $('#next-page').addEventListener('click',()=>{state.page++;renderCatalog();});
   // Yeni yapım düğmeleri üstteki delege edilmiş olay dinleyicisiyle yönetilir.
   $('#content-form').addEventListener('submit',saveContent);
-  $('#tmdb-search-input').addEventListener('input',event=>{clearTimeout(state.tmdbSearchTimer);const query=event.target.value.trim();state.tmdbSearchTimer=setTimeout(()=>searchTmdbTitles(query),320);});
+  $('#tmdb-search-input').addEventListener('input',event=>{clearTimeout(state.tmdbSearchTimer);state.tmdbSearchRequest++;state.tmdbController?.abort();state.tmdbController=null;const request=state.tmdbSearchRequest,query=event.target.value.trim(),host=$('#tmdb-search-results'),status=$('#tmdb-search-status');if(query.length<2){host.hidden=true;host.innerHTML='';status.textContent='En az iki karakter yaz. Manuel giriş de her zaman açık.';return;}status.textContent='Arama hazırlanıyor…';state.tmdbSearchTimer=setTimeout(()=>searchTmdbTitles(query,request),320);});
   $('#tmdb-search-results').addEventListener('click',event=>{const result=event.target.closest('[data-tmdb-id]');if(result)selectTmdbTitle(result.dataset.tmdbId,result.dataset.tmdbType);});
   $('#content-form').addEventListener('input',event=>{if(event.target.closest('.editor-grid-inner'))renderContentPreview();if(['field-title','field-country','field-route-slug'].includes(event.target.id))updateRouteSlugPreview();});
   $('#content-form').addEventListener('change',event=>{
