@@ -597,14 +597,17 @@ export function validateCatalogData(data) {
     for (const field of ["autoplay","pauseOnHover"]) {
       if (settings[field] !== undefined && typeof settings[field] !== "boolean") throw new Error("Vitrin ayarı geçersiz: " + field);
     }
-    if (config.heroSlides !== undefined && (!Array.isArray(config.heroSlides) || config.heroSlides.length > data.catalog.length)) throw new Error("Vitrin yapım listesi geçersiz.");
-    const slideIds = new Set();
-    for (const slide of config.heroSlides || []) {
-      if (!slide || typeof slide !== "object" || Array.isArray(slide)) throw new Error("Vitrinde geçersiz yapım kaydı bulundu.");
-      const id = String(slide.id ?? "");
-      if (!ids.has(id)) throw new Error("Vitrinde katalogda bulunmayan bir yapım seçilmiş.");
-      if (slideIds.has(id)) throw new Error("Vitrinde aynı yapım birden fazla kez seçilmiş.");
-      slideIds.add(id);
+    for (const field of ["heroSlides", "desktopHeroSlides", "mobileHeroSlides"]) {
+      const slides = config[field];
+      if (slides !== undefined && (!Array.isArray(slides) || slides.length > data.catalog.length)) throw new Error("Vitrin yapım listesi geçersiz: " + field);
+      const slideIds = new Set();
+      for (const slide of slides || []) {
+        if (!slide || typeof slide !== "object" || Array.isArray(slide)) throw new Error("Vitrinde geçersiz yapım kaydı bulundu: " + field);
+        const id = String(slide.id ?? "");
+        if (!ids.has(id)) throw new Error("Vitrinde katalogda bulunmayan bir yapım seçilmiş: " + field);
+        if (slideIds.has(id)) throw new Error("Vitrinde aynı yapım birden fazla kez seçilmiş: " + field);
+        slideIds.add(id);
+      }
     }
   }
   return true;
