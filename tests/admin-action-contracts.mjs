@@ -65,6 +65,20 @@ assert.match(js,/system-duplicate-content-count/,
 assert.match(js,/if\(duplicateContentCount>0&&note\)note\.textContent=/,
   'Mükerrer yapım bulunduğunda açıklayıcı uyarı gösterilmeli');
 
+// Backup imports must be bounded and validated before any destructive restore starts.
+assert.match(js,/function validateBackupStorageMap\(value,label\)[\s\S]*?entries\.length>10000[\s\S]*?totalSize>8\*1024\*1024/,
+  'Kişisel yedek anahtarları ve toplam veri boyutu sınırlandırılmalı');
+assert.match(js,/function validateBackupPayload\(data\)[\s\S]*?catalog\.length<1\|\|catalog\.length>5000\|\|JSON\.stringify\(data\.siteData\)\.length>2000000[\s\S]*?yinelenen yapım kimliği/,
+  'Site yedeği katalog boyutu, kimlik ve yapım adı bakımından önceden doğrulanmalı');
+assert.match(js,/function inspectBackupFile\(file\)[\s\S]*?file\.size>10\*1024\*1024/,
+  'Aşırı büyük yedek dosyaları okunmadan reddedilmeli');
+assert.match(js,/async function restoreFullBackup\(\)\s*\{\s*if\(backupRestoreInProgress\)return[\s\S]*?backupRestoreInProgress=true[\s\S]*?finally\{\s*backupRestoreInProgress=false/,
+  'Yedek geri yükleme aynı anda iki kez çalıştırılamamalı ve kilit serbest bırakılmalı');
+assert.match(js,/restoreMainSitePersonalStorage\(previousBrowserData\)/,
+  'Site kataloğu geri yüklenemezse kişisel tarayıcı verileri geri alınmalı');
+assert.match(js,/#catalog-select-all-page'\)\?\.addEventListener\('click'/,
+  'Tümünü seç kontrolü yalnızca görünür sayfadaki kayıtları seçmeli');
+
 console.log('PASS: Ortak katalog kayıt akışı ve çakışma yönetimi');
 console.log('PASS: Yapım, koleksiyon, film serisi ve düzenleme kayıt doğrulamaları');
 console.log('PASS: Silme işlemlerinde kullanıcı onayı ve kalıcı kayıt');
