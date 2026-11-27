@@ -41,7 +41,7 @@
       const title=normalizeContentTitle(titleOf(item));
       const type=(isSeries(item)||item.media_type==='tv')?'tv':'movie';
       const year=String(item.year||item.releaseYear||(item.tmdbReleaseDate||item.release_date||item.first_air_date||'').slice(0,4)||'').trim();
-      const key=tmdbId?'tmdb:'+type+':'+tmdbId:(imdbId?'imdb:'+type+':'+imdbId:(title&&year?'title:'+type+':'+title+':'+year:''));
+      const key=tmdbId?'tmdb:'+tmdbId:(imdbId?'imdb:'+imdbId:(title&&year?'title:'+type+':'+title+':'+year:''));
       if(!key)return;
       groups.set(key,(groups.get(key)||0)+1);
     });
