@@ -1956,8 +1956,8 @@ Filter(){
       const requestId='perde-backup-'+Date.now()+'-'+Math.random().toString(36).slice(2);
       const requestType='PERDE_BACKUP_'+action+'_REQUEST';
       const responseType='PERDE_BACKUP_'+action+'_RESPONSE';
-      let settled=false,requestSent=false;
-      const cleanup=()=>{window.removeEventListener('message',onMessage);clearTimeout(timeout);};
+      let settled=false,requestSent=false,closeCheck=null;
+      const cleanup=()=>{window.removeEventListener('message',onMessage);clearTimeout(timeout);if(closeCheck)clearInterval(closeCheck);};
       const finish=(error,value)=>{if(settled)return;settled=true;cleanup();try{if(!popup.closed)popup.close();}catch(_){}error?reject(error):resolve(value);};
       const onMessage=event=>{
         if(event.origin!==PERSONAL_BACKUP_SITE_ORIGIN||event.source!==popup)return;
@@ -1978,8 +1978,9 @@ Filter(){
           finish(null,previous);
         }
       };
-      const timeout=setTimeout(()=>finish(new Error('Ana siteyle bağlantı kurulamadı. Açılır pencerenin yüklenmesine izin verip tekrar dene.')),15000);
+      const timeout=setTimeout(()=>finish(new Error('Aktarım penceresi 15 saniye içinde yanıt vermedi. Ana siteyi yeni sekmede açıp tekrar dene.')),15000);
       window.addEventListener('message',onMessage);
+      closeCheck=setInterval(()=>{try{if(popup.closed)finish(new Error('Aktarım penceresi kapatıldı.'));}catch(_){finish(new Error('Aktarım penceresinin durumu kontrol edilemedi.'));}},300);
     });
   }
   function readMainSitePersonalStorage(){
