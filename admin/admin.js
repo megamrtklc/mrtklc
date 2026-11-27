@@ -330,13 +330,24 @@
     }catch(error){toast(error.message||'Ölçüm kaydedilemedi.','error');console.error(error);}
     finally{button.disabled=false;button.textContent='＋ Bu ölçümü kaydet';}
   }
+  let qualityAuditCache={catalog:null,summary:null,affected:null};
+  function getQualityAuditData(){
+    if(qualityAuditCache.catalog===state.catalog)return qualityAuditCache;
+    const issueKeys=['poster','rating','trailer','watch','cast','director','year','description','tmdb'];
+    const summary={};issueKeys.forEach(key=>summary[key]=0);
+    const affected=[];
+    state.catalog.forEach(item=>{
+      const issues=qualityIssuesFor(item);
+      issues.forEach(key=>summary[key]++);
+      if(issues.length)affected.push({item,issues});
+    });
+    qualityAuditCache={catalog:state.catalog,summary,affected};
+    return qualityAuditCache;
+  }
   function renderQualityAudit(){
     const query=($('#quality-search')?.value||'').trim().toLocaleLowerCase('tr');
     const filter=$('#quality-filter')?.value||'all';
-    const issueKeys=['poster','rating','trailer','watch','cast','director','year','description','tmdb'];
-    const summary={};issueKeys.forEach(key=>summary[key]=0);
-    const audited=state.catalog.map(item=>({item,issues:qualityIssuesFor(item)}));
-    audited.forEach(row=>row.issues.forEach(key=>summary[key]++));
+    const {summary,affected}=getQualityAuditData();
     const otherCount=['director','year','description','tmdb'].reduce((sum,key)=>sum+summary[key],0);
     $('#quality-page-poster').textContent=summary.poster.toLocaleString('tr-TR');
     $('#quality-page-rating').textContent=summary.rating.toLocaleString('tr-TR');
@@ -344,7 +355,6 @@
     $('#quality-page-watch').textContent=summary.watch.toLocaleString('tr-TR');
     $('#quality-page-cast').textContent=summary.cast.toLocaleString('tr-TR');
     $('#quality-page-other').textContent=otherCount.toLocaleString('tr-TR');
-    const affected=audited.filter(row=>row.issues.length);
     $('#quality-total-affected').textContent=affected.length.toLocaleString('tr-TR');
     $('#quality-issue-count').textContent=String(affected.length);
     const rows=affected.filter(({item,issues})=>(!query||titleOf(item).toLocaleLowerCase('tr').includes(query))&&(filter==='all'||(filter==='other'?issues.some(key=>['director','year','description','tmdb'].includes(key)):issues.includes(filter))));
@@ -634,7 +644,7 @@
       const result=await response.json().catch(()=>({}));
       if(response.status===409)throw new Error('Katalog başka bir işlemde güncellenmiş. Sayfayı yenileyip tekrar deneyin.');
       if(!response.ok)throw new Error(result.error||'Değişiklik kaydedilemedi.');
-      state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];
+      state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];qualityAuditCache.catalog=null;
       state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderMissingTrailers();renderCollections();renderFranchises();renderAnalytics();renderHomepage();renderHomepageLayout();renderPersonalizedSection();renderOverviewInsights();
       renderWatchLayout();renderAdminProfile();
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.','success');
