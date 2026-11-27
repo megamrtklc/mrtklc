@@ -65,6 +65,11 @@ assert.match(js,/system-duplicate-content-count/,
 assert.match(js,/if\(duplicateContentCount>0&&note\)note\.textContent=/,
   'Mükerrer yapım bulunduğunda açıklayıcı uyarı gösterilmeli');
 
+// Single and bulk deletion must remove every homepage slide reference, not only the legacy list.
+assert.match(js,/function removeCatalogReferences\(nextData,ids\)[\s\S]*?\['heroSlides','desktopHeroSlides','mobileHeroSlides'\][\s\S]*?removeCatalogReferences\(nextData,ids\)/,
+  'Toplu silme masaüstü, mobil ve eski vitrin listelerindeki referansları temizlemeli');
+assert.match(js,/async function deleteContent\(id\)[\s\S]*?removeCatalogReferences\(nextData,id\)/,
+  'Tekli silme tüm vitrin ve koleksiyon referanslarını temizlemeli');
 // Backup imports must be bounded and validated before any destructive restore starts.
 assert.match(js,/function validateBackupStorageMap\(value,label\)[\s\S]*?entries\.length>10000[\s\S]*?totalSize>8\*1024\*1024/,
   'Kişisel yedek anahtarları ve toplam veri boyutu sınırlandırılmalı');
