@@ -36,7 +36,7 @@
                                    @timeupdate="updateVideoProgress"
                                    @play="pauseNoticeVisible = false; isPlaying = true; hasPlaybackStarted = true; schedulePlayerSideControls(); showPlaybackFeedback('play', 5000); schedulePlayerControlsHide()"
                                    @pause="pauseNoticeVisible = !$event.target.ended && hasPlaybackStarted; isPlaying = false; revealPlayerSideControls(); showPlayerControls()"
-                                   @ended="handleVideoEnded($event.target); pauseNoticeVisible = false; isPlaying = false; showPlayerControls()"
+                                   @ended="videoEnded = true; pauseNoticeVisible = false; isPlaying = false; showPlayerControls()"
                                    @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
