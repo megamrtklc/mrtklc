@@ -245,8 +245,6 @@
     $('#result-count').textContent=state.filtered.length.toLocaleString('tr-TR')+' kayıt';
     $('#page-info').textContent='Sayfa '+state.page+' / '+pages;
     $('#prev-page').disabled=state.page<=1;$('#next-page').disabled=state.page>=pages;
-    $$('#catalog-rows [data-edit]').forEach(btn=>btn.addEventListener('click',()=>{const item=state.catalog.find(x=>String(x.id)===btn.dataset.edit);if(item)openEditor(item);}));
-    $$('#catalog-rows [data-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteContent(btn.dataset.delete)));
   }
   function renderMissingTrailers(){
     const query=($('#missing-trailer-search')?.value||'').trim().toLocaleLowerCase('tr');
@@ -262,7 +260,6 @@
     $('#missing-trailer-page-info').textContent='Sayfa '+state.missingTrailerPage+' / '+pages;
     $('#missing-trailer-prev').disabled=state.missingTrailerPage<=1;
     $('#missing-trailer-next').disabled=state.missingTrailerPage>=pages;
-    document.querySelectorAll('#missing-trailer-rows [data-missing-trailer-edit]').forEach(btn=>btn.addEventListener('click',event=>{event.preventDefault();const item=state.catalog.find(x=>String(x.id)===btn.dataset.missingTrailerEdit);if(!item){toast('Düzenlenecek yapım katalogda bulunamadı.');return;}try{openEditor(item);}catch(error){console.error('Fragman kaydı düzenleyicisi açılamadı:',error);toast('Düzenleme ekranı açılamadı: '+(error.message||'Beklenmeyen hata.'));}}));
   }
   const QUALITY_LABELS={poster:'Afiş',rating:'IMDb puanı',trailer:'Fragman',watch:'İzleme bağlantısı',cast:'Oyuncu bilgisi',director:'Yönetmen',year:'Yapım yılı',description:'Konu',tmdb:'TMDB eşleşmesi'};
   function qualityIssuesFor(item){
@@ -353,8 +350,6 @@
       const count=Array.isArray(item.items)?item.items.length:0;
       return '<article class="collection-card"><div class="collection-card-top"><span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Pasif':'Yayında')+'</span><span class="collection-id">'+escapeHtml(item.id||'')+'</span></div><h3>'+escapeHtml(item.title||item.name||'İsimsiz koleksiyon')+'</h3><p>'+escapeHtml(item.description||'Açıklama eklenmemiş')+'</p><strong>'+count+'</strong><small>İçerik kaydı</small><div class="collection-actions"><button class="row-action" data-collection-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-collection-delete="'+escapeHtml(item.id)+'">Sil</button></div></article>';
     }).join(''):'<article class="panel-card empty-state"><span>▧</span><h2>Henüz koleksiyon bulunamadı</h2><p>Yeni koleksiyon oluşturarak seçkilerini yönetebilirsin.</p></article>';
-    $$('#collection-grid [data-collection-edit]').forEach(btn=>btn.addEventListener('click',()=>openCollectionEditor(btn.dataset.collectionEdit)));
-    $$('#collection-grid [data-collection-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteCollection(btn.dataset.collectionDelete)));
     updateMetrics();
   }
   function renderFranchises(){
@@ -363,8 +358,6 @@
       const count=Array.isArray(item.items)?item.items.length:0;
       return '<article class="collection-card"><div class="collection-card-top"><span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Pasif':'Yayında')+'</span><span class="collection-id">'+escapeHtml(item.id||'')+'</span></div><h3>'+escapeHtml(item.title||'İsimsiz seri')+'</h3><p>'+escapeHtml(item.description||'Açıklama eklenmemiş')+'</p><strong>'+count+'</strong><small>Film kaydı</small><div class="collection-actions"><button class="row-action" data-franchise-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-franchise-delete="'+escapeHtml(item.id)+'">Sil</button></div></article>';
     }).join(''):'<article class="panel-card empty-state"><span>▤</span><h2>Henüz film serisi bulunamadı</h2><p>Yeni seri oluşturarak mevcut filmleri bir araya getirebilirsin.</p></article>';
-    $$('#franchise-grid [data-franchise-edit]').forEach(btn=>btn.addEventListener('click',()=>openFranchiseEditor(btn.dataset.franchiseEdit)));
-    $$('#franchise-grid [data-franchise-delete]').forEach(btn=>btn.addEventListener('click',()=>deleteFranchise(btn.dataset.franchiseDelete)));
   }
   function openFranchiseEditor(id){
     if(!canWrite())return;
@@ -2266,6 +2259,10 @@
     const visible=state.filtered.slice((state.page-1)*state.pageSize,state.page*state.pageSize);
     visible.forEach(item=>{const id=String(item.id);if(event.target.checked)state.selectedCatalogIds.add(id);else state.selectedCatalogIds.delete(id);});renderCatalog();
   });
+  $('#catalog-rows').addEventListener('click',event=>{
+    const edit=event.target.closest('[data-edit]');if(edit){const item=state.catalog.find(x=>String(x.id)===edit.dataset.edit);if(item)openEditor(item);return;}
+    const remove=event.target.closest('[data-delete]');if(remove)deleteContent(remove.dataset.delete);
+  });
   $('#catalog-rows').addEventListener('change',event=>{
     const checkbox=event.target.closest('[data-select-catalog]');if(!checkbox)return;
     const id=String(checkbox.dataset.selectCatalog);if(checkbox.checked)state.selectedCatalogIds.add(id);else state.selectedCatalogIds.delete(id);
@@ -2280,6 +2277,12 @@
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#catalog-sort').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#missing-trailer-search').addEventListener('input',()=>{state.missingTrailerPage=1;renderMissingTrailers();});
+  $('#missing-trailer-rows').addEventListener('click',event=>{
+    const button=event.target.closest('[data-missing-trailer-edit]');if(!button)return;
+    event.preventDefault();const item=state.catalog.find(x=>String(x.id)===button.dataset.missingTrailerEdit);
+    if(!item){toast('Düzenlenecek yapım katalogda bulunamadı.');return;}
+    try{openEditor(item);}catch(error){console.error('Fragman kaydı düzenleyicisi açılamadı:',error);toast('Düzenleme ekranı açılamadı: '+(error.message||'Beklenmeyen hata.'));}
+  });
   $('#quality-rows').addEventListener('click',event=>{const btn=event.target.closest('[data-quality-edit]');if(!btn)return;event.preventDefault();const item=state.catalog.find(x=>String(x.id)===btn.dataset.qualityEdit);if(!item){toast('Düzenlenecek yapım katalogda bulunamadı.','warning');return;}try{openEditor(item);}catch(error){console.error('Veri kalitesi düzenleme formu açılamadı:',error);toast('Düzenleme formu açılamadı: '+(error.message||'Beklenmeyen hata.'),'error');}});
   $('#quality-search').addEventListener('input',()=>{state.qualityPage=1;renderQualityAudit();});
   $('#quality-filter').addEventListener('change',()=>{state.qualityPage=1;renderQualityAudit();});
@@ -2310,9 +2313,17 @@
   });
   $('#close-editor').addEventListener('click',closeContentEditor);$('#cancel-editor').addEventListener('click',closeContentEditor);
   // Koleksiyon ekleme düğmesi de üstteki delege edilmiş olay dinleyicisiyle yönetilir.
+  $('#collection-grid').addEventListener('click',event=>{
+    const edit=event.target.closest('[data-collection-edit]');if(edit){openCollectionEditor(edit.dataset.collectionEdit);return;}
+    const remove=event.target.closest('[data-collection-delete]');if(remove)deleteCollection(remove.dataset.collectionDelete);
+  });
   $('#collection-form').addEventListener('submit',saveCollection);
   $('#collection-search').addEventListener('input',filterCollectionItems);
   $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
+  $('#franchise-grid').addEventListener('click',event=>{
+    const edit=event.target.closest('[data-franchise-edit]');if(edit){openFranchiseEditor(edit.dataset.franchiseEdit);return;}
+    const remove=event.target.closest('[data-franchise-delete]');if(remove)deleteFranchise(remove.dataset.franchiseDelete);
+  });
   $('#franchise-form').addEventListener('submit',saveFranchise);
   $('#franchise-search').addEventListener('input',filterFranchiseItems);
   $('#franchise-close').addEventListener('click',()=>$('#franchise-dialog').close());
