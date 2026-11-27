@@ -1862,6 +1862,7 @@
   const PERSONAL_BACKUP_SITE_ORIGIN='https://megamrtklc.github.io';
   const PERSONAL_BACKUP_BRIDGE_URL='https://megamrtklc.github.io/mrtklc/backup-bridge.html';
   let selectedBackup=null;
+  let backupRestoreInProgress=false;
   let remotePersonalStorage=null;
   function collectBrowserStorage(storage){
     const values={};
@@ -2034,20 +2035,34 @@
   }
   function validateBackupStorageMap(value,label){
     if(!value||typeof value!=='object'||Array.isArray(value))throw new Error(label+' alanı geçerli bir kayıt listesi değil.');
-    for(const [key,item] of Object.entries(value)){
-      if(!BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix)))throw new Error(label+' içinde izin verilmeyen kayıt anahtarı var: '+key);
+    const entries=Object.entries(value);
+    if(entries.length>10000)throw new Error(label+' içinde izin verilenden fazla kayıt var.');
+    let totalSize=0;
+    for(const [key,item] of entries){
+      if(!BACKUP_STORAGE_PREFIXES.some(prefix=>key.startsWith(prefix))||key.length>200)throw new Error(label+' içinde izin verilmeyen kayıt anahtarı var: '+key);
       if(typeof item!=='string')throw new Error(label+' içindeki '+key+' kaydı metin biçiminde değil.');
+      totalSize+=key.length+item.length;
+      if(totalSize>8*1024*1024)throw new Error(label+' yedek verisi 8 MB sınırını aşıyor.');
     }
-    return Object.keys(value).length;
+    return entries.length;
   }
   function validateBackupPayload(data){
     if(!data||typeof data!=='object'||Array.isArray(data)||data.version!==1)throw new Error('Yedek biçimi veya sürümü desteklenmiyor.');
     const isSite=data.format==='perde-site-backup'&&data.siteData&&typeof data.siteData==='object'&&!Array.isArray(data.siteData)&&Array.isArray(data.siteData.catalog);
-    const isPersonal=data.format==='perde-personal-backup'&&data.browserData&&typeof data.browserData==='object';
-    const isLegacy=data.format==='perde-full-backup'&&data.siteData&&typeof data.siteData==='object'&&Array.isArray(data.siteData.catalog)&&data.browserData&&typeof data.browserData==='object';
+    const isPersonal=data.format==='perde-personal-backup'&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
+    const isLegacy=data.format==='perde-full-backup'&&data.siteData&&typeof data.siteData==='object'&&!Array.isArray(data.siteData)&&Array.isArray(data.siteData.catalog)&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
     if(!isSite&&!isPersonal&&!isLegacy)throw new Error('Bu dosya geçerli bir Perde yedek dosyası değil.');
     if(isSite||isLegacy){
-      if(data.siteData.catalog.some(item=>!item||typeof item!=='object'||Array.isArray(item)))throw new Error('Katalog içinde geçersiz yapım kaydı bulundu.');
+      const catalog=data.siteData.catalog;
+      if(catalog.length<1||catalog.length>5000||JSON.stringify(data.siteData).length>2000000)throw new Error('Yedek katalog boyutu veya kayıt sayısı sınır dışında.');
+      const ids=new Set();
+      for(const item of catalog){
+        if(!item||typeof item!=='object'||Array.isArray(item))throw new Error('Katalog içinde geçersiz yapım kaydı bulundu.');
+        const id=String(item.id??'').trim();
+        if(!id||typeof item.title!=='string'||!item.title.trim())throw new Error('Yedekte kimliği veya yapım adı eksik kayıt bulundu.');
+        if(ids.has(id))throw new Error('Yedekte yinelenen yapım kimliği bulundu: '+id);
+        ids.add(id);
+      }
     }
     let personal=0;
     if(isPersonal||isLegacy){
@@ -2060,6 +2075,7 @@
     const button=$('#restore-full-backup'),summary=$('#restore-backup-summary');
     button.disabled=true;
     if(!file){summary.innerHTML='<span>Dosya durumu</span><b>Henüz dosya seçilmedi</b>';return;}
+    if(file.size>10*1024*1024){summary.innerHTML='<span>Dosya doğrulanamadı</span><b class="state-warning">Yedek dosyası 10 MB sınırını aşıyor.</b>';return;}
     const reader=new FileReader();
     reader.onload=()=>{
       try{
@@ -2083,6 +2099,7 @@
     reader.readAsText(file);
   }
   async function restoreFullBackup(){
+    if(backupRestoreInProgress)return;
     const data=selectedBackup;
     if(!data){toast('Önce geçerli bir yedek dosyası seçmelisin.');return;}
     const isSite=data.format==='perde-site-backup';
@@ -2095,6 +2112,8 @@
     const description=isSite?catalogCount+' yapım ve site ayarı':isPersonal?personalCount+' kişisel kayıt':catalogCount+' yapım ve '+personalCount+' kişisel kayıt';
     const scope=isSite?'Yalnızca site kataloğu ve ayarları':isPersonal?'Yalnızca ana sitedeki kişisel tarayıcı kayıtları':'Site verileri ve kişisel tarayıcı kayıtları';
     if(!confirm('GERİ YÜKLEME ONAYI\\n\\n'+scope+' değiştirilecek.\\n'+description+' aktarılacak.\\n\\nMevcut ilgili kayıtların üzerine yazılacak. İşlemden önce ayrıca mevcut kişisel kayıtların geri alma kopyası alınır. Devam edilsin mi?'))return;
+    backupRestoreInProgress=true;
+    const restoreButton=$('#restore-full-backup');if(restoreButton)restoreButton.disabled=true;
     let previousBrowserData=null;
     try{
       if(data.browserData)previousBrowserData=await restoreMainSitePersonalStorage(data.browserData);
@@ -2108,9 +2127,12 @@
     }catch(error){
       if(previousBrowserData){
         try{await restoreMainSitePersonalStorage(previousBrowserData);}
-        catch(rollbackError){console.error('Ana site kişisel kayıtları geri alınamadı:',rollbackError);}
+        catch(rollbackError){console.error('Ana site kişisel kayıtları geri alınamadı:',rollbackError);toast('Geri alma sırasında da hata oluştu. Ana site kişisel kayıtlarını ayrıca kontrol et.','error');}
       }
       toast(error.message||'Geri yükleme tamamlanamadı.','error');
+    }finally{
+      backupRestoreInProgress=false;
+      if(restoreButton)restoreButton.disabled=!selectedBackup||((isSite||isLegacy)&&!state.apiEnabled);
     }
   }
   function initBackupTools(){
