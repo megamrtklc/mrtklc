@@ -133,9 +133,10 @@
                                 <button type="button" @click="startPlayback()" class="shrink-0 rounded-lg bg-white/15 px-3 py-2 font-black hover:bg-white/25">Yeniden Dene</button>
                             </div>
                             <div x-show="videoEnded && selectedItem.type === 'tv'" class="absolute inset-0 z-30 flex items-center justify-center bg-black/65 p-4">
-                                <button type="button" @click="goToNextEpisode()" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#e7c477] to-[#b98b38] px-5 py-3 text-sm font-black text-black shadow-xl">
+                                <button x-show="hasNextEpisode()" type="button" @click="goToNextEpisode()" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#e7c477] to-[#b98b38] px-5 py-3 text-sm font-black text-black shadow-xl">
                                     Sonraki Bölüm <i class="fa-solid fa-forward-step"></i>
                                 </button>
+                                <span x-show="!hasNextEpisode()" class="rounded-xl border border-white/15 bg-black/55 px-5 py-3 text-center text-sm font-bold text-white">Bu dizide sıradaki bölüm bulunmuyor.</span>
                             </div>
 
                             <!-- Centered transport controls with feedback anchored below each button -->
