@@ -1,13 +1,13 @@
-const CACHE_NAME = "perde-shell-e2b349ffd5c7";
+const CACHE_NAME = "perde-shell-20261127-pwa-identity-v2";
 const PRECACHE_URLS = [
-  "./assets/logos/perde-favicon.png?v=e2b349ffd5c72030cf3e8d5f9c17148028d90f4a",
-  "./assets/logos/perde-favicon.png?v=698c60c1e144e4dc9650b5d9dc67265e671541c7",
   "./index.html",
-  "./manifest.webmanifest",
-  "./assets/logos/perde-app-icon.svg",
+  "./manifest.webmanifest?v=20261127-pwa-identity-v2",
+  "./assets/logos/perde-favicon.png?v=20261127-pwa-identity-v2",
+  "./assets/logos/perde-app-icon.svg?v=20261127-pwa-identity-v2",
   "./assets/logos/perde-mark.svg",
   "./assets/logos/perde-footer.svg",
-  "./assets/logos/perde-favicon-32.png"
+  "./assets/logos/perde-favicon-32.png?v=20261127-pwa-identity-v2",
+  "./assets/logos/perde-favicon-16.png?v=20261127-pwa-identity-v2"
 ];
 
 self.addEventListener("install", event => {
