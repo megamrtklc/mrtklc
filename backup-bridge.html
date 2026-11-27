@@ -29,7 +29,7 @@
     return values;
   }
 
-  function replaceMatchingStorage(storage, incoming) {
+  function replaceMatchingStorage(storage, incoming, previous) {
     if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) {
       throw new Error('Yedek tarayıcı verisi geçersiz.');
     }
@@ -41,21 +41,9 @@
     )) {
       throw new Error('Yedekte izin verilmeyen kayıt anahtarı veya veri biçimi var.');
     }
-    const previous = readMatchingStorage(storage);
-    if (previous.error) throw new Error(previous.error);
-    try {
-      Object.keys(previous).forEach(key => storage.removeItem(key));
-      entries.forEach(([key, value]) => storage.setItem(key, value));
-      return previous;
-    } catch (error) {
-      try {
-        Object.keys(readMatchingStorage(storage)).forEach(key => storage.removeItem(key));
-        Object.entries(previous).forEach(([key, value]) => storage.setItem(key, value));
-      } catch (rollbackError) {
-        throw new Error('Kayıt aktarımı başarısız oldu ve otomatik geri alma tamamlanamadı: ' + String(rollbackError && rollbackError.message || rollbackError));
-      }
-      throw error;
-    }
+    if (!previous || previous.error) throw new Error('Geri alma için önceki kayıt kopyası bulunamadı.');
+    Object.keys(previous).forEach(key => storage.removeItem(key));
+    entries.forEach(([key, value]) => storage.setItem(key, value));
   }
 
   function respond(target, type, requestId, payload) {
@@ -93,8 +81,8 @@
         previousLocal = readMatchingStorage(window.localStorage);
         previousSession = readMatchingStorage(window.sessionStorage);
         if (previousLocal.error || previousSession.error) throw new Error(previousLocal.error || previousSession.error);
-        replaceMatchingStorage(window.localStorage, data.localStorage || {});
-        replaceMatchingStorage(window.sessionStorage, data.sessionStorage || {});
+        replaceMatchingStorage(window.localStorage, data.localStorage || {}, previousLocal);
+        replaceMatchingStorage(window.sessionStorage, data.sessionStorage || {}, previousSession);
         respond(event.source, 'PERDE_BACKUP_RESTORE_RESPONSE', event.data.requestId, {
           ok: true,
           previousBrowserData: { localStorage: previousLocal, sessionStorage: previousSession }
