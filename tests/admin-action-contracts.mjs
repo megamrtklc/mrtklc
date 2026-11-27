@@ -54,6 +54,17 @@ for (const binding of [
   /#personalized-rules-save'\)\?\.addEventListener\('click',savePersonalizedRules\)/
 ]) assert.match(js, binding, 'Kayıt/yayınlama kontrolü gerçek işlem fonksiyonuna bağlı olmalı');
 
+// Duplicate diagnostics must detect repeated external identities and exact
+// title/type/year matches without automatically merging or deleting records.
+assert.match(js,/function countDuplicateContentGroups\(catalog\)[\s\S]*?groups\.set\(key,\(groups\.get\(key\)\|\|0\)\+1\)[\s\S]*?filter\(count=>count>1\)/,
+  'Katalog denetimi mükerrer yapım gruplarını belirlemeli');
+assert.match(js,/duplicateContentCount=countDuplicateContentGroups\(valid\)/,
+  'Sistem denetimi mükerrer yapım gruplarını saymalı');
+assert.match(js,/system-duplicate-content-count/,
+  'Mükerrer yapım sayısı admin arayüzünde gösterilmeli');
+assert.match(js,/if\(duplicateContentCount>0&&note\)note\.textContent=/,
+  'Mükerrer yapım bulunduğunda açıklayıcı uyarı gösterilmeli');
+
 console.log('PASS: Ortak katalog kayıt akışı ve çakışma yönetimi');
 console.log('PASS: Yapım, koleksiyon, film serisi ve düzenleme kayıt doğrulamaları');
 console.log('PASS: Silme işlemlerinde kullanıcı onayı ve kalıcı kayıt');
