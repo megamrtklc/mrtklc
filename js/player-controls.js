@@ -110,6 +110,50 @@ toggleFullscreen() {
             }
         }
     },
+    handleVideoEnded(video) {
+        const endedVideo = video || document.getElementById('customVideoPlayer');
+        if (!endedVideo || !this.selectedItem) return;
+        const duration = Number(endedVideo.duration);
+        const finalTime = Number.isFinite(duration) && duration > 0
+            ? duration
+            : Math.max(0, Number(endedVideo.currentTime) || 0);
+        const now = Date.now();
+
+        // ended olayı son timeupdate'ten bağımsız olarak tamamlanma kaydını kesinleştirir.
+        this.videoProgress = 100;
+        if (duration > 0) {
+            this.currentTimeFormatted = this.formatTime(finalTime);
+            this.durationFormatted = this.formatTime(duration);
+        }
+        this.saveMovieProgress(this.getPlaybackProgressKey(), {
+            time: finalTime,
+            duration: duration > 0 ? duration : finalTime,
+            savedAt: now
+        });
+
+        if (this.selectedItem.type === 'tv') {
+            const tracking = this.getEpisodeTracking();
+            const seasonKey = String(this.selectedSeason);
+            const episodeNumber = Number(this.selectedEpisode);
+            const watched = Array.isArray(tracking.watched?.[seasonKey])
+                ? [...tracking.watched[seasonKey]]
+                : [];
+            if (Number.isFinite(episodeNumber) && episodeNumber > 0 && !watched.includes(episodeNumber)) {
+                watched.push(episodeNumber);
+            }
+            tracking.watched = { ...(tracking.watched || {}), [seasonKey]: watched };
+            tracking.last = {
+                season: Number(this.selectedSeason),
+                episode: episodeNumber,
+                time: finalTime,
+                duration: duration > 0 ? duration : finalTime,
+                updatedAt: now
+            };
+            this.saveEpisodeTracking(tracking);
+            this._lastEpisodeProgressSaveAt = now;
+        }
+        this.videoEnded = true;
+    },
     restorePlaybackPosition(video) {
         if (!video || !this.selectedItem || !Number.isFinite(video.duration) || video.duration <= 0) return;
         const key = this.getPlaybackProgressKey();
