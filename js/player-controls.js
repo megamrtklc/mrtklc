@@ -317,9 +317,19 @@ toggleFullscreen() {
         if (!all || typeof all !== 'object' || Array.isArray(all)) return { watched: {}, last: null };
         const key = String(this.selectedItem?.id || '');
         const tracking = all[key];
-        return tracking && typeof tracking === 'object' && !Array.isArray(tracking)
-            ? { watched: tracking.watched && typeof tracking.watched === 'object' ? tracking.watched : {}, last: tracking.last ?? null }
-            : { watched: {}, last: null };
+        if (!tracking || typeof tracking !== 'object' || Array.isArray(tracking)) {
+            return { watched: {}, last: null };
+        }
+        const rawWatched = tracking.watched && typeof tracking.watched === 'object' && !Array.isArray(tracking.watched)
+            ? tracking.watched
+            : {};
+        const watched = {};
+        Object.entries(rawWatched).forEach(([season, episodes]) => {
+            if (!Array.isArray(episodes)) return;
+            const valid = [...new Set(episodes.map(Number).filter(number => Number.isInteger(number) && number > 0))];
+            if (valid.length) watched[String(season)] = valid;
+        });
+        return { watched, last: tracking.last && typeof tracking.last === 'object' ? tracking.last : null };
     },
     saveEpisodeTracking(tracking) {
         const stored = safeStorageRead('cine_episode_tracking_v1', {});
@@ -334,11 +344,12 @@ toggleFullscreen() {
         return (tracking.watched?.[seasonNum] || []).includes(Number(epNum));
     },
     getWatchedEpisodeCount(seasonNum) {
-        return (this.getEpisodeTracking().watched?.[seasonNum] || []).length;
+        const watched = this.getEpisodeTracking().watched?.[String(seasonNum)] || [];
+        return new Set(watched.map(Number).filter(number => Number.isInteger(number) && number > 0)).size;
     },
     getSeasonProgress(seasonNum) {
         const total = this.getEpisodesForSeason(seasonNum).length;
-        return total ? Math.round(this.getWatchedEpisodeCount(seasonNum) / total * 100) : 0;
+        return total ? Math.min(100, Math.round(this.getWatchedEpisodeCount(seasonNum) / total * 100)) : 0;
     },
     getLastWatchedEpisode() {
         return this.getEpisodeTracking().last;
@@ -347,14 +358,17 @@ toggleFullscreen() {
         const tracking = this.getEpisodeTracking();
         if (!tracking.watched) tracking.watched = {};
         const seasonKey = String(this.selectedSeason);
-        const watched = tracking.watched[seasonKey] || [];
-        const index = watched.indexOf(Number(epNum));
+        const watched = [...new Set((Array.isArray(tracking.watched[seasonKey]) ? tracking.watched[seasonKey] : [])
+            .map(Number).filter(number => Number.isInteger(number) && number > 0))];
+        const episodeNumber = Number(epNum);
+        if (!Number.isInteger(episodeNumber) || episodeNumber <= 0) return;
+        const index = watched.indexOf(episodeNumber);
         if (index >= 0) {
             watched.splice(index, 1);
-            if (tracking.last?.season === Number(this.selectedSeason) && tracking.last?.episode === Number(epNum)) tracking.last = null;
+            if (Number(tracking.last?.season) === Number(this.selectedSeason) && Number(tracking.last?.episode) === episodeNumber) tracking.last = null;
         } else {
-            watched.push(Number(epNum));
-            tracking.last = { season: Number(this.selectedSeason), episode: Number(epNum), updatedAt: Date.now() };
+            watched.push(episodeNumber);
+            tracking.last = { season: Number(this.selectedSeason), episode: episodeNumber, updatedAt: Date.now() };
         }
         tracking.watched[seasonKey] = watched;
         this.saveEpisodeTracking(tracking);
