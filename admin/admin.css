@@ -1359,6 +1359,12 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
  .page-heading>.primary-button{flex:0 0 auto;white-space:nowrap}
  .main-content,.view,.panel-card,.dashboard-card{min-width:0}
  .catalog-table-wrap,.table-wrap{max-width:100%;overflow-x:auto}
+ .editor-dialog{max-height:min(88dvh,900px);overscroll-behavior:contain}
+ .editor-form{padding:20px}
+ .editor-grid,.url-highlight-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .editor-grid>*,.url-highlight-fields>*{min-width:0}
+ .editor-grid input,.editor-grid select,.editor-grid textarea,
+ .url-highlight-fields input,.url-highlight-fields select,.url-highlight-fields textarea{width:100%;max-width:100%;min-width:0}
 }
 @media(max-width:700px){
  .main-content{padding-inline:14px}
