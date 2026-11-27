@@ -29,6 +29,8 @@ jobs:
           node --check admin/admin.js
           node --check app.js
           node --check app.min.js
+          node --check js/stats.js
+          node --check js/player-controls.js
           node --check scripts/assemble-html.mjs
           node tests/mobile-hero-resource-contract.mjs
           node scripts/assemble-html.mjs
