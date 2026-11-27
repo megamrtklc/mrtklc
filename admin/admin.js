@@ -2128,19 +2128,21 @@ Filter(){
       const catalog=data.siteData.catalog;
       if(catalog.length<1||catalog.length>5000||JSON.stringify(data.siteData).length>2000000)throw new Error('Yedek katalog boyutu veya kayıt sayısı sınır dışında.');
       const ids=new Set();
+      var movieCount=0;
       for(const item of catalog){
         if(!item||typeof item!=='object'||Array.isArray(item))throw new Error('Katalog içinde geçersiz yapım kaydı bulundu.');
         const id=String(item.id??'').trim();
         if(!id||typeof item.title!=='string'||!item.title.trim())throw new Error('Yedekte kimliği veya yapım adı eksik kayıt bulundu.');
         if(ids.has(id))throw new Error('Yedekte yinelenen yapım kimliği bulundu: '+id);
         ids.add(id);
+        if(!isSeries(item))movieCount++;
       }
     }
     let personal=0;
     if(isPersonal||isLegacy){
       personal=validateBackupStorageMap(data.browserData.localStorage,'localStorage')+validateBackupStorageMap(data.browserData.sessionStorage,'sessionStorage');
     }
-    return {isSite,isPersonal,isLegacy,count:data.siteData?.catalog?.length||0,personal};
+    return {isSite,isPersonal,isLegacy,count:data.siteData?.catalog?.length||0,movies:(isSite||isLegacy)?movieCount:0,personal};
   }
   function inspectBackupFile(file){
     selectedBackup=null;
@@ -2156,7 +2158,7 @@ Filter(){
         selectedBackup=data;
         const date=data.exportedAt&&!Number.isNaN(Date.parse(data.exportedAt))?new Date(data.exportedAt).toLocaleString('tr-TR'):'Tarih bilgisi yok';
         const kind=info.isSite?'Yapım ve site verileri':info.isPersonal?'Kişisel tarayıcı verileri':'Eski tip tam yedek';
-        const movies=info.isSite||info.isLegacy?data.siteData.catalog.filter(item=>!isSeries(item)).length:0;
+        const movies=info.movies;
         const series=info.isSite||info.isLegacy?info.count-movies:0;
         const details=[];
         if(info.isSite||info.isLegacy)details.push(info.count+' yapım ('+movies+' film · '+series+' dizi)');
