@@ -32,7 +32,7 @@
                                    preload="metadata"
                                    playsinline
                                    @click="showPlayerControls()"
-                                   @loadedmetadata="updateVideoProgress(); applyPlaybackRate(); $event.target.volume = isMuted ? 0 : volumeLevel; $event.target.muted = isMuted"
+                                   @loadedmetadata="window.PerdePlayerControls?.restorePlaybackPosition.call($data, $event.target); updateVideoProgress(); applyPlaybackRate(); $event.target.volume = isMuted ? 0 : volumeLevel; $event.target.muted = isMuted"
                                    @timeupdate="updateVideoProgress"
                                    @play="pauseNoticeVisible = false; isPlaying = true; hasPlaybackStarted = true; schedulePlayerSideControls(); showPlaybackFeedback('play', 5000); schedulePlayerControlsHide()"
                                    @pause="pauseNoticeVisible = !$event.target.ended && hasPlaybackStarted; isPlaying = false; revealPlayerSideControls(); showPlayerControls()"
