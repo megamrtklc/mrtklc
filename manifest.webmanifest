@@ -20,8 +20,26 @@
   ],
   "icons": [
     {
-      "src": "./assets/logos/perde-favicon.png?v=e2b349ffd5c72030cf3e8d5f9c17148028d90f4a",
+      "src": "./assets/logos/perde-favicon.png?v=20261127-pwa-identity-v2",
       "sizes": "1200x1200",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/logos/perde-app-icon.svg?v=20261127-pwa-identity-v2",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/logos/perde-favicon-32.png?v=20261127-pwa-identity-v2",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/logos/perde-favicon-16.png?v=20261127-pwa-identity-v2",
+      "sizes": "16x16",
       "type": "image/png",
       "purpose": "any"
     }
