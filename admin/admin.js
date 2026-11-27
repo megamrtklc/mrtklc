@@ -674,7 +674,7 @@ Filter(){
     el.innerHTML='<option value="all">Tüm yıllar</option>'+years.map(y=>'<option value="'+escapeHtml(y)+'">'+escapeHtml(y)+'</option>').join('');
     el.value=years.includes(Number(selected))||years.includes(selected)?String(selected):'all';
   }
-  async function persist(nextData,successMessage){
+  async function persist(nextData,successMessage,options={}){
     if(!canWrite()||state.saving)return false;
     state.saving=true;
     try{
@@ -687,7 +687,7 @@ Filter(){
       renderWatchLayout();renderAdminProfile();
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.','success');
       return true;
-    }catch(error){toast(error.message,'error');console.error(error);return false;}
+    }catch(error){if(!options.silent)toast(error.message,'error');console.error(error);return false;}
     finally{state.saving=false;}
   }
   const BRAND_DEFAULTS={"brandName":"Perde","shortName":"PERDE","slogan":"Film ve dizi arşivinin kişisel merkezi","pageTitle":"Perde","metaDescription":"Perde ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.","copyright":"© 2026 Perde. Tüm hakları saklıdır.","adminSubtitle":"YÖNETİM MERKEZİ","scopes":{"site":true,"admin":true,"login":true,"seo":true}};let brandConfigSha=null;
@@ -2202,23 +2202,35 @@ Filter(){
     if(!confirm('GERİ YÜKLEME ONAYI\\n\\n'+scope+' değiştirilecek.\\n'+description+' aktarılacak.\\n\\nMevcut ilgili kayıtların üzerine yazılacak. İşlemden önce ayrıca mevcut kişisel kayıtların geri alma kopyası alınır. Devam edilsin mi?'))return;
     backupRestoreInProgress=true;
     const restoreButton=$('#restore-full-backup');if(restoreButton)restoreButton.disabled=true;
-    let previousBrowserData=null;
+    let previousBrowserData=null,restoreStage='Geri yükleme başlatılamadı.';
+    const summary=$('#restore-backup-summary');
+    const showRestoreStage=(title,detail)=>{if(summary)summary.innerHTML='<span>'+title+'</span><b>'+detail+'</b>';};
     try{
-      if(data.browserData)previousBrowserData=await restoreMainSitePersonalStorage(data.browserData);
+      if(data.browserData){
+        restoreStage='Ana sitenin mevcut kişisel kayıtları korunuyor.';
+        showRestoreStage('1/3 · Kişisel kayıtlar','Mevcut kayıtlar için geri alma kopyası alınıyor…');
+        previousBrowserData=await restoreMainSitePersonalStorage(data.browserData);
+        restoreStage='Ana sitenin kişisel kayıtları geri yükleniyor.';
+        showRestoreStage('2/3 · Kişisel kayıtlar','Yedek kayıtlar ana siteye aktarılıyor…');
+      }
       if(data.siteData){
-        const ok=await persist(data.siteData,'Site verileri başarıyla geri yüklendi. Sayfa yenileniyor…');
-        if(!ok)throw new Error('Site verileri sunucuya kaydedilemedi; ana sitenin kişisel kayıtları eski hâline getiriliyor.');
+        restoreStage='Site kataloğu ve ayarları sunucuya kaydediliyor.';
+        showRestoreStage(data.browserData?'3/3 · Site verileri':'1/1 · Site verileri','Katalog ve site ayarları kaydediliyor…');
+        const ok=await persist(data.siteData,'Site verileri başarıyla geri yüklendi. Sayfa yenileniyor…',{silent:true});
+        if(!ok)throw new Error('Site verileri sunucuya kaydedilemedi.');
       }else{
-        toast('Kişisel kayıtlar ana Perde sitesine geri yüklendi. Açık ana site sekmesini yenile.');
+        toast('Kişisel kayıtlar ana Perde sitesine geri yüklendi. Açık ana site sekmesini yenile.','success');
       }
       setTimeout(()=>window.location.reload(),900);
     }catch(error){
       let rollbackWarning='';
       if(previousBrowserData){
+        showRestoreStage('Geri alma işlemi','Hata oluştu. Ana sitenin önceki kişisel kayıtları geri yükleniyor…');
         try{await restoreMainSitePersonalStorage(previousBrowserData);}
         catch(rollbackError){console.error('Ana site kişisel kayıtları geri alınamadı:',rollbackError);rollbackWarning=' Ayrıca kişisel kayıtların otomatik geri alınması da başarısız oldu; ana site kayıtlarını kontrol et.';}
       }
-      toast((error.message||'Geri yükleme tamamlanamadı.')+rollbackWarning,'error');
+      showRestoreStage('Geri yükleme tamamlanamadı',restoreStage);
+      toast(restoreStage+' '+(error.message||'İşlem tamamlanamadı.')+rollbackWarning,'error');
     }finally{
       backupRestoreInProgress=false;
       if(restoreButton)restoreButton.disabled=!selectedBackup||((isSite||isLegacy)&&!state.apiEnabled);
