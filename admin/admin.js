@@ -2152,12 +2152,15 @@ Filter(){
     const button=$('#restore-full-backup'),summary=$('#restore-backup-summary');
     button.disabled=true;
     if(!file){summary.innerHTML='<span>Dosya durumu</span><b>Henüz dosya seçilmedi</b>';return;}
+    if(!file.size){summary.innerHTML='<span>Dosya doğrulanamadı</span><b class="state-warning">Seçilen dosya boş. Geçerli bir Perde yedeği seç.</b>';return;}
     if(file.size>10*1024*1024){summary.innerHTML='<span>Dosya doğrulanamadı</span><b class="state-warning">Yedek dosyası 10 MB sınırını aşıyor.</b>';return;}
     const reader=new FileReader();
     reader.onload=()=>{
       if(inspectionId!==backupInspectionId)return;
+      let data;
+      try{data=JSON.parse(String(reader.result||''));}
+      catch(_){summary.innerHTML='<span>Dosya doğrulanamadı</span><b class="state-warning">Dosya JSON biçiminde okunamadı. Dosyanın bozulmadığını ve Perde yedeği olduğunu kontrol et.</b>';return;}
       try{
-        const data=JSON.parse(String(reader.result||''));
         const info=validateBackupPayload(data);
         selectedBackup=data;
         const date=data.exportedAt&&!Number.isNaN(Date.parse(data.exportedAt))?new Date(data.exportedAt).toLocaleString('tr-TR'):'Tarih bilgisi yok';
@@ -2171,11 +2174,15 @@ Filter(){
         summary.innerHTML='<span>Dosya doğrulandı · '+escapeHtml(file.name)+'</span><b>'+escapeHtml(kind)+' · '+escapeHtml(details.join(' · '))+'</b><small class="helper-text">Yedek tarihi: '+escapeHtml(date)+' · İçerik ve kayıt biçimleri kontrol edildi.</small>';
         button.disabled=(info.isSite||info.isLegacy)&&!state.apiEnabled;
         if((info.isSite||info.isLegacy)&&!state.apiEnabled)summary.innerHTML+='<small class="helper-text">Sunucu yazma bağlantısı hazır değil; bu yedek şu an geri yüklenemiyor.</small>';
-      }catch(error){summary.innerHTML='<span>Dosya doğrulanamadı</span><b class="state-warning">'+escapeHtml(error.message)+'</b>';selectedBackup=null;}
+      }catch(error){summary.innerHTML='<span>Yedek içeriği geçersiz</span><b class="state-warning">'+escapeHtml(error.message)+'</b>';selectedBackup=null;}
     };
     reader.onerror=()=>{
       if(inspectionId!==backupInspectionId)return;
-      summary.innerHTML='<span>Dosya durumu</span><b class="state-warning">Dosya okunamadı.</b>';
+      summary.innerHTML='<span>Dosya okunamadı</span><b class="state-warning">Tarayıcı dosyaya erişemedi. Dosyayı yeniden seçmeyi dene.</b>';
+    };
+    reader.onabort=()=>{
+      if(inspectionId!==backupInspectionId)return;
+      summary.innerHTML='<span>Dosya okuma iptal edildi</span><b class="state-warning">Dosya doğrulaması tamamlanamadı. Yeniden seçebilirsin.</b>';
     };
     reader.readAsText(file);
   }
