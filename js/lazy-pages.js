@@ -16,7 +16,7 @@
     };
     const pageCache = new Map();
     const pageStyleCache = new Map();
-    const buildVersion = '20261127-lazy-pages-series-completion-v48';
+    const buildVersion = '20261127-lazy-pages-stats-syntax-fix-v49';
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
@@ -32,7 +32,7 @@
         'watch-page': './js/watch-page.js?v=20261125-watch-page-v4',
         player: './js/player-controls.js?v=20261127-player-series-tracking-v12',
         'seek-preview': './js/player-seek-preview.js?v=20261126-seek-preview-v1',
-        stats: './js/stats.js?v=20261127-stats-series-completion-v3',
+        stats: './js/stats.js?v=20261127-stats-series-completion-v4',
         library: './js/library-page.js?v=20261127-library-resume-v3'
     };
     const pageScriptRoutes = {
