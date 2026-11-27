@@ -2135,11 +2135,12 @@
       }
       setTimeout(()=>window.location.reload(),900);
     }catch(error){
+      let rollbackWarning='';
       if(previousBrowserData){
         try{await restoreMainSitePersonalStorage(previousBrowserData);}
-        catch(rollbackError){console.error('Ana site kişisel kayıtları geri alınamadı:',rollbackError);toast('Geri alma sırasında da hata oluştu. Ana site kişisel kayıtlarını ayrıca kontrol et.','error');}
+        catch(rollbackError){console.error('Ana site kişisel kayıtları geri alınamadı:',rollbackError);rollbackWarning=' Ayrıca kişisel kayıtların otomatik geri alınması da başarısız oldu; ana site kayıtlarını kontrol et.';}
       }
-      toast(error.message||'Geri yükleme tamamlanamadı.','error');
+      toast((error.message||'Geri yükleme tamamlanamadı.')+rollbackWarning,'error');
     }finally{
       backupRestoreInProgress=false;
       if(restoreButton)restoreButton.disabled=!selectedBackup||((isSite||isLegacy)&&!state.apiEnabled);
