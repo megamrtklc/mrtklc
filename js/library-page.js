@@ -16,11 +16,36 @@
         // Kayıtlı filmi açar; dizi ise son izlenen sezon ve bölüm konumunu geri yükler.
         resumeLibraryItem(entry) {
             if (!entry?.item) return;
+
             this.openWatchPage(entry.item);
-            if (entry.kind === 'series') {
-                this.selectedSeason = entry.season;
-                this.selectedEpisode = entry.episode;
-                this.currentEpisodePage = Math.floor((entry.episode - 1) / 8) + 1;
+            if (entry.kind !== 'series') return;
+
+            // Sayfa açılırken varsayılan 1. bölüm seçilir. Kütüphane kaydındaki
+            // son bölüm bilgisini aynı açılış akışında uygula.
+            const season = Math.max(1, Number(entry.season) || 1);
+            const episode = Math.max(1, Number(entry.episode) || 1);
+            this.selectedSeason = season;
+            this.selectedEpisode = episode;
+            this.currentEpisodePage = Math.floor((episode - 1) / 8) + 1;
+
+            // Alpine'ın bölüm URL'sini DOM'a işlemesini bekle; ardından video
+            // kaynağının doğru bölümle eşleştiğini garanti et. Otomatik oynatma
+            // yapma: kullanıcı oynat düğmesine kendisi basar.
+            const syncEpisodeSource = () => {
+                const video = document.getElementById('customVideoPlayer');
+                const url = this.getPlaybackUrl?.();
+                if (!video || !url || !this.isDirectVideoUrl?.(url)) return;
+                if (video.getAttribute('src') !== url) {
+                    video.pause();
+                    video.src = url;
+                    video.load();
+                }
+            };
+
+            if (typeof this.$nextTick === 'function') {
+                this.$nextTick(syncEpisodeSource);
+            } else {
+                Promise.resolve().then(syncEpisodeSource);
             }
         }
     };
