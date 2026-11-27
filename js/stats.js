@@ -28,7 +28,7 @@
                                 const item = this.catalog.find(entry => String(entry.id) === id);
                                 if (!item || item.type !== 'tv') return;
                                 let count = 0;
-                                Object.values(value?.watched || {}).forEach(list => { if (Array.isArray(list)) count += new Set(list.map(Number)).size; });
+                                Object.values(value?.watched || {}).forEach(list => { if (Array.isArray(list)) count += new Set(list.map(Number).filter(number => Number.isInteger(number) && number > 0)).size; });
                                 watchedEpisodes += count;
                                 if (count || value?.last?.updatedAt) seriesItems.push({ item, watchedCount: count, savedAt: Number(value?.last?.updatedAt) || 0 });
                             });
