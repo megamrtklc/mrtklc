@@ -1039,6 +1039,18 @@
     if(label)label.textContent=count+' yapım seçildi';if(bar)bar.hidden=count===0;
     if(button)button.disabled=count===0||count>=state.catalog.length;
   }
+  function removeCatalogReferences(nextData,ids){
+    const removed=ids instanceof Set?ids:new Set([String(ids)]);
+    if(Array.isArray(nextData.collections))nextData.collections=nextData.collections.map(collection=>({...collection,items:(collection.items||[]).filter(id=>!removed.has(String(id)))}));
+    if(nextData.homepageConfig){
+      const config={...nextData.homepageConfig};
+      ['heroSlides','desktopHeroSlides','mobileHeroSlides'].forEach(field=>{
+        if(Array.isArray(config[field]))config[field]=config[field].filter(slide=>!removed.has(String(typeof slide==='object'?slide?.id:slide)));
+      });
+      nextData.homepageConfig=config;
+    }
+    return nextData;
+  }
   async function deleteSelectedContent(){
     if(!canWrite())return;
     const ids=new Set([...state.selectedCatalogIds].filter(id=>state.catalog.some(item=>String(item.id)===id)));
@@ -1046,8 +1058,7 @@
     const names=[...ids].map(id=>titleOf(state.catalog.find(item=>String(item.id)===id))).slice(0,5),more=ids.size>5?' ve '+(ids.size-5)+' yapım daha':'';
     if(!confirm(ids.size+' yapımı katalogdan silmek istediğine emin misin?\n\n'+names.join(', ')+more+'\n\nBu işlem yayına yansır ve geri alınamaz.'))return;
     const nextData={...state.data,catalog:state.catalog.filter(item=>!ids.has(String(item.id)))};
-    if(Array.isArray(nextData.collections))nextData.collections=nextData.collections.map(collection=>({...collection,items:(collection.items||[]).filter(id=>!ids.has(String(id)))}));
-    if(nextData.homepageConfig?.heroSlides)nextData.homepageConfig={...nextData.homepageConfig,heroSlides:nextData.homepageConfig.heroSlides.filter(slide=>!ids.has(String(slide.id)))};
+    removeCatalogReferences(nextData,ids);
     state.selectedCatalogIds.clear();
     const ok=await persist(nextData,ids.size+' yapım silindi; koleksiyon ve vitrin bağlantıları temizlendi.');
     if(!ok)ids.forEach(id=>state.selectedCatalogIds.add(id));updateCatalogBulkBar();
@@ -1058,8 +1069,7 @@
     if(state.catalog.length<=1){toast('Katalogda en az bir yapım kalmalı.');return;}
     if(!confirm('“'+titleOf(item)+'” kaydını katalogdan silmek istiyor musun? Bu işlem yayına yansır.'))return;
     const nextData={...state.data,catalog:state.catalog.filter(x=>String(x.id)!==String(id))};
-    if(Array.isArray(nextData.collections))nextData.collections=nextData.collections.map(c=>({...c,items:(c.items||[]).filter(x=>String(x)!==String(id))}));
-    if(nextData.homepageConfig?.heroSlides)nextData.homepageConfig={...nextData.homepageConfig,heroSlides:nextData.homepageConfig.heroSlides.filter(x=>String(x.id)!==String(id))};
+    removeCatalogReferences(nextData,id);
     await persist(nextData,'Yapım silindi; koleksiyon ve vitrin bağlantıları temizlendi.');
   }
   function openCollectionEditor(id){
