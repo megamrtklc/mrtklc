@@ -256,14 +256,19 @@
   }
   function renderMissingTrailers(){
     const query=($('#missing-trailer-search')?.value||'').trim().toLocaleLowerCase('tr');
-    const missing=state.catalog.filter(item=>!String(item.trailerUrl||item.tmdbTrailerUrl||'').trim())
-      .filter(item=>!query||titleOf(item).toLocaleLowerCase('tr').includes(query))
-      .reverse();
+    const missing=[];
+    let missingCount=0;
+    state.catalog.forEach(item=>{
+      if(String(item.trailerUrl||item.tmdbTrailerUrl||'').trim())return;
+      missingCount++;
+      if(!query||titleOf(item).toLocaleLowerCase('tr').includes(query))missing.push(item);
+    });
+    missing.reverse();
     const pages=Math.max(1,Math.ceil(missing.length/state.missingTrailerPageSize));
     state.missingTrailerPage=Math.min(state.missingTrailerPage,pages);
     const rows=missing.slice((state.missingTrailerPage-1)*state.missingTrailerPageSize,state.missingTrailerPage*state.missingTrailerPageSize);
     $('#missing-trailer-rows').innerHTML=rows.length?rows.map(item=>'<tr><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt=""><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+escapeHtml(item.director||item.tmdbDirector||'Yönetmen bilgisi yok')+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><span class="trailer-missing-status">Fragman eklenmemiş</span></td><td class="row-actions"><button class="row-action" data-missing-trailer-edit="'+escapeHtml(item.id)+'">Düzenle</button></td></tr>').join(''):'<tr><td colspan="5" class="empty-cell">'+(query?'Aramayla eşleşen fragmansız yapım bulunamadı.':'Harika! Tüm yapımlarda fragman bağlantısı mevcut.')+'</td></tr>';
-    $('#missing-trailer-count').textContent=String(state.catalog.filter(item=>!String(item.trailerUrl||item.tmdbTrailerUrl||'').trim()).length);
+    $('#missing-trailer-count').textContent=String(missingCount);
     $('#missing-trailer-result-count').textContent=missing.length.toLocaleString('tr-TR')+' yapım';
     $('#missing-trailer-page-info').textContent='Sayfa '+state.missingTrailerPage+' / '+pages;
     $('#missing-trailer-prev').disabled=state.missingTrailerPage<=1;
