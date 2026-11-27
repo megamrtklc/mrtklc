@@ -34,16 +34,31 @@
       throw new Error('Yedek tarayıcı verisi geçersiz.');
     }
     const entries = Object.entries(incoming);
-    if (entries.some(([key, value]) =>
-      typeof key !== 'string' ||
-      !PREFIXES.some(prefix => key.startsWith(prefix)) ||
-      typeof value !== 'string'
-    )) {
-      throw new Error('Yedekte izin verilmeyen kayıt anahtarı veya veri biçimi var.');
+    if (entries.length > 10000) throw new Error('Yedekte izin verilenden fazla tarayıcı kaydı var.');
+    let totalSize = 0;
+    if (entries.some(([key, value]) => {
+      if (
+        typeof key !== 'string' ||
+        key.length > 200 ||
+        !PREFIXES.some(prefix => key.startsWith(prefix)) ||
+        typeof value !== 'string'
+      ) return true;
+      totalSize += key.length + value.length;
+      return totalSize > 8 * 1024 * 1024;
+    })) {
+      throw new Error('Yedekte izin verilmeyen kayıt anahtarı, veri biçimi veya boyut var.');
     }
     if (!previous || previous.error) throw new Error('Geri alma için önceki kayıt kopyası bulunamadı.');
     Object.keys(previous).forEach(key => storage.removeItem(key));
     entries.forEach(([key, value]) => storage.setItem(key, value));
+    const written = readMatchingStorage(storage);
+    if (written.error) throw new Error(written.error);
+    if (
+      Object.keys(written).length !== entries.length ||
+      entries.some(([key, value]) => written[key] !== value)
+    ) {
+      throw new Error('Tarayıcı kayıtları yazıldı ancak doğrulama eşleşmedi.');
+    }
   }
 
   function respond(target, type, requestId, payload) {
