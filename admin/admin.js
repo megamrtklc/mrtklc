@@ -2124,12 +2124,12 @@ Filter(){
     const isPersonal=data.format==='perde-personal-backup'&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
     const isLegacy=data.format==='perde-full-backup'&&data.siteData&&typeof data.siteData==='object'&&!Array.isArray(data.siteData)&&Array.isArray(data.siteData.catalog)&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
     if(!isSite&&!isPersonal&&!isLegacy)throw new Error('Bu dosya geçerli bir Perde yedek dosyası değil.');
+    let movieCount=0;
     if(isSite||isLegacy){
       const catalog=data.siteData.catalog;
       if(catalog.length<1||catalog.length>5000||JSON.stringify(data.siteData).length>2000000)throw new Error('Yedek katalog boyutu veya kayıt sayısı sınır dışında.');
       const ids=new Set();
-      var movieCount=0;
-      for(const item of catalog){
+            for(const item of catalog){
         if(!item||typeof item!=='object'||Array.isArray(item))throw new Error('Katalog içinde geçersiz yapım kaydı bulundu.');
         const id=String(item.id??'').trim();
         if(!id||typeof item.title!=='string'||!item.title.trim())throw new Error('Yedekte kimliği veya yapım adı eksik kayıt bulundu.');
