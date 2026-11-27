@@ -29,6 +29,25 @@
     return values;
   }
 
+  function validateStorageSnapshot(values, label) {
+    if (!values || typeof values !== 'object' || Array.isArray(values)) {
+      throw new Error(label + ' geri alma kopyası geçersiz.');
+    }
+    const entries = Object.entries(values);
+    let totalSize = 0;
+    if (entries.length > 10000 || entries.some(([key, value]) => {
+      if (
+        key.length > 200 ||
+        !PREFIXES.some(prefix => key.startsWith(prefix)) ||
+        typeof value !== 'string'
+      ) return true;
+      totalSize += key.length + value.length;
+      return totalSize > 8 * 1024 * 1024;
+    })) {
+      throw new Error(label + ' geri alma kopyası güvenli aktarım sınırlarını aşıyor.');
+    }
+  }
+
   function replaceMatchingStorage(storage, incoming, previous) {
     if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) {
       throw new Error('Yedek tarayıcı verisi geçersiz.');
@@ -96,6 +115,8 @@
         previousLocal = readMatchingStorage(window.localStorage);
         previousSession = readMatchingStorage(window.sessionStorage);
         if (previousLocal.error || previousSession.error) throw new Error(previousLocal.error || previousSession.error);
+        validateStorageSnapshot(previousLocal, 'localStorage');
+        validateStorageSnapshot(previousSession, 'sessionStorage');
         replaceMatchingStorage(window.localStorage, data.localStorage || {}, previousLocal);
         replaceMatchingStorage(window.sessionStorage, data.sessionStorage || {}, previousSession);
         respond(event.source, 'PERDE_BACKUP_RESTORE_RESPONSE', event.data.requestId, {
