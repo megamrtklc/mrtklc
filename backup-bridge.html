@@ -88,23 +88,29 @@
           previousBrowserData: { localStorage: previousLocal, sessionStorage: previousSession }
         });
       } catch (error) {
+        const rollbackErrors = [];
+        const rollbackStorage = (storage, previous) => {
+          if (!previous || previous.error) return;
+          const current = readMatchingStorage(storage);
+          if (current.error) throw new Error(current.error);
+          Object.keys(current).forEach(key => storage.removeItem(key));
+          Object.entries(previous).forEach(([key, value]) => storage.setItem(key, value));
+        };
         try {
-          if (previousLocal && !previousLocal.error) {
-            Object.keys(readMatchingStorage(window.localStorage)).forEach(key => window.localStorage.removeItem(key));
-            Object.entries(previousLocal).forEach(([key, value]) => window.localStorage.setItem(key, value));
-          }
-          if (previousSession && !previousSession.error) {
-            Object.keys(readMatchingStorage(window.sessionStorage)).forEach(key => window.sessionStorage.removeItem(key));
-            Object.entries(previousSession).forEach(([key, value]) => window.sessionStorage.setItem(key, value));
-          }
+          rollbackStorage(window.localStorage, previousLocal);
         } catch (rollbackError) {
-          respond(event.source, 'PERDE_BACKUP_RESTORE_RESPONSE', event.data.requestId, {
-            error: 'Geri yükleme başarısız; otomatik geri alma da tamamlanamadı: ' + String(rollbackError && rollbackError.message || rollbackError)
-          });
-          return;
+          rollbackErrors.push('localStorage: ' + String(rollbackError && rollbackError.message || rollbackError));
         }
+        try {
+          rollbackStorage(window.sessionStorage, previousSession);
+        } catch (rollbackError) {
+          rollbackErrors.push('sessionStorage: ' + String(rollbackError && rollbackError.message || rollbackError));
+        }
+        const originalError = String(error && error.message || error);
         respond(event.source, 'PERDE_BACKUP_RESTORE_RESPONSE', event.data.requestId, {
-          error: String(error && error.message || error)
+          error: rollbackErrors.length
+            ? 'Geri yükleme başarısız: ' + originalError + '. Otomatik geri alma sorunu: ' + rollbackErrors.join(' | ')
+            : originalError
         });
       }
     }
