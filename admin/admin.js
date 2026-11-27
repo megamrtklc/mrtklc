@@ -449,9 +449,39 @@
   const RATING_LABELS=['0–4,9','5–5,9','6–6,9','7–7,9','8–8,9','9–10'];
   function renderAnalytics(){
     const catalog=Array.isArray(state.catalog)?state.catalog:[];
-    const total=catalog.length,movies=catalog.filter(x=>!isSeries(x)).length,series=total-movies;
-    const ratings=catalog.map(getItemRating).filter(n=>Number.isFinite(n)&&n>0&&n<=10);
-    const average=ratings.length?ratings.reduce((a,b)=>a+b,0)/ratings.length:0;
+    const total=catalog.length;
+    const now=new Date(),daysAgo=days=>new Date(now.getTime()-days*86400000);
+    const cutoff30=daysAgo(30),cutoff90=daysAgo(90);
+    const monthNames=Array.from({length:6},(_,i)=>{const d=new Date(now.getFullYear(),now.getMonth()-(5-i),1);return {key:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),label:d.toLocaleDateString('tr-TR',{month:'short'})+' '+String(d.getFullYear()).slice(-2)};});
+    const monthCounts=Object.fromEntries(monthNames.map(month=>[month.key,0]));
+    const yearCounts={},genreCounts={},annualCounts={};
+    const ratingRows=RATING_LABELS.map(name=>[name,0]);
+    let movies=0,ratingSum=0,ratedCount=0,added30=0,added90=0,datedCount=0;
+    catalog.forEach(item=>{
+      if(!isSeries(item))movies++;
+      const year=yearOf(item);
+      if(year!=='—'&&Number(year)>=1880&&Number(year)<=2100)yearCounts[year]=(yearCounts[year]||0)+1;
+      getItemGenres(item).forEach(name=>{genreCounts[name]=(genreCounts[name]||0)+1;});
+      const rating=getItemRating(item);
+      if(Number.isFinite(rating)&&rating>0&&rating<=10){
+        ratingSum+=rating;ratedCount++;
+        const index=rating<5?0:rating<6?1:rating<7?2:rating<8?3:rating<9?4:5;
+        ratingRows[index][1]++;
+      }
+      if(item.addedAt){
+        const date=new Date(item.addedAt);
+        if(!Number.isNaN(date.getTime())){
+          datedCount++;
+          if(date>=cutoff30&&date<=now)added30++;
+          if(date>=cutoff90&&date<=now)added90++;
+          const monthKey=date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0');
+          if(Object.prototype.hasOwnProperty.call(monthCounts,monthKey))monthCounts[monthKey]++;
+          const yearKey=date.getFullYear();
+          annualCounts[yearKey]=(annualCounts[yearKey]||0)+1;
+        }
+      }
+    });
+    const series=total-movies,average=ratedCount?ratingSum/ratedCount:0;
     const setText=(selector,value)=>{const el=$(selector);if(el)el.textContent=value;};
     setText('#analytics-total',total.toLocaleString('tr-TR'));
     setText('#analytics-movies',movies.toLocaleString('tr-TR'));
@@ -459,7 +489,7 @@
     setText('#analytics-average',average?average.toFixed(1).replace('.',',')+'/10':'—');
     setText('#analytics-movie-share',total?Math.round(movies/total*100)+'% katalog':'Katalog boş');
     setText('#analytics-series-share',total?Math.round(series/total*100)+'% katalog':'Katalog boş');
-    setText('#analytics-rated-count',ratings.length+' / '+total+' yapımda puan var');
+    setText('#analytics-rated-count',ratedCount+' / '+total+' yapımda puan var');
     const drawBars=(selector,rows,empty,maxOverride,action)=>{
       const root=$(selector);if(!root)return;
       const max=Math.max(1,maxOverride||0,...rows.map(row=>row[1]));
@@ -471,45 +501,32 @@
     drawBars('#type-chart',[['Film',movies],['Dizi',series]],'Henüz katalog kaydı yok.');
     const typeBalance=$('#analytics-type-balance');
     if(typeBalance)typeBalance.innerHTML='<span><i class="analytics-dot movie"></i>Film <b>'+movies+'</b></span><span><i class="analytics-dot series"></i>Dizi <b>'+series+'</b></span>';
-    const yearCounts={};
-    catalog.forEach(item=>{const y=yearOf(item);if(y!=='—'&&Number(y)>=1880&&Number(y)<=2100)yearCounts[y]=(yearCounts[y]||0)+1;});
     const yearRows=Object.entries(yearCounts).sort((a,b)=>Number(b[0])-Number(a[0]));
     const yearMore=$('#year-chart-more'),yearAll=$('#year-chart-all');
     const expandedYears=yearMore?.dataset.expanded==='true';
     drawBars('#year-chart',yearRows.slice(0,expandedYears?12:6),'Yapım yılı bilgisi bulunamadı.',0,'year');
     if(yearMore){yearMore.hidden=yearRows.length<=6;yearMore.textContent=expandedYears?'Daha az göster':'Daha fazla göster';yearMore.setAttribute('aria-expanded',String(expandedYears));}
     if(yearAll)yearAll.hidden=yearRows.length<=12;
-    const now=new Date();
-    const datedCatalog=catalog.map(item=>({item,date:item.addedAt?new Date(item.addedAt):null})).filter(row=>row.date&&!Number.isNaN(row.date.getTime()));
-    const daysAgo=days=>new Date(now.getTime()-days*86400000);
-    const added30=datedCatalog.filter(row=>row.date>=daysAgo(30)&&row.date<=now).length;
-    const added90=datedCatalog.filter(row=>row.date>=daysAgo(90)&&row.date<=now).length;
-    const undatedCount=total-datedCatalog.length;
     setText('#catalog-added-30',String(added30));
     setText('#catalog-added-90',String(added90));
-    setText('#catalog-undated',undatedCount.toLocaleString('tr-TR')+' yapımın eklenme tarihi bilinmiyor');
-    const monthNames=Array.from({length:6},(_,i)=>{const d=new Date(now.getFullYear(),now.getMonth()-(5-i),1);return {key:d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'),label:d.toLocaleDateString('tr-TR',{month:'short'})+' '+String(d.getFullYear()).slice(-2)};});
-    const monthCounts=monthNames.map(month=>[month.label,datedCatalog.filter(row=>row.date.getFullYear()+'-'+String(row.date.getMonth()+1).padStart(2,'0')===month.key).length]);
-    if(datedCatalog.length)drawBars('#catalog-monthly-chart',monthCounts,'Henüz tarihli ekleme bulunmuyor.');else{const monthlyRoot=$('#catalog-monthly-chart');if(monthlyRoot)monthlyRoot.innerHTML='<small class="analytics-empty">Eski kayıtların eklenme tarihleri tutulmadığı için aylık geçmiş henüz oluşmadı.</small>';}
-    const annualCounts={};
-    datedCatalog.forEach(row=>{const year=row.date.getFullYear();annualCounts[year]=(annualCounts[year]||0)+1;});
+    setText('#catalog-undated',(total-datedCount).toLocaleString('tr-TR')+' yapımın eklenme tarihi bilinmiyor');
+    const monthRows=monthNames.map(month=>[month.label,monthCounts[month.key]]);
+    if(datedCount)drawBars('#catalog-monthly-chart',monthRows,'Henüz tarihli ekleme bulunmuyor.');
+    else{const monthlyRoot=$('#catalog-monthly-chart');if(monthlyRoot)monthlyRoot.innerHTML='<small class="analytics-empty">Eski kayıtların eklenme tarihleri tutulmadığı için aylık geçmiş henüz oluşmadı.</small>';}
     const annualRows=Object.entries(annualCounts).sort((a,b)=>Number(b[0])-Number(a[0])).slice(0,6);
-    if(annualRows.length)drawBars('#catalog-annual-chart',annualRows,'Henüz yıllık ekleme verisi bulunmuyor.');else{const annualRoot=$('#catalog-annual-chart');if(annualRoot)annualRoot.innerHTML='<small class="analytics-empty">Yıllık rapor, yeni kayıtların eklenme tarihleri kaydedildikçe oluşacak.</small>';}
-    const genreCounts={};
-    catalog.forEach(item=>getItemGenres(item).forEach(name=>{genreCounts[name]=(genreCounts[name]||0)+1;}));
+    if(annualRows.length)drawBars('#catalog-annual-chart',annualRows,'Henüz yıllık ekleme verisi bulunmuyor.');
+    else{const annualRoot=$('#catalog-annual-chart');if(annualRoot)annualRoot.innerHTML='<small class="analytics-empty">Yıllık rapor, yeni kayıtların eklenme tarihleri kaydedildikçe oluşacak.</small>';}
     const genreRows=Object.entries(genreCounts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'tr'));
     const genreMore=$('#genre-chart-more'),genreAll=$('#genre-chart-all');
     const expandedGenres=genreMore?.dataset.expanded==='true';
     drawBars('#genre-chart',genreRows.slice(0,expandedGenres?12:6),'Tür etiketi bulunan kayıt yok.',0,'genre');
     if(genreMore){genreMore.hidden=genreRows.length<=6;genreMore.textContent=expandedGenres?'Daha az göster':'Daha fazla göster';genreMore.setAttribute('aria-expanded',String(expandedGenres));}
     if(genreAll)genreAll.hidden=genreRows.length<=12;
-    const ratingRows=RATING_LABELS.map((name,index)=>[name,0]);
-    ratings.forEach(n=>{const index=n<5?0:n<6?1:n<7?2:n<8?3:n<9?4:5;ratingRows[index][1]++;});
     const ratingRoot=$('#rating-chart');
     if(ratingRoot)ratingRoot.innerHTML=ratingRows.map(([name,count],index)=>'<button type="button" class="bar-row rating-bar-row analytics-bar-action" data-report-action="rating" data-report-value="'+index+'" aria-label="'+escapeHtml(name)+' puan aralığındaki '+count+' yapımı görüntüle"><span>'+escapeHtml(name)+'</span><span class="bar-track"><i class="bar-fill" style="width:'+(count/Math.max(1,...ratingRows.map(row=>row[1]))*100)+'%"></i></span><b>'+count+'</b><i class="bar-action-arrow" aria-hidden="true">›</i></button>').join('');
     const bestYear=yearRows.slice().sort((a,b)=>b[1]-a[1])[0],bestGenre=genreRows[0];
     setText('#analytics-insight-title',total?('Arşivinde '+total+' yapım bulunuyor'):'Arşivin henüz boş');
-    setText('#analytics-insight-copy',total?((bestYear?'En yoğun yapım yılı '+bestYear[0]+' ('+bestYear[1]+' kayıt). ':'')+(bestGenre?'En sık görülen tür '+bestGenre[0]+' ('+bestGenre[1]+' kayıt). ':'')+(ratings.length?'Puan ortalaması '+average.toFixed(1).replace('.',',')+'/10.':'Henüz puan verisi bulunmuyor.')):'İlk yapımlarını eklediğinde tür, yıl ve puan analizleri burada otomatik oluşacak.');
+    setText('#analytics-insight-copy',total?((bestYear?'En yoğun yapım yılı '+bestYear[0]+' ('+bestYear[1]+' kayıt). ':'')+(bestGenre?'En sık görülen tür '+bestGenre[0]+' ('+bestGenre[1]+' kayıt). ':'')+(ratedCount?'Puan ortalaması '+average.toFixed(1).replace('.',',')+'/10.':'Henüz puan verisi bulunmuyor.')):'İlk yapımlarını eklediğinde tür, yıl ve puan analizleri burada otomatik oluşacak.');
   }
   function openAnalyticsDetail(kind,value){
     state.analyticsDetail={kind,value:value??null};
