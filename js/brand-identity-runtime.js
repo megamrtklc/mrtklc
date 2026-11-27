@@ -6,7 +6,7 @@
  */
 
 (function(){
- var fallback={"brandName":"CINEVERSE","shortName":"CINE","slogan":"Film ve dizi arşivinin kişisel merkezi","pageTitle":"CINEVERSE","metaDescription":"CINEVERSE ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.","copyright":"© 2026 CINEVERSE. Tüm hakları saklıdır.","adminSubtitle":"CONTROL ROOM","scopes":{"site":true,"admin":true,"login":true,"seo":true}};
+ var fallback={"brandName":"Perde Film","shortName":"Perde","slogan":"Film ve dizi arşivinin kişisel merkezi","pageTitle":"Perde Film","metaDescription":"Perde Film ile film ve dizileri keşfet, izleme listeni oluştur ve izleme ilerlemeni takip et.","copyright":"© 2026 PERDE FILM. Tüm hakları saklıdır.","adminSubtitle":"YÖNETİM PANELİ","scopes":{"site":true,"admin":true,"login":true,"seo":true}};
  function apply(config){
   config=Object.assign({},fallback,config||{});
   if(config.scopes&&config.scopes.site===false)return;
