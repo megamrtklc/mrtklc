@@ -27,10 +27,16 @@
                             Object.entries(episodeMap).forEach(([id, value]) => {
                                 const item = this.catalog.find(entry => String(entry.id) === id);
                                 if (!item || item.type !== 'tv') return;
+                                const watchedBySeason = value?.watched && typeof value.watched === 'object' && !Array.isArray(value.watched) ? value.watched : {};
                                 let count = 0;
-                                Object.values(value?.watched || {}).forEach(list => { if (Array.isArray(list)) count += new Set(list.map(Number).filter(number => Number.isInteger(number) && number > 0)).size; });
+                                Object.values(watchedBySeason).forEach(list => {
+                                    if (Array.isArray(list)) count += new Set(list.map(Number).filter(number => Number.isInteger(number) && number > 0)).size;
+                                });
                                 watchedEpisodes += count;
-                                if (count || value?.last?.updatedAt) seriesItems.push({ item, watchedCount: count, savedAt: Number(value?.last?.updatedAt) || 0 });
+                                const total = Math.max(0, Number(item.episodes) || 0);
+                                const percent = total ? Math.min(100, Math.round(count / total * 100)) : 0;
+                                const completed = !!total && count >= total;
+                                if (count || value?.last?.updatedAt) seriesItems.push({ item, watchedCount: count, total, percent, completed, savedAt: Number(value?.last?.updatedAt) || 0 });
                             });
                             const completed = progressItems.filter(entry => entry.percent >= 90);
                             const inProgress = progressItems.filter(entry => entry.percent > 0 && entry.percent < 90);
@@ -55,10 +61,10 @@
                             const monthlyActivity = monthKeys.map(entry => ({label:entry.label,count:activityCounts.get(entry.key)||0}));
                             const maxActivity = Math.max(1,...monthlyActivity.map(entry => entry.count));
                             monthlyActivity.forEach(entry => entry.percent = entry.count/maxActivity*100);
-                            const trackedSeries = seriesItems.length;
+                            const trackedSeries = seriesItems.length;\n                            const completedSeries = seriesItems.filter(entry => entry.completed).length;
                             const totalTracked = progressItems.length + trackedSeries;
                             return {
-                                completedMovies:completed.length,inProgressMovies:inProgress.length,watchedEpisodes,savedTimeLabel,
+                                completedMovies:completed.length,inProgressMovies:inProgress.length,completedSeries,watchedEpisodes,savedTimeLabel,
                                 progressItems:progressItems.slice(0,8),topGenres,trackedSeries,totalTracked,
                                 watchlistCount:this.watchlist.length,monthlyActivity,
                                 contentBreakdown:[{label:'Filmler',count:progressItems.length},{label:'Diziler',count:trackedSeries}]
