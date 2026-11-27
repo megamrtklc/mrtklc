@@ -27,6 +27,7 @@ jobs:
           node tests/admin-markup-validation.mjs
           node tests/admin-action-contracts.mjs
           node --check admin/admin.js
+          node --check admin/admin.js
           node --check app.js
           node --check app.min.js
           node --check js/stats.js
