@@ -1348,8 +1348,17 @@ input,select,textarea,.field input,.field select,.field textarea,.catalog-toolba
  .dashboard-main-grid,.dashboard-bottom-grid{grid-template-columns:minmax(0,1fr)}
  .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  .hf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .panel-card,.dashboard-card{min-width:0}
- .page-heading,.panel-heading{min-width:0}
+ .catalog-toolbar{grid-template-columns:minmax(0,1fr) repeat(2,minmax(110px,.55fr));gap:9px}
+ .catalog-toolbar>*{min-width:0;max-width:100%}
+ .catalog-toolbar .search-box{grid-column:1/-1}
+ .catalog-toolbar .result-count{white-space:normal;align-self:center}
+ .homepage-settings{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .homepage-editor,.panel-card,.dashboard-card{min-width:0}
+ .page-heading,.panel-heading{min-width:0;flex-wrap:wrap}
+ .page-heading>div{min-width:0;flex:1 1 260px}
+ .page-heading>.primary-button{flex:0 0 auto;white-space:nowrap}
+ .main-content,.view,.panel-card,.dashboard-card{min-width:0}
+ .catalog-table-wrap,.table-wrap{max-width:100%;overflow-x:auto}
 }
 @media(max-width:700px){
  .main-content{padding-inline:14px}
