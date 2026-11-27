@@ -33,20 +33,27 @@
   const yearOf = item => Number(item.year || item.releaseYear || (item.tmdbReleaseDate || '').slice(0,4)) || '—';
   const collectionList = () => Array.isArray(state.data?.collections) ? state.data.collections : [];
   const franchiseList = () => Array.isArray(state.data?.franchises) ? state.data.franchises : [];
-  function countDuplicateContentGroups(catalog){
-    const groups=new Map();
-    (Array.isArray(catalog)?catalog:[]).forEach(item=>{
-      if(!item||typeof item!=='object'||Array.isArray(item))return;
+  function analyzeCatalogIntegrity(catalog){
+    const ids=new Set(),duplicateIds=new Set(),contentGroups=new Map();
+    let validCount=0,missingTitle=0,missingId=0;
+    for(const item of catalog){
+      if(!item||typeof item!=='object'||Array.isArray(item))continue;
+      validCount++;
+      const id=String(item.id??item.tmdbId??'').trim();
+      if(id){if(ids.has(id))duplicateIds.add(id);else ids.add(id);}
+      if(!String(item.title??item.name??'').trim())missingTitle++;
+      if(!id)missingId++;
       const tmdbId=String(item.tmdbId||'').trim();
       const imdbId=String(item.imdbId||item.tmdbImdbId||'').trim().toLowerCase();
       const title=normalizeContentTitle(titleOf(item));
       const type=(isSeries(item)||item.media_type==='tv')?'tv':'movie';
       const year=String(item.year||item.releaseYear||(item.tmdbReleaseDate||item.release_date||item.first_air_date||'').slice(0,4)||'').trim();
       const key=tmdbId?'tmdb:'+tmdbId:(imdbId?'imdb:'+imdbId:(title&&year?'title:'+type+':'+title+':'+year:''));
-      if(!key)return;
-      groups.set(key,(groups.get(key)||0)+1);
-    });
-    return [...groups.values()].filter(count=>count>1).length;
+      if(key)contentGroups.set(key,(contentGroups.get(key)||0)+1);
+    }
+    let duplicateContentCount=0;
+    for(const count of contentGroups.values())if(count>1)duplicateContentCount++;
+    return {validCount,duplicateCount:duplicateIds.size,duplicateContentCount,missingTitle,missingId};
   }
   const toast = (message,type='warning') => { const el=$('#toast'); if(!el)return; const title=$('#toast-title'),body=$('#toast-message'),icon=el.querySelector('.toast-icon'); const safeType=['success','warning','error','info'].includes(type)?type:'warning'; const config={success:{title:'İŞLEM BAŞARILI',icon:'✓',duration:2600,role:'status'},warning:{title:'İŞLEM BAŞARISIZ',icon:'!',duration:4800,role:'alert'},error:{title:'SİSTEM HATASI',icon:'×',duration:5200,role:'alert'},info:{title:'BİLGİLENDİRME',icon:'i',duration:3800,role:'status'}}[safeType]; if(title)title.textContent=config.title; if(body)body.textContent=String(message||''); if(icon)icon.textContent=config.icon; el.dataset.type=safeType; el.setAttribute('role',config.role); el.setAttribute('aria-live',config.role==='alert'?'assertive':'polite'); document.body.classList.add('has-admin-toast'); el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>{el.classList.remove('show');document.body.classList.remove('has-admin-toast');},config.duration); };
   async function fetchWithTimeout(url,options={},timeoutMs=15000){
@@ -2015,17 +2022,13 @@ Filter(){
       const elapsed=Math.round(performance.now()-startedAt);
       if(!payload?.data||!Array.isArray(payload.data.catalog))throw new Error('Katalog yanıtı beklenen JSON yapısında değil.');
       const catalog=payload.data.catalog;
-      const valid=catalog.filter(item=>item&&typeof item==='object'&&!Array.isArray(item));
-      const ids=valid.map(item=>String(item.id??item.tmdbId??'').trim()).filter(Boolean);
-      const duplicateCount=new Set(ids.filter((id,index)=>ids.indexOf(id)!==index)).size;
-      const duplicateContentCount=countDuplicateContentGroups(valid);
-      const missingTitle=valid.filter(item=>!String(item.title??item.name??'').trim()).length;
-      const missingId=valid.filter(item=>!String(item.id??item.tmdbId??'').trim()).length;
+      const integrity=analyzeCatalogIntegrity(catalog);
+      const {validCount,duplicateCount,duplicateContentCount,missingTitle,missingId}=integrity;
       const jsonBytes=new Blob([JSON.stringify(payload.data)]).size;
-      const clean=valid.length===catalog.length&&duplicateCount===0&&duplicateContentCount===0&&missingTitle===0&&missingId===0;
+      const clean=validCount===catalog.length&&duplicateCount===0&&duplicateContentCount===0&&missingTitle===0&&missingId===0;
       setSystemStatus('system-api-status','system-api-detail','Bağlandı','/api/catalog yanıt süresi: '+elapsed+' ms.','good');
       $('#system-catalog-count').textContent=catalog.length+' yapım';
-      $('#system-valid-count').textContent=valid.length+' kayıt';
+      $('#system-valid-count').textContent=validCount+' kayıt';
       $('#system-duplicate-count').textContent=duplicateCount+' kimlik';
       $('#system-duplicate-content-count').textContent=duplicateContentCount+' grup';
       $('#system-missing-title').textContent=missingTitle+' yapım';
