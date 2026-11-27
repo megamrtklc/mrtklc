@@ -382,6 +382,13 @@
       return '<article class="collection-card"><div class="collection-card-top"><span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Pasif':'Yayında')+'</span><span class="collection-id">'+escapeHtml(item.id||'')+'</span></div><h3>'+escapeHtml(item.title||'İsimsiz seri')+'</h3><p>'+escapeHtml(item.description||'Açıklama eklenmemiş')+'</p><strong>'+count+'</strong><small>Film kaydı</small><div class="collection-actions"><button class="row-action" data-franchise-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-franchise-delete="'+escapeHtml(item.id)+'">Sil</button></div></article>';
     }).join(''):'<article class="panel-card empty-state"><span>▤</span><h2>Henüz film serisi bulunamadı</h2><p>Yeni seri oluşturarak mevcut filmleri bir araya getirebilirsin.</p></article>';
   }
+  let franchiseFilmCache={catalog:null,films:null};
+  function getFranchiseFilmOptions(){
+    if(franchiseFilmCache.catalog!==state.catalog){
+      franchiseFilmCache={catalog:state.catalog,films:state.catalog.filter(x=>!isSeries(x)).sort((a,b)=>yearOf(a)-yearOf(b))};
+    }
+    return franchiseFilmCache.films;
+  }
   function openFranchiseEditor(id){
     if(!canWrite())return;
     const item=franchiseList().find(x=>String(x.id)===String(id));
@@ -390,7 +397,7 @@
     $('#franchise-backdrop').value=item?.backdrop||item?.poster||'';
     $('#franchise-active').checked=item?.active!==false;
     const selected=new Set((item?.items||[]).map(String));
-    $('#franchise-items').innerHTML=state.catalog.filter(x=>!isSeries(x)).sort((a,b)=>yearOf(a)-yearOf(b)).map(x=>'<label class="collection-pick"><input type="checkbox" value="'+escapeHtml(x.id)+'" '+(selected.has(String(x.id))?'checked':'')+'><span><b>'+escapeHtml(titleOf(x))+'</b><small>Film · '+escapeHtml(yearOf(x))+'</small></span></label>').join('');
+    $('#franchise-items').innerHTML=getFranchiseFilmOptions().map(x=>'<label class="collection-pick"><input type="checkbox" value="'+escapeHtml(x.id)+'" '+(selected.has(String(x.id))?'checked':'')+'><span><b>'+escapeHtml(titleOf(x))+'</b><small>Film · '+escapeHtml(yearOf(x))+'</small></span></label>').join('');
     $('#franchise-search').value='';filterFranchiseItems();
     $('#franchise-dialog-title').textContent=item?'Film serisini düzenle':'Yeni film serisi';
     $('#franchise-dialog').showModal();
