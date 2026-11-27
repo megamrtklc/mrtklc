@@ -36,6 +36,8 @@ const invalidCases = [
   ['yinelenen koleksiyon kimliği', data => { data.collections.push({ ...data.collections[0], title: 'İkinci koleksiyon' }); }],
   ['vitrinde katalog dışı yapım', data => { data.homepageConfig.heroSlides[0].id = 'missing-hero-id'; }],
   ['yinelenen vitrin öğesi', data => { data.homepageConfig.heroSlides.push({ ...data.homepageConfig.heroSlides[0] }); }],
+  ['masaüstü vitrinde katalog dışı yapım', data => { data.homepageConfig.desktopHeroSlides = [{ id: 'missing-desktop-id' }]; }],
+  ['mobil vitrinde katalog dışı yapım', data => { data.homepageConfig.mobileHeroSlides = [{ id: 'missing-mobile-id' }]; }],
   ['masaüstü kart sınırı', data => { data.homepageConfig.settings.desktopCount = 21; }],
   ['mobil kart sınırı', data => { data.homepageConfig.settings.mobileCount = 13; }],
   ['geçiş süresi sınırı', data => { data.homepageConfig.settings.interval = 1; }]
