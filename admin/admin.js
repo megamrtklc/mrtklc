@@ -614,21 +614,26 @@
     if(next)next.disabled=state.analyticsDetailPage>=pages;
     if(pageSize)pageSize.value=String(size);
   }
+  function csvCell(value){
+    return '"'+String(value??'').replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
+  }
+  function buildCsvDocument(headers,rows,mapRow){
+    const lines=[headers.map(csvCell).join(';')];
+    for(const row of rows)lines.push(mapRow(row).map(csvCell).join(';'));
+    return '\uFEFF'+lines.join('\r\n');
+  }
   function exportAnalyticsDetailCsv(){
     const config=state.analyticsDetail;if(!config){toast('Önce bir rapor aç.','info');return;}
-    const catalog=Array.isArray(state.catalog)?state.catalog:[];
     const kind=config.kind,query=($('#analytics-detail-search')?.value||'').trim().toLocaleLowerCase('tr');
     const type=$('#analytics-detail-type')?.value||'all',sortMode=$('#analytics-detail-sort')?.value||'default';
     const rows=getAnalyticsDetailRows(config,{query,type,sortMode});
     if(kind==='years'||kind==='genres'){
-      const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
-      const csv='\uFEFF'+[quote(kind==='years'?'Yapım yılı':'Tür')+';'+quote('Yapım sayısı'),...rows.map(row=>row.map(quote).join(';'))].join('\r\n');
+      const csv=buildCsvDocument([kind==='years'?'Yapım yılı':'Tür','Yapım sayısı'],rows,row=>row);
       downloadAnalyticsCsv(csv,'perde-'+(kind==='years'?'yil':'tur')+'-raporu');
       return;
     }
     const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['IMDb puanı',x=>getItemRating(x)||''],['Yönetmen',x=>x.director||x.tmdbDirector||''],['Tür etiketleri',x=>getItemGenres(x).join(' / ')],['Eklenme tarihi',x=>x.addedAt||'Bilinmiyor'],['TMDB ID',x=>x.tmdbId??x.tmdb_id??'']];
-    const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
-    const csv='\uFEFF'+[columns.map(column=>quote(column[0])).join(';'),...rows.map(item=>columns.map(column=>quote(column[1](item))).join(';'))].join('\r\n');
+    const csv=buildCsvDocument(columns.map(column=>column[0]),rows,item=>columns.map(column=>column[1](item)));
     downloadAnalyticsCsv(csv,'perde-detayli-rapor');
   }
   function downloadAnalyticsCsv(csv,baseName){
@@ -645,19 +650,18 @@
     else if(action==='all-years')openAnalyticsDetail('years');
     else if(action==='all-genres')openAnalyticsDetail('genres');
   }
-  function exportAnalyticsCsv(){
+  function exportAnaly  function exportAnalyticsCsv(){
     const catalog=Array.isArray(state.catalog)?state.catalog:[];
     if(!catalog.length){toast('Dışa aktarılacak katalog kaydı bulunamadı.','info');return;}
     const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['Kataloğa eklenme tarihi',x=>x.addedAt||'Bilinmiyor'],['Puan',x=>x.rating??x.imdbRating??x.voteAverage??''],['Tür etiketleri',x=>{const v=x.genres??x.genre??x.category??x.categories??'';return Array.isArray(v)?v.map(g=>g&&typeof g==='object'?g.name:g).join(' / '):v;}],['Yönetmen',x=>x.director??x.directors??''],['TMDB ID',x=>x.tmdbId??x.tmdb_id??'']];
-    const quote=value=>'"'+String(value??'').replace(/"/g,'""').replace(/[\r\n]+/g,' ')+'"';
-    const csv='\uFEFF'+[columns.map(c=>quote(c[0])).join(';'),...catalog.map(item=>columns.map(c=>quote(c[1](item))).join(';'))].join('\r\n');
+    const csv=buildCsvDocument(columns.map(column=>column[0]),catalog,item=>columns.map(column=>column[1](item)));
     const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
     const url=URL.createObjectURL(blob),link=document.createElement('a');
     link.href=url;link.download='perde-katalog-raporu-'+new Date().toISOString().slice(0,10)+'.csv';
     document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);
     toast('Katalog CSV raporu indirilmeye hazır.','success');
   }
-  function refreshYearFilter(){
+Filter(){
     const el=$('#year-filter'),selected=el.value;
     const years=[...new Set(state.catalog.map(yearOf).filter(y=>y!=='—'))].sort((a,b)=>Number(b)-Number(a));
     el.innerHTML='<option value="all">Tüm yıllar</option>'+years.map(y=>'<option value="'+escapeHtml(y)+'">'+escapeHtml(y)+'</option>').join('');
