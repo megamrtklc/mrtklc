@@ -184,32 +184,44 @@
     host.innerHTML=picks.map((item,index)=>'<div class="welcome-poster poster-float-'+(index+1)+'"><img src="'+escapeHtml(posterOf(item))+'" alt="" loading="lazy" onerror="this.parentElement.remove()"><span>'+escapeHtml(titleOf(item))+'</span></div>').join('');
   }
   function renderOverviewInsights(){
-    const years=state.catalog.map(yearOf).filter(x=>x!=='—').map(Number).filter(Number.isFinite);
-    const ratings=state.catalog.map(x=>Number(x.rating||x.tmdbRating)).filter(x=>Number.isFinite(x)&&x>0);
-    $('#overview-average').textContent=ratings.length?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)+'/10':'—';
-    $('#overview-oldest').textContent=years.length?Math.min(...years):'—';
-    $('#overview-newest').textContent=years.length?Math.max(...years):'—';
-    $('#overview-trailers').textContent=state.catalog.filter(x=>x.trailerUrl||x.tmdbTrailerUrl).length.toLocaleString('tr-TR');
-    const movieCount=state.catalog.filter(x=>!isSeries(x)).length,seriesCount=state.catalog.length-movieCount,totalCount=Math.max(1,state.catalog.length);
-    const movieShare=movieCount/totalCount*100,seriesShare=seriesCount/totalCount*100;
-    $('#overview-balance-movies').style.width=movieShare+'%';$('#overview-balance-series').style.width=seriesShare+'%';
-    $('#overview-balance-movie-count').textContent=movieCount.toLocaleString('tr-TR');$('#overview-balance-series-count').textContent=seriesCount.toLocaleString('tr-TR');
-    const quality={
-      poster:state.catalog.filter(x=>!posterOf(x)).length,
-      rating:state.catalog.filter(x=>!(Number(x.rating||x.tmdbRating)>0)).length,
-      trailer:state.catalog.filter(x=>!(x.trailerUrl||x.tmdbTrailerUrl)).length,
-      watch:state.catalog.filter(x=>!(x.watchUrl||(Array.isArray(x.episodeWatchUrls)&&x.episodeWatchUrls.some(Boolean)))).length,
-      cast:state.catalog.filter(x=>!((Array.isArray(x.cast)&&x.cast.length)||(Array.isArray(x.tmdbCast)&&x.tmdbCast.length))).length
-    };
+    const catalog=state.catalog;
+    let ratingTotal=0,ratingCount=0,movieCount=0,trailerCount=0;
+    let oldest=Infinity,newest=-Infinity;
+    const quality={poster:0,rating:0,trailer:0,watch:0,cast:0};
+    const yearCounts={};
+    let affectedCount=0;
+    catalog.forEach(item=>{
+      const year=Number(yearOf(item));
+      if(Number.isFinite(year)){oldest=Math.min(oldest,year);newest=Math.max(newest,year);}
+      const yearLabel=yearOf(item);
+      if(yearLabel!=='—')yearCounts[yearLabel]=(yearCounts[yearLabel]||0)+1;
+      const rating=Number(item.rating||item.tmdbRating);
+      if(Number.isFinite(rating)&&rating>0){ratingTotal+=rating;ratingCount++;}
+      if(!isSeries(item))movieCount++;
+      if(item.trailerUrl||item.tmdbTrailerUrl)trailerCount++;
+      if(!posterOf(item))quality.poster++;
+      if(!(Number(item.rating||item.tmdbRating)>0))quality.rating++;
+      if(!(item.trailerUrl||item.tmdbTrailerUrl))quality.trailer++;
+      if(!(item.watchUrl||(Array.isArray(item.episodeWatchUrls)&&item.episodeWatchUrls.some(Boolean))))quality.watch++;
+      if(!((Array.isArray(item.cast)&&item.cast.length)||(Array.isArray(item.tmdbCast)&&item.tmdbCast.length)))quality.cast++;
+      if(qualityIssuesFor(item).length>0)affectedCount++;
+    });
+    const seriesCount=catalog.length-movieCount,totalCount=Math.max(1,catalog.length);
+    $('#overview-average').textContent=ratingCount?(ratingTotal/ratingCount).toFixed(1)+'/10':'—';
+    $('#overview-oldest').textContent=oldest===Infinity?'—':oldest;
+    $('#overview-newest').textContent=newest===-Infinity?'—':newest;
+    $('#overview-trailers').textContent=trailerCount.toLocaleString('tr-TR');
+    $('#overview-balance-movies').style.width=(movieCount/totalCount*100)+'%';
+    $('#overview-balance-series').style.width=(seriesCount/totalCount*100)+'%';
+    $('#overview-balance-movie-count').textContent=movieCount.toLocaleString('tr-TR');
+    $('#overview-balance-series-count').textContent=seriesCount.toLocaleString('tr-TR');
     $('#quality-missing-poster').textContent=quality.poster.toLocaleString('tr-TR');
     $('#quality-missing-rating').textContent=quality.rating.toLocaleString('tr-TR');
     $('#quality-missing-trailer').textContent=quality.trailer.toLocaleString('tr-TR');
     $('#quality-missing-watch').textContent=quality.watch.toLocaleString('tr-TR');
     $('#quality-missing-cast').textContent=quality.cast.toLocaleString('tr-TR');
-    const affectedCount=state.catalog.filter(item=>qualityIssuesFor(item).length>0).length;
     $('#overview-quality-affected').textContent=affectedCount.toLocaleString('tr-TR')+' eksik kayıt';
-    const counts={};state.catalog.forEach(x=>{const y=yearOf(x);if(y!=='—')counts[y]=(counts[y]||0)+1;});
-    const top=Object.entries(counts).sort((a,b)=>Number(a[0])-Number(b[0])).slice(-12),max=Math.max(1,...top.map(x=>x[1]));
+    const top=Object.entries(yearCounts).sort((a,b)=>Number(a[0])-Number(b[0])).slice(-12),max=Math.max(1,...top.map(x=>x[1]));
     $('#overview-yearline').innerHTML=top.map(([year,count])=>'<span style="height:'+Math.max(8,count/max*100)+'%" title="'+escapeHtml(year)+': '+count+' yapım"><small>'+escapeHtml(String(year).slice(-2))+'</small></span>').join('');
   }
   function updateMetrics(){
