@@ -1938,6 +1938,7 @@ Filter(){
   const PERSONAL_BACKUP_SITE_ORIGIN='https://megamrtklc.github.io';
   const PERSONAL_BACKUP_BRIDGE_URL='https://megamrtklc.github.io/mrtklc/backup-bridge.html';
   let selectedBackup=null;
+  let backupInspectionId=0;
   let backupRestoreInProgress=false;
   let remotePersonalStorage=null;
   function collectBrowserStorage(storage){
@@ -2145,6 +2146,7 @@ Filter(){
     return {isSite,isPersonal,isLegacy,count:data.siteData?.catalog?.length||0,movies:(isSite||isLegacy)?movieCount:0,personal};
   }
   function inspectBackupFile(file){
+    const inspectionId=++backupInspectionId;
     selectedBackup=null;
     const button=$('#restore-full-backup'),summary=$('#restore-backup-summary');
     button.disabled=true;
@@ -2152,6 +2154,7 @@ Filter(){
     if(file.size>10*1024*1024){summary.innerHTML='<span>Dosya doğrulanamadı</span><b class="state-warning">Yedek dosyası 10 MB sınırını aşıyor.</b>';return;}
     const reader=new FileReader();
     reader.onload=()=>{
+      if(inspectionId!==backupInspectionId)return;
       try{
         const data=JSON.parse(String(reader.result||''));
         const info=validateBackupPayload(data);
@@ -2169,7 +2172,10 @@ Filter(){
         if((info.isSite||info.isLegacy)&&!state.apiEnabled)summary.innerHTML+='<small class="helper-text">Sunucu yazma bağlantısı hazır değil; bu yedek şu an geri yüklenemiyor.</small>';
       }catch(error){summary.innerHTML='<span>Dosya doğrulanamadı</span><b class="state-warning">'+escapeHtml(error.message)+'</b>';selectedBackup=null;}
     };
-    reader.onerror=()=>{summary.innerHTML='<span>Dosya durumu</span><b class="state-warning">Dosya okunamadı.</b>';};
+    reader.onerror=()=>{
+      if(inspectionId!==backupInspectionId)return;
+      summary.innerHTML='<span>Dosya durumu</span><b class="state-warning">Dosya okunamadı.</b>';
+    };
     reader.readAsText(file);
   }
   async function restoreFullBackup(){
