@@ -80,13 +80,46 @@ toggleFullscreen() {
             this.durationFormatted = this.formatTime(video.duration);
     
             if (this.selectedItem) {
-                this.saveMovieProgress(this.getPlaybackProgressKey(), {
+                const progressKey = this.getPlaybackProgressKey();
+                const now = Date.now();
+                this.saveMovieProgress(progressKey, {
                     time: video.currentTime,
                     duration: video.duration,
-                    savedAt: Date.now()
+                    savedAt: now
                 });
+
+                // Dizi bölümü ilerlemesini de otomatik kaydet; her timeupdate'te
+                // depoya yazmak yerine 15 saniyede bir kalıcılaştır.
+                if (this.selectedItem.type === 'tv' && (now - (this._lastEpisodeProgressSaveAt || 0) >= 15000 || video.currentTime >= video.duration - 3)) {
+                    const tracking = this.getEpisodeTracking();
+                    const seasonKey = String(this.selectedSeason);
+                    const watched = Array.isArray(tracking.watched?.[seasonKey]) ? [...tracking.watched[seasonKey]] : [];
+                    const completed = video.currentTime / video.duration >= 0.9;
+                    if (completed && !watched.includes(Number(this.selectedEpisode))) watched.push(Number(this.selectedEpisode));
+                    tracking.watched = { ...(tracking.watched || {}), [seasonKey]: watched };
+                    tracking.last = {
+                        season: Number(this.selectedSeason),
+                        episode: Number(this.selectedEpisode),
+                        time: video.currentTime,
+                        duration: video.duration,
+                        updatedAt: now
+                    };
+                    this.saveEpisodeTracking(tracking);
+                    this._lastEpisodeProgressSaveAt = now;
+                }
             }
         }
+    },
+    restorePlaybackPosition(video) {
+        if (!video || !this.selectedItem || !Number.isFinite(video.duration) || video.duration <= 0) return;
+        const key = this.getPlaybackProgressKey();
+        const saved = this.profileMovieProgress?.[String(key)];
+        const savedTime = Math.max(0, Number(saved?.time) || 0);
+        // Bitişe çok yakın kayıtlar tekrar başa sarmasın; tamamlanan içerik baştan başlar.
+        if (savedTime > 5 && savedTime < video.duration - 10) {
+            try { video.currentTime = savedTime; } catch (_) {}
+        }
+        this.videoEnded = false;
     },
     saveMovieProgress(itemId, progress) {
         try {
