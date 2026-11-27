@@ -20790,125 +20790,125 @@
     },
     "heroSlides": [
       {
-        "id": "cv-1794715209608",
+        "id": "cv-1794683744189",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795701627590",
+        "id": "archive-111",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531774852",
+        "id": "archive-70",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531734284",
+        "id": "archive-47",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531678896",
+        "id": "archive-80",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531639767",
+        "id": "cv-1794698129056",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531583972",
+        "id": "cv-1794698320791",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795461150842",
+        "id": "cv-1794698041312",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794714842137",
+        "id": "archive-53",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794714577385",
+        "id": "archive-8",
         "active": true,
         "headline": "",
         "description": ""
       }
     ],
     "desktopMode": "auto",
-    "desktopCategory": "new-arrivals",
+    "desktopCategory": "random",
     "desktopHeroSlides": [
       {
-        "id": "cv-1794715209608",
+        "id": "cv-1794683744189",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795701627590",
+        "id": "archive-111",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531774852",
+        "id": "archive-70",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531734284",
+        "id": "archive-47",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531678896",
+        "id": "archive-80",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531639767",
+        "id": "cv-1794698129056",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795531583972",
+        "id": "cv-1794698320791",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1795461150842",
+        "id": "cv-1794698041312",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794714842137",
+        "id": "archive-53",
         "active": true,
         "headline": "",
         "description": ""
       },
       {
-        "id": "cv-1794714577385",
+        "id": "archive-8",
         "active": true,
         "headline": "",
         "description": ""
@@ -20954,44 +20954,8 @@
       "description": "İzleme alışkanlıklarından ilham alan, sana özel seçkiler"
     },
     "mobileMode": "auto",
-    "mobileCategory": "new-arrivals",
+    "mobileCategory": "random",
     "mobileHeroSlides": [
-      {
-        "id": "cv-1795701627590",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1795531774852",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1795531734284",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1795531678896",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1795531639767",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
-      {
-        "id": "cv-1795531583972",
-        "active": true,
-        "headline": "",
-        "description": ""
-      },
       {
         "id": "cv-1795461150842",
         "active": true,
@@ -20999,7 +20963,43 @@
         "description": ""
       },
       {
-        "id": "cv-1794715209608",
+        "id": "perde-mw5zwmbz",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794697995185",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-53",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "cv-1794698223567",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-125",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-29",
+        "active": true,
+        "headline": "",
+        "description": ""
+      },
+      {
+        "id": "archive-50",
         "active": true,
         "headline": "",
         "description": ""
@@ -21041,8 +21041,6 @@
     "faviconImage": "https://raw.githubusercontent.com/megamrtklc/mrtklc/main/assets/logos/perde-favicon.png?v=e2b349ffd5c72030cf3e8d5f9c17148028d90f4a",
     "faviconWidth": 32,
     "faviconHeight": 32,
-    "logoWidth": 32,
-    "logoHeight": 32,
     "showHome": true,
     "homeLabel": "Ana Sayfa",
     "showExplore": true,
@@ -21072,10 +21070,13 @@
         "label": "Seri Filmler",
         "page": "franchises"
       }
-    ]
+    ],
+    "logoWidth": 32,
+    "logoHeight": 32
   },
   "footerConfig": {
     "enabled": true,
+    "customLinks": [],
     "brandPrimary": "Perde",
     "brandAccent": "Film",
     "brandPrimaryColor": "#a1948f",
@@ -21099,8 +21100,7 @@
     "ctaLabel": "Kütüphaneme Git",
     "showCta": true,
     "copyright": "© 2026 Perde. Tüm hakları saklıdır.",
-    "showBackToTop": true,
-    "customLinks": []
+    "showBackToTop": true
   },
   "franchises": [
     {
