@@ -2,7 +2,7 @@
   'use strict';
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
-  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], selectedCatalogIds:new Set(), page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null };
+  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], selectedCatalogIds:new Set(), page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbSelected:null, securityLoaded:false };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -107,6 +107,7 @@
     if(view==='watch-layout')renderWatchLayout();
     if(view==='header-footer')renderHeaderFooter();
     if(view==='backup')refreshBackupSummary();
+    if(view==='users'&&!state.securityLoaded){state.securityLoaded=true;Promise.all([loadSecuritySessions(),loadSecurityHistory(),loadSecuritySettings()]);}
     if(view==='system'){refreshSystemDiagnostics();refreshCredentialStatus();}
   }
   function applyProfilePhoto(url){
@@ -2159,8 +2160,6 @@
       refreshBackupSummary();
       if(selectedBackup)$('#restore-full-backup').disabled=!state.apiEnabled;
       renderWelcomePosters();
-      await loadBrandIdentity();
-      await Promise.all([loadSecuritySessions(),loadSecurityHistory(),loadSecuritySettings()]);
       $('.environment').innerHTML='<i></i> KORUMALI YÖNETİM';
       // Render the catalog immediately after the data API succeeds. A secondary
       // session/profile endpoint must never prevent the catalog from appearing.
@@ -2170,6 +2169,8 @@
       const writeHint=state.apiEnabled?'Yeni yapım ekle':'Form açılır; kaydetmek için GitHub yazma bağlantısı gerekir.';
       $('#add-content').title=writeHint;$('#catalog-add').title=writeHint;$('#collection-add').title=state.apiEnabled?'Yeni koleksiyon ekle':'Kayıt için GitHub yazma bağlantısı gerekir.';
       updateMetrics();refreshYearFilter();renderRecent();renderCatalog();renderCollections();renderAnalytics();renderHomepage();renderHomepageLayout();renderOverviewInsights();renderAdminProfile();renderWatchLayout();renderHeaderFooter();
+      // Marka ve profil bilgileri ikincil yüklenir; katalog arayüzünü bekletmez.
+      loadBrandIdentity();
       $('#last-check').textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
       $('.notice b').textContent='Katalog verileri yüklendi';
       $('.notice p').textContent=payload.readOnlyReason||'Katalog bağlantısı aktif. Yönetim işlemleri güvenli API üzerinden yürütülüyor.';
