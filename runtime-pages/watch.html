@@ -32,11 +32,11 @@
                                    preload="metadata"
                                    playsinline
                                    @click="showPlayerControls()"
-                                   @loadedmetadata="updateVideoProgress(); applyPlaybackRate(); $event.target.volume = isMuted ? 0 : volumeLevel; $event.target.muted = isMuted"
+                                   @loadedmetadata="restorePlaybackPosition($event.target); updateVideoProgress(); applyPlaybackRate(); $event.target.volume = isMuted ? 0 : volumeLevel; $event.target.muted = isMuted"
                                    @timeupdate="updateVideoProgress"
                                    @play="pauseNoticeVisible = false; isPlaying = true; hasPlaybackStarted = true; schedulePlayerSideControls(); showPlaybackFeedback('play', 5000); schedulePlayerControlsHide()"
                                    @pause="pauseNoticeVisible = !$event.target.ended && hasPlaybackStarted; isPlaying = false; revealPlayerSideControls(); showPlayerControls()"
-                                   @ended="videoEnded = true; pauseNoticeVisible = false; isPlaying = false; showPlayerControls()"
+                                   @ended="handleVideoEnded($event.target); pauseNoticeVisible = false; isPlaying = false; showPlayerControls()"
                                    @error="playbackError = true">
                                 Tarayıcınız video etiketini desteklemiyor.
                             </video>
