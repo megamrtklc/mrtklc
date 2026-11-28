@@ -173,10 +173,27 @@
                 <template x-for="collection in (homeSectionReady['published-collections'] ? publishedCollections : [])" :key="'published-' + collection.id">
                     <section class="home-published-collection w-full mx-6 sm:mx-12 space-y-5">
                         <div class="home-published-collection-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
-                            <div class="min-w-0">
-                                <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">CINEVERSE • ÖZEL SEÇKİ</p>
+                            <div class="flex min-w-0 items-center gap-3">
+                                <div x-show="collection.coverMode === 'mix' || collection.coverMode === 'auto' || (collection.coverMode === 'url' && collection.image)" class="home-published-collection-cover w-16 h-20 sm:w-20 sm:h-24 shrink-0 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900">
+                                    <template x-if="collection.coverMode === 'mix'">
+                                        <div class="home-published-collection-mix grid h-full w-full grid-cols-2 grid-rows-2 gap-0.5">
+                                            <template x-for="coverItem in collection.coverItems" :key="'cover-'+collection.id+'-'+coverItem.id">
+                                                <img :src="coverItem.poster || coverItem.image || coverItem.backdrop || coverItem.tmdbPoster" :alt="coverItem.title" loading="lazy" class="h-full w-full min-h-0 min-w-0 object-cover">
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <template x-if="collection.coverMode === 'auto'">
+                                        <img :src="collection.coverItems[0]?.poster || collection.coverItems[0]?.image || collection.coverItems[0]?.backdrop || collection.coverItems[0]?.tmdbPoster" alt="" loading="lazy" class="h-full w-full object-cover">
+                                    </template>
+                                    <template x-if="collection.coverMode === 'url'">
+                                        <img :src="collection.image || collection.cover || collection.backdrop" alt="" loading="lazy" class="h-full w-full object-cover">
+                                    </template>
+                                </div>
+                                <div class="min-w-0">
+                                <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">PERDE • ÖZEL SEÇKİ</p>
                                 <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white" x-text="collection.title"></h2>
                                 <p x-show="collection.description" class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-text="collection.description"></p>
+                                </div>
                             </div>
                             <div class="flex items-center gap-3 shrink-0"><span class="text-[10px] font-bold text-rose-700 dark:text-rose-400" x-text="Math.min(collection.items.length,15) + ' / ' + collection.items.length + ' yapım'"></span><div class="flex items-center gap-2 shrink-0"><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15</span><button type="button" @click="scrollHomeCards('home-collection-rail-' + collection.id,-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-collection-rail-' + collection.id,1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div></div>
                         </div>
