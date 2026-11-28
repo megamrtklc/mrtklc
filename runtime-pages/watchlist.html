@@ -16,7 +16,7 @@
                     <template x-for="item in currentWatchlist" :key="item.id">
                         <div @click="openWatchPage(item)" :class="getCardClass()" class="group rounded-xl overflow-hidden border hover:border-rose-600 transition-all cursor-pointer flex flex-col shadow-sm">
                             <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
-                                <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 15vw, 14.5vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"> <span x-show="item._catalogMissing" class="absolute bottom-2 left-2 z-10 rounded-md border border-amber-300/40 bg-black/85 px-2 py-1 text-[8px] font-black tracking-wide text-amber-200 shadow-lg">KATALOGDA YOK</span>
+                                <img :alt="item.title" @error="handleImageError($event)" decoding="async" loading="lazy" :src="item.poster" :srcset="getTmdbImageSrcSet(item.poster)" sizes="(max-width: 380px) 42vw, (max-width: 639px) 40vw, (max-width: 767px) 30vw, (max-width: 1023px) 19vw, (max-width: 1279px) 15vw, 14.5vw" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <button @click.stop="toggleWatchlist(item)" class="absolute top-2 right-2 w-7 h-7 rounded bg-rose-600 text-white flex items-center justify-center shadow">
                                     <i class="fa-solid fa-bookmark text-xs"></i>
                                 </button>
