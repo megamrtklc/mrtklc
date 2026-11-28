@@ -3,7 +3,7 @@
   Yayımlanmış seçkileri bağımsız, gecikmeli bir sayfada listeler; seçim açıldığında koleksiyondaki tüm yapımları gösterir.
 -->
 <template x-if="currentPage === 'collections'">
-    <div x-data="{ query: '', selectedId: '', sortMode: 'featured' }" class="w-full px-4 sm:px-8 lg:px-12 pt-7 sm:pt-9 pb-16 space-y-7">
+    <div x-data="{ query: '', selectedId: '', sortMode: 'featured', page: 1, pageSize: 15 }" class="w-full px-4 sm:px-8 lg:px-12 pt-7 sm:pt-9 pb-16 space-y-7">
         <template x-if="!selectedId">
             <div class="space-y-7">
                 <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -27,8 +27,9 @@
                     </select>
                 </div>
 
+                <div x-effect="query; sortMode; page = 1" class="hidden"></div>
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-5">
-                    <template x-for="collection in publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).slice().sort((a,b) => sortMode === 'name' ? a.title.localeCompare(b.title, 'tr') : sortMode === 'count' ? b.items.length - a.items.length : 0)" :key="'collection-browser-' + collection.id">
+                    <template x-for="collection in publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).slice().sort((a,b) => sortMode === 'name' ? a.title.localeCompare(b.title, 'tr') : sortMode === 'count' ? b.items.length - a.items.length : 0).slice((page - 1) * pageSize, page * pageSize)" :key="'collection-browser-' + collection.id">
                         <button type="button" @click="selectedId = String(collection.id); window.scrollTo({top:0,behavior:'smooth'})" class="group min-w-0 overflow-hidden rounded-2xl border border-gray-200 bg-white text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-xl dark:border-white/10 dark:bg-[#151922]">
                             <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                 <template x-if="collection.coverMode === 'mix'">
@@ -54,6 +55,17 @@
                             </div>
                         </button>
                     </template>
+                </div>
+
+                <div x-show="publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).length > pageSize" class="flex flex-col items-center gap-3 pt-2">
+                    <p class="text-[10px] font-semibold text-gray-500 dark:text-gray-400" x-text="'Gösterilen ' + (((page - 1) * pageSize) + 1) + '–' + Math.min(page * pageSize, publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).length) + ' / ' + publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).length + ' koleksiyon'"></p>
+                    <nav aria-label="Koleksiyon sayfaları" class="flex flex-wrap items-center justify-center gap-1.5">
+                        <button type="button" @click="page = Math.max(1, page - 1); window.scrollTo({top:0,behavior:'smooth'})" :disabled="page === 1" class="flex h-9 min-w-9 items-center justify-center rounded-lg border border-gray-200 px-3 text-xs font-bold text-gray-600 transition hover:border-rose-500 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-35 dark:border-gray-700 dark:text-gray-300" aria-label="Önceki sayfa"><i class="fa-solid fa-chevron-left"></i></button>
+                        <template x-for="pageNumber in Array.from({ length: Math.ceil(publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).length / pageSize) }, (_, index) => index + 1)" :key="'collection-page-' + pageNumber">
+                            <button type="button" @click="page = pageNumber; window.scrollTo({top:0,behavior:'smooth'})" :aria-current="page === pageNumber ? 'page' : null" :class="page === pageNumber ? 'border-rose-600 bg-rose-600 text-white shadow-sm' : 'border-gray-200 bg-white text-gray-600 hover:border-rose-500 hover:text-rose-600 dark:border-gray-700 dark:bg-[#151922] dark:text-gray-300'" class="h-9 min-w-9 rounded-lg border px-3 text-xs font-black transition" x-text="pageNumber"></button>
+                        </template>
+                        <button type="button" @click="page = Math.min(Math.ceil(publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).length / pageSize), page + 1); window.scrollTo({top:0,behavior:'smooth'})" :disabled="page >= Math.ceil(publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).length / pageSize)" class="flex h-9 min-w-9 items-center justify-center rounded-lg border border-gray-200 px-3 text-xs font-bold text-gray-600 transition hover:border-rose-500 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-35 dark:border-gray-700 dark:text-gray-300" aria-label="Sonraki sayfa"><i class="fa-solid fa-chevron-right"></i></button>
+                    </nav>
                 </div>
 
                 <div x-show="publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).length === 0" class="rounded-2xl border border-dashed border-gray-300 px-6 py-14 text-center dark:border-gray-700">
