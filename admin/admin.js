@@ -1098,12 +1098,18 @@
     }
     return collectionOptionCache.items;
   }
+  const COLLECTION_TEMPLATES={"Bilim Kurgu":"Geleceği, teknolojiyi ve bilinmeyeni keşfe çıkaran bilim kurgu seçkisi.","Korku":"Gerilim dozu yüksek, ürpertici ve akılda kalan korku yapımları.","Psikolojik Gerilim":"Zihnin sınırlarını zorlayan, gerilimi giderek yükselen hikâyeler.","Aksiyon Dolu":"Temposu hiç düşmeyen aksiyon ve macera yapımları.","Fantastik Dünyalar":"Büyü, mitoloji ve hayal gücüyle kurulan sıra dışı evrenler.","Suç ve Polisiye":"Gizemli dosyalar, suç hikâyeleri ve unutulmaz dedektifler.","Komedi":"Keyifli vakit geçirmek için eğlenceli ve bol kahkahalı yapımlar.","Dram":"Güçlü karakterler ve etkileyici hikâyelerle iz bırakan dramlar.","Romantik":"Aşkın farklı hallerini anlatan romantik hikâyeler.","Animasyon":"Her yaştan izleyiciye hitap eden yaratıcı animasyonlar.","Tarih ve Savaş":"Tarihe yön veren olayları ve savaşların izlerini anlatan yapımlar.","Belgesel":"Gerçek dünyaya farklı pencereler açan belgeseller.","Ölmeden İzle":"Her sinemaseverin hayatında en az bir kez izlemesi gereken yapımlar.","Şans Ver":"İlk bakışta gözden kaçsa da izleyince sevebileceğin yapımlar.","Ters Köşe":"Beklentileri altüst eden sürprizli hikâyeler ve şaşırtıcı finaller.","Gizli Cevherler":"Hak ettiği ilgiyi görmemiş, keşfedilmeyi bekleyen özel yapımlar.","Tek Oturuşta Bitir":"Bir sonraki bölümü açmadan duramayacağın sürükleyici yapımlar.","Hafta Sonu Maratonu":"Hafta sonunu keyifli bir izleme maratonuna dönüştürecek seçki.","Akıl Oyunları":"Düşündüren, ipuçlarıyla oynayan ve zihinde iz bırakan hikâyeler.","Unutulmaz Finaller":"Finaliyle uzun süre akıldan çıkmayan yapımlar.","Kısa ve Öz":"Az zamanda güçlü hikâyeler sunan mini diziler ve kısa yapımlar.","Bir Şans Daha":"Yeniden izlemeyi veya geç de olsa keşfetmeyi hak edenler.","Zamansız Klasikler":"Yıllar geçse de değerini kaybetmeyen sinema ve dizi klasikleri.","Yeni Başlayanlara Özel":"Dizi ve film dünyasına adım atmak isteyenler için güçlü başlangıçlar.","Yerli Yapımlar":"Türkiye'den çıkan dikkat çekici film ve diziler.","Kore Yapımları":"Güney Kore sinemasından ve dizilerinden öne çıkan hikâyeler.","Mini Dizi Seçkisi":"Baştan sona tek bir hikâyeyi tamamlayan mini diziler.","Gerçek Hikâyeler":"Yaşanmış olaylardan ve gerçek kişilerden ilham alan yapımlar.","Güçlü Kadın Hikâyeleri":"Merkezinde güçlü, çok katmanlı kadın karakterler bulunan yapımlar.","Distopik Dünyalar":"Geleceğin karanlık ve düşündürücü toplumlarını anlatan yapımlar.","Ailece İzle":"Birlikte izlemek için uygun, farklı yaşlara hitap eden yapımlar.","Yönetmenlerden Seçmeler":"Özgün anlatımı ve görsel diliyle öne çıkan yönetmen işleri."};
+  function selectedCollectionItems(){const ids=$('#collection-items input:checked').map(input=>String(input.value));return ids.map(id=>state.catalog.find(item=>String(item.id)===id)).filter(Boolean);}
+  function collectionPoster(item){return item?.poster||item?.image||item?.backdrop||'';}
+  function applyCollectionTemplate(){const name=$('#collection-template').value;if(name&&COLLECTION_TEMPLATES[name]){$('#collection-title').value=name;$('#collection-description').value=COLLECTION_TEMPLATES[name];}}
   function openCollectionEditor(id){
     if(!canWrite())return;
     const item=collectionList().find(x=>String(x.id)===String(id));
     $('#collection-form').reset();$('#collection-id').value=item?.id||'';
     $('#collection-title').value=item?.title||'';$('#collection-description').value=item?.description||'';
     $('#collection-cover').value=item?.image||item?.cover||item?.backdrop||'';
+    $('#collection-cover-mode').value=item?.coverMode||((item?.image||item?.cover||item?.backdrop)?'url':'mix');
+    $('#collection-template').value='';
     $('#collection-active').checked=item?.active!==false;
     const selected=new Set((item?.items||[]).map(String));
     $('#collection-items').innerHTML=getCollectionOptions().map(x=>'<label class="collection-pick"><input type="checkbox" value="'+x.value+'" '+(selected.has(x.id)?'checked':'')+'><span><b>'+x.title+'</b><small>'+x.type+' · '+x.year+'</small></span></label>').join('')||'<div class="collection-picker-empty">Katalogda henüz seçilebilecek yapım bulunmuyor.</div>';
@@ -1121,9 +1127,16 @@
     window.scrollTo({top:0,behavior:'instant'});
   }
   function updateCollectionCoverPreview(){
-    const preview=$('#collection-cover-preview'),url=$('#collection-cover').value.trim();
-    preview.innerHTML=url?'<img src="'+escapeHtml(url)+'" alt="Koleksiyon kapak önizlemesi" onerror="this.parentElement.classList.add(\'is-invalid\')"><span class="collection-cover-preview-label">KAPAK ÖNİZLEMESİ</span>':'<span>▧</span><small>Kapak önizlemesi</small>';
-    preview.classList.toggle('has-image',!!url);preview.classList.remove('is-invalid');
+    const preview=$('#collection-cover-preview'),url=$('#collection-cover').value.trim(),mode=$('#collection-cover-mode')?.value||'mix';
+    const urlField=$('#collection-cover-url-field');if(urlField)urlField.hidden=mode!=='url';
+    const help=$('#collection-cover-help');if(help)help.textContent=mode==='mix'?'Seçtiğin film ve dizilerin posterlerinden otomatik kolaj hazırlanır. En fazla dört poster kullanılır.':mode==='auto'?'İlk seçtiğin yapımın posteri otomatik kapak olarak kullanılır.':'Kendi yatay kapak görselinin bağlantısını ekle.';
+    const items=selectedCollectionItems().filter(item=>collectionPoster(item));let content='';
+    if(mode==='url'&&url)content='<img src="'+escapeHtml(url)+'" alt="Koleksiyon kapak önizlemesi">';
+    else if(mode==='auto'&&items.length)content='<img src="'+escapeHtml(collectionPoster(items[0]))+'" alt="Otomatik koleksiyon kapağı">';
+    else if(mode==='mix'&&items.length)content='<div class="collection-mix-preview">'+items.slice(0,4).map(item=>'<img src="'+escapeHtml(collectionPoster(item))+'" alt="">').join('')+'</div>';
+    else content='<span>▧</span><small>'+(mode==='url'?'Kapak görseli bağlantısı ekle':'Önce yapım seç')+'</small>';
+    preview.innerHTML=content+(content.includes('<img')||content.includes('collection-mix-preview')?'<span class="collection-cover-preview-label">'+(mode==='mix'?'MIX KAPAK':'KAPAK ÖNİZLEMESİ')+'</span>':'');
+    preview.classList.toggle('has-image',!!content.includes('<img'));preview.classList.remove('is-invalid');
   }
   function updateCollectionSelectedCount(){
     const count=$$('#collection-items input:checked').length;
@@ -1140,7 +1153,7 @@
     const id=$('#collection-id').value||('collection-'+Date.now());
     const existing=collectionList().find(x=>String(x.id)===String(id));
     const record={...(existing||{}),id,title:$('#collection-title').value.trim(),description:$('#collection-description').value.trim(),
-      active:$('#collection-active').checked,image:$('#collection-cover').value.trim(),items:$('#collection-items input:checked').map(x=>x.value)};
+      active:$('#collection-active').checked,coverMode:$('#collection-cover-mode').value,image:$('#collection-cover-mode').value==='url'?$('#collection-cover').value.trim():'',items:$('#collection-items input:checked').map(x=>x.value)};
     if(!record.title){toast('Koleksiyon adı zorunludur.');return;}
     const nextData={...state.data,collections:[...collectionList()]};
     const index=nextData.collections.findIndex(x=>String(x.id)===String(id));
@@ -2561,8 +2574,10 @@
   $('#collection-cancel').addEventListener('click',closeCollectionEditor);$('#collection-cancel-bottom').addEventListener('click',closeCollectionEditor);
   $('#collection-list-search').addEventListener('input',renderCollections);$('#collection-status-filter').addEventListener('change',renderCollections);$('#collection-sort').addEventListener('change',renderCollections);
   $('#collection-grid').addEventListener('click',event=>{if(event.target.closest('#collection-empty-add,#collection-clear-filters')){if(event.target.closest('#collection-empty-add'))openCollectionEditor(null);else{$('#collection-list-search').value='';$('#collection-status-filter').value='all';renderCollections();}return;}});
-  $('#collection-cover').addEventListener('input',updateCollectionCoverPreview);$('#collection-cover-clear').addEventListener('click',()=>{$('#collection-cover').value='';updateCollectionCoverPreview();});
-  $('#collection-items').addEventListener('change',event=>{if(event.target.matches('input[type="checkbox"]'))updateCollectionSelectedCount();});
+  $('#collection-template').addEventListener('change',applyCollectionTemplate);
+  $('#collection-cover-mode').addEventListener('change',updateCollectionCoverPreview);
+  $('#collection-cover').addEventListener('input',updateCollectionCoverPreview);$('#collection-cover-clear').addEventListener('click',()=>{$('#collection-cover').value='';$('#collection-cover-mode').value='mix';updateCollectionCoverPreview();});
+  $('#collection-items').addEventListener('change',event=>{if(event.target.matches('input[type="checkbox"]')){updateCollectionSelectedCount();updateCollectionCoverPreview();}});
   $('#franchise-grid').addEventListener('click',event=>{
     const edit=event.target.closest('[data-franchise-edit]');if(edit){openFranchiseEditor(edit.dataset.franchiseEdit);return;}
     const remove=event.target.closest('[data-franchise-delete]');if(remove)deleteFranchise(remove.dataset.franchiseDelete);
