@@ -2128,3 +2128,23 @@ body{font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;text-ren
 
 /* Dört posterli mix kapakta ilk görselin iki satırı kaplaması dördüncü posteri görünmez satıra itmesin. */
 #view-collections .collection-mix-preview:has(> img:nth-child(4)) img:nth-child(1){grid-row:auto}
+
+/* Koleksiyon yayın yönetimi */
+#view-collections .collection-publish-checks{display:grid;gap:8px}
+#view-collections .collection-publish-option{background:#202832;border-color:#3a4553}
+#view-collections .collection-publish-option b{color:#e6d3a7}
+#view-collections .collection-publish-option small{color:#a5afbb}
+#view-collections .collection-publish-option.field{display:flex;grid-column:1/-1}
+#view-collections .collection-editor-panel .field input[type="datetime-local"],
+#view-collections .collection-editor-panel .field input[type="number"],
+#view-collections .collection-editor-panel .field select{min-height:40px}
+#view-collections .collection-readiness{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;padding:12px;border:1px solid #3b4653;border-radius:10px;background:#171d26}
+#view-collections .collection-readiness-summary{width:100%;margin-bottom:2px;color:#d8c18b;font-size:10px;font-weight:800}
+#view-collections .collection-readiness-item{display:inline-flex;align-items:center;gap:5px;padding:5px 7px;border-radius:6px;background:#252d37;color:#b9c3cf;font-size:9px}
+#view-collections .collection-readiness-item i{font-style:normal;font-weight:900}
+#view-collections .collection-readiness-item.is-ready i{color:#8fc7a0}
+#view-collections .collection-readiness-item.is-missing i{color:#e0ad72}
+@media(max-width:680px){
+ #view-collections .collection-readiness{gap:6px}
+ #view-collections .collection-readiness-item{font-size:8px}
+}
