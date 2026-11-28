@@ -148,3 +148,18 @@ html.cv-tv-mode [data-watch-card="player"] .absolute.inset-x-0.bottom-0.px-4.pb-
     transform: translate(-50%, -50%) !important;
   }
 }
+
+
+/* Tablet dikey: URL'siz yapım bilgi kartını oynatıcının tam merkezine al */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  [data-watch-card="player"] .cv-no-url-info {
+    left: 50% !important;
+    right: auto !important;
+    top: 50% !important;
+    bottom: auto !important;
+    width: min(56%, 520px) !important;
+    max-width: min(56%, 520px) !important;
+    max-height: 62% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
