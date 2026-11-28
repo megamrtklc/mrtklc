@@ -373,3 +373,15 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   #home-page #home-personalized-section .home-personalized-feature h3{font-size:clamp(23px,3vw,31px)!important;line-height:1.12!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;overflow:hidden!important;overflow-wrap:anywhere!important}
   #home-page #home-personalized-section .home-personalized-feature .home-personalized-feature-reason{display:none!important}
 }
+
+
+/* Tablet dikey: ana sayfa yatay raflarında hem yatay hem dikey dokunma kaydırmasını koru. */
+@media (min-width:768px) and (max-width:1100px) and (orientation:portrait){
+  #home-page{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+  #home-page>section:not(#desktopEditorialHero){min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+  #home-page .home-card-rail{display:flex!important;width:100%!important;min-width:0!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;overscroll-behavior-x:contain!important;touch-action:pan-x pan-y pinch-zoom!important;scroll-padding-inline:8px!important;-webkit-overflow-scrolling:touch!important;scrollbar-width:none!important}
+  #home-page .home-card-rail::-webkit-scrollbar{display:none!important}
+  #home-page .home-card-rail>.home-rail-card{flex-shrink:0!important;min-width:0;scroll-snap-align:start}
+  #home-page :is(.home-continue-heading,.home-series-tracking-heading,.home-genre-discovery-heading,.home-watchlist-heading,.home-catalog-heading,.home-new-arrivals-heading){min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+  #home-page :is(.home-continue-heading,.home-series-tracking-heading,.home-genre-discovery-heading,.home-watchlist-heading,.home-catalog-heading,.home-new-arrivals-heading)>div{min-width:0;max-width:100%}
+}
