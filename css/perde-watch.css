@@ -163,3 +163,43 @@ html.cv-tv-mode [data-watch-card="player"] .absolute.inset-x-0.bottom-0.px-4.pb-
     transform: translate(-50%, -50%) !important;
   }
 }
+
+
+/* URL bağlantılı yapımlarda oynatma öncesi play butonunu daha belirginleştir */
+[data-watch-card="player"] .cv-preplay-button {
+  animation: cv-preplay-emphasis 2.2s ease-in-out infinite;
+  box-shadow:
+    0 0 0 5px rgba(231, 196, 119, 0.16),
+    0 0 28px 9px rgba(231, 196, 119, 0.48),
+    inset 0 1px 7px rgba(255, 255, 255, 0.8) !important;
+}
+[data-watch-card="player"] .cv-preplay-button > span:first-child {
+  inset: -13px !important;
+  border-width: 2px !important;
+  border-color: rgba(255, 224, 155, 0.9) !important;
+  animation: cv-preplay-ring 1.8s ease-out infinite !important;
+}
+[data-watch-card="player"] .cv-preplay-button > span:nth-child(2) {
+  inset: -5px !important;
+  border-color: rgba(255, 255, 255, 0.72) !important;
+}
+@keyframes cv-preplay-emphasis {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 8px rgba(231, 196, 119, 0.28));
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    filter: brightness(1.12) drop-shadow(0 0 17px rgba(231, 196, 119, 0.72));
+    transform: translate(-50%, -50%) scale(1.055);
+  }
+}
+@keyframes cv-preplay-ring {
+  0% { opacity: 0.9; transform: scale(0.94); }
+  75%, 100% { opacity: 0; transform: scale(1.28); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-watch-card="player"] .cv-preplay-button,
+  [data-watch-card="player"] .cv-preplay-button > span:first-child {
+    animation: none !important;
+  }
+}
