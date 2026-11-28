@@ -9,7 +9,7 @@ function has(pattern, message) {
 
 // The shared persistence path must serialize writes, preserve the GitHub SHA,
 // handle stale-write conflicts, and restore the saving lock after every result.
-has(/async function persist\(nextData,successMessage\)\s*\{[\s\S]*?if\(!canWrite\(\)\|\|state\.saving\)return false;[\s\S]*?fetch\('\/api\/catalog',\{method:'PUT',[\s\S]*?credentials:'same-origin'[\s\S]*?sha:state\.sha[\s\S]*?response\.status===409[\s\S]*?if\(!response\.ok\)[\s\S]*?finally\{state\.saving=false;\}/,
+has(/async function persist\\(nextData,successMessage\\)\\s*\\{[\\s\\S]*?if\\(!canWrite\\(\\)\\|\\|state\\.saving\\)return false;[\\s\\S]*?fetch\\('\\/api\\/catalog',\\{method:'PUT',credentials:'same-origin'[\\s\\S]*?body:JSON\\.stringify\\(\\{data:nextData,sha:state\\.sha\\}\\)\\}\\)[\\s\\S]*?response\\.status===409[\\s\\S]*?if\\(!response\\.ok\\)[\\s\\S]*?finally\\{state\\.saving=false;\\}/,
   'Katalog kayıt akışı güvenli ve çakışma kontrollü olmalı');
 
 // Create/update flows must validate input and persist through the same API path.
