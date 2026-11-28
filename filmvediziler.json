@@ -20943,6 +20943,22 @@
         "archive-104",
         "cv-1794683639717"
       ]
+    },
+    {
+      "id": "collection-1795899021610",
+      "title": "Suç ve Polisiye",
+      "description": "Gizemli dosyalar, suç hikâyeleri ve unutulmaz dedektifler.",
+      "active": true,
+      "coverMode": "mix",
+      "image": "",
+      "items": [
+        "archive-32",
+        "archive-43",
+        "archive-45",
+        "archive-47",
+        "archive-70",
+        "cv-1795461150842"
+      ]
     }
   ],
   "homepageConfig": {
