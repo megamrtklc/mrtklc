@@ -1968,7 +1968,10 @@
         }
         if(event.data?.type!==responseType||event.data?.requestId!==requestId)return;
         if(event.data.error){finish(new Error(String(event.data.error)));return;}
-        if(action==='EXPORT'){
+        if(action==='CLEAR'){
+          if(event.data.ok!==true){finish(new Error('Ana site kişisel kayıtları temizleyemedi.'));return;}
+          finish(null,{clearedCount:Number(event.data.clearedCount)||0});
+        }else if(action==='EXPORT'){
           const data=event.data.browserData;
           if(!data||typeof data.localStorage!=='object'||typeof data.sessionStorage!=='object'){finish(new Error('Ana siteden geçerli kişisel kayıt yanıtı alınamadı.'));return;}
           finish(null,data);
@@ -2334,9 +2337,24 @@
       if(restoreButton)restoreButton.disabled=!selectedBackup||((isSite||isLegacy)&&!state.apiEnabled);
     }
   }
+  async function clearPersonalBrowserData(){
+    const button=$('#clear-personal-data');
+    if(!window.confirm('ÖNEMLİ: Önce kişisel verilerini JSON olarak yedeklediğinden emin ol. Bu işlem bu tarayıcıdaki favorileri, izlenenleri, izleme listesini, film/dizi ilerlemelerini ve Perde tercihlerini kalıcı olarak siler. Site kataloğu silinmez. Devam etmek istiyor musun?'))return;
+    if(!window.confirm('SON ONAY: Bu cihazdaki Perde kişisel verileri geri alınamayacak şekilde temizlensin mi?'))return;
+    if(button){button.disabled=true;button.textContent='Temizleniyor…';}
+    try{
+      const result=await requestMainSiteBackup('CLEAR');
+      remotePersonalStorage=null;
+      const count=$('#backup-storage-count');if(count)count.textContent='0 kayıt';
+      const diagnostic=$('#backup-origin-status');if(diagnostic){diagnostic.textContent='Bu tarayıcıdaki Perde kişisel kayıtları temizlendi ('+result.clearedCount+' kayıt).';diagnostic.classList.remove('state-warning');}
+      toast(result.clearedCount+' kişisel kayıt bu tarayıcıdan temizlendi. Ana siteyi yenileyerek güncel durumu görebilirsin.','success');
+    }catch(error){toast(error.message||'Kişisel veriler temizlenemedi.','error');}
+    finally{if(button){button.disabled=false;button.textContent='Kişisel verileri temizle';}}
+  }
   function initBackupTools(){
     $('#download-site-backup')?.addEventListener('click',downloadSiteBackup);
     $('#download-personal-backup')?.addEventListener('click',downloadPersonalBackup);
+    $('#clear-personal-data')?.addEventListener('click',clearPersonalBrowserData);
     $('#restore-backup-file')?.addEventListener('change',event=>inspectBackupFile(event.target.files?.[0]));
     $('#restore-full-backup')?.addEventListener('click',restoreFullBackup);
     refreshBackupSummary();
