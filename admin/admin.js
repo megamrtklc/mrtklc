@@ -1241,7 +1241,7 @@
     $('#collection-cover').value=item?.image||item?.cover||item?.backdrop||'';
     $('#collection-cover-mode').value=item?.coverMode||((item?.image||item?.cover||item?.backdrop)?'url':'mix');
     $('#collection-template').value='';
-    $('#collection-publication-status').value=item?.publicationStatus||(item?.active===false?'draft':'published');
+    $('#collection-publication-status').value=item?collectionPublicationState(item):'draft';
     $('#collection-show-home').checked=item?.showHome!==false;
     $('#collection-show-page').checked=item?.showPage!==false;
     $('#collection-featured').checked=!!item?.featured;
@@ -1252,8 +1252,10 @@
     $('#collection-unpublish-at').value=collectionDateInput(item?.unpublishAt);
     $('#collection-expire-to-draft').checked=item?.expireToDraft!==false;
     $('#collection-require-ready').checked=item?.requireReady!==false;
+    const selectedOrder=new Map((item?.items||[]).map((id,index)=>[String(id),index]));
+    const options=getCollectionOptions().slice().sort((a,b)=>(selectedOrder.get(a.id)??Number.MAX_SAFE_INTEGER)-(selectedOrder.get(b.id)??Number.MAX_SAFE_INTEGER));
     const selected=new Set((item?.items||[]).map(String));
-    $('#collection-items').innerHTML=getCollectionOptions().map(x=>'<label class="collection-pick"><input type="checkbox" value="'+x.value+'" '+(selected.has(x.id)?'checked':'')+'><span><b>'+x.title+'</b><small>'+x.type+' · '+x.year+'</small></span></label>').join('')||'<div class="collection-picker-empty">Katalogda henüz seçilebilecek yapım bulunmuyor.</div>';
+    $('#collection-items').innerHTML=options.map(x=>'<label class="collection-pick"><input type="checkbox" value="'+x.value+'" '+(selected.has(x.id)?'checked':'')+'><span><b>'+x.title+'</b><small>'+x.type+' · '+x.year+'</small></span></label>').join('')||'<div class="collection-picker-empty">Katalogda henüz seçilebilecek yapım bulunmuyor.</div>';
     $('#collection-search').value='';filterCollectionItems();updateCollectionCoverPreview();updateCollectionReadiness();
     $('#collections-list-page').hidden=true;$('#collection-editor-page').hidden=false;
     $('#collection-editor-heading').textContent=item?'Koleksiyonu düzenle':'Yeni koleksiyon oluştur';
