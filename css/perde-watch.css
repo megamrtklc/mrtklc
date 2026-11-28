@@ -108,3 +108,43 @@
 html.cv-tv-mode [data-watch-card="player"] .absolute.inset-x-0.bottom-0.px-4.pb-1 button{min-width:48px;min-height:48px}
 html.cv-tv-mode [data-watch-card="player"] .absolute.inset-x-0.bottom-0.px-4.pb-1 button:focus-visible{outline-width:3px;outline-offset:4px}
 @media(prefers-reduced-motion:reduce){[data-watch-card="player"] button{transition:none!important}}
+
+
+/* URL'siz yapım bilgi kartı: yatay ve masaüstü oynatıcıda tam merkez */
+@media (max-width: 767px) and (orientation: landscape) {
+  [data-watch-card="player"] .cv-no-url-info {
+    left: 50% !important;
+    right: auto !important;
+    top: 50% !important;
+    bottom: auto !important;
+    width: min(52%, 460px) !important;
+    max-width: min(52%, 460px) !important;
+    max-height: 58% !important;
+    transform: translate(-50%, -50%) !important;
+    padding: 8px 10px !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+  [data-watch-card="player"] .cv-no-url-info {
+    left: 50% !important;
+    right: auto !important;
+    top: 50% !important;
+    bottom: auto !important;
+    width: min(48%, 520px) !important;
+    max-width: min(48%, 520px) !important;
+    max-height: 62% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
+@media (min-width: 1024px) {
+  [data-watch-card="player"] .cv-no-url-info {
+    left: 50% !important;
+    right: auto !important;
+    top: 50% !important;
+    bottom: auto !important;
+    width: min(48%, 560px) !important;
+    max-width: min(48%, 560px) !important;
+    max-height: 64% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
