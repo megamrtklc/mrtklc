@@ -67,10 +67,22 @@ for (const binding of [
 
 // Duplicate diagnostics must detect repeated external identities and exact
 // title/type/year matches without automatically merging or deleting records.
-assert.match(js,/function countDuplicateContentGroups\(catalog\)[\s\S]*?groups\.set\(key,\(groups\.get\(key\)\|\|0\)\+1\)[\s\S]*?filter\(count=>count>1\)/,
-  'Katalog denetimi mükerrer yapım gruplarını belirlemeli');
-assert.match(js,/duplicateContentCount=countDuplicateContentGroups\(valid\)/,
-  'Sistem denetimi mükerrer yapım gruplarını saymalı');
+const integrityStart = js.indexOf('function analyzeCatalogIntegrity(catalog)');
+const integrityEnd = js.indexOf('\n  const toast', integrityStart);
+const integrityBody = js.slice(integrityStart, integrityEnd);
+assert.ok(
+  integrityStart >= 0 && integrityEnd > integrityStart &&
+  integrityBody.includes('const ids=new Set(),duplicateIds=new Set(),contentGroups=new Map();') &&
+  integrityBody.includes('if(key)contentGroups.set(key,(contentGroups.get(key)||0)+1);') &&
+  integrityBody.includes('for(const count of contentGroups.values())if(count>1)duplicateContentCount++;') &&
+  integrityBody.includes('return {validCount,duplicateCount:duplicateIds.size,duplicateContentCount,missingTitle,missingId};'),
+  'Katalog denetimi mükerrer yapım gruplarını belirlemeli'
+);
+assert.ok(
+  js.includes('const integrity=analyzeCatalogIntegrity(catalog);') &&
+  js.includes('const {validCount,duplicateCount,duplicateContentCount,missingTitle,missingId}=integrity;'),
+  'Sistem denetimi mükerrer yapım gruplarını saymalı'
+);
 assert.match(js,/system-duplicate-content-count/,
   'Mükerrer yapım sayısı admin arayüzünde gösterilmeli');
 assert.match(js,/if\(duplicateContentCount>0&&note\)note\.textContent=/,
