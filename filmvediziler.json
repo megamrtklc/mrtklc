@@ -20887,7 +20887,48 @@
       "episodes": 17
     }
   ],
-  "collections": [],
+  "collections": [
+    {
+      "id": "collection-1795898611457",
+      "title": "Ölmeden İzle",
+      "description": "Her sinemaseverin hayatında en az bir kez izlemesi gereken yapımlar.",
+      "active": true,
+      "coverMode": "mix",
+      "image": "",
+      "items": [
+        "archive-35",
+        "archive-38",
+        "archive-40",
+        "archive-41",
+        "archive-42",
+        "archive-45",
+        "archive-46",
+        "archive-55",
+        "archive-76",
+        "archive-77",
+        "archive-82",
+        "archive-94",
+        "archive-107",
+        "archive-109",
+        "archive-111",
+        "archive-114",
+        "archive-115",
+        "archive-116",
+        "perde-mw5zwmbz",
+        "perde-mw6xs3qb",
+        "perde-mwawheyh",
+        "cv-1794697944496",
+        "cv-1794698259535",
+        "cv-1794698287703",
+        "cv-1794698302624",
+        "cv-1794698320791",
+        "cv-1794698369607",
+        "cv-1794698428751",
+        "cv-1794714842137",
+        "cv-1795531678896"
+      ]
+    }
+  ],
   "homepageConfig": {
     "version": 4,
     "settings": {
