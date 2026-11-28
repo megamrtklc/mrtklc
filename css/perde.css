@@ -249,51 +249,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   #home-page :is(#home-favorites-section .home-new-arrivals-heading,#home-catalog-section .home-catalog-heading) select{max-width:100%}
 }
 
-/* Tablet dikey ana sayfa: öne çıkan kart ölçülerini bölümler arasında eşitle */
-@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
-  #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) {
-    min-width: 0 !important;
-    max-width: 100% !important;
-  }
-
-  #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) .home-new-arrivals-rail {
-    display: flex !important;
-    align-items: stretch !important;
-    gap: 14px !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    overscroll-behavior-x: contain !important;
-  }
-
-  #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) .home-new-arrival-card {
-    box-sizing: border-box !important;
-    flex: 0 0 clamp(174px, 23%, 210px) !important;
-    width: clamp(174px, 23%, 210px) !important;
-    min-width: 0 !important;
-    align-self: stretch !important;
-  }
-
-  #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) .home-new-arrival-feature {
-    box-sizing: border-box !important;
-    flex: 0 0 23% !important;
-    width: 23% !important;
-    min-width: 0 !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    align-self: stretch !important;
-  }
-
-  /* 1024px ve üzerindeki tablet genişliğinde katalog kartları %19'a iner; öne çıkanlar da aynı ölçüyü kullanır. */
-  @media (min-width: 1024px) {
-    #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) .home-new-arrival-feature {
-      flex-basis: 19% !important;
-      width: 19% !important;
-    }
-  }
-}
+/* Öne çıkan kartlar, katalogdaki ortak .home-new-arrival-feature ölçüsünü kullanır. */
 
 /* Tablet dikey: kalan ana sayfa bölümlerinde kontrollü genişlik ve taşma önleme */
 @media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
