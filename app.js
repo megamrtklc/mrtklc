@@ -719,8 +719,9 @@
                         if (invalidCatalogCount) console.warn('Geçersiz katalog kayıtları atlandı:', invalidCatalogCount);
                         this.catalog = markStaticCatalog(normalizedCatalog);
                         this.heroCatalog = this.catalog;
-                        // Açıklama dosyası katalogdan önce geldiyse, katalog hazır olduğunda eşleştirmeyi yeniden uygula.
-                        if (this.catalogDetailsPromise) this.loadCatalogDescriptionsData();
+                        // Son Eklenenler'in ilk özel kartı için açıklama verisini katalog hazır olur olmaz arka planda başlat.
+                        // İstek beklenmez; ana katalog ve ilk ekran çizimini bloke etmez.
+                        if (this.currentPage === 'home' || this.catalogDetailsPromise) this.loadCatalogDescriptionsData();
                         // Mobil manşetin İngilizce adlarını katalog hazır olur olmaz yükle.
                         const loadEnglishTitlesWhenIdle = () => this.loadHeroEnglishTitles();
                         const scheduleEnglishTitles = () => {
