@@ -1175,7 +1175,7 @@
                                 .map(id => byId.get(String(id)))
                                 .filter(item => item && (item.poster || item.image || item.backdrop));
                             const coverMode = collection.coverMode || (collection.image ? 'url' : 'mix');
-                            return {...collection, items, coverItems: coverMode === 'mix' ? items.slice(0, 4) : coverMode === 'auto' ? items.slice(0, 1) : []};
+                            return {...collection, coverMode, items, coverItems: coverMode === 'mix' ? items.slice(0, 4) : coverMode === 'auto' ? items.slice(0, 1) : []};
                         })
                         .filter(collection => collection.items.length > 0);
                 },
