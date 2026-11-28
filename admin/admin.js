@@ -344,9 +344,12 @@
     $('#collection-grid').innerHTML=rows.length?rows.map(({item})=>{
       const count=Array.isArray(item.items)?item.items.length:0;
       const cover=String(item.image||item.cover||item.backdrop||'').trim();
+      const coverMode=item.coverMode||(cover?'url':'mix');
+      const coverItems=collectionCoverItemsForRecord(item);
+      const coverMarkup=coverMode==='mix'&&coverItems.length?'<div class="collection-mix-preview">'+coverItems.map(entry=>'<img loading="lazy" src="'+escapeHtml(collectionPoster(entry))+'" alt="">').join('')+'</div>':coverMode==='auto'&&coverItems.length?'<img loading="lazy" src="'+escapeHtml(collectionPoster(coverItems[0]))+'" alt="">':cover?'<img loading="lazy" src="'+escapeHtml(cover)+'" alt="" onerror="this.parentElement.classList.add(\'no-cover\');this.remove()">':'<span class="collection-cover-placeholder">▧</span>';
       const title=escapeHtml(item.title||item.name||'İsimsiz koleksiyon');
       return '<article class="collection-card collection-card-modern">'+
-        '<div class="collection-card-cover">'+(cover?'<img loading="lazy" src="'+escapeHtml(cover)+'" alt="" onerror="this.parentElement.classList.add(\'no-cover\');this.remove()">' :'<span class="collection-cover-placeholder">▧</span>')+
+        '<div class="collection-card-cover">'+coverMarkup+
         '<span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Taslak':'Yayında')+'</span></div>'+
         '<div class="collection-card-content"><div class="collection-card-title-row"><h3>'+title+'</h3><span class="collection-card-id">'+escapeHtml(item.id||'')+'</span></div>'+
         '<p>'+escapeHtml(item.description||'Henüz açıklama eklenmemiş.')+'</p><div class="collection-card-meta"><strong>'+count+'</strong><span>yapım</span></div>'+
@@ -1101,7 +1104,9 @@
   const COLLECTION_TEMPLATES={"Bilim Kurgu":"Geleceği, teknolojiyi ve bilinmeyeni keşfe çıkaran bilim kurgu seçkisi.","Korku":"Gerilim dozu yüksek, ürpertici ve akılda kalan korku yapımları.","Psikolojik Gerilim":"Zihnin sınırlarını zorlayan, gerilimi giderek yükselen hikâyeler.","Aksiyon Dolu":"Temposu hiç düşmeyen aksiyon ve macera yapımları.","Fantastik Dünyalar":"Büyü, mitoloji ve hayal gücüyle kurulan sıra dışı evrenler.","Suç ve Polisiye":"Gizemli dosyalar, suç hikâyeleri ve unutulmaz dedektifler.","Komedi":"Keyifli vakit geçirmek için eğlenceli ve bol kahkahalı yapımlar.","Dram":"Güçlü karakterler ve etkileyici hikâyelerle iz bırakan dramlar.","Romantik":"Aşkın farklı hallerini anlatan romantik hikâyeler.","Animasyon":"Her yaştan izleyiciye hitap eden yaratıcı animasyonlar.","Tarih ve Savaş":"Tarihe yön veren olayları ve savaşların izlerini anlatan yapımlar.","Belgesel":"Gerçek dünyaya farklı pencereler açan belgeseller.","Ölmeden İzle":"Her sinemaseverin hayatında en az bir kez izlemesi gereken yapımlar.","Şans Ver":"İlk bakışta gözden kaçsa da izleyince sevebileceğin yapımlar.","Ters Köşe":"Beklentileri altüst eden sürprizli hikâyeler ve şaşırtıcı finaller.","Gizli Cevherler":"Hak ettiği ilgiyi görmemiş, keşfedilmeyi bekleyen özel yapımlar.","Tek Oturuşta Bitir":"Bir sonraki bölümü açmadan duramayacağın sürükleyici yapımlar.","Hafta Sonu Maratonu":"Hafta sonunu keyifli bir izleme maratonuna dönüştürecek seçki.","Akıl Oyunları":"Düşündüren, ipuçlarıyla oynayan ve zihinde iz bırakan hikâyeler.","Unutulmaz Finaller":"Finaliyle uzun süre akıldan çıkmayan yapımlar.","Kısa ve Öz":"Az zamanda güçlü hikâyeler sunan mini diziler ve kısa yapımlar.","Bir Şans Daha":"Yeniden izlemeyi veya geç de olsa keşfetmeyi hak edenler.","Zamansız Klasikler":"Yıllar geçse de değerini kaybetmeyen sinema ve dizi klasikleri.","Yeni Başlayanlara Özel":"Dizi ve film dünyasına adım atmak isteyenler için güçlü başlangıçlar.","Yerli Yapımlar":"Türkiye'den çıkan dikkat çekici film ve diziler.","Kore Yapımları":"Güney Kore sinemasından ve dizilerinden öne çıkan hikâyeler.","Mini Dizi Seçkisi":"Baştan sona tek bir hikâyeyi tamamlayan mini diziler.","Gerçek Hikâyeler":"Yaşanmış olaylardan ve gerçek kişilerden ilham alan yapımlar.","Güçlü Kadın Hikâyeleri":"Merkezinde güçlü, çok katmanlı kadın karakterler bulunan yapımlar.","Distopik Dünyalar":"Geleceğin karanlık ve düşündürücü toplumlarını anlatan yapımlar.","Ailece İzle":"Birlikte izlemek için uygun, farklı yaşlara hitap eden yapımlar.","Yönetmenlerden Seçmeler":"Özgün anlatımı ve görsel diliyle öne çıkan yönetmen işleri."};
   function selectedCollectionIds(){return new Set(Array.from($('#collection-items').querySelectorAll('input:checked'),input=>String(input.value)));}
   function selectedCollectionItems(){const ids=selectedCollectionIds();return state.catalog.filter(item=>ids.has(String(item.id)));}
-  function collectionPoster(item){return item?.poster||item?.image||item?.backdrop||'';}
+  function collectionPoster(item){return item?.poster||item?.image||item?.backdrop||item?.tmdbPoster||'';}
+  function sampleCollectionCoverItems(items){const list=(items||[]).filter(item=>collectionPoster(item));const count=Math.min(4,list.length);if(count<=1)return list.slice(0,count);return Array.from({length:count},(_,index)=>list[Math.round(index*(list.length-1)/(count-1))]);}
+  function collectionCoverItemsForRecord(record){const byId=new Map(state.catalog.map(item=>[String(item.id),item]));return sampleCollectionCoverItems((Array.isArray(record?.items)?record.items:[]).map(id=>byId.get(String(id))).filter(Boolean));}
   const COLLECTION_TEMPLATE_RULES={
     'Bilim Kurgu':['bilim kurgu','science fiction','sci-fi','uzay','gelecek'],
     'Korku':['korku','horror','slasher','zombi'],
@@ -1210,8 +1215,8 @@
   function updateCollectionCoverPreview(){
     const preview=$('#collection-cover-preview'),url=$('#collection-cover').value.trim(),mode=$('#collection-cover-mode')?.value||'mix';
     const urlField=$('#collection-cover-url-field');if(urlField)urlField.hidden=mode!=='url';
-    const help=$('#collection-cover-help');if(help)help.textContent=mode==='mix'?'Seçtiğin film ve dizilerin posterlerinden otomatik kolaj hazırlanır. En fazla dört poster kullanılır.':mode==='auto'?'İlk seçtiğin yapımın posteri otomatik kapak olarak kullanılır.':'Kendi yatay kapak görselinin bağlantısını ekle.';
-    const items=selectedCollectionItems().filter(item=>collectionPoster(item));let content='';
+    const help=$('#collection-cover-help');if(help)help.textContent=mode==='mix'?'Seçtiğin tüm yapımlar arasından dengeli biçimde dört poster seçilerek kolaj hazırlanır.':mode==='auto'?'İlk seçtiğin yapımın posteri otomatik kapak olarak kullanılır.':'Kendi yatay kapak görselinin bağlantısını ekle.';
+    const selectedItems=selectedCollectionItems();const items=sampleCollectionCoverItems(selectedItems);let content='';
     if(mode==='url'&&url)content='<img src="'+escapeHtml(url)+'" alt="Koleksiyon kapak önizlemesi">';
     else if(mode==='auto'&&items.length)content='<img src="'+escapeHtml(collectionPoster(items[0]))+'" alt="Otomatik koleksiyon kapağı">';
     else if(mode==='mix'&&items.length)content='<div class="collection-mix-preview">'+items.slice(0,4).map(item=>'<img src="'+escapeHtml(collectionPoster(item))+'" alt="">').join('')+'</div>';
