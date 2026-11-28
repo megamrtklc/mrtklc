@@ -242,3 +242,11 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   #home-page .home-published-collection-heading{min-width:0;max-width:100%;flex-wrap:wrap}
   #home-page .home-published-collection-rail{max-width:100%;min-width:0}
 }
+
+/* Tablet portrait: featured rail cards need enough copy width beside the poster. */
+@media (min-width:768px) and (max-width:900px){
+  :is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section) .home-rail-card.home-new-arrival-feature{flex-basis:28%;width:28%}
+  :is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section) .home-new-arrival-feature .home-new-arrival-copy{padding-right:94px!important}
+  :is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section) .home-new-arrival-feature-poster{width:68px!important;height:102px!important;right:10px!important;bottom:10px!important}
+  :is(#home-new-arrivals-section,#home-favorites-section,#home-catalog-section) .home-new-arrival-feature .home-new-arrival-copy>p{font-size:11px!important;line-height:1.4!important;-webkit-line-clamp:3!important}
+}
