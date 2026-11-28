@@ -27,8 +27,7 @@
                     </select>
                 </div>
 
-                <div x-effect="query; sortMode; page = 1" class="hidden"></div>
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-5">
+                <div x-effect="query; sortMode; page = 1" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-5">
                     <template x-for="collection in publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).slice().sort((a,b) => sortMode === 'name' ? a.title.localeCompare(b.title, 'tr') : sortMode === 'count' ? b.items.length - a.items.length : 0).slice((page - 1) * pageSize, page * pageSize)" :key="'collection-browser-' + collection.id">
                         <button type="button" @click="selectedId = String(collection.id); window.scrollTo({top:0,behavior:'smooth'})" class="group min-w-0 overflow-hidden rounded-2xl border border-gray-200 bg-white text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-xl dark:border-white/10 dark:bg-[#151922]">
                             <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
