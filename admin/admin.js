@@ -272,26 +272,6 @@
     $('#page-info').textContent='Sayfa '+state.page+' / '+pages;
     $('#prev-page').disabled=state.page<=1;$('#next-page').disabled=state.page>=pages;
   }
-  function renderMissingTrailers(){
-    const query=($('#missing-trailer-search')?.value||'').trim().toLocaleLowerCase('tr');
-    const missing=[];
-    let missingCount=0;
-    state.catalog.forEach(item=>{
-      if(String(item.trailerUrl||item.tmdbTrailerUrl||'').trim())return;
-      missingCount++;
-      if(!query||titleOf(item).toLocaleLowerCase('tr').includes(query))missing.push(item);
-    });
-    missing.reverse();
-    const pages=Math.max(1,Math.ceil(missing.length/state.missingTrailerPageSize));
-    state.missingTrailerPage=Math.min(state.missingTrailerPage,pages);
-    const rows=missing.slice((state.missingTrailerPage-1)*state.missingTrailerPageSize,state.missingTrailerPage*state.missingTrailerPageSize);
-    $('#missing-trailer-rows').innerHTML=rows.length?rows.map(item=>'<tr><td><div class="catalog-title"><img loading="lazy" src="'+escapeHtml(posterOf(item))+'" alt=""><div><b>'+escapeHtml(titleOf(item))+'</b><small>'+escapeHtml(item.director||item.tmdbDirector||'Yönetmen bilgisi yok')+'</small></div></div></td><td><span class="type-chip">'+(isSeries(item)?'Dizi':'Film')+'</span></td><td>'+escapeHtml(yearOf(item))+'</td><td><span class="trailer-missing-status">Fragman eklenmemiş</span></td><td class="row-actions"><button class="row-action" data-missing-trailer-edit="'+escapeHtml(item.id)+'">Düzenle</button></td></tr>').join(''):'<tr><td colspan="5" class="empty-cell">'+(query?'Aramayla eşleşen fragmansız yapım bulunamadı.':'Harika! Tüm yapımlarda fragman bağlantısı mevcut.')+'</td></tr>';
-    $('#missing-trailer-count').textContent=String(missingCount);
-    $('#missing-trailer-result-count').textContent=missing.length.toLocaleString('tr-TR')+' yapım';
-    $('#missing-trailer-page-info').textContent='Sayfa '+state.missingTrailerPage+' / '+pages;
-    $('#missing-trailer-prev').disabled=state.missingTrailerPage<=1;
-    $('#missing-trailer-next').disabled=state.missingTrailerPage>=pages;
-  }
   const QUALITY_LABELS={poster:'Afiş',rating:'IMDb puanı',trailer:'Fragman',watch:'İzleme bağlantısı',cast:'Oyuncu bilgisi',director:'Yönetmen',year:'Yapım yılı',description:'Konu',tmdb:'TMDB eşleşmesi'};
   function qualityIssuesFor(item){
     const issues=[];
@@ -2528,7 +2508,6 @@
   $('#type-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#catalog-sort').addEventListener('change',()=>{state.page=1;renderCatalog();});
-  $('#missing-trailer-search').addEventListener('input',()=>{state.missingTrailerPage=1;renderMissingTrailers();});
   $('#missing-trailer-rows').addEventListener('click',event=>{
     const button=event.target.closest('[data-missing-trailer-edit]');if(!button)return;
     event.preventDefault();const item=state.catalog.find(x=>String(x.id)===button.dataset.missingTrailerEdit);
@@ -2543,8 +2522,6 @@
   $('#quality-prev')?.addEventListener('click',()=>{state.qualityPage=Math.max(1,state.qualityPage-1);renderQualityAudit();});
   $('#quality-next')?.addEventListener('click',()=>{state.qualityPage++;renderQualityAudit();});
   $('#quality-snapshot-save')?.addEventListener('click',saveQualitySnapshot);
-  $('#missing-trailer-prev').addEventListener('click',()=>{state.missingTrailerPage=Math.max(1,state.missingTrailerPage-1);renderMissingTrailers();});
-  $('#missing-trailer-next').addEventListener('click',()=>{state.missingTrailerPage++;renderMissingTrailers();});
   $('#prev-page').addEventListener('click',()=>{state.page=Math.max(1,state.page-1);renderCatalog();});
   $('#next-page').addEventListener('click',()=>{state.page++;renderCatalog();});
   // Yeni yapım düğmeleri üstteki delege edilmiş olay dinleyicisiyle yönetilir.
