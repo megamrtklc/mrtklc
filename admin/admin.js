@@ -2113,6 +2113,25 @@
     for(const key of PERSONAL_BACKUP_LIST_KEYS)if(!Object.prototype.hasOwnProperty.call(localStorageData,key))localStorageData[key]='[]';
     return {browserData:{localStorage:localStorageData,sessionStorage:{}},personalDataFormat:PERSONAL_BACKUP_MINIMAL_FORMAT};
   }
+  function hasMinimalPersonalFormat(data){return data?.personalDataFormat==='perde-personal-minimal-v2';}
+  function expandPersonalBackupData(data){
+    if(data?.personalDataFormat!==PERSONAL_BACKUP_SHARED_FORMAT)return data?.browserData||{};
+    const sharedItems=data.personalSharedItems||{};
+    const localStorageData={...(data.browserData?.localStorage||{})};
+    for(const key of PERSONAL_BACKUP_LIST_KEYS){
+      if(!Object.prototype.hasOwnProperty.call(localStorageData,key))continue;
+      let list;
+      try{list=JSON.parse(localStorageData[key]);}catch(_){throw new Error(key+' sıkıştırılmış yedek listesi okunamadı.');}
+      if(!Array.isArray(list))throw new Error(key+' sıkıştırılmış yedek listesi geçersiz.');
+      localStorageData[key]=JSON.stringify(list.map(entry=>{
+        const id=String(entry?.id??'');
+        const shared=sharedItems[id];
+        if(!id||!shared||typeof shared!=='object'||Array.isArray(shared))throw new Error('Kişisel yedekte '+(id||'kimliği eksik')+' yapımının ortak verisi bulunamadı.');
+        return {...shared,...entry};
+      }));
+    }
+    return {...data.browserData,localStorage:localStorageData};
+  }
   function downloadSiteBackup(){
     if(!state.data||!Array.isArray(state.data.catalog)){toast('Katalog yüklenmeden yedek oluşturulamaz.');return;}
     const date=new Date().toISOString().slice(0,10);
