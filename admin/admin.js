@@ -2094,6 +2094,14 @@
     'perde_discovery_current_v1','perde_discovery_seen_v1'
   ]);
   function compactPersonalBackup(browserData){
+    const PERSONAL_BACKUP_MINIMAL_FORMAT='perde-personal-minimal-v2';
+    const PERSONAL_BACKUP_LIST_KEYS=['cine_watched_items_v1','cine_favorite_items_v1','cine_watchlist_v1'];
+    const PERSONAL_BACKUP_ALLOWED_KEYS=new Set([
+      ...PERSONAL_BACKUP_LIST_KEYS,'cine_movie_progress_v1','cine_episode_tracking_v1','perde_player_progress_v3',
+      'cine_reviews','cine_recommendation_mode_v1','cine_recommendation_rotation_v1','cine_theme_v3',
+      'perde_recommendation_preferences_v1','perde_discovery_shuffle_seed_v1','perde_discovery_showcase_seed_v1',
+      'perde_discovery_current_v1','perde_discovery_seen_v1'
+    ]);
     const source=browserData?.localStorage||{},localStorageData={};
     for(const key of PERSONAL_BACKUP_ALLOWED_KEYS){
       if(!Object.prototype.hasOwnProperty.call(source,key))continue;
@@ -2116,6 +2124,8 @@
   }
   function hasMinimalPersonalFormat(data){return data?.personalDataFormat==='perde-personal-minimal-v2';}
   function expandPersonalBackupData(data){
+    const PERSONAL_BACKUP_SHARED_FORMAT='perde-shared-production-v1';
+    const PERSONAL_BACKUP_LIST_KEYS=['cine_watched_items_v1','cine_favorite_items_v1','cine_watchlist_v1'];
     if(data?.personalDataFormat!==PERSONAL_BACKUP_SHARED_FORMAT)return data?.browserData||{};
     const sharedItems=data.personalSharedItems||{};
     const localStorageData={...(data.browserData?.localStorage||{})};
