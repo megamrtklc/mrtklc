@@ -1163,6 +1163,7 @@
 
                 get publishedCollections() {
                     const byId = new Map(this.catalog.map(item => [String(item.id), item]));
+                    const catalogRank = new Map(this.catalog.map((item,index) => [String(item.id), index]));
                     const collections = Array.isArray(this.collections) ? this.collections : [];
                     const configuredOrder = this.homepageConfig?.layout?.collectionOrder;
                     const orderRank = new Map((Array.isArray(configuredOrder) ? configuredOrder : []).map((id, index) => [String(id), index]));
@@ -1183,7 +1184,7 @@
                                 .map(id => byId.get(String(id)))
                                 .filter(item => item && (item.poster || item.image || item.backdrop || item.tmdbPoster));
                             const sortMode = collection.sortMode || 'manual';
-                            if (sortMode === 'newest') items = items.slice().sort((a,b) => String(b.year || b.releaseDate || '').localeCompare(String(a.year || a.releaseDate || '')));
+                            if (sortMode === 'newest') items = items.slice().sort((a,b) => (catalogRank.get(String(b.id)) ?? -1) - (catalogRank.get(String(a.id)) ?? -1));
                             else if (sortMode === 'name') items = items.slice().sort((a,b) => String(a.title || '').localeCompare(String(b.title || ''), 'tr'));
                             else if (sortMode === 'rating') items = items.slice().sort((a,b) => Number(b.rating || b.tmdbRating || 0) - Number(a.rating || a.tmdbRating || 0));
                             const coverMode = collection.coverMode || (collection.image ? 'url' : 'mix');
