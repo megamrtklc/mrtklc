@@ -1085,13 +1085,18 @@ try {
         assert.ok(await page.locator('#home-personalized-section .home-personalized-mobile-card').isVisible(),
           'Dar mobil ekranda kişisel öneri kartı görünür değil');
       } else if (viewport.width <= 900) {
-        const tabletLayout = await page.locator('#home-personalized-rail').evaluate(element => ({
-          display: getComputedStyle(element).display,
-          overflowX: getComputedStyle(element).overflowX,
-          visible: element.getBoundingClientRect().width > 0
-        }));
-        assert.ok(tabletLayout.visible && tabletLayout.display === 'grid',
-          'Tablet genişliğinde kişisel öneri kart ızgarası görünür değil');
+        const tabletLayout = await page.locator('#home-personalized-section').evaluate(section => {
+          const feature = section.querySelector('.home-personalized-feature');
+          const mobileCard = section.querySelector('.home-personalized-mobile-card');
+          const rail = section.querySelector('#home-personalized-rail');
+          return {
+            featureVisible: !!feature && feature.getBoundingClientRect().width > 0,
+            mobileCardHidden: !mobileCard || getComputedStyle(mobileCard).display === 'none',
+            alternativesHidden: !rail || getComputedStyle(rail).display === 'none'
+          };
+        });
+        assert.ok(tabletLayout.featureVisible && tabletLayout.mobileCardHidden && tabletLayout.alternativesHidden,
+          'Tablet dikey görünümünde tek kişisel öneri kartı gösterilmeli; mobil kopya ve alternatif şeridi gizlenmeli');
       }
       for (const selector of railSelectors) {
         const state = await page.locator(selector).evaluate(element => {
