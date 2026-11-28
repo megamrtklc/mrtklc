@@ -387,6 +387,12 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 }
 
 
+/* Öneri bölümünün alternatif mobil kartı yalnızca telefon genişliğinde gösterilir. */
+#home-page #home-personalized-section .home-personalized-mobile-card{display:none!important}
+@media (max-width:767px){
+  #home-page #home-personalized-section .home-personalized-mobile-card{display:block!important}
+}
+
 /* Tablet dikey: ana sayfa yatay raflarında hem yatay hem dikey dokunma kaydırmasını koru. */
 @media (min-width:768px) and (max-width:1100px) and (orientation:portrait){
   #home-page{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
