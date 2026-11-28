@@ -366,6 +366,10 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   #home-page #home-personalized-section .home-personalized-toolbar{min-width:0!important;max-width:48%!important;flex:0 1 48%!important;flex-wrap:wrap!important;justify-content:flex-end!important}
   #home-page #home-personalized-section .home-personalized-showcase{display:block!important;width:100%!important;height:auto!important;min-height:0!important;margin:0!important}
   #home-page #home-personalized-section .home-personalized-feature{display:block!important;width:100%!important;height:360px!important;min-height:360px!important;max-height:360px!important;box-sizing:border-box!important;border-radius:16px!important;overflow:hidden!important}
+  #home-page #home-personalized-section .home-personalized-feature{position:relative!important;isolation:isolate!important;background:#11141b!important}
+  #home-page #home-personalized-section .home-personalized-feature-image{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;z-index:-2!important}
+  #home-page #home-personalized-section .home-personalized-feature-poster{width:104px!important;height:156px!important;max-width:22%!important;right:18px!important;bottom:18px!important;overflow:hidden!important;border-radius:12px!important}
+  #home-page #home-personalized-section .home-personalized-feature-poster img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
   #home-page #home-personalized-section .home-personalized-alternatives{display:none!important}
   #home-page #home-personalized-section .home-personalized-mobile-card{display:none!important}
   #home-page #home-personalized-section .home-personalized-feature-poster{width:112px!important;height:168px!important;right:20px!important;bottom:20px!important}
