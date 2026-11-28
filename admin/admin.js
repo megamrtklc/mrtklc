@@ -1136,7 +1136,7 @@
     'Yönetmenlerden Seçmeler':['rating:high'],
     'Bir Şans Daha':['rating:good']
   };
-  const normalizeCollectionText=value=>String(value||'').toLocaleLowerCase('tr').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/ı/g,'i');
+  const normalizeCollectionText=value=>String(value||'').toLocaleLowerCase('tr').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/ı/g,'i');
   function collectionSuggestionScore(item,template){
     const rules=COLLECTION_TEMPLATE_RULES[template]||[];
     const category=normalizeCollectionText([item.category,item.genre,item.genres,item.tmdbGenres,item.tags].flat().join(' '));
