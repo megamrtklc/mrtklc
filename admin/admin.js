@@ -2063,6 +2063,38 @@
     if(note)note.textContent='Kontrol tamamlandı: '+checked+'. Bu işlem katalog verilerini değiştirmedi.';
     if(button){button.disabled=false;button.textContent='↻  Kontrolleri yenile';}
   }
+  const BACKUP_HISTORY_KEY='perde_admin_backup_history_v1';
+  function readBackupHistory(){
+    try{const value=JSON.parse(localStorage.getItem(BACKUP_HISTORY_KEY)||'[]');return Array.isArray(value)?value.slice(0,20):[];}
+    catch(_){return [];}
+  }
+  function renderBackupHistory(){
+    const host=$('#backup-history-list');if(!host)return;
+    const items=readBackupHistory();
+    if(!items.length){host.innerHTML='<p class="backup-history-empty">Henüz yedekleme işlemi kaydedilmedi.</p>';return;}
+    host.innerHTML=items.map(item=>{
+      const state=item.status==='success'?'Başarılı':item.status==='error'?'Başarısız':'Bilgi';
+      const date=Number(item.at)?new Date(item.at).toLocaleString('tr-TR'):'Tarih yok';
+      return '<div class="backup-history-item"><span class="backup-history-mark" data-state="'+escapeHtml(item.status||'info')+'">'+(item.status==='success'?'✓':item.status==='error'?'!':'i')+'</span><div class="backup-history-copy"><b>'+escapeHtml(item.action||'İşlem')+'</b><small>'+escapeHtml(item.detail||'')+'</small><time>'+escapeHtml(date)+'</time></div><span class="backup-history-state" data-state="'+escapeHtml(item.status||'info')+'">'+state+'</span></div>';
+    }).join('');
+  }
+  function recordBackupHistory(action,detail,status='success'){
+    try{
+      const items=readBackupHistory();
+      items.unshift({at:Date.now(),action:String(action||'İşlem').slice(0,80),detail:String(detail||'').slice(0,220),status:['success','error','info'].includes(status)?status:'info'});
+      localStorage.setItem(BACKUP_HISTORY_KEY,JSON.stringify(items.slice(0,20)));
+    }catch(error){console.warn('Yedekleme işlem geçmişi kaydedilemedi:',error);}
+    renderBackupHistory();
+  }
+  function formatBackupSize(bytes){
+    const value=Math.max(0,Number(bytes)||0);
+    return value<1024?value+' B':(value/1024).toLocaleString('tr-TR',{maximumFractionDigits:1})+' KB';
+  }
+  function clearBackupHistory(){
+    if(!window.confirm('Bu tarayıcıdaki yedekleme işlem geçmişi temizlensin mi? Yedek dosyaları etkilenmez.'))return;
+    try{localStorage.removeItem(BACKUP_HISTORY_KEY);renderBackupHistory();toast('Yedekleme işlem geçmişi temizlendi.','success');}
+    catch(_){toast('İşlem geçmişi temizlenemedi.','error');}
+  }
   function refreshBackupSummary(){
     const catalogCount=Array.isArray(state.data?.catalog)?state.data.catalog.length:0;
     $('#backup-catalog-count').textContent=catalogCount+' yapım';
@@ -2084,7 +2116,10 @@
     const url=URL.createObjectURL(blob),anchor=document.createElement('a');
     anchor.href=url;anchor.download=filename;
     document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
-    toast(successMessage);
+    const isSite=payload?.format==='perde-site-backup';
+    const count=isSite?(payload.siteData?.catalog?.length||0):backupStorageCount(payload?.browserData||{});
+    recordBackupHistory(isSite?'Site yedeği alındı':'Kişisel yedek alındı',filename+' · '+count+' kayıt · '+formatBackupSize(blob.size),'success');
+    toast(successMessage,'success');
   }
   const PERSONAL_BACKUP_SHARED_FORMAT='perde-shared-production-v1';
   const PERSONAL_BACKUP_MINIMAL_FORMAT='perde-personal-minimal-v2';
@@ -2322,6 +2357,7 @@
       }else{
         toast('Kişisel kayıtlar ana Perde sitesine geri yüklendi. Açık ana site sekmesini yenile.','success');
       }
+      recordBackupHistory('Yedek geri yüklendi',scope+' · '+description,'success');
       setTimeout(()=>window.location.reload(),900);
     }catch(error){
       let rollbackWarning='';
@@ -2331,6 +2367,7 @@
         catch(rollbackError){console.error('Ana site kişisel kayıtları geri alınamadı:',rollbackError);rollbackWarning=' Ayrıca kişisel kayıtların otomatik geri alınması da başarısız oldu; ana site kayıtlarını kontrol et.';}
       }
       showRestoreStage('Geri yükleme tamamlanamadı',restoreStage);
+      recordBackupHistory('Geri yükleme başarısız',restoreStage+' '+(error.message||'İşlem tamamlanamadı.'),'error');
       toast(restoreStage+' '+(error.message||'İşlem tamamlanamadı.')+rollbackWarning,'error');
     }finally{
       backupRestoreInProgress=false;
@@ -2347,6 +2384,7 @@
       remotePersonalStorage=null;
       const count=$('#backup-storage-count');if(count)count.textContent='0 kayıt';
       const diagnostic=$('#backup-origin-status');if(diagnostic){diagnostic.textContent='Bu tarayıcıdaki Perde kişisel kayıtları temizlendi ('+result.clearedCount+' kayıt).';diagnostic.classList.remove('state-warning');}
+      recordBackupHistory('Kişisel veriler temizlendi',result.clearedCount+' tarayıcı kaydı silindi','success');
       toast(result.clearedCount+' kişisel kayıt bu tarayıcıdan temizlendi. Ana siteyi yenileyerek güncel durumu görebilirsin.','success');
     }catch(error){toast(error.message||'Kişisel veriler temizlenemedi.','error');}
     finally{if(button){button.disabled=false;button.textContent='Kişisel verileri temizle';}}
@@ -2357,6 +2395,8 @@
     $('#clear-personal-data')?.addEventListener('click',clearPersonalBrowserData);
     $('#restore-backup-file')?.addEventListener('change',event=>inspectBackupFile(event.target.files?.[0]));
     $('#restore-full-backup')?.addEventListener('click',restoreFullBackup);
+    $('#clear-backup-history')?.addEventListener('click',clearBackupHistory);
+    renderBackupHistory();
     refreshBackupSummary();
   }
   async function init(){
