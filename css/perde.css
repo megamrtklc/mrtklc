@@ -408,3 +408,33 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
     line-height:1.4!important;
   }
 }
+
+/* Tablet dikey: İzlediklerim ilk özel kartını katalog kartıyla aynı ölçüde sabitle. */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  #home-page #home-watched-section .home-new-arrival-feature {
+    flex: 0 0 31% !important;
+    width: 31% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    align-self: flex-start !important;
+    box-sizing: border-box !important;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1100px) and (orientation: portrait) {
+  #home-page #home-watched-section .home-new-arrival-feature {
+    flex: 0 0 clamp(300px, 31vw, 400px) !important;
+    width: clamp(300px, 31vw, 400px) !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    align-self: flex-start !important;
+    box-sizing: border-box !important;
+  }
+}
