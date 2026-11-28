@@ -1588,32 +1588,44 @@
                     return window.PerdeLibraryPage?.resumeLibraryItem.call(this, entry);
                 },
 
+                compactPersonalItem(item) {
+                    if (!item || item.id == null) return null;
+                    const compact = { id: String(item.id), title: String(item.title || item.tmdbTitle || item.originalTitle || item.tmdbOriginalTitle || 'Başlıksız yapım') };
+                    if (item.type != null) compact.type = String(item.type);
+                    if (item.year != null && String(item.year).trim()) compact.year = String(item.year);
+                    return compact;
+                },
+                resolvePersonalItem(entry) {
+                    if (!entry || entry.id == null) return null;
+                    const current = (this.catalog || []).find(item => String(item.id) === String(entry.id));
+                    if (!current) return { ...entry };
+                    const resolved = { ...current };
+                    if (entry._statusSavedAt != null) resolved._statusSavedAt = Number(entry._statusSavedAt) || 0;
+                    return resolved;
+                },
                 userStatusRevision: 0,
                 get watchedItems() {
                     this.userStatusRevision;
                     const saved = safeStorageRead('cine_watched_items_v1', []);
                     if (!Array.isArray(saved)) return [];
-                    return saved.filter(entry => entry && entry.id != null).map(entry => {
-                        const current = this.catalog.find(item => String(item.id) === String(entry.id));
-                        return current ? { ...current, _statusSavedAt: Number(entry._statusSavedAt) || 0 } : entry;
-                    }).sort((a,b) => (b._statusSavedAt || 0) - (a._statusSavedAt || 0));
+                    return saved.filter(entry => entry && entry.id != null).map(entry => this.resolvePersonalItem(entry))
+                        .filter(Boolean).sort((a,b) => (b._statusSavedAt || 0) - (a._statusSavedAt || 0));
                 },
                 get favoriteItems() {
                     this.userStatusRevision;
                     const saved = safeStorageRead('cine_favorite_items_v1', []);
                     if (!Array.isArray(saved)) return [];
-                    return saved.filter(entry => entry && entry.id != null).map(entry => {
-                        const current = this.catalog.find(item => String(item.id) === String(entry.id));
-                        return current ? { ...current, _statusSavedAt: Number(entry._statusSavedAt) || 0 } : entry;
-                    }).sort((a,b) => (b._statusSavedAt || 0) - (a._statusSavedAt || 0));
+                    return saved.filter(entry => entry && entry.id != null).map(entry => this.resolvePersonalItem(entry))
+                        .filter(Boolean).sort((a,b) => (b._statusSavedAt || 0) - (a._statusSavedAt || 0));
                 },
                 togglePersonalStatus(storageKey, item) {
                     if (!item || item.id == null) return;
                     const saved = safeStorageRead(storageKey, []);
-                    const list = Array.isArray(saved) ? saved.filter(entry => entry && entry.id != null) : [];
+                    const list = Array.isArray(saved) ? saved.filter(entry => entry && entry.id != null)
+                        .map(entry => ({ ...this.compactPersonalItem(entry), ...(Number(entry._statusSavedAt) > 0 ? { _statusSavedAt: Number(entry._statusSavedAt) } : {}) })) : [];
                     const index = list.findIndex(entry => String(entry.id) === String(item.id));
                     if (index >= 0) list.splice(index, 1);
-                    else list.unshift({ ...item, _statusSavedAt: Date.now() });
+                    else list.unshift({ ...this.compactPersonalItem(item), _statusSavedAt: Date.now() });
                     if (safeStorageWrite(storageKey, list)) this.userStatusRevision += 1;
                 },
                 toggleWatched(item) { this.togglePersonalStatus('cine_watched_items_v1', item); },
@@ -1636,7 +1648,8 @@
                 watchlistRevision: 0,
                 get watchlist() {
                     const list = safeStorageRead('cine_watchlist_v1', []);
-                    return Array.isArray(list) ? list.filter(item => item && typeof item === 'object' && item.id != null) : [];
+                    return Array.isArray(list) ? list.filter(item => item && typeof item === 'object' && item.id != null)
+                        .map(item => this.resolvePersonalItem(item)).filter(Boolean) : [];
                 },
                 // Video bağlantıları sayfası için yalnızca en az bir oynatma URL'si bulunan kayıtları listeler.
                 get watchableCatalog() {
@@ -1651,10 +1664,11 @@
                 },
 
                 toggleWatchlist(item) {
-                    const list = this.watchlist;
-                    const index = list.findIndex(m => m && String(m.id) === String(item.id));
+                    if (!item || item.id == null) return;
+                    const list = this.watchlist.map(entry => this.compactPersonalItem(entry)).filter(Boolean);
+                    const index = list.findIndex(m => String(m.id) === String(item.id));
                     if (index > -1) list.splice(index, 1);
-                    else list.push(item);
+                    else list.push(this.compactPersonalItem(item));
                     safeStorageWrite('cine_watchlist_v1', list);
                     this.watchlistRevision += 1;
                 },
