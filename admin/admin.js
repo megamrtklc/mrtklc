@@ -325,10 +325,33 @@
   }
   function renderCollections(){
     const list=collectionList();
-    $('#collection-grid').innerHTML=list.length?list.map(item=>{
+    const activeCount=list.filter(item=>item.active!==false).length;
+    $('#collection-total-count').textContent=String(list.length);
+    $('#collection-active-count').textContent=String(activeCount);
+    $('#collection-draft-count').textContent=String(list.length-activeCount);
+    const query=($('#collection-list-search')?.value||'').trim().toLocaleLowerCase('tr');
+    const status=$('#collection-status-filter')?.value||'all';
+    const sort=$('#collection-sort')?.value||'recent';
+    let rows=list.map((item,index)=>({item,index})).filter(({item})=>{
+      const title=String(item.title||item.name||'').toLocaleLowerCase('tr');
+      const description=String(item.description||'').toLocaleLowerCase('tr');
+      return (!query||title.includes(query)||description.includes(query))&&(status==='all'||(status==='active'?item.active!==false:item.active===false));
+    });
+    if(sort==='name')rows.sort((a,b)=>String(a.item.title||a.item.name||'').localeCompare(String(b.item.title||b.item.name||''),'tr'));
+    else if(sort==='count')rows.sort((a,b)=>(b.item.items?.length||0)-(a.item.items?.length||0));
+    else rows.sort((a,b)=>b.index-a.index);
+    $('#collection-result-count').textContent=rows.length+' koleksiyon';
+    $('#collection-grid').innerHTML=rows.length?rows.map(({item})=>{
       const count=Array.isArray(item.items)?item.items.length:0;
-      return '<article class="collection-card"><div class="collection-card-top"><span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Pasif':'Yayında')+'</span><span class="collection-id">'+escapeHtml(item.id||'')+'</span></div><h3>'+escapeHtml(item.title||item.name||'İsimsiz koleksiyon')+'</h3><p>'+escapeHtml(item.description||'Açıklama eklenmemiş')+'</p><strong>'+count+'</strong><small>İçerik kaydı</small><div class="collection-actions"><button class="row-action" data-collection-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" data-collection-delete="'+escapeHtml(item.id)+'">Sil</button></div></article>';
-    }).join(''):'<article class="panel-card empty-state"><span>▧</span><h2>Henüz koleksiyon bulunamadı</h2><p>Yeni koleksiyon oluşturarak seçkilerini yönetebilirsin.</p></article>';
+      const cover=String(item.image||item.cover||item.backdrop||'').trim();
+      const title=escapeHtml(item.title||item.name||'İsimsiz koleksiyon');
+      return '<article class="collection-card collection-card-modern">'+
+        '<div class="collection-card-cover">'+(cover?'<img loading="lazy" src="'+escapeHtml(cover)+'" alt="" onerror="this.parentElement.classList.add(\'no-cover\');this.remove()">' :'<span class="collection-cover-placeholder">▧</span>')+
+        '<span class="collection-status '+(item.active===false?'inactive':'')+'">'+(item.active===false?'Taslak':'Yayında')+'</span></div>'+
+        '<div class="collection-card-content"><div class="collection-card-title-row"><h3>'+title+'</h3><span class="collection-card-id">'+escapeHtml(item.id||'')+'</span></div>'+
+        '<p>'+escapeHtml(item.description||'Henüz açıklama eklenmemiş.')+'</p><div class="collection-card-meta"><strong>'+count+'</strong><span>yapım</span></div>'+
+        '<div class="collection-actions"><button class="row-action" type="button" data-collection-edit="'+escapeHtml(item.id)+'">Düzenle</button><button class="row-action danger-action" type="button" data-collection-delete="'+escapeHtml(item.id)+'">Sil</button></div></div></article>';
+    }).join(''):(list.length?'<article class="collection-empty-state"><span>⌕</span><h2>Aramana uygun koleksiyon bulunamadı</h2><p>Arama kelimesini veya durum filtresini değiştirebilirsin.</p><button type="button" class="secondary-button" id="collection-clear-filters">Filtreleri temizle</button></article>':'<article class="collection-empty-state"><span>▧</span><h2>Henüz koleksiyon oluşturulmadı</h2><p>Film ve dizilerini temalarına göre bir araya getir. İlk koleksiyonunu oluşturarak başlayabilirsin.</p><button type="button" class="primary-button" id="collection-empty-add">＋ İlk koleksiyonunu oluştur</button><small>Oluşturma ekranı ayrı bir sayfa olarak açılır.</small></article>');
     updateMetrics();
   }
   function renderFranchises(){
@@ -1080,29 +1103,50 @@
     const item=collectionList().find(x=>String(x.id)===String(id));
     $('#collection-form').reset();$('#collection-id').value=item?.id||'';
     $('#collection-title').value=item?.title||'';$('#collection-description').value=item?.description||'';
+    $('#collection-cover').value=item?.image||item?.cover||item?.backdrop||'';
     $('#collection-active').checked=item?.active!==false;
     const selected=new Set((item?.items||[]).map(String));
-    $('#collection-items').innerHTML=getCollectionOptions().map(x=>'<label class="collection-pick"><input type="checkbox" value="'+x.value+'" '+(selected.has(x.id)?'checked':'')+'><span><b>'+x.title+'</b><small>'+x.type+' · '+x.year+'</small></span></label>').join('');
-    $('#collection-search').value='';filterCollectionItems();
-    $('#collection-dialog-title').textContent=item?'Koleksiyonu düzenle':'Yeni koleksiyon';
-    $('#collection-dialog').showModal();
+    $('#collection-items').innerHTML=getCollectionOptions().map(x=>'<label class="collection-pick"><input type="checkbox" value="'+x.value+'" '+(selected.has(x.id)?'checked':'')+'><span><b>'+x.title+'</b><small>'+x.type+' · '+x.year+'</small></span></label>').join('')||'<div class="collection-picker-empty">Katalogda henüz seçilebilecek yapım bulunmuyor.</div>';
+    $('#collection-search').value='';filterCollectionItems();updateCollectionCoverPreview();
+    $('#collections-list-page').hidden=true;$('#collection-editor-page').hidden=false;
+    $('#collection-editor-heading').textContent=item?'Koleksiyonu düzenle':'Yeni koleksiyon oluştur';
+    $('#collection-editor-status').textContent=item?'Mevcut koleksiyon bilgilerini güncelleyebilirsin.':'Değişiklikler kaydedilene kadar taslak olarak kalır.';
+    $('#crumb-current').textContent=item?'Koleksiyon düzenle':'Yeni koleksiyon';
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  function closeCollectionEditor(){
+    $('#collection-editor-page').hidden=true;$('#collections-list-page').hidden=false;
+    $('#crumb-current').textContent='Koleksiyonlar';
+    $('#collection-form').reset();renderCollections();
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  function updateCollectionCoverPreview(){
+    const preview=$('#collection-cover-preview'),url=$('#collection-cover').value.trim();
+    preview.innerHTML=url?'<img src="'+escapeHtml(url)+'" alt="Koleksiyon kapak önizlemesi" onerror="this.parentElement.classList.add(\'is-invalid\')"><span class="collection-cover-preview-label">KAPAK ÖNİZLEMESİ</span>':'<span>▧</span><small>Kapak önizlemesi</small>';
+    preview.classList.toggle('has-image',!!url);preview.classList.remove('is-invalid');
+  }
+  function updateCollectionSelectedCount(){
+    const count=$('#collection-items input:checked').length;
+    $('#collection-selected-count').textContent=count+' seçili';
+    $('#collection-catalog-count').textContent=$('#collection-items .collection-pick').length+' yapım';
   }
   function filterCollectionItems(){
     const q=$('#collection-search').value.trim().toLocaleLowerCase('tr');
-    $$('.collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
+    $('.collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
+    updateCollectionSelectedCount();
   }
   async function saveCollection(event){
     event.preventDefault();if(!canWrite())return;
     const id=$('#collection-id').value||('collection-'+Date.now());
     const existing=collectionList().find(x=>String(x.id)===String(id));
     const record={...(existing||{}),id,title:$('#collection-title').value.trim(),description:$('#collection-description').value.trim(),
-      active:$('#collection-active').checked,items:$$('#collection-items input:checked').map(x=>x.value)};
+      active:$('#collection-active').checked,image:$('#collection-cover').value.trim(),items:$('#collection-items input:checked').map(x=>x.value)};
     if(!record.title){toast('Koleksiyon adı zorunludur.');return;}
     const nextData={...state.data,collections:[...collectionList()]};
     const index=nextData.collections.findIndex(x=>String(x.id)===String(id));
     if(index>=0)nextData.collections[index]=record;else nextData.collections.push(record);
     const ok=await persist(nextData,existing?'Koleksiyon güncellendi.':'Koleksiyon oluşturuldu.');
-    if(ok)$('#collection-dialog').close();
+    if(ok)closeCollectionEditor();
   }
   async function deleteCollection(id){
     if(!canWrite())return;const item=collectionList().find(x=>String(x.id)===String(id));if(!item)return;
@@ -2498,7 +2542,11 @@
   });
   $('#collection-form').addEventListener('submit',saveCollection);
   $('#collection-search').addEventListener('input',filterCollectionItems);
-  $('#collection-close').addEventListener('click',()=>$('#collection-dialog').close());$('#collection-cancel').addEventListener('click',()=>$('#collection-dialog').close());
+  $('#collection-cancel').addEventListener('click',closeCollectionEditor);$('#collection-cancel-bottom').addEventListener('click',closeCollectionEditor);
+  $('#collection-list-search').addEventListener('input',renderCollections);$('#collection-status-filter').addEventListener('change',renderCollections);$('#collection-sort').addEventListener('change',renderCollections);
+  $('#collection-grid').addEventListener('click',event=>{if(event.target.closest('#collection-empty-add,#collection-clear-filters')){if(event.target.closest('#collection-empty-add'))openCollectionEditor(null);else{$('#collection-list-search').value='';$('#collection-status-filter').value='all';renderCollections();}return;}});
+  $('#collection-cover').addEventListener('input',updateCollectionCoverPreview);$('#collection-cover-clear').addEventListener('click',()=>{$('#collection-cover').value='';updateCollectionCoverPreview();});
+  $('#collection-items').addEventListener('change',event=>{if(event.target.matches('input[type="checkbox"]'))updateCollectionSelectedCount();});
   $('#franchise-grid').addEventListener('click',event=>{
     const edit=event.target.closest('[data-franchise-edit]');if(edit){openFranchiseEditor(edit.dataset.franchiseEdit);return;}
     const remove=event.target.closest('[data-franchise-delete]');if(remove)deleteFranchise(remove.dataset.franchiseDelete);
