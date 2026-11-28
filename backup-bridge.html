@@ -107,6 +107,43 @@
       return;
     }
 
+    if (event.data.type === 'PERDE_BACKUP_CLEAR_REQUEST') {
+      const previousLocal = readMatchingStorage(window.localStorage);
+      const previousSession = readMatchingStorage(window.sessionStorage);
+      try {
+        if (previousLocal.error || previousSession.error) throw new Error(previousLocal.error || previousSession.error);
+        validateStorageSnapshot(previousLocal, 'localStorage');
+        validateStorageSnapshot(previousSession, 'sessionStorage');
+        const keys = [...new Set([...Object.keys(previousLocal), ...Object.keys(previousSession)])];
+        Object.keys(previousLocal).forEach(key => window.localStorage.removeItem(key));
+        Object.keys(previousSession).forEach(key => window.sessionStorage.removeItem(key));
+        const remainingLocal = readMatchingStorage(window.localStorage);
+        const remainingSession = readMatchingStorage(window.sessionStorage);
+        if (remainingLocal.error || remainingSession.error || Object.keys(remainingLocal).length || Object.keys(remainingSession).length) {
+          throw new Error('Bazı kişisel kayıtlar silindikten sonra doğrulanamadı.');
+        }
+        respond(event.source, 'PERDE_BACKUP_CLEAR_RESPONSE', event.data.requestId, {
+          ok: true,
+          clearedCount: keys.length
+        });
+      } catch (error) {
+        const rollback = (storage, previous) => {
+          if (!previous || previous.error) return;
+          const current = readMatchingStorage(storage);
+          if (current.error) throw new Error(current.error);
+          Object.keys(current).forEach(key => storage.removeItem(key));
+          Object.entries(previous).forEach(([key, value]) => storage.setItem(key, value));
+        };
+        let rollbackError = '';
+        try { rollback(window.localStorage, previousLocal); } catch (e) { rollbackError += ' localStorage: ' + String(e.message || e); }
+        try { rollback(window.sessionStorage, previousSession); } catch (e) { rollbackError += ' sessionStorage: ' + String(e.message || e); }
+        respond(event.source, 'PERDE_BACKUP_CLEAR_RESPONSE', event.data.requestId, {
+          error: String(error.message || error) + (rollbackError ? '. Geri alma sorunu:' + rollbackError : '')
+        });
+      }
+      return;
+    }
+
     if (event.data.type === 'PERDE_BACKUP_RESTORE_REQUEST') {
       const data = event.data.browserData;
       let previousLocal = null;
