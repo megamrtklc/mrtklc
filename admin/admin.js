@@ -286,48 +286,6 @@
     if(!String(item.tmdbId||'').trim())issues.push('tmdb');
     return issues;
   }
-  const QUALITY_TRACK_KEYS=['poster','rating','trailer','watch','cast','director','year','description','tmdb'];
-  let qualityHistory={history:[],sha:null};
-  function buildQualitySnapshot(){
-    const counts=Object.fromEntries(QUALITY_TRACK_KEYS.map(key=>[key,0]));
-    state.catalog.forEach(item=>qualityIssuesFor(item).forEach(key=>counts[key]++));
-    return {id:'q-'+Date.now(),createdAt:new Date().toISOString(),total:state.catalog.length,affected:state.catalog.filter(item=>qualityIssuesFor(item).length).length,counts};
-  }
-  async function loadQualityHistory(){
-    try{const response=await fetch('/api/quality-history',{cache:'no-store',credentials:'same-origin'});if(!response.ok)throw new Error('Kalite geçmişi alınamadı.');const data=await response.json();qualityHistory={history:Array.isArray(data.history)?data.history:[],sha:data.sha||null};}
-    catch(error){qualityHistory={history:[],sha:null};const note=$('#quality-history-note');if(note)note.textContent='Kalite geçmişi şu anda alınamadı. Katalog taraması çalışmaya devam ediyor.';console.warn(error);}
-    renderQualityHistory();
-  }
-  function renderQualityHistory(){
-    const rows=qualityHistory.history.slice().sort((a,b)=>String(a.createdAt).localeCompare(String(b.createdAt)));
-    const latest=rows[rows.length-1],previous=rows[rows.length-2];
-    const dateText=value=>value?new Date(value).toLocaleString('tr-TR',{dateStyle:'medium',timeStyle:'short'}):'Henüz yok';
-    $('#quality-last-date').textContent=dateText(latest?.createdAt);
-    $('#quality-last-total').textContent=latest?latest.affected+' yapımda eksik bilgi':'İlk ölçümü kaydet';
-    $('#quality-snapshot-count').textContent=String(rows.length);
-    const change=$('#quality-change'),label=$('#quality-change-label');
-    if(latest&&previous){const delta=latest.affected-previous.affected;change.textContent=(delta>0?'+':'')+delta;change.classList.toggle('is-better',delta<0);change.classList.toggle('is-worse',delta>0);label.textContent=delta<0?'Önceki ölçüme göre daha az eksik kayıt':delta>0?'Önceki ölçüme göre daha fazla eksik kayıt':'Değişiklik yok';}
-    else{change.textContent='—';change.classList.remove('is-better','is-worse');label.textContent='Karşılaştırma için ikinci ölçüm gerekli';}
-    const chart=$('#quality-history-chart');
-    if(!rows.length){chart.innerHTML='<div class="quality-history-empty">Henüz ölçüm kaydedilmedi. İlk ölçümü kaydederek takibi başlat.</div>';return;}
-    const recent=rows.slice(-8),max=Math.max(1,...recent.map(row=>Number(row.affected)||0));
-    chart.innerHTML=recent.map(row=>{const height=Math.max(5,Math.round((Number(row.affected)||0)/max*100));const d=new Date(row.createdAt);return '<div class="quality-history-column" title="'+escapeHtml(d.toLocaleString('tr-TR'))+' · '+row.affected+' eksik yapım"><b>'+row.affected+'</b><div class="quality-history-track"><i style="height:'+height+'%"></i></div><small>'+escapeHtml(d.toLocaleDateString('tr-TR',{day:'2-digit',month:'short'}))+'</small></div>';}).join('');
-  }
-  async function saveQualitySnapshot(){
-    const button=$('#quality-snapshot-save');if(button.disabled)return;
-    button.disabled=true;button.textContent='Kaydediliyor…';
-    try{
-      const snapshot=buildQualitySnapshot(),history=qualityHistory.history.slice(),last=history[history.length-1];
-      if(last&&last.total===snapshot.total&&last.affected===snapshot.affected&&JSON.stringify(last.counts)===JSON.stringify(snapshot.counts)){toast('Son ölçümle aynı sonuç; yeni kayıt oluşturulmadı.','info');return;}
-      history.push(snapshot);
-      const response=await fetch('/api/quality-history',{method:'PUT',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({history:history.slice(-180),sha:qualityHistory.sha})});
-      const payload=await response.json().catch(()=>({}));
-      if(response.status===409)throw new Error('Kalite geçmişi başka bir işlemde güncellenmiş. Sayfayı yenileyip tekrar deneyin.');
-      if(!response.ok)throw new Error(payload.error||'Ölçüm kaydedilemedi.');
-      qualityHistory={history:history.slice(-180),sha:payload.sha||null};renderQualityHistory();toast('Kalite ölçümü güvenli biçimde kaydedildi.','success');
-    }catch(error){toast(error.message||'Ölçüm kaydedilemedi.','error');console.error(error);}
-    finally{button.disabled=false;button.textContent='＋ Bu ölçümü kaydet';}
-  }
   let qualityAuditCache={catalog:null,summary:null,affected:null};
   function getQualityAuditData(){
     if(qualityAuditCache.catalog===state.catalog)return qualityAuditCache;
@@ -2421,7 +2379,6 @@
         console.warn('Oturum durumu kontrol edilemedi; katalog görünür durumda bırakıldı:',sessionError);
       }
       loadProfilePhoto();
-      loadQualityHistory();
     }catch(error){
       showStartupError(error.message||'Katalog yüklenemedi.');
       console.error('Admin yükleme hatası:',error);
@@ -2512,10 +2469,9 @@
   $('#quality-search').addEventListener('input',()=>{state.qualityPage=1;renderQualityAudit();});
   $('#quality-filter').addEventListener('change',()=>{state.qualityPage=1;renderQualityAudit();});
   $('#quality-page-size')?.addEventListener('change',event=>{state.qualityPageSize=Math.max(1,Number(event.target.value)||10);state.qualityPage=1;renderQualityAudit();});
-  $('#quality-refresh').addEventListener('click',()=>{renderQualityAudit();renderQualityHistory();});
+  $('#quality-refresh').addEventListener('click',()=>{renderQualityAudit();});
   $('#quality-prev')?.addEventListener('click',()=>{state.qualityPage=Math.max(1,state.qualityPage-1);renderQualityAudit();});
   $('#quality-next')?.addEventListener('click',()=>{state.qualityPage++;renderQualityAudit();});
-  $('#quality-snapshot-save')?.addEventListener('click',saveQualitySnapshot);
   $('#prev-page').addEventListener('click',()=>{state.page=Math.max(1,state.page-1);renderCatalog();});
   $('#next-page').addEventListener('click',()=>{state.page++;renderCatalog();});
   // Yeni yapım düğmeleri üstteki delege edilmiş olay dinleyicisiyle yönetilir.
