@@ -2086,6 +2086,7 @@
   const PERSONAL_BACKUP_SHARED_FORMAT='perde-shared-production-v1';
   const PERSONAL_BACKUP_MINIMAL_FORMAT='perde-personal-minimal-v2';
   const PERSONAL_BACKUP_LIST_KEYS=['cine_watched_items_v1','cine_favorite_items_v1','cine_watchlist_v1'];
+  const PERSONAL_BACKUP_SHARED_KEYS=PERSONAL_BACKUP_LIST_KEYS;
   const PERSONAL_BACKUP_ALLOWED_KEYS=new Set([
     ...PERSONAL_BACKUP_LIST_KEYS,'cine_movie_progress_v1','cine_episode_tracking_v1','perde_player_progress_v3',
     'cine_reviews','cine_recommendation_mode_v1','cine_recommendation_rotation_v1','cine_theme_v3',
