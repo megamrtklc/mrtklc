@@ -29,7 +29,7 @@
 
                 <div x-effect="query; sortMode; page = 1" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-5">
                     <template x-for="collection in publishedCollections.filter(item => !query || normalizeSearchText(item.title + ' ' + (item.description || '')).includes(normalizeSearchText(query))).slice().sort((a,b) => sortMode === 'name' ? a.title.localeCompare(b.title, 'tr') : sortMode === 'count' ? b.items.length - a.items.length : 0).slice((page - 1) * pageSize, page * pageSize)" :key="'collection-browser-' + collection.id">
-                        <button type="button" @click="selectedId = String(collection.id); window.scrollTo({top:0,behavior:'smooth'})" class="group min-w-0 overflow-hidden rounded-2xl border border-gray-200 bg-white text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-xl dark:border-white/10 dark:bg-[#151922]">
+                        <button type="button" @click="selectedId = String(collection.id); page = 1; window.scrollTo({top:0,behavior:'smooth'})" class="group min-w-0 overflow-hidden rounded-2xl border border-gray-200 bg-white text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-rose-500/50 hover:shadow-xl dark:border-white/10 dark:bg-[#151922]">
                             <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                 <template x-if="collection.coverMode === 'mix'">
                                     <div class="grid h-full w-full grid-cols-2 grid-rows-2 gap-0.5">
@@ -78,7 +78,7 @@
 
         <template x-if="selectedId">
             <div class="space-y-6">
-                <button type="button" @click="selectedId = ''; window.scrollTo({top:0,behavior:'smooth'})" class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-bold text-gray-600 transition hover:border-rose-500 hover:text-rose-600 dark:border-gray-700 dark:text-gray-300">
+                <button type="button" @click="selectedId = ''; page = 1; window.scrollTo({top:0,behavior:'smooth'})" class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-xs font-bold text-gray-600 transition hover:border-rose-500 hover:text-rose-600 dark:border-gray-700 dark:text-gray-300">
                     <i class="fa-solid fa-arrow-left"></i> Tüm koleksiyonlar
                 </button>
                 <template x-if="publishedCollections.find(item => String(item.id) === selectedId)">
@@ -106,8 +106,8 @@
                                 <p class="mt-2 text-[10px] font-bold text-rose-600 dark:text-rose-400" x-text="publishedCollections.find(item => String(item.id) === selectedId).items.length + ' yapım'"></p>
                             </div>
                         </header>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
-                            <template x-for="(item,index) in publishedCollections.find(entry => String(entry.id) === selectedId).items" :key="'collection-detail-item-'+selectedId+'-'+item.id">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3 sm:gap-4">
+                            <template x-for="(item,index) in publishedCollections.find(entry => String(entry.id) === selectedId).items.slice((page - 1) * pageSize, page * pageSize)" :key="'collection-detail-item-'+selectedId+'-'+item.id">
                                 <button type="button" @click="openWatchPage(item)" class="group min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:border-rose-500/60 dark:border-white/10 dark:bg-[#151922]">
                                     <div class="relative aspect-[2/3] overflow-hidden bg-gray-100 dark:bg-gray-900">
                                         <img :src="item.poster || item.image || item.backdrop || item.tmdbPoster" :srcset="getTmdbImageSrcSet(item.poster || item.image || item.backdrop || item.tmdbPoster, [185,342,500])" sizes="(max-width:639px) 44vw, (max-width:1023px) 28vw, 18vw" :alt="item.title" loading="lazy" decoding="async" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
@@ -117,6 +117,16 @@
                                     <div class="p-2.5"><h2 class="line-clamp-2 text-[11px] sm:text-xs font-extrabold leading-snug text-gray-900 dark:text-white" x-text="item.title"></h2><p class="mt-1 text-[9px] text-gray-500 dark:text-gray-400" x-text="item.year || ''"></p></div>
                                 </button>
                             </template>
+                        </div>
+                        <div x-show="publishedCollections.find(entry => String(entry.id) === selectedId).items.length > pageSize" class="flex flex-col items-center gap-3 pt-2">
+                            <p class="text-[10px] font-semibold text-gray-500 dark:text-gray-400" x-text="'Gösterilen ' + (((page - 1) * pageSize) + 1) + '–' + Math.min(page * pageSize, publishedCollections.find(entry => String(entry.id) === selectedId).items.length) + ' / ' + publishedCollections.find(entry => String(entry.id) === selectedId).items.length + ' yapım'"></p>
+                            <nav aria-label="Koleksiyon yapım sayfaları" class="flex flex-wrap items-center justify-center gap-1.5">
+                                <button type="button" @click="page = Math.max(1, page - 1); window.scrollTo({top:0,behavior:'smooth'})" :disabled="page === 1" class="flex h-9 min-w-9 items-center justify-center rounded-lg border border-gray-200 px-3 text-xs font-bold text-gray-600 transition hover:border-rose-500 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-35 dark:border-gray-700 dark:text-gray-300" aria-label="Önceki sayfa"><i class="fa-solid fa-chevron-left"></i></button>
+                                <template x-for="pageNumber in Array.from({ length: Math.ceil(publishedCollections.find(entry => String(entry.id) === selectedId).items.length / pageSize) }, (_, index) => index + 1)" :key="'collection-item-page-' + selectedId + '-' + pageNumber">
+                                    <button type="button" @click="page = pageNumber; window.scrollTo({top:0,behavior:'smooth'})" :aria-current="page === pageNumber ? 'page' : null" :class="page === pageNumber ? 'border-rose-600 bg-rose-600 text-white shadow-sm' : 'border-gray-200 bg-white text-gray-600 hover:border-rose-500 hover:text-rose-600 dark:border-gray-700 dark:bg-[#151922] dark:text-gray-300'" class="h-9 min-w-9 rounded-lg border px-3 text-xs font-black transition" x-text="pageNumber"></button>
+                                </template>
+                                <button type="button" @click="page = Math.min(Math.ceil(publishedCollections.find(entry => String(entry.id) === selectedId).items.length / pageSize), page + 1); window.scrollTo({top:0,behavior:'smooth'})" :disabled="page >= Math.ceil(publishedCollections.find(entry => String(entry.id) === selectedId).items.length / pageSize)" class="flex h-9 min-w-9 items-center justify-center rounded-lg border border-gray-200 px-3 text-xs font-bold text-gray-600 transition hover:border-rose-500 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-35 dark:border-gray-700 dark:text-gray-300" aria-label="Sonraki sayfa"><i class="fa-solid fa-chevron-right"></i></button>
+                            </nav>
                         </div>
                     </div>
                 </template>
