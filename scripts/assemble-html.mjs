@@ -24,6 +24,7 @@ const partialPaths = {
   ACTOR_DIRECTOR: 'src/templates/actor-director-page.html',
   EXPLORE: 'src/templates/explore-page.html',
   FRANCHISES: 'src/templates/franchises-page.html',
+  COLLECTIONS: 'src/templates/collections-page.html',
   WATCHLIST: 'src/templates/watchlist-page.html',
   WATCHLIST_CONFIRM_MODAL: 'src/templates/watchlist-confirm-modal.html',
   LIBRARY: 'src/templates/library-page.html',
