@@ -10,13 +10,14 @@
         explore: ['explore'],
         stats: ['stats'],
         franchises: ['franchises'],
+        collections: ['collections'],
         watchlist: ['watchlist'],
         library: ['library'],
         'video-links': ['video-links']
     };
     const pageCache = new Map();
     const pageStyleCache = new Map();
-    const buildVersion = '20261127-lazy-pages-stats-syntax-fix-v49';
+    const buildVersion = '20261128-collections-browser-v1';
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
