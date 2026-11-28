@@ -41,7 +41,7 @@
                             </div>
                         </template>
 
-                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" style="display:block!important;height:auto!important;box-sizing:border-box!important;visibility:hidden" :style="{visibility:homeSectionReady.personalized && displayedPersonalizedRecommendations.length ? 'visible' : 'hidden'}">
+                        <article class="home-personalized-mobile-card" aria-label="Sana özel mobil öneri" style="height:auto!important;box-sizing:border-box!important;visibility:hidden" :style="{visibility:homeSectionReady.personalized && displayedPersonalizedRecommendations.length ? 'visible' : 'hidden'}">
                             <div class="home-personalized-mobile-backdrop">
                                 <img @error="handleImageError($event)" :src="displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image" :srcset="getTmdbImageSrcSet(displayedPersonalizedRecommendations[0].backdrop || displayedPersonalizedRecommendations[0].poster || displayedPersonalizedRecommendations[0].image, [342, 500])" sizes="100vw" width="780" height="439" alt="" aria-hidden="true" loading="lazy" decoding="async">
                                 <div></div>
