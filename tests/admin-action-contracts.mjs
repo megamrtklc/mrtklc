@@ -116,11 +116,11 @@ assert.ok(
 assert.match(js,/#catalog-select-all-page'\)\?\.addEventListener\('click'/,
   'Tümünü seç kontrolü yalnızca görünür sayfadaki kayıtları seçmeli');
 
-// Personal backup compaction must round-trip every field and preserve legacy backups.
+// Personal backups contain references and progress, never full catalogue records.
 const backupHelpersStart = js.indexOf('function compactPersonalBackup(browserData)');
 const backupHelpersEnd = js.indexOf('\n  function downloadSiteBackup', backupHelpersStart);
 assert.ok(backupHelpersStart >= 0 && backupHelpersEnd > backupHelpersStart,
-  'Kişisel yedek sıkıştırma ve açma yardımcıları bulunmalı');
+  'Kişisel yedek sadeleştirme ve eski biçim açma yardımcıları bulunmalı');
 const backupHelpers = new Function(
   js.slice(backupHelpersStart, backupHelpersEnd) +
   '\nreturn { compactPersonalBackup, expandPersonalBackupData };'
@@ -128,8 +128,8 @@ const backupHelpers = new Function(
 const personalFixture = {
   localStorage: {
     cine_watched_items_v1: JSON.stringify([
-      { id: 'film-1', title: 'Örnek Film', tmdbCast: [{ id: 1, name: 'Oyuncu' }], _statusSavedAt: 100 },
-      { id: 'series-2', title: 'Örnek Dizi', tmdbEpisodesBySeason: { '1': [{ number: 1, title: 'Bölüm' }] }, _statusSavedAt: 200 }
+      { id: 'film-1', title: 'Örnek Film', type: 'movie', year: 2024, tmdbCast: [{ id: 1, name: 'Oyuncu' }], _statusSavedAt: 100 },
+      { id: 'series-2', title: 'Örnek Dizi', type: 'tv', year: 2023, tmdbEpisodesBySeason: { '1': [{ number: 1, title: 'Bölüm' }] }, _statusSavedAt: 200 }
     ]),
     cine_favorite_items_v1: JSON.stringify([
       { id: 'film-1', title: 'Örnek Film', tmdbCast: [{ id: 1, name: 'Oyuncu' }], _statusSavedAt: 300 }
@@ -137,25 +137,48 @@ const personalFixture = {
     cine_watchlist_v1: JSON.stringify([
       { id: 'film-1', title: 'Örnek Film', tmdbCast: [{ id: 1, name: 'Oyuncu' }], watchUrl: 'https://example.test/watch' }
     ]),
+    cine_movie_progress_v1: JSON.stringify({ 'film-1': { time: 90, duration: 120, savedAt: 400 } }),
+    cine_episode_tracking_v1: JSON.stringify({ 'series-2': { watched: { '1': [1, 2] }, last: { season: 1, episode: 2, updatedAt: 500 } } }),
     cine_theme_v3: JSON.stringify('dark')
   },
   sessionStorage: {}
 };
 const originalPersonalJson = JSON.stringify(personalFixture);
 const compactPersonal = backupHelpers.compactPersonalBackup(personalFixture);
-assert.equal(compactPersonal.personalDataFormat, 'perde-shared-production-v1',
-  'Tekrarlanan yapım verileri için sürümlü sıkıştırma biçimi kullanılmalı');
+assert.equal(compactPersonal.personalDataFormat, 'perde-personal-minimal-v2',
+  'Kişisel yedek yalnızca yapım referansları ve kişisel ilerlemeyi saklamalı');
+const watchedCompact = JSON.parse(compactPersonal.browserData.localStorage.cine_watched_items_v1);
+assert.deepEqual(watchedCompact[0], { id: 'film-1', title: 'Örnek Film', type: 'movie', year: '2024', _statusSavedAt: 100 },
+  'İzlenen kaydı yalnızca kimlik, ad, tür, yıl ve kişisel durum zamanını saklamalı');
+assert.ok(!JSON.stringify(compactPersonal).includes('tmdbCast') && !JSON.stringify(compactPersonal).includes('tmdbEpisodesBySeason') && !JSON.stringify(compactPersonal).includes('watchUrl'),
+  'Kişisel yedekte katalog detayları ve oynatma bağlantıları bulunmamalı');
+assert.deepEqual(JSON.parse(compactPersonal.browserData.localStorage.cine_movie_progress_v1), JSON.parse(personalFixture.localStorage.cine_movie_progress_v1),
+  'Film izleme ilerlemesi eksiksiz korunmalı');
+assert.deepEqual(JSON.parse(compactPersonal.browserData.localStorage.cine_episode_tracking_v1), JSON.parse(personalFixture.localStorage.cine_episode_tracking_v1),
+  'Dizi sezon ve bölüm ilerlemesi eksiksiz korunmalı');
 assert.ok(JSON.stringify(compactPersonal).length < originalPersonalJson.length,
-  'Kişisel yedek ortak yapım verileri tekilleştirildiğinde küçülmeli');
+  'Sade kişisel yedek kaynak veriden küçük olmalı');
 const expandedPersonal = backupHelpers.expandPersonalBackupData(compactPersonal);
-for (const key of Object.keys(personalFixture.localStorage)) {
-  assert.deepEqual(JSON.parse(expandedPersonal.localStorage[key]), JSON.parse(personalFixture.localStorage[key]),
-    key + ' kaydı sıkıştırma sonrasında birebir geri yüklenmeli');
-}
-assert.equal(JSON.stringify(personalFixture), originalPersonalJson,
-  'Yedek hazırlanırken mevcut tarayıcı kayıtları değiştirilmemeli');
+assert.deepEqual(expandedPersonal, compactPersonal.browserData,
+  'Yeni sade yedek geri yüklemede doğrudan kullanılmalı');
+const legacyShared = {
+  personalDataFormat: 'perde-shared-production-v1',
+  browserData: {
+    localStorage: {
+      cine_watched_items_v1: JSON.stringify([{ id: 'film-1', _statusSavedAt: 100 }]),
+      cine_favorite_items_v1: JSON.stringify([{ id: 'film-1', _statusSavedAt: 300 }])
+    },
+    sessionStorage: {}
+  },
+  personalSharedItems: { 'film-1': { id: 'film-1', title: 'Eski Film', tmdbCast: [{ id: 1 }] } }
+};
+const expandedLegacyShared = backupHelpers.expandPersonalBackupData(legacyShared);
+assert.equal(JSON.parse(expandedLegacyShared.localStorage.cine_watched_items_v1)[0].title, 'Eski Film',
+  'Önceki ortak kayıt biçimindeki yedekler açılabilmeli');
 assert.deepEqual(backupHelpers.expandPersonalBackupData({ browserData: personalFixture }), personalFixture,
   'Eski sıkıştırılmamış kişisel yedekler aynı biçimde geri yüklenebilmeli');
+assert.equal(JSON.stringify(personalFixture), originalPersonalJson,
+  'Yedek hazırlanırken mevcut tarayıcı kayıtları değiştirilmemeli');
 
 console.log('PASS: Ortak katalog kayıt akışı ve çakışma yönetimi');
 console.log('PASS: Yapım, koleksiyon, film serisi ve düzenleme kayıt doğrulamaları');
