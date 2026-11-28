@@ -2083,6 +2083,7 @@
     document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
     toast(successMessage);
   }
+  const PERSONAL_BACKUP_SHARED_FORMAT='perde-shared-production-v1';
   const PERSONAL_BACKUP_MINIMAL_FORMAT='perde-personal-minimal-v2';
   const PERSONAL_BACKUP_LIST_KEYS=['cine_watched_items_v1','cine_favorite_items_v1','cine_watchlist_v1'];
   const PERSONAL_BACKUP_ALLOWED_KEYS=new Set([
@@ -2185,7 +2186,7 @@
         if(Object.keys(data.browserData.sessionStorage||{}).length)throw new Error('Sade kişisel yedekte beklenmeyen oturum kaydı bulundu.');
         for(const key of PERSONAL_BACKUP_LIST_KEYS){
           let list;try{list=JSON.parse(data.browserData.localStorage[key]||'[]');}catch(_){throw new Error(key+' kişisel listesi JSON olarak okunamadı.');}
-          if(!Array.isArray(list)||list.length>5000||list.some(item=>!item||typeof item!=='object'||Array.isArray(item)||!String(item.id||'').trim()||typeof item.title!=='string'))throw new Error(key+' içinde geçersiz sade yapım kaydı bulundu.');
+          if(!Array.isArray(list)||list.length>5000||list.some(item=>!item||typeof item!=='object'||Array.isArray(item)||!String(item.id||'').trim()||(typeof item.title!=='string'||!item.title.trim())))throw new Error(key+' içinde geçersiz sade yapım kaydı bulundu.');
         }
       }
       if(hasSharedPersonal){
