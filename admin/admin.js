@@ -105,7 +105,6 @@
     $('#crumb-current').textContent=view==='analytics-detail'?'İstatistikler / Detaylı Rapor':(view==='content-editor'?'Yapım Ekle / Düzenle':(active?active.textContent.trim().replace(/\s+/g,' '):'Genel Bakış'));
     setMobileSidebar(false);
     if(view==='catalog')renderCatalog();
-    if(view==='trailers-missing')renderMissingTrailers();
     if(view==='quality')renderQualityAudit();
     if(view==='collections')renderCollections();
     if(view==='franchises')renderFranchises();
