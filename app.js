@@ -1173,9 +1173,12 @@
                         .map(collection => {
                             const items = (Array.isArray(collection.items) ? collection.items : [])
                                 .map(id => byId.get(String(id)))
-                                .filter(item => item && (item.poster || item.image || item.backdrop));
+                                .filter(item => item && (item.poster || item.image || item.backdrop || item.tmdbPoster));
                             const coverMode = collection.coverMode || (collection.image ? 'url' : 'mix');
-                            return {...collection, coverMode, items, coverItems: coverMode === 'mix' ? items.slice(0, 4) : coverMode === 'auto' ? items.slice(0, 1) : []};
+                            const coverCount = Math.min(4, items.length);
+                            const coverItems = coverCount <= 1 ? items.slice(0, coverCount) :
+                                Array.from({length: coverCount}, (_, index) => items[Math.round(index * (items.length - 1) / (coverCount - 1))]);
+                            return {...collection, coverMode, items, coverItems: coverMode === 'mix' ? coverItems : coverMode === 'auto' ? items.slice(0, 1) : []};
                         })
                         .filter(collection => collection.items.length > 0);
                 },
@@ -2035,6 +2038,18 @@
                 isHeaderMenuActive(page) {
                     if (this.currentPage === 'explore') return this.activeHeaderMenu === page;
                     return this.currentPage === page;
+                },
+
+                navigateToCollections() {
+                    this.mobileMenuOpen = false;
+                    const reveal = () => {
+                        const section = document.querySelector('[data-home-section="published-collections"]');
+                        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    };
+                    if (this.currentPage !== 'home') {
+                        this.navigateTo('home');
+                        this.$nextTick(() => window.setTimeout(reveal, 450));
+                    } else reveal();
                 },
 
                 navigateTo(page) {
