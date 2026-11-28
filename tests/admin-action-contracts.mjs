@@ -116,6 +116,47 @@ assert.ok(
 assert.match(js,/#catalog-select-all-page'\)\?\.addEventListener\('click'/,
   'Tümünü seç kontrolü yalnızca görünür sayfadaki kayıtları seçmeli');
 
+// Personal backup compaction must round-trip every field and preserve legacy backups.
+const backupHelpersStart = js.indexOf('function compactPersonalBackup(browserData)');
+const backupHelpersEnd = js.indexOf('\n  function downloadSiteBackup', backupHelpersStart);
+assert.ok(backupHelpersStart >= 0 && backupHelpersEnd > backupHelpersStart,
+  'Kişisel yedek sıkıştırma ve açma yardımcıları bulunmalı');
+const backupHelpers = new Function(
+  js.slice(backupHelpersStart, backupHelpersEnd) +
+  '\nreturn { compactPersonalBackup, expandPersonalBackupData };'
+)();
+const personalFixture = {
+  localStorage: {
+    cine_watched_items_v1: JSON.stringify([
+      { id: 'film-1', title: 'Örnek Film', tmdbCast: [{ id: 1, name: 'Oyuncu' }], _statusSavedAt: 100 },
+      { id: 'series-2', title: 'Örnek Dizi', tmdbEpisodesBySeason: { '1': [{ number: 1, title: 'Bölüm' }] }, _statusSavedAt: 200 }
+    ]),
+    cine_favorite_items_v1: JSON.stringify([
+      { id: 'film-1', title: 'Örnek Film', tmdbCast: [{ id: 1, name: 'Oyuncu' }], _statusSavedAt: 300 }
+    ]),
+    cine_watchlist_v1: JSON.stringify([
+      { id: 'film-1', title: 'Örnek Film', tmdbCast: [{ id: 1, name: 'Oyuncu' }], watchUrl: 'https://example.test/watch' }
+    ]),
+    cine_theme_v3: JSON.stringify('dark')
+  },
+  sessionStorage: {}
+};
+const originalPersonalJson = JSON.stringify(personalFixture);
+const compactPersonal = backupHelpers.compactPersonalBackup(personalFixture);
+assert.equal(compactPersonal.personalDataFormat, 'perde-shared-production-v1',
+  'Tekrarlanan yapım verileri için sürümlü sıkıştırma biçimi kullanılmalı');
+assert.ok(JSON.stringify(compactPersonal).length < originalPersonalJson.length,
+  'Kişisel yedek ortak yapım verileri tekilleştirildiğinde küçülmeli');
+const expandedPersonal = backupHelpers.expandPersonalBackupData(compactPersonal);
+for (const key of Object.keys(personalFixture.localStorage)) {
+  assert.deepEqual(JSON.parse(expandedPersonal.localStorage[key]), JSON.parse(personalFixture.localStorage[key]),
+    key + ' kaydı sıkıştırma sonrasında birebir geri yüklenmeli');
+}
+assert.equal(JSON.stringify(personalFixture), originalPersonalJson,
+  'Yedek hazırlanırken mevcut tarayıcı kayıtları değiştirilmemeli');
+assert.deepEqual(backupHelpers.expandPersonalBackupData({ browserData: personalFixture }), personalFixture,
+  'Eski sıkıştırılmamış kişisel yedekler aynı biçimde geri yüklenebilmeli');
+
 console.log('PASS: Ortak katalog kayıt akışı ve çakışma yönetimi');
 console.log('PASS: Yapım, koleksiyon, film serisi ve düzenleme kayıt doğrulamaları');
 console.log('PASS: Silme işlemlerinde kullanıcı onayı ve kalıcı kayıt');
