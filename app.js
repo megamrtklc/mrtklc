@@ -1908,7 +1908,8 @@
                         library: 'kutuphanem',
                         watchlist: 'izleme-listem',
                         stats: 'istatistikler',
-                        franchises: 'seriler'
+                        franchises: 'seriler',
+                        collections: 'koleksiyonlar'
                     };
                     return routes[page] || page || 'ana-sayfa';
                 },
@@ -2023,12 +2024,13 @@
                         kutuphanem: 'library', library: 'library',
                         'izleme-listem': 'watchlist', watchlist: 'watchlist',
                         istatistikler: 'stats', stats: 'stats',
-                        seriler: 'franchises', franchises: 'franchises'
+                        seriler: 'franchises', franchises: 'franchises',
+                        koleksiyonlar: 'collections', collections: 'collections'
                     };
                     const page = pageAliases[route] || 'home';
                     const catalogPages = ['movies', 'series', 'turkish'];
                     if (catalogPages.includes(page)) { this.navigateTo(page); return; }
-                    const allowedPages = ['home', 'explore', 'video-links', 'library', 'watchlist', 'stats', 'franchises'];
+                    const allowedPages = ['home', 'explore', 'video-links', 'library', 'watchlist', 'stats', 'franchises', 'collections'];
                     this.currentPage = allowedPages.includes(page) ? page : 'home';
                     this.activeHeaderMenu = this.currentPage;
                     if (this.currentPage === 'franchises') this.selectedFranchiseId = null;
