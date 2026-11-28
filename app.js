@@ -1162,7 +1162,12 @@
 
                 get publishedCollections() {
                     const byId = new Map(this.catalog.map(item => [String(item.id), item]));
-                    return (Array.isArray(this.collections) ? this.collections : [])
+                    const collections = Array.isArray(this.collections) ? this.collections : [];
+                    const configuredOrder = this.homepageConfig?.layout?.collectionOrder;
+                    const orderedCollections = Array.isArray(configuredOrder)
+                        ? configuredOrder.map(id => collections.find(item => String(item?.id) === String(id))).filter(Boolean)
+                        : collections;
+                    return orderedCollections
                         .filter(collection => collection && collection.active !== false && String(collection.title || '').trim())
                         .map(collection => ({
                             ...collection,
