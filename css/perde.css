@@ -248,3 +248,42 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   #home-page :is(#home-favorites-section .home-new-arrivals-heading,#home-catalog-section .home-catalog-heading)>div:last-child>*{min-width:0;max-width:100%}
   #home-page :is(#home-favorites-section .home-new-arrivals-heading,#home-catalog-section .home-catalog-heading) select{max-width:100%}
 }
+
+/* Tablet dikey ana sayfa: öne çıkan kart ölçülerini bölümler arasında eşitle */
+@media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+  #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) .home-new-arrivals-rail {
+    display: flex !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    overscroll-behavior-x: contain !important;
+  }
+
+  #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) .home-new-arrival-card {
+    box-sizing: border-box !important;
+    flex: 0 0 clamp(174px, 23%, 210px) !important;
+    width: clamp(174px, 23%, 210px) !important;
+    min-width: 0 !important;
+    align-self: stretch !important;
+  }
+
+  #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) .home-new-arrival-feature {
+    box-sizing: border-box !important;
+    flex: 0 0 clamp(260px, 31%, 320px) !important;
+    width: clamp(260px, 31%, 320px) !important;
+    min-width: 260px !important;
+    height: 280px !important;
+    min-height: 280px !important;
+    max-height: 280px !important;
+    align-self: stretch !important;
+  }
+}
+
