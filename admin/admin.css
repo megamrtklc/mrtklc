@@ -2050,3 +2050,42 @@ body{font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;text-ren
  #view-collections .collection-card-modern{transition:none}
  #view-collections .collection-card-modern:hover{transform:none}
 }
+
+
+/* Ana sayfa koleksiyon vitrini yönetimi */
+#view-homepage-layout .homepage-collection-manager{grid-column:1/-1;margin:0 0 14px 54px;padding:14px 16px;border:1px solid #39404c;border-radius:12px;background:#1b2029}
+#view-homepage-layout .homepage-collection-manager-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#view-homepage-layout .homepage-collection-manager-head>div{display:grid;gap:4px}
+#view-homepage-layout .homepage-collection-manager-head b{color:#f0d18b;font-size:12px}
+#view-homepage-layout .homepage-collection-manager-head small{color:#98a2b0;font-size:10px;line-height:1.5}
+#view-homepage-layout .homepage-collection-manager-head .secondary-button{min-height:34px;padding:7px 11px;font-size:10px;white-space:nowrap}
+#view-homepage-layout .homepage-collection-manager-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:15px}
+#view-homepage-layout .homepage-collection-manager-body section{min-width:0;padding:12px;border:1px solid #343c49;border-radius:10px;background:#202630}
+#view-homepage-layout .homepage-collection-list-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:9px}
+#view-homepage-layout .homepage-collection-list-heading b{color:#e5e9ef;font-size:10px}
+#view-homepage-layout .homepage-collection-list-heading span{color:#a7b0bd;font-size:9px}
+#view-homepage-layout .homepage-collection-selected-list,#view-homepage-layout .homepage-collection-options{display:grid;gap:7px}
+#view-homepage-layout .homepage-collection-selected{display:flex;align-items:center;gap:9px;min-width:0;padding:8px;border:1px solid #3a4350;border-radius:8px;background:#252d38}
+#view-homepage-layout .homepage-collection-selected.is-inactive{opacity:.62}
+#view-homepage-layout .homepage-collection-number{display:grid;place-items:center;flex:0 0 27px;height:27px;border-radius:7px;background:#3a3428;color:#e4c47c;font-size:9px;font-weight:800}
+#view-homepage-layout .homepage-collection-name{display:grid;gap:3px;flex:1;min-width:0}
+#view-homepage-layout .homepage-collection-name b{overflow:hidden;color:#e7ebf1;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+#view-homepage-layout .homepage-collection-name small{color:#98a3b1;font-size:9px}
+#view-homepage-layout .homepage-collection-actions{display:flex;gap:4px}
+#view-homepage-layout .homepage-collection-actions button{width:27px;height:27px;border:1px solid #46505e;border-radius:7px;background:#303946;color:#dce2e9;font-size:12px}
+#view-homepage-layout .homepage-collection-actions button:last-child{color:#e3a3a3}
+#view-homepage-layout .homepage-collection-actions button:disabled{opacity:.3;cursor:not-allowed}
+#view-homepage-layout .homepage-collection-option{display:flex;align-items:center;gap:9px;padding:9px;border:1px solid #3a4350;border-radius:8px;background:#252d38;cursor:pointer}
+#view-homepage-layout .homepage-collection-option input{width:16px;height:16px;flex:0 0 auto;accent-color:#d2ad62}
+#view-homepage-layout .homepage-collection-option span{display:grid;gap:3px;flex:1;min-width:0}
+#view-homepage-layout .homepage-collection-option b{overflow:hidden;color:#e7ebf1;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+#view-homepage-layout .homepage-collection-option small{color:#98a3b1;font-size:9px}
+#view-homepage-layout .homepage-collection-option i{color:#e0c27e;font-style:normal;font-size:15px}
+#view-homepage-layout .homepage-collection-empty{padding:12px;color:#98a3b1;font-size:10px;line-height:1.5}
+#view-homepage-layout .homepage-collection-manager-note{grid-column:1/-1;margin:0;color:#929eac;font-size:9px;line-height:1.6}
+@media(max-width:760px){
+ #view-homepage-layout .homepage-collection-manager{margin:0 0 12px;padding:11px}
+ #view-homepage-layout .homepage-collection-manager-head{align-items:flex-start;flex-direction:column}
+ #view-homepage-layout .homepage-collection-manager-head .secondary-button{width:100%}
+ #view-homepage-layout .homepage-collection-manager-body{grid-template-columns:minmax(0,1fr)}
+}
