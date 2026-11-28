@@ -187,7 +187,7 @@
         document.head.appendChild(tvScrollScript);
       }
     </script>
-    <script defer fetchpriority="high" src="./app.min.js?v=20261125-modular-v33"></script>
+    <script defer fetchpriority="high" src="./app.min.js?v=20261128-collection-covers-nav-v1"></script>
     <script defer fetchpriority="low" src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 
@@ -214,6 +214,7 @@
                 <nav class="cv-desktop-nav hidden xl:flex items-center space-x-5 text-[11px] font-bold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                     <a x-show="headerConfig.showHome !== false" href="#" @click.prevent="navigateTo('home')"  :class="isHeaderMenuActive('home') ? 'is-active' : ''" class="transition-colors" x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</a>
                     <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore')"  :class="isHeaderMenuActive('explore') ? 'is-active' : ''" class="transition-colors" x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</a>
+                    <a x-show="publishedCollections.length > 0 && isHomepageSectionVisible('published-collections')" href="#" @click.prevent="navigateToCollections()" class="transition-colors"><i class="fa-solid fa-layer-group mr-1"></i> Koleksiyonlar</a>
                     <a x-show="headerConfig.showFranchises !== false" href="#" @click.prevent="navigateTo('franchises')"  :class="isHeaderMenuActive('franchises') ? 'is-active' : ''" class="transition-colors" x-text="headerConfig.franchisesLabel || 'Seri Filmler'">Seri Filmler</a>
                     <a x-show="headerConfig.showVideo !== false" href="#" @click.prevent="navigateTo('video-links')"  :class="isHeaderMenuActive('video-links') ? 'is-active' : ''" class="transition-colors flex items-center gap-1.5">
                         <span x-text="headerConfig.videoLabel || 'Video Bağlantıları'">Video Bağlantıları</span>
@@ -285,6 +286,7 @@
             <nav class="grid grid-cols-1 gap-1 text-sm font-bold text-gray-700 dark:text-gray-200">
                 <a x-show="headerConfig.showHome !== false" href="#" @click.prevent="navigateTo('home'); mobileMenuOpen = false"  :class="isHeaderMenuActive('home') ? 'is-active' : ''" class="rounded-lg px-3 py-3"><span x-text="headerConfig.homeLabel || 'Ana Sayfa'">Ana Sayfa</span></a>
                 <a x-show="headerConfig.showExplore !== false" href="#" @click.prevent="navigateTo('explore'); mobileMenuOpen = false"  :class="isHeaderMenuActive('explore') ? 'is-active' : ''" class="rounded-lg px-3 py-3"><span x-text="headerConfig.exploreLabel || 'Keşfet'">Keşfet</span></a>
+                <a x-show="publishedCollections.length > 0 && isHomepageSectionVisible('published-collections')" href="#" @click.prevent="navigateToCollections()" class="rounded-lg px-3 py-3 flex items-center gap-2"><i class="fa-solid fa-layer-group text-amber-500"></i><span>Koleksiyonlar</span></a>
                 <a x-show="headerConfig.showFranchises !== false" href="#" @click.prevent="navigateTo('franchises'); mobileMenuOpen = false"  :class="isHeaderMenuActive('franchises') ? 'is-active' : ''" class="rounded-lg px-3 py-3" x-text="headerConfig.franchisesLabel || 'Seri Filmler'">Seri Filmler</a>
                 <a x-show="headerConfig.showVideo !== false" href="#" @click.prevent="navigateTo('video-links'); mobileMenuOpen = false"  :class="isHeaderMenuActive('video-links') ? 'is-active' : ''" class="rounded-lg px-3 py-3 flex items-center justify-between"><span x-text="headerConfig.videoLabel || 'Video Bağlantıları'">Video Bağlantıları</span><span class="text-xs text-rose-500" x-text="watchableCatalog.length"></span></a>
                 <template x-for="(link,index) in (headerConfig.customLinks || [])" :key="'mobile-header-custom-'+index">
@@ -538,10 +540,27 @@
                 <template x-for="collection in (homeSectionReady['published-collections'] ? publishedCollections : [])" :key="'published-' + collection.id">
                     <section class="home-published-collection w-full mx-6 sm:mx-12 space-y-5">
                         <div class="home-published-collection-heading flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-4">
-                            <div class="min-w-0">
-                                <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">CINEVERSE • ÖZEL SEÇKİ</p>
+                            <div class="flex min-w-0 items-center gap-3">
+                                <div x-show="collection.coverMode === 'mix' || collection.coverMode === 'auto' || (collection.coverMode === 'url' && collection.image)" class="home-published-collection-cover w-16 h-20 sm:w-20 sm:h-24 shrink-0 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-900">
+                                    <template x-if="collection.coverMode === 'mix'">
+                                        <div class="home-published-collection-mix grid h-full w-full grid-cols-2 grid-rows-2 gap-0.5">
+                                            <template x-for="coverItem in collection.coverItems" :key="'cover-'+collection.id+'-'+coverItem.id">
+                                                <img :src="coverItem.poster || coverItem.image || coverItem.backdrop || coverItem.tmdbPoster" :alt="coverItem.title" loading="lazy" class="h-full w-full min-h-0 min-w-0 object-cover">
+                                            </template>
+                                        </div>
+                                    </template>
+                                    <template x-if="collection.coverMode === 'auto'">
+                                        <img :src="collection.coverItems[0]?.poster || collection.coverItems[0]?.image || collection.coverItems[0]?.backdrop || collection.coverItems[0]?.tmdbPoster" alt="" loading="lazy" class="h-full w-full object-cover">
+                                    </template>
+                                    <template x-if="collection.coverMode === 'url'">
+                                        <img :src="collection.image || collection.cover || collection.backdrop" alt="" loading="lazy" class="h-full w-full object-cover">
+                                    </template>
+                                </div>
+                                <div class="min-w-0">
+                                <p class="text-[10px] font-black uppercase tracking-[0.22em] text-rose-700 dark:text-rose-400 mb-1">PERDE • ÖZEL SEÇKİ</p>
                                 <h2 class="text-xl sm:text-2xl font-black uppercase tracking-wider text-gray-900 dark:text-white" x-text="collection.title"></h2>
                                 <p x-show="collection.description" class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-text="collection.description"></p>
+                                </div>
                             </div>
                             <div class="flex items-center gap-3 shrink-0"><span class="text-[10px] font-bold text-rose-700 dark:text-rose-400" x-text="Math.min(collection.items.length,15) + ' / ' + collection.items.length + ' yapım'"></span><div class="flex items-center gap-2 shrink-0"><span class="text-[10px] font-bold text-gray-500 dark:text-gray-400">En fazla 15</span><button type="button" @click="scrollHomeCards('home-collection-rail-' + collection.id,-1)" aria-label="Önceki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-left"></i></button><button type="button" @click="scrollHomeCards('home-collection-rail-' + collection.id,1)" aria-label="Sonraki yapımlar" class="home-rail-arrow"><i class="fa-solid fa-chevron-right"></i></button></div></div>
                         </div>
