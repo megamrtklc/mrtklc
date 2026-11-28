@@ -53,6 +53,7 @@ const runtimePages = {
   'actor-director': { marker: 'ACTOR_DIRECTOR', nested: [] },
   explore: { marker: 'EXPLORE', nested: [] },
   franchises: { marker: 'FRANCHISES', nested: [] },
+  collections: { marker: 'COLLECTIONS', nested: [] },
   watchlist: { marker: 'WATCHLIST', nested: [] },
   library: { marker: 'LIBRARY', nested: [] },
   stats: { marker: 'STATS', nested: [] },
