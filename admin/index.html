@@ -592,39 +592,48 @@
         </div>
       </section>
 <section class="view" id="view-backup">
-       <div class="page-heading"><div><div class="eyebrow">DATA / PORTABILITY</div><h1>Veri Yedekleme &amp; Geri Yükleme</h1><p>Kataloğunu, site ayarlarını ve bu tarayıcıdaki kişisel izleme kayıtlarını tek dosyada taşı.</p></div></div>
-       <div class="settings-grid">
-        <article class="panel-card">
-         <div class="panel-card-heading"><div><span class="eyebrow">SITE DATA</span><h2>Yapımlar ve site verileri</h2></div><span class="state-ready">JSON yedek</span></div>
-         <p class="helper-text">Film/dizi kataloğu, koleksiyonlar, seri film bağlantıları, ana sayfa düzeni ve site yapılandırmaları ayrı bir dosyaya kaydedilir.</p>
-         <div class="setting-row"><span>Yapım kataloğu</span><b id="backup-catalog-count">—</b></div>
-         <button class="primary-button" id="download-site-backup" type="button">↓　Yapım ve site verilerini indir (.json)</button>
-         <div class="panel-card-heading" style="margin-top:22px"><div><span class="eyebrow">PERSONAL DATA</span><h2>Kişisel tarayıcı verileri</h2></div><span class="state-ready">JSON yedek</span></div>
-         <p class="helper-text">İzlemeye Devam Et, İzleme Listem, İzlediklerim, Favorilerim, bölüm ilerlemeleri, profil ve diğer Perde tercihlerin ayrı dosyaya kaydedilir.</p>
-         <div class="setting-row"><span>Kişisel kayıt sayısı</span><b id="backup-storage-count">—</b></div>
-         <p class="helper-text" id="backup-origin-status" role="status">Tarayıcı kayıtları kontrol ediliyor…</p>
-         <button class="primary-button" id="download-personal-backup" type="button">↓　Kişisel verileri indir (.json)</button>
-          <div class="backup-safety-note" style="margin-top:18px;border-color:rgba(220,80,80,.35)"><b>Kişisel verileri temizle</b><span>Yalnızca bu tarayıcıdaki Perde kişisel kayıtlarını siler. İşlem favorileri, izleme listelerini, izleme geçmişini, ilerlemeleri ve Perde tercihlerini kapsar. Site kataloğuna ve sunucu verilerine dokunmaz.</span><button class="secondary-button danger-text" id="clear-personal-data" type="button" style="margin-top:12px">Kişisel verileri temizle</button></div>
-         <p class="helper-text">Kişisel dosya, ana Perde sitesindeki bu tarayıcıdan güvenli aktarım penceresiyle okunur; sunucuya gönderilmez. 0 kayıt varsa eksik yedek indirilmesine izin verilmez.</p><div class="backup-safety-note"><b>Yedek güvenliği</b><span>Site ve kişisel veriler ayrı dosyalardır. Geri yükleme öncesi dosya içeriği kontrol edilir; yanlış biçimli veya izin verilmeyen tarayıcı anahtarı içeren dosyalar reddedilir.</span></div>
+       <div class="page-heading backup-page-heading"><div><div class="eyebrow">DATA / PORTABILITY</div><h1>Yedekleme Merkezi</h1><p>Perde kataloğunu ve kişisel kayıtlarını ayrı ayrı koru. İhtiyacın olduğunda yedeğini geri yükle.</p></div></div>
+       <div class="backup-card-grid">
+        <article class="panel-card backup-action-card">
+         <div class="backup-card-top"><span class="backup-card-icon">▤</span><span class="state-ready">JSON · Site</span></div>
+         <div class="backup-card-copy"><span class="eyebrow">1 · SİTE VERİLERİ</span><h2>Yapım kataloğu</h2><p>Film ve diziler, koleksiyonlar, film serileri, ana sayfa düzeni ve site ayarları.</p></div>
+         <div class="backup-card-metric"><span>Katalog kapsamı</span><b id="backup-catalog-count">—</b></div>
+         <button class="primary-button" id="download-site-backup" type="button">↓　Site yedeğini indir</button>
+         <small class="backup-card-footnote">Sunucudaki katalog ve site yapılandırmalarını dosyaya kaydeder.</small>
         </article>
-        <article class="panel-card">
-         <div class="panel-card-heading"><div><span class="eyebrow">RESTORE</span><h2>Yedekten geri yükle</h2></div><span class="state-warning">Mevcut verileri değiştirir</span></div>
-         <p class="helper-text">JSON dosyasını seçtiğinde biçim, sürüm, katalog kayıtları ve kişisel veri anahtarları doğrulanır. Eski tip tam yedekler de desteklenir.</p>
-         <label class="field"><span>Yedek JSON dosyası</span><input id="restore-backup-file" type="file" accept=".json,application/json"></label>
-         <div id="restore-backup-summary" class="setting-row"><span>Dosya durumu</span><b>Henüz dosya seçilmedi</b></div>
-         <button class="primary-button" id="restore-full-backup" type="button" disabled>↻　Yedeği geri yükle</button>
-         <p class="helper-text">Geri yükleme yalnızca dosyada bulunan veri kapsamını değiştirir. Kişisel veriler ana Perde sitesine aktarılır; site verileri sunucuya kaydedilir. Kişisel kayıtlar için işlem öncesi geri alma kopyası alınır. Kalıcı yedek geçmişi tutulmaz; indirdiğin JSON dosyalarını ayrıca saklamalısın.</p>
+        <article class="panel-card backup-action-card">
+         <div class="backup-card-top"><span class="backup-card-icon">♡</span><span class="state-ready">JSON · Kişisel</span></div>
+         <div class="backup-card-copy"><span class="eyebrow">2 · KİŞİSEL VERİLER</span><h2>Kişisel arşivin</h2><p>Favoriler, izlenenler, izleme listesi, film/dizi ilerlemesi ve Perde tercihlerin.</p></div>
+         <div class="backup-card-metric"><span>Kişisel kayıt sayısı</span><b id="backup-storage-count">—</b></div>
+         <p class="helper-text backup-origin-status" id="backup-origin-status" role="status">Kişisel kayıt sayısı, indirme sırasında ana Perde sitesinden güvenli şekilde okunur.</p>
+         <button class="primary-button" id="download-personal-backup" type="button">↓　Kişisel yedeği indir</button>
+         <small class="backup-card-footnote">Kişisel yedek katalog görsellerini ve uzun açıklamaları içermez; dosya daha küçük kalır.</small>
         </article>
        </div>
-       <article class="panel-card" style="margin-top:20px">
-        <h2>Yedek kapsamı</h2>
-        <div class="settings-grid">
-         <div><b>Yapımlar ve site verileri</b><p class="helper-text">Film/dizi kataloğu, koleksiyonlar, seri film bağlantıları, ana sayfa düzeni, vitrin ve izleme deneyimi ayarları.</p></div>
-         <div><b>Kişisel kullanım verileri</b><p class="helper-text">İzlemeye Devam Et, İzleme Listem, İzlediklerim, Favorilerim, bölüm ilerlemesi, öneri geri bildirimleri, beğeniler, yorumlar ve diğer Perde tarayıcı tercihleri.</p></div>
+       <article class="panel-card backup-restore-card">
+        <div class="panel-card-heading"><div><span class="eyebrow">3 · GERİ YÜKLEME</span><h2>Bir yedekten devam et</h2><p>Perde JSON yedeğini seç. Dosya türü, sürümü ve içeriği kontrol edilsin.</p></div><span class="state-warning">Mevcut ilgili verileri değiştirir</span></div>
+        <div class="backup-restore-layout">
+         <label class="field backup-file-field"><span>Yedek dosyası</span><input id="restore-backup-file" type="file" accept=".json,application/json"></label>
+         <div id="restore-backup-summary" class="backup-restore-summary"><span>Dosya durumu</span><b>Henüz dosya seçilmedi</b><small class="helper-text">Dosya seçildiğinde türü, kayıt sayısı ve boyutu burada gösterilir.</small></div>
         </div>
+        <div class="backup-restore-actions"><p class="helper-text">Kişisel yedek ana Perde sitesindeki tarayıcıya aktarılır. Site yedeği katalog ve ayarları sunucuya kaydeder. Eski tip tam yedekler de desteklenir.</p><button class="primary-button" id="restore-full-backup" type="button" disabled>↻　Yedeği geri yükle</button></div>
        </article>
+       <div class="backup-bottom-grid">
+        <article class="panel-card backup-cleanup-card">
+         <div class="backup-card-top"><span class="backup-card-icon backup-danger-icon">⌫</span><span class="state-warning">Dikkat gerektirir</span></div>
+         <div class="backup-card-copy"><span class="eyebrow">4 · TARAYICI BAKIMI</span><h2>Kişisel verileri temizle</h2><p>Yalnızca bu tarayıcıdaki Perde kişisel kayıtlarını siler. Katalog ve sunucu verilerine dokunmaz.</p></div>
+         <div class="backup-safety-note"><b>Önce yedek al</b><span>Temizleme işlemi favorileri, listeleri, izleme ilerlemesini ve Perde tercihlerini kapsar. İki aşamalı onay gerekir.</span></div>
+         <button class="secondary-button danger-text" id="clear-personal-data" type="button">Kişisel verileri temizle</button>
+        </article>
+        <article class="panel-card backup-history-card">
+         <div class="panel-card-heading"><div><span class="eyebrow">5 · SON HAREKETLER</span><h2>İşlem geçmişi</h2><p>Bu yönetim tarayıcısında yapılan son yedekleme işlemleri.</p></div><button class="text-button" id="clear-backup-history" type="button">Geçmişi temizle</button></div>
+         <div id="backup-history-list" class="backup-history-list"><p class="backup-history-empty">Henüz yedekleme işlemi kaydedilmedi.</p></div>
+         <small class="backup-card-footnote">Geçmiş yalnızca işlem türü, tarih, dosya boyutu ve sonuç bilgisini saklar. Yedek içeriği kaydedilmez.</small>
+        </article>
+       </div>
+       <div class="backup-scope-note"><b>Hangi yedeği ne zaman kullanmalısın?</b><div><span><strong>Site yedeği</strong> — Yapım kataloğunu ve site ayarlarını korumak için.</span><span><strong>Kişisel yedek</strong> — Favorilerini, izleme listeni ve ilerlemeni başka cihaza taşımak veya geri getirmek için.</span></div></div>
       </section>
-      <section class="view" id="view-system">
+<section class="view" id="view-system">
         <div class="page-heading"><div><div class="eyebrow">SYSTEM / HEALTH</div><h1>Sistem Kontrol Merkezi</h1><p>Perde yönetim bağlantılarını, katalog bütünlüğünü ve yayınlama erişimini buradan kontrol et.</p></div><button class="primary-button" id="system-refresh" type="button">↻　Kontrolleri yenile</button></div>
         <div class="system-health-grid">
           <article class="panel-card system-health-card"><span class="system-health-kicker">YÖNETİM API</span><strong id="system-api-status">Kontrol bekliyor</strong><p id="system-api-detail">Katalog servisi bağlantısı henüz test edilmedi.</p></article>
@@ -689,5 +698,5 @@
 <dialog class="editor-dialog collection-dialog" id="franchise-dialog" aria-labelledby="franchise-dialog-title"><form id="franchise-form" class="editor-form"><div class="editor-head"><div><div class="eyebrow">FILM FRANCHISE</div><h2 id="franchise-dialog-title">Yeni film serisi</h2><p>Seri bilgilerini gir ve mevcut film kayıtlarını vizyon sırasına göre seç.</p></div><button type="button" class="dialog-close" id="franchise-close" aria-label="Kapat">×</button></div><input type="hidden" id="franchise-id"><div class="editor-grid"><label class="field wide"><span>Seri adı *</span><input id="franchise-title" required maxlength="120" placeholder="Örn. Matrix Serisi"></label><label class="field wide"><span>Açıklama</span><textarea id="franchise-description" rows="2" maxlength="500" placeholder="Seri hakkında kısa bir açıklama…"></textarea></label><label class="field wide"><span>Kapak / arka plan görseli URL</span><input id="franchise-backdrop" type="url" maxlength="1000" placeholder="https://image.tmdb.org/t/p/w1280/…"></label><label class="toggle-field wide"><input id="franchise-active" type="checkbox" checked><span>Seriyi ana sayfada ve Seri Filmler sayfasında yayınla</span></label></div><div class="collection-picker-head"><h3>Filmleri vizyon sırasına göre seç</h3><input id="franchise-search" type="search" placeholder="Katalogda film ara…"></div><div id="franchise-items" class="collection-items"></div><div class="editor-footer"><span>Filmler yayın yıllarına göre sıralanır. En az iki film seç.</span><div><button type="button" class="secondary-button" id="franchise-cancel">Vazgeç</button><button type="submit" class="primary-button">Seriyi kaydet</button></div></div></form></dialog><dialog class="editor-dialog profile-dialog" id="profile-dialog" aria-labelledby="profile-dialog-title"><form id="profile-form" class="editor-form"><div class="editor-head"><div><div class="eyebrow">ADMIN PROFILE</div><h2 id="profile-dialog-title">Profil fotoğrafı</h2><p>Yönetici fotoğrafını buradan yükleyebilir veya değiştirebilirsin. Görünen yönetici adını Kullanıcılar bölümünden düzenleyebilirsin.</p></div><button type="button" class="dialog-close" id="profile-close" aria-label="Kapat">×</button></div><div class="profile-upload-preview"><div class="profile-photo-large"><span id="profile-dialog-initials">CV</span><img id="profile-dialog-preview" alt="" hidden></div><div><b>Yönetici fotoğrafı</b><small>Görünen ad Kullanıcılar bölümünden değiştirilir.</small></div></div><label class="field wide"><span>Fotoğraf dosyası (JPG, PNG veya WebP · en fazla 700 KB)</span><input id="profile-file" type="file" accept="image/jpeg,image/png,image/webp" required></label><p class="helper-text">Fotoğraf yönetim panelinde kullanılır ve GitHub deposundaki özel olmayan yönetici görseli dosyasında saklanır.</p><div class="editor-footer"><span id="profile-upload-status">Henüz fotoğraf seçilmedi.</span><div><button type="button" class="secondary-button" id="profile-cancel">Vazgeç</button><button type="submit" class="primary-button" id="profile-save">Fotoğrafı kaydet</button></div></div></form></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-icon" aria-hidden="true">i</span><span class="toast-content"><span class="toast-kicker" id="toast-title">PERDE YÖNETİM</span><span class="toast-message" id="toast-message"></span></span></div>
 
-<script src="./admin.js?v=20261128-personal-cleanup-v1" defer></script>
+<script src="./admin.js?v=20261128-backup-cards-v1" defer></script>
 </body></html>
