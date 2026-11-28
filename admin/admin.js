@@ -3,7 +3,7 @@
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
   const catalogSearchCache = new WeakMap();
-  const state = { homepageLayoutDirty:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], selectedCatalogIds:new Set(), page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbDetailRequest:0, tmdbController:null, tmdbSelected:null, securityLoaded:false };
+  const state = { homepageLayoutDirty:false, homepageCollectionsExpanded:false, homepagePreviewDevice:'desktop', homepageLayoutPublished:null, data:null, catalog:[], filtered:[], selectedCatalogIds:new Set(), page:1, pageSize:12, missingTrailerPage:1, missingTrailerPageSize:12, qualityPage:1, qualityPageSize:10, view:'overview', analyticsDetail:null, analyticsDetailPage:1, analyticsDetailPageSize:12, sha:null, apiEnabled:false, saving:false, heroDraft:null, heroRefreshDraft:null, tmdbSearchTimer:null, tmdbSearchRequest:0, tmdbDetailRequest:0, tmdbController:null, tmdbSelected:null, securityLoaded:false };
   const HOMEPAGE_LAYOUT_DEFAULTS = ['hero','personalized','continue','watchlist','watched','favorites','new-arrivals','series-tracking','genre-discovery','franchises','published-collections','catalog'];
   const HOMEPAGE_LAYOUT_ITEMS = {
     hero:{title:'Manşet',description:'Masaüstü ve mobil ana görsel alanı',icon:'▣',locked:true},
@@ -1366,7 +1366,22 @@
     const known=new Set(HOMEPAGE_LAYOUT_DEFAULTS);
     const order=Array.isArray(source.order)?source.order.filter(key=>known.has(key)):[...HOMEPAGE_LAYOUT_DEFAULTS];
     HOMEPAGE_LAYOUT_DEFAULTS.forEach(key=>{if(!order.includes(key))order.push(key);});
-    return {order,visibility:{...(source.visibility||{})},labels:JSON.parse(JSON.stringify(source.labels||{}))};
+    const existing=new Set(collectionList().map(item=>String(item.id)));
+    const collectionOrder=Array.isArray(source.collectionOrder)?source.collectionOrder.map(String).filter((id,index,all)=>existing.has(id)&&all.indexOf(id)===index):collectionList().filter(item=>item&&item.active!==false).map(item=>String(item.id));
+    return {order,visibility:{...(source.visibility||{})},labels:JSON.parse(JSON.stringify(source.labels||{})),collectionOrder};
+  }
+  function homepageCollectionOrder(layout=homepageLayoutConfig()){
+    const known=new Set(collectionList().map(item=>String(item.id)));
+    return (Array.isArray(layout.collectionOrder)?layout.collectionOrder:collectionList().filter(item=>item&&item.active!==false).map(item=>String(item.id))).map(String).filter((id,index,all)=>known.has(id)&&all.indexOf(id)===index);
+  }
+  function renderHomepageCollectionsManager(layout){
+    const collections=collectionList().filter(item=>item&&String(item.title||'').trim());
+    const order=homepageCollectionOrder(layout);
+    const selected=order.map(id=>collections.find(item=>String(item.id)===id)).filter(Boolean);
+    const available=collections.filter(item=>item.active!==false&&!order.includes(String(item.id)));
+    const selectedMarkup=selected.length?selected.map((item,index)=>'<div class="homepage-collection-selected'+(item.active===false?' is-inactive':'')+'" data-home-collection-id="'+escapeHtml(item.id)+'"><span class="homepage-collection-number">'+String(index+1).padStart(2,'0')+'</span><span class="homepage-collection-name"><b>'+escapeHtml(item.title)+'</b><small>'+(item.active===false?'Taslak · ana sayfada gösterilmez':'Yayında')+'</small></span><div class="homepage-collection-actions"><button type="button" data-home-collection-action="up" aria-label="Yukarı taşı" '+(index===0?'disabled':'')+'>↑</button><button type="button" data-home-collection-action="down" aria-label="Aşağı taşı" '+(index===selected.length-1?'disabled':'')+'>↓</button><button type="button" data-home-collection-action="remove" aria-label="Ana sayfadan çıkar">×</button></div></div>').join(''):'<p class="homepage-collection-empty">Henüz ana sayfada gösterilecek koleksiyon seçilmedi.</p>';
+    const availableMarkup=available.length?available.map(item=>'<label class="homepage-collection-option"><input type="checkbox" data-home-collection-select value="'+escapeHtml(item.id)+'"><span><b>'+escapeHtml(item.title)+'</b><small>'+(Array.isArray(item.items)?item.items.length:0)+' yapım</small></span><i>＋</i></label>').join(''):'<p class="homepage-collection-empty">Eklenebilecek başka yayınlanmış koleksiyon yok.</p>';
+    return '<div class="homepage-collection-manager"><div class="homepage-collection-manager-head"><div><b>Koleksiyon vitrini</b><small>Seçtiğin koleksiyonlar ana sayfada bu sırayla gösterilir.</small></div><button type="button" class="secondary-button" data-home-collection-manager-toggle>'+(state.homepageCollectionsExpanded?'Yönetimi gizle':'Koleksiyonları seç ve sırala')+'</button></div>'+(state.homepageCollectionsExpanded?'<div class="homepage-collection-manager-body"><section><div class="homepage-collection-list-heading"><b>Ana sayfada gösterilecekler</b><span>'+selected.length+' seçili</span></div><div class="homepage-collection-selected-list">'+selectedMarkup+'</div></section><section><div class="homepage-collection-list-heading"><b>Diğer yayınlanmış koleksiyonlar</b><span>'+available.length+' eklenebilir</span></div><div class="homepage-collection-options">'+availableMarkup+'</div></section><p class="homepage-collection-manager-note">Taslak durumundaki koleksiyonlar ana sayfada görünmez. Yeniden yayınlandıklarında önceki sıralarına dönerler. Koleksiyonların kendi kayıt sırası değişmez.</p></div>':'')+'</div>';
   }
   function homepageLayoutConfig(){
     const config=homepageConfig();
@@ -1409,7 +1424,7 @@
           '<button type="button" data-layout-action="up" aria-label="'+escapeHtml(item.title)+' bölümünü yukarı taşı" '+(locked||index<=1?'disabled':'')+'>↑</button>'+
           '<button type="button" data-layout-action="down" aria-label="'+escapeHtml(item.title)+' bölümünü aşağı taşı" '+(locked||index===layout.order.length-1?'disabled':'')+'>↓</button>'+
           (locked?'<span class="homepage-layout-lock" title="Manşet bu ekrandan değiştirilemez">🔒</span>':'<button type="button" class="homepage-layout-toggle" data-layout-action="toggle" aria-label="'+(active?'Bölümü gizle':'Bölümü göster')+'">'+(active?'◉':'○')+'</button>')+
-        '</div></div>';
+        '</div></div>'+(key==='published-collections'?renderHomepageCollectionsManager(layout):'');
     }).join('');
     renderHomepageLayoutPreview(layout);
     renderHomepagePublishCheck();
@@ -1450,6 +1465,7 @@
     const current=snapshotHomepageLayout(homepageLayoutConfig());
     const published=state.homepageLayoutPublished||snapshotHomepageLayout({});
     const changes=[];
+    if(JSON.stringify(current.collectionOrder)!==JSON.stringify(published.collectionOrder))changes.push({title:'Yayınlanan Koleksiyonlar',detail:'Ana sayfa seçkisi ve koleksiyonların gösterim sırası güncellendi ('+current.collectionOrder.length+' seçili).'});
     const titleFor=key=>HOMEPAGE_LAYOUT_ITEMS[key]?.title||key;
     current.order.forEach((key,index)=>{
       const oldIndex=published.order.indexOf(key);
@@ -1498,7 +1514,7 @@
     if(!changes.length){renderHomepagePublishCheck();return;}
     const config=homepageConfig();
     const layout=homepageLayoutConfig();
-    const nextLayout={order:[...layout.order],visibility:{...layout.visibility},labels:{...layout.labels}};
+    const nextLayout={order:[...layout.order],visibility:{...layout.visibility},labels:{...layout.labels},collectionOrder:homepageCollectionOrder(layout)};
     const ok=await persist({...state.data,homepageConfig:{...config,layout:nextLayout}},'Ana sayfa bölümleri ve sıralaması kaydedildi.');
     if(ok){
       state.homepageLayoutDirty=false;
@@ -2677,7 +2693,17 @@
     renderHomepageLayoutPreview(layout);
     renderHomepagePublishCheck();
   });
+  $('#homepage-layout-list').addEventListener('change',event=>{
+    const input=event.target.closest('[data-home-collection-select]');if(!input)return;
+    const order=homepageCollectionOrder();const id=String(input.value);
+    if(input.checked&&!order.includes(id))order.push(id);else if(!input.checked){const index=order.indexOf(id);if(index>=0)order.splice(index,1);}
+    homepageLayoutConfig().collectionOrder=order;state.homepageLayoutDirty=true;renderHomepageLayout();
+  });
   $('#homepage-layout-list').addEventListener('click',event=>{
+    const managerToggle=event.target.closest('[data-home-collection-manager-toggle]');
+    if(managerToggle){state.homepageCollectionsExpanded=!state.homepageCollectionsExpanded;renderHomepageLayout();return;}
+    const collectionAction=event.target.closest('[data-home-collection-action]');
+    if(collectionAction){const row=collectionAction.closest('[data-home-collection-id]');const order=homepageCollectionOrder();const index=order.indexOf(String(row?.dataset.homeCollectionId));const action=collectionAction.dataset.homeCollectionAction;if(index<0)return;if(action==='remove')order.splice(index,1);else{const next=index+(action==='up'?-1:1);if(next<0||next>=order.length)return;[order[index],order[next]]=[order[next],order[index]];}homepageLayoutConfig().collectionOrder=order;state.homepageLayoutDirty=true;renderHomepageLayout();return;}
     const button=event.target.closest('[data-layout-action]');
     const row=event.target.closest('[data-layout-key]');
     if(!button||!row)return;
@@ -2690,6 +2716,7 @@
     const layout=homepageLayoutConfig();
     layout.order=[...HOMEPAGE_LAYOUT_DEFAULTS];
     layout.visibility={};
+    layout.collectionOrder=collectionList().filter(item=>item&&item.active!==false).map(item=>String(item.id));
     state.homepageLayoutDirty=true;
     renderHomepageLayout();
     toast('Varsayılan sıra taslağa alındı. Kalıcı olması için Düzeni yayınla.');
