@@ -2075,12 +2075,75 @@
       diagnostic.classList.toggle('state-warning',total===0);
     }
   }
-  function downloadBackupJson(payload,filename,successMessage){
-    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
+  function downloadBackupJson(payload,filename,successMessage,compact=false){
+    const serialized=JSON.stringify(payload,null,compact?0:2);
+    const blob=new Blob([serialized],{type:'application/json;charset=utf-8'});
     const url=URL.createObjectURL(blob),anchor=document.createElement('a');
     anchor.href=url;anchor.download=filename;
     document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
     toast(successMessage);
+  }
+  const PERSONAL_BACKUP_SHARED_KEYS=['cine_watched_items_v1','cine_favorite_items_v1','cine_watchlist_v1'];
+  const PERSONAL_BACKUP_SHARED_FORMAT='perde-shared-production-v1';
+  function compactPersonalBackup(browserData){
+    const localStorageData={...(browserData?.localStorage||{})};
+    const grouped=new Map(),parsedLists=new Map();
+    for(const key of PERSONAL_BACKUP_SHARED_KEYS){
+      if(!Object.prototype.hasOwnProperty.call(localStorageData,key))continue;
+      const raw=localStorageData[key];
+      if(typeof raw!=='string')return {browserData};
+      let list;
+      try{list=JSON.parse(raw);}catch(_){return {browserData};}
+      if(!Array.isArray(list)||list.some(item=>!item||typeof item!=='object'||Array.isArray(item)||item.id==null))return {browserData};
+      parsedLists.set(key,list);
+      list.forEach((item,index)=>{
+        const id=String(item.id);
+        if(!grouped.has(id))grouped.set(id,[]);
+        grouped.get(id).push({key,index,item});
+      });
+    }
+    if(!grouped.size)return {browserData};
+    const sharedItems={},compactLists=new Map();
+    for(const [key,list] of parsedLists)compactLists.set(key,list.map(item=>({...item})));
+    for(const [id,occurrences] of grouped){
+      const shared={id:occurrences[0].item.id};
+      const deltas=occurrences.map(({item})=>({...item}));
+      const fields=new Set(occurrences.flatMap(({item})=>Object.keys(item)));
+      for(const field of fields){
+        if(field==='id'||!occurrences.every(({item})=>Object.prototype.hasOwnProperty.call(item,field)))continue;
+        const first=JSON.stringify(occurrences[0].item[field]);
+        if(occurrences.every(({item})=>JSON.stringify(item[field])===first)){
+          shared[field]=occurrences[0].item[field];
+          deltas.forEach(delta=>{delete delta[field];});
+        }
+      }
+      sharedItems[id]=shared;
+      occurrences.forEach(({key,index},position)=>{compactLists.get(key)[index]=deltas[position];});
+    }
+    for(const [key,list] of compactLists)localStorageData[key]=JSON.stringify(list);
+    return {
+      browserData:{...browserData,localStorage:localStorageData},
+      personalDataFormat:PERSONAL_BACKUP_SHARED_FORMAT,
+      personalSharedItems:sharedItems
+    };
+  }
+  function expandPersonalBackupData(data){
+    if(data?.personalDataFormat!==PERSONAL_BACKUP_SHARED_FORMAT)return data?.browserData||{};
+    const sharedItems=data.personalSharedItems||{};
+    const localStorageData={...(data.browserData?.localStorage||{})};
+    for(const key of PERSONAL_BACKUP_SHARED_KEYS){
+      if(!Object.prototype.hasOwnProperty.call(localStorageData,key))continue;
+      let list;
+      try{list=JSON.parse(localStorageData[key]);}catch(_){throw new Error(key+' sıkıştırılmış yedek listesi okunamadı.');}
+      if(!Array.isArray(list))throw new Error(key+' sıkıştırılmış yedek listesi geçersiz.');
+      localStorageData[key]=JSON.stringify(list.map(entry=>{
+        const id=String(entry?.id??'');
+        const shared=sharedItems[id];
+        if(!id||!shared||typeof shared!=='object'||Array.isArray(shared))throw new Error('Kişisel yedekte '+(id||'kimliği eksik')+' yapımının ortak verisi bulunamadı.');
+        return {...shared,...entry};
+      }));
+    }
+    return {...data.browserData,localStorage:localStorageData};
   }
   function downloadSiteBackup(){
     if(!state.data||!Array.isArray(state.data.catalog)){toast('Katalog yüklenmeden yedek oluşturulamaz.');return;}
@@ -2102,7 +2165,9 @@
         return;
       }
       const date=new Date().toISOString().slice(0,10);
-      downloadBackupJson({format:'perde-personal-backup',version:1,exportedAt:new Date().toISOString(),origin:PERSONAL_BACKUP_SITE_ORIGIN,browserData},'perde-kisisel-tarayici-verileri-'+date+'.json','Ana sitedeki '+count+' kişisel kayıt yedeklendi.');
+      const compacted=compactPersonalBackup(browserData);
+      const sharedCount=Object.keys(compacted.personalSharedItems||{}).length;
+      downloadBackupJson({format:'perde-personal-backup',version:1,exportedAt:new Date().toISOString(),origin:PERSONAL_BACKUP_SITE_ORIGIN,...compacted},'perde-kisisel-tarayici-verileri-'+date+'.json','Ana sitedeki '+count+' kişisel kayıt yedeklendi'+(sharedCount?' · '+sharedCount+' yapım verisi tekilleştirildi':'')+'.',true);
     }catch(error){
       toast(error.message||'Ana site kişisel kayıtları okunamadı.');
     }finally{if(button)button.disabled=false;}
@@ -2126,6 +2191,9 @@
     const isPersonal=data.format==='perde-personal-backup'&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
     const isLegacy=data.format==='perde-full-backup'&&data.siteData&&typeof data.siteData==='object'&&!Array.isArray(data.siteData)&&Array.isArray(data.siteData.catalog)&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
     if(!isSite&&!isPersonal&&!isLegacy)throw new Error('Bu dosya geçerli bir Perde yedek dosyası değil.');
+    const hasSharedPersonal=data.personalDataFormat===PERSONAL_BACKUP_SHARED_FORMAT;
+    if(data.personalDataFormat&&!hasSharedPersonal)throw new Error('Kişisel yedek sıkıştırma biçimi desteklenmiyor.');
+    if(hasSharedPersonal&&!isPersonal)throw new Error('Sıkıştırılmış kişisel yedek biçimi yalnızca kişisel yedeklerde kullanılabilir.');
     let movieCount=0;
     if(isSite||isLegacy){
       const catalog=data.siteData.catalog;
@@ -2143,6 +2211,24 @@
     let personal=0;
     if(isPersonal||isLegacy){
       personal=validateBackupStorageMap(data.browserData.localStorage,'localStorage')+validateBackupStorageMap(data.browserData.sessionStorage,'sessionStorage');
+      if(hasSharedPersonal){
+        const shared=data.personalSharedItems;
+        if(!shared||typeof shared!=='object'||Array.isArray(shared)||Object.keys(shared).length>5000||JSON.stringify(shared).length>8*1024*1024)throw new Error('Kişisel yedekteki ortak yapım verileri geçersiz veya sınır dışında.');
+        const referenced=new Set();
+        for(const key of PERSONAL_BACKUP_SHARED_KEYS){
+          const raw=data.browserData.localStorage[key];
+          if(raw===undefined)continue;
+          let list;
+          try{list=JSON.parse(raw);}catch(_){throw new Error(key+' sıkıştırılmış yedek listesi JSON olarak okunamadı.');}
+          if(!Array.isArray(list)||list.length>5000)throw new Error(key+' sıkıştırılmış yedek listesi geçersiz.');
+          for(const entry of list){
+            const id=String(entry?.id??'').trim(),common=id?shared[id]:null;
+            if(!id||!entry||typeof entry!=='object'||Array.isArray(entry)||!common||typeof common!=='object'||Array.isArray(common)||String(common.id)!==id)throw new Error(key+' içinde ortak yapım verisi eksik veya geçersiz kayıt var.');
+            referenced.add(id);
+          }
+        }
+        if(Object.keys(shared).some(id=>!referenced.has(id)))throw new Error('Kişisel yedekte kullanılmayan ortak yapım verisi bulundu.');
+      }
     }
     return {isSite,isPersonal,isLegacy,count:data.siteData?.catalog?.length||0,movies:(isSite||isLegacy)?movieCount:0,personal};
   }
@@ -2209,7 +2295,8 @@
       if(data.browserData){
         restoreStage='Ana sitenin mevcut kişisel kayıtları korunuyor.';
         showRestoreStage('1/3 · Kişisel kayıtlar','Mevcut kayıtlar için geri alma kopyası alınıyor…');
-        previousBrowserData=await restoreMainSitePersonalStorage(data.browserData);
+        const browserDataToRestore=expandPersonalBackupData(data);
+        previousBrowserData=await restoreMainSitePersonalStorage(browserDataToRestore);
         restoreStage='Ana sitenin kişisel kayıtları geri yükleniyor.';
         showRestoreStage('2/3 · Kişisel kayıtlar','Yedek kayıtlar ana siteye aktarılıyor…');
       }
