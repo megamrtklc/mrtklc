@@ -224,15 +224,17 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 
 /* Tablet portrait home layout: keep the desktop hero artwork visible beside its copy. */
 @media (min-width:768px) and (max-width:900px){
-  #desktopEditorialHero>div:first-child picture{left:auto;right:0;width:72%;max-width:72%;height:100%;aspect-ratio:auto}
-  #desktopEditorialHero>div:first-child picture img{object-fit:cover;object-position:center right;-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.22) 12%,#000 38%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.22) 12%,#000 38%)}
+  #desktopEditorialHero>div:first-child picture{z-index:0;left:auto;right:0;width:72%;max-width:72%;height:100%;aspect-ratio:auto}
+  #desktopEditorialHero>div:first-child picture img{display:block;opacity:1;object-fit:cover;object-position:center right;-webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.12) 0%,rgba(0,0,0,.55) 18%,#000 42%);mask-image:linear-gradient(90deg,rgba(0,0,0,.12) 0%,rgba(0,0,0,.55) 18%,#000 42%)}
   #desktopEditorialHero>div.relative.mx-auto{padding-left:clamp(18px,3vw,28px);padding-right:clamp(18px,3vw,28px)}
   #desktopEditorialHero .editorial-copy-enter{width:56%;max-width:56%;min-width:0}
   #desktopEditorialHero .editorial-copy-enter h1,#desktopEditorialHero .editorial-copy-enter>p{max-width:100%}
 }
 @media (min-width:768px) and (max-width:900px){
   #home-personalized-section .home-personalized-feature-poster{display:none!important}
-  #home-personalized-section .home-personalized-feature-image{width:100%;height:100%;object-fit:cover;object-position:center}
+  #home-personalized-section .home-personalized-feature-image{z-index:0!important;width:100%;height:100%;object-fit:cover;object-position:center}
+  #home-personalized-section .home-personalized-feature-shade{z-index:1!important;pointer-events:none}
+  #home-personalized-section .home-personalized-feature>div.relative.z-\\[1\\]{z-index:2!important}
 }
 
 /* Tablet portrait: published collection sections must stay inside the homepage content width. */
