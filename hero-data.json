@@ -113,7 +113,10 @@
         "series-tracking": true,
         "genre-discovery": true
       },
-      "labels": {}
+      "labels": {},
+      "collectionOrder": [
+        "collection-1795899002643"
+      ]
     }
   },
   "catalog": [
