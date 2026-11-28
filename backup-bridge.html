@@ -48,7 +48,7 @@
     }
   }
 
-  function replaceMatchingStorage(storage, incoming, previous) {
+  function replaceMatchingStorage(storage, incoming, previous, mergeExisting = false) {
     if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) {
       throw new Error('Yedek tarayıcı verisi geçersiz.');
     }
@@ -68,12 +68,13 @@
       throw new Error('Yedekte izin verilmeyen kayıt anahtarı, veri biçimi veya boyut var.');
     }
     if (!previous || previous.error) throw new Error('Geri alma için önceki kayıt kopyası bulunamadı.');
-    Object.keys(previous).forEach(key => storage.removeItem(key));
+    if (!mergeExisting) Object.keys(previous).forEach(key => storage.removeItem(key));
     entries.forEach(([key, value]) => storage.setItem(key, value));
     const written = readMatchingStorage(storage);
     if (written.error) throw new Error(written.error);
     if (
-      Object.keys(written).length !== entries.length ||
+      (!mergeExisting && Object.keys(written).length !== entries.length) ||
+      (mergeExisting && Object.keys(written).length < entries.length) ||
       entries.some(([key, value]) => written[key] !== value)
     ) {
       throw new Error('Tarayıcı kayıtları yazıldı ancak doğrulama eşleşmedi.');
@@ -117,8 +118,9 @@
         if (previousLocal.error || previousSession.error) throw new Error(previousLocal.error || previousSession.error);
         validateStorageSnapshot(previousLocal, 'localStorage');
         validateStorageSnapshot(previousSession, 'sessionStorage');
-        replaceMatchingStorage(window.localStorage, data.localStorage || {}, previousLocal);
-        replaceMatchingStorage(window.sessionStorage, data.sessionStorage || {}, previousSession);
+        const mergeExisting = event.data.mergeExisting === true;
+        replaceMatchingStorage(window.localStorage, data.localStorage || {}, previousLocal, mergeExisting);
+        replaceMatchingStorage(window.sessionStorage, data.sessionStorage || {}, previousSession, mergeExisting);
         respond(event.source, 'PERDE_BACKUP_RESTORE_RESPONSE', event.data.requestId, {
           ok: true,
           previousBrowserData: { localStorage: previousLocal, sessionStorage: previousSession }
