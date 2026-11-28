@@ -9,8 +9,19 @@ function has(pattern, message) {
 
 // The shared persistence path must serialize writes, preserve the GitHub SHA,
 // handle stale-write conflicts, and restore the saving lock after every result.
-has(/async function persist\\(nextData,successMessage(?:,options=\\{\\})?\\)\\s*\\{[\\s\\S]*?if\\(!canWrite\\(\\)\\|\\|state\\.saving\\)return false;[\\s\\S]*?fetch\\('\\/api\\/catalog',\\{method:'PUT',credentials:'same-origin'[\\s\\S]*?body:JSON\\.stringify\\(\\{data:nextData,sha:state\\.sha\\}\\)\\}\\)[\\s\\S]*?response\\.status===409[\\s\\S]*?if\\(!response\\.ok\\)[\\s\\S]*?finally\\{state\\.saving=false;\\}/,
-  'Katalog kayıt akışı güvenli ve çakışma kontrollü olmalı');
+const persistStart = js.indexOf('async function persist(');
+const persistEnd = js.indexOf('\n  const BRAND_DEFAULTS', persistStart);
+const persistBody = js.slice(persistStart, persistEnd);
+assert.ok(
+  persistStart >= 0 && persistEnd > persistStart &&
+  persistBody.includes('if(!canWrite()||state.saving)return false;') &&
+  persistBody.includes("fetch('/api/catalog',{method:'PUT',credentials:'same-origin'") &&
+  persistBody.includes('body:JSON.stringify({data:nextData,sha:state.sha})') &&
+  persistBody.includes('response.status===409') &&
+  persistBody.includes('if(!response.ok)') &&
+  persistBody.includes('finally{state.saving=false;}'),
+  'Katalog kayıt akışı güvenli ve çakışma kontrollü olmalı'
+);
 
 // Create/update flows must validate input and persist through the same API path.
 for (const [name, marker] of [
