@@ -662,7 +662,7 @@
       if(response.status===409)throw new Error('Katalog başka bir işlemde güncellenmiş. Sayfayı yenileyip tekrar deneyin.');
       if(!response.ok)throw new Error(result.error||'Değişiklik kaydedilemedi.');
       state.data=nextData;state.catalog=Array.isArray(nextData.catalog)?nextData.catalog:[];qualityAuditCache.catalog=null;
-      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderMissingTrailers();renderCollections();renderFranchises();renderAnalytics();renderHomepage();renderHomepageLayout();renderPersonalizedSection();renderOverviewInsights();
+      state.sha=result.sha;refreshYearFilter();updateMetrics();renderRecent();renderCatalog();renderCollections();renderFranchises();renderAnalytics();renderHomepage();renderHomepageLayout();renderPersonalizedSection();renderOverviewInsights();
       renderWatchLayout();renderAdminProfile();
       toast(successMessage||'Değişiklikler GitHub kataloğuna kaydedildi.','success');
       return true;
@@ -2508,12 +2508,6 @@
   $('#type-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#year-filter').addEventListener('change',()=>{state.page=1;renderCatalog();});
   $('#catalog-sort').addEventListener('change',()=>{state.page=1;renderCatalog();});
-  $('#missing-trailer-rows').addEventListener('click',event=>{
-    const button=event.target.closest('[data-missing-trailer-edit]');if(!button)return;
-    event.preventDefault();const item=state.catalog.find(x=>String(x.id)===button.dataset.missingTrailerEdit);
-    if(!item){toast('Düzenlenecek yapım katalogda bulunamadı.');return;}
-    try{openEditor(item);}catch(error){console.error('Fragman kaydı düzenleyicisi açılamadı:',error);toast('Düzenleme ekranı açılamadı: '+(error.message||'Beklenmeyen hata.'));}
-  });
   $('#quality-rows').addEventListener('click',event=>{const btn=event.target.closest('[data-quality-edit]');if(!btn)return;event.preventDefault();const item=state.catalog.find(x=>String(x.id)===btn.dataset.qualityEdit);if(!item){toast('Düzenlenecek yapım katalogda bulunamadı.','warning');return;}try{openEditor(item);}catch(error){console.error('Veri kalitesi düzenleme formu açılamadı:',error);toast('Düzenleme formu açılamadı: '+(error.message||'Beklenmeyen hata.'),'error');}});
   $('#quality-search').addEventListener('input',()=>{state.qualityPage=1;renderQualityAudit();});
   $('#quality-filter').addEventListener('change',()=>{state.qualityPage=1;renderQualityAudit();});
