@@ -657,7 +657,7 @@
     else if(action==='all-years')openAnalyticsDetail('years');
     else if(action==='all-genres')openAnalyticsDetail('genres');
   }
-  function exportAnaly  function exportAnalyticsCsv(){
+  function exportAnalyticsCsv(){
     const catalog=Array.isArray(state.catalog)?state.catalog:[];
     if(!catalog.length){toast('Dışa aktarılacak katalog kaydı bulunamadı.','info');return;}
     const columns=[['Yapım adı',x=>titleOf(x)],['Tür',x=>isSeries(x)?'Dizi':'Film'],['Yıl',x=>yearOf(x)],['Kataloğa eklenme tarihi',x=>x.addedAt||'Bilinmiyor'],['Puan',x=>x.rating??x.imdbRating??x.voteAverage??''],['Tür etiketleri',x=>{const v=x.genres??x.genre??x.category??x.categories??'';return Array.isArray(v)?v.map(g=>g&&typeof g==='object'?g.name:g).join(' / '):v;}],['Yönetmen',x=>x.director??x.directors??''],['TMDB ID',x=>x.tmdbId??x.tmdb_id??'']];
@@ -668,7 +668,7 @@
     document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);
     toast('Katalog CSV raporu indirilmeye hazır.','success');
   }
-Filter(){
+  function refreshYearFilter(){
     const el=$('#year-filter'),selected=el.value;
     const years=[...new Set(state.catalog.map(yearOf).filter(y=>y!=='—'))].sort((a,b)=>Number(b)-Number(a));
     el.innerHTML='<option value="all">Tüm yıllar</option>'+years.map(y=>'<option value="'+escapeHtml(y)+'">'+escapeHtml(y)+'</option>').join('');
