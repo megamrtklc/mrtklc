@@ -1126,13 +1126,13 @@
     preview.classList.toggle('has-image',!!url);preview.classList.remove('is-invalid');
   }
   function updateCollectionSelectedCount(){
-    const count=$('#collection-items input:checked').length;
+    const count=$$('#collection-items input:checked').length;
     $('#collection-selected-count').textContent=count+' seçili';
-    $('#collection-catalog-count').textContent=$('#collection-items .collection-pick').length+' yapım';
+    $('#collection-catalog-count').textContent=$$('#collection-items .collection-pick').length+' yapım';
   }
   function filterCollectionItems(){
     const q=$('#collection-search').value.trim().toLocaleLowerCase('tr');
-    $('.collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
+    $$('.collection-pick').forEach(el=>el.hidden=!el.textContent.toLocaleLowerCase('tr').includes(q));
     updateCollectionSelectedCount();
   }
   async function saveCollection(event){
