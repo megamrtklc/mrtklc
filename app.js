@@ -1165,22 +1165,44 @@
                     const byId = new Map(this.catalog.map(item => [String(item.id), item]));
                     const collections = Array.isArray(this.collections) ? this.collections : [];
                     const configuredOrder = this.homepageConfig?.layout?.collectionOrder;
-                    const orderedCollections = Array.isArray(configuredOrder)
-                        ? configuredOrder.map(id => collections.find(item => String(item?.id) === String(id))).filter(Boolean)
-                        : collections;
-                    return orderedCollections
-                        .filter(collection => collection && collection.active !== false && String(collection.title || '').trim())
+                    const orderRank = new Map((Array.isArray(configuredOrder) ? configuredOrder : []).map((id, index) => [String(id), index]));
+                    const now = Date.now();
+                    return collections
+                        .filter(collection => {
+                            if (!collection || collection.active === false || !String(collection.title || '').trim()) return false;
+                            const mode = collection.publicationStatus || 'published';
+                            if (mode === 'draft') return false;
+                            const starts = collection.publishAt ? new Date(collection.publishAt).getTime() : NaN;
+                            const ends = collection.unpublishAt ? new Date(collection.unpublishAt).getTime() : NaN;
+                            if (mode === 'scheduled' && (!Number.isFinite(starts) || starts > now)) return false;
+                            if (Number.isFinite(ends) && ends <= now) return false;
+                            return true;
+                        })
                         .map(collection => {
-                            const items = (Array.isArray(collection.items) ? collection.items : [])
+                            let items = (Array.isArray(collection.items) ? collection.items : [])
                                 .map(id => byId.get(String(id)))
                                 .filter(item => item && (item.poster || item.image || item.backdrop || item.tmdbPoster));
+                            const sortMode = collection.sortMode || 'manual';
+                            if (sortMode === 'newest') items = items.slice().sort((a,b) => String(b.year || b.releaseDate || '').localeCompare(String(a.year || a.releaseDate || '')));
+                            else if (sortMode === 'name') items = items.slice().sort((a,b) => String(a.title || '').localeCompare(String(b.title || ''), 'tr'));
+                            else if (sortMode === 'rating') items = items.slice().sort((a,b) => Number(b.rating || b.tmdbRating || 0) - Number(a.rating || a.tmdbRating || 0));
                             const coverMode = collection.coverMode || (collection.image ? 'url' : 'mix');
                             const coverCount = Math.min(4, items.length);
                             const coverItems = coverCount <= 1 ? items.slice(0, coverCount) :
                                 Array.from({length: coverCount}, (_, index) => items[Math.round(index * (items.length - 1) / (coverCount - 1))]);
                             return {...collection, coverMode, items, coverItems: coverMode === 'mix' ? coverItems : coverMode === 'auto' ? items.slice(0, 1) : []};
                         })
-                        .filter(collection => collection.items.length > 0);
+                        .filter(collection => collection.items.length > 0)
+                        .sort((a,b) => {
+                            if (!!a.featured !== !!b.featured) return a.featured ? -1 : 1;
+                            const priority = Number(b.priority || 0) - Number(a.priority || 0);
+                            if (priority) return priority;
+                            return (orderRank.get(String(a.id)) ?? Number.MAX_SAFE_INTEGER) - (orderRank.get(String(b.id)) ?? Number.MAX_SAFE_INTEGER);
+                        });
+                },
+
+                get collectionsPageItems() {
+                    return this.publishedCollections.filter(collection => collection.showPage !== false);
                 },
 
                 get heroThumbSlides() {
