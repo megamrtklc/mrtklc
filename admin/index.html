@@ -7,7 +7,7 @@
 <script>if(location.hostname.endsWith('github.io'))location.replace('https://cineverse-admin.megamrtklc.workers.dev/');</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="./fonts.css?v=20261117-inter-admin-v1">
-<link rel="stylesheet" href="./admin.css?v=20261128-catalog-select-modern-v1">
+<link rel="stylesheet" href="./admin.css?v=20261128-collections-studio-v1">
 </head>
 <body>
 <div class="app-shell">
@@ -150,7 +150,62 @@
        <div class="pagination quality-pagination" id="quality-pagination" hidden><span id="quality-page-info">Sayfa 1 / 1</span><div><button id="quality-prev" type="button" disabled>← Önceki</button><button id="quality-next" type="button" disabled>Sonraki →</button></div></div>
        <p class="quality-footnote">Bu ekran yalnızca eksik alanları tespit eder; hiçbir katalog kaydını kendiliğinden değiştirmez.</p>
       </section>
-      <section class="view" id="view-collections"><div class="page-heading"><div><div class="eyebrow">CURATED / 02</div><h1>Koleksiyonlar</h1><p>Özel seçkiler oluştur, içerikleri seç ve yayına al.</p></div><button class="primary-button" id="collection-add">＋ Yeni koleksiyon</button></div><div id="collection-grid" class="collection-grid"><div class="panel-card">Koleksiyonlar yükleniyor…</div></div></section>
+      <section class="view" id="view-collections">
+       <div id="collections-list-page">
+        <div class="page-heading collections-heading"><div><div class="eyebrow">CURATED / 02</div><h1>Koleksiyonlar</h1><p>Film ve dizileri tematik seçkiler halinde düzenle, vitrininde yayınla.</p></div><button class="primary-button" id="collection-add" type="button">＋ Yeni koleksiyon</button></div>
+        <div class="collection-overview" aria-label="Koleksiyon özeti">
+         <article><span>TOPLAM KOLEKSİYON</span><b id="collection-total-count">—</b></article>
+         <article><span>YAYINDA</span><b id="collection-active-count">—</b></article>
+         <article><span>TASLAK / GİZLİ</span><b id="collection-draft-count">—</b></article>
+        </div>
+        <div class="collection-toolbar">
+         <label class="collection-search"><span aria-hidden="true">⌕</span><input id="collection-list-search" type="search" placeholder="Koleksiyon ara…" aria-label="Koleksiyon ara"></label>
+         <select id="collection-status-filter" aria-label="Yayın durumuna göre filtrele"><option value="all">Tüm durumlar</option><option value="active">Yayında</option><option value="inactive">Taslak / Gizli</option></select>
+         <select id="collection-sort" aria-label="Koleksiyonları sırala"><option value="recent">Son eklenen</option><option value="name">İsme göre</option><option value="count">Yapım sayısı</option></select>
+         <span id="collection-result-count" class="collection-result-count"></span>
+        </div>
+        <div id="collection-grid" class="collection-grid"><div class="panel-card">Koleksiyonlar yükleniyor…</div></div>
+       </div>
+       <section id="collection-editor-page" class="collection-editor-page" hidden aria-labelledby="collection-editor-heading">
+        <div class="collection-editor-top"><button type="button" class="collection-back-button" id="collection-cancel">← Koleksiyonlara dön</button><span class="collection-editor-step">COLLECTION STUDIO / 02</span></div>
+        <div class="collection-editor-heading"><div><div class="eyebrow">KOLEKSİYON TASARIMI</div><h1 id="collection-editor-heading">Yeni koleksiyon oluştur</h1><p>Koleksiyonunun kimliğini belirle, kapağını seç ve yapımlarını ekle.</p></div><span class="collection-editor-number">01 <i>/ 04</i></span></div>
+        <form id="collection-form" class="collection-editor-form">
+         <input type="hidden" id="collection-id">
+         <div class="collection-editor-layout">
+          <div class="collection-editor-main">
+           <section class="collection-editor-panel">
+            <div class="collection-editor-panel-heading"><span>01</span><div><h2>Temel bilgiler</h2><p>Koleksiyonun adı ve ziyaretçilerin göreceği kısa açıklama.</p></div></div>
+            <div class="collection-editor-fields">
+             <label class="field wide"><span>Koleksiyon adı *</span><input id="collection-title" required maxlength="120" placeholder="Örn. Ölmeden İzle"></label>
+             <label class="field wide"><span>Koleksiyon açıklaması</span><textarea id="collection-description" rows="3" maxlength="500" placeholder="Bu seçkiyi özel kılan yapımları kısaca anlat…"></textarea></label>
+            </div>
+           </section>
+           <section class="collection-editor-panel">
+            <div class="collection-editor-panel-heading"><span>02</span><div><h2>Kapak görseli</h2><p>Koleksiyon kartında kullanılacak görsel bağlantısını ekle.</p></div></div>
+            <div class="collection-cover-layout">
+             <div class="collection-cover-preview" id="collection-cover-preview"><span>▧</span><small>Kapak önizlemesi</small></div>
+             <div class="collection-cover-controls"><label class="field"><span>Kapak görseli URL</span><input id="collection-cover" type="url" maxlength="1000" placeholder="https://…"></label><small class="helper-text">Yatay, yüksek çözünürlüklü bir görsel kullanmanı öneririm. Görseli daha sonra değiştirebilirsin.</small><button type="button" class="secondary-button" id="collection-cover-clear">Görseli kaldır</button></div>
+            </div>
+           </section>
+           <section class="collection-editor-panel">
+            <div class="collection-editor-panel-heading"><span>03</span><div><h2>Yapımları seç</h2><p>Arşivindeki film ve dizileri bu koleksiyona dahil et.</p></div><span class="collection-selected-count" id="collection-selected-count">0 seçili</span></div>
+            <div class="collection-picker-toolbar"><label class="collection-search"><span aria-hidden="true">⌕</span><input id="collection-search" type="search" placeholder="Film veya dizi ara…" aria-label="Katalogda yapım ara"></label><span id="collection-catalog-count"></span></div>
+            <div id="collection-items" class="collection-items"></div>
+           </section>
+          </div>
+          <aside class="collection-editor-side">
+           <section class="collection-editor-panel collection-publish-panel">
+            <div class="collection-editor-panel-heading"><span>04</span><div><h2>Yayın ayarları</h2><p>Koleksiyonun sitede görünürlüğünü belirle.</p></div></div>
+            <label class="collection-publish-option"><input id="collection-active" type="checkbox" checked><span><b>Yayında</b><small>Ana sayfadaki koleksiyon alanında göster.</small></span></label>
+            <div class="collection-publish-note">Yayın kapalı olduğunda koleksiyon ve içeriği silinmez; yalnızca ziyaretçilere gösterilmez.</div>
+           </section>
+           <div class="collection-editor-tip"><b>İpucu</b><p>Başlığı kısa, açıklamayı anlaşılır tut. Koleksiyonun etkisini kapak görseli ve seçtiğin yapımlar belirler.</p></div>
+          </aside>
+         </div>
+         <div class="collection-editor-footer"><span id="collection-editor-status">Değişiklikler kaydedilene kadar taslak olarak kalır.</span><div><button type="button" class="secondary-button" id="collection-cancel-bottom">Vazgeç</button><button type="submit" class="primary-button" id="collection-save">Koleksiyonu kaydet</button></div></div>
+        </form>
+       </section>
+      </section>
       <section class="view" id="view-franchises"><div class="page-heading"><div><div class="eyebrow">FRANCHISE MANAGER / 04</div><h1>Seri Filmler</h1><p>Mevcut film kayıtlarını seriler altında grupla, izleme sırasını düzenle ve ana sayfada yayınla.</p></div><button class="primary-button" id="franchise-add">＋ Yeni seri</button></div><div id="franchise-grid" class="collection-grid"><div class="panel-card">Seriler yükleniyor…</div></div></section>
       <section class="view" id="view-homepage"><div class="page-heading"><div><div class="eyebrow">FRONT PAGE / 03</div><h1>Manşet yönetimi</h1><p>Masaüstü ve mobil ana sayfa manşetlerini birbirinden bağımsız düzenle.</p></div></div><form id="homepage-form" class="panel-card homepage-editor"><div class="homepage-settings">
 <label class="field"><span>Masaüstü görünür kart sayısı</span><input id="hero-desktop-count" type="number" min="5" max="15" step="1" value="10"></label><label class="field"><span>Mobil görünür kart sayısı</span><input id="hero-mobile-count" type="number" min="1" max="12" value="6"></label><label class="field"><span>Otomatik geçiş (saniye)</span><input id="hero-interval" type="number" min="2" max="60" value="6"></label><label class="field"><span>Mobil konu metni uzunluğu</span><select id="hero-description-length-mode"><option value="120">Kısa · 120 karakter</option><option value="220">Orta · 220 karakter</option><option value="360">Uzun · 360 karakter</option><option value="500">Çok uzun · 500 karakter</option><option value="custom">Özel · Karakter sayısını belirle</option></select></label><label class="field" id="hero-description-length-custom" hidden><span>Özel karakter sınırı</span><input id="hero-description-length-custom-value" type="number" min="80" max="5000" step="10" value="750"><small id="hero-description-length-count" class="field-hint">Uygulanacak sınır: 750 karakter</small></label><label class="field"><span>Masaüstü konu metni</span><select id="hero-desktop-description-mode"><option value="short">Kısa · 2 satır</option><option value="medium">Orta · 3 satır</option><option value="long">Uzun · 4 satır</option><option value="custom">Özel · Satır sayısını belirle</option></select></label><label class="field" id="hero-desktop-description-custom" hidden><span>Masaüstü maksimum satır</span><input id="hero-desktop-description-lines" type="number" min="1" max="8" step="1" value="3"></label><label class="field"><span>Masaüstü konu metni genişliği</span><select id="hero-desktop-description-width"><option value="narrow">Dar · 560 px</option><option value="medium">Orta · 720 px</option><option value="wide">Geniş · 900 px</option><option value="custom">Özel · Piksel belirle</option></select></label><label class="field" id="hero-desktop-description-width-custom" hidden><span>Özel metin genişliği (px)</span><input id="hero-desktop-description-width-px" type="number" min="360" max="1200" step="10" value="720"></label><label class="toggle-field"><input id="hero-autoplay" type="checkbox" checked><span>Otomatik oynat</span></label><label class="toggle-field"><input id="hero-pause" type="checkbox" checked><span>Üzerine gelince duraklat</span></label></div><div class="hero-device-grid"><section class="hero-device-panel"><div class="homepage-slide-head"><div><span class="section-index">DESKTOP / MASAÜSTÜ</span><h2>Masaüstü manşeti</h2><p>Bilgisayar ve geniş ekranlarda gösterilecek yapımları yönet.</p></div><span id="hero-desktop-selected-count">—</span></div><div class="hero-controls">
