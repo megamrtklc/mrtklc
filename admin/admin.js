@@ -349,7 +349,7 @@
     const coverMode=$('#collection-cover-mode')?.value||'mix';
     const coverUrl=$('#collection-cover')?.value.trim()||'';
     const selected=selectedCollectionItems();
-    const placement=$('#collection-show-home')?.checked||$('#collection-show-page')?.checked||$('#collection-show-menu')?.checked;
+    const placement=$('#collection-show-home')?.checked||$('#collection-show-page')?.checked;
     const checks=[
       ['Koleksiyon başlığı',!!title],
       ['Açıklama',!!description],
