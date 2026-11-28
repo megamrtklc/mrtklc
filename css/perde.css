@@ -277,12 +277,12 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 
   #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) .home-new-arrival-feature {
     box-sizing: border-box !important;
-    flex: 0 0 clamp(260px, 31%, 320px) !important;
-    width: clamp(260px, 31%, 320px) !important;
-    min-width: 260px !important;
-    height: 280px !important;
-    min-height: 280px !important;
-    max-height: 280px !important;
+    flex: 0 0 23% !important;
+    width: 23% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
     align-self: stretch !important;
   }
 }
