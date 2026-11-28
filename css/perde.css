@@ -241,7 +241,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 }
 
 /* Tablet portrait: let homepage section headings and their controls wrap without forcing horizontal overflow. */
-@media (min-width:768px) and (max-width:900px){
+@media (min-width:768px) and (max-width:900px) and (orientation:portrait){
   #home-page :is(#home-continue-section .home-continue-heading,#home-series-tracking-section .home-series-tracking-heading,#home-favorites-section .home-new-arrivals-heading,#home-catalog-section .home-catalog-heading){min-width:0;max-width:100%;flex-wrap:wrap;align-items:flex-start}
   #home-page :is(#home-continue-section .home-continue-heading,#home-series-tracking-section .home-series-tracking-heading)>div:last-child{display:flex;flex:1 1 100%;width:100%;max-width:100%;min-width:0;flex-wrap:wrap;justify-content:flex-start;gap:8px}
   #home-page :is(#home-favorites-section .home-new-arrivals-heading,#home-catalog-section .home-catalog-heading)>div:last-child{display:flex;width:100%;max-width:100%;min-width:0;flex-wrap:wrap;justify-content:flex-start;gap:8px}
