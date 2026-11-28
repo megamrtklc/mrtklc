@@ -20,7 +20,7 @@
 
     // Sayfaya özel büyük CSS dosyalarını yalnızca ilgili rota açıldığında indir.
     const pageStyles = {
-        watch: './css/perde-watch.css?v=20261127-watch-design-system-v3',
+        watch: './css/perde-watch.css?v=20261128-no-url-info-centered-v1',
         explore: './css/perde-explore.css?v=20261127-explore-design-system-v2'
     };
 
