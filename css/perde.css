@@ -223,7 +223,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 @media(prefers-reduced-motion:reduce){.cineverse-search-close,.cineverse-search-result{transition:none}}
 
 /* Tablet portrait home layout: force the editorial hero artwork to occupy a visible, stable panel. */
-@media (min-width:768px) and (max-width:1023px){
+@media (min-width:768px) and (max-width:1023px) and (orientation:portrait){
   #desktopEditorialHero{display:block!important;min-width:0;isolation:isolate}
   #desktopEditorialHero>div:first-child{position:absolute!important;inset:0!important;display:block!important;min-height:100%!important;overflow:hidden!important}
   #desktopEditorialHero>div:first-child picture{position:absolute!important;display:block!important;top:0!important;right:0!important;bottom:0!important;left:auto!important;width:76%!important;max-width:76%!important;height:100%!important;aspect-ratio:auto!important;overflow:hidden!important;z-index:0!important;visibility:visible!important}
@@ -233,7 +233,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   #desktopEditorialHero .editorial-copy-enter h1,#desktopEditorialHero .editorial-copy-enter>p{max-width:100%}
 }
 /* Tablet portrait: published collection sections must stay inside the homepage content width. */
-@media (min-width:768px) and (max-width:900px){
+@media (min-width:768px) and (max-width:900px) and (orientation:portrait){
   #home-page [data-home-section="published-collections"]{min-width:0;max-width:100%;overflow:hidden}
   #home-page .home-published-collection{width:100%;max-width:100%;min-width:0;margin-left:0!important;margin-right:0!important;padding-left:clamp(24px,6vw,48px);padding-right:clamp(24px,6vw,48px);box-sizing:border-box}
   #home-page .home-published-collection-heading{min-width:0;max-width:100%;flex-wrap:wrap}
