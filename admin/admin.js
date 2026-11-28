@@ -1099,9 +1099,90 @@
     return collectionOptionCache.items;
   }
   const COLLECTION_TEMPLATES={"Bilim Kurgu":"Geleceği, teknolojiyi ve bilinmeyeni keşfe çıkaran bilim kurgu seçkisi.","Korku":"Gerilim dozu yüksek, ürpertici ve akılda kalan korku yapımları.","Psikolojik Gerilim":"Zihnin sınırlarını zorlayan, gerilimi giderek yükselen hikâyeler.","Aksiyon Dolu":"Temposu hiç düşmeyen aksiyon ve macera yapımları.","Fantastik Dünyalar":"Büyü, mitoloji ve hayal gücüyle kurulan sıra dışı evrenler.","Suç ve Polisiye":"Gizemli dosyalar, suç hikâyeleri ve unutulmaz dedektifler.","Komedi":"Keyifli vakit geçirmek için eğlenceli ve bol kahkahalı yapımlar.","Dram":"Güçlü karakterler ve etkileyici hikâyelerle iz bırakan dramlar.","Romantik":"Aşkın farklı hallerini anlatan romantik hikâyeler.","Animasyon":"Her yaştan izleyiciye hitap eden yaratıcı animasyonlar.","Tarih ve Savaş":"Tarihe yön veren olayları ve savaşların izlerini anlatan yapımlar.","Belgesel":"Gerçek dünyaya farklı pencereler açan belgeseller.","Ölmeden İzle":"Her sinemaseverin hayatında en az bir kez izlemesi gereken yapımlar.","Şans Ver":"İlk bakışta gözden kaçsa da izleyince sevebileceğin yapımlar.","Ters Köşe":"Beklentileri altüst eden sürprizli hikâyeler ve şaşırtıcı finaller.","Gizli Cevherler":"Hak ettiği ilgiyi görmemiş, keşfedilmeyi bekleyen özel yapımlar.","Tek Oturuşta Bitir":"Bir sonraki bölümü açmadan duramayacağın sürükleyici yapımlar.","Hafta Sonu Maratonu":"Hafta sonunu keyifli bir izleme maratonuna dönüştürecek seçki.","Akıl Oyunları":"Düşündüren, ipuçlarıyla oynayan ve zihinde iz bırakan hikâyeler.","Unutulmaz Finaller":"Finaliyle uzun süre akıldan çıkmayan yapımlar.","Kısa ve Öz":"Az zamanda güçlü hikâyeler sunan mini diziler ve kısa yapımlar.","Bir Şans Daha":"Yeniden izlemeyi veya geç de olsa keşfetmeyi hak edenler.","Zamansız Klasikler":"Yıllar geçse de değerini kaybetmeyen sinema ve dizi klasikleri.","Yeni Başlayanlara Özel":"Dizi ve film dünyasına adım atmak isteyenler için güçlü başlangıçlar.","Yerli Yapımlar":"Türkiye'den çıkan dikkat çekici film ve diziler.","Kore Yapımları":"Güney Kore sinemasından ve dizilerinden öne çıkan hikâyeler.","Mini Dizi Seçkisi":"Baştan sona tek bir hikâyeyi tamamlayan mini diziler.","Gerçek Hikâyeler":"Yaşanmış olaylardan ve gerçek kişilerden ilham alan yapımlar.","Güçlü Kadın Hikâyeleri":"Merkezinde güçlü, çok katmanlı kadın karakterler bulunan yapımlar.","Distopik Dünyalar":"Geleceğin karanlık ve düşündürücü toplumlarını anlatan yapımlar.","Ailece İzle":"Birlikte izlemek için uygun, farklı yaşlara hitap eden yapımlar.","Yönetmenlerden Seçmeler":"Özgün anlatımı ve görsel diliyle öne çıkan yönetmen işleri."};
-  function selectedCollectionItems(){const ids=$('#collection-items input:checked').map(input=>String(input.value));return ids.map(id=>state.catalog.find(item=>String(item.id)===id)).filter(Boolean);}
+  function selectedCollectionIds(){return new Set($('#collection-items input:checked').map(input=>String(input.value)));}
+  function selectedCollectionItems(){const ids=selectedCollectionIds();return state.catalog.filter(item=>ids.has(String(item.id)));}
   function collectionPoster(item){return item?.poster||item?.image||item?.backdrop||'';}
-  function applyCollectionTemplate(){const name=$('#collection-template').value;if(name&&COLLECTION_TEMPLATES[name]){$('#collection-title').value=name;$('#collection-description').value=COLLECTION_TEMPLATES[name];}}
+  const COLLECTION_TEMPLATE_RULES={
+    'Bilim Kurgu':['bilim kurgu','science fiction','sci-fi','uzay','gelecek'],
+    'Korku':['korku','horror','slasher','zombi'],
+    'Psikolojik Gerilim':['psikolojik gerilim','thriller','psychological','gizem'],
+    'Aksiyon Dolu':['aksiyon','action','macera','adventure'],
+    'Fantastik Dünyalar':['fantastik','fantasy','mitoloji','büyü'],
+    'Suç ve Polisiye':['suç','crime','polisiye','dedektif','gangster'],
+    'Komedi':['komedi','comedy'],
+    'Dram':['dram','drama'],
+    'Romantik':['romantik','romance','aşk'],
+    'Animasyon':['animasyon','animation','anime'],
+    'Tarih ve Savaş':['tarih','history','savaş','war'],
+    'Belgesel':['belgesel','documentary'],
+    'Ters Köşe':['gizem','mystery','thriller','psikolojik','suç'],
+    'Akıl Oyunları':['gizem','mystery','bilim kurgu','sci-fi','psikolojik','thriller'],
+    'Distopik Dünyalar':['distopya','dystopia','bilim kurgu','sci-fi','gelecek'],
+    'Ailece İzle':['aile','family','animasyon','animation'],
+    'Yerli Yapımlar':['country:tr','türkiye','turkey'],
+    'Kore Yapımları':['country:kr','south korea','korean','kore'],
+    'Mini Dizi Seçkisi':['type:tv','mini dizi','miniseries'],
+    'Gerçek Hikâyeler':['gerçek hikaye','based on a true','true story','biyografi','biography'],
+    'Güçlü Kadın Hikâyeleri':['kadın','woman','women','female','feminist'],
+    'Kısa ve Öz':['runtime:short'],
+    'Tek Oturuşta Bitir':['type:tv','thriller','gerilim','mini dizi'],
+    'Hafta Sonu Maratonu':['type:tv'],
+    'Ölmeden İzle':['rating:high'],
+    'Şans Ver':['rating:good'],
+    'Gizli Cevherler':['rating:gem'],
+    'Unutulmaz Finaller':['rating:high'],
+    'Zamansız Klasikler':['rating:high'],
+    'Yeni Başlayanlara Özel':['rating:high'],
+    'Yönetmenlerden Seçmeler':['rating:high'],
+    'Bir Şans Daha':['rating:good']
+  };
+  const normalizeCollectionText=value=>String(value||'').toLocaleLowerCase('tr').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/ı/g,'i');
+  function collectionSuggestionScore(item,template){
+    const rules=COLLECTION_TEMPLATE_RULES[template]||[];
+    const category=normalizeCollectionText([item.category,item.genre,item.genres,item.tmdbGenres,item.tags].flat().join(' '));
+    const details=normalizeCollectionText([item.title,item.originalTitle,item.desc,item.tmdbOverview,item.description].join(' '));
+    const country=String(item.country||'').toUpperCase();
+    let score=0;
+    for(const rule of rules){
+      if(rule.startsWith('country:')){if(country===rule.slice(8).toUpperCase())score+=8;continue;}
+      if(rule==='type:tv'){if(isSeries(item))score+=5;continue;}
+      if(rule==='rating:high'){const rating=Number(item.rating||item.tmdbRating)||0;score+=rating>=8.2?5:rating>=7.5?3:0;continue;}
+      if(rule==='rating:good'){const rating=Number(item.rating||item.tmdbRating)||0;score+=rating>=7.2&&rating<8.5?4:0;continue;}
+      if(rule==='rating:gem'){const rating=Number(item.rating||item.tmdbRating)||0,votes=Number(item.voteCount||item.tmdbVoteCount||item.vote_count)||0;score+=rating>=7.5?3:0;score+=votes>0&&votes<2500?2:0;continue;}
+      if(rule==='runtime:short'){const runtime=Number.parseInt(item.runtime||item.duration,10);if(runtime>0&&runtime<=110)score+=6;continue;}
+      const token=normalizeCollectionText(rule);
+      if(category.includes(token))score+=5;
+      else if(details.includes(token))score+=2;
+    }
+    if(!score&&rules.includes('rating:high'))score=Number(item.rating||item.tmdbRating)||0;
+    return score;
+  }
+  function renderCollectionSuggestions(){
+    const host=$('#collection-suggestions');if(!host)return;
+    const template=$('#collection-template').value;
+    if(!template){host.hidden=true;host.innerHTML='';return;}
+    const selected=selectedCollectionIds();
+    const candidates=state.catalog.map(item=>({item,score:collectionSuggestionScore(item,template)}))
+      .filter(entry=>entry.score>0&&!selected.has(String(entry.item.id)))
+      .sort((a,b)=>b.score-a.score||Number(b.item.rating||b.item.tmdbRating||0)-Number(a.item.rating||a.item.tmdbRating||0))
+      .slice(0,6);
+    host.hidden=false;
+    host.innerHTML='<div class="collection-suggestions-head"><div><b>Önerilen yapımlar</b><small>'+escapeHtml(template)+' şablonuna göre katalog tarandı · '+candidates.length+' öneri</small></div><button type="button" class="secondary-button" data-collection-add-all '+(candidates.length?'':'disabled')+'>Tüm önerileri ekle</button></div>'+
+      (candidates.length?'<div class="collection-suggestions-grid">'+candidates.map(({item})=>'<article class="collection-suggestion"><img src="'+escapeHtml(posterOf(item))+'" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span><b>'+escapeHtml(titleOf(item))+'</b><small>'+(isSeries(item)?'Dizi':'Film')+' · '+escapeHtml(item.category||item.genre||yearOf(item))+'</small></span><button type="button" data-collection-add="'+escapeHtml(item.id)+'" aria-label="Önerilen yapımı ekle">＋</button></article>').join('')+'</div>':'<p class="collection-suggestions-empty">Bu şablonla eşleşen yeterli katalog bilgisi bulunamadı. Arama alanını kullanarak kendin seçebilirsin.</p>')+
+      '<small class="collection-suggestions-note">Bunlar otomatik seçim değildir; yalnızca sen eklediğinde koleksiyona dahil edilir.</small>';
+  }
+  function addCollectionSuggestion(id){
+    const checkbox=$('#collection-items input[value="'+CSS.escape(String(id))+'"]');
+    if(!checkbox)return;
+    checkbox.checked=true;updateCollectionSelectedCount();updateCollectionCoverPreview();renderCollectionSuggestions();
+  }
+  function applyCollectionTemplate(){
+    const name=$('#collection-template').value;
+    if(name&&COLLECTION_TEMPLATES[name]){
+      $('#collection-title').value=name;$('#collection-description').value=COLLECTION_TEMPLATES[name];
+    }
+    renderCollectionSuggestions();
+  }
   function openCollectionEditor(id){
     if(!canWrite())return;
     const item=collectionList().find(x=>String(x.id)===String(id));
@@ -2575,9 +2656,16 @@
   $('#collection-list-search').addEventListener('input',renderCollections);$('#collection-status-filter').addEventListener('change',renderCollections);$('#collection-sort').addEventListener('change',renderCollections);
   $('#collection-grid').addEventListener('click',event=>{if(event.target.closest('#collection-empty-add,#collection-clear-filters')){if(event.target.closest('#collection-empty-add'))openCollectionEditor(null);else{$('#collection-list-search').value='';$('#collection-status-filter').value='all';renderCollections();}return;}});
   $('#collection-template').addEventListener('change',applyCollectionTemplate);
+  $('#collection-suggestions').addEventListener('click',event=>{
+    const add=event.target.closest('[data-collection-add]');
+    if(add){addCollectionSuggestion(add.dataset.collectionAdd);return;}
+    if(event.target.closest('[data-collection-add-all]')){
+      $('#collection-suggestions [data-collection-add]').forEach(button=>addCollectionSuggestion(button.dataset.collectionAdd));
+    }
+  });
   $('#collection-cover-mode').addEventListener('change',updateCollectionCoverPreview);
   $('#collection-cover').addEventListener('input',updateCollectionCoverPreview);$('#collection-cover-clear').addEventListener('click',()=>{$('#collection-cover').value='';$('#collection-cover-mode').value='mix';updateCollectionCoverPreview();});
-  $('#collection-items').addEventListener('change',event=>{if(event.target.matches('input[type="checkbox"]')){updateCollectionSelectedCount();updateCollectionCoverPreview();}});
+  $('#collection-items').addEventListener('change',event=>{if(event.target.matches('input[type="checkbox"]')){updateCollectionSelectedCount();updateCollectionCoverPreview();renderCollectionSuggestions();}});
   $('#franchise-grid').addEventListener('click',event=>{
     const edit=event.target.closest('[data-franchise-edit]');if(edit){openFranchiseEditor(edit.dataset.franchiseEdit);return;}
     const remove=event.target.closest('[data-franchise-delete]');if(remove)deleteFranchise(remove.dataset.franchiseDelete);
