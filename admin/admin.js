@@ -1986,8 +1986,8 @@
   function readMainSitePersonalStorage(){
     return requestMainSiteBackup('EXPORT');
   }
-  function restoreMainSitePersonalStorage(browserData){
-    return requestMainSiteBackup('RESTORE',{browserData});
+  function restoreMainSitePersonalStorage(browserData,mergeExisting=false){
+    return requestMainSiteBackup('RESTORE',{browserData,mergeExisting:!!mergeExisting});
   }
   async function refreshCredentialStatus(){
     const button=$('#credentials-refresh'),note=$('#credentials-status-note');
@@ -2083,67 +2083,34 @@
     document.body.appendChild(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
     toast(successMessage);
   }
-  const PERSONAL_BACKUP_SHARED_KEYS=['cine_watched_items_v1','cine_favorite_items_v1','cine_watchlist_v1'];
-  const PERSONAL_BACKUP_SHARED_FORMAT='perde-shared-production-v1';
+  const PERSONAL_BACKUP_MINIMAL_FORMAT='perde-personal-minimal-v2';
+  const PERSONAL_BACKUP_LIST_KEYS=['cine_watched_items_v1','cine_favorite_items_v1','cine_watchlist_v1'];
+  const PERSONAL_BACKUP_ALLOWED_KEYS=new Set([
+    ...PERSONAL_BACKUP_LIST_KEYS,'cine_movie_progress_v1','cine_episode_tracking_v1','perde_player_progress_v3',
+    'cine_reviews','cine_recommendation_mode_v1','cine_recommendation_rotation_v1','cine_theme_v3',
+    'perde_recommendation_preferences_v1','perde_discovery_shuffle_seed_v1','perde_discovery_showcase_seed_v1',
+    'perde_discovery_current_v1','perde_discovery_seen_v1'
+  ]);
   function compactPersonalBackup(browserData){
-    const localStorageData={...(browserData?.localStorage||{})};
-    const grouped=new Map(),parsedLists=new Map();
-    for(const key of PERSONAL_BACKUP_SHARED_KEYS){
-      if(!Object.prototype.hasOwnProperty.call(localStorageData,key))continue;
-      const raw=localStorageData[key];
-      if(typeof raw!=='string')return {browserData};
-      let list;
-      try{list=JSON.parse(raw);}catch(_){return {browserData};}
-      if(!Array.isArray(list)||list.some(item=>!item||typeof item!=='object'||Array.isArray(item)||item.id==null))return {browserData};
-      parsedLists.set(key,list);
-      list.forEach((item,index)=>{
-        const id=String(item.id);
-        if(!grouped.has(id))grouped.set(id,[]);
-        grouped.get(id).push({key,index,item});
-      });
-    }
-    if(!grouped.size)return {browserData};
-    const sharedItems={},compactLists=new Map();
-    for(const [key,list] of parsedLists)compactLists.set(key,list.map(item=>({...item})));
-    for(const [id,occurrences] of grouped){
-      const shared={id:occurrences[0].item.id};
-      const deltas=occurrences.map(({item})=>({...item}));
-      const fields=new Set(occurrences.flatMap(({item})=>Object.keys(item)));
-      for(const field of fields){
-        if(field==='id'||!occurrences.every(({item})=>Object.prototype.hasOwnProperty.call(item,field)))continue;
-        const first=JSON.stringify(occurrences[0].item[field]);
-        if(occurrences.every(({item})=>JSON.stringify(item[field])===first)){
-          shared[field]=occurrences[0].item[field];
-          deltas.forEach(delta=>{delete delta[field];});
-        }
-      }
-      sharedItems[id]=shared;
-      occurrences.forEach(({key,index},position)=>{compactLists.get(key)[index]=deltas[position];});
-    }
-    for(const [key,list] of compactLists)localStorageData[key]=JSON.stringify(list);
-    return {
-      browserData:{...browserData,localStorage:localStorageData},
-      personalDataFormat:PERSONAL_BACKUP_SHARED_FORMAT,
-      personalSharedItems:sharedItems
-    };
-  }
-  function expandPersonalBackupData(data){
-    if(data?.personalDataFormat!==PERSONAL_BACKUP_SHARED_FORMAT)return data?.browserData||{};
-    const sharedItems=data.personalSharedItems||{};
-    const localStorageData={...(data.browserData?.localStorage||{})};
-    for(const key of PERSONAL_BACKUP_SHARED_KEYS){
-      if(!Object.prototype.hasOwnProperty.call(localStorageData,key))continue;
-      let list;
-      try{list=JSON.parse(localStorageData[key]);}catch(_){throw new Error(key+' sıkıştırılmış yedek listesi okunamadı.');}
-      if(!Array.isArray(list))throw new Error(key+' sıkıştırılmış yedek listesi geçersiz.');
-      localStorageData[key]=JSON.stringify(list.map(entry=>{
-        const id=String(entry?.id??'');
-        const shared=sharedItems[id];
-        if(!id||!shared||typeof shared!=='object'||Array.isArray(shared))throw new Error('Kişisel yedekte '+(id||'kimliği eksik')+' yapımının ortak verisi bulunamadı.');
-        return {...shared,...entry};
+    const source=browserData?.localStorage||{},localStorageData={};
+    for(const key of PERSONAL_BACKUP_ALLOWED_KEYS){
+      if(!Object.prototype.hasOwnProperty.call(source,key))continue;
+      const raw=source[key];
+      if(typeof raw!=='string')throw new Error(key+' kişisel kaydı metin biçiminde değil.');
+      if(!PERSONAL_BACKUP_LIST_KEYS.includes(key)){localStorageData[key]=raw;continue;}
+      let list;try{list=JSON.parse(raw);}catch(_){throw new Error(key+' kişisel listesi okunamadı; eksik yedek oluşturmamak için işlem durduruldu.');}
+      if(!Array.isArray(list))throw new Error(key+' kişisel listesi geçerli bir dizi değil.');
+      localStorageData[key]=JSON.stringify(list.map(item=>{
+        if(!item||typeof item!=='object'||Array.isArray(item)||item.id==null)throw new Error(key+' içinde yapım kimliği eksik kayıt var.');
+        const compact={id:String(item.id),title:String(item.title||item.tmdbTitle||item.originalTitle||item.tmdbOriginalTitle||'')};
+        if(item.type!=null)compact.type=String(item.type);
+        if(item.year!=null&&String(item.year).trim())compact.year=String(item.year);
+        if(key!=='cine_watchlist_v1'&&Number(item._statusSavedAt)>0)compact._statusSavedAt=Number(item._statusSavedAt);
+        return compact;
       }));
     }
-    return {...data.browserData,localStorage:localStorageData};
+    for(const key of PERSONAL_BACKUP_LIST_KEYS)if(!Object.prototype.hasOwnProperty.call(localStorageData,key))localStorageData[key]='[]';
+    return {browserData:{localStorage:localStorageData,sessionStorage:{}},personalDataFormat:PERSONAL_BACKUP_MINIMAL_FORMAT};
   }
   function downloadSiteBackup(){
     if(!state.data||!Array.isArray(state.data.catalog)){toast('Katalog yüklenmeden yedek oluşturulamaz.');return;}
@@ -2166,8 +2133,7 @@
       }
       const date=new Date().toISOString().slice(0,10);
       const compacted=compactPersonalBackup(browserData);
-      const sharedCount=Object.keys(compacted.personalSharedItems||{}).length;
-      downloadBackupJson({format:'perde-personal-backup',version:1,exportedAt:new Date().toISOString(),origin:PERSONAL_BACKUP_SITE_ORIGIN,...compacted},'perde-kisisel-tarayici-verileri-'+date+'.json','Ana sitedeki '+count+' kişisel kayıt yedeklendi'+(sharedCount?' · '+sharedCount+' yapım verisi tekilleştirildi':'')+'.',true);
+      downloadBackupJson({format:'perde-personal-backup',version:2,exportedAt:new Date().toISOString(),origin:PERSONAL_BACKUP_SITE_ORIGIN,...compacted},'perde-kisisel-tarayici-verileri-'+date+'.json','Kişisel bilgiler ve izleme ilerlemeleri sade biçimde yedeklendi.',true);
     }catch(error){
       toast(error.message||'Ana site kişisel kayıtları okunamadı.');
     }finally{if(button)button.disabled=false;}
@@ -2186,14 +2152,17 @@
     return entries.length;
   }
   function validateBackupPayload(data){
-    if(!data||typeof data!=='object'||Array.isArray(data)||data.version!==1)throw new Error('Yedek biçimi veya sürümü desteklenmiyor.');
-    const isSite=data.format==='perde-site-backup'&&data.siteData&&typeof data.siteData==='object'&&!Array.isArray(data.siteData)&&Array.isArray(data.siteData.catalog);
-    const isPersonal=data.format==='perde-personal-backup'&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
-    const isLegacy=data.format==='perde-full-backup'&&data.siteData&&typeof data.siteData==='object'&&!Array.isArray(data.siteData)&&Array.isArray(data.siteData.catalog)&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
+    if(!data||typeof data!=='object'||Array.isArray(data)||![1,2].includes(data.version))throw new Error('Yedek biçimi veya sürümü desteklenmiyor.');
+    const isSite=data.version===1&&data.format==='perde-site-backup'&&data.siteData&&typeof data.siteData==='object'&&!Array.isArray(data.siteData)&&Array.isArray(data.siteData.catalog);
+    const isPersonal=(data.version===1||data.version===2)&&data.format==='perde-personal-backup'&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
+    const isLegacy=data.version===1&&data.format==='perde-full-backup'&&data.siteData&&typeof data.siteData==='object'&&!Array.isArray(data.siteData)&&Array.isArray(data.siteData.catalog)&&data.browserData&&typeof data.browserData==='object'&&!Array.isArray(data.browserData);
     if(!isSite&&!isPersonal&&!isLegacy)throw new Error('Bu dosya geçerli bir Perde yedek dosyası değil.');
-    const hasSharedPersonal=data.personalDataFormat===PERSONAL_BACKUP_SHARED_FORMAT;
-    if(data.personalDataFormat&&!hasSharedPersonal)throw new Error('Kişisel yedek sıkıştırma biçimi desteklenmiyor.');
-    if(hasSharedPersonal&&!isPersonal)throw new Error('Sıkıştırılmış kişisel yedek biçimi yalnızca kişisel yedeklerde kullanılabilir.');
+    const hasSharedPersonal=data.personalDataFormat==='perde-shared-production-v1';
+    const hasMinimalPersonal=data.personalDataFormat===PERSONAL_BACKUP_MINIMAL_FORMAT;
+    if(data.personalDataFormat&&!hasSharedPersonal&&!hasMinimalPersonal)throw new Error('Kişisel yedek sıkıştırma biçimi desteklenmiyor.');
+    if(hasSharedPersonal&&(!isPersonal||data.version!==1))throw new Error('Eski sıkıştırılmış kişisel yedek biçimi desteklenmiyor.');
+    if(hasMinimalPersonal&&(!isPersonal||data.version!==2))throw new Error('Yeni sade kişisel yedek biçimi desteklenmiyor.');
+    if(data.version===2&&!hasMinimalPersonal)throw new Error('2. sürüm kişisel yedek biçimi eksik veya geçersiz.');
     let movieCount=0;
     if(isSite||isLegacy){
       const catalog=data.siteData.catalog;
@@ -2211,6 +2180,14 @@
     let personal=0;
     if(isPersonal||isLegacy){
       personal=validateBackupStorageMap(data.browserData.localStorage,'localStorage')+validateBackupStorageMap(data.browserData.sessionStorage,'sessionStorage');
+      if(hasMinimalPersonal){
+        for(const key of Object.keys(data.browserData.localStorage||{}))if(!PERSONAL_BACKUP_ALLOWED_KEYS.has(key))throw new Error('Sade kişisel yedekte izin verilmeyen kayıt var: '+key);
+        if(Object.keys(data.browserData.sessionStorage||{}).length)throw new Error('Sade kişisel yedekte beklenmeyen oturum kaydı bulundu.');
+        for(const key of PERSONAL_BACKUP_LIST_KEYS){
+          let list;try{list=JSON.parse(data.browserData.localStorage[key]||'[]');}catch(_){throw new Error(key+' kişisel listesi JSON olarak okunamadı.');}
+          if(!Array.isArray(list)||list.length>5000||list.some(item=>!item||typeof item!=='object'||Array.isArray(item)||!String(item.id||'').trim()||typeof item.title!=='string'))throw new Error(key+' içinde geçersiz sade yapım kaydı bulundu.');
+        }
+      }
       if(hasSharedPersonal){
         const shared=data.personalSharedItems;
         if(!shared||typeof shared!=='object'||Array.isArray(shared)||Object.keys(shared).length>5000||JSON.stringify(shared).length>8*1024*1024)throw new Error('Kişisel yedekteki ortak yapım verileri geçersiz veya sınır dışında.');
@@ -2296,7 +2273,7 @@
         restoreStage='Ana sitenin mevcut kişisel kayıtları korunuyor.';
         showRestoreStage('1/3 · Kişisel kayıtlar','Mevcut kayıtlar için geri alma kopyası alınıyor…');
         const browserDataToRestore=expandPersonalBackupData(data);
-        previousBrowserData=await restoreMainSitePersonalStorage(browserDataToRestore);
+        previousBrowserData=await restoreMainSitePersonalStorage(browserDataToRestore,hasMinimalPersonalFormat(data));
         restoreStage='Ana sitenin kişisel kayıtları geri yükleniyor.';
         showRestoreStage('2/3 · Kişisel kayıtlar','Yedek kayıtlar ana siteye aktarılıyor…');
       }
