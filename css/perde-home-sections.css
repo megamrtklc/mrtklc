@@ -63,3 +63,24 @@
 @media(max-width:639px){
   #home-page :is(#home-continue-section .home-continue-card,#home-genre-discovery-section .home-genre-discovery-card,#home-personalized-section .home-personalized-alternative,#home-personalized-section .home-personalized-card,#home-series-tracking-section .home-series-tracking-card,#home-watchlist-section .home-watchlist-card,#home-catalog-section .home-catalog-card,#home-new-arrivals-section .home-catalog-card,#home-new-arrivals-section .home-new-arrival-card,#home-favorites-section .home-new-arrival-card){border-radius:14px}
 }
+
+
+/* Tablet dikey: tek, geniş kişiselleştirilmiş öneri kartı */
+@media (min-width:768px) and (max-width:900px) and (orientation:portrait){
+  #home-personalized-section{min-height:0!important;padding-left:clamp(20px,3.2vw,30px)!important;padding-right:clamp(20px,3.2vw,30px)!important}
+  #home-personalized-section .home-personalized-heading{height:auto!important;min-height:0!important;margin-bottom:16px!important;align-items:center!important;gap:12px!important}
+  #home-personalized-section .home-personalized-heading h2{font-size:clamp(19px,2.5vw,24px)!important;line-height:1.2!important}
+  #home-personalized-section .home-personalized-heading>div:first-child>p:last-child{font-size:11px!important}
+  #home-personalized-section .home-personalized-toolbar{max-width:48%;flex-wrap:wrap!important;justify-content:flex-end!important}
+  #home-personalized-section .home-personalized-showcase{display:block!important;height:auto!important;min-height:0!important;margin:0!important}
+  #home-personalized-section .home-personalized-feature{display:block!important;width:100%!important;height:360px!important;min-height:360px!important;max-height:360px!important;border-radius:16px!important;overflow:hidden!important}
+  #home-personalized-section .home-personalized-alternatives{display:none!important}
+  #home-personalized-section .home-personalized-mobile-card{display:none!important}
+  #home-personalized-section .home-personalized-feature-poster{width:112px!important;height:168px!important;right:20px!important;bottom:20px!important}
+  #home-personalized-section .home-personalized-feature>div.flex.h-full{width:calc(100% - 150px)!important;max-width:calc(100% - 150px)!important;min-width:0!important;padding:22px!important;box-sizing:border-box!important}
+  #home-personalized-section .home-personalized-feature h3{font-size:clamp(23px,3vw,31px)!important;line-height:1.12!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;overflow:hidden!important}
+  #home-personalized-section .home-personalized-feature .mt-3{margin-top:10px!important}
+  #home-personalized-section .home-personalized-feature .mt-5{margin-top:13px!important}
+  #home-personalized-section .home-personalized-feature .home-personalized-feature-reason{display:none!important}
+  #home-personalized-section .home-personalized-feature-labels{top:16px!important;left:18px!important}
+}
