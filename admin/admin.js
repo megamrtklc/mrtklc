@@ -2120,6 +2120,9 @@
       }));
     }
     for(const key of PERSONAL_BACKUP_LIST_KEYS)if(!Object.prototype.hasOwnProperty.call(localStorageData,key))localStorageData[key]='[]';
+    for(const [key,fallback] of Object.entries({
+      cine_movie_progress_v1:'{}',cine_episode_tracking_v1:'{}',perde_player_progress_v3:'{}'
+    }))if(!Object.prototype.hasOwnProperty.call(localStorageData,key))localStorageData[key]=fallback;
     return {browserData:{localStorage:localStorageData,sessionStorage:{}},personalDataFormat:PERSONAL_BACKUP_MINIMAL_FORMAT};
   }
   function hasMinimalPersonalFormat(data){return data?.personalDataFormat==='perde-personal-minimal-v2';}
