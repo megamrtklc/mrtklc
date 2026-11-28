@@ -2660,7 +2660,7 @@
     const add=event.target.closest('[data-collection-add]');
     if(add){addCollectionSuggestion(add.dataset.collectionAdd);return;}
     if(event.target.closest('[data-collection-add-all]')){
-      $('#collection-suggestions [data-collection-add]').forEach(button=>addCollectionSuggestion(button.dataset.collectionAdd));
+      Array.from($('#collection-suggestions').querySelectorAll('[data-collection-add]')).forEach(button=>addCollectionSuggestion(button.dataset.collectionAdd));
     }
   });
   $('#collection-cover-mode').addEventListener('change',updateCollectionCoverPreview);
