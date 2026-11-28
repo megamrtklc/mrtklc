@@ -774,6 +774,7 @@
                     if (document.documentElement.classList.contains('cv-tv-mode') && sectionKey === 'personalized') return false;
                     // Yapılandırma gelene kadar varsayılan olarak görünür tut;
                     // veri geldikten sonra kapalı bölümler normal şekilde gizlenir.
+                    if (sectionKey === 'published-collections' && this.publishedCollections.length === 0) return false;
                     return this.homepageConfig?.layout?.visibility?.[sectionKey] !== false;
                 },
 
