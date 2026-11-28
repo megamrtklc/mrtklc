@@ -719,6 +719,8 @@
                         if (invalidCatalogCount) console.warn('Geçersiz katalog kayıtları atlandı:', invalidCatalogCount);
                         this.catalog = markStaticCatalog(normalizedCatalog);
                         this.heroCatalog = this.catalog;
+                        // Açıklama dosyası katalogdan önce geldiyse, katalog hazır olduğunda eşleştirmeyi yeniden uygula.
+                        if (this.catalogDetailsPromise) this.loadCatalogDescriptionsData();
                         // Mobil manşetin İngilizce adlarını katalog hazır olur olmaz yükle.
                         const loadEnglishTitlesWhenIdle = () => this.loadHeroEnglishTitles();
                         const scheduleEnglishTitles = () => {
