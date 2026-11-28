@@ -84,3 +84,10 @@
   #home-personalized-section .home-personalized-feature .home-personalized-feature-reason{display:none!important}
   #home-personalized-section .home-personalized-feature-labels{top:16px!important;left:18px!important}
 }
+
+/* Published collection covers and navigation anchor */
+.home-published-collection{scroll-margin-top:84px}
+.home-published-collection-cover{position:relative;aspect-ratio:4/5}
+.home-published-collection-mix{position:absolute;inset:0;overflow:hidden}
+.home-published-collection-mix img{display:block}
+@media(max-width:420px){.home-published-collection-cover{width:54px!important;height:68px!important}}
