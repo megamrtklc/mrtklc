@@ -20927,6 +20927,22 @@
         "cv-1794714842137",
         "cv-1795531678896"
       ]
+    },
+    {
+      "id": "collection-1795899002643",
+      "title": "Korku",
+      "description": "Gerilim dozu yüksek, ürpertici ve akılda kalan korku yapımları.",
+      "active": true,
+      "coverMode": "mix",
+      "image": "",
+      "items": [
+        "archive-5",
+        "archive-51",
+        "archive-82",
+        "archive-92",
+        "archive-104",
+        "cv-1794683639717"
+      ]
     }
   ],
   "homepageConfig": {
