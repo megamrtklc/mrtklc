@@ -985,7 +985,7 @@
                             const stylePromise = window.__perdeHomeSectionsCssPromise || (window.__perdeHomeSectionsCssPromise = new Promise(resolve => {
                                 const link = document.createElement('link');
                                 link.rel = 'stylesheet';
-                                link.href = './css/perde-home-sections.css?v=20261128-tablet-personalized-v1';
+                                link.href = './css/perde-home-sections.css?v=20261128-collection-covers-nav-v1';
                                 link.onload = () => resolve();
                                 link.onerror = () => { console.warn('[Perde home styles] Stil dosyası yüklenemedi.'); resolve(); };
                                 document.head.appendChild(link);
