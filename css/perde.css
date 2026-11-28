@@ -234,7 +234,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   #home-personalized-section .home-personalized-feature-poster{display:none!important}
   #home-personalized-section .home-personalized-feature-image{z-index:0!important;width:100%;height:100%;object-fit:cover;object-position:center}
   #home-personalized-section .home-personalized-feature-shade{z-index:1!important;pointer-events:none}
-  #home-personalized-section .home-personalized-feature>div.relative.z-\\[1\\]{z-index:2!important}
+  #home-personalized-section .home-personalized-feature>div[class~="z-[1]"]{z-index:2!important}
 }
 
 /* Tablet portrait: published collection sections must stay inside the homepage content width. */
