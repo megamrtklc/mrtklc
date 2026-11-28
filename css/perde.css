@@ -223,7 +223,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 @media(prefers-reduced-motion:reduce){.cineverse-search-close,.cineverse-search-result{transition:none}}
 
 /* Tablet portrait home layout: force the editorial hero artwork to occupy a visible, stable panel. */
-@media (min-width:768px) and (max-width:1023px) and (orientation:portrait){
+@media (min-width:768px) and (max-width:1100px) and (orientation:portrait){
   #desktopEditorialHero{display:block!important;min-width:0;isolation:isolate}
   #desktopEditorialHero>div:first-child{position:absolute!important;inset:0!important;display:block!important;min-height:100%!important;overflow:hidden!important}
   #desktopEditorialHero>div:first-child picture{position:absolute!important;display:block!important;top:0!important;right:0!important;bottom:0!important;left:auto!important;width:76%!important;max-width:76%!important;height:100%!important;aspect-ratio:auto!important;overflow:hidden!important;z-index:0!important;visibility:visible!important}
@@ -233,7 +233,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   #desktopEditorialHero .editorial-copy-enter h1,#desktopEditorialHero .editorial-copy-enter>p{max-width:100%}
 }
 /* Tablet portrait: published collection sections must stay inside the homepage content width. */
-@media (min-width:768px) and (max-width:900px) and (orientation:portrait){
+@media (min-width:768px) and (max-width:1100px) and (orientation:portrait){
   #home-page [data-home-section="published-collections"]{min-width:0;max-width:100%;overflow:hidden}
   #home-page .home-published-collection{width:100%;max-width:100%;min-width:0;margin-left:0!important;margin-right:0!important;padding-left:clamp(24px,6vw,48px);padding-right:clamp(24px,6vw,48px);box-sizing:border-box}
   #home-page .home-published-collection-heading{min-width:0;max-width:100%;flex-wrap:wrap}
@@ -241,7 +241,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 }
 
 /* Tablet portrait: let homepage section headings and their controls wrap without forcing horizontal overflow. */
-@media (min-width:768px) and (max-width:900px) and (orientation:portrait){
+@media (min-width:768px) and (max-width:1100px) and (orientation:portrait){
   #home-page :is(#home-continue-section .home-continue-heading,#home-series-tracking-section .home-series-tracking-heading,#home-favorites-section .home-new-arrivals-heading,#home-catalog-section .home-catalog-heading){min-width:0;max-width:100%;flex-wrap:wrap;align-items:flex-start}
   #home-page :is(#home-continue-section .home-continue-heading,#home-series-tracking-section .home-series-tracking-heading)>div:last-child{display:flex;flex:1 1 100%;width:100%;max-width:100%;min-width:0;flex-wrap:wrap;justify-content:flex-start;gap:8px}
   #home-page :is(#home-favorites-section .home-new-arrivals-heading,#home-catalog-section .home-catalog-heading)>div:last-child{display:flex;width:100%;max-width:100%;min-width:0;flex-wrap:wrap;justify-content:flex-start;gap:8px}
@@ -250,7 +250,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 }
 
 /* Tablet dikey ana sayfa: öne çıkan kart ölçülerini bölümler arasında eşitle */
-@media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
   #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) {
     min-width: 0 !important;
     max-width: 100% !important;
@@ -288,7 +288,7 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
 }
 
 /* Tablet dikey: kalan ana sayfa bölümlerinde kontrollü genişlik ve taşma önleme */
-@media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
   #home-page :is(#home-continue-section,#home-catalog-section,#home-genre-discovery-section,#home-series-tracking-section,#home-watchlist-section,#home-franchises-section,[data-home-section="published-collections"]) {
     min-width: 0;
     max-width: 100%;
@@ -355,4 +355,21 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   #home-page #home-franchises-section > .grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
+}
+
+
+/* Tablet portrait (including 11.5-inch devices): one adaptive personalized feature card. */
+@media (min-width:768px) and (max-width:1100px) and (orientation:portrait){
+  #home-page #home-personalized-section{min-width:0!important;max-width:100%!important;min-height:0!important;box-sizing:border-box!important}
+  #home-page #home-personalized-section .home-personalized-heading{height:auto!important;min-height:0!important;max-width:100%!important;margin-bottom:16px!important;align-items:center!important;gap:12px!important}
+  #home-page #home-personalized-section .home-personalized-heading>div:first-child{min-width:0!important;flex:1 1 0!important}
+  #home-page #home-personalized-section .home-personalized-toolbar{min-width:0!important;max-width:48%!important;flex:0 1 48%!important;flex-wrap:wrap!important;justify-content:flex-end!important}
+  #home-page #home-personalized-section .home-personalized-showcase{display:block!important;width:100%!important;height:auto!important;min-height:0!important;margin:0!important}
+  #home-page #home-personalized-section .home-personalized-feature{display:block!important;width:100%!important;height:360px!important;min-height:360px!important;max-height:360px!important;box-sizing:border-box!important;border-radius:16px!important;overflow:hidden!important}
+  #home-page #home-personalized-section .home-personalized-alternatives{display:none!important}
+  #home-page #home-personalized-section .home-personalized-mobile-card{display:none!important}
+  #home-page #home-personalized-section .home-personalized-feature-poster{width:112px!important;height:168px!important;right:20px!important;bottom:20px!important}
+  #home-page #home-personalized-section .home-personalized-feature>div.flex.h-full{width:calc(100% - 150px)!important;max-width:calc(100% - 150px)!important;min-width:0!important;padding:22px!important;box-sizing:border-box!important}
+  #home-page #home-personalized-section .home-personalized-feature h3{font-size:clamp(23px,3vw,31px)!important;line-height:1.12!important;display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;overflow:hidden!important;overflow-wrap:anywhere!important}
+  #home-page #home-personalized-section .home-personalized-feature .home-personalized-feature-reason{display:none!important}
 }
