@@ -285,6 +285,14 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
     max-height: none !important;
     align-self: stretch !important;
   }
+
+  /* 1024px ve üzerindeki tablet genişliğinde katalog kartları %19'a iner; öne çıkanlar da aynı ölçüyü kullanır. */
+  @media (min-width: 1024px) {
+    #home-page :is(#home-new-arrivals-section, #home-favorites-section, #home-watched-section) .home-new-arrival-feature {
+      flex-basis: 19% !important;
+      width: 19% !important;
+    }
+  }
 }
 
 /* Tablet dikey: kalan ana sayfa bölümlerinde kontrollü genişlik ve taşma önleme */
