@@ -287,3 +287,72 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
   }
 }
 
+/* Tablet dikey: kalan ana sayfa bölümlerinde kontrollü genişlik ve taşma önleme */
+@media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+  #home-page :is(#home-continue-section,#home-catalog-section,#home-genre-discovery-section,#home-series-tracking-section,#home-watchlist-section,#home-franchises-section,[data-home-section="published-collections"]) {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  #home-page :is(#home-continue-section,#home-catalog-section,#home-series-tracking-section,#home-watchlist-section) :is(.home-continue-heading,.home-catalog-heading,.home-series-tracking-heading,.home-watchlist-heading) {
+    min-width: 0;
+    max-width: 100%;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    row-gap: 10px;
+  }
+
+  #home-page :is(#home-continue-section,#home-catalog-section,#home-series-tracking-section,#home-watchlist-section) :is(.home-continue-heading,.home-catalog-heading,.home-series-tracking-heading,.home-watchlist-heading) > div:last-child {
+    display: flex;
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  #home-page :is(#home-continue-section,#home-catalog-section,#home-series-tracking-section,#home-watchlist-section) :is(.home-continue-rail,.home-catalog-rail,.home-series-tracking-rail,.home-watchlist-rail) {
+    display: flex;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #home-page :is(#home-series-tracking-section .home-series-tracking-card,#home-watchlist-section .home-watchlist-card) {
+    box-sizing: border-box;
+    flex: 0 0 clamp(190px, 29%, 240px);
+    width: clamp(190px, 29%, 240px);
+    min-width: 0;
+    align-self: stretch;
+  }
+
+  #home-page #home-genre-discovery-section .home-genre-discovery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #home-page #home-genre-discovery-section .home-genre-discovery-card {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  #home-page #home-genre-discovery-section .home-genre-discovery-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  #home-page #home-franchises-section > .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
