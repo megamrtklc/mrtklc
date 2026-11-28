@@ -408,5 +408,12 @@ html,body,button,input,select,textarea{font-family:var(--perde-font-family)}
     line-height:1.4!important;
   }
 }
-
-
+/* Tablet dikey: İzlediklerim özel kartının rail içinde küçülmesini engelle; diğer özel kartlarla aynı ölçüyü koru. */
+@media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
+  #home-page #home-watched-section .home-new-arrival-feature {
+    flex: 0 0 clamp(300px, 31vw, 400px) !important;
+    width: clamp(300px, 31vw, 400px) !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+  }
+}
