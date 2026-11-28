@@ -157,7 +157,7 @@
     <!-- Mobilde ikon fontları ilk manşet yüklemesi tamamlanana kadar ertelenir. -->
     <link rel="stylesheet" href="./icons.css?v=20261120-continue-five-v2">
     <!-- Modüler stil dosyası: sayfa stillerini Tailwind ve ikon stillerinden sonra erken yükle. -->
-    <link rel="stylesheet" href="./css/perde.css?v=20261128-tablet-home-audit-v7">
+    <link rel="stylesheet" href="./css/perde.css?v=20261128-tablet-home-audit-v8">
     <script src="./icons.js?v=20261120-continue-five-v2" defer></script>
     <!-- Mobilde sistem fontu kullanıldığı için Inter yalnızca masaüstünde yüklenir. -->
     <!-- Alpine.js -->
@@ -348,7 +348,7 @@
                 <section id="desktopEditorialHero" data-home-section="hero" x-cloak  x-data="{ trailerOpen: false, trailerItem: null }" @keydown.escape.window="trailerOpen = false; trailerItem = null" class="relative hidden md:block isolate overflow-hidden bg-[#090a0d] text-white">
                     <div class="absolute inset-0 overflow-hidden bg-[#090a0d]">
                         <img class="cv-hero-left-color-spread" x-effect="(() => { const url = window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '').replace('/w1280/', '/w500/') : ''; if (!url || $el.dataset.heroSlideUrl === url || $el.dataset.pendingHeroUrl === url) return; $el.dataset.pendingHeroUrl = url; const loader = new Image(); loader.onload = () => { if ($el.isConnected && $el.dataset.pendingHeroUrl === url) { $el.src = url; $el.dataset.heroSlideUrl = url; } }; loader.src = url; })()" alt="" aria-hidden="true" @error="handleImageError($event)" decoding="async">
-                        <picture class="absolute inset-0 block"><img x-effect="(() => { const source = currentHero.backdrop || currentHero.poster || ''; const targetWidth = Math.min(window.innerWidth, 1800) * 0.7 * (window.devicePixelRatio || 1) >= 1024 ? 1280 : 1024; const url = window.matchMedia('(min-width: 768px)').matches ? source.replace(/\/t\/p\/(?:w\d+|original)\//, '/t/p/w' + targetWidth + '/') : ''; if (!url || $el.dataset.heroSlideUrl === url || $el.dataset.pendingHeroUrl === url) return; $el.dataset.pendingHeroUrl = url; const loader = new Image(); loader.onload = () => { if ($el.isConnected && $el.dataset.pendingHeroUrl === url) { const previousId = $el.dataset.heroSlideId; $el.src = url; $el.dataset.heroSlideUrl = url; $el.dataset.heroSlideId = String(currentHero.id || ''); if (previousId && previousId !== String(currentHero.id || '') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) { $el.getAnimations().forEach(animation => animation.cancel()); $el.animate([{ opacity: 0.97, transform: 'scale(1.004)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 210, easing: 'ease-out' }); } } }; loader.src = url; })()" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="absolute inset-0 h-full w-full object-contain object-right transition-none"></picture>
+                        <picture class="absolute inset-0 block"><img x-effect="(() => { const url = window.matchMedia('(min-width: 768px)').matches ? (currentHero.backdrop || currentHero.poster || '') : ''; if ($el.getAttribute('src') !== url) $el.src = url; })()" :alt="currentHero.title + ' sinematik görseli'" @error="handleImageError($event)" fetchpriority="high" decoding="async" class="absolute inset-0 h-full w-full object-cover object-center transition-none"></picture>
                         <div class="absolute inset-0 z-[1]" style="background:linear-gradient(90deg,#090a0d 0%,#090a0d 25%,rgba(9,10,13,.94) 38%,rgba(9,10,13,.72) 49%,rgba(9,10,13,.28) 63%,rgba(9,10,13,.04) 82%,transparent 100%);"></div>
                         <div class="absolute inset-0 bg-gradient-to-t from-[#090a0d] via-[#090a0d]/10 to-black/25"></div>
                         <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_42%,transparent_0%,transparent_42%,rgba(0,0,0,.28)_100%)]"></div>
@@ -466,7 +466,7 @@
   </div>
 </div>
        <!-- Kişiselleştirilmiş Öneriler -->
-                <section id="home-personalized-section" data-home-section="personalized" x-data="{ showAllPersonalized: false }" :style="{ display: isHomepageSectionVisible('personalized') ? 'block' : 'none' }" class="home-personalized-section w-full px-6 sm:px-12 space-y-4" style="visibility:hidden;min-height:0!important;height:auto!important;box-sizing:border-box" data-home-fragment="./runtime-pages/home-personalized.html?v=20261126-home-personalized-v4" x-ignore>
+                <section id="home-personalized-section" data-home-section="personalized" x-data="{ showAllPersonalized: false }" :style="{ display: isHomepageSectionVisible('personalized') ? 'block' : 'none' }" class="home-personalized-section w-full px-6 sm:px-12 space-y-4" style="visibility:hidden;min-height:0!important;height:auto!important;box-sizing:border-box" data-home-fragment="./runtime-pages/home-personalized.html?v=20261128-tablet-single-card-v5" x-ignore>
                     <!-- Sana Özel Öneriler: görünür alana yaklaşınca ayrı dosyadan yüklenir. -->
                     <div class="home-catalog-loading" role="status" aria-live="polite" aria-label="Sana Özel Öneriler yükleniyor">
                         <div class="home-catalog-loading-heading"><span></span><span></span></div>
